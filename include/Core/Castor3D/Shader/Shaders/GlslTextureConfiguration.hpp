@@ -15,6 +15,34 @@ namespace castor3d
 	{
 		castor::String const TextureConfigurationBufferName = cuT( "TextureConfigurations" );
 
+		template< typename LhsT, typename RhsT >
+		inline LhsT translateUV( LhsT const & translate
+			, RhsT const & uv )
+		{
+			return translate + uv;
+		}
+
+		inline sdw::Vec2 rotateUV( sdw::Vec2 const & rotate
+			, sdw::Vec2 const & uv )
+		{
+			auto mid = 0.5_f;
+			return vec2( rotate.x() * ( uv.x() - mid ) + rotate.y() * ( uv.y() - mid ) + mid
+				, rotate.x() * ( uv.y() - mid ) - rotate.y() * ( uv.x() - mid ) + mid );
+		}
+
+		inline sdw::Vec3 rotateUV( sdw::Vec3 const & rotate
+			, sdw::Vec3 const & uv )
+		{
+			return ( ( uv - vec3( 0.5_f, 0.5f, 0.5f ) ) * rotate ) + vec3( 0.5_f, 0.5f, 0.5f );
+		}
+
+		template< typename LhsT, typename RhsT >
+		inline LhsT scaleUV( LhsT const & scale
+			, RhsT const & uv )
+		{
+			return scale * uv;
+		}
+
 		struct TextureConfigData
 			: public sdw::StructInstance
 		{
@@ -29,60 +57,42 @@ namespace castor3d
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
-			C3D_API sdw::Vec3 getDiffuse( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Vec3 getDiffuse( sdw::Vec4 const & sampled
 				, sdw::Vec3 const & diffuse )const;
-			C3D_API sdw::Vec3 getAlbedo( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Vec3 getAlbedo( sdw::Vec4 const & sampled
 				, sdw::Vec3 const & diffuse )const;
-			C3D_API sdw::Vec3 getEmissive( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Vec3 getEmissive( sdw::Vec4 const & sampled
 				, sdw::Vec3 const & emissive )const;
-			C3D_API sdw::Vec3 getSpecular( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Vec3 getSpecular( sdw::Vec4 const & sampled
 				, sdw::Vec3 const & specular )const;
-			C3D_API sdw::Float getMetalness( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Float getMetalness( sdw::Vec4 const & sampled
 				, sdw::Float const & metalness )const;
-			C3D_API sdw::Float getShininess( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Float getShininess( sdw::Vec4 const & sampled
 				, sdw::Float const & shininess )const;
-			C3D_API sdw::Float getGlossiness( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Float getGlossiness( sdw::Vec4 const & sampled
 				, sdw::Float const & glossiness )const;
-			C3D_API sdw::Float getRoughness( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Float getRoughness( sdw::Vec4 const & sampled
 				, sdw::Float const & roughness )const;
-			C3D_API sdw::Float getOpacity( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Float getOpacity( sdw::Vec4 const & sampled
 				, sdw::Float const & opacity )const;
-			C3D_API sdw::Vec3 getNormal( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Vec3 getNormal( sdw::Vec4 const & sampled
 				, sdw::Mat3 const & tbn )const;
-			C3D_API sdw::Vec3 getNormal( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Vec3 getNormal( sdw::Vec4 const & sampled
 				, sdw::Vec3 const & normal
 				, sdw::Vec3 const & tangent
 				, sdw::Vec3 const & bitangent )const;
-			C3D_API sdw::Float getHeight( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled )const;
-			C3D_API sdw::Float getOcclusion( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Float getHeight( sdw::Vec4 const & sampled )const;
+			C3D_API sdw::Float getOcclusion( sdw::Vec4 const & sampled
 				, sdw::Float const & occlusion )const;
-			C3D_API sdw::Float getTransmittance( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			C3D_API sdw::Float getTransmittance( sdw::Vec4 const & sampled
 				, sdw::Float const & transmittance )const;
-			C3D_API void convertUV( sdw::ShaderWriter & writer
-				, sdw::Vec2 & uv )const;
-			C3D_API void convertUVW( sdw::ShaderWriter & writer
-				, sdw::Vec3 & uvw )const;
+			C3D_API void convertUV( sdw::Vec2 & uv )const;
+			C3D_API void convertUVW( sdw::Vec3 & uvw )const;
 
 		private:
-			sdw::Float getFloat( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			sdw::Float getFloat( sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
-			sdw::Vec3 getVec3( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
+			sdw::Vec3 getVec3( sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
 
 		private:
@@ -130,6 +140,7 @@ namespace castor3d
 			sdw::Float hgtFact;
 			sdw::Float fneedYI;
 			sdw::UInt needsYI;
+			sdw::Boolean isAnim;
 		};
 
 		class TextureConfigurations

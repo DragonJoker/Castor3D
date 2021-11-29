@@ -15,16 +15,24 @@ namespace castor3d
 		: AnimationInstance{ object, animation }
 		, m_animatedTexture{ object }
 		, m_textureAnimation{ animation }
-		, m_prev{ animation.isEmpty() ? animation.end() : animation.begin() }
-		, m_curr{ animation.isEmpty() ? animation.end() : animation.begin() + 1 }
 	{
 	}
 
 	void TextureAnimationInstance::doUpdate()
 	{
-		m_animatedTexture.getTexture().setAnimationTransform( m_textureAnimation.getTranslate( m_currentTime )
-			, m_textureAnimation.getRotate( m_currentTime )
-			, m_textureAnimation.getScale( m_currentTime ) );
+		auto translate = m_textureAnimation.getTranslate( m_currentTime );
+		auto rotate = m_textureAnimation.getRotate( m_currentTime );
+		auto scale = m_textureAnimation.getScale( m_currentTime );
+
+		m_transform.translate->x = translate->x;
+		m_transform.translate->y = translate->y;
+		m_transform.translate->z = translate->z;
+
+		m_transform.rotate = rotate;
+
+		m_transform.scale->x = scale->x;
+		m_transform.scale->y = scale->y;
+		m_transform.scale->z = scale->z;
 	}
 
 	//*************************************************************************************************

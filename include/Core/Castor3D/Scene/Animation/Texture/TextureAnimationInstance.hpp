@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 
@@ -49,9 +50,14 @@ namespace castor3d
 			return m_textureAnimation;
 		}
 
-		AnimatedTexture & getAnimatedMesh()
+		AnimatedTexture & getAnimatedTexture()
 		{
 			return m_animatedTexture;
+		}
+
+		TextureTransform const & getTransform()const
+		{
+			return m_transform;
 		}
 		/**@}*/
 
@@ -61,8 +67,7 @@ namespace castor3d
 	protected:
 		AnimatedTexture & m_animatedTexture;
 		TextureAnimation const & m_textureAnimation;
-		AnimationKeyFrameArray::iterator m_prev;
-		AnimationKeyFrameArray::iterator m_curr;
+		TextureTransform m_transform;
 
 		friend class BinaryWriter< TextureAnimation >;
 		friend class BinaryParser< TextureAnimation >;

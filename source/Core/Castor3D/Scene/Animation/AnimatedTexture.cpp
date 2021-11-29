@@ -1,11 +1,14 @@
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Animation/Animable.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationInstance.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 using namespace castor;
 
@@ -61,11 +64,28 @@ namespace castor3d
 	{
 	}
 
+	AnimatedTexture::~AnimatedTexture()
+	{
+		m_pass.getOwner()->getEngine()->getMaterialCache().unregisterTexture( *this );
+	}
+
 	void AnimatedTexture::update( Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
 		{
 			m_playingAnimation->update( elpased );
+		}
+	}
+
+	void AnimatedTexture::fillBuffer( TextureAnimationData * buffer )const
+	{
+		if ( m_playingAnimation )
+		{
+			auto & transform = m_playingAnimation->getTransform();
+			auto & data = *buffer;
+			data.translate = transform.translate;
+			data.rotate = { transform.rotate.cos(), transform.rotate.sin(), 0.0f, 0.0f };
+			data.scale = transform.scale;
 		}
 	}
 
@@ -81,6 +101,7 @@ namespace castor3d
 				auto & animation = m_texture->getAnimation();
 				auto instance = std::make_unique< TextureAnimationInstance >( *this, animation );
 				m_animations.emplace( name, std::move( instance ) );
+				m_pass.getOwner()->getEngine()->getMaterialCache().registerTexture( *this );
 				startAnimation( animation.getName() );
 			}
 		}
