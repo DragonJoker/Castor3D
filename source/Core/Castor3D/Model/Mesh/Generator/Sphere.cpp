@@ -5,6 +5,8 @@
 
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 namespace castor3d
 {
 	Sphere::Sphere()

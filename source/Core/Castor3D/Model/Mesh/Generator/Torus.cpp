@@ -4,6 +4,8 @@
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 using namespace castor;
 
 namespace castor3d

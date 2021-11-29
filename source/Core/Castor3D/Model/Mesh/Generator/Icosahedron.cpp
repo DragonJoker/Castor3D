@@ -6,6 +6,8 @@
 
 #include <CastorUtils/Math/SphericalVertex.hpp>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 using namespace castor;
 
 namespace castor3d
