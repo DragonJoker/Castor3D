@@ -20,6 +20,7 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
@@ -122,7 +123,8 @@ namespace castor3d
 		{
 			ashes::VkDescriptorSetLayoutBindingArray uboBindings;
 			uboBindings.emplace_back( engine.getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
-			uboBindings.emplace_back( engine.getMaterialCache().getTextureBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTextures ) ) );
+			uboBindings.emplace_back( engine.getMaterialCache().getTexConfigBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
+			uboBindings.emplace_back( engine.getMaterialCache().getTexAnimBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModel )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, ( VK_SHADER_STAGE_FRAGMENT_BIT
@@ -212,8 +214,10 @@ namespace castor3d
 				auto & descriptorSet = *node.uboDescriptorSet;
 				engine.getMaterialCache().getPassBuffer().createBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
-				engine.getMaterialCache().getTextureBuffer().createBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eTextures ) ) );
+				engine.getMaterialCache().getTexConfigBuffer().createBinding( descriptorSet
+					, layout.getBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
+				engine.getMaterialCache().getTexAnimBuffer().createBinding( descriptorSet
+					, layout.getBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
 				CU_Require( node.modelUbo );
 				node.modelUbo.createSizedBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eModel ) ) );

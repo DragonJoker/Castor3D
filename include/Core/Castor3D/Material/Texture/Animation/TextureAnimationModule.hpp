@@ -17,6 +17,13 @@ namespace castor3d
 	/**@name Animation */
 	//@{
 
+	struct TextureAnimationData
+	{
+		castor::Point4f translate;
+		castor::Point4f rotate;
+		castor::Point4f scale;
+	};
+
 	class TextureAnimation;
 
 	CU_DeclareSmartPtr( TextureAnimation );

@@ -25,6 +25,7 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
@@ -149,11 +150,15 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
+		shader::TextureAnimations textureAnims{ writer };
 
 		if ( hasTextures )
 		{
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTextures )
+				, uint32_t( NodeUboIdx::eTexConfigs )
+				, RenderPipeline::eBuffers );
+			textureAnims.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
+				, uint32_t( NodeUboIdx::eTexAnims )
 				, RenderPipeline::eBuffers );
 		}
 
@@ -241,6 +246,7 @@ namespace castor3d
 				lightingModel->computeMapContributions( flags.passFlags
 					, filterTexturesFlags( flags.textures )
 					, textureConfigs
+					, textureAnims
 					, c3d_maps
 					, texCoord
 					, normal

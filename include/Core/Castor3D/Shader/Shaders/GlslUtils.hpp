@@ -55,18 +55,21 @@ namespace castor3d::shader
 			, sdw::Vec3 const & f0 );
 		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & colour
 			, sdw::Float & opacity );
 		C3D_API void computeOpacityMapContribution( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Float & opacity );
 		C3D_API void computeGeometryMapsContributions( FilteredTextureFlags const & flags
 			, PassFlags const & passFlags
 			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Float & opacity
@@ -79,6 +82,7 @@ namespace castor3d::shader
 			, PassFlags const & passFlags
 			, std::string const & name
 			, shader::TextureConfigData const & config
+			, shader::TextureAnimData const & anim
 			, sdw::SampledImage2DRgba32 const & map
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
@@ -91,6 +95,7 @@ namespace castor3d::shader
 			, PassFlags const & passFlags
 			, std::string const & name
 			, shader::TextureConfigData const & config
+			, shader::TextureAnimData const & anim
 			, sdw::SampledImage2DRgba32 const & map
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
@@ -251,6 +256,7 @@ namespace castor3d::shader
 			, PassFlags const & passFlags
 			, std::string const & name
 			, shader::TextureConfigData const & config
+			, shader::TextureAnimData const & anim
 			, sdw::SampledImage2DRgba32 const & map
 			, sdw::Vec3 & texCoords
 			, sdw::Float & opacity
