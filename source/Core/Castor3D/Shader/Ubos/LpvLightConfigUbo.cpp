@@ -12,6 +12,8 @@
 
 #include <ShaderWriter/Writer.hpp>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 CU_ImplementCUSmartPtr( castor3d, LpvLightConfigUbo )
 
 namespace castor3d

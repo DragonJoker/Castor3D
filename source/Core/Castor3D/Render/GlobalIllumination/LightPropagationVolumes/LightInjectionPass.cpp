@@ -38,6 +38,8 @@
 #include <numeric>
 #include <random>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 CU_ImplementCUSmartPtr( castor3d, LightInjectionPass )
 
 using namespace castor;

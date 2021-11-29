@@ -16,6 +16,8 @@
 
 #include <ashespp/Core/Device.hpp>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 using namespace castor;
 
 namespace castor3d

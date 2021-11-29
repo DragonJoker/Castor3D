@@ -11,6 +11,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+
 using namespace sdw;
 
 namespace castor3d
