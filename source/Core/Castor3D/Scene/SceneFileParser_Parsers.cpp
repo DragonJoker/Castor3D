@@ -3341,6 +3341,24 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserTexTile )
+	{
+		auto & parsingContext = static_cast< SceneFileContext & >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			castor::Point2i value;
+			params[0]->get( value );
+			parsingContext.textureConfiguration.tileSet->x = uint32_t( value->x );
+			parsingContext.textureConfiguration.tileSet->y = uint32_t( value->y );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserTexAnimRotate )
 	{
 		auto & parsingContext = static_cast< SceneFileContext & >( context );
@@ -3400,6 +3418,27 @@ namespace castor3d
 			castor::Point2f value;
 			params[0]->get( value );
 			parsingContext.textureAnimation->setScaleSpeed( TextureScaleSpeed{ value } );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserTexAnimTile )
+	{
+		auto & parsingContext = static_cast< SceneFileContext & >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			bool value;
+			params[0]->get( value );
+
+			if ( value )
+			{
+				parsingContext.textureAnimation->enableTileAnim();
+			}
 		}
 	}
 	CU_EndAttribute()

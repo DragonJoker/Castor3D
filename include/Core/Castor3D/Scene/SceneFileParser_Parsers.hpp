@@ -193,15 +193,17 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserMaterialPass )
 	CU_DeclareAttributeParser( parserMaterialEnd )
 
-	// Texture Transform Parsers
+	// Texture Config Parsers
 	CU_DeclareAttributeParser( parserTexTransformRotate )
 	CU_DeclareAttributeParser( parserTexTransformTranslate )
 	CU_DeclareAttributeParser( parserTexTransformScale )
+	CU_DeclareAttributeParser( parserTexTile )
 
 	// Texture Animation Parsers
 	CU_DeclareAttributeParser( parserTexAnimRotate )
 	CU_DeclareAttributeParser( parserTexAnimTranslate )
 	CU_DeclareAttributeParser( parserTexAnimScale )
+	CU_DeclareAttributeParser( parserTexAnimTile )
 
 	// Shader Parsers
 	CU_DeclareAttributeParser( parserVertexShader )

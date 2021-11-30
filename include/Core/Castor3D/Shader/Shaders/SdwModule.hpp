@@ -80,7 +80,7 @@ namespace castor3d::shader
 	static int constexpr MaxTextureConfigurationComponentsCount = 12;
 	// Texture Animation Buffer.
 	static uint32_t constexpr MaxTextureAnimationCount = MaxTextureConfigurationCount;
-	static int constexpr MaxTextureAnimationComponentsCount = 3;
+	static int constexpr MaxTextureAnimationComponentsCount = 4;
 
 	struct DirectionalLight;
 	struct Light;
