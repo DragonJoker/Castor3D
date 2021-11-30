@@ -75,6 +75,7 @@ namespace castor3d
 			, castor::Size const & size
 			, Texture const & srcTexture
 			, SamplerResPtr sampler );
+		C3D_API ~EnvironmentPrefilter();
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.

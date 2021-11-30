@@ -149,4 +149,13 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::AnimationKeyFrame">
+		<DisplayString>{m_timeIndex}</DisplayString>
+		<Expand>
+			<Item Name="timeIndex">m_timeIndex</Item>
+			<Item Name="boundingBox">m_boundingBox</Item>
+			<Item Name="owner">m_owner</Item>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>

@@ -26,6 +26,8 @@ namespace smaa
 			, SmaaConfig const & config
 			, std::unique_ptr< ast::Shader > pixelShader
 			, bool const * enabled );
+		~EdgeDetection();
+
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getColourResult()const

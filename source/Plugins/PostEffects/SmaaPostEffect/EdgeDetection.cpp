@@ -143,6 +143,12 @@ namespace smaa
 		m_outDepth.create();
 	}
 
+	EdgeDetection::~EdgeDetection()
+	{
+		m_outColour.destroy();
+		m_outDepth.destroy();
+	}
+
 	void EdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );

@@ -121,7 +121,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		static Texture createResult( crg::ResourceHandler & handler
+		static TexturePtr createResult( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, uint32_t index

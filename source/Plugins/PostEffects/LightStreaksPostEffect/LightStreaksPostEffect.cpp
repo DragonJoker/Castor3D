@@ -172,6 +172,8 @@ namespace light_streaks
 		m_combinePass.reset();
 		m_kawasePass.reset();
 		m_hiPass.reset();
+		m_hiImage.destroy();
+		m_kawaseImage.destroy();
 	}
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )

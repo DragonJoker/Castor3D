@@ -52,6 +52,7 @@ namespace castor3d
 			, castor::Size const & textureSize
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult );
+		C3D_API ~SubsurfaceScatteringPass();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -68,7 +69,7 @@ namespace castor3d
 
 		Texture const & getResult()const
 		{
-			return m_result;
+			return *m_result;
 		}
 
 	public:
@@ -104,9 +105,9 @@ namespace castor3d
 		Scene const & m_scene;
 		bool m_enabled;
 		castor::Size m_size;
-		Texture m_intermediate;
+		TexturePtr m_intermediate;
 		TextureArray m_blurImages;
-		Texture m_result;
+		TexturePtr m_result;
 		UniformBufferOffsetT< BlurConfiguration > m_blurCfgUbo;
 		UniformBufferOffsetT< BlurWeights > m_blurWgtUbo;
 		ShaderModule m_blurHorizVertexShader;

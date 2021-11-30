@@ -171,17 +171,17 @@ namespace castor3d
 
 		crg::ImageViewId const & getNormalImgView()const
 		{
-			return m_normal.sampledViewId;
+			return m_normal->sampledViewId;
 		}
 
 		crg::ImageViewId const & getDepthImgView()const
 		{
-			return m_depth.sampledViewId;
+			return m_depth->sampledViewId;
 		}
 
 		crg::ImageViewId const & getDepthObjImgView()const
 		{
-			return m_depthObj.sampledViewId;
+			return m_depthObj->sampledViewId;
 		}
 
 		TextureLayout const & getDepth()const
@@ -264,10 +264,10 @@ namespace castor3d
 		castor::Size m_rawSize;
 		Texture m_colour;
 		TextureUnitUPtr m_colourTexture;
-		Texture m_depth;
+		TexturePtr m_depth;
 		TextureUnitUPtr m_depthBuffer;
-		Texture m_depthObj;
-		Texture m_normal;
+		TexturePtr m_depthObj;
+		TexturePtr m_normal;
 		MatrixUbo m_matrixUbo;
 		SceneUbo m_sceneUbo;
 		GpInfoUbo m_gpInfoUbo;

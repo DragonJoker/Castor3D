@@ -250,7 +250,7 @@ namespace castor3d
 			return m_combined;
 		}
 
-		Texture const & getVelocity()const
+		TexturePtr getVelocity()const
 		{
 			return m_velocity;
 		}
@@ -402,7 +402,7 @@ namespace castor3d
 		crg::SemaphoreWait m_signalFinished{};
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
-		Texture m_velocity;
+		TexturePtr m_velocity;
 		Texture m_objects;
 		Texture m_overlays;
 		Texture m_combined;

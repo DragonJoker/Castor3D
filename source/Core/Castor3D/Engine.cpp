@@ -269,6 +269,8 @@ namespace castor3d
 			m_overlayCache->cleanup();
 			m_materialCache->cleanup();
 
+			postEvent( makeGpuCleanupEvent( * m_targetCache) );
+
 			if ( m_lightsSampler.lock() )
 			{
 				postEvent( makeCpuCleanupEvent( *m_lightsSampler.lock() ) );

@@ -146,6 +146,11 @@ namespace castor3d
 	{
 	}
 
+	IblTextures::~IblTextures()
+	{
+		m_prefilteredBrdf.destroy();
+	}
+
 	void IblTextures::update( QueueData const & queueData )
 	{
 		m_radianceComputer.render( queueData );

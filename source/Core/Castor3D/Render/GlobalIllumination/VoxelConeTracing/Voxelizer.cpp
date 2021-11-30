@@ -115,6 +115,8 @@ namespace castor3d
 	Voxelizer::~Voxelizer()
 	{
 		m_runnable.reset();
+		m_firstBounce.destroy();
+		m_secondaryBounce.destroy();
 		m_voxels.reset();
 		m_engine.getSamplerCache().remove( "VoxelizedSceneSecondaryBounce" );
 		m_engine.getSamplerCache().remove( "VoxelizedSceneFirstBounce" );

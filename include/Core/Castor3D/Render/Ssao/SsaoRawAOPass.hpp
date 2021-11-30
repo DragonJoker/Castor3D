@@ -44,7 +44,7 @@ namespace castor3d
 		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
 		 *\param[in]	normals					Le tampon de normales.
 		 */
-		SsaoRawAOPass( crg::FrameGraph & graph
+		C3D_API SsaoRawAOPass( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePass const & previousPass
@@ -54,6 +54,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo
 			, Texture const & linearisedDepthBuffer
 			, Texture const & normals );
+		C3D_API ~SsaoRawAOPass();
 		/**
 		 *\~english
 		 *\brief		Accepts a visitor.

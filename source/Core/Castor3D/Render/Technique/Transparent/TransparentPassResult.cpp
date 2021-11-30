@@ -90,14 +90,14 @@ namespace castor3d
 
 	TransparentPassResult::TransparentPassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
-		, Texture const & depthTexture
-		, Texture const & velocityTexture )
+		, TexturePtr depthTexture
+		, TexturePtr velocityTexture )
 		: GBufferT< WbTexture >{ handler
 			, device
 			, cuT( "WBResult" )
-			, { &depthTexture, nullptr, nullptr, &velocityTexture }
+			, { depthTexture, nullptr, nullptr, velocityTexture }
 			, 0u
-			, makeSize( getExtent( depthTexture.imageId ) ) }
+			, makeSize( getExtent( depthTexture->imageId ) ) }
 	{
 	}
 

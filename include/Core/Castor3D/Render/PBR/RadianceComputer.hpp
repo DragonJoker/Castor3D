@@ -39,6 +39,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Texture const & srcTexture );
+		C3D_API ~RadianceComputer();
 		/**
 		 *\~english
 		 *\brief		Computes the radiance map.

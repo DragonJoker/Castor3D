@@ -69,7 +69,7 @@ namespace castor3d
 		bool m_initialised{ false };
 		LightType m_lightType;
 		LightVolumePassResult m_injection;
-		Texture m_geometry;
+		TexturePtr m_geometry;
 		std::array< LightVolumePassResult, 2u > m_propagate;
 		struct LightLpv
 		{

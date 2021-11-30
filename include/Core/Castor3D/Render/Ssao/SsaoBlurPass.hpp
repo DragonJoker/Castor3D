@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	bentInput		La texture de bent normals à flouter
 		 *\param[in]	normals			Le tampon de normales.
 		 */
-		SsaoBlurPass( crg::FrameGraph & graph
+		C3D_API SsaoBlurPass( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePass const & previousPass
@@ -60,6 +60,7 @@ namespace castor3d
 			, Texture const & input
 			, Texture const & bentInput
 			, Texture const & normals );
+		C3D_API ~SsaoBlurPass();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -68,7 +69,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		void update( CpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Accepts a visitor.
