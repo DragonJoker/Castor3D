@@ -42,6 +42,7 @@ namespace castor3d
 			sdw::Vec4 texTrn;
 			sdw::Vec4 texRot;
 			sdw::Vec4 texScl;
+			sdw::Vec4 tleSet;
 		};
 
 		class TextureAnimations

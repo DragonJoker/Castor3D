@@ -158,4 +158,13 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::TextureAnimationKeyFrame">
+		<DisplayString>{m_timeIndex} {m_tile}</DisplayString>
+		<Expand>
+			<Item Name="timeIndex">m_timeIndex</Item>
+			<Item Name="tile">m_tile</Item>
+			<Item Name="owner">m_owner</Item>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>

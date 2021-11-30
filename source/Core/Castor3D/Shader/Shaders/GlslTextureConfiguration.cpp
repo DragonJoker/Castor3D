@@ -56,7 +56,8 @@ namespace castor3d
 			, hgtFact{ hgtFcr.z() }
 			, fneedYI{ mscVls.x() }
 			, needsYI{ m_writer->cast< sdw::UInt >( mscVls.x() ) }
-			, isAnim{ mscVls.y() != 0.0_f }
+			, isTrnfAnim{ mscVls.y() != 0.0_f }
+			, isTileAnim{ mscVls.z() != 0.0_f }
 		{
 		}
 
@@ -201,20 +202,6 @@ namespace castor3d
 			uv = scaleUV( texScl.xy(), uv );
 			uv = rotateUV( texRot.xy(), uv );
 			uv = translateUV( texTrn.xy(), uv );
-
-			IF( *m_writer, tleSet.z() > 1.0_f )
-			{
-				uv.x() /= tleSet.z();
-				uv.x() += tleSet.x() / tleSet.z();
-			}
-			FI;
-
-			IF( *m_writer, tleSet.w() > 1.0_f )
-			{
-				uv.x() /= tleSet.w();
-				uv.x() += tleSet.y() / tleSet.w();
-			}
-			FI;
 		}
 
 		void TextureConfigData::convertUVW( sdw::Vec3 & uvw )const
@@ -225,6 +212,12 @@ namespace castor3d
 			uvw = scaleUV( texScl.xyz(), uvw );
 			uvw = rotateUV( texRot.xyz(), uvw );
 			uvw = translateUV( texTrn.xyz(), uvw );
+		}
+
+		void TextureConfigData::convertToTile( sdw::Vec2 & uv )const
+		{
+			uv.x() = ( uv.x() + tleSet.x() ) / tleSet.z();
+			uv.y() = ( uv.y() + tleSet.y() ) / tleSet.w();
 		}
 
 		//*********************************************************************************************
