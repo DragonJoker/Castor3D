@@ -217,6 +217,8 @@ namespace castor3d
 	{
 		m_runnables.clear();
 		m_passes.clear();
+		m_environmentMapViews.clear();
+		m_environmentMap.destroy();
 		m_graphs.clear();
 		m_sortedNodes.clear();
 		m_reflectionNodes.clear();

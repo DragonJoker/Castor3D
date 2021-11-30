@@ -463,6 +463,11 @@ namespace castor3d
 		}
 	}
 
+	EnvironmentPrefilter::~EnvironmentPrefilter()
+	{
+		m_result.destroy();
+	}
+
 	void EnvironmentPrefilter::render( QueueData const & queueData )
 	{
 		for ( auto & cubePass : m_renderPasses )

@@ -34,6 +34,8 @@ namespace draw_edges
 			, crg::ImageViewId const & data0
 			, crg::ImageViewId const & data1
 			, ashes::Buffer< int32_t > const & depthRange );
+		~DepthNormalEdgeDetection();
+
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const

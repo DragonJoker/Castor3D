@@ -274,11 +274,13 @@ namespace castor3d
 		{
 			m_deviceExtensions.addFeature( &drawParamsFeatures );
 		}
-		else if ( isExtensionSupported( "VK_KHR_shader_draw_parameters"
+#if VK_KHR_shader_draw_parameters
+		else if ( isExtensionSupported( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME
 			, deviceExtensions ) )
 		{
-			m_deviceExtensions.addExtension( "VK_KHR_shader_draw_parameters" );
+			m_deviceExtensions.addExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME );
 		}
+#endif
 
 		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 		{
@@ -299,11 +301,13 @@ namespace castor3d
 			gpu.getFeatures( features2 );
 			features = features2.features;
 
-			if ( isExtensionSupported( "VK_EXT_shader_atomic_float"
+#if VK_EXT_shader_atomic_float
+			if ( isExtensionSupported( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME
 				, deviceExtensions ) )
 			{
-				m_deviceExtensions.addExtension( "VK_EXT_shader_atomic_float" );
+				m_deviceExtensions.addExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME );
 			}
+#endif
 		}
 
 		m_deviceExtensions.addExtension( VK_KHR_SWAPCHAIN_EXTENSION_NAME );

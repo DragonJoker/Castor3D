@@ -203,6 +203,8 @@ namespace castor3d
 		{
 			m_device.uboPools->putBuffer( m_clipInfo );
 		}
+
+		m_result.destroy();
 	}
 
 	void LineariseDepthPass::update( CpuUpdater & updater )

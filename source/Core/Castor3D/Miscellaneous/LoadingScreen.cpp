@@ -297,6 +297,8 @@ namespace castor3d
 		m_culler.reset();
 		m_camera.reset();
 		m_scene.reset();
+		m_depth.destroy();
+		m_colour.destroy();
 	}
 
 	void LoadingScreen::enable()

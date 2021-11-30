@@ -487,7 +487,7 @@ namespace castor3d
 				, getName()
 				, 0u
 				, m_scene.getLpvGridSize() )
-			: Texture{} ) }
+			: TexturePtr{} ) }
 		, m_propagate{ LightVolumePassResult{ handler
 				, m_device
 				, getName() + "Propagate0"
@@ -546,7 +546,7 @@ namespace castor3d
 					, m_lpvGridConfigUbo
 					, m_injection
 					, ( m_geometryVolumes
-						? &m_geometry
+						? m_geometry.get()
 						: nullptr ) ) );
 			for ( auto & lightInjectionPassDesc : ires.first->second->lightInjectionPassDescs )
 			{
@@ -682,8 +682,8 @@ namespace castor3d
 			if ( m_geometryVolumes )
 			{
 				visitor.visit( "LPV Geometry"
-					, m_geometry
-					, m_graph.getFinalLayout( m_geometry.wholeViewId ).layout
+					, *m_geometry
+					, m_graph.getFinalLayout( m_geometry->wholeViewId ).layout
 					, TextureFactors::tex3D( &m_gridsSize ) );
 			}
 
@@ -719,13 +719,13 @@ namespace castor3d
 
 		for ( auto & texture : m_injection )
 		{
-			result.addTransferOutputView( texture.wholeViewId
+			result.addTransferOutputView( texture->wholeViewId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 		}
 
 		if ( m_geometryVolumes )
 		{
-			result.addTransferOutputView( m_geometry.wholeViewId
+			result.addTransferOutputView( m_geometry->wholeViewId
 				, VK_IMAGE_LAYOUT_UNDEFINED );
 		}
 
@@ -785,7 +785,7 @@ namespace castor3d
 
 		if ( index > 0u && m_geometryVolumes )
 		{
-			result.addSampledView( m_geometry.sampledViewId
+			result.addSampledView( m_geometry->sampledViewId
 				, LightPropagationPass::GpGridIdx
 				, VK_IMAGE_LAYOUT_UNDEFINED
 				, crg::SamplerDesc{ VK_FILTER_LINEAR

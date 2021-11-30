@@ -275,7 +275,7 @@ namespace smaa
 
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{
-			m_images.emplace_back( m_device
+			m_images.emplace_back( std::make_shared< castor3d::Texture >( m_device
 				, m_graph.getHandler()
 				, "SMNBRes" + std::to_string( i )
 				, 0u
@@ -286,14 +286,22 @@ namespace smaa
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) ) );
 			auto & image = m_images.back();
-			image.create();
-			m_imageViews.push_back( image.wholeViewId );
+			image->create();
+			m_imageViews.push_back( image->wholeViewId );
 		}
 
 		m_pass.addOutputColourView( m_imageViews
 			, castor3d::transparentBlackClearColor );
+	}
+
+	NeighbourhoodBlending::~NeighbourhoodBlending()
+	{
+		for ( auto & image : m_images )
+		{
+			image->destroy();
+		}
 	}
 
 	void NeighbourhoodBlending::accept( castor3d::PipelineVisitorBase & visitor )
@@ -304,8 +312,8 @@ namespace smaa
 		for ( uint32_t i = 0; i < m_images.size(); ++i )
 		{
 			visitor.visit( "SMAA NeighbourhoodBlending " + std::to_string( i )
-				, m_images[i]
-				, m_graph.getFinalLayout( m_images[i].wholeViewId ).layout
+				, *m_images[i]
+				, m_graph.getFinalLayout( m_images[i]->wholeViewId ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
 	}

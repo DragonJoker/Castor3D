@@ -725,17 +725,17 @@ namespace castor3d
 		visitor.visit( m_pixelShader );
 	}
 
-	Texture GeometryInjectionPass::createResult( crg::ResourceHandler & handler
+	TexturePtr GeometryInjectionPass::createResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, uint32_t index
 		, uint32_t gridSize )
 	{
-		return Texture{ device
+		return std::make_shared< Texture >( device
 			, handler
 			, prefix + cuT( "GeometryInjection" ) + string::toString( index )
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-			, { gridSize, gridSize, gridSize }
+			, VkExtent3D{ gridSize, gridSize, gridSize }
 			, 1u
 			, 1u
 			, VK_FORMAT_R16G16B16A16_SFLOAT
@@ -744,6 +744,6 @@ namespace castor3d
 				| VK_IMAGE_USAGE_STORAGE_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK
-			, false };
+			, false );
 	}
 }

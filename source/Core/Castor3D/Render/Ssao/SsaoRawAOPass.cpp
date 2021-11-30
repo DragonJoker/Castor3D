@@ -631,6 +631,12 @@ namespace castor3d
 		m_bentNormals.create();
 	}
 
+	SsaoRawAOPass::~SsaoRawAOPass()
+	{
+		m_result.destroy();
+		m_bentNormals.destroy();
+	}
+
 	void SsaoRawAOPass::accept( SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{

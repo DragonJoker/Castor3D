@@ -48,8 +48,9 @@ namespace castor3d
 		auto commandBuffer = queueData->commandPool->createCommandBuffer();
 		commandBuffer->begin();
 
-		for ( auto & texture : m_result )
+		for ( auto & ptexture : m_result )
 		{
+			auto & texture = *ptexture;
 			texture.image = handler.createImage( context, texture.imageId );
 			VkImageMemoryBarrier transferBarrier{ VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
 				, nullptr
