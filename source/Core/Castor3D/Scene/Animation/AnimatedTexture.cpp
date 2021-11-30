@@ -86,6 +86,22 @@ namespace castor3d
 			data.translate = transform.translate;
 			data.rotate = { transform.rotate.cos(), transform.rotate.sin(), 0.0f, 0.0f };
 			data.scale = transform.scale;
+
+			if ( !m_playingAnimation->getTextureAnimation().isEmpty() )
+			{
+				auto tile = m_playingAnimation->getTile();
+				data.tileSet = { tile->x
+					, tile->y
+					, m_texture->getConfiguration().tileSet->z
+					, m_texture->getConfiguration().tileSet->w };
+			}
+			else
+			{
+				data.tileSet = { 0.0f
+					, 0.0f
+					, 1.0f
+					, 1.0f };
+			}
 		}
 	}
 

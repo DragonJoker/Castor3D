@@ -4,6 +4,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
@@ -219,7 +220,9 @@ namespace castor3d
 					data.trsDum = writeFlags( config.transmittanceMask, {} );
 					data.nmlFcr = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
 					data.hgtFcr = writeFlags( config.heightMask, config.heightFactor );
-					data.mscVls = writeFlags( float( config.needsYInversion ), unit->hasAnimation() ? 1.0f : 0.0f );
+					data.mscVls = writeFlags( float( config.needsYInversion )
+						, ( unit->hasAnimation() ? ( static_cast< TextureAnimation const & >( unit->getAnimation() ).isTransformAnimated() ? 1.0f : 0.0f ) : 0.0f )
+						, ( unit->hasAnimation() ? ( static_cast< TextureAnimation const & >( unit->getAnimation() ).isTileAnimated() ? 1.0f : 0.0f ) : 0.0f ) );
 					data.translate = config.transform.translate;
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
 					data.scale = config.transform.scale;

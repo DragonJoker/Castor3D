@@ -310,6 +310,14 @@ namespace castor3d
 #endif
 		}
 
+#if VK_KHR_synchronization2
+		if ( isExtensionSupported( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
+		}
+#endif
+
 		m_deviceExtensions.addExtension( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
 		device = renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()

@@ -22,6 +22,7 @@ namespace castor3d
 			, texTrn{ getMember< sdw::Vec4 >( "texTrn" ) }
 			, texRot{ getMember< sdw::Vec4 >( "texRot" ) }
 			, texScl{ getMember< sdw::Vec4 >( "texScl" ) }
+			, tleSet{ getMember< sdw::Vec4 >( "tleSet" ) }
 		{
 		}
 
@@ -39,6 +40,7 @@ namespace castor3d
 				result->declMember( "texTrn", ast::type::Kind::eVec4F );
 				result->declMember( "texRot", ast::type::Kind::eVec4F );
 				result->declMember( "texScl", ast::type::Kind::eVec4F );
+				result->declMember( "tleSet", ast::type::Kind::eVec4F );
 			}
 
 			return result;
@@ -47,7 +49,9 @@ namespace castor3d
 		void TextureAnimData::animUV( TextureConfigData const & config
 			, sdw::Vec2 & uv )const
 		{
-			IF( *m_writer, config.isAnim )
+			config.convertUV( uv );
+
+			IF( *m_writer, config.isTrnfAnim )
 			{
 				uv = vec2( uv.x()
 					, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
@@ -56,12 +60,23 @@ namespace castor3d
 				uv = translateUV( texTrn.xy(), uv );
 			}
 			FI;
+
+			config.convertToTile( uv );
+
+			IF( *m_writer, config.isTileAnim )
+			{
+				uv.x() += tleSet.x() / tleSet.z();
+				uv.y() += tleSet.y() / tleSet.w();
+			}
+			FI;
 		}
 
 		void TextureAnimData::animUVW( TextureConfigData const & config
 			, sdw::Vec3 & uvw )const
 		{
-			IF( *m_writer, config.isAnim )
+			config.convertUVW( uvw );
+
+			IF( *m_writer, config.isTrnfAnim )
 			{
 				uvw = vec3( uvw.x()
 					, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
