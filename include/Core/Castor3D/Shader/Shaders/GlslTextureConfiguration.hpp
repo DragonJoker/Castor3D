@@ -47,6 +47,7 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			friend class TextureConfigurations;
+			friend struct TextureAnimData;
 
 		public:
 			C3D_API TextureConfigData( sdw::ShaderWriter & writer
@@ -86,10 +87,11 @@ namespace castor3d
 				, sdw::Float const & occlusion )const;
 			C3D_API sdw::Float getTransmittance( sdw::Vec4 const & sampled
 				, sdw::Float const & transmittance )const;
-			C3D_API void convertUV( sdw::Vec2 & uv )const;
-			C3D_API void convertUVW( sdw::Vec3 & uvw )const;
 
 		private:
+			C3D_API void convertUV( sdw::Vec2 & uv )const;
+			C3D_API void convertUVW( sdw::Vec3 & uvw )const;
+			C3D_API void convertToTile( sdw::Vec2 & uv )const;
 			sdw::Float getFloat( sdw::Vec4 const & sampled
 				, sdw::Float const & mask )const;
 			sdw::Vec3 getVec3( sdw::Vec4 const & sampled
@@ -141,7 +143,8 @@ namespace castor3d
 			sdw::Float hgtFact;
 			sdw::Float fneedYI;
 			sdw::UInt needsYI;
-			sdw::Boolean isAnim;
+			sdw::Boolean isTrnfAnim;
+			sdw::Boolean isTileAnim;
 		};
 
 		class TextureConfigurations

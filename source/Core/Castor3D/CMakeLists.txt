@@ -398,9 +398,11 @@ source_group( "Source Files\\Material\\Texture" FILES ${${PROJECT_NAME}_FOLDER_S
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimation.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimationKeyFrame.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimation.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimationKeyFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimationModule.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

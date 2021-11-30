@@ -46,10 +46,12 @@ namespace castor3d
 			, castor::String const & name = castor::cuEmptyString );
 
 		C3D_API void setAnimable( TextureUnit & unit );
+		C3D_API void initialiseTiles( TextureUnit const & unit );
 
 		C3D_API castor::Point3f getTranslate( castor::Milliseconds const & time )const;
 		C3D_API castor::Angle getRotate( castor::Milliseconds const & time )const;
 		C3D_API castor::Point3f getScale( castor::Milliseconds const & time )const;
+		C3D_API bool isTransformAnimated()const;
 
 		void addPendingAnimated( AnimatedObject & object )
 		{
@@ -86,6 +88,16 @@ namespace castor3d
 			m_scale = scale;
 		}
 
+		void enableTileAnim()
+		{
+			m_tileAnim = true;
+		}
+
+		bool isTileAnimated()const
+		{
+			return m_tileAnim;
+		}
+
 		void setTransformSpeed( TextureTranslateSpeed const & translate
 			, TextureRotateSpeed const & rotate
 			, TextureScaleSpeed const & scale )
@@ -99,6 +111,7 @@ namespace castor3d
 		TextureTranslateSpeed m_translate;
 		TextureRotateSpeed m_rotate;
 		TextureScaleSpeed m_scale;
+		bool m_tileAnim{};
 		std::set< AnimatedObject * > m_pending;
 
 		friend class BinaryWriter< TextureAnimation >;
