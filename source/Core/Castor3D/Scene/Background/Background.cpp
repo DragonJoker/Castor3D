@@ -34,6 +34,11 @@ namespace castor3d
 	{
 	}
 
+	SceneBackground::~SceneBackground()
+	{
+		m_textureId.destroy();
+	}
+
 	bool SceneBackground::initialise( RenderDevice const & device )
 	{
 		if ( !m_initialised )

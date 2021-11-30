@@ -24,7 +24,7 @@ namespace castor3d
 			, castor::String name );
 
 	protected:
-		C3D_API Texture doCreateTexture( crg::ResourceHandler & handler
+		C3D_API TexturePtr doCreateTexture( crg::ResourceHandler & handler
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -67,7 +67,7 @@ namespace castor3d
 		*/
 		template< typename TextureEnumT >
 		TextureArray doCreateTextures( crg::ResourceHandler & handler
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
@@ -92,7 +92,7 @@ namespace castor3d
 				}
 				else
 				{
-					result.push_back( *inputs[i] );
+					result.emplace_back( inputs[i] );
 				}
 			}
 
@@ -128,7 +128,7 @@ namespace castor3d
 		*/
 		template< typename TextureEnumT >
 		TextureArray doCreateTextures( crg::ResourceHandler & handler
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size )const
@@ -152,7 +152,7 @@ namespace castor3d
 				}
 				else
 				{
-					result.push_back( *inputs[i] );
+					result.push_back( inputs[i] );
 				}
 			}
 
@@ -203,7 +203,7 @@ namespace castor3d
 		GBufferT( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String name
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount = 1u )
@@ -247,7 +247,7 @@ namespace castor3d
 		GBufferT( crg::ResourceHandler & handler
 			, RenderDevice const & device
 			, castor::String name
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size )
 			: GBufferBase{ device, std::move( name ) }
@@ -259,11 +259,19 @@ namespace castor3d
 		{
 		}
 
+		~GBufferT()
+		{
+			for ( auto & texture : m_result )
+			{
+				texture->destroy();
+			}
+		}
+
 		void create()
 		{
 			for ( auto & texture : m_result )
 			{
-				texture.create();
+				texture->create();
 			}
 		}
 		/**
@@ -277,7 +285,7 @@ namespace castor3d
 		/**@{*/
 		Texture const & operator[]( TextureEnumT texture )const
 		{
-			return m_result[size_t( texture )];
+			return *m_result[size_t( texture )];
 		}
 
 		TextureArray::const_iterator cbegin()const

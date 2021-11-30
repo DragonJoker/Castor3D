@@ -252,7 +252,7 @@ namespace castor3d
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
 		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
-		, m_velocity{ getOwner()->getRenderSystem()->getRenderDevice()
+		, m_velocity{ std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
 			, "Velocity"
 			, 0u
@@ -263,7 +263,7 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
 		, m_objects{ getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
 			, "Scene"
@@ -427,7 +427,7 @@ namespace castor3d
 
 				m_objects.create();
 				m_overlays.create();
-				m_velocity.create();
+				m_velocity->create();
 				m_combined.create();
 				auto runnable = m_runnable.get();
 				device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -477,6 +477,10 @@ namespace castor3d
 			}
 
 			m_renderTechnique.reset();
+			m_objects.destroy();
+			m_overlays.destroy();
+			m_velocity->destroy();
+			m_combined.destroy();
 			m_combineStages.clear();
 			m_combinePxl.shader.reset();
 			m_combineVtx.shader.reset();
@@ -701,7 +705,7 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
 		result.emplace_back( "Target Velocity"
-			, m_velocity
+			, *m_velocity
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

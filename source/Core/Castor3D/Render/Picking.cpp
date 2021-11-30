@@ -234,6 +234,7 @@ namespace castor3d
 	{
 		m_commandBuffer.reset();
 		m_stagingBuffer.reset();
+		m_colourTexture.reset();
 	}
 
 	void Picking::addScene( Scene & scene, Camera & camera )

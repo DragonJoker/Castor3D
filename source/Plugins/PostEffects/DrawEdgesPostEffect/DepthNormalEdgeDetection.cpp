@@ -243,6 +243,11 @@ namespace draw_edges
 		m_result.create();
 	}
 
+	DepthNormalEdgeDetection::~DepthNormalEdgeDetection()
+	{
+		m_result.destroy();
+	}
+
 	void DepthNormalEdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );

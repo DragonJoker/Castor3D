@@ -36,6 +36,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, Texture const & source
 			, SamplerResPtr sampler );
+		C3D_API ~IblTextures();
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.

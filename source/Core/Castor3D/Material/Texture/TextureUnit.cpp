@@ -357,6 +357,11 @@ namespace castor3d
 			log::error << "Couldn't load texture [" << toString() << "]" << std::endl;
 		}
 
+		if ( hasAnimation() )
+		{
+			static_cast< TextureAnimation & >( getAnimation() ).initialiseTiles( *this );
+		}
+
 		m_device = &device;
 		m_initialised = result;
 		getOwner()->getMaterialCache().registerUnit( *this );

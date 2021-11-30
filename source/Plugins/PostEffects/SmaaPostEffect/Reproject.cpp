@@ -235,6 +235,11 @@ namespace smaa
 		}
 	}
 
+	Reproject::~Reproject()
+	{
+		m_result.destroy();
+	}
+
 	void Reproject::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
