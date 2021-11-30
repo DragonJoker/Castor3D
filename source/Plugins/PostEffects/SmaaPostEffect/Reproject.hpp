@@ -26,6 +26,8 @@ namespace smaa
 			, crg::ImageViewId const * velocityView
 			, SmaaConfig const & config
 			, bool const * enabled );
+		~Reproject();
+
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const

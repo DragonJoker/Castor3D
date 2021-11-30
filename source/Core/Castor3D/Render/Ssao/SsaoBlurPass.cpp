@@ -492,6 +492,12 @@ namespace castor3d
 		m_bentResult.create();
 	}
 
+	SsaoBlurPass::~SsaoBlurPass()
+	{
+		m_bentResult.destroy();
+		m_result.destroy();
+	}
+
 	void SsaoBlurPass::update( CpuUpdater & updater )
 	{
 		if ( m_config.blurRadius.isDirty() )

@@ -61,6 +61,7 @@ namespace castor3d
 
 	bool ColourBackground::doInitialise( RenderDevice const & device )
 	{
+		m_textureId.create();
 		auto data = device.graphicsData();
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
@@ -94,6 +95,7 @@ namespace castor3d
 	{
 		m_stagingTexture.reset();
 		m_cmdCopy.reset();
+		m_textureId.destroy();
 	}
 
 	void ColourBackground::doCpuUpdate( CpuUpdater & updater )const

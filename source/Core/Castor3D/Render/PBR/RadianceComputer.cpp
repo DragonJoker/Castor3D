@@ -289,6 +289,11 @@ namespace castor3d
 		cmd.end();
 	}
 
+	RadianceComputer::~RadianceComputer()
+	{
+		m_result.destroy();
+	}
+
 	void RadianceComputer::render( QueueData const & queueData )
 	{
 		m_commands.submit( *queueData.queue );

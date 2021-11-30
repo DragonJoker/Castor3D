@@ -86,6 +86,19 @@ namespace castor3d
 		return result;
 	}
 
+	void RenderTargetCache::cleanup( RenderDevice const & device )
+	{
+		LockType lock{ castor::makeUniqueLock( *this ) };
+
+		for ( auto & array : m_renderTargets )
+		{
+			for ( auto & target : array )
+			{
+				target->cleanup( device );
+			}
+		}
+	}
+
 	void RenderTargetCache::clear()
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };

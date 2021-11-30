@@ -279,6 +279,16 @@ namespace castor3d
 			return validNames.find( name ) != validNames.end();
 		}
 
+		bool isSynchronisationLayer( std::string const & name
+			, std::string const & description )
+		{
+			static std::set< std::string > const validNames
+			{
+				"VK_LAYER_KHRONOS_synchronization2",
+			};
+			return validNames.find( name ) != validNames.end();
+		}
+
 		bool isApiTraceLayer( std::string const & name
 			, std::string const & description )
 		{
@@ -303,6 +313,13 @@ namespace castor3d
 		void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
 			, Extensions & extensions )
 		{
+#if VK_KHR_synchronization2
+			log::debug << "Adding synchronization layer" << std::endl;
+			if ( isExtensionAvailable( available, VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME ) )
+			{
+				extensions.addExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
+			}
+#endif
 #if VK_EXT_debug_utils
 			log::debug << "Adding debug_utils layer" << std::endl;
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
@@ -678,7 +695,8 @@ namespace castor3d
 		for ( auto const & props : layers )
 		{
 			if ( ( engine.isValidationEnabled()
-				&& isValidationLayer( props.layerName, props.description ) )
+				&& ( isValidationLayer( props.layerName, props.description )
+					|| isSynchronisationLayer( props.layerName, props.description ) ) )
 				|| ( engine.isApiTraceEnabled()
 					&& isApiTraceLayer( props.layerName, props.description ) ) )
 			{
