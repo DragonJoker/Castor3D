@@ -85,6 +85,7 @@ namespace castor3d
 		float normalGMultiplier{ 1.0f };
 		uint32_t needsYInversion{ 0u };
 		TextureTransform transform;
+		castor::Point4ui tileSet;
 		TextureSpace textureSpace{ TextureSpace::eColour };
 		/**@}*/
 		/**

@@ -24,7 +24,7 @@ namespace castor
 					dst[i] = DstType( src[i] );
 				}
 
-				if ( DstCount > MinCount )
+				if constexpr ( DstCount > MinCount )
 				{
 					for ( uint32_t i = MinCount; i < DstCount; ++i )
 					{

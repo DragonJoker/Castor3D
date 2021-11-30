@@ -21,29 +21,26 @@ namespace castor
 	*/
 	struct ImageCreateParams
 	{
-		explicit ImageCreateParams( Path const & path
-			, bool allowCompression = true
-			, bool generateMips = true )
+		explicit ImageCreateParams( Path const & ppath
+			, ImageLoaderConfig ploadConfig = { true, true, true } )
 			: mode{ false }
-			, path{ path }
-			, allowCompression{ allowCompression }
-			, generateMips{ generateMips }
+			, path{ ppath }
+			, loadConfig{ std::move( ploadConfig ) }
 		{
 		}
 
-		ImageCreateParams( Size const & size
-			, PixelFormat format )
+		ImageCreateParams( Size const & psize
+			, PixelFormat pformat )
 			: mode{ true }
-			, size{ size }
-			, format{ format }
+			, size{ psize }
+			, format{ pformat }
 		{
 		}
 
 		bool mode;
 		// mode 0
 		Path path;
-		bool allowCompression{};
-		bool generateMips{};
+		ImageLoaderConfig loadConfig{};
 		// mode 1
 		Size size{};
 		PixelFormat format{};

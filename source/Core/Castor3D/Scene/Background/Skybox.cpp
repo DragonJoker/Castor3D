@@ -138,7 +138,7 @@ namespace castor3d
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackground" ) + castor3d::getName( face ) );
-		texture->setSource( folder, relative, false, false );
+		texture->setSource( folder, relative, { false, false, false } );
 		m_layerTexturePath[size_t( face )] = texture->getImage().getPath();
 		m_layerTexture[size_t( face )] = texture;
 		notifyChanged();
@@ -165,7 +165,7 @@ namespace castor3d
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
-		texture->setSource( folder, relative, false, false );
+		texture->setSource( folder, relative, { false, false, false } );
 		setEquiTexture( texture, size );
 	}
 
@@ -205,7 +205,7 @@ namespace castor3d
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCross" ) );
-		texture->setSource( folder, relative, false, false );
+		texture->setSource( folder, relative, { false, false, false } );
 		setCrossTexture( texture );
 	}
 

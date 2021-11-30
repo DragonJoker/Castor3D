@@ -111,7 +111,7 @@ namespace
 		try
 		{
 			std::cout << "Converting " << path << std::endl;
-			auto image = loader.load( path.getFileName(), path, false, false );
+			auto image = loader.load( path.getFileName(), path, {} );
 
 			if ( castor::convertToNormalMap( strength, image ) )
 			{
