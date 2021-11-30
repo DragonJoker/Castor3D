@@ -335,7 +335,7 @@ namespace castor3d
 			{
 				stepProgressBar( progress, "Initialising indirect light pass" );
 				auto result = crg::RenderQuadBuilder{}
-					.renderSize( makeExtent2D( m_lpResult.begin()->getExtent() ) )
+					.renderSize( makeExtent2D( ( *m_lpResult.begin() )->getExtent() ) )
 					.programs( convertPrograms( m_programs ) )
 					.passIndex( &m_programIndex )
 					.build( pass, context, graph, uint32_t( m_programs.size() ) );

@@ -275,7 +275,7 @@ namespace castor3d
 
 			for ( auto & texture : lpvResult )
 			{
-				pass.addTransferOutputView( texture.wholeViewId
+				pass.addTransferOutputView( texture->wholeViewId
 					, VK_IMAGE_LAYOUT_UNDEFINED );
 			}
 
@@ -283,7 +283,7 @@ namespace castor3d
 			{
 				for ( auto & texture : *textures )
 				{
-					pass.addTransferOutputView( texture.wholeViewId
+					pass.addTransferOutputView( texture->wholeViewId
 						, VK_IMAGE_LAYOUT_UNDEFINED );
 				}
 			}
@@ -323,7 +323,7 @@ namespace castor3d
 		, m_colourTexture{ doCreateTextureUnit( m_device
 			, queueData
 			, m_colour.imageId ) }
-		, m_depth{ device
+		, m_depth{ std::make_shared< Texture >( device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechDpt"
 			, 0u
@@ -336,11 +336,11 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
 		, m_depthBuffer{ doCreateTextureUnit( m_device
 			, queueData
-			, m_depth.imageId ) }
-		, m_depthObj{ device
+			, m_depth->imageId ) }
+		, m_depthObj{ std::make_shared< Texture >( device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechData0"
 			, 0u
@@ -349,8 +349,8 @@ namespace castor3d
 			, 1u
 			, getFormat( DsTexture::eData0 )
 			, getUsageFlags( DsTexture::eData0 )
-			, getBorderColor( DsTexture::eData0 ) }
-		, m_normal{ device
+			, getBorderColor( DsTexture::eData0 ) ) }
+		, m_normal{ std::make_shared< Texture >( device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechData1"
 			, 0u
@@ -359,7 +359,7 @@ namespace castor3d
 			, 1u
 			, getFormat( DsTexture::eData1 )
 			, getUsageFlags( DsTexture::eData1 )
-			, getBorderColor( DsTexture::eData1 ) }
+			, getBorderColor( DsTexture::eData1 ) ) }
 		, m_matrixUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_gpInfoUbo{ m_device }
@@ -379,8 +379,8 @@ namespace castor3d
 			, *m_depthPassDecl
 			, makeSize( m_colour.getExtent() )
 			, getSsaoConfig()
-			, m_depth
-			, m_normal
+			, *m_depth
+			, *m_normal
 			, m_gpInfoUbo ) }
 		, m_voxelizer{ castor::makeUnique< Voxelizer >( getOwner()->getGraphResourceHandler()
 			, device
@@ -407,7 +407,7 @@ namespace castor3d
 			, m_sceneUbo
 			, m_colour.targetViewId
 			, true
-			, m_depth.targetViewId ) }
+			, m_depth->targetViewId ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()
 			, m_device
@@ -433,7 +433,7 @@ namespace castor3d
 			, *m_opaquePassDesc
 			, m_device
 			, progress
-			, m_depth
+			, *m_depth
 			, *m_opaquePassResult
 			, m_colour
 			, m_directionalShadowMap->getShadowPassResult()
@@ -481,7 +481,7 @@ namespace castor3d
 		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
 		m_colour.create();
-		m_depth.create();
+		m_depth->create();
 		auto runnable = m_clearLpvRunnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [runnable]( RenderDevice const &
@@ -514,6 +514,8 @@ namespace castor3d
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();
+		m_colour.destroy();
+		m_depth->destroy();
 		m_depthBuffer->cleanup();
 		m_colourTexture->cleanup();
 		getEngine()->getSamplerCache().remove( cuT( "RenderTechnique_Colour" ) );
@@ -684,8 +686,8 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
-			, m_depth
-			, m_renderTarget.getGraph().getFinalLayout( m_depth.sampledViewId ).layout
+			, *m_depth
+			, m_renderTarget.getGraph().getFinalLayout( m_depth->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		m_depthPass->accept( visitor );
@@ -793,19 +795,19 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, getSsaoConfig()
-					, SceneRenderPassDesc{ m_depth.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true ) );
+					, SceneRenderPassDesc{ m_depth->getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true ) );
 				m_depthPass = res.get();
 				getEngine()->registerTimer( runnableGraph.getName() + "/Depth"
 					, res->getTimer() );
 				return res;
 			} );
-		result.addOutputDepthStencilView( m_depth.targetViewId
+		result.addOutputDepthStencilView( m_depth->targetViewId
 			, defaultClearDepthStencil );
-		result.addOutputColourView( m_depthObj.targetViewId
+		result.addOutputColourView( m_depthObj->targetViewId
 			, getClearValue( DsTexture::eData0 ) );
-		result.addOutputColourView( m_normal.targetViewId
+		result.addOutputColourView( m_normal->targetViewId
 			, getClearValue( DsTexture::eData1 ) );
-		result.addOutputColourView( m_renderTarget.getVelocity().targetViewId );
+		result.addOutputColourView( m_renderTarget.getVelocity()->targetViewId );
 		return result;
 	}
 
@@ -827,7 +829,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( *m_depthPassDecl );
-		result.addInputStorageView( m_depthObj.sampledViewId
+		result.addInputStorageView( m_depthObj->sampledViewId
 			, ComputeDepthRange::eInput
 			, VK_IMAGE_LAYOUT_UNDEFINED );
 		result.addOutputStorageBuffer( { m_depthRange->getBuffer(), "DepthRange" }
@@ -875,7 +877,7 @@ namespace castor3d
 		result.addDependency( m_backgroundRenderer->getPass() );
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
-		result.addInOutDepthStencilView( m_depth.targetViewId );
+		result.addInOutDepthStencilView( m_depth->targetViewId );
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;
 		result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
@@ -935,10 +937,10 @@ namespace castor3d
 			} );
 #if C3D_UseDeferredRendering
 		result.addDependency( m_deferredRendering->getLastPass() );
-		result.addInOutDepthStencilView( m_depth.targetViewId, {} );
+		result.addInOutDepthStencilView( m_depth->targetViewId, {} );
 #else
 		result.addDependency( *m_opaquePassDesc );
-		result.addInOutDepthStencilView( m_depth.targetViewId );
+		result.addInOutDepthStencilView( m_depth->targetViewId );
 #endif
 
 #if C3D_UseWeightedBlendedRendering

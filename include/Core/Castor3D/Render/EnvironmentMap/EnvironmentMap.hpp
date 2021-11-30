@@ -135,7 +135,7 @@ namespace castor3d
 			return m_extent;
 		}
 
-		Texture getColourId()const
+		Texture const & getColourId()const
 		{
 			return m_environmentMap;
 		}

@@ -9,7 +9,7 @@ namespace castor3d
 	{
 	}
 
-	Texture GBufferBase::doCreateTexture( crg::ResourceHandler & handler
+	TexturePtr GBufferBase::doCreateTexture( crg::ResourceHandler & handler
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
@@ -19,7 +19,7 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags
 		, VkBorderColor const & borderColor )const
 	{
-		return Texture{ m_device
+		return std::make_shared< Texture >( m_device
 			, handler
 			, name
 			, createFlags
@@ -28,6 +28,6 @@ namespace castor3d
 			, mipLevels
 			, format
 			, usageFlags
-			, borderColor };
+			, borderColor );
 	}
 }

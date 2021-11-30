@@ -95,6 +95,13 @@ namespace castor3d
 			, crg::SemaphoreWaitArray signalsToWait );
 		/**
 		 *\~english
+		 *\brief		cleans up the collection.
+		 *\~french
+		 *\brief		Nettoie la collection.
+		 */
+		C3D_API void cleanup( RenderDevice const & device );
+		/**
+		 *\~english
 		 *\brief		Flushes the collection.
 		 *\~french
 		 *\brief		Vide la collection.

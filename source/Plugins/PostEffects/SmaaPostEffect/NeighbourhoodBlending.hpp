@@ -28,6 +28,8 @@ namespace smaa
 			, crg::ImageViewId const * velocityView
 			, SmaaConfig const & config
 			, bool const * enabled );
+		~NeighbourhoodBlending();
+
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewIdArray const & getResult()const

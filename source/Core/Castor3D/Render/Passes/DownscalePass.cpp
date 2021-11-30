@@ -20,22 +20,22 @@ namespace castor3d
 
 	namespace
 	{
-		Texture doCreateImage( RenderDevice const & device
+		TexturePtr doCreateImage( RenderDevice const & device
 			, crg::FrameGraph & graph
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
-			return Texture{ device
+			return std::make_shared< Texture >( device
 				, graph.getHandler()
 				, name
 				, 0u
-				, { size.width, size.height, 1u }
+				, VkExtent3D{ size.width, size.height, 1u }
 				, 1u
 				, 1u
 				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) );
 		}
 
 		TextureArray doCreateImages( RenderDevice const & device
@@ -51,7 +51,7 @@ namespace castor3d
 				result.emplace_back( doCreateImage( device
 					, graph
 					, name + castor::string::toString( result.size() )
-					, view.getFormat()
+					, view->getFormat()
 					, size ) );
 			}
 
@@ -142,7 +142,7 @@ namespace castor3d
 		for ( auto & texture : m_result )
 		{
 			visitor.visit( "Downscale" + castor::string::toString( index++ )
-				, texture
+				, *texture
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}

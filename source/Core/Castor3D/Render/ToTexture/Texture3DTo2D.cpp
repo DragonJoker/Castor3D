@@ -491,6 +491,8 @@ namespace castor3d
 
 	Texture3DTo2D::~Texture3DTo2D()
 	{
+		m_depthBuffer.destroy();
+		m_target.destroy();
 		m_device.uboPools->putBuffer( m_uniformBuffer );
 	}
 

@@ -950,6 +950,7 @@ namespace smaa
 		m_graph.getHandler().destroyImage( context, m_areaView.data->image );
 		m_graph.getHandler().destroyImageView( context, m_searchView );
 		m_graph.getHandler().destroyImage( context, m_searchView.data->image );
+		m_result.destroy();
 	}
 
 	void BlendingWeightCalculation::accept( castor3d::PipelineVisitorBase & visitor )
