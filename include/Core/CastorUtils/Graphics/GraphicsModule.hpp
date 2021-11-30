@@ -179,6 +179,19 @@ namespace castor
 	};
 	/**
 	\~english
+	\brief		The image loading configuration.
+	\~french
+	\brief		La configuration de chargement d'une image.
+	*/
+	struct ImageLoaderConfig
+	{
+		bool allowCompression;
+		bool generateMips;
+		bool layersToTiles;
+	};
+
+	/**
+	\~english
 	\brief		The memory layout for an image.
 	\~french
 	\brief		Le layout mémoire d'une image.

@@ -113,8 +113,7 @@ namespace castor3d
 			return TextureSourceInfo{ lhs.sampler()
 				, lhs.folder()
 				, castor::Path{ lhs.relative() + rhs.relative() }
-				, lhs.allowCompression()
-				, lhs.generateMips() };
+				, lhs.config() };
 		}
 	}
 
@@ -520,19 +519,20 @@ namespace castor3d
 						, rhsIt.second.config.heightFactor );
 					getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
 					getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
+					auto img = textureCache.mergeImages( lhsIt.first
+						, lhsIt.second.config
+						, getMask( lhsIt.second.config, lhsMaskOffset )
+						, lhsDstMask
+						, rhsIt.first
+						, rhsIt.second.config
+						, getMask( rhsIt.second.config, rhsMaskOffset )
+						, rhsDstMask
+						, getOwner()->getName() + name
+						, resultSourceInfo
+						, resultConfig );
 					doAddUnit( resultConfig
 						, nullptr
-						, textureCache.mergeImages( lhsIt.first
-							, lhsIt.second.config
-							, getMask( lhsIt.second.config, lhsMaskOffset )
-							, lhsDstMask
-							, rhsIt.first
-							, rhsIt.second.config
-							, getMask( rhsIt.second.config, rhsMaskOffset )
-							, rhsDstMask
-							, getOwner()->getName() + name
-							, resultSourceInfo
-							, resultConfig )
+						, std::move( img )
 						, result );
 				}
 				else

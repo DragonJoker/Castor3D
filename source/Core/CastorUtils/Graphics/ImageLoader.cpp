@@ -13,19 +13,18 @@ namespace castor
 	{
 		Image postProcess( PxBufferConvertOptions const & options
 			, Image image
-			, bool allowCompression
-			, bool generateMips )
+			, ImageLoaderConfig const & config )
 		{
 			auto dstFormat = image.getPixelFormat();
 
-			if ( allowCompression )
+			if ( config.allowCompression )
 			{
 				dstFormat = options.getCompressed( dstFormat );
 			}
 
 			if ( dstFormat == image.getPixelFormat()
 				&& ( image.getLayout().levels > 1u
-					|| !generateMips ) )
+					|| !config.generateMips ) )
 			{
 				return image;
 			}
@@ -48,7 +47,7 @@ namespace castor
 					buffer->flip();
 				}
 			}
-			else if ( generateMips
+			else if ( config.generateMips
 				&& !isCompressed( image.getPixelFormat() ) )
 			{
 				buffer->generateMips();
@@ -148,8 +147,7 @@ namespace castor
 
 	Image ImageLoader::load( String const & name
 		, Path const & path
-		, bool allowCompression
-		, bool generateMips )const
+		, ImageLoaderConfig const & config )const
 	{
 		if ( path.empty() )
 		{
@@ -180,8 +178,7 @@ namespace castor
 				, path
 				, data.data()
 				, uint32_t( data.size() )
-				, allowCompression
-				, generateMips );
+				, config );
 		}
 		catch ( std::exception & exc )
 		{
@@ -194,8 +191,7 @@ namespace castor
 		, String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
-		, bool allowCompression
-		, bool generateMips )const
+		, ImageLoaderConfig const & config )const
 	{
 		checkData( data, size );
 		auto loader = findLoader( imageFormat );
@@ -204,16 +200,14 @@ namespace castor
 				, imageFormat
 				, data
 				, size )
-			, allowCompression
-			, generateMips );
+			, config );
 	}
 
 	Image ImageLoader::load( String const & name
 		, Path const & imagePath
 		, uint8_t const * data
 		, uint32_t size
-		, bool allowCompression
-		, bool generateMips )const
+		, ImageLoaderConfig const & config )const
 	{
 		checkData( data, size );
 		auto loader = findLoader( imagePath );
@@ -222,8 +216,7 @@ namespace castor
 				, imagePath
 				, data
 				, size )
-			, allowCompression
-			, generateMips );
+			, config );
 	}
 
 	void ImageLoader::checkData( uint8_t const * data
