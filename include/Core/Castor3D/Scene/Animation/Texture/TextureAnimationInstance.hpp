@@ -59,6 +59,11 @@ namespace castor3d
 		{
 			return m_transform;
 		}
+
+		castor::Point2ui const & getTile()const
+		{
+			return m_tile;
+		}
 		/**@}*/
 
 	private:
@@ -66,8 +71,13 @@ namespace castor3d
 
 	protected:
 		AnimatedTexture & m_animatedTexture;
-		TextureAnimation const & m_textureAnimation;
+		TextureAnimation & m_textureAnimation;
 		TextureTransform m_transform;
+		castor::Point2ui m_tile;
+		AnimationKeyFrameArray::iterator m_prev;
+		AnimationKeyFrameArray::iterator m_curr;
+		float m_ratio{ 0.0f };
+		bool m_first{ true };
 
 		friend class BinaryWriter< TextureAnimation >;
 		friend class BinaryParser< TextureAnimation >;

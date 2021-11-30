@@ -22,11 +22,14 @@ namespace castor3d
 		castor::Point4f translate;
 		castor::Point4f rotate;
 		castor::Point4f scale;
+		castor::Point4f tileSet;
 	};
 
 	class TextureAnimation;
+	class TextureAnimationKeyFrame;
 
 	CU_DeclareSmartPtr( TextureAnimation );
+	CU_DeclareSmartPtr( TextureAnimationKeyFrame );
 
 	using TextureRotateSpeed = castor::SpeedT< castor::Angle, castor::Seconds >;
 	using TextureTranslateSpeed = castor::SpeedT< castor::Point2f, castor::Seconds >;

@@ -1025,7 +1025,6 @@ namespace castor3d::shader
 					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
 				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 					, texCoords.xy() );
-				config.convertUV( texCoord );
 				anim.animUV( config, texCoord );
 				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
 					, maps[i].sample( texCoord ) );
@@ -1062,7 +1061,6 @@ namespace castor3d::shader
 				, textureAnims.getTextureAnimation(  sdw::UInt( it->second.id ) ) );
 			auto texCoord = m_writer.declLocale( "c3d_texCoordOpacity"
 				, texCoords.xy() );
-			config.convertUV( texCoord );
 			anim.animUV( config, texCoord );
 			auto sampledOpacity = m_writer.declLocale< sdw::Vec4 >( "c3d_sampledOpacity"
 				, maps[i].sample( texCoord ) );
@@ -1127,7 +1125,6 @@ namespace castor3d::shader
 	{
 		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
-		config.convertUV( texCoord );
 		anim.animUV( config, texCoord );
 		auto result = m_writer.declLocale( "c3d_result" + name
 			, map.sample( texCoord ) );
@@ -1163,7 +1160,6 @@ namespace castor3d::shader
 	{
 		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
-		config.convertUV( texCoord );
 		anim.animUV( config, texCoord );
 		auto result = m_writer.declLocale< sdw::Vec4 >( "c3d_result" + name
 			, map.sample( texCoord ) );
@@ -1408,7 +1404,6 @@ namespace castor3d::shader
 	{
 		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 			, texCoords.xy() );
-		config.convertUV( texCoord );
 		anim.animUV( config, texCoord );
 
 		if ( checkFlag( textureFlags, TextureFlag::eHeight )
