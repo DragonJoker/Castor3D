@@ -207,8 +207,7 @@ namespace castor3d
 			{
 				auto image = getEngine()->getImageLoader().load( relative.getFileName()
 					, folder / relative
-					, false
-					, true );
+					, { false, true, true } );
 				result = castor::makeUnique< castor::Image >( relative.getFileName()
 					, folder / relative
 					, *image.getPixels() );
@@ -246,7 +245,7 @@ namespace castor3d
 		return TextureSourceInfo{ sampler
 			, folder
 			, relative
-			, allowCompression };
+			, { allowCompression, true, true } };
 	}
 
 	void MeshImporter::loadTexture( castor3d::SamplerRes sampler

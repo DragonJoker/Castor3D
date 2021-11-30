@@ -604,6 +604,55 @@ namespace castor
 		m_buffer = buffer;
 	}
 
+	void PxBufferBase::convertToTiles()
+	{
+		if ( m_layers <= 1u )
+		{
+			return;
+		}
+
+		PxArray result;
+		result.resize( m_buffer.size() );
+		VkExtent2D srcSize{ m_size.getWidth(), m_size.getHeight() };
+		VkExtent2D dstSize{ m_size.getWidth() * m_layers, m_size.getHeight() };
+		auto blockSize = ashes::getBlockSize( VkFormat( m_format ) );
+		auto src = m_buffer.data();
+		auto dst = result.data();
+
+		for ( uint32_t layer = 0u; layer < m_layers; ++layer )
+		{
+			auto srcLayer = src;
+
+			for ( uint32_t level = 0u; level < m_levels; ++level )
+			{
+				auto dstMipOffset = ashes::getLevelsSize( dstSize, VkFormat( m_format ), 0u, level, 1u );
+				auto srcLevel = srcLayer;
+				auto dstLevel = dst + dstMipOffset;
+
+				auto levelSize = ashes::getSize( srcSize, VkFormat( m_format ), level );
+				auto lines = ( srcSize.height >> level ) / blockSize.extent.height;
+				auto srcLineSize = levelSize / lines;
+				auto dstLineSize = srcLineSize * m_layers;
+				dstLevel += layer * srcLineSize;
+
+				for ( uint32_t line = 0u; line < lines; ++line )
+				{
+					std::memcpy( dstLevel, srcLevel, srcLineSize );
+					srcLevel += srcLineSize;
+					dstLevel += dstLineSize;
+				}
+
+				srcLayer = srcLevel;
+			}
+
+			src = srcLayer;
+		}
+
+		m_buffer = result;
+		m_size = { dstSize.width, dstSize.height };
+		m_layers = 1u;
+	}
+
 	void PxBufferBase::update( uint32_t layers
 		, uint32_t levels )
 	{

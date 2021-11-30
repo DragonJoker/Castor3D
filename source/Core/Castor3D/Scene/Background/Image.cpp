@@ -94,7 +94,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "ImageBackground_Colour" ) );
-			texture->setSource( folder, relative, false, false );
+			texture->setSource( folder, relative, { false, false, false } );
 			m_2dTexture = texture;
 			m_2dTexturePath = castor::Path( m_2dTexture->getDefaultView().toString() );
 			notifyChanged();

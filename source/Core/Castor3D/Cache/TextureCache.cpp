@@ -330,8 +330,7 @@ namespace castor3d
 			{
 				image = engine.getImageCache().add( name
 					, castor::ImageCreateParams{ folder / relative
-						, false
-						, false } );
+						, { false, false, false } } );
 			}
 
 			auto img = image.lock();
@@ -369,7 +368,9 @@ namespace castor3d
 		TextureLayoutSPtr getTextureLayout( Engine & engine
 			, castor::PxBufferBaseUPtr buffer
 			, castor::String const & name
-			, bool allowCompression )
+			, bool allowCompression
+			, bool layersToTiles
+			, uint32_t & layers )
 		{
 			// Finish buffer initialisation.
 			auto & loader = engine.getImageLoader();
@@ -389,6 +390,12 @@ namespace castor3d
 			{
 				log::debug << ( name + cuT( " - Generating result mipmaps.\n" ) );
 				buffer->generateMips();
+			}
+
+			if ( layersToTiles )
+			{
+				layers = buffer->getLayers();
+				buffer->convertToTiles();
 			}
 
 			// Create the resulting texture.
@@ -559,7 +566,9 @@ namespace castor3d
 		data.layout = getTextureLayout( *getEngine()
 			, std::move( data.buffer )
 			, name
-			, data.sourceInfo.allowCompression() && ( data.config.config.normalMask[0] == 0 ) );
+			, data.sourceInfo.allowCompression() && ( data.config.config.normalMask[0] == 0 )
+			, data.sourceInfo.layersToTiles()
+			, data.tiles );
 	}
 
 	void TextureUnitCache::doLoadSource( TextureSourceInfo const & sourceInfo
@@ -575,7 +584,10 @@ namespace castor3d
 				{
 					data.unit->setSampler( data.sourceInfo.sampler() );
 					data.unit->setRenderTarget( data.sourceInfo.renderTarget() );
-					data.unit->setConfiguration( data.config.config );
+					auto config = data.config.config;
+					config.tileSet->z = data.tiles;
+					config.tileSet->w = 1u;
+					data.unit->setConfiguration( std::move( config ) );
 					data.unit->initialise( device, queueData );
 					doDestroyThreadData( data );
 				} );
@@ -668,7 +680,10 @@ namespace castor3d
 			{
 				data.unit->setSampler( data.sourceInfo.sampler() );
 				data.unit->setTexture( data.layout );
-				data.unit->setConfiguration( data.config.config );
+				auto config = data.config.config;
+				config.tileSet->z = data.tiles;
+				config.tileSet->w = 1u;
+				data.unit->setConfiguration( std::move( config ) );
 				data.unit->initialise( device, queueData );
 				doDestroyThreadData( data );
 			} );
