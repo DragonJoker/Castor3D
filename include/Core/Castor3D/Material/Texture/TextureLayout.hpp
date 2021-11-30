@@ -168,7 +168,7 @@ namespace castor3d
 	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
 		, castor::Path const & relative
 		, castor::Path const & folder
-		, bool allowCompression = true );
+		, castor::ImageLoaderConfig config = { true, true, true } );
 	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
 		, castor::String const & name
 		, castor::PxBufferBaseUPtr buffer
@@ -299,8 +299,7 @@ namespace castor3d
 			, bool isStatic = false );
 		C3D_API void setSource( castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true
-			, bool generateMips = true );
+			, castor::ImageLoaderConfig config = { true, true, true } );
 		C3D_API void setSource( VkExtent3D const & extent
 			, VkFormat format );
 		void setSource( VkExtent2D const & extent
@@ -366,8 +365,7 @@ namespace castor3d
 		C3D_API void setLayerSource( uint32_t index
 			, castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true
-			, bool generateMips = true );
+			, castor::ImageLoaderConfig config = { true, true, false } );
 		C3D_API void setLayerSource( uint32_t index
 			, VkExtent3D const & extent
 			, VkFormat format );
@@ -440,7 +438,7 @@ namespace castor3d
 			, uint32_t level
 			, castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true );
+			, castor::ImageLoaderConfig config = { true, false, false } );
 		C3D_API void setLayerMipSource( uint32_t index
 			, uint32_t level
 			, VkExtent3D const & extent
@@ -587,8 +585,7 @@ namespace castor3d
 			, CubeMapFace face
 			, castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true
-			, bool generateMips = true );
+			, castor::ImageLoaderConfig config = { true, true, false } );
 		void setLayerCubeFaceSource( uint32_t layer
 			, CubeMapFace face
 			, VkExtent2D const & extent
@@ -632,7 +629,7 @@ namespace castor3d
 			, uint32_t level
 			, castor::Path const & folder
 			, castor::Path const & relative
-			, bool allowCompression = true );
+			, castor::ImageLoaderConfig config = { true, false, false } );
 		void setLayerCubeFaceMipSource( uint32_t layer
 			, CubeMapFace face
 			, uint32_t level

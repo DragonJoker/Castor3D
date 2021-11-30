@@ -26,8 +26,7 @@ namespace castor
 		auto & realCache = static_cast< ResourceCacheT< Image, String, ResourceCacheTraitsT< Image, String > > const & >( cache );
 		return makeResource< Image, String >( realCache.getLoader().load( name
 			, params.path
-			, params.allowCompression
-			, params.generateMips ) );
+			, params.loadConfig ) );
 	}
 
 	//*********************************************************************************************

@@ -160,8 +160,7 @@ namespace castor
 		 */
 		CU_API Image load( String const & name
 			, Path const & path
-			, bool allowCompression
-			, bool generateMips )const;
+			, ImageLoaderConfig const & config )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -182,8 +181,7 @@ namespace castor
 			, Path const & imagePath
 			, uint8_t const * data
 			, uint32_t size
-			, bool allowCompression
-			, bool generateMips )const;
+			, ImageLoaderConfig const & config )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -204,8 +202,7 @@ namespace castor
 			, String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size
-			, bool allowCompression
-			, bool generateMips )const;
+			, ImageLoaderConfig const & config )const;
 
 		void setCompressionSupport( PxCompressionSupport support )
 		{

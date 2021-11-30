@@ -41,6 +41,7 @@ namespace castor3d
 			castor::PxBufferBaseUPtr buffer{};
 			TextureLayoutSPtr layout{};
 			TextureUnit * unit{};
+			uint32_t tiles{ 1u };
 		};
 
 	public:

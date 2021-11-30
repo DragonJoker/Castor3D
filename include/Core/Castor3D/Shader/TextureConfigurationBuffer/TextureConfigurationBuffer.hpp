@@ -106,6 +106,7 @@ namespace castor3d
 			castor::ArrayView< castor::Point4f > translate;
 			castor::ArrayView< castor::Point4f > rotate;
 			castor::ArrayView< castor::Point4f > scale;
+			castor::ArrayView< castor::Point4f > tileSet;
 		};
 
 #else
@@ -123,6 +124,7 @@ namespace castor3d
 			castor::Point4f translate;
 			castor::Point4f rotate;
 			castor::Point4f scale;
+			castor::Point4f tileSet;
 		};
 
 		using TextureConfigurationsData = castor::ArrayView< Data >;
