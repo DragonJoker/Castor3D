@@ -20,8 +20,7 @@ namespace castor3d
 		C3D_API TextureSourceInfo( SamplerRes sampler
 			, castor::Path folder
 			, castor::Path relative
-			, bool allowCompression = true
-			, bool generateMips = true );
+			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
 		C3D_API TextureSourceInfo( SamplerRes sampler
 			, RenderTargetSPtr renderTarget );
 
@@ -50,13 +49,25 @@ namespace castor3d
 		bool allowCompression()const
 		{
 			CU_Require( !m_renderTarget );
-			return m_allowCompression;
+			return m_loadConfig.allowCompression;
 		}
 
 		bool generateMips()const
 		{
 			CU_Require( !m_renderTarget );
-			return m_generateMips;
+			return m_loadConfig.generateMips;
+		}
+
+		bool layersToTiles()const
+		{
+			CU_Require( !m_renderTarget );
+			return m_loadConfig.layersToTiles;
+		}
+
+		castor::ImageLoaderConfig const & config()const
+		{
+			CU_Require( !m_renderTarget );
+			return m_loadConfig;
 		}
 
 	private:
@@ -64,8 +75,7 @@ namespace castor3d
 		RenderTargetSPtr m_renderTarget{};
 		castor::Path m_folder{};
 		castor::Path m_relative{};
-		bool m_allowCompression{};
-		bool m_generateMips{};
+		castor::ImageLoaderConfig m_loadConfig{};
 	};
 }
 

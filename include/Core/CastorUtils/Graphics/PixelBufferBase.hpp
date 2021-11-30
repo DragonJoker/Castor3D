@@ -212,6 +212,13 @@ namespace castor
 		CU_API void generateMips();
 		/**
 		 *\~english
+		 *\brief		Convert to tiles map (no effect if m_layers <= 1).
+		 *\~french
+		 *\brief		Convvertit en tile map (aucun effet si m_layers <= 1).
+		 */
+		CU_API void convertToTiles();
+		/**
+		 *\~english
 		 *\return		A clone of this buffer.
 		 *\~french
 		 *\return		Un clone de ce buffer.

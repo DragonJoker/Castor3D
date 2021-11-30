@@ -11,13 +11,11 @@ namespace castor3d
 	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
 		, castor::Path folder
 		, castor::Path relative
-		, bool allowCompression
-		, bool generateMips )
+		, castor::ImageLoaderConfig loadConfig )
 		: m_sampler{ std::move( sampler ) }
 		, m_folder{ std::move( folder ) }
 		, m_relative{ std::move( relative ) }
-		, m_allowCompression{ allowCompression }
-		, m_generateMips{ generateMips }
+		, m_loadConfig{ std::move( loadConfig ) }
 	{
 	}
 

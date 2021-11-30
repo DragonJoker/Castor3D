@@ -77,7 +77,7 @@ namespace castor3d::shader
 	static int constexpr MaxMaterialComponentsCount = MaxTransmittanceProfileSize + 9;
 	// Texture Configuration Buffer.
 	static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
-	static int constexpr MaxTextureConfigurationComponentsCount = 9;
+	static int constexpr MaxTextureConfigurationComponentsCount = 12;
 	// Texture Animation Buffer.
 	static uint32_t constexpr MaxTextureAnimationCount = MaxTextureConfigurationCount;
 	static int constexpr MaxTextureAnimationComponentsCount = 3;

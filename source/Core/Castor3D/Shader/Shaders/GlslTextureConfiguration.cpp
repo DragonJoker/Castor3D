@@ -28,6 +28,7 @@ namespace castor3d
 			, texTrn{ getMember< sdw::Vec4 >( "texTrn" ) }
 			, texRot{ getMember< sdw::Vec4 >( "texRot" ) }
 			, texScl{ getMember< sdw::Vec4 >( "texScl" ) }
+			, tleSet{ getMember< sdw::Vec4 >( "tleSet" ) }
 			, colEnbl{ colOpa.x() }
 			, colMask{ colOpa.y() }
 			, opaEnbl{ colOpa.z() }
@@ -81,6 +82,7 @@ namespace castor3d
 				result->declMember( "texTrn", ast::type::Kind::eVec4F );
 				result->declMember( "texRot", ast::type::Kind::eVec4F );
 				result->declMember( "texScl", ast::type::Kind::eVec4F );
+				result->declMember( "tleSet", ast::type::Kind::eVec4F );
 			}
 
 			return result;
@@ -199,6 +201,20 @@ namespace castor3d
 			uv = scaleUV( texScl.xy(), uv );
 			uv = rotateUV( texRot.xy(), uv );
 			uv = translateUV( texTrn.xy(), uv );
+
+			IF( *m_writer, tleSet.z() > 1.0_f )
+			{
+				uv.x() /= tleSet.z();
+				uv.x() += tleSet.x() / tleSet.z();
+			}
+			FI;
+
+			IF( *m_writer, tleSet.w() > 1.0_f )
+			{
+				uv.x() /= tleSet.w();
+				uv.x() += tleSet.y() / tleSet.w();
+			}
+			FI;
 		}
 
 		void TextureConfigData::convertUVW( sdw::Vec3 & uvw )const
@@ -253,6 +269,7 @@ namespace castor3d
 						result.texTrn = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.texRot = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.texScl = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.tleSet = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						m_writer.returnStmt( result );
 					}
 					, sdw::InUInt{ m_writer, cuT( "index" ) } );

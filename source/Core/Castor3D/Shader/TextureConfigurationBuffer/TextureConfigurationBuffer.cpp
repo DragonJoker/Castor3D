@@ -51,6 +51,9 @@ namespace castor3d
 			buffer += sizeof( castor::Point4f ) * count;
 			auto scale = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
+			buffer += sizeof( castor::Point4f ) * count;
+			auto tileSet = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			return
 			{
 				colOpa,
@@ -63,6 +66,7 @@ namespace castor3d
 				translate,
 				rotate,
 				scale,
+				tileSet,
 			};
 		}
 
@@ -203,6 +207,7 @@ namespace castor3d
 					m_data.data.translate[index] = config.translate;
 					m_data.data.rotate[index] = config.rotate;
 					m_data.data.scale[index] = config.scale;
+					m_data.data.tileSet[index] = castor::Point4f{ config.tileSet };
 
 #else
 
@@ -218,6 +223,7 @@ namespace castor3d
 					data.translate = config.transform.translate;
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
 					data.scale = config.transform.scale;
+					data.tileSet = castor::Point4f{ config.tileSet };
 
 #endif
 				} );
