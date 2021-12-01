@@ -94,7 +94,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			TextureUnit unit{ engine };
+			TextureUnit unit{ engine, TextureSourceInfo{ sampler.lock(), layout->getCreateInfo() } };
 			unit.setTexture( layout );
 			unit.setSampler( sampler );
 			unit.initialise( device, *device.graphicsData() );
@@ -106,6 +106,7 @@ namespace castor3d
 
 	TextureUnit::TextureUnit( TextureUnit && rhs )
 		: AnimableT< Engine >{ std::move( rhs ) }
+		, m_sourceInfo{ std::move( rhs.m_sourceInfo ) }
 		, m_device{ std::move( rhs.m_device ) }
 		, m_configuration{ std::move( rhs.m_configuration ) }
 		, m_transform{ std::move( rhs.m_transform ) }
@@ -134,8 +135,10 @@ namespace castor3d
 		}
 	}
 
-	TextureUnit::TextureUnit( Engine & engine )
+	TextureUnit::TextureUnit( Engine & engine
+		, TextureSourceInfo const & sourceInfo )
 		: AnimableT< Engine >{ engine }
+		, m_sourceInfo{ sourceInfo }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_descriptor
 		{
@@ -426,6 +429,18 @@ namespace castor3d
 	{
 		return m_texture
 			&& m_texture->isInitialised();
+	}
+
+	bool TextureUnit::isTransformAnimated()const
+	{
+		return hasAnimation()
+			&& static_cast< TextureAnimation const & >( getAnimation() ).isTransformAnimated();
+	}
+
+	bool TextureUnit::isTileAnimated()const
+	{
+		return hasAnimation()
+			&& static_cast< TextureAnimation const & >( getAnimation() ).isTileAnimated();
 	}
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )
