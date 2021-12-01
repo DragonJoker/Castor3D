@@ -257,16 +257,7 @@ namespace castor3d
 		}
 
 		m_textures |= getFlags( it->second.config );
-		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
-		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
-		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
-
-		if ( m_texturesReduced.exchange( false ) )
-		{
-			prepareTextures();
-		}
-
-		m_dirty = true;
+		doUpdateTextureFlags();
 	}
 
 	void Pass::registerTexture( TextureSourceInfo sourceInfo
@@ -289,14 +280,49 @@ namespace castor3d
 			m_dirty = true;
 
 			remFlag( m_textures, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
-			updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
-			updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
-			updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
+			doUpdateTextureFlags();
+		}
+	}
 
-			if ( m_texturesReduced.exchange( false ) )
+	void Pass::resetTexture( TextureSourceInfo const & srcSourceInfo
+		, TextureSourceInfo dstSourceInfo )
+	{
+		auto it = m_sources.find( srcSourceInfo );
+		PassTextureConfig configuration;
+
+		if ( it != m_sources.end() )
+		{
+			configuration = it->second;
+			m_sources.erase( it );
+			remFlag( m_textures, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+
+			it = m_sources.find( dstSourceInfo );
+
+			if ( it != m_sources.end() )
 			{
-				prepareTextures();
+				mergeConfigs( std::move( configuration.config ), it->second.config );
 			}
+			else
+			{
+				it = m_sources.emplace( std::move( dstSourceInfo )
+					, std::move( configuration ) ).first;
+			}
+
+			m_textures |= getFlags( it->second.config );
+			doUpdateTextureFlags();
+		}
+	}
+
+	void Pass::updateConfig( TextureSourceInfo const & sourceInfo
+		, TextureConfiguration configuration )
+	{
+		auto it = m_sources.find( sourceInfo );
+		if ( it != m_sources.end() )
+		{
+			remFlag( m_textures, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+			it->second.config = std::move( configuration );
+			m_textures |= getFlags( it->second.config );
+			doUpdateTextureFlags();
 		}
 	}
 
@@ -364,9 +390,7 @@ namespace castor3d
 			m_alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
-		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
-		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
+		doUpdateAlphaFlags();
 		m_dirty = true;
 	}
 
@@ -498,9 +522,11 @@ namespace castor3d
 
 			if ( lhsIt.first == rhsIt.first )
 			{
+				auto unit = textureCache.getTexture( lhsIt.first, lhsIt.second );
+				m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
 				doAddUnit( lhsIt.second.config
 					, std::move( lhsAnim )
-					, textureCache.getTexture( lhsIt.first, lhsIt.second )
+					, std::move( unit )
 					, result );
 			}
 			else
@@ -530,6 +556,8 @@ namespace castor3d
 						, getOwner()->getName() + name
 						, resultSourceInfo
 						, resultConfig );
+					m_unitsSources.emplace( img.get(), TextureSourceSet {} ).first->second.insert( lhsIt.first );
+					m_unitsSources.emplace( img.get(), TextureSourceSet {} ).first->second.insert( rhsIt.first );
 					doAddUnit( resultConfig
 						, nullptr
 						, std::move( img )
@@ -537,13 +565,17 @@ namespace castor3d
 				}
 				else
 				{
+					auto unit = textureCache.getTexture( lhsIt.first, lhsIt.second );
+					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
 					doAddUnit( lhsIt.second.config
 						, std::move( lhsAnim )
-						, textureCache.getTexture( lhsIt.first, lhsIt.second )
+						, std::move( unit )
 						, result );
+					unit = textureCache.getTexture( rhsIt.first, rhsIt.second );
+					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( rhsIt.first );
 					doAddUnit( rhsIt.second.config
 						, std::move( rhsAnim )
-						, textureCache.getTexture( rhsIt.first, rhsIt.second )
+						, std::move( unit )
 						, result );
 				}
 			}
@@ -557,9 +589,11 @@ namespace castor3d
 				auto anim = ( animIt != m_animations.end()
 					? std::move( animIt->second )
 					: nullptr );
+				auto unit = textureCache.getTexture( it.first, it.second );
+				m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
 				doAddUnit( it.second.config
 					, std::move( anim )
-					, textureCache.getTexture( it.first, it.second )
+					, std::move( unit )
 					, result );
 			}
 			else if ( !sourcesRhs.empty() )
@@ -569,9 +603,11 @@ namespace castor3d
 				auto anim = ( animIt != m_animations.end()
 					? std::move( animIt->second )
 					: nullptr );
+				auto unit = textureCache.getTexture( it.first, it.second );
+				m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
 				doAddUnit( it.second.config
 					, std::move( anim )
-					, textureCache.getTexture( it.first, it.second )
+					, std::move( unit )
 					, result );
 			}
 		}
@@ -638,5 +674,25 @@ namespace castor3d
 		}
 
 		result.push_back( unit );
+	}
+
+	void Pass::doUpdateAlphaFlags()
+	{
+		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
+		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
+		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
+	}
+
+	void Pass::doUpdateTextureFlags()
+	{
+		doUpdateAlphaFlags();
+
+		if ( m_texturesReduced.exchange( false ) )
+		{
+			prepareTextures();
+			onChanged( *this );
+		}
+
+		m_dirty = true;
 	}
 }

@@ -83,13 +83,14 @@ namespace GuiCommon
 		{
 		public:
 			static std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > submit( castor3d::Pass & pass
+				, castor3d::TextureConfiguration & config
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, onMaskChange onChange )
 			{
 				std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > result;
 				UnitTreeGatherer vis{ properties, grid, onChange, result };
-				pass.accept( vis );
+				pass.fillConfig( config, vis );
 				return result;
 			}
 
@@ -101,6 +102,7 @@ namespace GuiCommon
 				: castor3d::PassVisitor{ {} }
 				, m_properties{ properties }
 				, m_grid{ grid }
+				, m_onChange{ onChange }
 				, m_result{ result }
 			{
 			}
@@ -265,11 +267,6 @@ namespace GuiCommon
 				, uint32_t componentsCount )
 			{
 				auto onChange = m_onChange;
-				auto handler = [onChange, flag, componentsCount]( wxVariant const & var )
-				{
-					onChange( var, flag, componentsCount );
-				};
-
 				static wxString PROPERTY_COMPONENT_R = wxT( "R" );
 				static wxString PROPERTY_COMPONENT_G = wxT( "G" );
 				static wxString PROPERTY_COMPONENT_B = wxT( "B" );
@@ -282,7 +279,10 @@ namespace GuiCommon
 				auto isProp = m_properties->addProperty( m_grid
 					, isName
 					, mask[0] != 0
-					, handler );
+					, [onChange, flag, componentsCount]( wxVariant const & var )
+					{
+						onChange( var, flag, componentsCount );
+					} );
 				wxString name;
 				wxString selected;
 				wxArrayString choices;
@@ -306,7 +306,10 @@ namespace GuiCommon
 					, compName
 					, choices
 					, selected
-					, handler );
+					, [onChange, flag, componentsCount]( wxVariant const & var )
+					{
+						onChange( var, flag, componentsCount );
+					} );
 				compProp->Enable( mask[0] != 0 );
 				m_result.emplace( flag, TextureTreeItemProperty::PropertyPair{ isProp, compProp, mask } );
 			}
@@ -396,7 +399,10 @@ namespace GuiCommon
 					} );
 			}
 
-			m_properties = UnitTreeGatherer::submit( m_pass, this, grid
+			m_properties = UnitTreeGatherer::submit( m_pass
+				, m_configuration
+				, this
+				, grid
 				, [this]( wxVariant const & var
 					, castor3d::TextureFlag flag
 					, uint32_t componentsCount )
@@ -431,7 +437,7 @@ namespace GuiCommon
 		long components = it->second.components->GetValue();
 		it->second.components->Enable( isMap );
 		it->second.mask[0] = getMask( isMap, components, componentsCount );
-		unit->setConfiguration( m_configuration );
+		m_pass.updateConfig( unit->getSourceInfo(), m_configuration );
 	}
 
 	void TextureTreeItemProperty::onImageChange( wxVariant const & var )
@@ -442,28 +448,12 @@ namespace GuiCommon
 		// Absolute path
 		if ( castor::File::fileExists( path ) )
 		{
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				VK_FORMAT_R32_SFLOAT,
-				{ 1u, 1u, 1u },
-				1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
-			};
-			auto & device = unit->getDevice();
-			auto texture = std::make_shared< castor3d::TextureLayout >( *unit->getEngine()->getRenderSystem()
-				, image
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, path );
-			texture->setSource( castor::Path{}, path );
-			unit->setTexture( texture );
-
-			unit->initialise( device, *device.graphicsData() );
+			auto & sourceInfo = unit->getSourceInfo();
+			m_pass.resetTexture( sourceInfo
+				, castor3d::TextureSourceInfo{ sourceInfo.sampler()
+				, path.getPath()
+				, path.getFileName( true )
+				, sourceInfo.config() } );
 		}
 	}
 
