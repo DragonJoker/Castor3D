@@ -188,12 +188,14 @@ namespace castor3d
 				, image.data->info.format
 				, image.data->info.usage
 				, image.data->name );
-			auto result = castor::makeUnique< TextureUnit >( engine );
-			result->setTexture( colourTexture );
-			result->setSampler( createSampler( engine
+			auto sampler = createSampler( engine
 				, image.data->name
 				, VK_FILTER_LINEAR
-				, &range ) );
+				, &range );
+			auto result = castor::makeUnique< TextureUnit >( engine
+				, TextureSourceInfo{ sampler.lock(), colourTexture->getCreateInfo() } );
+			result->setTexture( colourTexture );
+			result->setSampler( sampler );
 			result->initialise( device, queueData );
 			return result;
 		}

@@ -26,39 +26,56 @@ namespace castor3d
 	{
 	}
 
+	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
+		, ashes::ImageCreateInfo const & createInfo )
+		: m_sampler{ std::move( sampler ) }
+		, m_createInfo{ static_cast< VkImageCreateInfo  const & >( createInfo ) }
+	{
+	}
+
 	//************************************************************************************************
 
 	size_t TextureSourceInfoHasher::operator()( TextureSourceInfo const & value )const noexcept
 	{
-		auto result = std::hash< RenderTargetSPtr >{}( value.renderTarget() );
-		result = castor::hashCombinePtr( result, *value.sampler() );
-
-		if ( !value.renderTarget() )
+		if ( value.isVulkanImage() )
 		{
-			result = castor::hashCombine( result, static_cast< castor::String const & >( value.folder() ) );
-			result = castor::hashCombine( result, static_cast< castor::String const & >( value.relative() ) );
-			result = castor::hashCombine( result, value.allowCompression() );
-			result = castor::hashCombine( result, value.generateMips() );
+			return std::hash< TextureSourceInfo const * >{}( &value );
 		}
 
-		return result;
+		auto result = std::hash< SamplerRes >{}( value.sampler() );
+
+		if ( value.isRenderTarget() )
+		{
+			return castor::hashCombinePtr( result, *value.renderTarget() );
+		}
+
+		result = castor::hashCombine( result, static_cast< castor::String const & >( value.folder() ) );
+		result = castor::hashCombine( result, static_cast< castor::String const & >( value.relative() ) );
+		result = castor::hashCombine( result, value.allowCompression() );
+		return castor::hashCombine( result, value.generateMips() );
 	}
 
 	bool operator==( TextureSourceInfo const & lhs
 		, TextureSourceInfo const & rhs )noexcept
 	{
-		auto result = lhs.sampler() == rhs.sampler();
-		result = result && ( lhs.renderTarget() == rhs.renderTarget() );
-
-		if ( result && !lhs.renderTarget() )
+		if ( lhs.isVulkanImage() || rhs.isVulkanImage() )
 		{
-			result = result && ( lhs.folder() == rhs.folder() );
-			result = result && ( lhs.relative() == rhs.relative() );
-			result = result && ( lhs.allowCompression() == rhs.allowCompression() );
-			result = result && ( lhs.generateMips() == rhs.generateMips() );
+			return &lhs == &rhs;
 		}
 
-		return result;
+		auto result = lhs.sampler() == rhs.sampler();
+
+		if ( lhs.isRenderTarget() || rhs.isRenderTarget() )
+		{
+			return result
+				&& ( lhs.isRenderTarget() && rhs.isRenderTarget() )
+				&& ( lhs.renderTarget() == rhs.renderTarget() );
+		}
+
+		result = result && ( lhs.folder() == rhs.folder() );
+		result = result && ( lhs.relative() == rhs.relative() );
+		result = result && ( lhs.allowCompression() == rhs.allowCompression() );
+		return result && ( lhs.generateMips() == rhs.generateMips() );
 	}
 
 	//************************************************************************************************

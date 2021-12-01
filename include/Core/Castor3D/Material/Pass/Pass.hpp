@@ -25,6 +25,7 @@ See LICENSE file in root folder
 #pragma warning( disable:4365 )
 #include <atomic>
 #include <unordered_map>
+#include <unordered_set>
 #pragma warning( pop )
 
 namespace castor3d
@@ -88,43 +89,73 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		adds a texture unit.
-		 *\param[in]	unit	The texture unit.
+		 *\brief		Adds a texture.
+		 *\param[in]	sourceInfo		The texture source.
+		 *\param[in]	configuration	The texture configuration.
 		 *\~french
-		 *\brief		Ajoute une unité de texture.
-		 *\param[in]	unit	L'unité de texture.
+		 *\brief		Ajoute une texture.
+		 *\param[in]	sourceInfo		La source de la texture.
+		 *\param[in]	configuration	La configuration de la texture.
 		 */
 		C3D_API void registerTexture( TextureSourceInfo sourceInfo
 			, PassTextureConfig configuration );
 		/**
 		 *\~english
-		 *\brief		adds a texture unit.
-		 *\param[in]	unit	The texture unit.
+		 *\brief		Adds an animated texture.
+		 *\param[in]	sourceInfo		The texture source.
+		 *\param[in]	configuration	The texture configuration.
+		 *\param[in]	animation		The texture animation.
 		 *\~french
-		 *\brief		Ajoute une unité de texture.
-		 *\param[in]	unit	L'unité de texture.
+		 *\brief		Ajoute une texture animée.
+		 *\param[in]	sourceInfo		La source de la texture.
+		 *\param[in]	configuration	La configuration de la texture.
+		 *\param[in]	animation		L'animation de la texture.
 		 */
 		C3D_API void registerTexture( TextureSourceInfo sourceInfo
 			, PassTextureConfig configuration
 			, AnimationUPtr animation );
 		/**
 		 *\~english
-		 *\brief		adds a texture unit.
-		 *\param[in]	unit	The texture unit.
+		 *\brief		Removes a texture unit.
+		 *\param[in]	sourceInfo	The texture source.
 		 *\~french
-		 *\brief		Ajoute une unité de texture.
-		 *\param[in]	unit	L'unité de texture.
+		 *\brief		Supprime une unité de texture.
+		 *\param[in]	sourceInfo	La source de la texture.
 		 */
 		C3D_API void unregisterTexture( TextureSourceInfo sourceInfo );
 		/**
 		 *\~english
+		 *\brief		Replaces a texture source.
+		 *\param[in]	srcSourceInfo	The original texture source.
+		 *\param[in]	dstSourceInfo	The replacement texture source.
+		 *\~french
+		 *\brief		Remplace la source d'une texture.
+		 *\param[in]	srcSourceInfo	La source d'origine de la texture.
+		 *\param[in]	dstSourceInfo	La source de remplacement de la texture.
+		 */
+		C3D_API void resetTexture( TextureSourceInfo const & srcSourceInfo
+			, TextureSourceInfo dstSourceInfo );
+		/**
+		 *\~english
+		 *\brief		Updates the configuration for a texture.
+		 *\param[in]	sourceInfo		The texture source.
+		 *\param[in]	configuration	The new texture configuration.
+		 *\~french
+		 *\brief		Met à jour la configuration d'une texture.
+		 *\param[in]	sourceInfo		La source de la texture.
+		 *\param[in]	configuration	La nouvelle configuration de la texture.
+		 */
+		C3D_API void updateConfig( TextureSourceInfo const & sourceInfo
+			, TextureConfiguration configuration );
+		/**
+		 *\~english
 		 *\brief		Retrieves the TextureUnit at the given index.
 		 *\param[in]	index	The index of the TextureUnit to retrieve.
-		 *\return		The retrieved TextureUnit, nullptr if none.
+		 *\return		\p nullptr if index was out of bounds.
 		 *\~french
 		 *\brief		Récupère la TextureUnit à l'index donné.
 		 *\param[in]	index	L'index voulu.
-		 *\return		La TextureUnit récupérée, nullptr si index était hors bornes.
+		 *\return		\p nullptr si index était hors bornes.
 		 */
 		C3D_API TextureUnitSPtr getTextureUnit( uint32_t index )const;
 		/**
@@ -618,6 +649,8 @@ namespace castor3d
 			, AnimationUPtr animation
 			, TextureUnitSPtr unit
 			, TextureUnitPtrArray & result );
+		void doUpdateAlphaFlags();
+		void doUpdateTextureFlags();
 		virtual void doPrepareTextures( TextureUnitPtrArray & result ) = 0;
 
 		void updateFlag( PassFlag flag
@@ -649,6 +682,8 @@ namespace castor3d
 		PassTypeID m_typeID;
 		PassFlags m_flags;
 		TextureUnitPtrArray m_textureUnits;
+		using TextureSourceSet = std::unordered_set< TextureSourceInfo, TextureSourceInfoHasher >;
+		std::unordered_map< TextureUnit const *, TextureSourceSet > m_unitsSources;
 		TextureFlags m_textures;
 		uint32_t m_id{ 0u };
 		bool m_implicit{ false };
@@ -676,6 +711,7 @@ namespace castor3d
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };
+		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_unitsConnections;
 	};
 }
 

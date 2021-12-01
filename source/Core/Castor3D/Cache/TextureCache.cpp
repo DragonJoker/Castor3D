@@ -426,7 +426,7 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				it->second = std::make_shared< TextureUnit >( engine );
+				it->second = std::make_shared< TextureUnit >( engine, sourceInfo );
 				it->second->setConfiguration( config.config );
 			}
 
@@ -577,7 +577,7 @@ namespace castor3d
 	{
 		auto & data = doCreateThreadData( sourceInfo, config, unit );
 
-		if ( sourceInfo.renderTarget() )
+		if ( sourceInfo.isRenderTarget() )
 		{
 			getEngine()->pushGpuJob( [this, &data]( RenderDevice const & device
 				, QueueData const & queueData )

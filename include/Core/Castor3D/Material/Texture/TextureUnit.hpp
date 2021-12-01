@@ -6,6 +6,7 @@ See LICENSE file in root folder
 #pragma once
 
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
@@ -81,7 +82,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param		engine	Le moteur.
 		 */
-		C3D_API explicit TextureUnit( Engine & engine );
+		C3D_API explicit TextureUnit( Engine & engine
+			, TextureSourceInfo const & sourceInfo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -168,6 +170,8 @@ namespace castor3d
 		C3D_API castor::String toString()const;
 		C3D_API TextureFlags getFlags()const;
 		C3D_API bool isInitialised()const;
+		C3D_API bool isTransformAnimated()const;
+		C3D_API bool isTileAnimated()const;
 		
 		TextureLayoutSPtr getTexture()const
 		{
@@ -224,6 +228,11 @@ namespace castor3d
 		{
 			return m_transform;
 		}
+
+		TextureSourceInfo const & getSourceInfo()const
+		{
+			return m_sourceInfo;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -278,6 +287,7 @@ namespace castor3d
 
 	private:
 		friend class TextureRenderer;
+		TextureSourceInfo m_sourceInfo;
 		RenderDevice const * m_device{ nullptr };
 		TextureConfiguration m_configuration;
 		TextureTransform m_transform;
