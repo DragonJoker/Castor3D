@@ -677,6 +677,11 @@ namespace castor3d
 			return *m_texture;
 		}
 
+		ashes::ImageCreateInfo const & getCreateInfo()const
+		{
+			return m_info;
+		}
+
 		uint32_t getWidth()const
 		{
 			return m_info->extent.width;
