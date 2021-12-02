@@ -36,16 +36,14 @@ jobs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-recommends ccache gcc-10 g++-10
-        sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev
+        sudo apt-get install -y --no-install-recommends ccache gcc-10 g++-10 libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev
 
     - name: Install necessary Clang++ version (Linux)
       if: runner.os == 'Linux' && matrix.os[2] == 'clang'
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12
-        sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev
+        sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12 libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
