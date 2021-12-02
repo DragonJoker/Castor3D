@@ -23,7 +23,7 @@ namespace castor3d
 
 		for ( auto name : m_createdElements )
 		{
-			if ( auto resource = m_cache.tryRemove( name, false ) )
+			if ( auto resource = m_cache.tryRemoveNoLock( name, false ) )
 			{
 				if ( m_clean )
 				{
@@ -43,7 +43,7 @@ namespace castor3d
 		, ParametersT && ... params )
 	{
 		auto lock( castor::makeUniqueLock( m_cache ) );
-		auto result = m_cache.tryAdd( name
+		auto result = m_cache.tryAddNoLock( name
 			, false
 			, created
 			, std::forward< ParametersT >( params )... );
@@ -79,7 +79,7 @@ namespace castor3d
 		, bool initialise )
 	{
 		auto lock( castor::makeUniqueLock( m_cache ) );
-		auto result = m_cache.tryAdd( name
+		auto result = m_cache.tryAddNoLock( name
 			, element
 			, false );
 
@@ -102,7 +102,7 @@ namespace castor3d
 		, bool initialise )
 	{
 		auto lock( castor::makeUniqueLock( m_cache ) );
-		auto result = m_cache.add( name
+		auto result = m_cache.addNoLock( name
 			, element
 			, false );
 
@@ -139,7 +139,7 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( m_cache ) );
 		auto it = m_createdElements.find( name );
 		return it != m_createdElements.end()
-			? m_cache.tryFind( name )
+			? m_cache.tryFindNoLock( name )
 			: ElementObsT{};
 	}
 
@@ -165,7 +165,7 @@ namespace castor3d
 
 		if ( it != m_createdElements.end() )
 		{
-			result = m_cache.tryRemove( name, false );
+			result = m_cache.tryRemoveNoLock( name, false );
 			m_createdElements.erase( it );
 		}
 

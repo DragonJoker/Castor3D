@@ -362,7 +362,7 @@ namespace castor3d
 
 		if ( hasAnimation() )
 		{
-			static_cast< TextureAnimation & >( getAnimation() ).initialiseTiles( *this );
+			getAnimation().initialiseTiles( *this );
 		}
 
 		m_device = &device;
@@ -434,13 +434,13 @@ namespace castor3d
 	bool TextureUnit::isTransformAnimated()const
 	{
 		return hasAnimation()
-			&& static_cast< TextureAnimation const & >( getAnimation() ).isTransformAnimated();
+			&& getAnimation().isTransformAnimated();
 	}
 
 	bool TextureUnit::isTileAnimated()const
 	{
 		return hasAnimation()
-			&& static_cast< TextureAnimation const & >( getAnimation() ).isTileAnimated();
+			&& getAnimation().isTileAnimated();
 	}
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )

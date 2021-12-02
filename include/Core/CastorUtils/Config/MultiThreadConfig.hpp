@@ -17,33 +17,54 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< typename MutexT >
-	struct CheckedMutexT
-	{
-		void lock()const
-		{
-			assert( !m_locked.exchange( true ) );
-			m_mutex.lock();
-		}
-
-		void unlock()const
-		{
-			assert( m_locked.exchange( false ) );
-			m_mutex.unlock();
-		}
-
-	private:
-		mutable std::atomic_bool m_locked{ false };
-		mutable MutexT m_mutex;
-	};
-
-	using CheckedMutex = CheckedMutexT< std::mutex >;
-
 	template< typename Lockable >
 	std::unique_lock< Lockable > makeUniqueLock( Lockable & lockable )
 	{
 		return std::unique_lock< Lockable >( lockable );
 	}
+
+	template< typename MutexT >
+	struct CheckedMutexT
+	{
+		void lock()const
+		{
+			assert( this->doCheckUnlocked() );
+			m_mutex.lock();
+		}
+
+		void unlock()const
+		{
+			assert( this->doCheckLocked() );
+			m_mutex.unlock();
+		}
+
+	private:
+		bool doCheckUnlocked()const
+		{
+			auto lock = makeUniqueLock( this->m_lockedMtx );
+			auto it = m_locked.emplace( std::this_thread::get_id(), false ).first;
+			auto result = it->second;
+			it->second = true;
+			return !result;
+		}
+
+		bool doCheckLocked()const
+		{
+			auto lock = makeUniqueLock( this->m_lockedMtx );
+			auto it = m_locked.find( std::this_thread::get_id() );
+			assert( it != m_locked.end() );
+			auto result = it->second;
+			it->second = false;
+			return result;
+		}
+
+	private:
+		mutable std::map< std::thread::id, bool > m_locked;
+		mutable MutexT m_lockedMtx;
+		mutable MutexT m_mutex;
+	};
+
+	using CheckedMutex = CheckedMutexT< std::mutex >;
 }
 
 #endif

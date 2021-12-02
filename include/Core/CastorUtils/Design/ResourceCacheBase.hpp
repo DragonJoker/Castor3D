@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "DesignModule.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Multithreading/MultithreadingModule.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
@@ -123,6 +124,28 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\brief			Adds an element.
+		 *\param[in]		name		The element name.
+		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
+		 *\param[in]		initialise	\p true to initialise the added element (no effect on duplicates).
+		 *\return			The real element (added or duplicate original ).
+		 *\~french
+		 *\brief			Ajoute un élément.
+		 *\param[in]		name		Le nom d'élément.
+		 *\param[in,out]	element		La ressource, vidée en cas d'ajout (le cache en prend la responsabilité).
+		 *\param[in]		initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
+		 *\return			L'élément réel (ajouté, ou original du doublon).
+		 */
+		ElementObsT tryAddNoLock( ElementKeyT const & name
+			, ElementPtrT & element
+			, bool initialise = false )
+		{
+			return this->doTryAddNoLock( name
+				, element
+				, initialise );
+		}
+		/**
+		 *\~english
 		 *\brief			Logging version of tryAdd.
 		 *\param[in]		name		The resource name.
 		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
@@ -140,6 +163,28 @@ namespace castor
 			, bool initialise = true )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
+			return this->doAddNoLock( name
+				, element
+				, initialise );
+		}
+		/**
+		 *\~english
+		 *\brief			Logging version of tryAdd.
+		 *\param[in]		name		The resource name.
+		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).
+		 *\param[in]		initialise	\p true to initialise the added element (no effect on duplicates).
+		 *\return			The real element (added or duplicate original ).
+		 *\~french
+		 *\brief			Version journalisante de tryAdd.
+		 *\param[in]		name		Le nom de la ressource.
+		 *\param[in,out]	element		La ressource, vidée en cas d'ajout (le cache en prend la responsabilité).
+		 *\param[in]		initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
+		 *\return			L'élément réel (ajouté, ou original du doublon).
+		 */
+		ElementObsT addNoLock( ElementKeyT const & name
+			, ElementPtrT & element
+			, bool initialise = true )
+		{
 			return this->doAddNoLock( name
 				, element
 				, initialise );
@@ -172,6 +217,31 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\brief		Add an element, constructed in-place.
+		 *\param[in]	name		The element name.
+		 *\param[in]	initialise	\p true to initialise the added element (no effect on duplicates).
+		 *\param[out]	created		The created element.
+		 *\return		The real element (added or duplicate original ).
+		 *\~french
+		 *\brief		Ajoute un élément, construict sur place.
+		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	initialise	\p true pour initialiser l'élément ajouté (aucun effect sur les doublons).
+		 *\param[out]	created		L'élément créé.
+		 *\return		L'élément réel (ajouté, ou original du doublon).
+		 */
+		template< typename ... ParametersT >
+		ElementObsT tryAddNoLock( ElementKeyT const & name
+			, bool initialise
+			, ElementObsT & created
+			, ParametersT && ... parameters)
+		{
+			return this->doTryAddNoLockT( name
+				, initialise
+				, created
+				, std::forward< ParametersT >( parameters )... );
+		}
+		/**
+		 *\~english
 		 *\brief		Logging version of tryAdd.
 		 *\param[in]	name		The element name.
 		 *\param[in]	parameters	The other constructor parameters.
@@ -192,6 +262,25 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\brief		Logging version of tryAdd.
+		 *\param[in]	name		The element name.
+		 *\param[in]	parameters	The other constructor parameters.
+		 *\return		The real element (added or duplicate original ).
+		 *\~french
+		 *\brief		Version journalisante de tryAdd.
+		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	parameters	Les autres paramètres de construction.
+		 *\return		L'élément réel (ajouté, ou original du doublon).
+		 */
+		template< typename ... ParametersT >
+		ElementObsT addNoLock( ElementKeyT const & name
+			, ParametersT && ... parameters )
+		{
+			return this->doAddNoLockT( name
+				, std::forward< ParametersT >( parameters )... );
+		}
+		/**
+		 *\~english
 		 *\brief		Removes an element, given a name.
 		 *\param[in]	name	The element name.
 		 *\~french
@@ -206,6 +295,19 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\brief		Removes an element, given a name.
+		 *\param[in]	name	The element name.
+		 *\~french
+		 *\brief		Retire un élément à partir d'un nom.
+		 *\param[in]	name	Le nom d'élément.
+		 */
+		ElementPtrT tryRemoveNoLock( ElementKeyT const & name
+			, bool cleanup = false )
+		{
+			return this->doTryRemoveNoLock( name, cleanup );
+		}
+		/**
+		 *\~english
 		 *\brief		Logging version of tryRemove.
 		 *\param[in]	name	The element name.
 		 *\~french
@@ -216,6 +318,24 @@ namespace castor
 			, bool cleanup = false )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
+			auto result = this->doTryRemoveNoLock( name, cleanup );
+
+			if ( !result )
+			{
+				this->reportUnknown( name );
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Logging version of tryRemove.
+		 *\param[in]	name	The element name.
+		 *\~french
+		 *\brief		Version journalisante de tryAdd.
+		 *\param[in]	name	Le nom d'élément.
+		 */
+		void removeNoLock( ElementKeyT const & name
+			, bool cleanup = false )
+		{
 			auto result = this->doTryRemoveNoLock( name, cleanup );
 
 			if ( !result )
@@ -240,6 +360,20 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\brief		Looks for an element with given name.
+		 *\param[in]	name	The object name.
+		 *\return		The found element, nullptr if not found.
+		 *\~french
+		 *\brief		Cherche un élément par son nom.
+		 *\param[in]	name	Le nom d'élément.
+		 *\return		L'élément trouvé, nullptr si non trouvé.
+		 */
+		ElementObsT tryFindNoLock( ElementKeyT const & name )const
+		{
+			return this->doTryFindNoLock( name );
+		}
+		/**
+		 *\~english
 		 *\brief		Logging version of tryRemove.
 		 *\param[in]	name	The object name.
 		 *\return		The found element, nullptr if not found.
@@ -251,6 +385,27 @@ namespace castor
 		ElementObsT find( ElementKeyT const & name )const
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
+			auto result = this->doTryFindNoLock( name );
+
+			if ( !result.lock() )
+			{
+				this->reportUnknown( name );
+			}
+
+			return result;
+		}
+		/**
+		 *\~english
+		 *\brief		Logging version of tryRemove.
+		 *\param[in]	name	The object name.
+		 *\return		The found element, nullptr if not found.
+		 *\~french
+		 *\brief		Version journalisante de tryAdd.
+		 *\param[in]	name	Le nom d'élément.
+		 *\return		L'élément trouvé, nullptr si non trouvé.
+		 */
+		ElementObsT findNoLock( ElementKeyT const & name )const
+		{
 			auto result = this->doTryFindNoLock( name );
 
 			if ( !result.lock() )
@@ -324,6 +479,11 @@ namespace castor
 			return uint32_t( m_resources.size() );
 		}
 
+		uint32_t getObjectCountNoLock()const
+		{
+			return uint32_t( m_resources.size() );
+		}
+
 		String const & getObjectTypeName()const
 		{
 			return ElementCacheTraitsT::Name;
@@ -334,9 +494,19 @@ namespace castor
 			return tryFind( name ).lock() != ElementPtrT{};
 		}
 
+		bool hasNoLock( ElementKeyT const & name )const
+		{
+			return tryFindNoLock( name ).lock() != ElementPtrT{};
+		}
+
 		bool isEmpty()const
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
+			return m_resources.empty();
+		}
+
+		bool isEmptyNoLock()const
+		{
 			return m_resources.empty();
 		}
 		/**@}*/
@@ -350,12 +520,10 @@ namespace castor
 		void lock()const
 		{
 			m_mutex.lock();
-			m_locked = true;
 		}
 
 		void unlock()const
 		{
-			m_locked = false;
 			m_mutex.unlock();
 		}
 		/**@}*/
@@ -368,13 +536,11 @@ namespace castor
 		/**@{*/
 		auto begin()
 		{
-			CU_Require( this->m_locked );
 			return m_resources.begin();
 		}
 
 		auto begin()const
 		{
-			CU_Require( this->m_locked );
 			return m_resources.begin();
 		}
 
@@ -596,8 +762,7 @@ namespace castor
 		using MutexT = std::recursive_mutex;
 
 		LoggerInstance & m_logger;
-		mutable MutexT m_mutex;
-		mutable bool m_locked{ false };
+		CheckedMutexT< MutexT > m_mutex;
 		//!\~english	The elements collection.
 		//!\~french		La collection d'éléments.
 		mutable ElementContT m_resources;
