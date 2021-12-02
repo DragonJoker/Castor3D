@@ -34,8 +34,8 @@ namespace castor3d
 				, dst.makeTransferDestination() );
 			commandBuffer.copyBuffer( src
 				, dst
-				, uint32_t( elemAlignedSize * count )
-				, uint32_t( elemAlignedSize * offset ) );
+				, elemAlignedSize * count
+				, elemAlignedSize * offset );
 			srcSrcStage = src.getCompatibleStageFlags();
 			dstSrcStage = dst.getCompatibleStageFlags();
 

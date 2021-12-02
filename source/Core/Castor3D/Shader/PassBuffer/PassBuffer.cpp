@@ -122,7 +122,7 @@ namespace castor3d
 		m_passID--;
 	}
 
-	void PassBuffer::update()
+	void PassBuffer::update( ashes::CommandBuffer const & commandBuffer )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
@@ -137,7 +137,7 @@ namespace castor3d
 				p_pass->fillBuffer( *this );
 			} );
 
-			m_buffer.update();
+			m_buffer.upload( commandBuffer );
 		}
 	}
 

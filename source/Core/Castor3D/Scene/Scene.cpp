@@ -673,9 +673,9 @@ namespace castor3d
 
 			for ( auto & matName : *m_materialCacheView )
 			{
-				if ( cache.has( matName ) )
+				if ( cache.hasNoLock( matName ) )
 				{
-					auto material = cache.find( matName ).lock();
+					auto material = cache.findNoLock( matName ).lock();
 
 					m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
 

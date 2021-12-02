@@ -89,7 +89,7 @@ namespace castor3d
 		bool isPreparable( TextureSourceInfo const & source
 			, PassTextureConfig const & config )
 		{
-			return ( !source.renderTarget() )
+			return ( !source.isRenderTarget() )
 				&& !ashes::isCompressedFormat( config.imageInfo->format );
 		}
 

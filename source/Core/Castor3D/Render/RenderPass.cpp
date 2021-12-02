@@ -606,7 +606,6 @@ namespace castor3d
 			++it;
 		}
 
-		bonesBuffer.update( 0u, stride * count );
 		return count;
 	}
 

@@ -207,6 +207,7 @@ namespace castor
 			, PixelFormat srcFormat
 			, uint32_t srcAlign
 			, uint8_t * dstBuffer
+			, size_t dstBufferSize
 			, PixelFormat dstFormat
 			, uint32_t dstAlign
 			, VkExtent3D const & extent
@@ -223,6 +224,7 @@ namespace castor
 			auto dstLayerStart = dstBuffer;
 			auto srcBlockSize = ashes::getBlockSize( VkFormat( srcFormat ) );
 			auto dstBlockSize = ashes::getBlockSize( VkFormat( dstFormat ) );
+			uint32_t written = 0u;
 
 			for ( uint32_t layer = 0u; layer < layers; ++layer )
 			{
@@ -250,6 +252,7 @@ namespace castor
 						, level
 						, VkFormat( dstFormat ) );
 
+					CU_Require( ( written + dstLevelSize ) <= dstBufferSize );
 					convertBuffer( { srcLevelExtent.width, srcLevelExtent.height }
 						, { dstLevelExtent.width, dstLevelExtent.height }
 						, srcFormat
@@ -260,6 +263,7 @@ namespace castor
 						, dstLevelSize );
 					srcLevelStart += srcLevelSize;
 					dstLevelStart += dstLevelSize;
+					written += dstLevelSize;
 				}
 
 				srcLayerStart = srcLevelStart;
@@ -273,6 +277,7 @@ namespace castor
 			, PixelFormat srcFormat
 			, uint32_t srcAlign
 			, uint8_t * dstBuffer
+			, size_t dstBufferSize
 			, PixelFormat dstFormat
 			, uint32_t dstAlign
 			, VkExtent3D const & extent
@@ -289,6 +294,7 @@ namespace castor
 			auto dstLayerStart = dstBuffer;
 			auto srcBlockSize = ashes::getBlockSize( VkFormat( srcFormat ) );
 			auto dstBlockSize = ashes::getBlockSize( VkFormat( dstFormat ) );
+			uint32_t written = 0u;
 
 			for ( uint32_t layer = 0u; layer < layers; ++layer )
 			{
@@ -316,6 +322,7 @@ namespace castor
 						, level
 						, VkFormat( srcFormat ) );
 
+					CU_Require( ( written + dstLevelSize ) <= dstBufferSize );
 					compressBuffer( options
 						, { srcLevelExtent.width, srcLevelExtent.height }
 						, { dstLevelExtent.width, dstLevelExtent.height }
@@ -327,6 +334,7 @@ namespace castor
 						, dstLevelSize );
 					srcLevelStart += srcLevelSize;
 					dstLevelStart += dstLevelSize;
+					written += dstLevelSize;
 				}
 
 				srcLayerStart = srcLevelStart;
@@ -523,11 +531,12 @@ namespace castor
 			m_align = uint32_t( ( mips.empty() || !options )
 				? getBytesPerPixel( getFormat() )
 				: std::max( VkDeviceSize( options->getAdditionalAlign( getFormat() ) ), getBytesPerPixel( getFormat() ) ) );
-			VkDeviceSize newSize = ashes::getLevelsSize( extent
-				, VkFormat( getFormat() )
-				, 0u
-				, m_levels
-				, m_align );
+			VkDeviceSize newSize = m_layers
+				* ashes::getLevelsSize( VkExtent2D{ extent.width, extent.height }
+					, VkFormat( getFormat() )
+					, 0u
+					, m_levels
+					, m_align );
 			m_buffer.resize( newSize );
 			compressBuffer( options
 				, m_size
@@ -535,6 +544,7 @@ namespace castor
 				, bufferFormat
 				, bufferAlign
 				, m_buffer.data()
+				, m_buffer.size()
 				, getFormat()
 				, m_align
 				, extent
@@ -546,11 +556,12 @@ namespace castor
 			m_align = uint32_t( isCompressed( bufferFormat )
 				? bufferAlign
 				: getBytesPerPixel( getFormat() ) );
-			VkDeviceSize newSize = ashes::getLevelsSize( extent
-				, VkFormat( getFormat() )
-				, 0u
-				, m_levels
-				, m_align );
+			VkDeviceSize newSize = m_layers
+				* ashes::getLevelsSize( VkExtent2D{ extent.width, extent.height }
+					, VkFormat( getFormat() )
+					, 0u
+					, m_levels
+					, m_align );
 			m_buffer.resize( newSize );
 
 			if ( !buffer )
@@ -565,6 +576,7 @@ namespace castor
 					, bufferFormat
 					, bufferAlign
 					, m_buffer.data()
+					, m_buffer.size()
 					, getFormat()
 					, m_align
 					, ( m_layers > 1u
@@ -604,42 +616,66 @@ namespace castor
 		m_buffer = buffer;
 	}
 
-	void PxBufferBase::convertToTiles()
+	void PxBufferBase::convertToTiles( uint32_t maxSize )
 	{
 		if ( m_layers <= 1u )
 		{
 			return;
 		}
 
-		PxArray result;
-		result.resize( m_buffer.size() );
 		VkExtent2D srcSize{ m_size.getWidth(), m_size.getHeight() };
-		VkExtent2D dstSize{ m_size.getWidth() * m_layers, m_size.getHeight() };
+		uint32_t tilesX = m_layers;
+		uint32_t tilesY = 1u;
+		uint32_t n = 1u;
+
+		while ( ( m_size.getWidth() * tilesX ) > maxSize )
+		{
+			++n;
+			tilesX = ( tilesX + ( m_layers % n ) ) / n;
+			tilesY++;
+		}
+
+		VkExtent2D dstSize{ m_size.getWidth() * tilesX, m_size.getHeight() * tilesY };
+		PxArray result;
+		result.resize( ashes::getLevelsSize( dstSize
+			, VkFormat( getFormat() )
+			, 0u
+			, m_levels
+			, m_align ) );
 		auto blockSize = ashes::getBlockSize( VkFormat( m_format ) );
 		auto src = m_buffer.data();
 		auto dst = result.data();
+		VkDeviceSize written = 0u;
 
 		for ( uint32_t layer = 0u; layer < m_layers; ++layer )
 		{
 			auto srcLayer = src;
+			auto tileX = layer % tilesX;
+			auto tileY = layer / tilesX;
 
 			for ( uint32_t level = 0u; level < m_levels; ++level )
 			{
 				auto dstMipOffset = ashes::getLevelsSize( dstSize, VkFormat( m_format ), 0u, level, 1u );
 				auto srcLevel = srcLayer;
-				auto dstLevel = dst + dstMipOffset;
 
 				auto levelSize = ashes::getSize( srcSize, VkFormat( m_format ), level );
-				auto lines = ( srcSize.height >> level ) / blockSize.extent.height;
-				auto srcLineSize = levelSize / lines;
-				auto dstLineSize = srcLineSize * m_layers;
-				dstLevel += layer * srcLineSize;
+				auto lines = ashes::getSubresourceDimension( srcSize.height, level ) / blockSize.extent.height;
 
-				for ( uint32_t line = 0u; line < lines; ++line )
+				if ( lines )
 				{
-					std::memcpy( dstLevel, srcLevel, srcLineSize );
-					srcLevel += srcLineSize;
-					dstLevel += dstLineSize;
+					auto srcLineSize = levelSize / lines;
+					auto dstLineSize = srcLineSize * tilesX;
+					auto dstLevelOffset = dstMipOffset + ( tileY * dstLineSize * lines ) + ( tileX * srcLineSize );
+
+					for ( uint32_t line = 0u; line < lines; ++line )
+					{
+						CU_Require( ( dstLevelOffset + srcLineSize ) <= result.size() );
+						std::memcpy( dst + dstLevelOffset, srcLevel, srcLineSize );
+						srcLevel += srcLineSize;
+						dstLevelOffset += dstLineSize;
+						written += srcLineSize;
+						CU_Require( written <= result.size() );
+					}
 				}
 
 				srcLayer = srcLevel;
@@ -650,6 +686,7 @@ namespace castor
 
 		m_buffer = result;
 		m_size = { dstSize.width, dstSize.height };
+		m_tiles = { tilesX, tilesY, m_layers };
 		m_layers = 1u;
 	}
 
@@ -669,11 +706,12 @@ namespace castor
 			m_layers = layers;
 			m_levels = levels;
 
-			auto newSize = m_layers * ashes::getLevelsSize( extent
-				, VkFormat( getFormat() )
-				, 0u
-				, m_levels
-				, m_align );
+			auto newSize = m_layers
+				* ashes::getLevelsSize( extent
+					, VkFormat( getFormat() )
+					, 0u
+					, m_levels
+					, m_align );
 			m_buffer.resize( newSize );
 
 			auto srcBuffer = buffer.data();

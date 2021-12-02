@@ -56,7 +56,7 @@ namespace castor3d
 		m_animations[unit.getId()] = nullptr;
 	}
 
-	void TextureAnimationBuffer::update()
+	void TextureAnimationBuffer::update( ashes::CommandBuffer const & commandBuffer )
 	{
 		if ( m_count )
 		{
@@ -73,7 +73,7 @@ namespace castor3d
 				++buffer;
 			}
 
-			m_buffer.update();
+			m_buffer.upload( commandBuffer );
 		}
 	}
 

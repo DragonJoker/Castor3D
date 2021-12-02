@@ -38,18 +38,11 @@ namespace castor3d
 			, VkFormat tboFormat = VK_FORMAT_R32G32B32A32_SFLOAT );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ShaderBuffer();
-		/**
-		 *\~english
 		 *\brief		Updates the buffer.
 		 *\~french
 		 *\brief		Met à jour le tampon.
 		 */
-		C3D_API void update();
+		C3D_API void upload( ashes::CommandBuffer const & commandBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the buffer on GPU.
@@ -60,8 +53,9 @@ namespace castor3d
 		 *\param[in]	offset	L'offset de départ.
 		 *\param[in]	size	L'intervalle à mettre à jour.
 		 */
-		C3D_API void update( VkDeviceSize offset
-			, VkDeviceSize size );
+		C3D_API void upload( ashes::CommandBuffer const & commandBuffer
+			, VkDeviceSize offset
+			, VkDeviceSize size )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
@@ -109,7 +103,7 @@ namespace castor3d
 		 */
 		uint8_t * getPtr()
 		{
-			return m_data.data();
+			return m_data;
 		}
 		/**
 		 *\~english
@@ -133,16 +127,19 @@ namespace castor3d
 		}
 
 	private:
-		void doUpdate( VkDeviceSize offset
-			, VkDeviceSize size );
+		void doUpload( ashes::CommandBuffer const & commandBuffer
+			, VkDeviceSize offset
+			, VkDeviceSize size )const;
 
 	private:
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
 		ashes::BufferBasePtr m_buffer;
 		ashes::BufferViewPtr m_bufferView;
+		ashes::StagingBufferPtr m_staging;
 		VkDescriptorType m_type;
-		ashes::ByteArray m_data;
+		uint8_t * m_data;
+		VkAccessFlags m_targetAccess;
 	};
 }
 

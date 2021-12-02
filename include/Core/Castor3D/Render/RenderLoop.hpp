@@ -103,6 +103,20 @@ namespace castor3d
 			, FramePassTimer & timer );
 		/**
 		 *\~english
+		 *\brief		Registers a ShaderBuffer.
+		 *\~french
+		 *\brief		Enregistre un ShaderBuffer.
+		 */
+		C3D_API void registerBuffer( ShaderBuffer const & buffer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a ShaderBuffer.
+		 *\~french
+		 *\brief		Désenregistre un ShaderBuffer.
+		 */
+		C3D_API void unregisterBuffer( ShaderBuffer const & buffer );
+		/**
+		 *\~english
 		 *\return		The debug overlays shown status.
 		 *\~french
 		 *\return		Le statut d'affichage des incrustations de débogage.
@@ -240,6 +254,8 @@ namespace castor3d
 	private:
 		bool m_first = true;
 		QueueData const * m_queueData{};
+		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
+		std::mutex m_shaderBuffersMtx;
 	};
 }
 

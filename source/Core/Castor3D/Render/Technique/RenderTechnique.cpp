@@ -1130,15 +1130,11 @@ namespace castor3d
 	{
 		auto & cache = updater.camera->getScene()->getParticleSystemCache();
 		auto lock( castor::makeUniqueLock( cache ) );
+		updater.index = 0u;
 
-		if ( !cache.isEmpty() )
+		for ( auto & particleSystem : cache )
 		{
-			updater.index = 0u;
-
-			for ( auto & particleSystem : cache )
-			{
-				particleSystem.second->update( updater );
-			}
+			particleSystem.second->update( updater );
 		}
 	}
 	
@@ -1146,25 +1142,21 @@ namespace castor3d
 	{
 		auto & cache = updater.scene->getParticleSystemCache();
 		auto lock( castor::makeUniqueLock( cache ) );
+		auto count = 2u * cache.getObjectCountNoLock();
 
-		if ( !cache.isEmpty() )
+		if ( m_particleTimer->getCount() < count )
 		{
-			auto count = 2u * cache.getObjectCount();
+			m_particleTimer->updateCount( count );
+		}
 
-			if ( m_particleTimer->getCount() < count )
-			{
-				m_particleTimer->updateCount( count );
-			}
+		auto timerBlock( m_particleTimer->start() );
+		updater.index = 0u;
+		updater.timer = m_particleTimer.get();
 
-			auto timerBlock( m_particleTimer->start() );
-			updater.index = 0u;
-			updater.timer = m_particleTimer.get();
-
-			for ( auto & particleSystem : cache )
-			{
-				particleSystem.second->update( updater );
-				updater.info.m_particlesCount += particleSystem.second->getParticlesCount();
-			}
+		for ( auto & particleSystem : cache )
+		{
+			particleSystem.second->update( updater );
+			updater.info.m_particlesCount += particleSystem.second->getParticlesCount();
 		}
 	}
 
