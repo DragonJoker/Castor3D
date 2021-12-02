@@ -12,8 +12,12 @@ See LICENSE file in root folder.
 
 #include <ashespp/Core/Device.hpp>
 
+#pragma warning( disable:4005 )
+#pragma warning( disable:4365 )
+#pragma warning( disable:4464 )
+
 #include <glslang/Public/ShaderLang.h>
-#include <SPIRV/GlslangToSpv.h>
+#include <glslang/SPIRV/GlslangToSpv.h>
 
 #include <locale>
 #include <regex>

@@ -168,6 +168,10 @@ namespace castor3d
 		: private GBufferBase
 	{
 	public:
+		GBufferT( GBufferT const & rhs ) = delete;
+		GBufferT & operator=( GBufferT const & rhs ) = delete;
+		GBufferT( GBufferT && rhs ) = default;
+		GBufferT & operator=( GBufferT && rhs ) = default;
 		/**
 		*\~english
 		*\brief

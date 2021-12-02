@@ -68,6 +68,12 @@ namespace castor
 	{
 		CU_Require( m_context );
 		bool result = !m_actions.empty();
+
+		if ( !result )
+		{
+			return result;
+		}
+
 		m_context->pendingSection = 0u;
 		m_context->sections.clear();
 		m_context->sections.push_back( m_parser.getRootSectionId() );

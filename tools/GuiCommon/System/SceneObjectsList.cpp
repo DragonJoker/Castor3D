@@ -475,6 +475,8 @@ namespace GuiCommon
 			case MovableType::eBillboard:
 				doAddBillboard( id, static_cast< BillboardList & >( object.get() ) );
 				break;
+			case MovableType::eParticleEmitter:
+				break;
 			default:
 				CU_Failure( "Unsupported MovableType" );
 				break;

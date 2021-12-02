@@ -24,8 +24,8 @@ namespace castor3d
 				, dst.makeTransferDestination() );
 			commandBuffer.copyBuffer( src
 				, dst
-				, uint32_t( size )
-				, uint32_t( offset ) );
+				, size
+				, offset );
 			dstSrcStage = dst.getCompatibleStageFlags();
 			commandBuffer.memoryBarrier( dstSrcStage
 				, flags

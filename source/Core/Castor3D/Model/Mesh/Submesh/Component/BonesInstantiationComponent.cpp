@@ -45,23 +45,27 @@ namespace castor3d
 	bool BonesInstantiationComponent::doInitialise( RenderDevice const & device )
 	{
 		bool result = true;
+		auto & scene = *getOwner()->getOwner()->getScene();
+		auto & engine = *device.renderSystem.getEngine();
 
 		if ( m_instantiation.isInstanced()
-			&& getOwner()->getOwner()->getScene()->getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() )
+			&& device.renderSystem.getGpuInformations().hasShaderStorageBuffers() )
 		{
 			if ( !m_instancedBonesBuffer )
 			{
 				auto count = m_instantiation.getMaxRefCount();
 				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
-				auto size = count * stride * getOwner()->getOwner()->getScene()->getDirectionalShadowCascades();
-				m_instancedBonesBuffer = castor::makeUnique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
+				auto size = count * stride * scene.getDirectionalShadowCascades();
+				m_instancedBonesBuffer = castor::makeUnique< ShaderBuffer >( engine
 					, device
 					, size
 					, cuT( "InstancedBonesBuffer" ) );
+				engine.registerBuffer( *m_instancedBonesBuffer );
 			}
 		}
 		else
 		{
+			engine.unregisterBuffer( *m_instancedBonesBuffer );
 			m_instancedBonesBuffer.reset();
 		}
 
@@ -70,14 +74,16 @@ namespace castor3d
 
 	void BonesInstantiationComponent::doCleanup()
 	{
-		m_instancedBonesBuffer.reset();
+		if ( m_instancedBonesBuffer )
+		{
+			auto & scene = *getOwner()->getOwner()->getScene();
+			auto & engine = *scene.getEngine();
+			engine.unregisterBuffer( *m_instancedBonesBuffer );
+			m_instancedBonesBuffer.reset();
+		}
 	}
 
 	void BonesInstantiationComponent::doUpload()
 	{
-		if ( m_instancedBonesBuffer )
-		{
-			m_instancedBonesBuffer->update();
-		}
 	}
 }
