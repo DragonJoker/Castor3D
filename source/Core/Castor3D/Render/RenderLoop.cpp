@@ -15,6 +15,7 @@
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -123,6 +124,18 @@ namespace castor3d
 		m_debugOverlays->unregisterTimer( category, timer );
 	}
 
+	void RenderLoop::registerBuffer( ShaderBuffer const & buffer )
+	{
+		auto lock( makeUniqueLock( m_shaderBuffersMtx ) );
+		m_shaderBuffers.insert( &buffer );
+	}
+
+	void RenderLoop::unregisterBuffer( ShaderBuffer const & buffer )
+	{
+		auto lock( makeUniqueLock( m_shaderBuffersMtx ) );
+		m_shaderBuffers.erase( &buffer );
+	}
+
 	bool RenderLoop::hasDebugOverlays()const
 	{
 		return m_debugOverlays->isShown();
@@ -204,6 +217,13 @@ namespace castor3d
 		uploadResources.fence->reset();
 		uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		device.uboPools->upload( *uploadResources.commands.commandBuffer );
+		getEngine()->getMaterialCache().upload( *uploadResources.commands.commandBuffer );
+
+		for ( auto & buffer : m_shaderBuffers )
+		{
+			buffer->upload( *uploadResources.commands.commandBuffer );
+		}
+
 		uploadResources.commands.commandBuffer->end();
 		m_queueData->queue->submit( *uploadResources.commands.commandBuffer
 			, ( uploadResources.used

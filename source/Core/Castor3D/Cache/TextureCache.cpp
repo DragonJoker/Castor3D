@@ -395,7 +395,7 @@ namespace castor3d
 			if ( layersToTiles )
 			{
 				layers = buffer->getLayers();
-				buffer->convertToTiles();
+				buffer->convertToTiles( engine.getRenderSystem()->getProperties().limits.maxImageDimension2D );
 			}
 
 			// Create the resulting texture.
@@ -681,8 +681,9 @@ namespace castor3d
 				data.unit->setSampler( data.sourceInfo.sampler() );
 				data.unit->setTexture( data.layout );
 				auto config = data.config.config;
-				config.tileSet->z = data.tiles;
-				config.tileSet->w = 1u;
+				auto tiles = data.layout->getImage().getPixels()->getTiles();
+				config.tileSet->z = tiles->x;
+				config.tileSet->w = tiles->y;
 				data.unit->setConfiguration( std::move( config ) );
 				data.unit->initialise( device, queueData );
 				doDestroyThreadData( data );
