@@ -1763,12 +1763,27 @@ elseif ( ANDROID )
 			VK_USE_PLATFORM_ANDROID_KHR
 	)
 else ()
-	target_compile_definitions( ${PROJECT_NAME}
-		PUBLIC
-			VK_USE_PLATFORM_XLIB_KHR
-			VK_USE_PLATFORM_XCB_KHR
-			VK_USE_PLATFORM_WAYLAND_KHR
-	)
+	find_package( X11 )
+	if ( X11_FOUND )
+		target_compile_definitions( ${PROJECT_NAME}
+			PUBLIC
+				VK_USE_PLATFORM_XLIB_KHR
+		)
+	endif ()
+	find_package( XCB REQUIRED COMPONENTS xcb )
+	if ( XCB_FOUND )
+		target_compile_definitions( ${PROJECT_NAME}
+			PUBLIC
+				VK_USE_PLATFORM_XCB_KHR
+		)
+	endif ()
+	find_file( WAYLAND_CLIENT_HDR NAMES wayland-client.h )
+	if ( WAYLAND_CLIENT_HDR )
+		target_compile_definitions( ${PROJECT_NAME}
+			PUBLIC
+				VK_USE_PLATFORM_WAYLAND_KHR
+		)
+	endif ()
 endif ()
 
 target_link_libraries( ${PROJECT_NAME}
