@@ -372,10 +372,11 @@ namespace C3dAssimp
 				}
 				else if ( name == "Metalness" )
 				{
-					float metalness = 0.5f;
-					m_material.Get( AI_MATKEY_COLOR_SPECULAR, metalness );
-					value = metalness;
-					m_mtlInfos.specular.r = metalness;
+					m_mtlInfos.specular = { 1, 1, 1 };
+					m_material.Get( AI_MATKEY_COLOR_SPECULAR, m_mtlInfos.specular );
+					value = m_mtlInfos.specular.r;
+					m_mtlInfos.specular.g = 0.0f;
+					m_mtlInfos.specular.b = 0.0f;
 				}
 				else if ( name == "Opacity" )
 				{

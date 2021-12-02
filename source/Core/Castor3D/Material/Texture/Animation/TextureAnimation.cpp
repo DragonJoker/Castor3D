@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationKeyFrame.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
@@ -30,18 +31,25 @@ namespace castor3d
 		if ( m_tileAnim )
 		{
 			m_length = 0_ms;
+			auto tiles = unit.getTexture()->getImage().getPxBuffer().getTiles()->z;
 			auto tileSet = unit.getConfiguration().tileSet;
 			castor::Milliseconds timeIndex{};
 			castor::Milliseconds timeStep{ 25_ms };
+			uint32_t tile = 0u;
 
 			for ( uint32_t y = 0u; y < tileSet->w; ++y )
 			{
 				for ( uint32_t x = 0u; x < tileSet->z; ++x )
 				{
-					auto kf = std::make_unique< TextureAnimationKeyFrame >( *this, timeIndex );
-					kf->setTile( { x, y } );
-					addKeyFrame( std::move( kf ) );
-					timeIndex += timeStep;
+					if ( tile < tiles )
+					{
+						auto kf = std::make_unique< TextureAnimationKeyFrame >( *this, timeIndex );
+						kf->setTile( { x, y } );
+						addKeyFrame( std::move( kf ) );
+						timeIndex += timeStep;
+					}
+
+					++tile;
 				}
 			}
 

@@ -182,7 +182,7 @@ namespace castor3d
 		m_dirty.erase( it, m_dirty.end() );
 	}
 
-	void TextureConfigurationBuffer::update()
+	void TextureConfigurationBuffer::update( ashes::CommandBuffer const & commandBuffer )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
@@ -234,7 +234,7 @@ namespace castor3d
 #endif
 				} );
 
-			m_buffer.update();
+			m_buffer.upload( commandBuffer );
 		}
 	}
 

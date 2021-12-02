@@ -138,11 +138,15 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( GpuUpdater & updater )
 	{
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::upload( ashes::CommandBuffer const & cb )const
+	{
 		if ( m_passBuffer )
 		{
-			m_passBuffer->update();
-			m_texConfigBuffer->update();
-			m_texAnimBuffer->update();
+			m_passBuffer->update( cb );
+			m_texConfigBuffer->update( cb );
+			m_texAnimBuffer->update( cb );
 		}
 	}
 

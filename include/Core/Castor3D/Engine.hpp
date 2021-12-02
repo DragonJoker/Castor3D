@@ -45,6 +45,8 @@ See LICENSE file in root folder
 
 #include <RenderGraph/ResourceHandler.hpp>
 
+#include <unordered_set>
+
 namespace castor3d
 {
 	class Engine
@@ -320,6 +322,20 @@ namespace castor3d
 		 *\brief		Désenregistre une RenderWindow.
 		 */
 		C3D_API void unregisterLightingModel( castor::String const & name );
+		/**
+		 *\~english
+		 *\brief		Registers a RenderWindow.
+		 *\~french
+		 *\brief		Enregistre une RenderWindow.
+		 */
+		C3D_API void registerBuffer( ShaderBuffer const & buffer );
+		/**
+		 *\~english
+		 *\brief		Unregisters a RenderWindow.
+		 *\~french
+		 *\brief		Désenregistre une RenderWindow.
+		 */
+		C3D_API void unregisterBuffer( ShaderBuffer const & buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path

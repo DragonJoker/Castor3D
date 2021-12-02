@@ -529,6 +529,22 @@ namespace castor3d
 		m_lightingModelFactory.unregisterType( name );
 	}
 
+	void Engine::registerBuffer( ShaderBuffer const & buffer )
+	{
+		if ( hasRenderLoop() )
+		{
+			m_renderLoop->registerBuffer( buffer );
+		}
+	}
+
+	void Engine::unregisterBuffer( ShaderBuffer const & buffer )
+	{
+		if ( hasRenderLoop() )
+		{
+			m_renderLoop->unregisterBuffer( buffer );
+		}
+	}
+
 	bool Engine::isCleaned()
 	{
 		return m_cleaned;

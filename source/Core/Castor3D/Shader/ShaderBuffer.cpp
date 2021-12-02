@@ -31,7 +31,7 @@ namespace castor3d
 			result = makeBufferBase( device
 				, size
 				, VkBufferUsageFlags( target | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( name ) );
 			return result;
 		}
@@ -63,29 +63,37 @@ namespace castor3d
 		, castor::String name
 		, VkFormat tboFormat )
 		: m_device{ device }
-		, m_size{ size }
-		, m_buffer{ doCreateBuffer( engine, device, m_size, name ) }
-		, m_bufferView{ doCreateView( engine, device, tboFormat, *m_buffer ) }
+		, m_size{ ashes::getAlignedSize( size
+			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
+		, m_buffer{ doCreateBuffer( engine, m_device, m_size, name ) }
+		, m_bufferView{ doCreateView( engine, m_device, tboFormat, *m_buffer ) }
+		, m_staging{ std::make_unique< ashes::StagingBuffer >( *m_device
+			, name + "Staging"
+			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+			, m_size
+			, ashes::QueueShare{ { m_device.getGraphicsQueueFamilyIndex()
+				, m_device.getComputeQueueFamilyIndex()
+				, m_device.getTransferQueueFamilyIndex() } } ) }
 		, m_type{ m_bufferView ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER : VK_DESCRIPTOR_TYPE_STORAGE_BUFFER }
-		, m_data( m_size, uint8_t( 0 ) )
+		, m_data( m_staging->getBuffer().lock( 0u, m_size, 0u ) )
+		, m_targetAccess{ VkAccessFlags( m_bufferView ? VK_ACCESS_UNIFORM_READ_BIT : VK_ACCESS_SHADER_READ_BIT ) }
 	{
+		assert( m_data );
 	}
 
-	ShaderBuffer::~ShaderBuffer()
+	void ShaderBuffer::upload( ashes::CommandBuffer const & commandBuffer )const
 	{
-		m_bufferView.reset();
-		m_buffer.reset();
+		doUpload( commandBuffer
+			, 0u
+			, ashes::WholeSize );
 	}
 
-	void ShaderBuffer::update()
+	void ShaderBuffer::upload( ashes::CommandBuffer const & commandBuffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )const
 	{
-		doUpdate( 0u, ashes::WholeSize );
-	}
-
-	void ShaderBuffer::update( VkDeviceSize offset
-		, VkDeviceSize size )
-	{
-		doUpdate( 0u
+		doUpload( commandBuffer
+			, 0u
 			, std::min( m_size
 				, ashes::getAlignedSize( size
 					, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) ) );
@@ -161,19 +169,37 @@ namespace castor3d
 		}
 	}
 
-	void ShaderBuffer::doUpdate( VkDeviceSize offset
-		, VkDeviceSize size )
+	void ShaderBuffer::doUpload( ashes::CommandBuffer const & commandBuffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )const
 	{
 		CU_Require( ( offset + size <= m_size )
 			|| ( offset == 0u && size == ashes::WholeSize ) );
+		size = ( size == ashes::WholeSize ? m_size : size );
+		m_staging->getBuffer().flush( offset, size );
+		auto stgSrcStage = m_staging->getBuffer().getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( stgSrcStage
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_staging->getBuffer().makeTransferSource() );
 
-		if ( uint8_t * buffer = m_buffer->lock( offset
+		auto dstSrcStage = m_buffer->getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstSrcStage
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_buffer->makeTransferDestination() );
+
+		commandBuffer.copyBuffer( m_staging->getBuffer()
+			, *m_buffer
 			, size
-			, 0u ) )
-		{
-			std::memcpy( buffer, m_data.data(), std::min( size, m_size ) );
-			m_buffer->flush( offset, size );
-			m_buffer->unlock();
-		}
+			, offset );
+
+		auto dstDstStage = m_buffer->getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstDstStage
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_buffer->makeMemoryTransitionBarrier( m_targetAccess ) );
+
+		auto stgDstStage = m_staging->getBuffer().getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( stgDstStage
+			, VK_PIPELINE_STAGE_HOST_BIT
+			, m_staging->getBuffer().makeHostWrite() );
 	}
 }

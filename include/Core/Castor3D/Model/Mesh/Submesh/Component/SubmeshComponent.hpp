@@ -52,8 +52,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Uploads data on VRAM.
+		 *\remarks		For host visible buffers.
 		 *\~french
 		 *\brief		Met les données en VRAM.
+		 *\remarks		Pour les buffers host visible.
 		 */
 		C3D_API void upload();
 		/**

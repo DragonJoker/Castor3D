@@ -63,7 +63,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le tampon de configurations.
 		 */
-		C3D_API void update();
+		C3D_API void update( ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding.

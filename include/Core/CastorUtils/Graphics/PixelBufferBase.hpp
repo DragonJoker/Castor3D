@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/Pixel.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 #include "CastorUtils/Graphics/Position.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {
@@ -216,7 +217,7 @@ namespace castor
 		 *\~french
 		 *\brief		Convvertit en tile map (aucun effet si m_layers <= 1).
 		 */
-		CU_API void convertToTiles();
+		CU_API void convertToTiles( uint32_t maxSize );
 		/**
 		 *\~english
 		 *\return		A clone of this buffer.
@@ -283,6 +284,26 @@ namespace castor
 		uint32_t getHeight()const
 		{
 			return m_size.getHeight();
+		}
+
+		Point3ui getTiles()const
+		{
+			return m_tiles;
+		}
+
+		Size getTileSize()const
+		{
+			return { getTileWidth(), getTileHeight() };
+		}
+
+		uint32_t getTileWidth()const
+		{
+			return m_size.getWidth() / m_tiles->x;
+		}
+
+		uint32_t getTileHeight()const
+		{
+			return m_size.getHeight() / m_tiles->y;
 		}
 
 		uint32_t getLayers()const
@@ -608,6 +629,7 @@ namespace castor
 		uint32_t m_layers;
 		uint32_t m_levels;
 		uint32_t m_align;
+		Point3ui m_tiles{ 1u, 1u, 1u };
 		mutable PxArray m_buffer;
 	};
 }
