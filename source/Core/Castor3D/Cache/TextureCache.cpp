@@ -682,8 +682,17 @@ namespace castor3d
 				data.unit->setTexture( data.layout );
 				auto config = data.config.config;
 				auto tiles = data.layout->getImage().getPixels()->getTiles();
-				config.tileSet->z = tiles->x;
-				config.tileSet->w = tiles->y;
+
+				if ( config.tileSet->z <= 1 && tiles->x >= 1 )
+				{
+					config.tileSet->z = tiles->x;
+				}
+
+				if ( config.tileSet->w <= 1 && tiles->y >= 1 )
+				{
+					config.tileSet->w = tiles->y;
+				}
+
 				data.unit->setConfiguration( std::move( config ) );
 				data.unit->initialise( device, queueData );
 				doDestroyThreadData( data );
