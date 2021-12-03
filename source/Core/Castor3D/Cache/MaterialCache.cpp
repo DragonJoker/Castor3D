@@ -9,9 +9,9 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 

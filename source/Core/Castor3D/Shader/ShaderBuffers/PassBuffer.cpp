@@ -1,4 +1,4 @@
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"

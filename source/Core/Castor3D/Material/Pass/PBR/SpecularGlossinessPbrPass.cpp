@@ -10,7 +10,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>

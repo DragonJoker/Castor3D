@@ -1,4 +1,4 @@
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
