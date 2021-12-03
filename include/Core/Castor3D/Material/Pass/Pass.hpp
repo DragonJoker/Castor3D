@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>

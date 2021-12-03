@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DDE_ObjectIDEdgeDetection_H___
 #define ___C3DDE_ObjectIDEdgeDetection_H___
 
-#include <Castor3D/Shader/PassBuffer/PassBufferModule.hpp>
+#include <Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
