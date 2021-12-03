@@ -31,32 +31,6 @@ namespace castor3d
 
 	namespace
 	{
-		//TextureFlags getUsedImageComponents( TextureConfiguration const & config )
-		//{
-		//	auto mergeMasks = []( uint32_t toMerge
-		//		, TextureFlag flag
-		//		, TextureFlags & result )
-		//	{
-		//		result |= toMerge
-		//			? flag
-		//			: TextureFlag::eNone;
-		//	};
-
-		//	TextureFlags result = TextureFlag::eNone;
-		//	mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
-		//	mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
-		//	mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
-		//	mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
-		//	mergeMasks( config.roughnessMask[0], TextureFlag::eRoughness, result );
-		//	mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
-		//	mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
-		//	mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
-		//	mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
-		//	mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
-		//	mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
-		//	return result;
-		//}
-
 		CU_ImplementAttributeParser( parserPassEmissive )
 		{
 			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
@@ -732,6 +706,31 @@ namespace castor3d
 		}
 		CU_EndAttributePush( CSCNSection::eTextureTransform )
 
+		CU_ImplementAttributeParser( parserUnitTileSet )
+		{
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+			if ( parsingContext.pass )
+			{
+				castor::Point2i value;
+				params[0]->get( value );
+				parsingContext.textureConfiguration.tileSet->z = uint32_t( value->x );
+				parsingContext.textureConfiguration.tileSet->w = uint32_t( value->y );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserUnitTiles )
+		{
+			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+
+			if ( parsingContext.pass )
+			{
+				params[0]->get( parsingContext.textureConfiguration.tiles );
+			}
+		}
+		CU_EndAttribute()
+
 		CU_ImplementAttributeParser( parserUnitAnimation )
 		{
 			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
@@ -894,6 +893,8 @@ namespace castor3d
 		Pass::addParser( result, texSectionID, cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
 		Pass::addParser( result, texSectionID, cuT( "invert_y" ), parserUnitInvertY, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, texSectionID, cuT( "transform" ), parserUnitTransform );
+		Pass::addParser( result, texSectionID, cuT( "tileset" ), parserUnitTileSet, { makeParameter< ParameterType::ePoint2I >() } );
+		Pass::addParser( result, texSectionID, cuT( "tiles" ), parserUnitTiles, { makeParameter< ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "animation" ), parserUnitAnimation );
 		Pass::addParser( result, texSectionID, cuT( "}" ), parserUnitEnd );
 	}

@@ -86,6 +86,7 @@ namespace castor3d
 		uint32_t needsYInversion{ 0u };
 		TextureTransform transform;
 		castor::Point4ui tileSet;
+		uint32_t tiles{ 1u };
 		TextureSpace textureSpace{ TextureSpace::eColour };
 		/**@}*/
 		/**
