@@ -10,9 +10,18 @@ namespace castor3d
 {
 	/**@name Shader */
 	//@{
-	/**@name TextureConfigurationBuffer */
+	/**@name Buffers */
 	//@{
 
+	/**
+	*\~english
+	*\brief
+	*	ShaderBuffer holding the Passes data.
+	*\~french
+	*\brief
+	*	ShaderBuffer contenant les données des Pass.
+	*/
+	class PassBuffer;
 	/**
 	*\~english
 	*\brief
@@ -32,6 +41,7 @@ namespace castor3d
 	*/
 	class TextureAnimationBuffer;
 
+	CU_DeclareSmartPtr( PassBuffer );
 	CU_DeclareSmartPtr( TextureConfigurationBuffer );
 	CU_DeclareSmartPtr( TextureAnimationBuffer );
 

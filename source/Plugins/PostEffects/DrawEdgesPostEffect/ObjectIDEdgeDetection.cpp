@@ -6,7 +6,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include <Castor3D/Shader/PassBuffer/PassBuffer.hpp>
+#include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
