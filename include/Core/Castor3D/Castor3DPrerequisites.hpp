@@ -52,9 +52,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Event/Frame/CpuFrameEvent.hpp"
