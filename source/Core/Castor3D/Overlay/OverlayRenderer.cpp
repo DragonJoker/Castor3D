@@ -18,13 +18,13 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp"
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>

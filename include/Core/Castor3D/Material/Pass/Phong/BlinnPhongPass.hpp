@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
 
-#include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include <CastorUtils/Graphics/RgbColour.hpp>
 

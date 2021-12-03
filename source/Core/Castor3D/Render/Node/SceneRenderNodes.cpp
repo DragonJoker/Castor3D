@@ -19,9 +19,9 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>

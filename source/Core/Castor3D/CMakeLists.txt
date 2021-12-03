@@ -1474,11 +1474,15 @@ source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Shader" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/PassBuffer/PassBuffer.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/PassBuffer.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/TextureAnimationBuffer.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/TextureConfigurationBuffer.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/PassBuffer/PassBuffer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/PassBuffer/PassBufferModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/PassBuffer.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/ShaderBuffersModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/TextureAnimationBuffer.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
@@ -1488,8 +1492,8 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${${PROJECT_NAME}_HDR_FILES}
 	${${PROJECT_NAME}_FOLDER_HDR_FILES}
 )
-source_group( "Header Files\\Shader\\PassBuffer" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-source_group( "Source Files\\Shader\\PassBuffer" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+source_group( "Header Files\\Shader\\ShaderBuffers" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Shader\\ShaderBuffers" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslCookTorranceBRDF.cpp
@@ -1536,26 +1540,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Shader\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Shader\\Shaders" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-
-set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.cpp
-)
-set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/TextureConfigurationBuffer/TextureAnimationBuffer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp
-)
-set( ${PROJECT_NAME}_SRC_FILES
-	${${PROJECT_NAME}_SRC_FILES}
-	${${PROJECT_NAME}_FOLDER_SRC_FILES}
-)
-set( ${PROJECT_NAME}_HDR_FILES
-	${${PROJECT_NAME}_HDR_FILES}
-	${${PROJECT_NAME}_FOLDER_HDR_FILES}
-)
-source_group( "Header Files\\Shader\\TextureConfigurationBuffer" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-source_group( "Source Files\\Shader\\TextureConfigurationBuffer" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/BillboardUbo.cpp

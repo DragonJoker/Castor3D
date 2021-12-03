@@ -10,8 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include "Castor3D/Material/Material.hpp"
 
