@@ -82,6 +82,17 @@ namespace castor3d
 		 *\brief		Crée le descriptor write pour ce tampon.
 		 *\param[in]	binding	L'attache de layout de set de descripteurs.
 		 */
+		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
+			, VkDeviceSize offset
+			, VkDeviceSize size )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor write for this buffer.
+		 *\param[in]	binding	The descriptor set layout binding.
+		 *\~french
+		 *\brief		Crée le descriptor write pour ce tampon.
+		 *\param[in]	binding	L'attache de layout de set de descripteurs.
+		 */
 		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
 		/**
 		 *\~english

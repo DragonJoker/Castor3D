@@ -268,7 +268,8 @@ namespace castor3d
 			, false
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
-			, RenderPipeline::eAdditional );
+			, RenderPipeline::eAdditional
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 		// Fragment Outputs
 		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );

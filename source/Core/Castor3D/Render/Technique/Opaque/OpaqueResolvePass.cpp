@@ -165,7 +165,8 @@ namespace castor3d
 
 			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
-				, true );
+				, true
+				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			auto reflections = lightingModel->getReflectionModel( uint32_t( ResolveBind::eEnvironment )
 				, 0u );
 			shader::Fog fog{ writer };

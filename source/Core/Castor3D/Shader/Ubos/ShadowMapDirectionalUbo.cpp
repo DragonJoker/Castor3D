@@ -87,7 +87,7 @@ namespace castor3d
 
 		TiledDirectionalLight ShadowMapDirectionalData::getDirectionalLight( LightingModel const & lighting )const
 		{
-			return lighting.getTiledDirectionalLight( getWriter()->cast< sdw::Int >( m_lightIndex ) );
+			return lighting.getTiledDirectionalLight( m_lightIndex );
 		}
 	}
 

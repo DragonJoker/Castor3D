@@ -89,7 +89,7 @@ namespace castor3d
 		void doPrepareShadowMap( LightCache const & cache
 			, LightType type
 			, ShadowMap & shadowMap
-			, ShadowMapLightTypeArray & activeShadowMaps
+			, ShadowMapLightArray & activeShadowMaps
 			, LightPropagationVolumesLightType const & lightPropagationVolumes
 			, LightPropagationVolumesGLightType const & lightPropagationVolumesG
 			, LayeredLightPropagationVolumesLightType const & layeredLightPropagationVolumes
@@ -103,14 +103,14 @@ namespace castor3d
 			{
 				uint32_t index = 0u;
 				auto lightIt = lights.begin();
-				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), UInt32Array{} );
+				activeShadowMaps[size_t( type )].push_back( { std::ref( shadowMap ), LightIdArray{} } );
 				auto & active = activeShadowMaps[size_t( type )].back();
 
 				for ( auto i = 0u; i < count; ++i )
 				{
 					auto & light = *lightIt->second;
 					light.setShadowMap( &shadowMap, index );
-					active.second.push_back( index );
+					active.ids.push_back( { &light, index } );
 					updater.light = &light;
 					updater.index = index;
 					shadowMap.update( updater );
@@ -1087,10 +1087,11 @@ namespace castor3d
 		{
 			for ( auto & map : maps )
 			{
-				for ( auto & id : map.second )
+				for ( auto & id : map.ids )
 				{
-					updater.index = id;
-					map.first.get().update( updater );
+					updater.light = id.first;
+					updater.index = id.second;
+					map.shadowMap.get().update( updater );
 				}
 			}
 		}
@@ -1208,9 +1209,9 @@ namespace castor3d
 			{
 				for ( auto & shadowMap : array )
 				{
-					for ( auto & index : shadowMap.second )
+					for ( auto & index : shadowMap.ids )
 					{
-						result = shadowMap.first.get().render( result, queue, index );
+						result = shadowMap.shadowMap.get().render( result, queue, index.second );
 					}
 				}
 			}

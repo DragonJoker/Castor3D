@@ -20,7 +20,8 @@ namespace castor3d::shader
 			, sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 	public:
 		C3D_API sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
@@ -198,13 +199,15 @@ namespace castor3d::shader
 		C3D_API PbrMRLightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		C3D_API static const castor::String getName();
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
 	};
@@ -216,13 +219,15 @@ namespace castor3d::shader
 		C3D_API PbrSGLightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		C3D_API static const castor::String getName();
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name )override;
 	};

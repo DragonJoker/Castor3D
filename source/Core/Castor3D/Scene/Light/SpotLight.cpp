@@ -30,6 +30,11 @@ namespace castor3d
 
 	SpotLight::SpotLight( Light & p_light )
 		: LightCategory{ LightType::eSpot, p_light }
+		, m_attenuation{ m_dirtyData, castor::Point3f{ 1, 0, 0 } }
+		, m_exponent{ m_dirtyData, 1.0f }
+		, m_cutOff{ m_dirtyData, 45.0_degrees }
+		, m_lightView{ m_dirtyShadow }
+		, m_lightProj{ m_dirtyShadow }
 	{
 	}
 
@@ -124,81 +129,6 @@ namespace castor3d
 		return result;
 	}
 
-	//Point3fArray const & SpotLight::generateVertices()
-	//{
-	//	static Point3fArray result;
-
-	//	if ( result.empty() )
-	//	{
-	//		Point3fArray data;
-	//		Angle alpha;
-	//		auto angle = Angle::fromDegrees( 360.0f / FaceCount );
-
-	//		data.emplace_back( 0.0f, 0.0f, 0.0f );
-	//		data.emplace_back( 0.0f, 0.0f, 1.0f );
-
-	//		for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
-	//		{
-	//			data.push_back( point::getNormalised( Point3f{ alpha.cos()
-	//				, alpha.sin()
-	//				, 1.0f } ) );
-	//		}
-
-	//		for ( auto i = 0u; i < FaceCount; alpha += angle, ++i )
-	//		{
-	//			data.push_back( point::getNormalised( Point3f{ alpha.cos() / 2.0f
-	//				, alpha.sin() / 2.0f
-	//				, 1.0f } ) );
-	//		}
-
-
-	//		// Side
-	//		for ( auto i = 0u; i < FaceCount - 1; i++ )
-	//		{
-	//			result.push_back( data[0u] );
-	//			result.push_back( data[i + 3u] );
-	//			result.push_back( data[i + 2u] );
-	//		}
-
-	//		// Last face
-	//		result.push_back( data[0u] );
-	//		result.push_back( data[2u] );
-	//		result.push_back( data[FaceCount + 1] );
-
-	//		// Base
-	//		auto second = 2u + FaceCount;
-	//		for ( auto i = 0u; i < FaceCount - 1; i++ )
-	//		{
-	//			// Center to intermediate.
-	//			result.push_back( data[1u] );
-	//			result.push_back( data[i + second + 0u] );
-	//			result.push_back( data[i + second + 1u] );
-	//			// Intermediate to border.
-	//			result.push_back( data[i + second + 0u] );
-	//			result.push_back( data[i + 2u] );
-	//			result.push_back( data[i + 3u] );
-	//			result.push_back( data[i + second + 0u] );
-	//			result.push_back( data[i + 3u] );
-	//			result.push_back( data[i + second + 1u] );
-	//		}
-	//		// Last face
-	//		auto third = second + FaceCount - 1u;
-	//		// Center to intermediate.
-	//		result.push_back( data[1u] );
-	//		result.push_back( data[third] );
-	//		result.push_back( data[second] );
-	//		// Intermediate to border
-	//		result.push_back( data[third] );
-	//		result.push_back( data[FaceCount + 1u] );
-	//		result.push_back( data[2u] );
-	//		result.push_back( data[third] );
-	//		result.push_back( data[2u] );
-	//		result.push_back( data[second] );
-	//	}
-
-	//	return result;
-	//}
-
 	void SpotLight::update()
 	{
 		SpotLight::generateVertices();
@@ -206,8 +136,7 @@ namespace castor3d
 		m_cubeBox.load( castor::Point3f{ -scale[0], -scale[0], -scale[1] }
 			, castor::Point3f{ scale[0], scale[0], scale[1] } );
 		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
-		m_attenuation.reset();
-		m_cutOff.reset();
+		m_dirtyData = false;
 	}
 
 	void SpotLight::updateShadow( Camera & lightCamera
@@ -225,40 +154,71 @@ namespace castor3d
 		lightCamera.update();
 		m_lightView = lightCamera.getView();
 		m_lightProj = lightCamera.getProjection( false );
-		m_lightSpace = m_lightProj * m_lightView;
+
+		if ( m_dirtyShadow )
+		{
+			m_lightSpace = ( *m_lightProj ) * ( *m_lightView );
+			getLight().onGPUChanged( getLight() );
+		}
+
 		m_shadowMapIndex = index;
 	}
 
-	void SpotLight::doBind( Point4f * buffer )const
+	void SpotLight::doFillBuffer( LightBuffer::LightData & data )const
 	{
+		auto & spot = data.specific.spot;
 		auto position = getLight().getParent()->getDerivedPosition();
-		doCopyComponent( position, buffer );
-		doCopyComponent( m_attenuation, buffer );
-		doCopyComponent( m_direction, buffer );
-		doCopyComponent( Point2f{ m_exponent, m_cutOff.value().cos() }, buffer );
-		doCopyComponent( m_lightSpace, buffer );
+
+		spot.position = position;
+		spot.attenuation = ( *m_attenuation );
+		spot.direction = m_direction;
+		spot.exponentCutOff.x = m_exponent;
+		spot.exponentCutOff.y = m_cutOff.value().cos();
+		spot.exponentCutOff.z = 0.0f;
+		spot.exponentCutOff.w = 0.0f;
+
+		spot.transform = m_lightSpace;
 	}
 
-	void SpotLight::setAttenuation( Point3f const & p_attenuation )
+	void SpotLight::setAttenuation( Point3f const & attenuation )
 	{
-		m_attenuation = p_attenuation;
-		getLight().onChanged( getLight() );
+		m_attenuation = attenuation;
+
+		if ( m_dirtyData )
+		{
+			getLight().onGPUChanged( getLight() );
+		}
 	}
 
-	void SpotLight::setExponent( float p_exponent )
+	void SpotLight::setExponent( float exponent )
 	{
-		m_exponent = p_exponent;
+		m_exponent = exponent;
+
+		if ( m_dirtyData )
+		{
+			getLight().onGPUChanged( getLight() );
+		}
 	}
 
-	void SpotLight::setCutOff( Angle const & p_cutOff )
+	void SpotLight::setCutOff( Angle const & cutOff )
 	{
-		m_cutOff = p_cutOff;
-		getLight().onChanged( getLight() );
+		m_cutOff = cutOff;
+
+		if ( m_dirtyData )
+		{
+			getLight().onGPUChanged( getLight() );
+		}
 	}
 
-	void SpotLight::updateNode( SceneNode const & p_node )
+	void SpotLight::updateNode( SceneNode const & node )
 	{
-		m_direction = Point3f{ 0, 0, 1 };
-		p_node.getDerivedOrientation().transform( m_direction, m_direction );
+		auto direction = Point3f{ 0, 0, 1 };
+		node.getDerivedOrientation().transform( direction, direction );
+		m_direction = direction;
+
+		if ( m_dirtyData )
+		{
+			getLight().onGPUChanged( getLight() );
+		}
 	}
 }

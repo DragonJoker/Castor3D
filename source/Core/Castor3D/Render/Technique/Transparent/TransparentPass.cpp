@@ -191,7 +191,8 @@ namespace castor3d
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
 			, RenderPipeline::eAdditional
-			, false );
+			, false
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto reflections = lightingModel->getReflectionModel( flags.passFlags
 			, index
 			, uint32_t( RenderPipeline::eAdditional ) );

@@ -75,11 +75,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, bool isOpaqueProgram
+		, bool hasSsbo
 		, bool isBlinnPhong )
 		: LightingModel{ m_writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, isBlinnPhong ? std::string{ "c3d_blinnphong_" } : std::string{ "c3d_phong_" } }
 		, m_isBlinnPhong{ isBlinnPhong }
 	{
@@ -88,12 +90,14 @@ namespace castor3d::shader
 	LightingModelPtr PhongLightingModel::create( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< PhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, false );
 	}
 
@@ -1347,11 +1351,13 @@ namespace castor3d::shader
 	BlinnPhongLightingModel::BlinnPhongLightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: PhongLightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, true }
 	{
 	}
@@ -1359,12 +1365,14 @@ namespace castor3d::shader
 	LightingModelPtr BlinnPhongLightingModel::create( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< BlinnPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, hasSsbo );
 	}
 
 	castor::String BlinnPhongLightingModel::getName()

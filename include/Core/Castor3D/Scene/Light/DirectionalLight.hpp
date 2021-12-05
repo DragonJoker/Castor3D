@@ -116,7 +116,7 @@ namespace castor3d
 
 	private:
 		void updateNode( SceneNode const & node )override;
-		void doBind( castor::Point4f * buffer )const override;
+		void doFillBuffer( LightBuffer::LightData & data )const override;
 
 	private:
 		castor::Point3f m_direction;

@@ -217,7 +217,7 @@ namespace castor3d
 		uploadResources.fence->reset();
 		uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		device.uboPools->upload( *uploadResources.commands.commandBuffer );
-		getEngine()->getMaterialCache().upload( *uploadResources.commands.commandBuffer );
+		getEngine()->upload( *uploadResources.commands.commandBuffer );
 
 		for ( auto & buffer : m_shaderBuffers )
 		{

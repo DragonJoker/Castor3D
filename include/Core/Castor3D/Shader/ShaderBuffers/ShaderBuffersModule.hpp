@@ -16,6 +16,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	ShaderBuffer holding the light sources data.
+	*\~french
+	*\brief
+	*	ShaderBuffer contenant les données des sources lumineuses.
+	*/
+	class LightBuffer;
+	/**
+	*\~english
+	*\brief
 	*	ShaderBuffer holding the Passes data.
 	*\~french
 	*\brief
@@ -41,9 +50,10 @@ namespace castor3d
 	*/
 	class TextureAnimationBuffer;
 
-	CU_DeclareSmartPtr( PassBuffer );
-	CU_DeclareSmartPtr( TextureConfigurationBuffer );
-	CU_DeclareSmartPtr( TextureAnimationBuffer );
+	CU_DeclareCUSmartPtr( castor3d, LightBuffer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PassBuffer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );
 
 	//@}
 	//@}
