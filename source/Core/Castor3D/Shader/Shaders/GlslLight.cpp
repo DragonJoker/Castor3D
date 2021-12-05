@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 
+#include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
+
 #include <ShaderWriter/Source.hpp>
 
 using namespace castor;
@@ -9,6 +11,29 @@ namespace castor3d
 {
 	namespace shader
 	{
+		//*********************************************************************************************
+
+		LightData::LightData( ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, data{ getMemberArray< Vec4 >( "data" ) }
+		{
+		}
+
+		ast::type::BaseStructPtr LightData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "C3D_LightData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "data", ast::type::Kind::eVec4F, getMaxLightComponentsCount() );
+			}
+
+			return result;
+		}
+
 		//*********************************************************************************************
 
 		Light::Light( ShaderWriter & writer

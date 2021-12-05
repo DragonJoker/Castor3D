@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -11,6 +12,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -43,30 +45,13 @@ namespace castor3d
 				m_connections.emplace( &element
 					, element.onChanged.connect( [this]( Light & light )
 						{
-							onLightChanged( light );
+							m_dirtyLights.emplace_back( &light );
 						} ) );
-				auto index = size_t( element.getLightType() );
-				auto it = std::find( m_typeSortedLights[index].begin()
-					, m_typeSortedLights[index].end()
-					, &element );
-
-				if ( it == m_typeSortedLights[index].end() )
-				{
-					m_typeSortedLights[index].push_back( &element );
-				}
+				doRegisterLight( element );
 			}
 			, [this]( ElementT & element )
 			{
-				auto index = size_t( element.getLightType() );
-				auto it = std::find( m_typeSortedLights[index].begin()
-					, m_typeSortedLights[index].end()
-					, &element );
-
-				if ( it != m_typeSortedLights[index].end() )
-				{
-					m_typeSortedLights[index].erase( it );
-				}
-
+				doUnregisterLight( element );
 				m_connections.erase( &element );
 				getScene()->unregisterLight( element );
 			}
@@ -74,28 +59,37 @@ namespace castor3d
 			, MovableAttacherT< LightCache >{}
 			, MovableDetacherT< LightCache >{} }
 	{
-		auto & engine = *getScene()->getEngine();
-		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
-		m_textureBuffer = makeBuffer< castor::Point4f >( engine.getRenderSystem()->getRenderDevice()
-			, uint32_t( m_lightsBuffer.size() )
-			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				| VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT
-				| VK_BUFFER_USAGE_TRANSFER_DST_BIT )
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "LightsBuffer" );
-		m_textureView = ( engine.getRenderSystem()->getRenderDevice() )->createBufferView( "LightsBufferView"
-			, m_textureBuffer->getBuffer()
-			, VK_FORMAT_R32G32B32A32_SFLOAT
-			, 0u
-			, uint32_t( m_lightsBuffer.size() * sizeof( castor::Point4f ) ) );
+	}
+
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::initialise( RenderDevice const & device )
+	{
+		if ( !m_lightBuffer )
+		{
+			auto lock( makeUniqueLock( *this ) );
+			m_lightBuffer = castor::makeUnique< LightBuffer >( m_engine
+				, device
+				, shader::MaxLightsCount );
+
+			for ( auto light : m_pendingLights )
+			{
+				doRegisterLight( *light );
+			}
+
+			m_pendingLights.clear();
+		}
 	}
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::cleanup()
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		m_dirtyLights.clear();
-		m_connections.clear();
-		ElementObjectCacheT::doCleanupNoLock();
+		{
+			auto lock( makeUniqueLock( *this ) );
+			doCleanupNoLock();
+		}
+		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				m_lightBuffer.reset();
+			} ) );
 	}
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( CpuUpdater & updater )
@@ -113,60 +107,56 @@ namespace castor3d
 				light->update( updater );
 			}
 		}
+
+		if ( m_lightBuffer )
+		{
+			m_lightBuffer->update( updater );
+		}
 	}
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( GpuUpdater & updater )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		auto & camera = *updater.camera;
-		uint32_t index = 0;
-		uint32_t lightIndex = 0;
-		castor::Point4f * data = m_lightsBuffer.data();
+	}
 
-		for ( auto lights : m_typeSortedLights )
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::upload( ashes::CommandBuffer const & cb )const
+	{
+		if ( m_lightBuffer )
 		{
-			for ( auto light : lights )
-			{
-				if ( light->getLightType() == LightType::eDirectional
-					|| camera.isVisible( light->getBoundingBox()
-						, light->getParent()->getDerivedTransformationMatrix() ) )
-				{
-					light->bind( lightIndex++, data );
-					data += shader::getMaxLightComponentsCount();
-					index += shader::getMaxLightComponentsCount();
-				}
-			}
-		}
-
-		if ( index )
-		{
-			if ( auto * locked = m_textureBuffer->lock( 0u
-				, index
-				, 0u ) )
-			{
-				std::copy( m_lightsBuffer.begin(), m_lightsBuffer.begin() + index, locked );
-				m_textureBuffer->flush( 0u, index );
-				m_textureBuffer->unlock();
-			}
+			m_lightBuffer->upload( cb );
 		}
 	}
 
-	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getDescriptorWrite( uint32_t binding )const
+	LightsArray ObjectCacheT< Light, castor::String, LightCacheTraits >::getLights( LightType type )const
 	{
-		auto & buffer = getBuffer().getBuffer();
-		auto & view = getView();
-		ashes::WriteDescriptorSet write{ binding
-			, 0u
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER };
-		write.bufferInfo.push_back( { buffer, view.getOffset(), view.getRange() } );
-		write.texelBufferView.push_back( view );
-		return write;
+		CU_Require( m_lightBuffer );
+		return m_lightBuffer->getLights( type );
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::onLightChanged( Light & light )
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::createPassBinding( crg::FramePass & pass
+		, uint32_t binding )const
 	{
-		m_dirtyLights.emplace_back( &light );
+		CU_Require( m_lightBuffer );
+		m_lightBuffer->createPassBinding( pass, binding );
+	}
+
+	VkDescriptorSetLayoutBinding ObjectCacheT< Light, castor::String, LightCacheTraits >::createLayoutBinding( uint32_t index )const
+	{
+		CU_Require( m_lightBuffer );
+		return m_lightBuffer->createLayoutBinding( index );
+	}
+
+	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getBinding( uint32_t binding )const
+	{
+		CU_Require( m_lightBuffer );
+		return m_lightBuffer->getBinding( binding );
+	}
+
+	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getBinding( uint32_t binding
+		, VkDeviceSize offset
+		, VkDeviceSize size )const
+	{
+		CU_Require( m_lightBuffer );
+		return m_lightBuffer->getBinding( binding, offset, size );
 	}
 
 	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )
@@ -180,5 +170,25 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doRegisterLight( Light & light )
+	{
+		if ( m_lightBuffer )
+		{
+			m_lightBuffer->addLight( light );
+			return true;
+		}
+
+		m_pendingLights.push_back( &light );
+		return false;
+	}
+
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::doUnregisterLight( Light & light )
+	{
+		if ( m_lightBuffer )
+		{
+			m_lightBuffer->removeLight( light );
+		}
 	}
 }

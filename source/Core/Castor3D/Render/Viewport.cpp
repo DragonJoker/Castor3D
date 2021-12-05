@@ -75,6 +75,7 @@ namespace castor3d
 
 	const std::array< String, size_t( ViewportType::eCount ) > Viewport::TypeName
 	{
+		cuT( "undefined" ),
 		cuT( "ortho" ),
 		cuT( "perspective" ),
 		cuT( "frustum" )

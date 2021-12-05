@@ -31,7 +31,7 @@ namespace castor3d
 			, ShadowMapUbo const & shadowMapUbo )
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
-			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( scene.getLightCache().getBinding( index++ ) );
 			descriptorWrites.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
 		}
 	}
@@ -82,9 +82,7 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );

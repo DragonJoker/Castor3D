@@ -231,9 +231,7 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -298,7 +296,7 @@ namespace castor3d
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
-			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( scene.getLightCache().getBinding( index++ ) );
 			descriptorWrites.push_back( voxelizerUbo.getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( getDescriptorWrite( voxels, index++ ) );
 			bindShadowMaps( graph
@@ -583,7 +581,8 @@ namespace castor3d
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
 			, RenderPipeline::eAdditional
-			, m_mode != RenderMode::eTransparentOnly );
+			, m_mode != RenderMode::eTransparentOnly
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 		writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
 			, FragmentOut out )

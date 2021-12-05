@@ -299,7 +299,7 @@ namespace castor3d
 		crg::RunnableGraphPtr m_clearLpvRunnable;
 		FramePassTimerUPtr m_particleTimer;
 		ShadowMapLightTypeArray m_allShadowMaps;
-		ShadowMapLightTypeArray m_activeShadowMaps;
+		ShadowMapLightArray m_activeShadowMaps;
 		LightPropagationVolumesLightType m_lightPropagationVolumes;
 		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
 		LightPropagationVolumesGLightType m_lightPropagationVolumesG;

@@ -230,9 +230,7 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
@@ -360,7 +358,7 @@ namespace castor3d
 		{
 			auto index = uint32_t( PassUboIdx::eCount );
 			auto & flags = pipeline.getFlags();
-			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( scene.getLightCache().getBinding( index++ ) );
 
 			if ( ssao )
 			{

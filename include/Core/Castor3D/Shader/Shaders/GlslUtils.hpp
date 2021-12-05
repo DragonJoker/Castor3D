@@ -19,7 +19,8 @@ namespace castor3d::shader
 
 		C3D_API LightingModelPtr createLightingModel( castor::String const & name
 			, ShadowOptions shadowsOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord );
 		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord );

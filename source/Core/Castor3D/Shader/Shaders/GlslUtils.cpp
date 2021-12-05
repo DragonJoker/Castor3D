@@ -27,13 +27,15 @@ namespace castor3d::shader
 
 	LightingModelPtr Utils::createLightingModel( castor::String const & name
 		, ShadowOptions shadowsOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return m_engine.getLightingModelFactory().create( name
 			, m_writer
 			, *this
 			, std::move( shadowsOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, hasSsbo );
 	}
 
 	void Utils::declareCalcTexCoord()

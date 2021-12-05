@@ -220,11 +220,8 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( *lastLightPass );
-		result.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
-			, lightCache.getView()
-			, LightInjectionPass::LightsIdx
-			, lightCache.getView().getOffset()
-			, lightCache.getView().getRange() );
+		lightCache.createPassBinding( result
+			, LightInjectionPass::LightsIdx );
 		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, LightInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -275,11 +272,8 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( *lastGeomPass );
-		result.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
-			, lightCache.getView()
-			, GeometryInjectionPass::LightsIdx
-			, lightCache.getView().getOffset()
-			, lightCache.getView().getRange() );
+		lightCache.createPassBinding( result
+			, GeometryInjectionPass::LightsIdx );
 		result.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, GeometryInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );

@@ -228,11 +228,38 @@ namespace castor3d
 	{
 		if ( m_runnables[updater.index] )
 		{
-			for ( uint32_t cascade = 0u; cascade < std::min( m_cascades, uint32_t( m_passes.size() ) ); ++cascade )
+			auto & light = *updater.light;
+			auto & camera = *updater.camera;
+			auto & directional = *light.getDirectionalLight();
+			auto node = light.getParent();
+			node->update();
+			m_shadowType = light.getShadowType();
+
+#if C3D_UseTiledDirectionalShadowMap
+			if ( directional.updateShadow( camera )
+				|| m_passes[0u].pass->isDirty() )
 			{
+				m_passes[0u].pass->update( updater );
+			}
+#else
+			auto shadowModified = directional.updateShadow( camera );
+
+			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+			{
+				if ( shadowModified )
+				{
+					auto & culler = m_passes[cascade]->pass->getCuller();
+					auto & lightCamera = culler.getCamera();
+					lightCamera.attachTo( *node );
+					lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
+					lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
+					lightCamera.updateFrustum();
+				}
+
 				updater.index = cascade;
 				m_passes[cascade]->pass->update( updater );
 			}
+#endif
 		}
 	}
 
@@ -263,35 +290,17 @@ namespace castor3d
 	{
 		if ( m_runnables[updater.index] )
 		{
-			auto & light = *updater.light;
-			auto & camera = *updater.camera;
-			m_shadowType = light.getShadowType();
-			auto node = light.getParent();
-			node->update();
-
-			auto & directional = *light.getDirectionalLight();
-
 #if C3D_UseTiledDirectionalShadowMap
+			auto & camera = *updater.camera;
+
 			if ( directional.updateShadow( camera )
 				|| m_passes[0u].pass->isDirty() )
 			{
 				m_passes[0u].pass->update( updater );
 			}
 #else
-			auto shadowModified = directional.updateShadow( camera );
-
 			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 			{
-				if ( shadowModified )
-				{
-					auto & culler = m_passes[cascade]->pass->getCuller();
-					auto & lightCamera = culler.getCamera();
-					lightCamera.attachTo( *node );
-					lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
-					lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
-					lightCamera.updateFrustum();
-				}
-
 				updater.index = cascade;
 				m_passes[cascade]->pass->update( updater );
 			}

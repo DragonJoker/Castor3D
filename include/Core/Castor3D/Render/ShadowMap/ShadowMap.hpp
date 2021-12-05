@@ -127,10 +127,15 @@ namespace castor3d
 		{
 			return m_result;
 		}
-		
+
 		ShadowMapResult & getShadowPassResult()
 		{
 			return m_result;
+		}
+
+		Scene & getScene()const
+		{
+			return m_scene;
 		}
 
 		uint32_t getCount()const

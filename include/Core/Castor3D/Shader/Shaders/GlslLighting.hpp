@@ -80,6 +80,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram
+			, bool hasSsbo
 			, std::string prefix );
 		C3D_API virtual ~LightingModel() = default;
 		C3D_API virtual sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
@@ -126,7 +127,8 @@ namespace castor3d::shader
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 		template< typename LightsBufBindingT >
 		static LightingModelPtr createModelT( Utils & utils
 			, castor::String const & name
@@ -135,7 +137,8 @@ namespace castor3d::shader
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
+			, bool isOpaqueProgram
+			, bool hasSsbo )
 		{
 			return createModel( utils
 				, name
@@ -144,7 +147,8 @@ namespace castor3d::shader
 				, shadows
 				, shadowMapBinding
 				, shadowMapSet
-				, isOpaqueProgram );
+				, isOpaqueProgram
+				, hasSsbo );
 		}
 		template< typename LightBindingT >
 		static LightingModelPtr createModel( Utils & utils
@@ -155,7 +159,8 @@ namespace castor3d::shader
 			, bool lightUbo
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet )
+			, uint32_t shadowMapSet
+			, bool hasSsbo )
 		{
 			return createModel( utils
 				, name
@@ -165,7 +170,8 @@ namespace castor3d::shader
 				, lightSet
 				, shadows
 				, shadowMapBinding
-				, shadowMapSet );
+				, shadowMapSet
+				, hasSsbo );
 		}
 		//\}
 		/**
@@ -189,7 +195,8 @@ namespace castor3d::shader
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 		template< typename LightsBufBindingT >
 		static LightingModelPtr createDiffuseModelT( Utils & utils
 			, castor::String const & name
@@ -198,7 +205,8 @@ namespace castor3d::shader
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
-			, bool isOpaqueProgram )
+			, bool isOpaqueProgram
+			, bool hasSsbo )
 		{
 			return createDiffuseModel( utils
 				, name
@@ -207,7 +215,8 @@ namespace castor3d::shader
 				, shadows
 				, shadowMapBinding
 				, shadowMapSet
-				, isOpaqueProgram );
+				, isOpaqueProgram
+				, hasSsbo );
 		}
 		//\}
 		//\}
@@ -319,10 +328,10 @@ namespace castor3d::shader
 		*	Light accessors
 		*/
 		//\{
-		C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;
-		C3D_API TiledDirectionalLight getTiledDirectionalLight( sdw::Int const & index )const;
-		C3D_API PointLight getPointLight( sdw::Int const & index )const;
-		C3D_API SpotLight getSpotLight( sdw::Int const & index )const;
+		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & index )const;
+		C3D_API TiledDirectionalLight getTiledDirectionalLight( sdw::UInt const & index )const;
+		C3D_API PointLight getPointLight( sdw::UInt const & index )const;
+		C3D_API SpotLight getSpotLight( sdw::UInt const & index )const;
 		//\}
 
 		inline Shadow & getShadowModel()const
@@ -331,7 +340,7 @@ namespace castor3d::shader
 		}
 
 	protected:
-		C3D_API Light getBaseLight( sdw::Int const & value )const;
+		C3D_API Light getBaseLight( sdw::UInt & offset )const;
 		C3D_API void doDeclareLightsBuffer( uint32_t binding
 			, uint32_t set );
 		C3D_API void doDeclareDirectionalLightUbo( uint32_t binding
@@ -366,12 +375,17 @@ namespace castor3d::shader
 			, uint32_t lightSet
 			, ShadowOptions const & shadows
 			, uint32_t & shadowMapBinding
-			, uint32_t shadowMapSet );
+			, uint32_t shadowMapSet
+			, bool hasSsbo );
 
 	protected:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
+		std::unique_ptr< sdw::Struct > m_type;
+		std::unique_ptr< sdw::Ssbo > m_ssbo;
+		std::unique_ptr < sdw::RImageBufferRgba32 > m_tbo;
 		bool m_isOpaqueProgram;
+		bool m_hasSsbo;
 		std::string m_prefix;
 		std::shared_ptr< Shadow > m_shadowModel;
 		sdw::Function< sdw::Vec3
@@ -383,15 +397,15 @@ namespace castor3d::shader
 			, sdw::InVec4Array
 			, sdw::InUInt > m_getTileFactors;
 		sdw::Function< shader::Light
-			, sdw::InInt > m_getBaseLight;
+			, sdw::InOutUInt > m_getBaseLight;
 		sdw::Function< shader::DirectionalLight
-			, sdw::InInt > m_getDirectionalLight;
+			, sdw::InUInt > m_getDirectionalLight;
 		sdw::Function< shader::TiledDirectionalLight
-			, sdw::InInt > m_getTiledDirectionalLight;
+			, sdw::InUInt > m_getTiledDirectionalLight;
 		sdw::Function< shader::PointLight
-			, sdw::InInt > m_getPointLight;
+			, sdw::InUInt > m_getPointLight;
 		sdw::Function< shader::SpotLight
-			, sdw::InInt > m_getSpotLight;
+			, sdw::InUInt > m_getSpotLight;
 	};
 }
 
