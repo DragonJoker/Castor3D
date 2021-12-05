@@ -10,7 +10,7 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, TextureAnimationBuffer )
 
 namespace castor3d
 {
@@ -23,7 +23,7 @@ namespace castor3d
 			, uint32_t count )
 		{
 			CU_Require( ( count * sizeof( TextureAnimationData ) ) <= size );
-			return makeArrayView( reinterpret_cast< TextureAnimationData * >( buffer )
+			return castor::makeArrayView( reinterpret_cast< TextureAnimationData * >( buffer )
 				, reinterpret_cast< TextureAnimationData * >( buffer ) + count );
 		}
 	}

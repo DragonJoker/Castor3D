@@ -1060,6 +1060,7 @@ namespace castor3d
 	void RenderWindow::doDestroyFrameBuffers()
 	{
 		m_frameBuffers.clear();
+		m_swapchainViews.clear();
 	}
 
 	void RenderWindow::doCreateLoadingScreen()

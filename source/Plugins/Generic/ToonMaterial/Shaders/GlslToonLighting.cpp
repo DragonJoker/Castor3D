@@ -78,11 +78,13 @@ namespace toon::shader
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, bool isOpaqueProgram
+		, bool hasSsbo
 		, bool isBlinnPhong )
 		: c3d::PhongLightingModel{ m_writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, isBlinnPhong }
 	{
 		m_prefix = m_prefix + "toon_";
@@ -91,12 +93,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< ToonPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, false );
 	}
 
@@ -1257,11 +1261,13 @@ namespace toon::shader
 	ToonBlinnPhongLightingModel::ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: ToonPhongLightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, true }
 	{
 	}
@@ -1269,12 +1275,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< ToonBlinnPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, hasSsbo );
 	}
 
 	castor::String ToonBlinnPhongLightingModel::getName()
@@ -1375,11 +1383,13 @@ namespace toon::shader
 		, sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: c3d::LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_toon_" } : std::string{ "c3d_pbrmr_toon_" } }
 		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
@@ -2546,12 +2556,14 @@ namespace toon::shader
 	ToonPbrMRLightingModel::ToonPbrMRLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: ToonPbrLightingModel{ false
 			, writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram }
+			, isOpaqueProgram
+			, hasSsbo }
 	{
 	}
 
@@ -2563,12 +2575,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPbrMRLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< ToonPbrMRLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, hasSsbo );
 	}
 
 	std::unique_ptr< c3d::LightMaterial > ToonPbrMRLightingModel::declMaterial( std::string const & name )
@@ -2581,12 +2595,14 @@ namespace toon::shader
 	ToonPbrSGLightingModel::ToonPbrSGLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: ToonPbrLightingModel{ true
 		, writer
 		, utils
 		, std::move( shadowOptions )
-		, isOpaqueProgram }
+		, isOpaqueProgram
+		, hasSsbo }
 	{
 	}
 
@@ -2598,12 +2614,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPbrSGLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< ToonPbrSGLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, hasSsbo );
 	}
 
 	std::unique_ptr< c3d::LightMaterial > ToonPbrSGLightingModel::declMaterial( std::string const & name )

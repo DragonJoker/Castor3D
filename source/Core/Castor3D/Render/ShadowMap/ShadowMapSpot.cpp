@@ -142,7 +142,12 @@ namespace castor3d
 		if ( m_runnables.size() > updater.index
 			&& m_runnables[updater.index] )
 		{
-			m_passes[updater.index]->pass->update( updater );
+			auto & light = *updater.light;
+			auto & pass = *m_passes[updater.index]->pass;
+			auto & myCamera = pass.getCuller().getCamera();
+			light.getSpotLight()->updateShadow( myCamera
+				, int32_t( updater.index ) );
+			pass.update( updater );
 		}
 	}
 

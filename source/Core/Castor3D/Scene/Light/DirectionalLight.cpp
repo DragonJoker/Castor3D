@@ -202,18 +202,22 @@ namespace castor3d
 		point::normalise( m_direction );
 	}
 
-	void DirectionalLight::doBind( Point4f * buffer )const
+	void DirectionalLight::doFillBuffer( LightBuffer::LightData & data )const
 	{
+		auto & directional = data.specific.directional;
+
 #if C3D_UseTiledDirectionalShadowMap
 
 		auto shadowTilesX = float( ShadowMapPassDirectional::TileCountX );
 		auto shadowTilesY = float( ShadowMapPassDirectional::TileCountY );
-		doCopyComponent( m_direction, float( m_cascades.size() ), buffer );
-		doCopyComponent( shadowTilesX
-			, shadowTilesY
-			, 1.0f / shadowTilesX
-			, 1.0f / shadowTilesY
-			, buffer );
+		directional.directionCount = m_direction;
+		directional.directionCount.w = float( m_cascades.size() );
+
+		directional.tiles.x = shadowTilesX;
+		directional.tiles.y = shadowTilesY;
+		directional.tiles.z = 1.0f / shadowTilesX;
+		directional.tiles.w = 1.0f / shadowTilesY;
+
 		std::array< Point4f, 2u > splitDepths;
 		std::array< Point4f, 2u > splitScales;
 
@@ -223,10 +227,10 @@ namespace castor3d
 			splitScales[i / 4][i % 4] = m_cascades[i].splitDepthScale->y;
 		}
 
-		doCopyComponent( splitDepths[0], buffer );
-		doCopyComponent( splitDepths[1], buffer );
-		doCopyComponent( splitScales[0], buffer );
-		doCopyComponent( splitScales[1], buffer );
+		directional.splitDepths[0] = splitDepths[0];
+		directional.splitDepths[1] = splitDepths[1];
+		directional.splitScales[0] = splitScales[0];
+		directional.splitScales[1] = splitScales[1];
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
@@ -240,17 +244,18 @@ namespace castor3d
 			tileBias[2] = { 0.0f, 0.0f, 1.0f, 0.0f };
 			tileBias[3] = { offsetX, offsetY, 0.0f, 1.0f };
 
-			doCopyComponent( tileBias * m_cascades[i].viewProjMatrix, buffer );
+			directional.transforms[i] = tileBias * m_cascades[i].viewProjMatrix;
 		}
 
 		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
 		{
-			doCopyComponent( Matrix4x4f{ .0f }, buffer );
+			directional.transforms[i] = Matrix4x4f{ .0f };
 		}
 
 #else
 
-		doCopyComponent( m_direction, float( m_cascades.size() ), buffer );
+		directional.directionCount = m_direction;
+		directional.directionCount.w = float( m_cascades.size() );
 		Point4f splitDepths;
 		Point4f splitScales;
 
@@ -260,17 +265,17 @@ namespace castor3d
 			splitScales[i] = m_cascades[i].splitDepthScale->y;
 		}
 
-		doCopyComponent( splitDepths, buffer );
-		doCopyComponent( splitScales, buffer );
+		directional.splitDepths = splitDepths;
+		directional.splitScales = splitScales;
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
-			doCopyComponent( m_cascades[i].viewProjMatrix, buffer );
+			directional.transforms[i] = m_cascades[i].viewProjMatrix;
 		}
 
 		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
 		{
-			doCopyComponent( Matrix4x4f{ .0f }, buffer );
+			directional.transforms[i] = Matrix4x4f{ .0f };
 		}
 
 #endif

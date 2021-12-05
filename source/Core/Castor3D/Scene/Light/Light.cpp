@@ -30,14 +30,22 @@ namespace castor3d
 	void Light::update( CpuUpdater & updater )
 	{
 		m_category->update();
-		m_dirty = false;
+
+		if ( m_dirty )
+		{
+			onGPUChanged( *this );
+			m_dirty = false;
+		}
+
 		m_currentGlobalIllumination = m_shadows.globalIllumination;
 		m_currentShadowCaster = m_shadowCaster;
 	}
 
-	void Light::bind( Point4f * buffer )const
+	void Light::fillBuffer( uint32_t index
+		, LightBuffer::LightData & data )
 	{
-		m_category->bind( buffer );
+		m_bufferIndex = index;
+		m_category->fillBuffer( data );
 	}
 
 	void Light::attachTo( SceneNode & node )

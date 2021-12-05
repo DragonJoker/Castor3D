@@ -184,11 +184,8 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
-			, lightCache.getView()
-			, LightInjectionPass::LightsIdx
-			, lightCache.getView().getOffset()
-			, lightCache.getView().getRange() );
+		lightCache.createPassBinding( pass
+			, LightInjectionPass::LightsIdx );
 		pass.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, LightInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -239,11 +236,8 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
-			, lightCache.getView()
-			, LightInjectionPass::LightsIdx
-			, lightCache.getView().getOffset()
-			, lightCache.getView().getRange() );
+		lightCache.createPassBinding( pass
+			, LightInjectionPass::LightsIdx );
 		pass.addSampledView( arrayViews[0u]
 			, LightInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -340,11 +334,8 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
-			, lightCache.getView()
-			, GeometryInjectionPass::LightsIdx
-			, lightCache.getView().getOffset()
-			, lightCache.getView().getRange() );
+		lightCache.createPassBinding( pass
+			, GeometryInjectionPass::LightsIdx );
 		pass.addSampledView( smResult[SmTexture::eNormalLinear].sampledViewId
 			, GeometryInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -390,16 +381,13 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *lastPass );
-		pass.addStorageBufferView( { lightCache.getBuffer().getBuffer(), "LightCache" }
-			, lightCache.getView()
-			, GeometryInjectionPass::LightsIdx
-			, lightCache.getView().getOffset()
-			, lightCache.getView().getRange() );
+		lightCache.createPassBinding( pass
+			, GeometryInjectionPass::LightsIdx );
 		pass.addSampledView( arrayViews[0u]
-			, LightInjectionPass::RsmNormalsIdx
+			, GeometryInjectionPass::RsmNormalsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		pass.addSampledView( arrayViews[1u]
-			, LightInjectionPass::RsmPositionIdx
+			, GeometryInjectionPass::RsmPositionIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		lpvGridConfigUbo.createPassBinding( pass
 			, GeometryInjectionPass::LpvGridUboIdx );

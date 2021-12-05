@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
@@ -76,6 +77,15 @@ namespace castor3d
 		C3D_API ~ObjectCacheT() = default;
 		/**
 		 *\~english
+		 *\brief		Intialises GPU buffer.
+		 *\param[in]	device	The GPU device.
+		 *\~french
+		 *\brief		Initialise le buffer GPU.
+		 *\param[in]	device	Le device GPU.
+		 */
+		C3D_API void initialise( castor3d::RenderDevice const & device );
+		/**
+		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
@@ -99,27 +109,59 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
-		C3D_API ashes::WriteDescriptorSet getDescriptorWrite( uint32_t binding )const;
 		/**
 		 *\~english
-		 *\return		The texture buffer.
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
 		 *\~french
-		 *\return		Le tampon de la texture.
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API ashes::Buffer< castor::Point4f > const & getBuffer()const
-		{
-			return *m_textureBuffer;
-		}
+		C3D_API void upload( ashes::CommandBuffer const & cb )const;
 		/**
 		 *\~english
-		 *\return		The texture view.
+		 *\brief		Retrieves the lights of given type.
+		 *\param[in]	type	The light type.
+		 *\return		The lights.
 		 *\~french
-		 *\return		La vue de la texture.
+		 *\brief		Récupère les lumières du type donné.
+		 *\param[in]	type	Le type de lumière.
+		 *\return		Les lumières.
 		 */
-		C3D_API ashes::BufferView const & getView()const
-		{
-			return *m_textureView;
-		}
+		C3D_API LightsArray getLights( LightType type )const;
+		/**
+		 *\~english
+		 *\brief		Creates a frame pass binding.
+		 *\~french
+		 *\brief		Crée une attache de frame pass.
+		 */
+		C3D_API void createPassBinding( crg::FramePass & pass
+			, uint32_t binding )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor set layout binding at given point.
+		 *\param[in]	index	The binding point index.
+		 *\~french
+		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
+		 *\param[in]	index	L'indice du point d'attache.
+		 */
+		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor write for the lights buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 */
+		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor write for the lights buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 */
+		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
+			, VkDeviceSize offset
+			, VkDeviceSize size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the count of the lights of given type.
@@ -134,32 +176,17 @@ namespace castor3d
 		{
 			return uint32_t( getLights( type ).size() );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the lights of given type.
-		 *\param[in]	type	The light type.
-		 *\return		The lights.
-		 *\~french
-		 *\brief		Récupère les lumières du type donné.
-		 *\param[in]	type	Le type de lumière.
-		 *\return		Les lumières.
-		 */
-		LightsArray getLights( LightType type )const
-		{
-			return m_typeSortedLights[size_t( type )];
-		}
 
 	private:
-		void onLightChanged( Light & light );
 		bool doCheckUniqueDirectionalLight( LightType toAdd );
+		bool doRegisterLight( Light & light );
+		void doUnregisterLight( Light & light );
 
 	private:
-		LightsMap m_typeSortedLights;
-		mutable castor::Point4fArray m_lightsBuffer;
-		ashes::BufferPtr< castor::Point4f > m_textureBuffer;
-		ashes::BufferViewPtr m_textureView;
 		LightsRefArray m_dirtyLights;
 		std::map< Light *, OnLightChangedConnection > m_connections;
+		LightBufferUPtr m_lightBuffer;
+		std::vector< Light * > m_pendingLights;
 	};
 }
 

@@ -13,6 +13,19 @@ namespace castor3d
 {
 	namespace shader
 	{
+		struct LightData
+			: public sdw::StructInstance
+		{
+			C3D_API LightData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			SDW_DeclStructInstance( C3D_API, LightData );
+
+			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+
+			sdw::Array< sdw::Vec4 > data;
+		};
+
 		struct Light
 			: public sdw::StructInstance
 		{
