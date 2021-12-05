@@ -29,7 +29,6 @@ namespace castor
 				&& write( file, cuT( "type" ), castor3d::getName( light.getLightType() ) )
 				&& writeNamedSub( file, cuT( "colour" ), light.getColour() )
 				&& writeNamedSub( file, cuT( "intensity" ), light.getIntensity() )
-				&& write( file, cuT( "shadow_producer" ), light.getLight().isShadowProducer() )
 				&& writeSub( file, light.getShadowConfig() );
 		}
 
