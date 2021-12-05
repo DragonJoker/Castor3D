@@ -132,6 +132,12 @@ namespace castor
 						auto rotate = transform.rotate.degrees();
 						auto translate = castor::Point3f{ transform.translate };
 						auto scale = castor::Point3f{ transform.scale };
+						auto & config = unit.getConfiguration();
+
+						if ( config.tileSet->z > 1 || config.tileSet->w > 1 )
+						{
+							result = writeNamedSub( file, cuT( "tile" ), castor::Point2ui{ config.tileSet } );
+						}
 
 						if ( translate != castor::Point3f{}
 							|| rotate != 0.0f
@@ -154,15 +160,27 @@ namespace castor
 						auto translate = anim.getTranslateSpeed().getValue();
 						auto scale = anim.getScaleSpeed().getValue();
 
-						if ( translate != castor::Point2f{}
+						if ( anim.isTileAnimated()
+							|| translate != castor::Point2f{}
 							|| rotate != 0.0f
 							|| scale != castor::Point2f{} )
 						{
 							if ( auto animBlock{ beginBlock( file, "animation" ) } )
 							{
-								result = writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point2f{} )
-									&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
-									&& writeNamedSubOpt( file, cuT( "scale" ), scale, castor::Point2f{} );
+								if ( anim.isTileAnimated() )
+								{
+									result = write( file, cuT( "tiles" ), anim.isTileAnimated() );
+								}
+
+								if ( translate != castor::Point2f{}
+									|| rotate != 0.0f
+									|| scale != castor::Point2f{} )
+								{
+									result = result
+										&& writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point2f{} )
+										&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
+										&& writeNamedSubOpt( file, cuT( "scale" ), scale, castor::Point2f{} );
+								}
 							}
 						}
 					}
