@@ -25,11 +25,13 @@ namespace toon::shader
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, bool isOpaqueProgram
+			, bool hasSsbo
 			, bool isBlinnPhong );
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
@@ -234,12 +236,14 @@ namespace toon::shader
 		ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 		static castor::String getName();
 	};
 
@@ -251,7 +255,8 @@ namespace toon::shader
 			, sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 	public:
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
@@ -429,13 +434,15 @@ namespace toon::shader
 		ToonPbrMRLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		static const castor::String getName();
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name )override;
 	};
@@ -447,13 +454,15 @@ namespace toon::shader
 		ToonPbrSGLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		static const castor::String getName();
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		std::unique_ptr< c3d::LightMaterial > declMaterial( std::string const & name )override;
 	};

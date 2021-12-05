@@ -10,7 +10,7 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, TextureConfigurationBuffer )
 
 namespace castor3d
 {
@@ -23,37 +23,37 @@ namespace castor3d
 		TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			auto colOpa = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto colOpa = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto glsShn = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto glsShn = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto emsOcc = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto emsOcc = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto trsDum = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto trsDum = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto nmlFcr = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto nmlFcr = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto hgtFcr = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto hgtFcr = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto mscVls = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto mscVls = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto translate = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto translate = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto rotate = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto rotate = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto scale = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto scale = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			buffer += sizeof( castor::Point4f ) * count;
-			auto tileSet = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+			auto tileSet = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			return
 			{
@@ -78,7 +78,7 @@ namespace castor3d
 			, uint32_t count )
 		{
 			CU_Require( ( count * sizeof( TextureConfigurationBuffer::Data ) ) <= size );
-			return makeArrayView( reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer )
+			return castor::makeArrayView( reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer )
 				, reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer ) + count );
 		}
 

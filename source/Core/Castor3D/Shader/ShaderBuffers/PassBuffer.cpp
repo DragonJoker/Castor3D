@@ -4,6 +4,8 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, PassBuffer )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -15,34 +17,34 @@ namespace castor3d
 		PassBuffer::PassesData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			auto colourDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto colourDiv = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto specDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto specDiv = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto edgeFactors = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto edgeFactors = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto edgeColour = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto edgeColour = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto specific = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto specific = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto common = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto common = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto opacity = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto opacity = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto reflRefr = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto reflRefr = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto sssInfo = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
+			auto sssInfo = castor::makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( buffer )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( buffer ) + count );
 			buffer += sizeof( PassBuffer::RgbaColour ) * count;
-			auto transmittance = makeArrayView( reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( buffer )
+			auto transmittance = castor::makeArrayView( reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( buffer )
 				, reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( buffer ) + count );
 			return
 			{

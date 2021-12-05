@@ -105,8 +105,6 @@ namespace castor3d
 				: 0.1f )
 			, farPlane );
 		m_shadowType = light.getShadowType();
-		light.getSpotLight()->updateShadow( myCamera
-			, int32_t( updater.index ) );
 		m_shadowMapUbo.update( light
 			, updater.index );
 		m_matrixUbo.cpuUpdate( myCamera.getView()
@@ -256,7 +254,8 @@ namespace castor3d
 			, false
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
-			, RenderPipeline::eAdditional );
+			, RenderPipeline::eAdditional
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 		// Fragment Outputs
 		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );

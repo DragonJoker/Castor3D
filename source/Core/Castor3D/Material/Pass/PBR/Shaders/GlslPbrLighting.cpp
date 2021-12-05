@@ -105,11 +105,13 @@ namespace castor3d::shader
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, isOpaqueProgram
+			, hasSsbo
 			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_" } : std::string{ "c3d_pbrmr_" } }
 		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
@@ -1252,12 +1254,14 @@ namespace castor3d::shader
 	PbrMRLightingModel::PbrMRLightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: PbrLightingModel{ false
-		, writer
-		, utils
-		, std::move( shadowOptions )
-		, isOpaqueProgram }
+			, writer
+			, utils
+			, std::move( shadowOptions )
+			, isOpaqueProgram
+			, hasSsbo }
 	{
 	}
 
@@ -1269,12 +1273,14 @@ namespace castor3d::shader
 	LightingModelPtr PbrMRLightingModel::create( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< PbrMRLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, hasSsbo );
 	}
 
 	std::unique_ptr< LightMaterial > PbrMRLightingModel::declMaterial( std::string const & name )
@@ -1287,12 +1293,14 @@ namespace castor3d::shader
 	PbrSGLightingModel::PbrSGLightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 		: PbrLightingModel{ true
 			, writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram }
+			, isOpaqueProgram
+			, hasSsbo }
 	{
 	}
 
@@ -1304,12 +1312,14 @@ namespace castor3d::shader
 	LightingModelPtr PbrSGLightingModel::create( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
-		, bool isOpaqueProgram )
+		, bool isOpaqueProgram
+		, bool hasSsbo )
 	{
 		return std::make_unique< PbrSGLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
-			, isOpaqueProgram );
+			, isOpaqueProgram
+			, hasSsbo );
 	}
 
 	std::unique_ptr< LightMaterial > PbrSGLightingModel::declMaterial( std::string const & name )

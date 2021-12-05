@@ -150,6 +150,7 @@ namespace castor3d
 		if ( m_runnables.size() > updater.index
 			&& m_runnables[updater.index] )
 		{
+			updater.light->getPointLight()->updateShadow( int32_t( updater.index ) );
 			uint32_t offset = updater.index * 6u;
 
 			for ( uint32_t face = offset; face < offset + 6u; ++face )
@@ -195,7 +196,6 @@ namespace castor3d
 			&& m_runnables[updater.index] )
 		{
 			uint32_t offset = updater.index * 6u;
-			updater.light->getPointLight()->updateShadow( int32_t( updater.index ) );
 
 			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{

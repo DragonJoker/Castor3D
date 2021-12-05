@@ -146,7 +146,8 @@ namespace castor3d
 			, true
 			, shader::ShadowOptions{ shadows, lightType, false }
 			, index
-			, 1u );
+			, 1u
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
 			, lightingModel->getShadowModel()
 			, utils

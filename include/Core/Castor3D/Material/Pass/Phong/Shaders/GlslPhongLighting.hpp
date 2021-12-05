@@ -19,11 +19,13 @@ namespace castor3d::shader
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram
+			, bool hasSsbo
 			, bool isBlinnPhong );
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 		C3D_API sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
@@ -234,12 +236,14 @@ namespace castor3d::shader
 		C3D_API BlinnPhongLightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
-			, bool isOpaqueProgram );
+			, bool isOpaqueProgram
+			, bool hasSsbo );
 		C3D_API static castor::String getName();
 	};
 }

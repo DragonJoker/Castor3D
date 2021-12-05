@@ -88,7 +88,7 @@ namespace castor3d
 
 	private:
 		void updateNode( SceneNode const & node )override;
-		void doBind( castor::Point4f * buffer )const override;
+		void doFillBuffer( LightBuffer::LightData & data )const override;
 
 	private:
 		friend class Scene;
@@ -96,6 +96,7 @@ namespace castor3d
 		//!\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
 		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1.0f, 0.0f, 0.0f } };
 		std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
+		castor::ChangeTracked< castor::Point3f > m_position;
 	};
 }
 

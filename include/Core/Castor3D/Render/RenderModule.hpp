@@ -648,6 +648,15 @@ namespace castor3d
 	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
 	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
 	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
+	using LightIdArray = std::vector< std::pair< Light *, uint32_t > >;
+
+	struct ShadowMapLightIds
+	{
+		std::reference_wrapper< ShadowMap > shadowMap;
+		LightIdArray ids;
+	};
+	using ShadowMapLightIdArray = std::vector< ShadowMapLightIds >;
+	using ShadowMapLightArray = std::array< ShadowMapLightIdArray, size_t( LightType::eCount ) >;
 
 	struct TechniqueQueues
 	{
@@ -698,6 +707,7 @@ namespace castor3d
 		castor::Point2f jitter;
 		Scene * scene{ nullptr };
 		Camera * camera{ nullptr };
+		Light * light{ nullptr };
 		uint32_t index{ 0u };
 		bool voxelConeTracing{ false };
 		FramePassTimer * timer{ nullptr };

@@ -140,21 +140,30 @@ namespace castor3d
 	void PointLight::updateShadow( int32_t index )
 	{
 		m_shadowMapIndex = index;
-		auto position = getLight().getParent()->getDerivedPosition();
-		doUpdateShadowMatrices( position, m_lightViews );
+		m_position = getLight().getParent()->getDerivedPosition();
+
+		if ( m_position.isDirty() )
+		{
+			doUpdateShadowMatrices( m_position, m_lightViews );
+			getLight().onGPUChanged( getLight() );
+			m_position.reset();
+		}
 	}
 
-	void PointLight::doBind( castor::Point4f * buffer )const
+	void PointLight::doFillBuffer( LightBuffer::LightData & data )const
 	{
+		auto & point = data.specific.point;
 		auto position = getLight().getParent()->getDerivedPosition();
-		doCopyComponent( position, buffer );
-		doCopyComponent( m_attenuation, buffer );
+
+		point.position = position;
+		point.attenuation = ( *m_attenuation );
 	}
 
-	void PointLight::setAttenuation( castor::Point3f const & p_attenuation )
+	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
-		m_attenuation = p_attenuation;
+		m_attenuation = attenuation;
 		getLight().onChanged( getLight() );
+		getLight().onGPUChanged( getLight() );
 	}
 
 	void PointLight::updateNode( SceneNode const & p_node )

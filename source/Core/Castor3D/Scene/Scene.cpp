@@ -278,6 +278,7 @@ namespace castor3d
 
 	void Scene::initialise()
 	{
+		m_lightCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		doUpdateLightsDependent();
 		m_initialised = true;
@@ -702,7 +703,12 @@ namespace castor3d
 		if ( changed )
 		{
 			m_hasShadows[size_t( lightType )] = shadowProducer;
-			m_giTypes[size_t( lightType )].insert( globalIllumination );
+
+			if ( globalIllumination != GlobalIlluminationType::eNone )
+			{
+				m_giTypes[size_t( lightType )].insert( globalIllumination );
+			}
+
 			onChanged( *this );
 		}
 

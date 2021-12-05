@@ -17,14 +17,28 @@ namespace castor3d
 	{
 	}
 
-	void LightCategory::bind( Point4f * buffer )const
+	void LightCategory::fillBuffer( LightBuffer::LightData & data )const
 	{
-		doCopyComponent( getColour(), float( m_shadowMapIndex ), buffer );
-		doCopyComponent( getIntensity(), getFarPlane(), float( getLight().getShadowType() ), buffer );
-		doCopyComponent( float( getVolumetricSteps() ), getVolumetricScatteringFactor(), 0.0f, 0.0f, buffer );
-		doCopyComponent( getShadowRawOffsets(), getShadowPcfOffsets(), buffer );
-		doCopyComponent( getShadowVariance(), buffer );
-		doBind( buffer );
+		data.colourIndex = getColour();
+		data.colourIndex.w = float( m_shadowMapIndex );
+
+		data.intensityFarPlane = getIntensity();
+		data.intensityFarPlane.z = getFarPlane();
+		data.intensityFarPlane.w = float( getLight().getShadowType() );
+
+		data.volumetric.x = float( getVolumetricSteps() );
+		data.volumetric.y = getVolumetricScatteringFactor();
+		data.volumetric.z = 0.0f;
+		data.volumetric.w = 0.0f;
+
+		data.shadowsOffsets.x = getShadowRawOffsets()->x;
+		data.shadowsOffsets.y = getShadowRawOffsets()->y;
+		data.shadowsOffsets.z = getShadowPcfOffsets()->y;
+		data.shadowsOffsets.w = getShadowPcfOffsets()->y;
+
+		data.shadowsVariances = getShadowVariance();
+
+		doFillBuffer( data );
 	}
 
 	uint32_t LightCategory::getVolumetricSteps()const
@@ -107,123 +121,27 @@ namespace castor3d
 		m_light.setVsmVarianceBias( value );
 	}
 
-	void LightCategory::doCopyComponent( Point2f const & component
-		, Point4f *& buffer )const
+	void LightCategory::setColour( castor::Point3f const & value )
 	{
-		( *buffer )[0] = component[0];
-		( *buffer )[1] = component[1];
-		++buffer;
+		m_colour = value;
+		getLight().onGPUChanged( getLight() );
 	}
 
-	void LightCategory::doCopyComponent( castor::Point2f const & components1
-		, castor::Point2f const & components2
-		, castor::Point4f *& buffer )const
+	void LightCategory::setIntensity( castor::Point2f const & value )
 	{
-		( *buffer )[0] = components1[0];
-		( *buffer )[1] = components1[1];
-		( *buffer )[2] = components2[0];
-		( *buffer )[3] = components2[1];
-		++buffer;
+		m_intensity = value;
+		getLight().onGPUChanged( getLight() );
 	}
 
-	void LightCategory::doCopyComponent( Point2f const & components
-		, float component
-		, Point4f *& buffer )const
+	void LightCategory::setDiffuseIntensity( float value )
 	{
-		( *buffer )[0] = components[0];
-		( *buffer )[1] = components[1];
-		( *buffer )[2] = component;
-		++buffer;
+		m_intensity[0] = value;
+		getLight().onGPUChanged( getLight() );
 	}
 
-	void LightCategory::doCopyComponent( Point2f const & components
-		, float component1
-		, float component2
-		, Point4f *& buffer )const
+	void LightCategory::setSpecularIntensity( float value )
 	{
-		( *buffer )[0] = components[0];
-		( *buffer )[1] = components[1];
-		( *buffer )[2] = component1;
-		( *buffer )[3] = component2;
-		++buffer;
-	}
-
-	void LightCategory::doCopyComponent( float component0
-		, float component1
-		, float component2
-		, float component3
-		, castor::Point4f *& buffer )const
-	{
-		( *buffer )[0] = component0;
-		( *buffer )[1] = component1;
-		( *buffer )[2] = component2;
-		( *buffer )[3] = component3;
-		++buffer;
-	}
-
-	void LightCategory::doCopyComponent( Point3f const & component
-		, Point4f *& buffer )const
-	{
-		( *buffer )[0] = component[0];
-		( *buffer )[1] = component[1];
-		( *buffer )[2] = component[2];
-		++buffer;
-	}
-
-	void LightCategory::doCopyComponent( Point3f const & components
-		, float component
-		, Point4f *& buffer )const
-	{
-		( *buffer )[0] = components[0];
-		( *buffer )[1] = components[1];
-		( *buffer )[2] = components[2];
-		( *buffer )[3] = component;
-		++buffer;
-	}
-
-	void LightCategory::doCopyComponent( Point4f const & component
-		, Point4f *& buffer )const
-	{
-		( *buffer )[0] = component[0];
-		( *buffer )[1] = component[1];
-		( *buffer )[2] = component[2];
-		( *buffer )[3] = component[3];
-		++buffer;
-	}
-
-	void LightCategory::doCopyComponent( ConstCoords4f const & component
-		, Point4f *& buffer )const
-	{
-		( *buffer )[0] = component[0];
-		( *buffer )[1] = component[1];
-		( *buffer )[2] = component[2];
-		( *buffer )[3] = component[3];
-		++buffer;
-	}
-
-	void LightCategory::doCopyComponent( Coords4f const & component
-		, Point4f *& buffer )const
-	{
-		( *buffer )[0] = component[0];
-		( *buffer )[1] = component[1];
-		( *buffer )[2] = component[2];
-		( *buffer )[3] = component[3];
-		++buffer;
-	}
-
-	void LightCategory::doCopyComponent( castor::Matrix4x4f const & component
-		, Point4f *& buffer )const
-	{
-		doCopyComponent( component[0], buffer );
-		doCopyComponent( component[1], buffer );
-		doCopyComponent( component[2], buffer );
-		doCopyComponent( component[3], buffer );
-	}
-
-	void LightCategory::doCopyComponent( int32_t const & component
-		, Point4f *& buffer )const
-	{
-		( *buffer )[0] = float( component );
-		++buffer;
+		m_intensity[1] = value;
+		getLight().onGPUChanged( getLight() );
 	}
 }

@@ -71,6 +71,8 @@ namespace castor3d::shader
 	constexpr uint32_t LpvMaxCascadesCount = 3u;
 	// Directional Shadow Cascades.
 	static uint32_t constexpr DirectionalMaxCascadesCount = ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY;
+	// Light Buffer.
+	static uint32_t constexpr MaxLightsCount = 2000u;
 	// Pass Buffer.
 	static uint32_t constexpr MaxMaterialsCount = 2000u;
 	static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
@@ -84,6 +86,7 @@ namespace castor3d::shader
 
 	struct DirectionalLight;
 	struct Light;
+	struct LightData;
 	struct LightMaterial;
 	struct LayeredLpvGridData;
 	struct LpvGridData;
@@ -128,7 +131,8 @@ namespace castor3d::shader
 	using LightingModelCreator = std::function< LightingModelPtr( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowsOptions
-		, bool isOpaqueProgram ) >;
+		, bool isOpaqueProgram
+		, bool hasSsbo ) >;
 
 	using LightingModelFactory = castor::Factory< LightingModel
 		, castor::String
