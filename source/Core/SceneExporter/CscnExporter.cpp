@@ -8,6 +8,8 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>
 #include <Castor3D/Model/Mesh/ImporterFactory.hpp>
@@ -610,9 +612,28 @@ namespace castor3d::exporter
 			bool result = false;
 			castor::StringStream stream;
 			{
-				result = writeView< Sampler >( scene.getSamplerView()
-					, cuT( "Samplers" )
-					, stream );
+				std::set< castor3d::SamplerSPtr > samplers;
+
+				for ( auto & material : scene.getMaterialView() )
+				{
+					for ( auto & pass : *scene.getMaterialView().tryFind( material ).lock() )
+					{
+						for ( auto & unit : pass->getTextureUnits() )
+						{
+							samplers.insert( unit->getSampler().lock() );
+						}
+					}
+				}
+
+				stream << ( cuT( "// Samplers\n" ) );
+				log::info << cuT( "Scene::write - Samplers\n" );
+				castor::TextWriter< Sampler > writer{ castor::cuEmptyString };
+				result = true;
+
+				for ( auto & sampler : samplers )
+				{
+					result = result && writer( *sampler, stream );
+				}
 
 				if ( result )
 				{
@@ -624,6 +645,7 @@ namespace castor3d::exporter
 						, stream );
 				}
 			}
+
 			if ( result )
 			{
 				options.materialsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Materials.cscn" ) );

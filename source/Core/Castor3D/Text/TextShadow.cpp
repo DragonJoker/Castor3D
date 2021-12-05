@@ -22,7 +22,15 @@ namespace castor
 		if ( auto block{ beginBlock( file, "shadows" ) } )
 		{
 			result = write( file, "filter", getName( object.filterType ) )
+				&& write( file, "producer", object.filterType != ShadowType::eNone )
 				&& write( file, "global_illumination", getName( object.globalIllumination ) );
+
+			if ( object.volumetricSteps )
+			{
+				result = result
+					&& write( file, cuT( "volumetric_steps" ), object.volumetricSteps )
+					&& write( file, cuT( "volumetric_scattering" ), object.volumetricScattering );
+			}
 
 			if ( auto rawBlock{ beginBlock( file, "raw_config" ) } )
 			{

@@ -81,7 +81,7 @@ namespace castor
 				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
 				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
 				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-				&& writeNamedSub( file, cuT( "edg_colour" ), pass.getEdgeColour() );
+				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
 		}
 
 	private:
@@ -115,7 +115,7 @@ namespace castor
 				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
 				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
 				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-				&& writeNamedSub( file, cuT( "edg_colour" ), pass.getEdgeColour() );
+				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
 		}
 
 	private:
@@ -149,7 +149,7 @@ namespace castor
 				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
 				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
 				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-				&& writeNamedSub( file, cuT( "edg_colour" ), pass.getEdgeColour() );
+				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
 		}
 
 	private:

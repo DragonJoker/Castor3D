@@ -41,7 +41,7 @@ namespace castor
 
 		if ( result && configuration.metalnessMask[0] )
 		{
-			result = writeMask( file, cuT( "metalness_mask" ), configuration.specularMask[0] );
+			result = writeMask( file, cuT( "metalness_mask" ), configuration.metalnessMask[0] );
 		}
 
 		if ( result && configuration.glossinessMask[0] )
@@ -60,7 +60,7 @@ namespace castor
 
 		if ( result && configuration.roughnessMask[0] )
 		{
-			result = writeMask( file, cuT( "roughness_mask" ), configuration.glossinessMask[0] );
+			result = writeMask( file, cuT( "roughness_mask" ), configuration.roughnessMask[0] );
 		}
 
 		if ( result && configuration.opacityMask[0] )
