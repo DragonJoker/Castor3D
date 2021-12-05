@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
@@ -64,22 +65,8 @@ namespace castor3d
 		 *\brief		Enregistre les données de l'image dans le tampon donné.
 		 *\param[out]	buffer	Le tampon.
 		 */
-		C3D_API void bind( castor::Point4f * buffer )const;
-		/**
-		 *\~english
-		 *\brief		Records the light data into given buffer.
-		 *\param[in]	index	The light index inside the lights buffer.
-		 *\param[out]	buffer	The buffer.
-		 *\~french
-		 *\brief		Enregistre les données de l'image dans le tampon donné.
-		 *\param[in]	index	L'indice de la source lumineuse dans le tampon de lumières.
-		 *\param[out]	buffer	Le tampon.
-		 */
-		void bind( uint32_t index, castor::Point4f * buffer )
-		{
-			m_bufferIndex = index;
-			bind( buffer );
-		}
+		C3D_API void fillBuffer( uint32_t index
+			, LightBuffer::LightData & data );
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a SceneNode.
@@ -324,8 +311,13 @@ namespace castor3d
 
 		void setShadowMap( ShadowMapRPtr value, uint32_t index = 0u )
 		{
-			m_shadowMap = value;
-			m_shadowMapIndex = index;
+			if ( m_shadowMap != value
+				|| m_shadowMapIndex != index )
+			{
+				m_shadowMap = value;
+				m_shadowMapIndex = index;
+				onGPUChanged( *this );
+			}
 		}
 
 		void setGlobalIlluminationType( GlobalIlluminationType value )
@@ -378,10 +370,16 @@ namespace castor3d
 		{
 			m_shadows.variance[1] = value;
 		}
+
+		void setBufferIndex( uint32_t value )
+		{
+			m_bufferIndex = value;
+		}
 		/**@}*/
 
 	public:
 		OnLightChanged onChanged;
+		OnLightChanged onGPUChanged;
 
 	protected:
 		void onNodeChanged( SceneNode const & node );

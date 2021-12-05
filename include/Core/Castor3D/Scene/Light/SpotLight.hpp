@@ -89,12 +89,12 @@ namespace castor3d
 
 		castor::Matrix4x4f const & getViewMatrix()const
 		{
-			return m_lightView;
+			return m_lightView.value();
 		}
 
 		castor::Matrix4x4f const & getProjectionMatrix()const
 		{
-			return m_lightProj;
+			return m_lightProj.value();
 		}
 
 		castor::Matrix4x4f const & getLightSpaceTransform()const
@@ -109,7 +109,7 @@ namespace castor3d
 
 		float getExponent()const
 		{
-			return m_exponent;
+			return m_exponent.value();
 		}
 
 		castor::Angle const & getCutOff()const
@@ -120,14 +120,16 @@ namespace castor3d
 
 	private:
 		void updateNode( SceneNode const & node )override;
-		void doBind( castor::Point4f * buffer )const override;
+		void doFillBuffer( LightBuffer::LightData & data )const override;
 
 	private:
-		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1, 0, 0 } };
-		float m_exponent{ 1.0f };
-		castor::ChangeTracked< castor::Angle > m_cutOff{ 45.0_degrees };
-		castor::Matrix4x4f m_lightView;
-		castor::Matrix4x4f m_lightProj;
+		bool m_dirtyData{ false };
+		bool m_dirtyShadow{ false };
+		castor::GroupChangeTracked< castor::Point3f > m_attenuation;
+		castor::GroupChangeTracked< float > m_exponent;
+		castor::GroupChangeTracked< castor::Angle > m_cutOff;
+		castor::GroupChangeTracked< castor::Matrix4x4f > m_lightView;
+		castor::GroupChangeTracked< castor::Matrix4x4f > m_lightProj;
 		castor::Matrix4x4f m_lightSpace;
 		castor::Point3f m_direction;
 	};

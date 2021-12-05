@@ -54,8 +54,10 @@ namespace castor3d
 
 	struct LightDescriptors
 	{
-		explicit LightDescriptors( RenderDevice const & device );
+		explicit LightDescriptors( Light const & light
+			, RenderDevice const & device );
 
+		Light const & light;
 		MatrixUbo matrixUbo;
 		UniformBufferOffsetT< ModelUboConfiguration > modelMatrixUbo;
 		ashes::DescriptorSetPtr descriptorSet;
@@ -116,6 +118,8 @@ namespace castor3d
 		void clear();
 		void addLight( Camera const & camera
 			, Light const & light );
+		void removeLight( Camera const & camera
+			, Light const & light );
 		void recordInto( VkCommandBuffer commandBuffer
 			, uint32_t & index );
 
@@ -163,6 +167,8 @@ namespace castor3d
 
 		void clear();
 		void enableLight( Camera const & camera
+			, Light const & light );
+		void disableLight( Camera const & camera
 			, Light const & light );
 		void resetCommandBuffer();
 

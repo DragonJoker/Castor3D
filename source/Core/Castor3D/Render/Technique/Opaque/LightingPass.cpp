@@ -94,8 +94,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightDescriptors::LightDescriptors( RenderDevice const & device )
-		: matrixUbo{ device }
+	LightDescriptors::LightDescriptors( Light const & plight
+		, RenderDevice const & device )
+		: light{ plight }
+		, matrixUbo{ device }
 	{
 	}
 
@@ -350,6 +352,22 @@ namespace castor3d
 		m_enabledLights.push_back( &entry );
 	}
 
+	void LightsPipeline::removeLight( Camera const & camera
+		, Light const & light )
+	{
+		auto it = std::find_if( m_enabledLights.begin()
+			, m_enabledLights.end()
+			, [&light]( LightDescriptors const * lookup )
+			{
+				return &lookup->light == &light;
+			} );
+
+		if ( it != m_enabledLights.end() )
+		{
+			m_enabledLights.erase( it );
+		}
+	}
+
 	void LightsPipeline::recordInto( VkCommandBuffer commandBuffer
 		, uint32_t & index )
 	{
@@ -494,17 +512,14 @@ namespace castor3d
 
 		if ( ires.second )
 		{
-			ires.first->second = std::make_unique< LightDescriptors >( m_device );
+			ires.first->second = std::make_unique< LightDescriptors >( light, m_device );
 			auto & result = *ires.first->second;
 			auto lightSize = shader::getMaxLightComponentsCount() * sizeof( castor::Point4f );
 			auto & scene = *light.getScene();
 			ashes::WriteDescriptorSetArray writes;
-			writes.emplace_back( uint32_t( LightPassLgtIdx::eLight )
-				, 0u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, ashes::VkDescriptorBufferInfoArray{ { scene.getLightCache().getBuffer().getBuffer()
-					, light.getBufferIndex() * lightSize
-					, lightSize } } );
+			writes.emplace_back( scene.getLightCache().getBinding( uint32_t( LightPassLgtIdx::eLight )
+				, light.getBufferIndex() * lightSize
+				, lightSize ) );
 			writes.emplace_back( result.matrixUbo.getDescriptorWrite( uint32_t( LightPassLgtIdx::eMatrix ) ) );
 
 			if ( m_config.lightType != LightType::eDirectional )
@@ -669,6 +684,13 @@ namespace castor3d
 	{
 		auto & pipeline = doFindPipeline( light );
 		pipeline.addLight( camera, light );
+	}
+
+	void RunnableLightingPass::disableLight( Camera const & camera
+		, Light const & light )
+	{
+		auto & pipeline = doFindPipeline( light );
+		pipeline.removeLight( camera, light );
 	}
 
 	void RunnableLightingPass::resetCommandBuffer()
@@ -915,6 +937,10 @@ namespace castor3d
 				|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 			{
 				m_lightPass->enableLight( camera, *light );
+			}
+			else
+			{
+				m_lightPass->disableLight( camera, *light );
 			}
 		}
 	}

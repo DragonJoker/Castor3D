@@ -192,6 +192,13 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
+		 *\brief		Updates the buffers.
+		 *\~french
+		 *\brief		Met à jour les buffers.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
+		/**
+		 *\~english
 		 *\brief		Retrieves the cleanup status
 		 *\remarks		Thread-safe
 		 *\return		\p true if cleaned up

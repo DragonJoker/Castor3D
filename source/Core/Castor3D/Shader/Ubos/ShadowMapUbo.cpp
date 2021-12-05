@@ -67,17 +67,17 @@ namespace castor3d
 
 		DirectionalLight ShadowMapData::getDirectionalLight( LightingModel const & lighting )const
 		{
-			return lighting.getDirectionalLight( getWriter()->cast< sdw::Int >( m_lightIndex ) );
+			return lighting.getDirectionalLight( m_lightIndex );
 		}
 
 		PointLight ShadowMapData::getPointLight( LightingModel const & lighting )const
 		{
-			return lighting.getPointLight( getWriter()->cast< sdw::Int >( m_lightIndex ) );
+			return lighting.getPointLight( m_lightIndex );
 		}
 
 		SpotLight ShadowMapData::getSpotLight( LightingModel const & lighting )const
 		{
-			return lighting.getSpotLight( getWriter()->cast< sdw::Int >( m_lightIndex ) );
+			return lighting.getSpotLight( m_lightIndex );
 		}
 	}
 
