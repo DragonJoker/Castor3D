@@ -933,7 +933,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
 		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
-			, [this]( TiledDirectionalLight const & light
+			, [this]( TiledDirectionalLight light
 				, PbrLightMaterial const & material
 				, Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -948,6 +948,7 @@ namespace castor3d::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -1001,7 +1002,7 @@ namespace castor3d::shader
 
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 			}
-			, InTiledDirectionalLight( m_writer, "light" )
+			, InOutTiledDirectionalLight( m_writer, "light" )
 			, InPbrLightMaterial{ m_writer, "material" }
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -1011,7 +1012,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
 	{
 		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
-			, [this]( DirectionalLight const & light
+			, [this]( DirectionalLight light
 				, PbrLightMaterial const & material
 				, Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -1026,6 +1027,7 @@ namespace castor3d::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -1079,7 +1081,7 @@ namespace castor3d::shader
 
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 			}
-			, InDirectionalLight( m_writer, "light" )
+			, InOutDirectionalLight( m_writer, "light" )
 			, InPbrLightMaterial{ m_writer, "material" }
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -1089,7 +1091,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputePointLightDiffuse()
 	{
 		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
-			, [this]( PointLight const & light
+			, [this]( PointLight light
 				, PbrLightMaterial const & material
 				, Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -1108,6 +1110,7 @@ namespace castor3d::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
 
@@ -1160,7 +1163,7 @@ namespace castor3d::shader
 							, light.m_attenuation.x() ) ) );
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 			}
-			, InPointLight( m_writer, "light" )
+			, InOutPointLight( m_writer, "light" )
 			, InPbrLightMaterial{ m_writer, "material" }
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -1170,7 +1173,7 @@ namespace castor3d::shader
 	void PbrLightingModel::doDeclareComputeSpotLightDiffuse()
 	{
 		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
-			, [this]( SpotLight const & light
+			, [this]( SpotLight light
 				, PbrLightMaterial const & material
 				, Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -1191,6 +1194,7 @@ namespace castor3d::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f - step( spotFactor, light.m_cutOff ) );
 						shadowFactor *= max( 1.0_f - m_writer.cast< sdw::Float >( receivesShadows )
@@ -1242,7 +1246,7 @@ namespace castor3d::shader
 					, 1.0_f );
 				m_writer.returnStmt( max( vec3( 0.0_f ), spotFactor * diffuse / attenuation ) );
 			}
-			, InSpotLight( m_writer, "light" )
+			, InOutSpotLight( m_writer, "light" )
 			, InPbrLightMaterial{ m_writer, "material" }
 			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )

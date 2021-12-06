@@ -204,25 +204,25 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3 > m_computeLightDiffuse;
 		sdw::Function< sdw::Vec3
-			, InTiledDirectionalLight
+			, InOutTiledDirectionalLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeTiledDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
-			, InDirectionalLight
+			, InOutDirectionalLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
-			, InPointLight
+			, InOutPointLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computePointDiffuse;
 		sdw::Function< sdw::Vec3
-			, InSpotLight
+			, InOutSpotLight
 			, InPhongLightMaterial
 			, InSurface
 			, sdw::InVec3

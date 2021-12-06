@@ -922,7 +922,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
 		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
-			, [this]( c3d::TiledDirectionalLight const & light
+			, [this]( c3d::TiledDirectionalLight light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -937,6 +937,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -980,7 +981,7 @@ namespace toon::shader
 
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 			}
-			, c3d::InTiledDirectionalLight( m_writer, "light" )
+			, c3d::InOutTiledDirectionalLight( m_writer, "light" )
 			, InToonPhongLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -990,7 +991,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputeDirectionalLightDiffuse()
 	{
 		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
-			, [this]( c3d::DirectionalLight const & light
+			, [this]( c3d::DirectionalLight light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -1005,6 +1006,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -1048,7 +1050,7 @@ namespace toon::shader
 
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 			}
-			, c3d::InDirectionalLight( m_writer, "light" )
+			, c3d::InOutDirectionalLight( m_writer, "light" )
 			, InToonPhongLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -1058,7 +1060,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputePointLightDiffuse()
 	{
 		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
-			, [this]( c3d::PointLight const & light
+			, [this]( c3d::PointLight light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -1077,6 +1079,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
 
@@ -1126,7 +1129,7 @@ namespace toon::shader
 							, light.m_attenuation.x() ) ) );
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 			}
-			, c3d::InPointLight( m_writer, "light" )
+			, c3d::InOutPointLight( m_writer, "light" )
 			, InToonPhongLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -1136,7 +1139,7 @@ namespace toon::shader
 	void ToonPhongLightingModel::doDeclareComputeSpotLightDiffuse()
 	{
 		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
-			, [this]( c3d::SpotLight const & light
+			, [this]( c3d::SpotLight light
 				, ToonPhongLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -1157,6 +1160,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f - step( spotFactor, light.m_cutOff ) );
 
@@ -1210,7 +1214,7 @@ namespace toon::shader
 					, 1.0_f );
 				m_writer.returnStmt( max( vec3( 0.0_f ), spotFactor * diffuse / attenuation ) );
 			}
-			, c3d::InSpotLight( m_writer, "light" )
+			, c3d::InOutSpotLight( m_writer, "light" )
 			, InToonPhongLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -2223,7 +2227,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputeTiledDirectionalLightDiffuse()
 	{
 		m_computeTiledDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
-			, [this]( c3d::TiledDirectionalLight const & light
+			, [this]( c3d::TiledDirectionalLight light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -2238,6 +2242,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -2294,7 +2299,7 @@ namespace toon::shader
 
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 			}
-			, c3d::InTiledDirectionalLight( m_writer, "light" )
+			, c3d::InOutTiledDirectionalLight( m_writer, "light" )
 			, InToonPbrLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -2304,7 +2309,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputeDirectionalLightDiffuse()
 	{
 		m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
-			, [this]( c3d::DirectionalLight const & light
+			, [this]( c3d::DirectionalLight light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -2319,6 +2324,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -2375,7 +2381,7 @@ namespace toon::shader
 
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 			}
-			, c3d::InDirectionalLight( m_writer, "light" )
+			, c3d::InOutDirectionalLight( m_writer, "light" )
 			, InToonPbrLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -2385,7 +2391,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputePointLightDiffuse()
 	{
 		m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
-			, [this]( c3d::PointLight const & light
+			, [this]( c3d::PointLight light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -2404,6 +2410,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f );
 
@@ -2459,7 +2466,7 @@ namespace toon::shader
 							, light.m_attenuation.x() ) ) );
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 			}
-			, c3d::InPointLight( m_writer, "light" )
+			, c3d::InOutPointLight( m_writer, "light" )
 			, InToonPbrLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
@@ -2469,7 +2476,7 @@ namespace toon::shader
 	void ToonPbrLightingModel::doDeclareComputeSpotLightDiffuse()
 	{
 		m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
-			, [this]( c3d::SpotLight const & light
+			, [this]( c3d::SpotLight light
 				, ToonPbrLightMaterial const & material
 				, c3d::Surface const & surface
 				, sdw::Vec3 const & worldEye
@@ -2490,6 +2497,7 @@ namespace toon::shader
 				{
 					IF( m_writer, light.m_lightBase.m_shadowType != sdw::Int( int( castor3d::ShadowType::eNone ) ) )
 					{
+						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 1.0_f - step( spotFactor, light.m_cutOff ) );
 						shadowFactor *= max( 1.0_f - m_writer.cast< sdw::Float >( receivesShadows )
@@ -2544,7 +2552,7 @@ namespace toon::shader
 					, 1.0_f );
 				m_writer.returnStmt( max( vec3( 0.0_f ), spotFactor * diffuse / attenuation ) );
 			}
-			, c3d::InSpotLight( m_writer, "light" )
+			, c3d::InOutSpotLight( m_writer, "light" )
 			, InToonPbrLightMaterial{ m_writer, "material" }
 			, c3d::InSurface{ m_writer, "surface" }
 			, sdw::InVec3( m_writer, "worldEye" )
