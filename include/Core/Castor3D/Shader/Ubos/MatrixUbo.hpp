@@ -133,9 +133,9 @@ namespace castor3d
 		, castor3d::MatrixUbo::BufferMatrix\
 		, binding\
 		, set\
-		, ast::type::MemoryLayout::eStd140\
+		, sdw::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_matrixData = matrices.declStructMember< shader::MatrixData >( castor3d::MatrixUbo::MatrixData );\
+	auto c3d_matrixData = matrices.declStructMember< castor3d::shader::MatrixData >( castor3d::MatrixUbo::MatrixData );\
 	matrices.end()
 
 #endif

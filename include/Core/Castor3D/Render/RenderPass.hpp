@@ -191,13 +191,22 @@ namespace castor3d
 		C3D_API ShaderPtr getVertexShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\brief		Retrieves the hull shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\brief		Récupère le source du hull shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API ShaderPtr getPixelShaderSource( PipelineFlags const & flags )const;
+		C3D_API ShaderPtr getHullShaderSource( PipelineFlags const & flags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the domain shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du domain shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API ShaderPtr getDomainShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
@@ -207,6 +216,15 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API ShaderPtr getGeometryShaderSource( PipelineFlags const & flags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API ShaderPtr getPixelShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
@@ -788,6 +806,24 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the hull shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du hull shader correspondant aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the domain shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du domain shader correspondant aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.

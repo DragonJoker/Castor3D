@@ -111,6 +111,16 @@ namespace castor3d
 			, m_shadowMapUbo );
 	}
 
+	ShaderPtr ShadowMapPass::doGetHullShaderSource( PipelineFlags const & flags )const
+	{
+		return ShaderPtr{};
+	}
+
+	ShaderPtr ShadowMapPass::doGetDomainShaderSource( PipelineFlags const & flags )const
+	{
+		return ShaderPtr{};
+	}
+
 	ShaderPtr ShadowMapPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		return ShaderPtr{};
