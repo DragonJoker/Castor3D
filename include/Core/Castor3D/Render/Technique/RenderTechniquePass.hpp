@@ -217,6 +217,8 @@ namespace castor3d
 			, RenderInfo & info );
 		void doUpdateUbos( CpuUpdater & updater )override;
 		void doUpdateFlags( PipelineFlags & flags )const override;
+		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;

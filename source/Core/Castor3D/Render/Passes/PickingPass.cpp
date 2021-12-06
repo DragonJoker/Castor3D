@@ -360,6 +360,16 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
+	ShaderPtr PickingPass::doGetHullShaderSource( PipelineFlags const & flags )const
+	{
+		return ShaderPtr{};
+	}
+
+	ShaderPtr PickingPass::doGetDomainShaderSource( PipelineFlags const & flags )const
+	{
+		return ShaderPtr{};
+	}
+
 	ShaderPtr PickingPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		return ShaderPtr{};

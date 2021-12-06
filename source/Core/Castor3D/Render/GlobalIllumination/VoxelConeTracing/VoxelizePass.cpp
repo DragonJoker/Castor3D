@@ -450,6 +450,16 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
+	ShaderPtr VoxelizePass::doGetHullShaderSource( PipelineFlags const & flags )const
+	{
+		return ShaderPtr{};
+	}
+
+	ShaderPtr VoxelizePass::doGetDomainShaderSource( PipelineFlags const & flags )const
+	{
+		return ShaderPtr{};
+	}
+
 	ShaderPtr VoxelizePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;

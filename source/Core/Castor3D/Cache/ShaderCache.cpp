@@ -78,6 +78,22 @@ namespace castor3d
 			, renderPass.getVertexShaderSource( flags ) );
 		result->setSource( VK_SHADER_STAGE_FRAGMENT_BIT
 			, renderPass.getPixelShaderSource( flags ) );
+		auto hull = renderPass.getHullShaderSource( flags );
+
+		if ( hull )
+		{
+			result->setSource( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+				, std::move( hull ) );
+		}
+
+		auto domain = renderPass.getDomainShaderSource( flags );
+
+		if ( domain )
+		{
+			result->setSource( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+				, std::move( domain ) );
+		}
+
 		auto geometry = renderPass.getGeometryShaderSource( flags );
 
 		if ( geometry )

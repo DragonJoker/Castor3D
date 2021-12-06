@@ -81,9 +81,9 @@ namespace castor3d
 		}
 		/**@}*/
 
+	private:
 		using SceneRenderPass::update;
 
-	private:
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
@@ -100,6 +100,8 @@ namespace castor3d
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 

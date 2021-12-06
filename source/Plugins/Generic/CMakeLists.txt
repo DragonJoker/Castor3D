@@ -6,14 +6,23 @@ function( GenericInit )
 	set( Cgui "no (Not wanted)" PARENT_SCOPE )
 	set( Toon "no (Not wanted)" PARENT_SCOPE )
 
+	if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
+		set( Castor3D_MATERIAL_DIRS
+			${Castor3D_MATERIAL_DIRS}
+			${CASTOR_SOURCE_DIR}/source/Plugins/Generic/ToonMaterial
+		)
+		set( Castor3D_MATERIAL_DEPS
+			${Castor3D_MATERIAL_DEPS}
+			castor::ToonMaterial
+		)
+	endif()
+
 	set( Castor3D_MATERIAL_DIRS
 		${Castor3D_MATERIAL_DIRS}
-		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/ToonMaterial
 		PARENT_SCOPE
 	)
 	set( Castor3D_MATERIAL_DEPS
-		${Castor3D_MATERIAL_DIRS}
-		castor::ToonMaterial
+		${Castor3D_MATERIAL_DEPS}
 		PARENT_SCOPE
 	)
 endfunction( GenericInit )
