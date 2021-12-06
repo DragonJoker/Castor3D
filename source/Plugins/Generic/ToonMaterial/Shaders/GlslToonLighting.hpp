@@ -204,25 +204,25 @@ namespace toon::shader
 			, sdw::InVec3
 			, sdw::InVec3 > m_computeLightDiffuse;
 		sdw::Function< sdw::Vec3
-			, c3d::InTiledDirectionalLight
+			, c3d::InOutTiledDirectionalLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeTiledDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
-			, c3d::InDirectionalLight
+			, c3d::InOutDirectionalLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
-			, c3d::InPointLight
+			, c3d::InOutPointLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computePointDiffuse;
 		sdw::Function< sdw::Vec3
-			, c3d::InSpotLight
+			, c3d::InOutSpotLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
@@ -402,25 +402,25 @@ namespace toon::shader
 			, sdw::InInt
 			, c3d::OutputComponents & > m_computeSpot;
 		sdw::Function< sdw::Vec3
-			, c3d::InTiledDirectionalLight
+			, c3d::InOutTiledDirectionalLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeTiledDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
-			, c3d::InDirectionalLight
+			, c3d::InOutDirectionalLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computeDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
-			, c3d::InPointLight
+			, c3d::InOutPointLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InInt > m_computePointDiffuse;
 		sdw::Function< sdw::Vec3
-			, c3d::InSpotLight
+			, c3d::InOutSpotLight
 			, InToonPbrLightMaterial
 			, c3d::InSurface
 			, sdw::InVec3
