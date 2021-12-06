@@ -374,7 +374,12 @@ namespace castor3d
 					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
 					, vec4( in.normal, 0.0_f ) );
-				out.texture = in.texture;
+
+				if ( hasTextures )
+				{
+					out.texture = in.texture;
+				}
+
 				in.morph( c3d_morphingData
 					, curPosition
 					, v4Normal
@@ -397,10 +402,13 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
+		bool hasTextures = !flags.textures.empty();
 
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
-		auto center = writer.declInput< Vec3 >( "center", 2u );
+		auto inTexcoord = writer.declInput< Vec2 >( "inTexcoord", 1u, hasTextures );
+		auto inCenter = writer.declInput< Vec3 >( "inCenter", 2u );
 
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
@@ -420,7 +428,7 @@ namespace castor3d
 			, VertexOutT< SurfaceT > out )
 			{
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
+					, c3d_modelData.modelToCurWorld( vec4( inCenter, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_sceneData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
@@ -434,6 +442,11 @@ namespace castor3d
 					, c3d_billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
 				auto height = writer.declLocale( "height"
 					, c3d_billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
+
+				if ( hasTextures )
+				{
+					out.texture = vec3( inTexcoord, 0.0_f );
+				}
 
 				out.vtx.position = vec4( curBbcenter
 						+ right * inPosition.x() * width
@@ -464,6 +477,8 @@ namespace castor3d
 	{
 		using namespace sdw;
 		GeometryWriter writer;
+		auto textureFlags = filterTexturesFlags( flags.textures );
+		bool hasTextures = !flags.textures.empty();
 
 		UBO_VOXELIZER( writer
 			, uint32_t( PassUboIdx::eCount ) + 1u
@@ -522,8 +537,12 @@ namespace castor3d
 					out.viewPosition = list[i].viewPosition;
 					out.normal = list[i].normal;
 					out.material = list[i].material;
-					out.texture = list[i].texture;
 					out.vtx.position = vec4( positions[i], 1.0f );
+
+					if ( hasTextures )
+					{
+						out.texture = list[i].texture;
+					}
 
 					out.append();
 				}
