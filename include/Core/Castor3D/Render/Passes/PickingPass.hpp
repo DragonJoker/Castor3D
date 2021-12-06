@@ -110,6 +110,8 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdate( RenderQueueArray & queues )override;
 		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;

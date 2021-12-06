@@ -211,6 +211,16 @@ namespace castor3d
 		return result;
 	}
 
+	ShaderPtr SceneRenderPass::getHullShaderSource( PipelineFlags const & flags )const
+	{
+		return doGetHullShaderSource( flags );
+	}
+
+	ShaderPtr SceneRenderPass::getDomainShaderSource( PipelineFlags const & flags )const
+	{
+		return doGetDomainShaderSource( flags );
+	}
+
 	ShaderPtr SceneRenderPass::getGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		return doGetGeometryShaderSource( flags );
