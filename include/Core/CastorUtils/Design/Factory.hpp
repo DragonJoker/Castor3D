@@ -19,7 +19,7 @@ namespace castor
 	template< class ObjT, class KeyT, class PtrTypeT, typename CreatorT, class PredicateT >
 	class Factory
 	{
-	protected:
+	public:
 		using Obj = ObjT;
 		using Key = KeyT;
 		using PtrType = PtrTypeT;

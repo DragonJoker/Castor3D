@@ -16,21 +16,21 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct PassRegisterInfo
+	{
+		castor::String lightingModel;
+		PassFactoryBase::Creator passCreator;
+		castor::AttributeParsers parsers;
+		castor::StrUInt32Map sections;
+		shader::LightingModelCreator lightingModelCreator;
+		bool isIBLNeeded;
+	};
+
 	class PassFactory
 		: public castor::OwnedBy< Engine >
 		, private PassFactoryBase
 	{
 	public:
-		struct RegisterInfo
-		{
-			castor::String lightingModel;
-			PassFactoryBase::Creator passCreator;
-			castor::AttributeParsers parsers;
-			castor::StrUInt32Map sections;
-			shader::LightingModelCreator lightingModelCreator;
-			bool needsIbl;
-		};
-
 		using StringIdPair = std::pair< castor::String, PassTypeID >;
 
 	public:
@@ -50,7 +50,7 @@ namespace castor3d
 		C3D_API ~PassFactory();
 
 		C3D_API void registerType( castor::String const & passType
-			, RegisterInfo info );
+			, PassRegisterInfo info );
 		C3D_API void unregisterType( castor::String const & passType );
 		C3D_API PassSPtr create( castor::String const & passType
 			, Material & parent )const;

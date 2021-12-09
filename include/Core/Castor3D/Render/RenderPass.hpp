@@ -159,9 +159,12 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
+			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
 			, SceneRenderPassDesc const & desc );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -169,8 +172,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~SceneRenderPass()override;
-
-	public:
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -179,7 +180,16 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API virtual void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API virtual void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -526,6 +536,16 @@ namespace castor3d
 		{
 			return m_mode;
 		}
+
+		castor::String const & getTypeName()const
+		{
+			return m_typeName;
+		}
+
+		RenderPassTypeID getTypeID()const
+		{
+			return m_typeID;
+		}
 		/**@}*/
 
 	private:
@@ -687,7 +707,8 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
-		C3D_API virtual bool doIsValidPass( PassFlags const & passFlags )const;
+		C3D_API virtual bool doAreValidPassFlags( PassFlags const & passFlags )const;
+		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 
@@ -839,6 +860,8 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		MatrixUbo & m_matrixUbo;
 		SceneCuller & m_culler;
+		castor::String m_typeName;
+		RenderPassTypeID m_typeID{};
 		RenderQueueUPtr m_renderQueue;
 		castor::String m_category;
 		castor::Size m_size;

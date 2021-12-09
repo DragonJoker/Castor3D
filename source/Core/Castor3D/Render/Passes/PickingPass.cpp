@@ -127,6 +127,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	uint32_t const PickingPass::UboBindingPoint = 7u;
+	castor::String const PickingPass::Type = "c3d.pick";
 
 	PickingPass::PickingPass( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -139,6 +140,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, Type
 			, cuT( "Picking" )
 			, cuT( "Picking" )
 			, SceneRenderPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false } }
@@ -189,14 +191,14 @@ namespace castor3d
 		return TextureFlags{ TextureFlag::eOpacity };
 	}
 
-	bool PickingPass::doIsValidPass( PassFlags const & passFlags )const
+	bool PickingPass::doIsValidPass( Pass const & pass )const
 	{
-		if ( !checkFlag( passFlags, PassFlag::ePickable ) )
+		if ( !checkFlag( pass.getPassFlags(), PassFlag::ePickable) )
 		{
 			return false;
 		}
 
-		return SceneRenderPass::doIsValidPass( passFlags );
+		return SceneRenderPass::doAreValidPassFlags( pass.getPassFlags() );
 	}
 
 	void PickingPass::doUpdateNodes( QueueCulledRenderNodes & nodes )

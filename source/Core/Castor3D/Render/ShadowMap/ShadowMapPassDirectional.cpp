@@ -75,6 +75,7 @@ namespace castor3d
 	uint32_t const ShadowMapPassDirectional::TileSize = 2048u;
 	uint32_t const ShadowMapPassDirectional::TileCountX = ShadowMapDirectionalTileCountX;
 	uint32_t const ShadowMapPassDirectional::TileCountY = ShadowMapDirectionalTileCountY;
+	castor::String const ShadowMapPassDirectional::Type = "c3d.shadows.directional";
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -89,6 +90,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, Type
 			, cuT( "DirectionalSM" )
 			, matrixUbo
 			, culler
@@ -100,6 +102,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, Type
 			, getPassName( cascadeCount )
 			, matrixUbo
 			, culler
@@ -116,7 +119,7 @@ namespace castor3d
 		getCuller().getCamera().detach();
 	}
 
-	bool ShadowMapPassDirectional::update( CpuUpdater & updater )
+	void ShadowMapPassDirectional::update( CpuUpdater & updater )
 	{
 #if C3D_UseTiledDirectionalShadowMap
 		auto & light = *updater.light;
@@ -142,7 +145,6 @@ namespace castor3d
 #endif
 		m_outOfDate = true;
 		SceneRenderPass::update( updater );
-		return m_outOfDate;
 	}
 
 	void ShadowMapPassDirectional::update( GpuUpdater & updater )

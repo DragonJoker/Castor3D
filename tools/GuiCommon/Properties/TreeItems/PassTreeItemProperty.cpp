@@ -206,20 +206,20 @@ namespace GuiCommon
 				, Scene const & scene )
 			{
 				ShaderSources result;
-				PassShaderGatherer vis{
-					{
-						pass.getColourBlendMode(),
-						pass.getAlphaBlendMode(),
-						pass.getPassFlags(),
-						pass.getTypeID(),
-						pass.getHeightTextureIndex(),
-						ProgramFlags{},
-						scene.getFlags(),
-						VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-						pass.getAlphaFunc(),
-						pass.getBlendAlphaFunc(),
-						pass.getTexturesMask(),
-					}
+				PassShaderGatherer vis{ { pass.getColourBlendMode()
+						, pass.getAlphaBlendMode()
+						, pass.getPassFlags()
+						, ( pass.getRenderPassInfo()
+							? pass.getRenderPassInfo()->id
+							: castor3d::RenderPassTypeID{} )
+						, pass.getTypeID()
+						, pass.getHeightTextureIndex()
+						, ProgramFlags{}
+						, scene.getFlags()
+						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+						, pass.getAlphaFunc()
+						, pass.getBlendAlphaFunc()
+						, pass.getTexturesMask() }
 					, scene
 					, result };
 				auto & engine = *pass.getOwner()->getEngine();

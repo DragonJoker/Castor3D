@@ -13,6 +13,10 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <RenderGraph/FrameGraphPrerequisites.hpp>
+
+#include <functional>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -120,6 +124,7 @@ namespace castor3d
 	struct IntermediateView;
 	using TexturePtr = std::shared_ptr< Texture >;
 	using TextureArray = std::vector< TexturePtr >;
+	using RenderPassTypeID = uint16_t;
 
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
@@ -371,6 +376,7 @@ namespace castor3d
 		PipelineFlags( BlendMode colourBlendMode = BlendMode::eNoBlend
 			, BlendMode alphaBlendMode = BlendMode::eNoBlend
 			, PassFlags passFlags = PassFlag::eNone
+			, RenderPassTypeID renderPassType = 0u
 			, PassTypeID passType = 0u
 			, uint32_t heightMapIndex = InvalidIndex
 			, ProgramFlags programFlags = ProgramFlag::eNone
@@ -382,6 +388,7 @@ namespace castor3d
 			: colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
 			, passFlags{ passFlags }
+			, renderPassType{ renderPassType }
 			, passType{ passType }
 			, heightMapIndex{ heightMapIndex }
 			, programFlags{ programFlags }
@@ -397,6 +404,7 @@ namespace castor3d
 		BlendMode colourBlendMode{ BlendMode::eNoBlend };
 		BlendMode alphaBlendMode{ BlendMode::eNoBlend };
 		PassFlags passFlags{ PassFlag::eNone };
+		RenderPassTypeID renderPassType{ 0u };
 		PassTypeID passType{ 0u };
 		uint32_t heightMapIndex{ InvalidIndex };
 		ProgramFlags programFlags{ ProgramFlag::eNone };
@@ -604,6 +612,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	SceneRenderPass creation data.
+	*\~french
+	*\brief
+	*	Données de création d'une SceneRenderPass.
+	*/
+	struct SceneRenderPassDesc;
+	/**
+	*\~english
+	*\brief
 	*	Render pass base class.
 	*\~french
 	*\brief
@@ -638,6 +655,8 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, RenderTarget, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderWindow, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Viewport, C3D_API );
+
+	CU_DeclareSmartPtr( SceneRenderPass );
 
 	using RenderWindowPtr = std::unique_ptr< RenderWindow >;
 
@@ -724,7 +743,6 @@ namespace castor3d
 		, castor::Size const & size );
 	C3D_API float getSafeBandedAspect( float aspect
 		, castor::Size const & size );
-
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )

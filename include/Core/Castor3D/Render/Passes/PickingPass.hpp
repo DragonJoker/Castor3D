@@ -97,7 +97,7 @@ namespace castor3d
 		void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes );
 		void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
 		void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes );
-		bool doIsValidPass( PassFlags const & passFlags )const override;
+		bool doIsValidPass( Pass const & pass )const override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
@@ -120,6 +120,7 @@ namespace castor3d
 		void doUpdateFlags( PipelineFlags & flags )const override;
 
 	public:
+		C3D_API static castor::String const Type;
 		static uint32_t constexpr PickingWidth = 32u;
 
 	private:
