@@ -407,6 +407,7 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
+					, ForwardRenderTechniquePass::Type
 					, SceneName
 					, pass.name
 					, SceneRenderPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler }
@@ -432,6 +433,7 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
+					, ForwardRenderTechniquePass::Type
 					, SceneName
 					, pass.name
 					, SceneRenderPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler, false }

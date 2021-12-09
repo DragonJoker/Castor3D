@@ -46,6 +46,8 @@ using namespace castor;
 
 namespace castor3d
 {
+	castor::String const TransparentPass::Type = "c3d.transparent.accumulation";
+
 	TransparentPass::TransparentPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -58,6 +60,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, Type
 			, category
 			, name
 			, renderPassDesc
@@ -72,10 +75,13 @@ namespace castor3d
 
 	void TransparentPass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
-			, visitor.getFlags() );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		if ( visitor.getFlags().renderPassType == m_typeID )
+		{
+			auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
+				, visitor.getFlags() );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const

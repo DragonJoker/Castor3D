@@ -45,8 +45,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, RenderTechniquePass )
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -130,11 +128,12 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, String const & category
-		, String const & name
+		, castor::String const & typeName
+		, castor::String const & category
+		, castor::String const & name
 		, SceneRenderPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: SceneRenderPass{ pass, context, graph, device, category, name, renderPassDesc }
+		: SceneRenderPass{ pass, context, graph, device, typeName, category, name, renderPassDesc }
 		, m_scene{ renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_environment{ techniquePassDesc.m_environment }

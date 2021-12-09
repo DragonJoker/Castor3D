@@ -54,6 +54,7 @@ namespace castor3d
 	}
 
 	uint32_t const ShadowMapPassPoint::TextureSize = 512u;
+	castor::String const ShadowMapPassPoint::Type = "c3d.shadows.point";
 
 	ShadowMapPassPoint::ShadowMapPassPoint( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -67,6 +68,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, Type
 			, getPassName( index )
 			, matrixUbo
 			, culler
@@ -80,14 +82,13 @@ namespace castor3d
 		m_onNodeChanged.disconnect();
 	}
 
-	bool ShadowMapPassPoint::update( CpuUpdater & updater )
+	void ShadowMapPassPoint::update( CpuUpdater & updater )
 	{
 		getCuller().compute();
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
 		SceneRenderPass::update( updater );
-		return m_outOfDate;
 	}
 
 	void ShadowMapPassPoint::update( GpuUpdater & updater )

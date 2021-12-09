@@ -44,6 +44,8 @@ namespace castor3d
 		static String const Output5 = "outData5";
 	}
 
+	castor::String const OpaquePass::Type = "c3d.deferred.geometry";
+
 	OpaquePass::OpaquePass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -56,6 +58,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, Type
 			, category
 			, name
 			, renderPassDesc
@@ -65,10 +68,13 @@ namespace castor3d
 
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto flags = visitor.getFlags();
-		auto shaderProgram = doGetProgram( flags );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		if ( visitor.getFlags().renderPassType == m_typeID )
+		{
+			auto flags = visitor.getFlags();
+			auto shaderProgram = doGetProgram( flags );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
 	}
 
 	TextureFlags OpaquePass::getTexturesMask()const

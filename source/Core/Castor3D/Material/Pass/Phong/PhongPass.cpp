@@ -250,15 +250,23 @@ namespace castor3d
 	castor::String const PhongPass::LightingModel = shader::PhongLightingModel::getName();
 
 	PhongPass::PhongPass( Material & parent
+		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
-		: PhongPass{ parent, parent.getEngine()->getPassFactory().getNameId( Type ), initialFlags }
+		: PhongPass{ parent
+			, parent.getEngine()->getPassFactory().getNameId( Type )
+			, renderPassInfo
+			, initialFlags }
 	{
 	}
 
 	PhongPass::PhongPass( Material & parent
 		, PassTypeID typeID
+		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
-		: Pass{ parent, typeID, initialFlags }
+		: Pass{ parent
+			, typeID
+			, renderPassInfo
+			, initialFlags }
 		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_ambient{ m_dirty, 1.0f }
@@ -268,7 +276,7 @@ namespace castor3d
 
 	PassSPtr PhongPass::create( Material & parent )
 	{
-		return std::make_shared< PhongPass >( parent );
+		return std::make_shared< PhongPass >( parent, nullptr );
 	}
 
 	castor::AttributeParsers PhongPass::createParsers()

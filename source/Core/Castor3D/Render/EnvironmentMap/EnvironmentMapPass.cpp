@@ -169,6 +169,7 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
+					, ForwardRenderTechniquePass::Type
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Opaque" )
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
@@ -196,6 +197,7 @@ namespace castor3d
 					, context
 					, graph
 					, m_device
+					, ForwardRenderTechniquePass::Type
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Transparent" )
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }

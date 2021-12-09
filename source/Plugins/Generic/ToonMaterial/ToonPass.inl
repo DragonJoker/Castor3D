@@ -47,7 +47,10 @@ namespace toon
 	ToonPassT< TypeT >::ToonPassT( castor3d::Material & parent
 		, castor3d::PassTypeID typeID
 		, castor3d::PassFlags initialFlags )
-		: TypeT{ parent, typeID, initialFlags | castor3d::PassFlag::eDrawEdge }
+		: TypeT{ parent
+			, typeID
+			, nullptr
+			, initialFlags | castor3d::PassFlag::eDrawEdge }
 		, m_smoothBandWidth{ this->m_dirty, 1.0f }
 	{
 	}
