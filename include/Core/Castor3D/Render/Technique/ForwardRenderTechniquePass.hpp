@@ -34,6 +34,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
+			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
 			, SceneRenderPassDesc const & renderPassDesc
@@ -42,6 +43,9 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
+
+	public:
+		C3D_API static castor::String const Type;
 
 	private:
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;

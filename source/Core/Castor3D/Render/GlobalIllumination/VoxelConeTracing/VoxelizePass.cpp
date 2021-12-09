@@ -45,6 +45,8 @@ CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		template< sdw::var::Flag FlagT >
@@ -109,6 +111,10 @@ namespace castor3d
 		};
 	}
 
+	//*********************************************************************************************
+
+	castor::String const VoxelizePass::Type = "c3d.voxelize";
+
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -122,6 +128,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, Type
 			, "Voxelize"
 			, "Voxelization"
 			, SceneRenderPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true } }
@@ -135,11 +142,14 @@ namespace castor3d
 
 	void VoxelizePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto flags = visitor.getFlags();
-		auto shaderProgram = doGetProgram( flags );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_GEOMETRY_BIT ) );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		if ( visitor.getFlags().renderPassType == m_typeID )
+		{
+			auto flags = visitor.getFlags();
+			auto shaderProgram = doGetProgram( flags );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_GEOMETRY_BIT ) );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
 	}
 
 	void VoxelizePass::update( CpuUpdater & updater )
@@ -212,7 +222,7 @@ namespace castor3d
 		remFlag( flags.sceneFlags, SceneFlag::eFogSquaredExponential );
 
 		remFlag( flags.passFlags, PassFlag::eReflection );
-		remFlag( flags.passFlags, PassFlag::eReflection );
+		remFlag( flags.passFlags, PassFlag::eRefraction );
 		remFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingOne );
 		remFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingRepeat );
 		remFlag( flags.passFlags, PassFlag::eDistanceBasedTransmittance );
@@ -686,4 +696,6 @@ namespace castor3d
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
+
+	//*********************************************************************************************
 }

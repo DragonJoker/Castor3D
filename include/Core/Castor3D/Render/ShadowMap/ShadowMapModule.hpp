@@ -135,7 +135,7 @@ namespace castor3d
 	*\brief
 	*	Ecrit les descripteurs des shadow maps dans les writes donnés.
 	*/
-	void bindShadowMaps( crg::RunnableGraph & graph
+	C3D_API void bindShadowMaps( crg::RunnableGraph & graph
 		, PipelineFlags const & pipelineFlags
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes

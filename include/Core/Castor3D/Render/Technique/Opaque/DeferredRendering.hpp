@@ -111,6 +111,8 @@ namespace castor3d
 		 */
 		void accept( RenderTechniqueVisitor & visitor );
 
+		crg::ImageViewId const & getLightDepthImgView()const;
+
 		crg::FramePass const & getLastPass()const
 		{
 			return *m_lastPass;

@@ -119,6 +119,35 @@ namespace castor3d
 		{
 			return m_prvMtxModel * pos;
 		}
+
+		sdw::Mat4 ModelData::getCurModelMtx( ProgramFlags programFlags
+			, SkinningData const & skinning
+			, sdw::IVec4 const & boneIds0
+			, sdw::IVec4 const & boneIds1
+			, sdw::Vec4 const & boneWeights0
+			, sdw::Vec4 const & boneWeights1
+			, sdw::Mat4 const & transform )const
+		{
+			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+			{
+				return SkinningUbo::computeTransform( skinning
+					, boneIds0
+					, boneIds1
+					, boneWeights0
+					, boneWeights1
+					, transform
+					, *getWriter()
+					, programFlags
+					, m_curMtxModel );
+			}
+
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				return transform;
+			}
+
+			return m_curMtxModel;
+		}
 	}
 
 	//*********************************************************************************************
