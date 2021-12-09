@@ -91,6 +91,29 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SsaoPass, C3D_API );
 
+	enum class TechniquePassEvent
+	{
+		eBeforeDepth,
+		eBeforeBackground,
+		eBeforeOpaque,
+		eBeforeTransparent,
+		eBeforePostEffects,
+		CU_ScopedEnumBounds( eBeforeDepth )
+	};
+	using TechniquePassVector = std::vector< RenderTechniquePass * >;
+	using TechniquePasses = std::array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
+
+	struct RenderPassRegisterInfo
+	{
+		using Creator = std::function< crg::FramePass & ( RenderDevice const &
+			, RenderTechnique &
+			, TechniquePasses &
+			, crg::FramePass const * ) >;
+		castor::String name;
+		Creator create;
+		TechniquePassEvent event;
+		RenderPassTypeID id{};
+	};
 	//@}
 	//@}
 }

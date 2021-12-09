@@ -43,6 +43,11 @@ namespace castor3d
 			C3D_API sdw::Vec3 getPrvViewCenter()const;
 			C3D_API void jitter( sdw::Vec4 & csPosition )const;
 
+			sdw::Mat4 const & getInvProjMtx()const
+			{
+				return m_invProjection;
+			}
+
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;

@@ -153,4 +153,9 @@ namespace castor3d
 		m_subsurfaceScattering->accept( visitor );
 		m_resolve->accept( visitor );
 	}
+
+	crg::ImageViewId const & DeferredRendering::getLightDepthImgView()const
+	{
+		return m_lightPassResult[LpTexture::eDepth].targetViewId;
+	}
 }

@@ -105,6 +105,9 @@ namespace castor3d
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
+	public:
+		C3D_API static castor::String const Type;
+
 	private:
 		Scene const & m_scene;
 		Camera const & m_camera;

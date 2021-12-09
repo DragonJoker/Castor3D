@@ -160,6 +160,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
+			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
 			, SceneRenderPassDesc const & renderPassDesc
@@ -183,7 +184,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( GpuUpdater & updater );
+		C3D_API void update( GpuUpdater & updater )override;
 		/**
 		*\~english
 		*name
@@ -212,7 +213,7 @@ namespace castor3d
 		using SceneRenderPass::update;
 
 	private:
-		virtual void doUpdateNodes( QueueCulledRenderNodes & nodes
+		void doUpdateNodes( QueueCulledRenderNodes & nodes
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
 		void doUpdateUbos( CpuUpdater & updater )override;

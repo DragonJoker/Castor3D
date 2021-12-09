@@ -147,6 +147,10 @@ namespace castor3d
 		C3D_API crg::FramePass const & getLastPass()const;
 		C3D_API SsaoConfig const & getSsaoConfig()const;
 		C3D_API SsaoConfig & getSsaoConfig();
+		C3D_API Texture const & getSsaoResult()const;
+		C3D_API Texture const & getFirstVctBounce()const;
+		C3D_API Texture const & getSecondaryVctBounce()const;
+		C3D_API crg::ImageViewId const & getLightDepthImgView()const;
 
 		castor::Size const & getSize()const
 		{
@@ -159,6 +163,11 @@ namespace castor3d
 			return *m_colourTexture->getTexture();
 		}
 
+		Texture const & getResultTexture()const
+		{
+			return m_colour;
+		}
+
 		crg::ImageId const & getResultImg()const
 		{
 			return m_colour.imageId;
@@ -169,9 +178,19 @@ namespace castor3d
 			return m_colour.sampledViewId;
 		}
 
+		Texture const & getNormalTexture()const
+		{
+			return *m_normal;
+		}
+
 		crg::ImageViewId const & getNormalImgView()const
 		{
 			return m_normal->sampledViewId;
+		}
+
+		Texture const & getDepthTexture()const
+		{
+			return *m_depth;
 		}
 
 		crg::ImageViewId const & getDepthImgView()const
@@ -200,6 +219,17 @@ namespace castor3d
 			return *m_depthRange;
 		}
 
+		LightVolumePassResult const & getLpvResult()const
+		{
+			CU_Require( m_lpvResult );
+			return *m_lpvResult;
+		}
+
+		LightVolumePassResultArray const & getLlpvResult()const
+		{
+			return m_llpvResult;
+		}
+
 		MatrixUbo const & getMatrixUbo()const
 		{
 			return m_matrixUbo;
@@ -208,6 +238,21 @@ namespace castor3d
 		MatrixUbo & getMatrixUbo()
 		{
 			return m_matrixUbo;
+		}
+
+		LpvGridConfigUbo const & getLpvConfigUbo()const
+		{
+			return m_lpvConfigUbo;
+		}
+
+		LayeredLpvGridConfigUbo const & getLlpvConfigUbo()const
+		{
+			return m_llpvConfigUbo;
+		}
+
+		VoxelizerUbo const & getVctConfigUbo()const
+		{
+			return m_vctConfigUbo;
 		}
 
 		ShadowMapLightTypeArray const & getShadowMaps()const
@@ -226,6 +271,11 @@ namespace castor3d
 			return m_renderTarget;
 		}
 
+		RenderTarget & getRenderTarget()
+		{
+			return m_renderTarget;
+		}
+
 		bool isMultisampling()const
 		{
 			return false;
@@ -236,8 +286,12 @@ namespace castor3d
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
+		crg::FramePass const * doCreateRenderPasses( ProgressBar * progress
+			, TechniquePassEvent event
+			, crg::FramePass const * previousPass );
 		crg::FramePass & doCreateDepthPass( ProgressBar * progress );
 		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
+		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
 		crg::FramePass & doCreateOpaquePass( ProgressBar * progress );
 		crg::FramePass & doCreateTransparentPass( ProgressBar * progress );
 		void doInitialiseLpv();
@@ -304,6 +358,7 @@ namespace castor3d
 		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
 		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
 		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
+		TechniquePasses m_renderPasses;
 	};
 }
 

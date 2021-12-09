@@ -121,6 +121,7 @@ namespace castor3d
 
 	Pass::Pass( Material & parent
 		, PassTypeID typeID
+		, RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: OwnedBy< Material >{ parent }
 		, m_typeID{ typeID }
@@ -144,6 +145,7 @@ namespace castor3d
 		, m_depthFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_normalFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_objectFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
+		, m_renderPassInfo{ renderPassInfo }
 	{
 	}
 

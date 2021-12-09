@@ -46,10 +46,13 @@ using namespace castor;
 
 namespace castor3d
 {
+	castor::String const ForwardRenderTechniquePass::Type = "c3d.forward";
+
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
+		, castor::String const & typeName
 		, castor::String const & category
 		, castor::String const & name
 		, SceneRenderPassDesc const & renderPassDesc
@@ -58,6 +61,7 @@ namespace castor3d
 			, context
 			, graph
 			, device
+			, typeName
 			, category
 			, name
 			, renderPassDesc
@@ -67,10 +71,13 @@ namespace castor3d
 
 	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		auto flags = visitor.getFlags();
-		auto shaderProgram = doGetProgram( flags );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
-		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		if ( visitor.getFlags().renderPassType == m_typeID )
+		{
+			auto flags = visitor.getFlags();
+			auto shaderProgram = doGetProgram( flags );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
 	}
 
 	ShaderPtr ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags )const

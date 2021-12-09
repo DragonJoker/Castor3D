@@ -49,6 +49,8 @@
 
 using namespace castor;
 
+CU_ImplementCUSmartPtr( castor3d, SceneRenderPass )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -143,6 +145,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
+		, String const & typeName
 		, String const & category
 		, String const & name
 		, SceneRenderPassDesc const & desc )
@@ -160,6 +163,8 @@ namespace castor3d
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }
 		, m_culler{ desc.m_culler }
+		, m_typeName{ typeName }
+		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_mode, desc.m_ignored ) }
 		, m_category{ category }
 		, m_size{ desc.m_size.width, desc.m_size.height }
@@ -193,6 +198,10 @@ namespace castor3d
 		doUpdate( *updater.queues );
 		doUpdateUbos( updater );
 		m_isDirty = false;
+	}
+
+	void SceneRenderPass::update( GpuUpdater & updater )
+	{
 	}
 
 	ShaderPtr SceneRenderPass::getVertexShaderSource( PipelineFlags const & flags )const
@@ -242,6 +251,9 @@ namespace castor3d
 		auto flags = PipelineFlags{ pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
+			, ( pass.getRenderPassInfo()
+				? pass.getRenderPassInfo()->id
+				: RenderPassTypeID{} )
 			, pass.getTypeID()
 			, pass.getHeightTextureIndex()
 			, programFlags
@@ -267,6 +279,9 @@ namespace castor3d
 		auto flags = PipelineFlags{ pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
+			, ( pass.getRenderPassInfo()
+				? pass.getRenderPassInfo()->id
+				: RenderPassTypeID{} )
 			, pass.getTypeID()
 			, pass.getHeightTextureIndex()
 			, programFlags
@@ -478,7 +493,7 @@ namespace castor3d
 
 	bool SceneRenderPass::isValidPass( Pass const & pass )const
 	{
-		return doIsValidPass( pass.getPassFlags() );
+		return doIsValidPass( pass );
 	}
 
 	bool SceneRenderPass::hasNodes()const
@@ -782,7 +797,13 @@ namespace castor3d
 		}
 	}
 
-	bool SceneRenderPass::doIsValidPass( PassFlags const & passFlags )const
+	bool SceneRenderPass::doIsValidPass( Pass const & pass )const
+	{
+		return ( pass.getRenderPassInfo() == nullptr || pass.getRenderPassInfo()->create == nullptr )
+			&& doAreValidPassFlags( pass.getPassFlags() );
+	}
+
+	bool SceneRenderPass::doAreValidPassFlags( PassFlags const & passFlags )const
 	{
 		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
 		{
@@ -853,7 +874,7 @@ namespace castor3d
 		RenderPipeline * result{};
 		auto program = doGetProgram( flags, cullMode );
 
-		if ( doIsValidPass( flags.passFlags )
+		if ( doAreValidPassFlags( flags.passFlags )
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{

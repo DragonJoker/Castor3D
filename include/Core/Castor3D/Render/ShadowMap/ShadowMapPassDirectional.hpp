@@ -49,7 +49,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		C3D_API bool update( CpuUpdater & updater )override;
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
@@ -77,6 +77,7 @@ namespace castor3d
 		C3D_API static uint32_t const TileSize;
 		C3D_API static uint32_t const TileCountX;
 		C3D_API static uint32_t const TileCountY;
+		C3D_API static castor::String const Type;
 
 	private:
 		ShadowMapDirectionalUbo m_shadowMapDirectionalUbo;

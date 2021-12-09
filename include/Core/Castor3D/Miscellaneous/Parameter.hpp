@@ -179,6 +179,25 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\brief		adds a string parameter
+		 *\remarks		If a parameter with the given name already exists, nothing is done
+		 *\param[in]	name	The parameter name
+		 *\param[in]	value	The parameter value
+		 *\return		\p false if a parameter with the given name already exists
+		 *\~french
+		 *\brief		Ajoute un paramètre chaîne de caractères
+		 *\remarks		Si un paramètre avec le nom donné existe déjà, rien n'est fait
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	value	La valeur du paramètre
+		 *\return		\p false si un paramètre avec le nom donné existe déjà
+		 */
+		bool add( KeyT const & name
+			, castor::Path const & value )
+		{
+			return add( name, static_cast< castor::String const & >( value ) );
+		}
+		/**
+		 *\~english
 		 *\brief		Sets a parameter value
 		 *\param[in]	name	The parameter name
 		 *\param[in]	value	The parameter value
@@ -301,6 +320,23 @@ namespace castor3d
 			}
 
 			return result;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a parameter value
+		 *\param[in]	name	The parameter name
+		 *\param[out]	value	The parameter value
+		 *\return		\p false if there is no parameter with the given name
+		 *\~french
+		 *\brief		Récupère la valeur d'un paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[out]	value	La valeur du paramètre
+		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
+		 */
+		bool get( KeyT const & name
+			, castor::Path & value )const
+		{
+			return get( name, static_cast< castor::String & >( value ) );
 		}
 		/**
 		 *\~english

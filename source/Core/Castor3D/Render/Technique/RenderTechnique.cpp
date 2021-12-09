@@ -292,6 +292,16 @@ namespace castor3d
 
 			return result;
 		}
+
+		template< typename ActionT >
+		void applyAction( TechniquePassVector const & renderPasses
+			, ActionT action )
+		{
+			for ( auto & renderPass : renderPasses )
+			{
+				action( *renderPass );
+			}
+		}
 	}
 
 	//*************************************************************************************************
@@ -399,17 +409,7 @@ namespace castor3d
 		, m_llpvResult{ doCreateLLPVResult( getOwner()->getGraphResourceHandler()
 			, m_device
 			, getName() ) }
-		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
-			, m_computeDepthRangeDesc
-			, m_device
-			, progress
-			, name
-			, *m_renderTarget.getScene()->getBackground()
-			, m_renderTarget.getHdrConfigUbo()
-			, m_sceneUbo
-			, m_colour.targetViewId
-			, true
-			, m_depth->targetViewId ) }
+		, m_backgroundRenderer{ doCreateBackgroundPass( progress ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()
 			, m_device
@@ -482,6 +482,14 @@ namespace castor3d
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
+		doCreateRenderPasses( progress
+			, TechniquePassEvent::eBeforeDepth
+#if C3D_UseWeightedBlendedRendering
+			, &m_weightedBlendRendering->getLastPass() );
+#else
+			, m_transparentPassDesc );
+#endif
+
 		m_colour.create();
 		m_depth->create();
 		auto runnable = m_clearLpvRunnable.get();
@@ -584,7 +592,17 @@ namespace castor3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
 		m_depthPass->update( updater );
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
 		m_backgroundRenderer->update( updater );
 
 		if ( updater.voxelConeTracing )
@@ -592,15 +610,33 @@ namespace castor3d
 			m_voxelizer->update( updater );
 		}
 
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
+
 		if ( m_opaquePass )
 		{
 			static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
 		}
 
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
+
 		if ( m_transparentPass )
 		{
 			static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 		}
+
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
 
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
@@ -646,7 +682,17 @@ namespace castor3d
 			scene.getEnvironmentMap().update( updater );
 		}
 
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
 		m_depthPass->update( updater );
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
 		m_backgroundRenderer->update( updater );
 
 		if ( updater.voxelConeTracing )
@@ -654,15 +700,33 @@ namespace castor3d
 			m_voxelizer->update( updater );
 		}
 
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
+
 		if ( m_opaquePass )
 		{
 			static_cast< OpaquePassType & >( *m_opaquePass ).update( updater );
 		}
 
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
+
 		if ( m_transparentPass )
 		{
 			static_cast< TransparentPassType & >( *m_transparentPass ).update( updater );
 		}
+
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
+			, [&updater]( RenderTechniquePass & renderPass )
+			{
+				renderPass.update( updater );
+			} );
 	}
 
 	crg::SemaphoreWait RenderTechnique::preRender( crg::SemaphoreWait const & toWait
@@ -692,9 +756,46 @@ namespace castor3d
 			, m_renderTarget.getGraph().getFinalLayout( m_depth->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
+			, [&visitor]( RenderTechniquePass & renderPass )
+			{
+				renderPass.accept( visitor );
+			} );
 		m_depthPass->accept( visitor );
 		m_voxelizer->accept( visitor );
 		m_ssao->accept( visitor );
+
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
+			, [&visitor]( RenderTechniquePass & renderPass )
+			{
+				renderPass.accept( visitor );
+			} );
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeOpaque )]
+			, [&visitor]( RenderTechniquePass & renderPass )
+			{
+				renderPass.accept( visitor );
+			} );
+
+		if ( !checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
+		{
+			if ( m_opaquePass )
+			{
+				m_opaquePass->accept( visitor );
+			}
+
+#if C3D_UseDeferredRendering
+			if ( m_deferredRendering )
+			{
+				m_deferredRendering->accept( visitor );
+			}
+#endif
+		}
+
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeTransparent )]
+			, [&visitor]( RenderTechniquePass & renderPass )
+			{
+				renderPass.accept( visitor );
+			} );
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
@@ -710,20 +811,12 @@ namespace castor3d
 			}
 #endif
 		}
-		else
-		{
-			if ( m_opaquePass )
-			{
-				m_opaquePass->accept( visitor );
-			}
 
-#if C3D_UseDeferredRendering
-			if ( m_deferredRendering )
+		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )]
+			, [&visitor]( RenderTechniquePass & renderPass )
 			{
-				m_deferredRendering->accept( visitor );
-			}
-#endif
-		}
+				renderPass.accept( visitor );
+			} );
 
 #if !C3D_DebugDisableShadowMaps
 		m_directionalShadowMap->accept( visitor );
@@ -766,6 +859,11 @@ namespace castor3d
 
 	crg::FramePass const & RenderTechnique::getLastPass()const
 	{
+		if ( !m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )].empty() )
+		{
+			return m_renderPasses[size_t( TechniquePassEvent::eBeforePostEffects )].back()->getPass();
+		}
+
 #if C3D_UseWeightedBlendedRendering
 		return m_weightedBlendRendering->getLastPass();
 #else
@@ -783,8 +881,52 @@ namespace castor3d
 		return m_renderTarget.getSsaoConfig();
 	}
 
+	Texture const & RenderTechnique::getSsaoResult()const
+	{
+		return m_ssao->getResult();
+	}
+
+	Texture const & RenderTechnique::getFirstVctBounce()const
+	{
+		return m_voxelizer->getFirstBounce();
+	}
+
+	Texture const & RenderTechnique::getSecondaryVctBounce()const
+	{
+		return m_voxelizer->getSecondaryBounce();
+	}
+
+	crg::ImageViewId const & RenderTechnique::getLightDepthImgView()const
+	{
+#if C3D_UseDeferredRendering
+		return m_deferredRendering->getLightDepthImgView();
+#else
+		return getDepthImgView();
+#endif
+	}
+
+	crg::FramePass const * RenderTechnique::doCreateRenderPasses( ProgressBar * progress
+		, TechniquePassEvent event
+		, crg::FramePass const * previousPass )
+	{
+		crg::FramePass const * result{ previousPass };
+
+		for ( auto renderPassInfo : getEngine()->getRenderPassInfos( event ) )
+		{
+			result = &renderPassInfo->create( m_device
+				, *this
+				, m_renderPasses
+				, result );
+		}
+
+		return result;
+	}
+
 	crg::FramePass & RenderTechnique::doCreateDepthPass( ProgressBar * progress )
 	{
+		auto previousPass = doCreateRenderPasses( progress
+			, TechniquePassEvent::eBeforeDepth
+			, nullptr );
 		stepProgressBar( progress, "Creating depth pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "Depth"
 			, [this, progress]( crg::FramePass const & framePass
@@ -803,6 +945,12 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
+
+		if ( previousPass )
+		{
+			result.addDependency( *previousPass );
+		}
+
 		result.addOutputDepthStencilView( m_depth->targetViewId
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_depthObj->targetViewId
@@ -841,8 +989,31 @@ namespace castor3d
 		return result;
 	}
 
+	BackgroundRendererUPtr RenderTechnique::doCreateBackgroundPass( ProgressBar * progress )
+	{
+		auto previousPass = doCreateRenderPasses( progress
+			, TechniquePassEvent::eBeforeBackground
+			, m_computeDepthRangeDesc );
+		auto result = castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
+			, previousPass
+			, m_device
+			, progress
+			, getName()
+			, *m_renderTarget.getScene()->getBackground()
+			, m_renderTarget.getHdrConfigUbo()
+			, m_sceneUbo
+			, m_colour.targetViewId
+			, true
+			, m_depth->targetViewId );
+
+		return result;
+	}
+
 	crg::FramePass & RenderTechnique::doCreateOpaquePass( ProgressBar * progress )
 	{
+		auto previousPass = doCreateRenderPasses( progress
+			, TechniquePassEvent::eBeforeDepth
+			, &m_backgroundRenderer->getPass() );
 		stepProgressBar( progress, "Creating opaque pass" );
 #if C3D_UseDeferredRendering
 		castor::String name = cuT( "Geometry" );
@@ -876,7 +1047,7 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( m_backgroundRenderer->getPass() );
+		result.addDependency( *previousPass );
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
 		result.addInOutDepthStencilView( m_depth->targetViewId );
@@ -898,6 +1069,13 @@ namespace castor3d
 
 	crg::FramePass & RenderTechnique::doCreateTransparentPass( ProgressBar * progress )
 	{
+		auto previousPass = doCreateRenderPasses( progress
+			, TechniquePassEvent::eBeforeTransparent
+#if C3D_UseDeferredRendering
+			, &m_deferredRendering->getLastPass() );
+#else
+			, m_opaquePassDesc );
+#endif
 		stepProgressBar( progress, "Creating transparent pass" );
 		auto & result = m_renderTarget.getGraph().createPass( "Transparent"
 			, [this, progress]( crg::FramePass const & framePass
@@ -937,13 +1115,8 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-#if C3D_UseDeferredRendering
-		result.addDependency( m_deferredRendering->getLastPass() );
-		result.addInOutDepthStencilView( m_depth->targetViewId, {} );
-#else
-		result.addDependency( *m_opaquePassDesc );
+		result.addDependency( *previousPass );
 		result.addInOutDepthStencilView( m_depth->targetViewId );
-#endif
 
 #if C3D_UseWeightedBlendedRendering
 		auto & transparentPassResult = *m_transparentPassResult;

@@ -38,6 +38,13 @@ namespace castor3d
 			C3D_API sdw::Vec4 modelToWorld( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToCurWorld( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
+			C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
+				, SkinningData const & skinning
+				, sdw::IVec4 const & boneIds0
+				, sdw::IVec4 const & boneIds1
+				, sdw::Vec4 const & boneWeights0
+				, sdw::Vec4 const & boneWeights1
+				, sdw::Mat4 const & transform )const;
 
 			sdw::Int const & isShadowReceiver()const
 			{
@@ -49,26 +56,23 @@ namespace castor3d
 				return m_envMapIndex;
 			}
 
+			sdw::Mat4 const & getModelMtx()const
+			{
+				return m_curMtxModel;
+			}
+
 			template< ast::var::Flag FlagT >
 			sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 				, SkinningData const & skinning
 				, VertexSurfaceT< FlagT > const & surface )const
 			{
-				if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
-				{
-					return SkinningUbo::computeTransform( skinning
-						, surface
-						, *getWriter()
-						, programFlags
-						, m_curMtxModel );
-				}
-
-				if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-				{
-					return surface.transform;
-				}
-
-				return m_curMtxModel;
+				return getCurModelMtx( programFlags
+					, skinning
+					, surface.boneIds0
+					, surface.boneIds1
+					, surface.boneWeights0
+					, surface.boneWeights1
+					, surface.transform );
 			}
 
 		private:

@@ -42,6 +42,24 @@ namespace castor3d
 				, sdw::Vec3 const & tan2
 				, sdw::Vec3 & uvw
 				, sdw::Vec3 const & uvw2 )const;
+			C3D_API void morph( sdw::Vec4 & pos
+				, sdw::Vec4 const & pos2
+				, sdw::Vec4 & uvuv
+				, sdw::Vec4 const & uvuv2 )const;
+			C3D_API void morph( sdw::Vec4 & pos
+				, sdw::Vec4 const & pos2
+				, sdw::Vec4 & nml
+				, sdw::Vec3 const & nml2
+				, sdw::Vec4 & uvuv
+				, sdw::Vec4 const & uvuv2 )const;
+			C3D_API void morph( sdw::Vec4 & pos
+				, sdw::Vec4 const & pos2
+				, sdw::Vec4 & nml
+				, sdw::Vec3 const & nml2
+				, sdw::Vec4 & tan
+				, sdw::Vec3 const & tan2
+				, sdw::Vec4 & uvuv
+				, sdw::Vec4 const & uvuv2 )const;
 
 		private:
 			using sdw::StructInstance::getMember;
