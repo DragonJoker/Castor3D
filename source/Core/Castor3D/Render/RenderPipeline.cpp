@@ -99,6 +99,14 @@ namespace castor3d
 			dynamicState = ashes::PipelineDynamicStateCreateInfo{ 0u, std::move( dynamicStates ) };
 		}
 
+		ashes::Optional< ashes::PipelineTessellationStateCreateInfo > tessellationState = ashes::nullopt;
+
+		if ( m_program->hasSource( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT )
+			|| m_program->hasSource( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) )
+		{
+			tessellationState = ashes::PipelineTessellationStateCreateInfo{ 0u, 3u };
+		}
+
 		m_pipelineLayout = device->createPipelineLayout( getOwner()->getName() + "RenderPipeline"
 			, descriptorLayouts
 			, m_pushConstantRanges );
@@ -108,7 +116,7 @@ namespace castor3d
 			m_program->getStates(),
 			ashes::PipelineVertexInputStateCreateInfo{ 0u, std::move( bindings ), std::move( attributes ) },
 			ashes::PipelineInputAssemblyStateCreateInfo{ 0u, m_flags.topology },
-			ashes::nullopt,
+			std::move( tessellationState ),
 			ashes::PipelineViewportStateCreateInfo{ 0u, 1u, std::move( viewports ), 1u, std::move( scissors ) },
 			std::move( m_rsState ),
 			std::move( m_msState ),

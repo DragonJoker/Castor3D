@@ -44,29 +44,12 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
+			, castor::String const & typeName
 			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
 			, uint32_t instanceMult = 1u );
-		/**
-		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API virtual bool update( CpuUpdater & updater ) = 0;
-		/**
-		 *\~english
-		 *\brief			Updates the render pass, GPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau GPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API virtual void update( GpuUpdater & updater ) = 0;
 
 		bool isUpToDate()const
 		{

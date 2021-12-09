@@ -53,6 +53,7 @@ namespace castor3d
 		 */
 		C3D_API explicit Pass( Material & parent
 			, PassTypeID typeID
+			, RenderPassRegisterInfo * renderPassInfo
 			, PassFlags initialFlags );
 		/**
 		 *\~english
@@ -459,6 +460,11 @@ namespace castor3d
 		{
 			return *m_edgeColour;
 		}
+
+		RenderPassRegisterInfo * getRenderPassInfo()const
+		{
+			return m_renderPassInfo;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -712,6 +718,7 @@ namespace castor3d
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };
 		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_unitsConnections;
+		RenderPassRegisterInfo * m_renderPassInfo{};
 	};
 }
 

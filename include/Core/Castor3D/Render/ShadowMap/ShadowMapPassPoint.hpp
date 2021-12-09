@@ -51,11 +51,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		bool update( CpuUpdater & updater )override;
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		void update( GpuUpdater & updater )override;
+		C3D_API void update( GpuUpdater & updater )override;
 
 	protected:
 		void doUpdateNodes( QueueCulledRenderNodes & nodes );
@@ -70,6 +70,7 @@ namespace castor3d
 
 	public:
 		C3D_API static uint32_t const TextureSize;
+		C3D_API static castor::String const Type;
 
 	private:
 		OnSceneNodeChangedConnection m_onNodeChanged;

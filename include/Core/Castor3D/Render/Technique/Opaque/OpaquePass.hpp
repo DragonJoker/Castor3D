@@ -59,6 +59,9 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+
+	public:
+		C3D_API static castor::String const Type;
 	};
 }
 

@@ -173,8 +173,12 @@ namespace castor3d
 	using OnPassChanged = castor::SignalT< OnPassChangedFunction >;
 	using OnPassChangedConnection = OnPassChanged::connection;
 
+	struct RenderPassRegisterInfo;
+	struct PassRegisterInfo;
+
 	using PassFactoryBase = castor::Factory< Pass, PassTypeID, PassSPtr, std::function< PassSPtr( Material & ) > >;
 
+	CU_DeclareCUSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
 	//@}
 	//@}
 }

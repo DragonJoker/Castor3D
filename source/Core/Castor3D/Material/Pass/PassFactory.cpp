@@ -54,13 +54,13 @@ namespace castor3d
 	}
 
 	void PassFactory::registerType( castor::String const & passType
-		, RegisterInfo info )
+		, PassRegisterInfo info )
 	{
 		auto id = uint16_t( m_passTypeNames.size() + 1u );
 		PassFactoryBase::registerType( id, info.passCreator );
 		m_passTypeNames.emplace_back( passType, id );
 		m_lightingModels.emplace( id, info.lightingModel );
-		m_ibls.emplace( id, info.needsIbl );
+		m_ibls.emplace( id, info.isIBLNeeded );
 		getEngine()->registerParsers( passType, info.parsers );
 		getEngine()->registerSections( passType, info.sections );
 		getEngine()->registerLightingModel( info.lightingModel, info.lightingModelCreator );

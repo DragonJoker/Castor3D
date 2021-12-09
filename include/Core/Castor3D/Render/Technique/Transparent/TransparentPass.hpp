@@ -70,6 +70,9 @@ namespace castor3d
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 
+	public:
+		C3D_API static castor::String const Type;
+
 	private:
 		VkFormat m_depthFormat{};
 		ashes::CommandBufferPtr m_nodesCommands;

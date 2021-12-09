@@ -554,6 +554,107 @@ namespace castor3d
 		}
 	}
 
+	void Engine::registerPassType( castor::String const & passType
+		, PassRegisterInfo info )
+	{
+		m_passFactory->registerType( passType, std::move( info ) );
+	}
+
+	void Engine::unregisterPassType( castor::String const & passType )
+	{
+		m_passFactory->unregisterType( passType );
+	}
+
+	void Engine::registerRenderPassType( castor::String const & passType
+		, castor::UniquePtr< RenderPassRegisterInfo > info )
+	{
+		if ( info )
+		{
+			auto & ninfo = *m_passRenderPassTypes.emplace( passType, std::move( info ) ).first->second;
+			auto ires = m_renderPassTypes.emplace( ninfo.name, std::make_pair( RenderPassTypeID{}, Parameters{} ) );
+
+			if ( ires.second )
+			{
+				ires.first->second.first = RenderPassTypeID( m_renderPassTypes.size() );
+			}
+
+			ninfo.id = ires.first->second.first;
+		}
+	}
+
+	RenderPassTypeID Engine::getRenderPassTypeID( castor::String const & renderPassType )const
+	{
+		auto it = m_renderPassTypes.find( renderPassType );
+
+		if ( it == m_renderPassTypes.end() )
+		{
+			return RenderPassTypeID{};
+		}
+
+		return it->second.first;
+	}
+
+	void Engine::setRenderPassTypeConfiguration( castor::String const & renderPassType
+		, Parameters parameters )
+	{
+		auto it = m_renderPassTypes.find( renderPassType );
+
+		if ( it != m_renderPassTypes.end() )
+		{
+			it->second.second = std::move( parameters );
+		}
+	}
+
+	Parameters Engine::getRenderPassTypeConfiguration( castor::String const & renderPassType )
+	{
+		auto it = m_renderPassTypes.find( renderPassType );
+
+		if ( it != m_renderPassTypes.end() )
+		{
+			return it->second.second;
+		}
+
+		return Parameters{};
+	}
+
+	RenderPassRegisterInfo * Engine::getRenderPassInfo( castor::String const & passType )const
+	{
+		auto it = m_passRenderPassTypes.find( passType );
+
+		if ( it == m_passRenderPassTypes.end() )
+		{
+			return nullptr;
+		}
+
+		return it->second.get();
+	}
+
+	std::vector< RenderPassRegisterInfo * > Engine::getRenderPassInfos( TechniquePassEvent event )const
+	{
+		std::vector< RenderPassRegisterInfo * > result;
+		std::set< castor::String > inserted;
+
+		for ( auto & renderPass : m_passRenderPassTypes )
+		{
+			if ( renderPass.second->event == event )
+			{
+				auto ires = inserted.insert( renderPass.second->name );
+
+				if ( ires.second )
+				{
+					result.push_back( renderPass.second.get() );
+				}
+			}
+		}
+
+		return result;
+	}
+
+	void Engine::unregisterRenderPassType( castor::String const & passType )
+	{
+		m_renderPassTypes.erase( passType );
+	}
+
 	bool Engine::isCleaned()
 	{
 		return m_cleaned;

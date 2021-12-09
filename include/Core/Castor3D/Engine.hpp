@@ -219,6 +219,27 @@ namespace castor3d
 		C3D_API void setCleaned();
 		/**
 		 *\~english
+		 *\brief		Enqueues the given CPU job.
+		 *\~french
+		 *\brief		Met dans la file la tâche CPU donnée.
+		 */
+		C3D_API void pushCpuJob( castor::AsyncJobQueue::Job job );
+		/**
+		 *\~english
+		 *\brief		Enqueues the given GPU job.
+		 *\~french
+		 *\brief		Met dans la file la tâche GPU donnée.
+		 */
+		C3D_API void pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job );
+		/**
+		 *\~english
+		 *\brief		Retrieves a colour issued from a rainbow colours iterator.
+		 *\~french
+		 *\brief		Récupère une couleur issue d'un itérateur de couleurs d'arc-en-ciel.
+		 */
+		C3D_API castor::RgbaColour getNextRainbowColour()const;
+		/**
+		 *\~english
 		 *\brief		Registers a RenderWindow.
 		 *\~french
 		 *\brief		Enregistre une RenderWindow.
@@ -244,6 +265,15 @@ namespace castor3d
 		C3D_API void registerParsers( castor::String const & name, castor::AttributeParsers const & parsers );
 		/**
 		 *\~english
+		 *\brief		Unregisters parsers for SceneFileParser.
+		 *\param[in]	name		The registering name.
+		 *\~french
+		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
+		 *\param[in]	name		Le nom d'enregistrement.
+		 */
+		C3D_API void unregisterParsers( castor::String const & name );
+		/**
+		 *\~english
 		 *\brief		Registers additional sections for SceneFileParser.
 		 *\param[in]	name		The registering name.
 		 *\param[in]	sections	The sections.
@@ -255,15 +285,6 @@ namespace castor3d
 		C3D_API void registerSections( castor::String const & name, castor::StrUInt32Map const & sections );
 		/**
 		 *\~english
-		 *\brief		Unregisters parsers for SceneFileParser.
-		 *\param[in]	name		The registering name.
-		 *\~french
-		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
-		 *\param[in]	name		Le nom d'enregistrement.
-		 */
-		C3D_API void unregisterParsers( castor::String const & name );
-		/**
-		 *\~english
 		 *\brief		Unregisters sections for SceneFileParser.
 		 *\param[in]	name		The registering name.
 		 *\~french
@@ -271,27 +292,6 @@ namespace castor3d
 		 *\param[in]	name		Le nom d'enregistrement.
 		 */
 		C3D_API void unregisterSections( castor::String const & name );
-		/**
-		 *\~english
-		 *\brief		Enqueues the given CPU job.
-		 *\~french
-		 *\brief		Met dans la file la tâche CPU donnée.
-		 */
-		C3D_API void pushCpuJob( castor::AsyncJobQueue::Job job );
-		/**
-		 *\~english
-		 *\brief		Enqueues the given GPU job.
-		 *\~french
-		 *\brief		Met dans la file la tâche GPU donnée.
-		 */
-		C3D_API void pushGpuJob( std::function< void( RenderDevice const &, QueueData const & ) > job );
-		/**
-		 *\~english
-		 *\brief		Retrieves a colour issued from a rainbow colours iterator.
-		 *\~french
-		 *\brief		Récupère une couleur issue d'un itérateur de couleurs d'arc-en-ciel.
-		 */
-		C3D_API castor::RgbaColour getNextRainbowColour()const;
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
@@ -343,6 +343,60 @@ namespace castor3d
 		 *\brief		Désenregistre une RenderWindow.
 		 */
 		C3D_API void unregisterBuffer( ShaderBuffer const & buffer );
+		/**
+		 *\~english
+		 *\brief		Registers a material pass type.
+		 *\~french
+		 *\brief		Enregistre un type de passe de matériau.
+		 */
+		C3D_API void registerPassType( castor::String const & type
+			, PassRegisterInfo info );
+		/**
+		 *\~english
+		 *\brief		Unregisters a material pass type.
+		 *\~french
+		 *\brief		Désenregistre un type de passe de matériau.
+		 */
+		C3D_API void unregisterPassType( castor::String const & type );
+		/**
+		 *\~english
+		 *\brief		Registers a scene render pass type, used to render given material pass type.
+		 *\~french
+		 *\brief		Enregistre un type de passe de rendu de scène, pour le type de passe de matériau donné.
+		 */
+		C3D_API void registerRenderPassType( castor::String const & passType
+			, castor::UniquePtr< RenderPassRegisterInfo > info );
+		C3D_API void setRenderPassTypeConfiguration( castor::String const & renderPassType
+			, Parameters parameters );
+		C3D_API Parameters getRenderPassTypeConfiguration( castor::String const & renderPassType );
+		/**
+		 *\~english
+		 *\brief		Retrieves the ID for given scene render pass type name.
+		 *\~french
+		 *\brief		Récupère l'ID correspondant au nom de type de passe de rendu de scène donné.
+		 */
+		C3D_API RenderPassTypeID getRenderPassTypeID( castor::String const & renderPassType )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves a scene render pass type, used to render given material pass type.
+		 *\~french
+		 *\brief		Récupère un type de passe de rendu de scène, pour le type de passe de matériau donné.
+		 */
+		C3D_API RenderPassRegisterInfo * getRenderPassInfo( castor::String const & passType )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves a scene render pass type, used to render given material pass type.
+		 *\~french
+		 *\brief		Récupère un type de passe de rendu de scène, pour le type de passe de matériau donné.
+		 */
+		C3D_API std::vector< RenderPassRegisterInfo * > getRenderPassInfos( TechniquePassEvent event )const;
+		/**
+		 *\~english
+		 *\brief		Unregisters a scene render pass type.
+		 *\~french
+		 *\brief		Désenregistre un type de passe de rendu de scène.
+		 */
+		C3D_API void unregisterRenderPassType( castor::String const & passType );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
@@ -671,6 +725,8 @@ namespace castor3d
 		crg::ResourceHandler m_resourceHandler;
 		shader::LightingModelFactory m_lightingModelFactory;
 		SceneSPtr m_loadingScene;
+		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
+		std::unordered_map< castor::String, std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
 	};
 }
 

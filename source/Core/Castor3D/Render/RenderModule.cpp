@@ -196,6 +196,7 @@ namespace castor3d
 		return lhs.colourBlendMode == rhs.colourBlendMode
 			&& lhs.alphaBlendMode == rhs.alphaBlendMode
 			&& lhs.passFlags == rhs.passFlags
+			&& lhs.renderPassType == rhs.renderPassType
 			&& lhs.passType == rhs.passType
 			&& lhs.heightMapIndex == rhs.heightMapIndex
 			&& lhs.programFlags == rhs.programFlags
