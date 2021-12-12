@@ -316,12 +316,16 @@ namespace castor3d
 			, int32_t( m_colourImage.data->info.extent.height - PickingWidth ) );
 
 #if !C3D_DebugPicking
+		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock( { "PickingPass Copy"
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 		auto pipelineStageFlags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
 		m_commandBuffer->memoryBarrier( pipelineStageFlags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_colourView.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
