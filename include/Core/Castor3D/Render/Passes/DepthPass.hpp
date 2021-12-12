@@ -32,7 +32,8 @@ namespace castor3d
 		 *\param[in]	ssaoConfig	La configuration du SSAO.
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
-		C3D_API DepthPass( crg::FramePass const & pass
+		C3D_API DepthPass( RenderTechnique * parent
+			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device

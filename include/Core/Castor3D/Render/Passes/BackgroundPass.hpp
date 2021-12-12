@@ -98,7 +98,7 @@ namespace castor3d
 	{
 	private:
 		C3D_API BackgroundRenderer( crg::FrameGraph & graph
-			, crg::FramePass const * previousPass
+			, crg::FramePassArray previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, castor::String const & name
@@ -121,7 +121,9 @@ namespace castor3d
 			, crg::ImageViewId const & colour
 			, bool clearColour = true )
 			: BackgroundRenderer{ graph
-				, previousPass
+				, ( previousPass
+					? crg::FramePassArray{ previousPass }
+					: crg::FramePassArray{} )
 				, device
 				, progress
 				, name
@@ -146,7 +148,9 @@ namespace castor3d
 			, bool clearColour
 			, crg::ImageViewId const & depth )
 			: BackgroundRenderer{ graph
-				, previousPass
+				, ( previousPass
+					? crg::FramePassArray{ previousPass }
+					: crg::FramePassArray{} )
 				, device
 				, progress
 				, name
@@ -169,7 +173,9 @@ namespace castor3d
 			, crg::ImageViewId const & colour
 			, bool clearColour = true )
 			: BackgroundRenderer{ graph
-				, previousPass
+				, ( previousPass
+					? crg::FramePassArray{ previousPass }
+					: crg::FramePassArray{} )
 				, device
 				, nullptr
 				, name
@@ -193,7 +199,105 @@ namespace castor3d
 			, bool clearColour
 			, crg::ImageViewId const & depth )
 			: BackgroundRenderer{ graph
-				, previousPass
+				, ( previousPass
+					? crg::FramePassArray{ previousPass }
+					: crg::FramePassArray{} )
+				, device
+				, nullptr
+				, name
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, clearColour
+				, &depth }
+		{
+		}
+
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePassArray previousPasses
+			, RenderDevice const & device
+			, ProgressBar * progress
+			, castor::String const & name
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, bool clearColour = true )
+			: BackgroundRenderer{ graph
+				, std::move( previousPasses )
+				, device
+				, progress
+				, name
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, clearColour
+				, nullptr }
+		{
+		}
+
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePassArray previousPasses
+			, RenderDevice const & device
+			, ProgressBar * progress
+			, castor::String const & name
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, bool clearColour
+			, crg::ImageViewId const & depth )
+			: BackgroundRenderer{ graph
+				, std::move( previousPasses )
+				, device
+				, progress
+				, name
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, clearColour
+				, &depth }
+		{
+		}
+
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePassArray previousPasses
+			, RenderDevice const & device
+			, castor::String const & name
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, bool clearColour = true )
+			: BackgroundRenderer{ graph
+				, std::move( previousPasses )
+				, device
+				, nullptr
+				, name
+				, background
+				, hdrConfigUbo
+				, sceneUbo
+				, colour
+				, clearColour
+				, nullptr }
+		{
+		}
+
+		BackgroundRenderer( crg::FrameGraph & graph
+			, crg::FramePassArray previousPasses
+			, RenderDevice const & device
+			, castor::String const & name
+			, SceneBackground & background
+			, HdrConfigUbo const & hdrConfigUbo
+			, SceneUbo const & sceneUbo
+			, crg::ImageViewId const & colour
+			, bool clearColour
+			, crg::ImageViewId const & depth )
+			: BackgroundRenderer{ graph
+				, std::move( previousPasses )
 				, device
 				, nullptr
 				, name
@@ -233,7 +337,7 @@ namespace castor3d
 
 	private:
 		crg::FramePass const & doCreatePass( crg::FrameGraph & graph
-			, crg::FramePass const * previousPass
+			, crg::FramePassArray previousPasses
 			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo

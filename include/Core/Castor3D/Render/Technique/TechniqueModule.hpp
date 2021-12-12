@@ -105,10 +105,10 @@ namespace castor3d
 
 	struct RenderPassRegisterInfo
 	{
-		using Creator = std::function< crg::FramePass & ( RenderDevice const &
+		using Creator = std::function< crg::FramePassArray( RenderDevice const &
 			, RenderTechnique &
 			, TechniquePasses &
-			, crg::FramePass const * ) >;
+			, crg::FramePassArray ) >;
 		castor::String name;
 		Creator create;
 		TechniquePassEvent event;

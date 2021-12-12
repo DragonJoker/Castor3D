@@ -39,13 +39,15 @@ namespace castor3d
 
 	castor::String const DepthPass::Type = "c3d.depth";
 
-	DepthPass::DepthPass( crg::FramePass const & pass
+	DepthPass::DepthPass( RenderTechnique * parent
+		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, SsaoConfig const & ssaoConfig
 		, SceneRenderPassDesc const & renderPassDesc )
-		: RenderTechniquePass{ pass
+		: RenderTechniquePass{ parent
+			, pass
 			, context
 			, graph
 			, device

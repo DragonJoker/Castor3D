@@ -56,6 +56,8 @@ namespace castor3d
 			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
 		{
+			CU_Require( view != nullptr );
+			CU_Require( sampler != nullptr );
 			writes.push_back( { index++
 				, 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -70,6 +72,8 @@ namespace castor3d
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
+		CU_Require( view != nullptr );
+		CU_Require( sampler != nullptr );
 		writes.push_back( { index++
 			, 0u
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -124,7 +128,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTechniquePass::RenderTechniquePass( crg::FramePass const & pass
+	RenderTechniquePass::RenderTechniquePass( RenderTechnique * parent
+		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
@@ -134,6 +139,7 @@ namespace castor3d
 		, SceneRenderPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: SceneRenderPass{ pass, context, graph, device, typeName, category, name, renderPassDesc }
+		, m_parent{ parent }
 		, m_scene{ renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_environment{ techniquePassDesc.m_environment }

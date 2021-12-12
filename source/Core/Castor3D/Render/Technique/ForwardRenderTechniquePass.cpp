@@ -48,7 +48,8 @@ namespace castor3d
 {
 	castor::String const ForwardRenderTechniquePass::Type = "c3d.forward";
 
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( crg::FramePass const & pass
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderTechnique * parent
+		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
@@ -57,7 +58,8 @@ namespace castor3d
 		, castor::String const & name
 		, SceneRenderPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: RenderTechniquePass{ pass
+		: RenderTechniquePass{ parent
+			, pass
 			, context
 			, graph
 			, device

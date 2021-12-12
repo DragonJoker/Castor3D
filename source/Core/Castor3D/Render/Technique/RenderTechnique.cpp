@@ -483,7 +483,7 @@ namespace castor3d
 		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
 		doCreateRenderPasses( progress
-			, TechniquePassEvent::eBeforeDepth
+			, TechniquePassEvent::eBeforePostEffects
 #if C3D_UseWeightedBlendedRendering
 			, &m_weightedBlendRendering->getLastPass() );
 #else
@@ -492,6 +492,7 @@ namespace castor3d
 
 		m_colour.create();
 		m_depth->create();
+		m_normal->create();
 		auto runnable = m_clearLpvRunnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [runnable]( RenderDevice const &
@@ -905,18 +906,38 @@ namespace castor3d
 #endif
 	}
 
-	crg::FramePass const * RenderTechnique::doCreateRenderPasses( ProgressBar * progress
+	TechniquePassVector RenderTechnique::getCustomRenderPasses()const
+	{
+		TechniquePassVector result;
+
+		for ( auto & passes : m_renderPasses )
+		{
+			for ( auto pass : passes )
+			{
+				result.push_back( pass );
+			}
+		}
+
+		return result;
+	}
+
+	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
 		, TechniquePassEvent event
 		, crg::FramePass const * previousPass )
 	{
-		crg::FramePass const * result{ previousPass };
+		crg::FramePassArray result;
+
+		if ( previousPass )
+		{
+			result.push_back( previousPass );
+		}
 
 		for ( auto renderPassInfo : getEngine()->getRenderPassInfos( event ) )
 		{
-			result = &renderPassInfo->create( m_device
+			result = renderPassInfo->create( m_device
 				, *this
 				, m_renderPasses
-				, result );
+				, std::move( result ) );
 		}
 
 		return result;
@@ -924,7 +945,7 @@ namespace castor3d
 
 	crg::FramePass & RenderTechnique::doCreateDepthPass( ProgressBar * progress )
 	{
-		auto previousPass = doCreateRenderPasses( progress
+		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeDepth
 			, nullptr );
 		stepProgressBar( progress, "Creating depth pass" );
@@ -934,7 +955,8 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising depth pass" );
-				auto res = std::make_unique< DepthPass >( framePass
+				auto res = std::make_unique< DepthPass >( this
+					, framePass
 					, context
 					, runnableGraph
 					, m_device
@@ -945,12 +967,7 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-
-		if ( previousPass )
-		{
-			result.addDependency( *previousPass );
-		}
-
+		result.addDependencies( previousPasses );
 		result.addOutputDepthStencilView( m_depth->targetViewId
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_depthObj->targetViewId
@@ -991,11 +1008,11 @@ namespace castor3d
 
 	BackgroundRendererUPtr RenderTechnique::doCreateBackgroundPass( ProgressBar * progress )
 	{
-		auto previousPass = doCreateRenderPasses( progress
+		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeBackground
 			, m_computeDepthRangeDesc );
 		auto result = castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
-			, previousPass
+			, previousPasses
 			, m_device
 			, progress
 			, getName()
@@ -1011,8 +1028,8 @@ namespace castor3d
 
 	crg::FramePass & RenderTechnique::doCreateOpaquePass( ProgressBar * progress )
 	{
-		auto previousPass = doCreateRenderPasses( progress
-			, TechniquePassEvent::eBeforeDepth
+		auto previousPasses = doCreateRenderPasses( progress
+			, TechniquePassEvent::eBeforeOpaque
 			, &m_backgroundRenderer->getPass() );
 		stepProgressBar( progress, "Creating opaque pass" );
 #if C3D_UseDeferredRendering
@@ -1026,7 +1043,8 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque pass" );
-				auto res = std::make_unique< OpaquePassType >( framePass
+				auto res = std::make_unique< OpaquePassType >( this
+					, framePass
 					, context
 					, runnableGraph
 					, m_device
@@ -1047,7 +1065,7 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( *previousPass );
+		result.addDependencies( previousPasses );
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
 		result.addInOutDepthStencilView( m_depth->targetViewId );
@@ -1069,7 +1087,7 @@ namespace castor3d
 
 	crg::FramePass & RenderTechnique::doCreateTransparentPass( ProgressBar * progress )
 	{
-		auto previousPass = doCreateRenderPasses( progress
+		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeTransparent
 #if C3D_UseDeferredRendering
 			, &m_deferredRendering->getLastPass() );
@@ -1092,7 +1110,8 @@ namespace castor3d
 				static constexpr bool isOit = false;
 				static constexpr bool hasVelocity = false;
 #endif
-				auto res = std::make_unique< TransparentPassType >( framePass
+				auto res = std::make_unique< TransparentPassType >( this
+					, framePass
 					, context
 					, runnableGraph
 					, m_device
@@ -1115,7 +1134,7 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-		result.addDependency( *previousPass );
+		result.addDependencies( previousPasses );
 		result.addInOutDepthStencilView( m_depth->targetViewId );
 
 #if C3D_UseWeightedBlendedRendering

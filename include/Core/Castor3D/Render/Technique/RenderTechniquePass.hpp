@@ -156,7 +156,8 @@ namespace castor3d
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
-		C3D_API RenderTechniquePass( crg::FramePass const & pass
+		C3D_API RenderTechniquePass( RenderTechnique * parent
+			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
@@ -207,16 +208,23 @@ namespace castor3d
 				| ( m_hasVelocity ? ShaderFlag::eVelocity : ShaderFlag::eNone )
 				| ShaderFlag::eViewSpace;
 		}
+
+		Scene const & getScene()
+		{
+			return m_scene;
+		}
 		/**@}*/
 
 	public:
 		using SceneRenderPass::update;
 
-	private:
-		void doUpdateNodes( QueueCulledRenderNodes & nodes
+	protected:
+		C3D_API void doUpdateNodes( QueueCulledRenderNodes & nodes
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
-		void doUpdateUbos( CpuUpdater & updater )override;
+		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
+
+	private:
 		void doUpdateFlags( PipelineFlags & flags )const override;
 		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
@@ -236,6 +244,7 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
+		RenderTechnique * m_parent{};
 		Scene const & m_scene;
 		Camera * m_camera{ nullptr };
 		bool m_environment{ false };

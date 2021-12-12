@@ -30,7 +30,8 @@ namespace castor3d
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
-		C3D_API ForwardRenderTechniquePass( crg::FramePass const & pass
+		C3D_API ForwardRenderTechniquePass( RenderTechnique * parent
+			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
