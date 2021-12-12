@@ -26,17 +26,17 @@ namespace GuiCommon
 		, bool * control )
 	{
 		using ValueT = std::remove_cv_t< std::remove_reference_t< MyValueT > >;
-		m_handlers.emplace( name, doGetHandler( handler, control ) );
+		m_handlers.emplace( m_prefix + name, doGetHandler( handler, control ) );
 
 		if constexpr ( std::is_same_v< ValueT, bool > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxBoolProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxBoolProperty( name, m_prefix + name, value ) );
 			prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint8_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -48,7 +48,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, int16_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -60,7 +60,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint16_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -72,7 +72,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, int32_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -84,7 +84,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint32_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -95,7 +95,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, int64_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, wxLongLong( value ) ) );
+			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, m_prefix + name, wxLongLong( value ) ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 #if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
@@ -104,7 +104,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint64_t > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, wxULongLong( value ) ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, m_prefix + name, wxULongLong( value ) ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -115,7 +115,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, float > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -125,7 +125,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, double > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
@@ -135,91 +135,91 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::RgbColour > )
 		{
-			return appendProp( parent, new wxColourProperty( name, name, wxColour{ toBGRPacked( value ) } ) );
+			return appendProp( parent, new wxColourProperty( name, m_prefix + name, wxColour{ toBGRPacked( value ) } ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::RgbaColour > )
 		{
-			return appendProp( parent, new wxColourProperty( name, name, wxColour{ toBGRPacked( value ) } ) );
+			return appendProp( parent, new wxColourProperty( name, m_prefix + name, wxColour{ toBGRPacked( value ) } ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2f > )
 		{
-			return appendProp( parent, new Point2fProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2fProperty( GC_POINT_XY, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3f > )
 		{
-			return appendProp( parent, new Point3fProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3fProperty( GC_POINT_XYZ, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4f > )
 		{
-			return appendProp( parent, new Point4fProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4fProperty( GC_POINT_XYZW, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2d > )
 		{
-			return appendProp( parent, new Point2dProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2dProperty( GC_POINT_XY, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3d > )
 		{
-			return appendProp( parent, new Point3dProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3dProperty( GC_POINT_XYZ, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4d > )
 		{
-			return appendProp( parent, new Point4dProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4dProperty( GC_POINT_XYZW, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2i > )
 		{
-			return appendProp( parent, new Point2iProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2iProperty( GC_POINT_XY, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3i > )
 		{
-			return appendProp( parent, new Point3iProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3iProperty( GC_POINT_XYZ, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4i > )
 		{
-			return appendProp( parent, new Point4iProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4iProperty( GC_POINT_XYZW, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2ui > )
 		{
-			return appendProp( parent, new Point2uiProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2uiProperty( GC_POINT_XY, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3ui > )
 		{
-			return appendProp( parent, new Point3uiProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3uiProperty( GC_POINT_XYZ, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4ui > )
 		{
-			return appendProp( parent, new Point4uiProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4uiProperty( GC_POINT_XYZW, name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Matrix4x4f > )
 		{
-			return appendProp( parent, new Matrix4fProperty( name, name, value ) );
+			return appendProp( parent, new Matrix4fProperty( name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Quaternion > )
 		{
-			return appendProp( parent, new QuaternionProperty( name, name, value ) );
+			return appendProp( parent, new QuaternionProperty( name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Position > )
 		{
-			return appendProp( parent, new PositionProperty( name, name, value ) );
+			return appendProp( parent, new PositionProperty( name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Size > )
 		{
-			return appendProp( parent, new SizeProperty( name, name, value ) );
+			return appendProp( parent, new SizeProperty( name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Rectangle > )
 		{
-			return appendProp( parent, new RectangleProperty( name, name, value ) );
+			return appendProp( parent, new RectangleProperty( name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::String > )
 		{
-			return appendProp( parent, new wxStringProperty( name, name, make_wxString( value ) ) );
+			return appendProp( parent, new wxStringProperty( name, m_prefix + name, make_wxString( value ) ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Path > )
 		{
-			return appendProp( parent, new wxImageFileProperty( name, name, make_wxString( value ) ) );
+			return appendProp( parent, new wxImageFileProperty( name, m_prefix + name, make_wxString( value ) ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Milliseconds > )
 		{
-			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, double( value.count() ) / 1000.0 ) );
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, m_prefix + name, double( value.count() ) / 1000.0 ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
@@ -231,13 +231,13 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::BoundingSphere > )
 		{
-			wxPGProperty * prop = appendProp( parent, new BoundingSphereProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new BoundingSphereProperty( name, m_prefix + name, value ) );
 			prop->Enable( false );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::BoundingBox > )
 		{
-			wxPGProperty * prop = appendProp( parent, new BoundingBoxProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new BoundingBoxProperty( name, m_prefix + name, value ) );
 			prop->Enable( false );
 			return prop;
 		}
@@ -260,7 +260,7 @@ namespace GuiCommon
 		{
 			wxFontInfo info( value.getHeight() );
 			info.FaceName( value.getFaceName() );
-			return appendProp( parent, new wxFontProperty( name, name, wxFont{ info } ) );
+			return appendProp( parent, new wxFontProperty( name, m_prefix + name, wxFont{ info } ) );
 		}
 		else if constexpr ( castor::isGroupChangeTrackedT< ValueT > )
 		{
@@ -283,16 +283,16 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, wxString > )
 		{
-			return appendProp( parent, new wxStringProperty( name, name, value ) );
+			return appendProp( parent, new wxStringProperty( name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, wxArrayString > )
 		{
-			return appendProp( parent, new wxEnumProperty( name, name, value ) );
+			return appendProp( parent, new wxEnumProperty( name, m_prefix + name, value ) );
 		}
 		else
 		{
 			//static_assert( false, "TreeItemProperty::createProperty - Unsupported ValueT" );
-			return appendProp( parent, new wxStringProperty( name, name, value ) );
+			return appendProp( parent, new wxStringProperty( name, m_prefix + name, value ) );
 		}
 	}
 
