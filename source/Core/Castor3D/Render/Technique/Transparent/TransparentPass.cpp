@@ -239,7 +239,7 @@ namespace castor3d
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto texCoord = writer.declLocale( "texCoord"
-					, in.texture );
+					, in.texture0 );
 				auto occlusion = writer.declLocale( "occlusion"
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"

@@ -60,7 +60,8 @@ namespace castor3d
 		return getOwner()->getParent().getSkeleton();
 	}
 
-	void BonesComponent::gather( ShaderFlags const & flags
+	void BonesComponent::gather( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -69,18 +70,23 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
-		hash = castor::hashCombine( hash, mask.empty() );
-		auto layoutIt = m_bonesLayouts.find( hash );
-
-		if ( layoutIt == m_bonesLayouts.end() )
+		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 		{
-			layoutIt = m_bonesLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty(), currentLocation ) ).first;
-		}
+			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+			hash = castor::hashCombine( hash, mask.empty() );
+			hash = castor::hashCombine( hash, currentLocation );
+			auto layoutIt = m_bonesLayouts.find( hash );
 
-		buffers.emplace_back( m_bonesBuffer->getBuffer() );
-		offsets.emplace_back( 0u );
-		layouts.emplace_back( layoutIt->second );
+			if ( layoutIt == m_bonesLayouts.end() )
+			{
+				layoutIt = m_bonesLayouts.emplace( hash
+					, doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
+			}
+
+			buffers.emplace_back( m_bonesBuffer->getBuffer() );
+			offsets.emplace_back( 0u );
+			layouts.emplace_back( layoutIt->second );
+		}
 	}
 
 	SubmeshComponentSPtr BonesComponent::clone( Submesh & submesh )const

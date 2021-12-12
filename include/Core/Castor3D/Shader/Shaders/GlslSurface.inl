@@ -96,7 +96,8 @@ namespace castor3d::shader
 		, position{ this->getMember< sdw::Vec4 >( "position", true ) }
 		, normal{ this->getMember< sdw::Vec3 >( "normal", true ) }
 		, tangent{ this->getMember< sdw::Vec3 >( "tangent", true ) }
-		, texture{ this->getMember< sdw::Vec3 >( "texcoord", true ) }
+		, texture0{ this->getMember< sdw::Vec3 >( "texcoord0", true ) }
+		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
 		, boneIds0{ this->getMember< sdw::IVec4 >( "boneIds0", true ) }
 		, boneIds1{ this->getMember< sdw::IVec4 >( "boneIds1", true ) }
 		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
@@ -119,6 +120,7 @@ namespace castor3d::shader
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
+		hasTextures |= checkFlag( programFlags, ProgramFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
@@ -143,7 +145,7 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ? index++ : 0 )
 				, checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) );
-			result->declMember( "texcoord", ast::type::Kind::eVec3F
+			result->declMember( "texcoord0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( hasTextures ? index++ : 0 )
 				, hasTextures );
@@ -210,6 +212,15 @@ namespace castor3d::shader
 				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
 				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 			//@}
+			/**
+			*	Secondary UV
+			*/
+			//@{
+			result->declMember( "texcoord1", ast::type::Kind::eVec3F
+				, ast::type::NotArray
+				, ( ( checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures );
+			//@}
 		}
 
 		return result;
@@ -264,7 +275,8 @@ namespace castor3d::shader
 		, normal{ this->getMember< sdw::Vec3 >( "normal", true ) }
 		, tangent{ this->getMember< sdw::Vec3 >( "tangent", true ) }
 		, bitangent{ this->getMember< sdw::Vec3 >( "bitangent", true ) }
-		, texture{ this->getMember< sdw::Vec3 >( "texcoord", true ) }
+		, texture0{ this->getMember< sdw::Vec3 >( "texcoord0", true ) }
+		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
 		, instance{ this->getMember< sdw::UInt >( "instance", true ) }
 		, material{ this->getMember< sdw::UInt >( "material", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
@@ -279,6 +291,7 @@ namespace castor3d::shader
 		, PassFlags passFlags
 		, bool hasTextures )
 	{
+		hasTextures |= checkFlag( programFlags, ProgramFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
@@ -330,10 +343,14 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ? index++ : 0 )
 				, checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) );
-			result->declMember( "texcoord", ast::type::Kind::eVec3F
+			result->declMember( "texcoord0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( hasTextures ? index++ : 0 )
 				, hasTextures );
+			result->declMember( "texcoord1", ast::type::Kind::eVec3F
+				, ast::type::NotArray
+				, ( ( checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures );
 			result->declMember( "instance"
 				, ast::type::Kind::eUInt
 				, ast::type::NotArray

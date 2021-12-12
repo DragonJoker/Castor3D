@@ -1,17 +1,14 @@
 #include "Castor3D/Model/Mesh/Generator/Plane.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SecondaryUVComponent.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
 namespace castor3d
 {
 	Plane::Plane()
-		: MeshGenerator( cuT( "plane" ) )
-		, m_depth( 0 )
-		, m_width( 0 )
-		, m_subDivisionsW( 0 )
-		, m_subDivisionsD( 0 )
+		: MeshGenerator{ cuT( "plane" ) }
 	{
 	}
 
@@ -23,6 +20,7 @@ namespace castor3d
 	void Plane::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
 		castor::String param;
+		parameters.get( cuT( "tile_uv" ), m_tileUV );
 
 		if ( parameters.get( cuT( "width_subdiv" ), param ) )
 		{
@@ -66,6 +64,25 @@ namespace castor3d
 					.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
 					.texcoord( castor::Point2f{ float( i ) * gapW / m_width, float( j ) * gapH / m_depth } ) );
 			}
+		}
+
+		if ( m_tileUV )
+		{
+			std::vector< castor::Point3f > tiledUV;
+
+			for ( uint32_t i = 0; i < nbVertexW; i++ )
+			{
+				for ( uint32_t j = 0; j < nbVertexH; j++ )
+				{
+					tiledUV.push_back( castor::Point3f{ float( ( m_subDivisionsW + 1u )* i ) * gapW / m_width
+						, float( ( m_subDivisionsD + 1u ) * j ) * gapH / m_depth
+						, 0.0f } );
+				}
+			}
+
+			auto secondaryUV = std::make_shared< SecondaryUVComponent >( *submesh );
+			secondaryUV->addTexcoords( tiledUV );
+			submesh->addComponent( secondaryUV );
 		}
 
 		auto indexMapping = std::make_shared< TriFaceMapping >( *submesh );

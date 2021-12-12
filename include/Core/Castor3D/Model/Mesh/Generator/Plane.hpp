@@ -29,10 +29,11 @@ namespace castor3d
 			, Parameters const & parameters )override;
 
 	private:
-		float m_depth;
-		float m_width;
-		uint32_t m_subDivisionsW;
-		uint32_t m_subDivisionsD;
+		float m_depth{};
+		float m_width{};
+		uint32_t m_subDivisionsW{};
+		uint32_t m_subDivisionsD{};
+		bool m_tileUV{};
 		friend std::ostream & operator <<( std::ostream & o
 			, Plane const & c );
 	};

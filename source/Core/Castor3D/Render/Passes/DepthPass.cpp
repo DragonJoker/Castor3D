@@ -169,7 +169,7 @@ namespace castor3d
 				if ( hasTextures )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
-						, in.texture );
+						, in.texture0 );
 					utils.computeGeometryMapsContributions( textureFlags
 						, flags.passFlags
 						, textureConfigs

@@ -935,9 +935,11 @@ namespace castor3d
 		, AnimatedSkeleton * skeleton )
 	{
 		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
+			, pipeline.getFlags().programFlags
 			, pass.getOwner()
 			, getInstanceMult()
-			, pass.getTexturesMask() );
+			, pass.getTexturesMask()
+			, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
@@ -1027,12 +1029,12 @@ namespace castor3d
 					, vec4( in.normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( in.tangent, 0.0_f ) );
-				out.texture = in.texture;
+				out.texture0 = in.texture0;
 				in.morph( c3d_morphingData
 					, curPosition
 					, v4Normal
 					, v4Tangent
-					, out.texture );
+					, out.texture0 );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 				out.nodeId = c3d_modelData.getNodeId( flags.programFlags
@@ -1131,7 +1133,7 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					out.texture = vec3( uv, 0.0_f );
+					out.texture0 = vec3( uv, 0.0_f );
 				}
 
 				out.material = c3d_modelData.getMaterialIndex();
