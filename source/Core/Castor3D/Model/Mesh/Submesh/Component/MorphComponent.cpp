@@ -63,7 +63,8 @@ namespace castor3d
 	{
 	}
 
-	void MorphComponent::gather( ShaderFlags const & flags
+	void MorphComponent::gather( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -72,18 +73,23 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
-		hash = castor::hashCombine( hash, mask.empty() );
-		auto layoutIt = m_animLayouts.find( hash );
-
-		if ( layoutIt == m_animLayouts.end() )
+		if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 		{
-			layoutIt = m_animLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty(), currentLocation ) ).first;
-		}
+			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+			hash = castor::hashCombine( hash, mask.empty() );
+			hash = castor::hashCombine( hash, currentLocation );
+			auto layoutIt = m_animLayouts.find( hash );
 
-		buffers.emplace_back( m_animBuffer->getBuffer() );
-		offsets.emplace_back( 0u );
-		layouts.emplace_back( layoutIt->second );
+			if ( layoutIt == m_animLayouts.end() )
+			{
+				layoutIt = m_animLayouts.emplace( hash
+					, doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
+			}
+
+			buffers.emplace_back( m_animBuffer->getBuffer() );
+			offsets.emplace_back( 0u );
+			layouts.emplace_back( layoutIt->second );
+		}
 	}
 
 	SubmeshComponentSPtr MorphComponent::clone( Submesh & submesh )const

@@ -387,7 +387,7 @@ namespace castor3d
 
 				if ( hasTextures )
 				{
-					out.texture = in.texture;
+					out.texture = in.texture0;
 				}
 
 				in.morph( c3d_morphingData

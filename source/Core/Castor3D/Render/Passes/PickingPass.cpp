@@ -346,10 +346,10 @@ namespace castor3d
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
-				out.texture = in.texture;
+				out.texture0 = in.texture0;
 				in.morph( c3d_morphingData
 					, curPosition
-					, out.texture );
+					, out.texture0 );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 				out.instance = writer.cast< UInt >( in.instanceIndex );
@@ -434,7 +434,7 @@ namespace castor3d
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
-					, in.texture
+					, in.texture0
 					, opacity );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity

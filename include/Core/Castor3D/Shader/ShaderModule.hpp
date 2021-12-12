@@ -123,12 +123,21 @@ namespace castor3d
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
 		eHasGeometry = 0x8000,
+		//!\~english	Vertex shader inverts normals (for front culling).
+		//\~french		Le vertex shader inverse les normales (pour le front culling).
+		eHasTessellation = 0x10000,
 		//!\~english	Voxelization uses conservative rasterization.
 		//\~french		La voxelisation utilise la conservative rasterization.
-		eConservativeRasterization = 0x10000,
+		eConservativeRasterization = 0x20000,
+		//!\~english	Mesh uses a second UV set.
+		//\~french		Le mesh utilise un second set d'UV.
+		eSecondaryUV = 0x40000,
+		//!\~english	Forces texcoords binding.
+		//\~french		Force le binding des UV.
+		eForceTexCoords = 0x80000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x1FFFF,
+		eAll = 0xFFFFF,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**

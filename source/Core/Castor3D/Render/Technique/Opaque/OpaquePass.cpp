@@ -196,7 +196,7 @@ namespace castor3d
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( in.material ) );
 				auto texCoord = writer.declLocale( "texCoord"
-					, in.texture );
+					, in.texture0 );
 				auto alpha = writer.declLocale( "alpha"
 					, material.opacity );
 				auto emissive = writer.declLocale( "emissive"
