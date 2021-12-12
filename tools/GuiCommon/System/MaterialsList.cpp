@@ -184,7 +184,7 @@ namespace GuiCommon
 
 		if ( target )
 		{
-			AppendRenderTarget( treeCtrl
+			appendRenderTarget( treeCtrl
 				, editable
 				, unitId
 				, *target );
