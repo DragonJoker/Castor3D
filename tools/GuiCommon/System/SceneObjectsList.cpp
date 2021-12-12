@@ -179,7 +179,7 @@ namespace GuiCommon
 				, eBMP_RENDER_TARGET_SEL );
 			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( RenderTarget & elem )
 				{
-					AppendRenderTarget( this
+					appendRenderTarget( this
 						, m_propertiesHolder->isEditable()
 						, catId
 						, elem );

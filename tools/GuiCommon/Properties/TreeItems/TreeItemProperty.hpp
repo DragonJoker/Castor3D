@@ -72,9 +72,14 @@ namespace GuiCommon
 		 *\brief		Retrieves the editable status
 		 *\return		The value
 		 */
-		inline bool IsEditable()const
+		bool IsEditable()const
 		{
 			return m_editable;
+		}
+
+		void setPrefix( castor::String const & prefix )
+		{
+			m_prefix = prefix;
 		}
 
 	protected:
@@ -256,6 +261,7 @@ namespace GuiCommon
 		bool m_editable;
 		castor3d::Engine * m_engine;
 		std::map< wxString, PropertyChangeHandler > m_handlers;
+		castor::String m_prefix;
 	};
 }
 
