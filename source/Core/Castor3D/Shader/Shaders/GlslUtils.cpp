@@ -887,6 +887,33 @@ namespace castor3d::shader
 			, sdw::InInt{ m_writer, "imax" } );
 	}
 
+	void Utils::declarePerspectiveDivide()
+	{
+		if ( m_perspectiveDivide )
+		{
+			return;
+		}
+
+		auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
+
+		m_perspectiveDivide = m_writer.implementFunction< sdw::Vec4 >( "c3d_perspectiveDivide"
+			, [&]( sdw::Vec4 const & in )
+			{
+				auto out = m_writer.declLocale( "out", in );
+
+				IF( m_writer, abs( out.w() ) < epsilon )
+				{
+					out.w() = epsilon;
+				}
+				FI;
+
+				out.xyz() /= out.w();
+				out.xyz() = fma( out.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) );
+				m_writer.returnStmt( out );
+			}
+			, sdw::InVec4{ m_writer, "in" } );
+	}
+
 	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )
 	{
 		declareInvertVec2Y();
@@ -1182,6 +1209,12 @@ namespace castor3d::shader
 		}
 
 		return result;
+	}
+
+	sdw::Vec4 Utils::perspectiveDivide( sdw::Vec4 const & in )
+	{
+		declarePerspectiveDivide();
+		return m_perspectiveDivide( in );
 	}
 
 	void Utils::encodeMaterial( sdw::Int const & receiver
