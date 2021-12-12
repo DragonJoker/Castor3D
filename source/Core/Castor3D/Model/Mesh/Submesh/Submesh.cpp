@@ -16,7 +16,9 @@ namespace castor3d
 	{
 		size_t hash( MaterialRPtr material
 			, ShaderFlags const & shaderFlags
-			, TextureFlagsArray const & mask )
+			, ProgramFlags const & programFlags
+			, TextureFlagsArray const & mask
+			, bool forceTexcoords )
 		{
 			auto result = std::hash< Material * >{}( material );
 
@@ -27,6 +29,8 @@ namespace castor3d
 			}
 
 			result = castor::hashCombine( result, shaderFlags.value() );
+			result = castor::hashCombine( result, programFlags.value() );
+			result = castor::hashCombine( result, forceTexcoords );
 			return result;
 		}
 
@@ -401,13 +405,16 @@ namespace castor3d
 		}
 	}
 
-	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & flags
+	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, MaterialRPtr material
 		, uint32_t instanceMult
-		, TextureFlagsArray const & mask )const
+		, TextureFlagsArray const & mask
+		, bool forceTexcoords )const
 	{
-		auto key = hash( material, flags, mask );
+		auto key = hash( material, shaderFlags, programFlags, mask, forceTexcoords );
 		auto it = m_geometryBuffers.find( key );
+		bool hasTextures = forceTexcoords || ( !mask.empty() );
 
 		if ( it == m_geometryBuffers.end() )
 		{
@@ -416,22 +423,28 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			buffers.emplace_back( m_vertexBuffer->getBuffer() );
 			offsets.emplace_back( 0u );
-			auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
-			hash = castor::hashCombine( hash, mask.empty() );
+			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+			hash = castor::hashCombine( hash, hasTextures );
 
 			auto layoutIt = m_vertexLayouts.find( hash );
 			uint32_t currentLocation = 0u;
 
 			if ( layoutIt == m_vertexLayouts.end() )
 			{
-				layoutIt = m_vertexLayouts.emplace( hash, doCreateVertexLayout( flags, !mask.empty(), currentLocation ) ).first;
+				layoutIt = m_vertexLayouts.emplace( hash
+					, doCreateVertexLayout( shaderFlags, hasTextures, currentLocation ) ).first;
+			}
+			else
+			{
+				currentLocation = layoutIt->second.vertexAttributeDescriptions.back().location + 1u;
 			}
 
 			layouts.push_back( layoutIt->second );
 
 			for ( auto & component : m_components )
 			{
-				component.second->gather( flags
+				component.second->gather( shaderFlags
+					, programFlags
 					, material
 					, buffers
 					, offsets

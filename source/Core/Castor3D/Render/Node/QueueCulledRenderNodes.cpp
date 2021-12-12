@@ -106,21 +106,27 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		GeometryBuffers const & getGeometryBuffers( ShaderFlags const & flags
+		GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
 			, Submesh const & submesh
 			, Pass const & pass
-			, uint32_t instanceCount )
+			, uint32_t instanceCount
+			, bool forceTexcoords )
 		{
-			return submesh.getGeometryBuffers( flags
+			return submesh.getGeometryBuffers( shaderFlags
+				, programFlags
 				, pass.getOwner()
 				, instanceCount
-				, pass.getTexturesMask() );
+				, pass.getTexturesMask()
+				, forceTexcoords );
 		}
 
-		GeometryBuffers const & getGeometryBuffers( ShaderFlags const & flags
+		GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
 			, BillboardBase const & billboard
 			, Pass const & pass
-			, uint32_t instanceCount )
+			, uint32_t instanceCount
+			, bool forceTexcoords )
 		{
 			return billboard.getGeometryBuffers();
 		}
@@ -137,9 +143,11 @@ namespace castor3d
 			if ( instanceCount )
 			{
 				GeometryBuffers const & geometryBuffers = getGeometryBuffers( shaderFlags
+					, pipeline.getFlags().programFlags
 					, node.data
 					, node.passNode.pass
-					, instanceCount );
+					, instanceCount
+					, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
 
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 
@@ -205,9 +213,11 @@ namespace castor3d
 			if ( instanceCount )
 			{
 				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( shaderFlags
+					, pipeline.getFlags().programFlags
 					, pass.getOwner()
 					, instanceCount
-					, pass.getTexturesMask() );
+					, pass.getTexturesMask()
+					, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
 
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 

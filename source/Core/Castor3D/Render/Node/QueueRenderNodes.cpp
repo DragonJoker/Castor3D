@@ -265,12 +265,19 @@ namespace castor3d
 							, *pass
 							, renderPass
 							, instance.getName() );
-						auto backPipeline = renderPass.prepareBackPipeline( *pass
+						auto pipelineFlags = renderPass.createPipelineFlags( *pass
 							, textures
 							, programFlags
 							, sceneFlags
-							, submesh.getTopology()
-							, submesh.getGeometryBuffers( renderPass.getShaderFlags(), material, instanceMult, textures ).layouts
+							, submesh.getTopology() );
+						auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
+							, pipelineFlags.programFlags
+							, material
+							, instanceMult
+							, textures
+							, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
+						auto backPipeline = renderPass.prepareBackPipeline( pipelineFlags
+							, vertexLayouts
 							, nodes.getDescriptorSetLayouts( *pass
 								, submesh
 								, animated.mesh.get()
@@ -295,12 +302,8 @@ namespace castor3d
 
 						if ( needsFront )
 						{
-							auto frontPipeline = renderPass.prepareFrontPipeline( *pass
-								, textures
-								, programFlags
-								, sceneFlags
-								, submesh.getTopology()
-								, submesh.getGeometryBuffers( renderPass.getShaderFlags(), material, instanceMult, textures ).layouts
+							auto frontPipeline = renderPass.prepareFrontPipeline( pipelineFlags
+								, vertexLayouts
 								, nodes.getDescriptorSetLayouts( *pass
 									, submesh
 									, animated.mesh.get()
@@ -336,11 +339,12 @@ namespace castor3d
 				{
 					auto sceneFlags = scene.getFlags();
 					auto textures = pass->getTexturesMask();
-					auto pipeline = renderPass.prepareBackPipeline( *pass
+					auto pipelineFlags = renderPass.createPipelineFlags( *pass
 						, textures
 						, programFlags
 						, sceneFlags
-						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
+						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
+					auto pipeline = renderPass.prepareBackPipeline( pipelineFlags
 						, billboard.getGeometryBuffers().layouts
 						, nodes.getDescriptorSetLayouts( *pass
 							, billboard ) );

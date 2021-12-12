@@ -105,6 +105,13 @@ namespace castor3d
 	class MorphComponent;
 	/**
 	\~english
+	\brief		Component for a secondary UV set.
+	\~french
+	\brief		Composant pour un set d'UV secondaire.
+	*/
+	class SecondaryUVComponent;
+	/**
+	\~english
 	\brief		Component for a submesh.
 	\~french
 	\brief		Composant pour un sous-maillage.

@@ -194,12 +194,12 @@ namespace castor3d
 					, vec4( in.normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( in.tangent, 0.0_f ) );
-				out.texture = in.texture;
+				out.texture0 = in.texture0;
 				in.morph( c3d_morphingData
 					, curPosition
 					, v4Normal
 					, v4Tangent
-					, out.texture );
+					, out.texture0 );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 				out.instance = writer.cast< UInt >( in.instanceIndex );
@@ -293,7 +293,7 @@ namespace castor3d
 				pxl_position = vec4( 0.0_f );
 				pxl_flux = vec4( 0.0_f );
 				auto texCoord = writer.declLocale( "texCoord"
-					, in.texture );
+					, in.texture0 );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
