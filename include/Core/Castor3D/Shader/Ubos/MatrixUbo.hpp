@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_MatrixUbo_H___
 
 #include "UbosModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
@@ -35,6 +36,21 @@ namespace castor3d
 			C3D_API sdw::Vec4 worldToPrvView( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToCurProj( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToPrvProj( sdw::Vec4 const & wsPosition )const;
+			C3D_API sdw::Vec4 viewToScreenUV( Utils & utils
+				, sdw::Vec4 vsPosition )const;
+			C3D_API sdw::Vec4 worldToCurScreenUV( Utils & utils
+				, sdw::Vec4 wsPosition )const;
+			C3D_API sdw::Vec4 worldToPrvScreenUV( Utils & utils
+				, sdw::Vec4 wsPosition )const;
+			C3D_API sdw::Vec3 projToView( Utils & utils
+				, sdw::Vec2 const & texCoord
+				, sdw::Float const & depth )const;
+			C3D_API sdw::Vec3 curProjToWorld( Utils & utils
+				, sdw::Vec2 const & texCoord
+				, sdw::Float const & depth )const;
+			C3D_API sdw::Vec3 prvProjToWorld( Utils & utils
+				, sdw::Vec2 const & texCoord
+				, sdw::Float const & depth )const;
 			C3D_API sdw::Vec3 getCurViewRight()const;
 			C3D_API sdw::Vec3 getPrvViewRight()const;
 			C3D_API sdw::Vec3 getCurViewUp()const;

@@ -69,6 +69,17 @@ namespace castor
 		 *\param[in]	name	Le nom du contexte.
 		 *\return		Les données du contexte utilisateur.
 		 */
+		CU_API bool hasUserContext( String const & name );
+		/**
+		 *\~english
+		 *\brief		Retrieves a user context.
+		 *\param[in]	name	The context name.
+		 *\return		The user context data.
+		 *\~french
+		 *\brief		Récupère un contexte utilisateur.
+		 *\param[in]	name	Le nom du contexte.
+		 *\return		Les données du contexte utilisateur.
+		 */
 		CU_API void * getUserContext( String const & name );
 
 	public:

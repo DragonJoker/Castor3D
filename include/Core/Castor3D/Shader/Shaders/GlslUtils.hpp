@@ -102,6 +102,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion );
+		C3D_API sdw::Vec4 perspectiveDivide( sdw::Vec4 const & in );
 		/**
 		 *\~english
 		 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
@@ -251,6 +252,7 @@ namespace castor3d::shader
 		C3D_API void declareFlatten();
 		C3D_API void declareUnflatten();
 		C3D_API void declareIsSaturatedImg();
+		C3D_API void declarePerspectiveDivide();
 
 	private:
 		void doComputeGeometryMapContribution( TextureFlags const & textureFlags
@@ -371,6 +373,8 @@ namespace castor3d::shader
 		sdw::Function< sdw::UVec3
 			, sdw::InUInt
 			, sdw::InUVec3 > m_unflatten3D;
+		sdw::Function< sdw::Vec4
+			, sdw::InVec4 > m_perspectiveDivide;
 	};
 }
 

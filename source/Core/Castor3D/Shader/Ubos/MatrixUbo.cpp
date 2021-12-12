@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
@@ -76,6 +77,45 @@ namespace castor3d
 		sdw::Vec4 MatrixData::worldToPrvProj( sdw::Vec4 const & wsPosition )const
 		{
 			return m_prvViewProj * wsPosition;
+		}
+
+		sdw::Vec4 MatrixData::viewToScreenUV( Utils & utils
+			, sdw::Vec4 vsPosition )const
+		{
+			return utils.perspectiveDivide( viewToProj( vsPosition ) );
+		}
+
+		sdw::Vec4 MatrixData::worldToCurScreenUV( Utils & utils
+			, sdw::Vec4 wsPosition )const
+		{
+			return utils.perspectiveDivide( worldToCurProj( wsPosition ) );
+		}
+
+		sdw::Vec4 MatrixData::worldToPrvScreenUV( Utils & utils
+			, sdw::Vec4 wsPosition )const
+		{
+			return utils.perspectiveDivide( worldToCurProj( wsPosition ) );
+		}
+
+		sdw::Vec3 MatrixData::projToView( Utils & utils
+			, sdw::Vec2 const & texCoord
+			, sdw::Float const & depth )const
+		{
+			return utils.calcWSPosition( texCoord, depth, m_invProjection );
+		}
+
+		sdw::Vec3 MatrixData::curProjToWorld( Utils & utils
+			, sdw::Vec2 const & texCoord
+			, sdw::Float const & depth )const
+		{
+			return utils.calcWSPosition( texCoord, depth, inverse( m_curViewProj ) );
+		}
+
+		sdw::Vec3 MatrixData::prvProjToWorld( Utils & utils
+			, sdw::Vec2 const & texCoord
+			, sdw::Float const & depth )const
+		{
+			return utils.calcWSPosition( texCoord, depth, inverse( m_prvViewProj ) );
 		}
 
 		sdw::Vec3 MatrixData::getCurViewRight()const
