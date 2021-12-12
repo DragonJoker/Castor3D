@@ -126,6 +126,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/OverlayTreeItemProperty.cpp
 	Properties/TreeItems/PassTreeItemProperty.cpp
 	Properties/TreeItems/PostEffectTreeItemProperty.cpp
+	Properties/TreeItems/RenderPassTreeItemProperty.cpp
 	Properties/TreeItems/RenderTargetTreeItemProperty.cpp
 	Properties/TreeItems/RenderWindowTreeItemProperty.cpp
 	Properties/TreeItems/SceneTreeItemProperty.cpp
@@ -157,6 +158,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/OverlayTreeItemProperty.hpp
 	Properties/TreeItems/PassTreeItemProperty.hpp
 	Properties/TreeItems/PostEffectTreeItemProperty.hpp
+	Properties/TreeItems/RenderPassTreeItemProperty.hpp
 	Properties/TreeItems/RenderTargetTreeItemProperty.hpp
 	Properties/TreeItems/RenderWindowTreeItemProperty.hpp
 	Properties/TreeItems/SceneTreeItemProperty.hpp
