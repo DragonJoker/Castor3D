@@ -228,11 +228,7 @@ namespace Bloom
 						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 					maxComponent = max( maxComponent, pxl_fragColor.b() );
 
-					IF( writer, maxComponent > 1.0_f )
-					{
-						pxl_fragColor.xyz() /= maxComponent;
-					}
-					ELSE
+					IF( writer, maxComponent <= 1.0_f )
 					{
 						pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}

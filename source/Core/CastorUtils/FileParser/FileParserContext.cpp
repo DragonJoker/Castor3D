@@ -33,6 +33,11 @@ namespace castor
 		return result;
 	}
 
+	bool FileParserContext::hasUserContext( String const & name )
+	{
+		return userContexts.find( name ) != userContexts.end();
+	}
+
 	void * FileParserContext::getUserContext( String const & name )
 	{
 		auto it = userContexts.find( name );
