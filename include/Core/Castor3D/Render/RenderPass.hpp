@@ -237,56 +237,53 @@ namespace castor3d
 		C3D_API ShaderPtr getPixelShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
+		 *\brief			Creates the pipeline flags for given configuration.
+		 *\param[in]		pass			The pass for whic the pipeline is created.
+		 *\param[in,out]	textures		The textures configuration.
+		 *\param[in,out]	programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags		Scene related flags.
+		 *\param[in]		topology		The render topology.
+		 *\~french
+		 *\brief			Crée les indicateurs de pipeline pour la configuration donnée.
+		 *\param[in]		pass			La passe pour laquelle le pipeline est créé.
+		 *\param[in,out]	textures		La configuration des textures.
+		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]		topology		La topologie de rendu.
+		 */
+		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
+			, TextureFlagsArray const & textures
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, VkPrimitiveTopology topology );
+		/**
+		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
-		 *\param[in]		pass				The pass for whic the pipeline is created.
-		 *\param[in,out]	textures			The textures configuration.
-		 *\param[in,out]	programFlags		A combination of ProgramFlag.
-		 *\param[in,out]	sceneFlags			Scene related flags.
-		 *\param[in]		topology			The render topology.
+		 *\param[in]		pipelineFlags		The pipeline flags.
 		 *\param[in]		vertexLayouts		The vertex buffers layouts.
 		 *\param[in]		descriptorLayouts	The render node descriptor set layouts.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en back face culling.
-		 *\param[in]		pass				La passe pour laquelle le pipeline est créé.
-		 *\param[in,out]	textures			La configuration des textures.
-		 *\param[in,out]	programFlags		Une combinaison de ProgramFlag.
-		 *\param[in,out]	sceneFlags			Les indicateurs relatifs à la scène.
-		 *\param[in]		topology			La topologie de rendu.
+		 *\param[in]		pipelineFlags		Les indicateurs de pipeline.
 		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API RenderPipeline * prepareBackPipeline( Pass const & pass
-			, TextureFlagsArray const & textures
-			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags
-			, VkPrimitiveTopology topology
+		C3D_API RenderPipeline * prepareBackPipeline( PipelineFlags pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
-		 *\param[in]		pass				The pass for whic the pipeline is created.
-		 *\param[in,out]	textures			The textures configuration.
-		 *\param[in,out]	programFlags		A combination of ProgramFlag.
-		 *\param[in,out]	sceneFlags			Scene related flags.
-		 *\param[in]		topology			The render topology.
+		 *\param[in]		pipelineFlags		The pipeline flags.
 		 *\param[in]		vertexLayouts		The vertex buffers layouts.
 		 *\param[in]		descriptorLayouts	The render node descriptor set layouts.
 		 *\~french
 		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en front face culling.
-		 *\param[in]		pass				La passe pour laquelle le pipeline est créé.
-		 *\param[in,out]	textures			La configuration des textures.
-		 *\param[in,out]	programFlags		Une combinaison de ProgramFlag.
-		 *\param[in,out]	sceneFlags			Les indicateurs relatifs à la scène.
-		 *\param[in]		topology			La topologie de rendu.
+		 *\param[in]		pipelineFlags		Les indicateurs de pipeline.
 		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API RenderPipeline * prepareFrontPipeline( Pass const & pass
-			, TextureFlagsArray const & textures
-			, ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags
-			, VkPrimitiveTopology topology
+		C3D_API RenderPipeline * prepareFrontPipeline( PipelineFlags pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
@@ -431,8 +428,7 @@ namespace castor3d
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
 		 *\param[in,out]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API void updateFlags( PipelineFlags & flags
-			, VkCullModeFlags cullMode )const;
+		C3D_API void updateFlags( PipelineFlags & flags )const;
 		/**
 		 *\~english
 		 *\brief		Filters the given textures flags using this pass needed textures.
@@ -709,7 +705,7 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 		C3D_API virtual bool doAreValidPassFlags( PassFlags const & passFlags )const;
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
-		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags & flags
+		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 
 	private:
@@ -720,7 +716,7 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		RenderPipeline * doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
-			, PipelineFlags & flags
+			, PipelineFlags flags
 			, VkCullModeFlags cullMode );
 		SubmeshRenderNode * doCreateSubmeshNode( Pass & pass
 			, RenderPipeline & pipeline
