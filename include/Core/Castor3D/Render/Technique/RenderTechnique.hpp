@@ -151,6 +151,7 @@ namespace castor3d
 		C3D_API Texture const & getFirstVctBounce()const;
 		C3D_API Texture const & getSecondaryVctBounce()const;
 		C3D_API crg::ImageViewId const & getLightDepthImgView()const;
+		C3D_API TechniquePassVector getCustomRenderPasses()const;
 
 		castor::Size const & getSize()const
 		{
@@ -178,6 +179,11 @@ namespace castor3d
 			return m_colour.sampledViewId;
 		}
 
+		crg::ImageViewId const & getResultTargetView()const
+		{
+			return m_colour.targetViewId;
+		}
+
 		Texture const & getNormalTexture()const
 		{
 			return *m_normal;
@@ -193,9 +199,19 @@ namespace castor3d
 			return *m_depth;
 		}
 
+		crg::ImageId const & getDepthImg()const
+		{
+			return m_depth->imageId;
+		}
+
 		crg::ImageViewId const & getDepthImgView()const
 		{
 			return m_depth->sampledViewId;
+		}
+
+		crg::ImageViewId const & getDepthTargetView()const
+		{
+			return m_depth->targetViewId;
 		}
 
 		crg::ImageViewId const & getDepthObjImgView()const
@@ -286,7 +302,7 @@ namespace castor3d
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
-		crg::FramePass const * doCreateRenderPasses( ProgressBar * progress
+		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
 			, TechniquePassEvent event
 			, crg::FramePass const * previousPass );
 		crg::FramePass & doCreateDepthPass( ProgressBar * progress );

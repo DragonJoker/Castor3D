@@ -26,7 +26,8 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API OpaquePass( crg::FramePass const & pass
+		C3D_API OpaquePass( RenderTechnique * parent
+			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
