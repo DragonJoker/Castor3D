@@ -231,22 +231,18 @@ namespace castor3d
 	castor::String const MetallicRoughnessPbrPass::LightingModel = shader::PbrMRLightingModel::getName();
 
 	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent
-		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: MetallicRoughnessPbrPass{ parent
 			, parent.getEngine()->getPassFactory().getNameId( Type )
-			, renderPassInfo
 			, initialFlags }
 	{
 	}
 	
 	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent
 		, PassTypeID typeID
-		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: Pass{ parent
 			, typeID
-			, renderPassInfo
 			, initialFlags | PassFlag::eImageBasedLighting }
 		, m_albedo{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_roughness{ m_dirty, 1.0f }
@@ -256,7 +252,7 @@ namespace castor3d
 
 	PassSPtr MetallicRoughnessPbrPass::create( Material & parent )
 	{
-		return std::make_shared< MetallicRoughnessPbrPass >( parent, nullptr );
+		return std::make_shared< MetallicRoughnessPbrPass >( parent );
 	}
 
 	castor::AttributeParsers MetallicRoughnessPbrPass::createParsers()
