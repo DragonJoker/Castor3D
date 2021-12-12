@@ -35,7 +35,8 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo	L'UBO de configuration des Layered LPV.
 		 *\param[in]	vctConfigUbo	L'UBO de configuration du VCT.
 		 */
-		C3D_API TransparentPass( crg::FramePass const & pass
+		C3D_API TransparentPass( RenderTechnique * parent
+			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device

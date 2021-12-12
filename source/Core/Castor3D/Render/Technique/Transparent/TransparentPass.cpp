@@ -48,7 +48,8 @@ namespace castor3d
 {
 	castor::String const TransparentPass::Type = "c3d.transparent.accumulation";
 
-	TransparentPass::TransparentPass( crg::FramePass const & pass
+	TransparentPass::TransparentPass( RenderTechnique * parent
+		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
@@ -56,7 +57,8 @@ namespace castor3d
 		, castor::String const & name
 		, SceneRenderPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: castor3d::RenderTechniquePass{ pass
+		: castor3d::RenderTechniquePass{ parent
+			, pass
 			, context
 			, graph
 			, device

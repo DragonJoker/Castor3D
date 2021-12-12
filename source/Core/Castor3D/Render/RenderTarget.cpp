@@ -676,6 +676,16 @@ namespace castor3d
 		return {};
 	}
 
+	TechniquePassVector RenderTarget::getCustomRenderPasses()const
+	{
+		if ( m_renderTechnique )
+		{
+			return m_renderTechnique->getCustomRenderPasses();
+		}
+
+		return {};
+	}
+
 	void RenderTarget::setExposure( float value )
 	{
 		getCamera()->setExposure( value );

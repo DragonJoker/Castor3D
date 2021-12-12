@@ -403,7 +403,8 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( pass
+				auto result = std::make_unique< ForwardRenderTechniquePass >( nullptr
+					, pass
 					, context
 					, graph
 					, m_device
@@ -429,7 +430,8 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( pass
+				auto result = std::make_unique< ForwardRenderTechniquePass >( nullptr
+					, pass
 					, context
 					, graph
 					, m_device
