@@ -59,7 +59,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		inline void gather( ShaderFlags const & flags
+		inline void gather( ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets

@@ -192,7 +192,7 @@ namespace castor3d
 				}
 
 				auto texCoord = writer.declLocale( "texCoord"
-					, in.texture );
+					, in.texture0 );
 				lightingModel->computeMapContributions( flags.passFlags
 					, filterTexturesFlags( flags.textures )
 					, textureConfigs
