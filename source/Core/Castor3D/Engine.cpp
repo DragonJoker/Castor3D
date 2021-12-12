@@ -565,13 +565,13 @@ namespace castor3d
 		m_passFactory->unregisterType( passType );
 	}
 
-	void Engine::registerRenderPassType( castor::String const & passType
+	void Engine::registerRenderPassType( castor::String const & renderPassType
 		, castor::UniquePtr< RenderPassRegisterInfo > info )
 	{
 		if ( info )
 		{
-			auto & ninfo = *m_passRenderPassTypes.emplace( passType, std::move( info ) ).first->second;
-			auto ires = m_renderPassTypes.emplace( ninfo.name, std::make_pair( RenderPassTypeID{}, Parameters{} ) );
+			auto & ninfo = *m_passRenderPassTypes.emplace( renderPassType, std::move( info ) ).first->second;
+			auto ires = m_renderPassTypes.emplace( renderPassType, std::make_pair( RenderPassTypeID{}, Parameters{} ) );
 
 			if ( ires.second )
 			{
@@ -617,9 +617,9 @@ namespace castor3d
 		return Parameters{};
 	}
 
-	RenderPassRegisterInfo * Engine::getRenderPassInfo( castor::String const & passType )const
+	RenderPassRegisterInfo * Engine::getRenderPassInfo( castor::String const & renderPassType )const
 	{
-		auto it = m_passRenderPassTypes.find( passType );
+		auto it = m_passRenderPassTypes.find( renderPassType );
 
 		if ( it == m_passRenderPassTypes.end() )
 		{
@@ -650,9 +650,15 @@ namespace castor3d
 		return result;
 	}
 
-	void Engine::unregisterRenderPassType( castor::String const & passType )
+	void Engine::unregisterRenderPassType( castor::String const & renderPassType )
 	{
-		m_renderPassTypes.erase( passType );
+		auto it = m_passRenderPassTypes.find( renderPassType );
+
+		if ( it != m_passRenderPassTypes.end() )
+		{
+			m_renderPassTypes.erase( renderPassType );
+			m_passRenderPassTypes.erase( it );
+		}
 	}
 
 	bool Engine::isCleaned()

@@ -49,7 +49,6 @@ namespace toon
 		, castor3d::PassFlags initialFlags )
 		: TypeT{ parent
 			, typeID
-			, nullptr
 			, initialFlags | castor3d::PassFlag::eDrawEdge }
 		, m_smoothBandWidth{ this->m_dirty, 1.0f }
 	{
