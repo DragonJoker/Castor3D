@@ -72,29 +72,25 @@ namespace castor3d
 	castor::String const BlinnPhongPass::LightingModel = shader::BlinnPhongLightingModel::getName();
 
 	BlinnPhongPass::BlinnPhongPass( Material & parent
-		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: BlinnPhongPass{ parent
 			, parent.getEngine()->getPassFactory().getNameId( Type )
-			, renderPassInfo
 			, initialFlags }
 	{
 	}
 
 	BlinnPhongPass::BlinnPhongPass( Material & parent
 		, PassTypeID typeID
-		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: PhongPass{ parent
 			, typeID
-			, renderPassInfo
 			, initialFlags }
 	{
 	}
 
 	PassSPtr BlinnPhongPass::create( Material & parent )
 	{
-		return std::make_shared< BlinnPhongPass >( parent, nullptr );
+		return std::make_shared< BlinnPhongPass >( parent );
 	}
 
 	castor::AttributeParsers BlinnPhongPass::createParsers()

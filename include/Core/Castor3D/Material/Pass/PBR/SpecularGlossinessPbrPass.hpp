@@ -27,7 +27,6 @@ namespace castor3d
 		 *\param[in]	parent	Le matériau parent.
 		 */
 		C3D_API explicit SpecularGlossinessPbrPass( Material & parent
-			, castor3d::RenderPassRegisterInfo * renderPassInfo
 			, PassFlags initialFlags = PassFlag::eNone );
 		/**
 		 *\~english
@@ -41,7 +40,6 @@ namespace castor3d
 		 */
 		C3D_API SpecularGlossinessPbrPass( Material & parent
 			, PassTypeID typeID
-			, castor3d::RenderPassRegisterInfo * renderPassInfo
 			, PassFlags initialFlags = PassFlag::eNone );
 
 		C3D_API static PassSPtr create( Material & parent );

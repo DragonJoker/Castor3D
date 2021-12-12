@@ -81,94 +81,76 @@ namespace castor3d
 		C3D_API void destroyPass( uint32_t index );
 		/**
 		*\~english
-		*\return		\p true if all passes needs alpha blending.
+		*name
+		*	Getters.
 		*\~french
-		*\return		\p true si toutes les passes ont besoin d'alpha blending.
+		*name
+		*	Accesseurs.
 		*/
+		/**@{*/
 		C3D_API bool hasAlphaBlending()const;
-		/**
-		*\~english
-		*\return		\p true if at least one pass needs a reflection map.
-		*\~french
-		*\return		\p true si au moins une passe a besoin d'une reflection map.
-		*/
 		C3D_API bool hasEnvironmentMapping()const;
-		/**
-		 *\~english
-		 *\return		Tells if the material has subsurface scattering.
-		 *\~french
-		 *\return		Dit si le matériau a du subsurface scattering.
-		 */
 		C3D_API bool hasSubsurfaceScattering()const;
-		/**
-		 *\~english
-		 *\return		Tells if the material is textured.
-		 *\param[in]	mask	A texture mask to filter out textures.
-		 *\~french
-		 *\return		Dit si le matériau a des textures.
-		 *\param[in]	mask	Un masque de textures pour les filtrer.
-		 */
 		C3D_API bool isTextured( TextureFlags mask = TextureFlag::eAll )const;
-		/**
-		 *\~english
-		 *\return		The passes count.
-		 *\~french
-		 *\return		Le nombre de passes.
-		 */
-		uint32_t getPassCount()const
-		{
-			return uint32_t( m_passes.size() );
-		}
-		/**
-		 *\~english
-		 *\return		The constant iterator on the beginning of the passes array.
-		 *\~french
-		 *\return		L'itérateur constant sur le début du tableau de passes.
-		 */
-		PassPtrArrayConstIt begin()const
-		{
-			return m_passes.begin();
-		}
-		/**
-		 *\~english
-		 *\return		The iterator on the beginning of the passes array.
-		 *\~french
-		 *\return		L'itérateur sur le début du tableau de passes.
-		 */
-		PassPtrArrayIt begin()
-		{
-			return m_passes.begin();
-		}
-		/**
-		 *\~english
-		 *\return		The constant iterator on the end of the passes array.
-		 *\~french
-		 *\return		L'itérateur constant sur la fin du tableau de passes.
-		 */
-		PassPtrArrayConstIt end()const
-		{
-			return m_passes.end();
-		}
-		/**
-		 *\~english
-		 *\return		The iterator on the end of the passes array.
-		 *\~french
-		 *\return		L'itérateur sur la fin du tableau de passes.
-		 */
-		PassPtrArrayIt end()
-		{
-			return m_passes.end();
-		}
-		/**
-		 *\~english
-		 *\return		The material type.
-		 *\~french
-		 *\return		Le type de matériau.
-		 */
+
 		PassTypeID getType()const
 		{
 			return m_type;
 		}
+
+		uint32_t getPassCount()const
+		{
+			return uint32_t( m_passes.size() );
+		}
+
+		RenderPassRegisterInfo * getRenderPassInfo()const
+		{
+			return m_renderPassInfo;
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Passes iteration.
+		*\~french
+		*name
+		*	Itération sur les passes.
+		*/
+		/**@{*/
+		PassPtrArrayConstIt begin()const
+		{
+			return m_passes.begin();
+		}
+
+		PassPtrArrayIt begin()
+		{
+			return m_passes.begin();
+		}
+
+		PassPtrArrayConstIt end()const
+		{
+			return m_passes.end();
+		}
+
+		PassPtrArrayIt end()
+		{
+			return m_passes.end();
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void setRenderPassInfo( RenderPassRegisterInfo * renderPassInfo )
+		{
+			m_renderPassInfo = renderPassInfo;
+		}
+		/**@}*/
 
 	private:
 		void onPassChanged( Pass const & pass );
@@ -185,6 +167,7 @@ namespace castor3d
 		PassPtrArray m_passes;
 		PassTypeID m_type{ 0u };
 		std::map< PassSPtr, OnPassChangedConnection > m_passListeners;
+		RenderPassRegisterInfo * m_renderPassInfo{};
 	};
 }
 

@@ -121,7 +121,6 @@ namespace castor3d
 
 	Pass::Pass( Material & parent
 		, PassTypeID typeID
-		, RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: OwnedBy< Material >{ parent }
 		, m_typeID{ typeID }
@@ -145,7 +144,7 @@ namespace castor3d
 		, m_depthFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_normalFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_objectFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
-		, m_renderPassInfo{ renderPassInfo }
+		, m_renderPassInfo{ getOwner()->getRenderPassInfo() }
 	{
 	}
 
@@ -187,6 +186,8 @@ namespace castor3d
 		doAccept( vis );
 		vis.visit( cuT( "Emissive" )
 			, m_emissive );
+		vis.visit( cuT( "Transmission" )
+			, m_transmission );
 		vis.visit( cuT( "Opacity" )
 			, m_opacity );
 		vis.visit( cuT( "Two sided" )
@@ -203,8 +204,6 @@ namespace castor3d
 			, m_blendAlphaFunc );
 		vis.visit( cuT( "Alpha ref. value" )
 			, m_alphaValue );
-		vis.visit( cuT( "Transmission" )
-			, m_transmission );
 		vis.visit( cuT( "Blended weighted accumulator" )
 			, m_bwAccumulationOperator );
 		vis.visit( cuT( "Parallax occlusion mode" )

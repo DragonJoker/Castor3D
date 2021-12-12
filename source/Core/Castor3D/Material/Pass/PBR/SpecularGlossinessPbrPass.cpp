@@ -231,22 +231,18 @@ namespace castor3d
 	castor::String const SpecularGlossinessPbrPass::LightingModel = shader::PbrSGLightingModel::getName();
 
 	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & parent
-		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: SpecularGlossinessPbrPass{ parent
 			, parent.getEngine()->getPassFactory().getNameId( Type )
-			, renderPassInfo
 			, initialFlags }
 	{
 	}
 
 	SpecularGlossinessPbrPass::SpecularGlossinessPbrPass( Material & parent
 		, PassTypeID typeID
-		, castor3d::RenderPassRegisterInfo * renderPassInfo
 		, PassFlags initialFlags )
 		: Pass{ parent
 			, typeID
-			, renderPassInfo
 			, initialFlags | PassFlag::eImageBasedLighting }
 		, m_diffuse{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
 		, m_specular{ m_dirty, castor::RgbColour::fromRGBA( 0xFFFFFFFF ) }
@@ -256,7 +252,7 @@ namespace castor3d
 
 	PassSPtr SpecularGlossinessPbrPass::create( Material & parent )
 	{
-		return std::make_shared< SpecularGlossinessPbrPass >( parent, nullptr );
+		return std::make_shared< SpecularGlossinessPbrPass >( parent );
 	}
 
 	castor::AttributeParsers SpecularGlossinessPbrPass::createParsers()
