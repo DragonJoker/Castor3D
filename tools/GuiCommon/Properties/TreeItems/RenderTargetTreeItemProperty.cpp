@@ -2,6 +2,7 @@
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 #include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/RenderPassTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SsaoConfigTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
 #include "GuiCommon/Shader/ShaderDialog.hpp"
@@ -11,6 +12,7 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
 #include <Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp>
 
 #include <wx/propgrid/advprops.h>
@@ -20,7 +22,7 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	void AppendRenderTarget( wxTreeCtrlBase * list
+	void appendRenderTarget( wxTreeCtrlBase * list
 		, bool editable
 		, wxTreeItemId id
 		, RenderTarget & target )
@@ -87,5 +89,18 @@ namespace GuiCommon
 		};
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] );
+
+		for ( auto & renderPass : target.getCustomRenderPasses() )
+		{
+			if ( renderPass->hasNodes() )
+			{
+				addProperty( grid, wxT( "Render pass " ) + renderPass->getName() );
+				setPrefix( renderPass->getName() );
+				fillRenderPassConfiguration( grid, *this, *renderPass );
+			}
+		}
+
+
+		setPrefix( {} );
 	}
 }
