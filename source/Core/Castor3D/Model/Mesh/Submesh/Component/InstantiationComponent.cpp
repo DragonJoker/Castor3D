@@ -205,7 +205,8 @@ namespace castor3d
 		return count;
 	}
 
-	void InstantiationComponent::gather( ShaderFlags const & flags
+	void InstantiationComponent::gather( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
 		, MaterialRPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -214,26 +215,31 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
-		auto it = m_instances.find( material );
-		auto index = ( instanceMult <= 1u
-			? 0u
-			: instanceMult - 1u );
-
-		if ( it != m_instances.end()
-			&& it->second[index].buffer )
+		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 		{
-			auto hash = std::hash< ShaderFlags::BaseType >{}( flags );
-			hash = castor::hashCombine( hash, mask.empty() );
-			auto layoutIt = m_mtxLayouts.find( hash );
+			auto it = m_instances.find( material );
+			auto index = ( instanceMult <= 1u
+				? 0u
+				: instanceMult - 1u );
 
-			if ( layoutIt == m_mtxLayouts.end() )
+			if ( it != m_instances.end()
+				&& it->second[index].buffer )
 			{
-				layoutIt = m_mtxLayouts.emplace( hash, getMatrixLayout( flags, currentLocation ) ).first;
-			}
+				auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+				hash = castor::hashCombine( hash, mask.empty() );
+				hash = castor::hashCombine( hash, currentLocation );
+				auto layoutIt = m_mtxLayouts.find( hash );
 
-			buffers.emplace_back( it->second[index].buffer->getBuffer() );
-			offsets.emplace_back( 0u );
-			layouts.emplace_back( layoutIt->second );
+				if ( layoutIt == m_mtxLayouts.end() )
+				{
+					layoutIt = m_mtxLayouts.emplace( hash
+						, getMatrixLayout( shaderFlags, currentLocation ) ).first;
+				}
+
+				buffers.emplace_back( it->second[index].buffer->getBuffer() );
+				offsets.emplace_back( 0u );
+				layouts.emplace_back( layoutIt->second );
+			}
 		}
 	}
 

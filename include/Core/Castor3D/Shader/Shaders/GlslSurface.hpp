@@ -81,7 +81,8 @@ namespace castor3d::shader
 		sdw::Vec4 position;
 		sdw::Vec3 normal;
 		sdw::Vec3 tangent;
-		sdw::Vec3 texture;
+		sdw::Vec3 texture0;
+		sdw::Vec3 texture1;
 		sdw::IVec4 boneIds0;
 		sdw::IVec4 boneIds1;
 		sdw::Vec4 boneWeights0;
@@ -144,7 +145,8 @@ namespace castor3d::shader
 		sdw::Vec3 normal;
 		sdw::Vec3 tangent;
 		sdw::Vec3 bitangent;
-		sdw::Vec3 texture;
+		sdw::Vec3 texture0;
+		sdw::Vec3 texture1;
 		sdw::UInt instance;
 		sdw::UInt material;
 		sdw::Int nodeId;

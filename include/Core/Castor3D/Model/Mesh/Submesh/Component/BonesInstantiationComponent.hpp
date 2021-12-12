@@ -33,7 +33,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		C3D_API void gather( ShaderFlags const & flags
+		C3D_API void gather( ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets

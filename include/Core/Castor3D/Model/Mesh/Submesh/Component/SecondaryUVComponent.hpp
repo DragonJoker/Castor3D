@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MorphComponent_H___
-#define ___C3D_MorphComponent_H___
+#ifndef ___C3D_SecondaryUVComponent_H___
+#define ___C3D_SecondaryUVComponent_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
 
@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class MorphComponent
+	class SecondaryUVComponent
 		: public SubmeshComponent
 	{
 	public:
@@ -26,7 +26,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
-		C3D_API explicit MorphComponent( Submesh & submesh );
+		C3D_API explicit SecondaryUVComponent( Submesh & submesh );
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
@@ -44,41 +44,28 @@ namespace castor3d
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
 		/**
-		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
-		inline ashes::VertexBuffer< InterleavedVertex > const & getAnimationBuffer()const
-		{
-			return *m_animBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
-		inline ashes::VertexBuffer< InterleavedVertex > & getAnimationBuffer()
-		{
-			return *m_animBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The animated vertex buffer data.
-		 *\~french
-		 *\return		Les données du tampon de sommets animés.
-		 */
-		inline InterleavedVertexArray & getData()
-		{
-			return m_data;
-		}
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags( MaterialRPtr material )const override
+		ProgramFlags getProgramFlags( MaterialRPtr material )const override
 		{
-			return ProgramFlag::eMorphing;
+			return ProgramFlag::eSecondaryUV;
+		}
+
+		C3D_API void addTexcoords( std::vector< castor::Point3f > const & uvs );
+
+		ashes::VertexBuffer< castor::Point3f > const & getAnimationBuffer()const
+		{
+			return *m_buffer;
+		}
+
+		ashes::VertexBuffer< castor::Point3f > & getAnimationBuffer()
+		{
+			return *m_buffer;
+		}
+
+		std::vector< castor::Point3f > & getData()
+		{
+			return m_data;
 		}
 
 	private:
@@ -88,12 +75,12 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr BindingPoint = 1u;
+		C3D_API static uint32_t constexpr BindingPoint = 4u;
 
 	private:
-		ashes::VertexBufferPtr< InterleavedVertex > m_animBuffer;
-		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_animLayouts;
-		InterleavedVertexArray m_data;
+		ashes::VertexBufferPtr< castor::Point3f > m_buffer;
+		std::vector< castor::Point3f > m_data;
+		std::unordered_map< uint32_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 }
 

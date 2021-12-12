@@ -129,13 +129,18 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, ( VK_SHADER_STAGE_FRAGMENT_BIT
 					| VK_SHADER_STAGE_GEOMETRY_BIT
+					| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+					| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
 					| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 
 			if ( billboard )
 			{
 				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eBillboard )
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+					, ( VK_SHADER_STAGE_GEOMETRY_BIT
+						| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+						| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+						| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 			}
 			else
 			{
@@ -147,26 +152,38 @@ namespace castor3d
 						{
 							uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
 								, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-								, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+								, ( VK_SHADER_STAGE_GEOMETRY_BIT
+									| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+									| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+									| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 						}
 						else
 						{
 							uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
 								, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-								, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+								, ( VK_SHADER_STAGE_GEOMETRY_BIT
+									| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+									| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+									| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 						}
 					}
 
 					uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningUbo )
 						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-						, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+						, ( VK_SHADER_STAGE_GEOMETRY_BIT
+							| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+							| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+							| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 				}
 
 				if ( mesh )
 				{
 					uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eMorphing )
 						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-						, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT ) );
+						, ( VK_SHADER_STAGE_GEOMETRY_BIT
+							| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+							| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+							| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 				}
 			}
 
