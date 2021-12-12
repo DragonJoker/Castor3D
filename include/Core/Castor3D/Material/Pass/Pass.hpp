@@ -53,7 +53,6 @@ namespace castor3d
 		 */
 		C3D_API explicit Pass( Material & parent
 			, PassTypeID typeID
-			, RenderPassRegisterInfo * renderPassInfo
 			, PassFlags initialFlags );
 		/**
 		 *\~english

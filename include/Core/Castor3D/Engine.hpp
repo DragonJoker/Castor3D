@@ -364,7 +364,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Enregistre un type de passe de rendu de scène, pour le type de passe de matériau donné.
 		 */
-		C3D_API void registerRenderPassType( castor::String const & passType
+		C3D_API void registerRenderPassType( castor::String const & renderPassType
 			, castor::UniquePtr< RenderPassRegisterInfo > info );
 		C3D_API void setRenderPassTypeConfiguration( castor::String const & renderPassType
 			, Parameters parameters );
@@ -382,7 +382,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère un type de passe de rendu de scène, pour le type de passe de matériau donné.
 		 */
-		C3D_API RenderPassRegisterInfo * getRenderPassInfo( castor::String const & passType )const;
+		C3D_API RenderPassRegisterInfo * getRenderPassInfo( castor::String const & renderPassType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a scene render pass type, used to render given material pass type.
@@ -396,7 +396,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Désenregistre un type de passe de rendu de scène.
 		 */
-		C3D_API void unregisterRenderPassType( castor::String const & passType );
+		C3D_API void unregisterRenderPassType( castor::String const & renderPassType );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
