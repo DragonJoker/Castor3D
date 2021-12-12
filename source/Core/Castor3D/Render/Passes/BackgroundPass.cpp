@@ -355,7 +355,7 @@ namespace castor3d
 	//*********************************************************************************************
 	
 	BackgroundRenderer::BackgroundRenderer( crg::FrameGraph & graph
-		, crg::FramePass const * previousPass
+		, crg::FramePassArray previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, castor::String const & name
@@ -369,7 +369,7 @@ namespace castor3d
 		, m_matrixUbo{ m_device }
 		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
-			, previousPass
+			, std::move( previousPasses )
 			, name
 			, background
 			, hdrConfigUbo
@@ -409,7 +409,7 @@ namespace castor3d
 	}
 
 	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FrameGraph & graph
-		, crg::FramePass const * previousPass
+		, crg::FramePassArray previousPasses
 		, castor::String const & name
 		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
@@ -439,12 +439,7 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-
-		if ( previousPass )
-		{
-			result.addDependency( *previousPass );
-		}
-
+		result.addDependencies( previousPasses );
 		m_matrixUbo.createPassBinding( result
 			, SceneBackground::MtxUboIdx );
 		m_modelUbo.createPassBinding( result

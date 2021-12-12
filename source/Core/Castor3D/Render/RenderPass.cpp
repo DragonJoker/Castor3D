@@ -240,15 +240,13 @@ namespace castor3d
 		return doGetPixelShaderSource( flags );
 	}
 
-	RenderPipeline * SceneRenderPass::prepareBackPipeline( Pass const & pass
+	PipelineFlags SceneRenderPass::createPipelineFlags( Pass const & pass
 		, TextureFlagsArray const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, VkPrimitiveTopology topology
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
+		, VkPrimitiveTopology topology )
 	{
-		auto flags = PipelineFlags{ pass.getColourBlendMode()
+		auto result = PipelineFlags{ pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
 			, ( pass.getRenderPassInfo()
@@ -262,37 +260,27 @@ namespace castor3d
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures };
+		updateFlags( result );
+		return result;
+	}
+
+	RenderPipeline * SceneRenderPass::prepareBackPipeline( PipelineFlags pipelineFlags
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
+	{
 		return doPreparePipeline( vertexLayouts
 			, std::move( descriptorLayouts )
-			, flags
+			, std::move( pipelineFlags )
 			, VK_CULL_MODE_BACK_BIT );
 	}
 
-	RenderPipeline * SceneRenderPass::prepareFrontPipeline( Pass const & pass
-		, TextureFlagsArray const & textures
-		, ProgramFlags const & programFlags
-		, SceneFlags const & sceneFlags
-		, VkPrimitiveTopology topology
+	RenderPipeline * SceneRenderPass::prepareFrontPipeline( PipelineFlags pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
 	{
-		auto flags = PipelineFlags{ pass.getColourBlendMode()
-			, pass.getAlphaBlendMode()
-			, pass.getPassFlags()
-			, ( pass.getRenderPassInfo()
-				? pass.getRenderPassInfo()->id
-				: RenderPassTypeID{} )
-			, pass.getTypeID()
-			, pass.getHeightTextureIndex()
-			, programFlags
-			, sceneFlags
-			, topology
-			, pass.getAlphaFunc()
-			, pass.getBlendAlphaFunc()
-			, textures };
 		return doPreparePipeline( vertexLayouts
 			, std::move( descriptorLayouts )
-			, flags
+			, std::move( pipelineFlags )
 			, VK_CULL_MODE_FRONT_BIT );
 	}
 
@@ -365,24 +353,9 @@ namespace castor3d
 		doUpdatePipeline( pipeline );
 	}
 
-	void SceneRenderPass::updateFlags( PipelineFlags & flags
-		, VkCullModeFlags cullMode )const
+	void SceneRenderPass::updateFlags( PipelineFlags & flags )const
 	{
 		doUpdateFlags( flags );
-
-		if ( m_mode != RenderMode::eTransparentOnly )
-		{
-			flags.alphaBlendMode = BlendMode::eNoBlend;
-		}
-
-		if ( checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT ) )
-		{
-			addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		}
-		else
-		{
-			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		}
 	}
 
 	FilteredTextureFlags SceneRenderPass::filterTexturesFlags( TextureFlagsArray const & textures )const
@@ -820,28 +793,34 @@ namespace castor3d
 			|| m_mode == RenderMode::eOpaqueOnly;
 	}
 
-	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags & flags
+	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags const & flags
 		, VkCullModeFlags cullMode )
 	{
-		updateFlags( flags, cullMode );
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
+		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_VERTEX_BIT;
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry ) )
+		{
+			stageFlags |= VK_SHADER_STAGE_GEOMETRY_BIT;
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eHasTessellation ) )
+		{
+			stageFlags |= VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+			stageFlags |= VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+		}
+
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VkShaderStageFlags( VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT )
-					: VkShaderStageFlags( VK_SHADER_STAGE_VERTEX_BIT ) ) ) ) );
+			, stageFlags ) );
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eScene )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VkShaderStageFlags( VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT )
-					: VkShaderStageFlags( VK_SHADER_STAGE_VERTEX_BIT ) ) ) ) );
+			, stageFlags ) );
 		doFillAdditionalBindings( flags, addBindings );
 		return addBindings;
 	}
@@ -868,21 +847,31 @@ namespace castor3d
 
 	RenderPipeline * SceneRenderPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
-		, PipelineFlags & flags
+		, PipelineFlags flags
 		, VkCullModeFlags cullMode )
 	{
 		RenderPipeline * result{};
+
+		if ( m_mode != RenderMode::eTransparentOnly )
+		{
+			flags.alphaBlendMode = BlendMode::eNoBlend;
+		}
+
+		if ( checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT ) )
+		{
+			addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		}
+		else
+		{
+			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		}
+
 		auto program = doGetProgram( flags, cullMode );
 
 		if ( doAreValidPassFlags( flags.passFlags )
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
-			if ( m_mode != RenderMode::eTransparentOnly )
-			{
-				flags.alphaBlendMode = BlendMode::eNoBlend;
-			}
-
 			auto & pipelines = checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
 				? doGetFrontPipelines()
 				: doGetBackPipelines();

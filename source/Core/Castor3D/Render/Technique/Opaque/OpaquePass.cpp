@@ -46,7 +46,8 @@ namespace castor3d
 
 	castor::String const OpaquePass::Type = "c3d.deferred.geometry";
 
-	OpaquePass::OpaquePass( crg::FramePass const & pass
+	OpaquePass::OpaquePass( RenderTechnique * parent
+		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
@@ -54,7 +55,8 @@ namespace castor3d
 		, castor::String const & name
 		, SceneRenderPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: RenderTechniquePass{ pass
+		: RenderTechniquePass{ parent
+			, pass
 			, context
 			, graph
 			, device
