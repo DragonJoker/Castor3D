@@ -22,6 +22,11 @@ namespace castor3d::shader
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
+		C3D_API void swap( sdw::Float const A, sdw::Float const & B );
+		C3D_API sdw::Float saturate( sdw::Float const v );
+		C3D_API sdw::Vec3 saturate( sdw::Vec3 const v );
+		C3D_API sdw::Float distanceSquared( sdw::Vec2 const A, sdw::Vec2 const & B );
+		C3D_API sdw::Float distanceSquared( sdw::Vec3 const A, sdw::Vec3 const & B );
 		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord );
 		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord );
 		C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord );
@@ -102,7 +107,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
 			, sdw::Float & occlusion );
-		C3D_API sdw::Vec4 perspectiveDivide( sdw::Vec4 const & in );
+		C3D_API sdw::Vec4 clipToScreen( sdw::Vec4 const & in );
 		/**
 		 *\~english
 		 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
@@ -220,39 +225,42 @@ namespace castor3d::shader
 			, PassFlags const & passFlags );
 
 	private:
-		C3D_API void declareCalcTexCoord();
-		C3D_API void declareCalcVSPosition();
-		C3D_API void declareCalcWSPosition();
-		C3D_API void declareApplyGamma();
-		C3D_API void declareRemoveGamma();
-		C3D_API void declareRescaleDepth();
-		C3D_API void declareGetMapNormal();
-		C3D_API void declareComputeAccumulation();
-		C3D_API void declareFresnelSchlick();
+		void declareSwap1F();
+		void declareDistanceSquared2F();
+		void declareDistanceSquared3F();
+		void declareCalcTexCoord();
+		void declareCalcVSPosition();
+		void declareCalcWSPosition();
+		void declareApplyGamma();
+		void declareRemoveGamma();
+		void declareRescaleDepth();
+		void declareGetMapNormal();
+		void declareComputeAccumulation();
+		void declareFresnelSchlick();
 		// 1.0 - y
-		C3D_API void declareInvertVec2Y();
-		C3D_API void declareInvertVec3Y();
-		C3D_API void declareInvertVec4Y();
+		void declareInvertVec2Y();
+		void declareInvertVec3Y();
+		void declareInvertVec4Y();
 		// -y
-		C3D_API void declareNegateVec2Y();
-		C3D_API void declareNegateVec3Y();
-		C3D_API void declareNegateVec4Y();
+		void declareNegateVec2Y();
+		void declareNegateVec3Y();
+		void declareNegateVec4Y();
 
-		C3D_API void declareEncodeMaterial();
-		C3D_API void declareDecodeMaterial();
-		C3D_API void declareDecodeReceiver();
-		C3D_API void declareParallaxMappingFunc();
-		C3D_API void declareParallaxShadowFunc();
+		void declareEncodeMaterial();
+		void declareDecodeMaterial();
+		void declareDecodeReceiver();
+		void declareParallaxMappingFunc();
+		void declareParallaxShadowFunc();
 
-		C3D_API void declareIsSaturated();
-		C3D_API void declareEncodeColor();
-		C3D_API void declareEncodeNormal();
-		C3D_API void declareDecodeColor();
-		C3D_API void declareDecodeNormal();
-		C3D_API void declareFlatten();
-		C3D_API void declareUnflatten();
-		C3D_API void declareIsSaturatedImg();
-		C3D_API void declarePerspectiveDivide();
+		void declareIsSaturated();
+		void declareEncodeColor();
+		void declareEncodeNormal();
+		void declareDecodeColor();
+		void declareDecodeNormal();
+		void declareFlatten();
+		void declareUnflatten();
+		void declareIsSaturatedImg();
+		void declareClipToScreen();
 
 	private:
 		void doComputeGeometryMapContribution( TextureFlags const & textureFlags
@@ -276,6 +284,15 @@ namespace castor3d::shader
 	private:
 		sdw::ShaderWriter & m_writer;
 		Engine const & m_engine;
+		sdw::Function< sdw::Void
+			, sdw::InOutFloat
+			, sdw::InOutFloat > m_swap1F;
+		sdw::Function< sdw::Float
+			, sdw::InVec2
+			, sdw::InVec2 > m_distanceSquared2F;
+		sdw::Function< sdw::Float
+			, sdw::InVec3
+			, sdw::InVec3 > m_distanceSquared3F;
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2
 			, sdw::InVec2 > m_calcTexCoord;
@@ -374,7 +391,7 @@ namespace castor3d::shader
 			, sdw::InUInt
 			, sdw::InUVec3 > m_unflatten3D;
 		sdw::Function< sdw::Vec4
-			, sdw::InVec4 > m_perspectiveDivide;
+			, sdw::InVec4 > m_clipToScreen;
 	};
 }
 

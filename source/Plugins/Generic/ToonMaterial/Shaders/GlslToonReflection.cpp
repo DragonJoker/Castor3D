@@ -100,6 +100,32 @@ namespace toon::shader
 		FI;
 	}
 
+	sdw::Vec3 ToonPhongReflectionModel::computeForward( c3d::LightMaterial & material
+		, c3d::Surface const & surface
+		, c3d::SceneData const & sceneData )
+	{
+		auto & toonMaterial = static_cast< ToonPhongLightMaterial & >( material );
+		auto incident = m_writer.declLocale( "incident"
+			, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
+
+		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection ) )
+		{
+			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
+			return computeRefl( incident
+				, surface.worldNormal
+				, envMap
+				, toonMaterial );
+		}
+
+		return vec3( 0.0_f );
+		// TODO: Bind skybox with phong passes.
+		auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapSkybox" );
+		return computeRefl( incident
+			, surface.worldNormal
+			, envMap
+			, toonMaterial );
+	}
+
 	void ToonPhongReflectionModel::computeForward( c3d::LightMaterial & material
 		, c3d::Surface const & surface
 		, c3d::SceneData const & sceneData
@@ -661,6 +687,34 @@ namespace toon::shader
 			FI;
 		}
 		FI;
+	}
+
+	sdw::Vec3 ToonPbrReflectionModel::computeForward( c3d::LightMaterial & material
+		, c3d::Surface const & surface
+		, c3d::SceneData const & sceneData )
+	{
+		auto & toonMaterial = static_cast< ToonPbrLightMaterial const & >( material );
+
+		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection ) )
+		{
+			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
+			auto incident = m_writer.declLocale( "incident"
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
+			return computeReflEnvMap( incident
+				, surface.worldNormal
+				, envMap
+				, toonMaterial );
+		}
+
+		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
+		auto irradiance = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapIrradiance" );
+		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
+		return computeIBL( surface
+			, toonMaterial
+			, sceneData.cameraPosition
+			, irradiance
+			, prefiltered
+			, brdf );
 	}
 
 	void ToonPbrReflectionModel::computeForward( c3d::LightMaterial & material
