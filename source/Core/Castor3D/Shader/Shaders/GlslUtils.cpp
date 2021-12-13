@@ -38,6 +38,61 @@ namespace castor3d::shader
 			, hasSsbo );
 	}
 
+	void Utils::declareSwap1F()
+	{
+		if ( m_swap1F )
+		{
+			return;
+		}
+
+		m_swap1F = m_writer.implementFunction< sdw::Void >( "c3d_distanceSquared2F"
+			, [&]( sdw::Float A
+				, sdw::Float B )
+			{
+				auto tmp = m_writer.declLocale( "tmp", A );
+				A = B;
+				B = tmp;
+			}
+			, sdw::InOutFloat{ m_writer, "A" }
+			, sdw::InOutFloat{ m_writer, "B" } );
+	}
+
+	void Utils::declareDistanceSquared2F()
+	{
+		if ( m_distanceSquared2F )
+		{
+			return;
+		}
+
+		m_distanceSquared2F = m_writer.implementFunction< sdw::Float >( "c3d_distanceSquared2F"
+			, [&]( sdw::Vec2 A
+				, sdw::Vec2 const & B )
+			{
+				A -= B;
+				m_writer.returnStmt( dot( A, A ) );
+			}
+			, sdw::InVec2{ m_writer, "A" }
+			, sdw::InVec2{ m_writer, "B" } );
+	}
+
+	void Utils::declareDistanceSquared3F()
+	{
+		if ( m_distanceSquared3F )
+		{
+			return;
+		}
+
+		m_distanceSquared3F = m_writer.implementFunction< sdw::Float >( "c3d_distanceSquared3F"
+			, [&]( sdw::Vec3 A
+				, sdw::Vec3 const & B )
+			{
+				A -= B;
+				m_writer.returnStmt( dot( A, A ) );
+			}
+			, sdw::InVec3{ m_writer, "A" }
+			, sdw::InVec3{ m_writer, "B" } );
+	}
+
 	void Utils::declareCalcTexCoord()
 	{
 		if ( m_calcTexCoord )
@@ -887,16 +942,16 @@ namespace castor3d::shader
 			, sdw::InInt{ m_writer, "imax" } );
 	}
 
-	void Utils::declarePerspectiveDivide()
+	void Utils::declareClipToScreen()
 	{
-		if ( m_perspectiveDivide )
+		if ( m_clipToScreen )
 		{
 			return;
 		}
 
 		auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
 
-		m_perspectiveDivide = m_writer.implementFunction< sdw::Vec4 >( "c3d_perspectiveDivide"
+		m_clipToScreen = m_writer.implementFunction< sdw::Vec4 >( "c3d_perspectiveDivide"
 			, [&]( sdw::Vec4 const & in )
 			{
 				auto out = m_writer.declLocale( "out", in );
@@ -912,6 +967,34 @@ namespace castor3d::shader
 				m_writer.returnStmt( out );
 			}
 			, sdw::InVec4{ m_writer, "in" } );
+	}
+
+	void Utils::swap( sdw::Float const A, sdw::Float const & B )
+	{
+		declareSwap1F();
+		m_swap1F( A, B );
+	}
+
+	sdw::Float Utils::saturate( sdw::Float const v )
+	{
+		return clamp( v, 0.0_f, 1.0_f );
+	}
+
+	sdw::Vec3 Utils::saturate( sdw::Vec3 const v )
+	{
+		return clamp( v, vec3( 0.0_f ), vec3( 1.0_f ) );
+	}
+
+	sdw::Float Utils::distanceSquared( sdw::Vec2 const A, sdw::Vec2 const & B )
+	{
+		declareDistanceSquared2F();
+		return m_distanceSquared2F( A, B );
+	}
+
+	sdw::Float Utils::distanceSquared( sdw::Vec3 const A, sdw::Vec3 const & B )
+	{
+		declareDistanceSquared3F();
+		return m_distanceSquared3F( A, B );
 	}
 
 	sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )
@@ -1211,10 +1294,10 @@ namespace castor3d::shader
 		return result;
 	}
 
-	sdw::Vec4 Utils::perspectiveDivide( sdw::Vec4 const & in )
+	sdw::Vec4 Utils::clipToScreen( sdw::Vec4 const & in )
 	{
-		declarePerspectiveDivide();
-		return m_perspectiveDivide( in );
+		declareClipToScreen();
+		return m_clipToScreen( in );
 	}
 
 	void Utils::encodeMaterial( sdw::Int const & receiver
