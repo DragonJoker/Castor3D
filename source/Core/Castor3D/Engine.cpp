@@ -707,7 +707,10 @@ namespace castor3d
 		m_renderWindows.erase( window.getName() );
 	}
 
-	void Engine::registerParsers( castor::String const & name, castor::AttributeParsers const & parsers )
+	void Engine::registerParsers( castor::String const & name
+		, castor::AttributeParsers const & parsers
+		, castor::StrUInt32Map const & sections
+		, castor::UserContextCreator contextCreator )
 	{
 		auto && it = m_additionalParsers.find( name );
 
@@ -716,19 +719,10 @@ namespace castor3d
 			CU_Exception( "registerParsers - Duplicate entry for " + name );
 		}
 
-		m_additionalParsers.emplace( name, parsers );
-	}
-
-	void Engine::registerSections( castor::String const & name, castor::StrUInt32Map const & sections )
-	{
-		auto && it = m_additionalSections.find( name );
-
-		if ( it != m_additionalSections.end() )
-		{
-			CU_Exception( "registerSections - Duplicate entry for " + name );
-		}
-
-		m_additionalSections.emplace( name, sections );
+		m_additionalParsers.emplace( name
+			, castor::AdditionalParsers{ std::move( parsers )
+				, std::move( sections )
+				, std::move( contextCreator ) } );
 	}
 
 	void Engine::unregisterParsers( castor::String const & name )
@@ -741,18 +735,6 @@ namespace castor3d
 		}
 
 		m_additionalParsers.erase( it );
-	}
-
-	void Engine::unregisterSections( castor::String const & name )
-	{
-		auto && it = m_additionalSections.find( name );
-
-		if ( it == m_additionalSections.end() )
-		{
-			CU_Exception( "unregisterSections - Unregistered entry " + name );
-		}
-
-		m_additionalSections.erase( it );
 	}
 
 	void Engine::pushCpuJob( castor::AsyncJobQueue::Job job )

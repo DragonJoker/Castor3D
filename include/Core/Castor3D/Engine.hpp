@@ -255,43 +255,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
-		 *\param[in]	name	The registering name.
-		 *\param[in]	parsers	The parsers.
+		 *\param[in]	name		The registering name.
+		 *\param[in]	parsers		The parsers.
+		 *\param[in]	sections	The sections.
 		 *\~french
 		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
-		 *\param[in]	name	Le nom d'enregistrement.
-		 *\param[in]	parsers	Les analyseurs.
+		 *\param[in]	name		Le nom d'enregistrement.
+		 *\param[in]	parsers		Les analyseurs.
+		 *\param[in]	sections	Les sections.
 		 */
-		C3D_API void registerParsers( castor::String const & name, castor::AttributeParsers const & parsers );
+		C3D_API void registerParsers( castor::String const & name
+			, castor::AttributeParsers const & parsers
+			, castor::StrUInt32Map const & sections
+			, castor::UserContextCreator contextCreator );
 		/**
 		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
-		 *\param[in]	name		The registering name.
+		 *\param[in]	name	The registering name.
 		 *\~french
 		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
-		 *\param[in]	name		Le nom d'enregistrement.
+		 *\param[in]	name	Le nom d'enregistrement.
 		 */
 		C3D_API void unregisterParsers( castor::String const & name );
-		/**
-		 *\~english
-		 *\brief		Registers additional sections for SceneFileParser.
-		 *\param[in]	name		The registering name.
-		 *\param[in]	sections	The sections.
-		 *\~french
-		 *\brief		Enregistre des sections supplémentaires pour SceneFileParser.
-		 *\param[in]	name		Le nom d'enregistrement.
-		 *\param[in]	sections	Les sections.
-		 */
-		C3D_API void registerSections( castor::String const & name, castor::StrUInt32Map const & sections );
-		/**
-		 *\~english
-		 *\brief		Unregisters sections for SceneFileParser.
-		 *\param[in]	name		The registering name.
-		 *\~french
-		 *\brief		Désenregistre des sections pour SceneFileParser.
-		 *\param[in]	name		Le nom d'enregistrement.
-		 */
-		C3D_API void unregisterSections( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
@@ -498,14 +483,9 @@ namespace castor3d
 			return m_lightsSampler;
 		}
 
-		std::map< castor::String, castor::AttributeParsers > const & getAdditionalParsers()const
+		std::map< castor::String, castor::AdditionalParsers > const & getAdditionalParsers()const
 		{
 			return m_additionalParsers;
-		}
-
-		std::map< castor::String, castor::StrUInt32Map > const & getAdditionalSections()const
-		{
-			return m_additionalSections;
 		}
 
 		Version const & getVersion()const
@@ -708,8 +688,7 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( texture, TextureUnit );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
-		std::map< castor::String, castor::AttributeParsers > m_additionalParsers;
-		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
+		std::map< castor::String, castor::AdditionalParsers > m_additionalParsers;
 		MeshFactoryUPtr m_meshFactory;
 		MeshSubdividerFactoryUPtr m_subdividerFactory;
 		MeshImporterFactoryUPtr m_importerFactory;

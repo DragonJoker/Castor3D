@@ -153,6 +153,13 @@ namespace CastorGui
 				{ uint32_t( GUISection::eEdit ), cuT( "edit" ) },
 			};
 		}
+
+		void * createContext( castor::FileParserContext & context )
+		{
+			CastorGui::ParserContext * userContext = new CastorGui::ParserContext;
+			userContext->m_engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
+			return userContext;
+		}
 	}
 }
 
@@ -182,8 +189,10 @@ extern "C"
 
 	C3D_CGui_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->registerParsers( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateParsers( engine ) ) );
-		engine->registerSections( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateSections() ) );
+		engine->registerParsers( CastorGui::PLUGIN_NAME
+			, std::move( CastorGui::CreateParsers( engine ) )
+			, std::move( CastorGui::CreateSections() )
+			, &CastorGui::createContext );
 		engine->setUserInputListener( std::make_shared< CastorGui::ControlsManager >( *engine ) );
 	}
 
@@ -191,6 +200,5 @@ extern "C"
 	{
 		engine->setUserInputListener( nullptr );
 		engine->unregisterParsers( CastorGui::PLUGIN_NAME );
-		engine->unregisterSections( CastorGui::PLUGIN_NAME );
 	}
 }

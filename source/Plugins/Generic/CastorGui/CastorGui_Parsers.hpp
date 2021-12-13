@@ -9,8 +9,27 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
 
+#include <stack>
+
 namespace CastorGui
 {
+	struct ParserContext
+	{
+		std::stack< ControlSPtr > m_parents;
+		castor3d::Engine * m_engine{};
+		ButtonCtrlSPtr m_button;
+		ComboBoxCtrlSPtr m_combo;
+		EditCtrlSPtr m_edit;
+		ListBoxCtrlSPtr m_listbox;
+		SliderCtrlSPtr m_slider;
+		StaticCtrlSPtr m_static;
+		uint32_t m_flags{};
+		uint32_t m_ctrlId{};
+
+		C3D_CGui_API ControlRPtr getTop()const;
+		C3D_CGui_API void Pop();
+	};
+
 	//! Scene file sections Enum
 	/**
 	The enumeration which defines all the sections and subsections of a scene file

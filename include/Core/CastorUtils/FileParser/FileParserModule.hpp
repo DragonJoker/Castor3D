@@ -77,35 +77,6 @@ namespace castor
 	*	Le type d'un ID de section.
 	*/
 	using SectionId = uint32_t;
-	/**
-	*\~english
-	*\brief
-	*	The parser function and expected parameters.
-	*\~french
-	*\brief
-	*	La fonction ainsi que les paramètres attendus pour un parser.
-	*/
-	struct ParserFunctionAndParams;
-	/**
-	*\~english
-	*\brief
-	*	The parsers sorted per section.
-	*	This will be used to store the functions associated to a unique token.
-	*\~french
-	*\brief
-	*	Les parsers triés par section.
-	*	Sera utilisé pour stocker les fonctions associées à un unique token.
-	*/
-	using SectionAttributeParsers = std::map< SectionId, ParserFunctionAndParams >;
-	/**
-	*\~english
-	*\brief
-	*	The parsers sorted per token name.
-	*\~french
-	*\brief
-	*	Les parsers triés par nom de token.
-	*/
-	using AttributeParsers = std::map< String, SectionAttributeParsers >;
 	//@}
 	/**
 	\~english
@@ -205,6 +176,62 @@ namespace castor
 	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
 	 */
 	using ParserFunction = std::function< bool( FileParserContext &, ParserParameterArray const & ) >;
+	/**
+	*\~english
+	*\brief
+	*	The parser function and expected parameters.
+	*\~french
+	*\brief
+	*	La fonction ainsi que les paramètres attendus pour un parser.
+	*/
+	struct ParserFunctionAndParams
+	{
+		ParserFunction function;
+		ParserParameterArray params;
+	};
+	/**
+	*\~english
+	*\brief
+	*	The parsers sorted per section.
+	*	This will be used to store the functions associated to a unique token.
+	*\~french
+	*\brief
+	*	Les parsers triés par section.
+	*	Sera utilisé pour stocker les fonctions associées à un unique token.
+	*/
+	using SectionAttributeParsers = std::map< SectionId, ParserFunctionAndParams >;
+	/**
+	*\~english
+	*\brief
+	*	The parsers sorted per token name.
+	*\~french
+	*\brief
+	*	Les parsers triés par nom de token.
+	*/
+	using AttributeParsers = std::map< String, SectionAttributeParsers >;
+	/**
+	 *\~english
+	 *\brief		User defined parsing context creator.
+	 *\~french
+	 *\brief		Fonction de création d'un contexte défini par l'utilisateur.
+	 */
+	using UserContextCreator = std::function< void * ( FileParserContext & ) >;
+
+	struct AdditionalParsers
+	{
+		AdditionalParsers( AttributeParsers pparsers = {}
+			, StrUInt32Map psections = {}
+			, UserContextCreator pcontextCreator = {} )
+			: parsers{ std::move( pparsers ) }
+			, sections{ std::move( psections ) }
+			, contextCreator{ std::move( pcontextCreator ) }
+		{
+		}
+
+		AttributeParsers parsers;
+		StrUInt32Map sections;
+		UserContextCreator contextCreator;
+	};
 	//@}
 }
 

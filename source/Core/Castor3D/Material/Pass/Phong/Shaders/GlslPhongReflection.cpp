@@ -116,11 +116,11 @@ namespace castor3d::shader
 
 		return vec3( 0.0_f );
 		// TODO: Bind skybox with phong passes.
-		auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapSkybox" );
-		return computeRefl( incident
-			, surface.worldNormal
-			, envMap
-			, phongMaterial );
+		//auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapSkybox" );
+		//return computeRefl( incident
+		//	, surface.worldNormal
+		//	, envMap
+		//	, phongMaterial );
 	}
 
 	void PhongReflectionModel::computeForward( LightMaterial & material

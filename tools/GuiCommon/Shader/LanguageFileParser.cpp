@@ -15,9 +15,16 @@ namespace GuiCommon
 
 	namespace
 	{
+		static castor::String const ParsersName{ "gc.language" };
+
+		LanguageFileContext & getParserContext( castor::FileParserContext & context )
+		{
+			return *static_cast< LanguageFileContext * >( context.getUserContext( ParsersName ) );
+		}
+
 		CU_ImplementAttributeParser( Root_Language )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -32,7 +39,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Language_Pattern )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -68,7 +75,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Language_FoldFlags )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -99,7 +106,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Language_Keywords )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
 
 			if ( params.empty() )
@@ -120,7 +127,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Language_FontName )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -135,7 +142,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Language_FontSize )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -150,7 +157,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Language_CLike )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -165,7 +172,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Style_Type )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -182,7 +189,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Style_FgColour )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -199,7 +206,7 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Style_BgColour )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 
 			if ( params.empty() )
 			{
@@ -221,7 +228,7 @@ namespace GuiCommon
 
 			if ( !langParams.empty() )
 			{
-				auto & langContext = static_cast< LanguageFileContext & >( context );
+				auto & langContext = getParserContext( context );
 				StringArray styles = string::split( string::lowerCase( string::trim( langParams ) ), cuT( "\t " ), 10, false );
 				int style = 0;
 
@@ -256,10 +263,102 @@ namespace GuiCommon
 
 		CU_ImplementAttributeParser( Keywords_End )
 		{
-			auto & langContext = static_cast< LanguageFileContext & >( context );
+			auto & langContext = getParserContext( context );
 			langContext.currentLanguage->setKeywords( langContext.index - 1, langContext.keywords );
 		}
 		CU_EndAttributePop()
+
+		void parseError( castor::String const & error )
+		{
+			castor::StringStream stream{ castor::makeStringStream() };
+			stream << cuT( "Error, : " ) << error;
+			castor::Logger::logError( stream.str() );
+		}
+
+		void addParser( castor::AttributeParsers & parsers
+			, uint32_t section
+			, castor::String const & name
+			, castor::ParserFunction function
+			, castor::ParserParameterArray && array = castor::ParserParameterArray{} )
+		{
+			auto nameIt = parsers.find( name );
+
+			if ( nameIt != parsers.end()
+				&& nameIt->second.find( section ) != nameIt->second.end() )
+			{
+				parseError( cuT( "Parser " ) + name + cuT( " for section " ) + castor::string::toString( section ) + cuT( " already exists." ) );
+			}
+			else
+			{
+				parsers[name][section] = { function, array };
+			}
+		}
+
+		castor::AttributeParsers registerParsers()
+		{
+			static castor::UInt32StrMap mapTypes;
+
+			if ( mapTypes.empty() )
+			{
+				mapTypes[cuT( "default" )] = uint32_t( wxSTC_C_DEFAULT );
+				mapTypes[cuT( "word1" )] = uint32_t( wxSTC_C_WORD );
+				mapTypes[cuT( "word2" )] = uint32_t( wxSTC_C_WORD2 );
+				mapTypes[cuT( "comment" )] = uint32_t( wxSTC_C_COMMENT );
+				mapTypes[cuT( "comment_doc" )] = uint32_t( wxSTC_C_COMMENTDOC );
+				mapTypes[cuT( "comment_line" )] = uint32_t( wxSTC_C_COMMENTLINE );
+				mapTypes[cuT( "comment_line_doc" )] = uint32_t( wxSTC_C_COMMENTLINEDOC );
+				mapTypes[cuT( "comment_line_doc" )] = uint32_t( wxSTC_C_COMMENTLINEDOC );
+				mapTypes[cuT( "comment_doc_keyword" )] = uint32_t( wxSTC_C_COMMENTDOCKEYWORD );
+				mapTypes[cuT( "comment_doc_keyword_error" )] = uint32_t( wxSTC_C_COMMENTDOCKEYWORDERROR );
+				mapTypes[cuT( "char" )] = uint32_t( wxSTC_C_CHARACTER );
+				mapTypes[cuT( "string" )] = uint32_t( wxSTC_C_STRING );
+				mapTypes[cuT( "string_eol" )] = uint32_t( wxSTC_C_STRINGEOL );
+				mapTypes[cuT( "operator" )] = uint32_t( wxSTC_C_OPERATOR );
+				mapTypes[cuT( "identifier" )] = uint32_t( wxSTC_C_IDENTIFIER );
+				mapTypes[cuT( "number" )] = uint32_t( wxSTC_C_NUMBER );
+				mapTypes[cuT( "preprocessor" )] = uint32_t( wxSTC_C_PREPROCESSOR );
+			}
+
+			castor::AttributeParsers result;
+
+			addParser( result, uint32_t( LANGSection::eRoot ), cuT( "language" ), Root_Language, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "pattern" ), Language_Pattern, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "fold_flags" ), Language_FoldFlags, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "keywords" ), Language_Keywords, { makeParameter< ParameterType::eUInt32 >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "font_name" ), Language_FontName, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "font_size" ), Language_FontSize, { makeParameter< ParameterType::eInt32 >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "is_c_like" ), Language_CLike, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "style" ), Language_Style );
+			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { makeParameter< ParameterType::eCheckedText>( mapTypes ) } );
+			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "font_style" ), Style_FontStyle, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( LANGSection::eKeywords ), cuT( "}" ), Keywords_End );
+
+			return result;
+		}
+
+		castor::StrUInt32Map registerSections()
+		{
+			return { { uint32_t( LANGSection::eRoot ), castor::String{} }
+				, { uint32_t( LANGSection::eLanguage ), cuT( "language" ) }
+				, { uint32_t( LANGSection::eKeywords ), cuT( "keywords" ) }
+				, { uint32_t( LANGSection::eStyle ), cuT( "style" ) } };
+		}
+
+		void * createContext( castor::FileParserContext & context )
+		{
+			LanguageFileContext * userContext = new LanguageFileContext;
+			userContext->currentLanguage.reset( new LanguageInfo );
+			return userContext;
+		}
+
+		castor::AdditionalParsers createParsers()
+		{
+			return { registerParsers()
+				, registerSections()
+				, &createContext };
+		}
 	}
 
 	//*********************************************************************************************
@@ -268,31 +367,12 @@ namespace GuiCommon
 		: FileParser{ castor::SectionId( LANGSection::eRoot ) }
 		, m_stcContext{ stcContext }
 	{
-	}
-
-	castor::FileParserContextSPtr LanguageFileParser::doInitialiseParser( Path const & path )
-	{
-		LanguageFileContextPtr result = std::make_shared< LanguageFileContext >( path );
-		addParser( uint32_t( LANGSection::eRoot ), cuT( "language" ), Root_Language, { makeParameter< ParameterType::eName >() } );
-		addParser( uint32_t( LANGSection::eLanguage ), cuT( "pattern" ), Language_Pattern, { makeParameter< ParameterType::eText >() } );
-		addParser( uint32_t( LANGSection::eLanguage ), cuT( "fold_flags" ), Language_FoldFlags, { makeParameter< ParameterType::eText >() } );
-		addParser( uint32_t( LANGSection::eLanguage ), cuT( "keywords" ), Language_Keywords, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( uint32_t( LANGSection::eLanguage ), cuT( "font_name" ), Language_FontName, { makeParameter< ParameterType::eText >() } );
-		addParser( uint32_t( LANGSection::eLanguage ), cuT( "font_size" ), Language_FontSize, { makeParameter< ParameterType::eInt32 >() } );
-		addParser( uint32_t( LANGSection::eLanguage ), cuT( "is_c_like" ), Language_CLike, { makeParameter< ParameterType::eBool >() } );
-		addParser( uint32_t( LANGSection::eLanguage ), cuT( "style" ), Language_Style );
-		addParser( uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { makeParameter< ParameterType::eCheckedText>( result->mapTypes ) } );
-		addParser( uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { makeParameter< ParameterType::eText >() } );
-		addParser( uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { makeParameter< ParameterType::eText >() } );
-		addParser( uint32_t( LANGSection::eStyle ), cuT( "font_style" ), Style_FontStyle, { makeParameter< ParameterType::eText >() } );
-		addParser( uint32_t( LANGSection::eKeywords ), cuT( "}" ), Keywords_End );
-		result->currentLanguage.reset( new LanguageInfo );
-		return std::static_pointer_cast< castor::FileParserContext >( result );
+		registerParsers( ParsersName, createParsers() );
 	}
 
 	void LanguageFileParser::doCleanupParser( castor::PreprocessedFile & preprocessed )
 	{
-		static_cast< LanguageFileContext & >( preprocessed.getContext() ).currentLanguage.reset();
+		getParserContext( preprocessed.getContext() ).currentLanguage.reset();
 	}
 
 	bool LanguageFileParser::doDiscardParser( castor::PreprocessedFile & preprocessed
@@ -309,14 +389,14 @@ namespace GuiCommon
 		String strWords( line );
 		string::replace( strWords, cuT( "\\" ), cuT( "" ) );
 		StringArray arrayWords = string::split( string::trim( strWords ), cuT( "\t " ), 1000, false );
-		auto & langContext = static_cast< LanguageFileContext & >( context );
+		auto & langContext = getParserContext( context );
 		langContext.keywords.insert( langContext.keywords.end(), arrayWords.begin(), arrayWords.end() );
 		return true;
 	}
 
 	void LanguageFileParser::doValidate( castor::PreprocessedFile & preprocessed )
 	{
-		auto & context = static_cast< LanguageFileContext & >( preprocessed.getContext() );
+		auto & context = getParserContext( preprocessed.getContext() );
 		m_stcContext->push_back( context.currentLanguage );
 	}
 

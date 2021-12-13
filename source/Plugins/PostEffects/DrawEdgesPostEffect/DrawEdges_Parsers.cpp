@@ -12,12 +12,6 @@ namespace draw_edges
 {
 	namespace
 	{
-		struct ParserContext
-		{
-			castor3d::Engine * engine{ nullptr };
-			DrawEdgesUboConfiguration data{};
-		};
-
 		ParserContext & getParserContext( castor::FileParserContext & context )
 		{
 			return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
@@ -26,9 +20,6 @@ namespace draw_edges
 
 	CU_ImplementAttributeParser( parserDrawEdges )
 	{
-		ParserContext * deContext = new ParserContext;
-		deContext->engine = static_cast< castor3d::SceneFileContext & >( context ).parser->getEngine();
-		context.registerUserContext( PostEffect::Type, deContext );
 	}
 	CU_EndAttributePush( Section::eRoot )
 
@@ -68,7 +59,7 @@ namespace draw_edges
 
 	CU_ImplementAttributeParser( parserDrawEdgesEnd )
 	{
-		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+		auto & parsingContext = castor3d::getParserContext( context );
 		auto & deContext = getParserContext( context );
 		auto engine = deContext.engine;
 		castor3d::Parameters parameters;

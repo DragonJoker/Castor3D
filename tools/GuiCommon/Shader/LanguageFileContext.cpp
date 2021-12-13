@@ -8,8 +8,7 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	LanguageFileContext::LanguageFileContext( Path const & path )
-		: FileParserContext{ *castor::Logger::getSingleton().getInstance(), path }
+	LanguageFileContext::LanguageFileContext()
 	{
 		mapTypes[cuT( "default" )] = uint32_t( wxSTC_C_DEFAULT );
 		mapTypes[cuT( "word1" )] = uint32_t( wxSTC_C_WORD );

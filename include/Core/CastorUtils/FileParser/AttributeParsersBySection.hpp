@@ -8,12 +8,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	struct ParserFunctionAndParams
-	{
-		ParserFunction function;
-		ParserParameterArray params;
-	};
-
 #if defined( CU_CompilerMSVC )
 
 	class AttributeParserMap
