@@ -74,6 +74,7 @@ namespace GuiCommon
 		castor3d::TextureUnitWPtr m_texture;
 		castor3d::TextureConfiguration m_configuration;
 		std::map< castor3d::TextureFlag, PropertyPair > m_properties;
+		castor::Path m_path;
 	};
 }
 
