@@ -27,6 +27,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
@@ -45,6 +46,7 @@ See LICENSE file in root folder
 
 #include <RenderGraph/ResourceHandler.hpp>
 
+#include <unordered_map>
 #include <unordered_set>
 
 namespace castor3d
