@@ -97,6 +97,32 @@ namespace castor3d::shader
 		FI;
 	}
 
+	sdw::Vec3 PhongReflectionModel::computeForward( LightMaterial & material
+		, Surface const & surface
+		, SceneData const & sceneData )
+	{
+		auto & phongMaterial = static_cast< PhongLightMaterial & >( material );
+		auto incident = m_writer.declLocale( "incident"
+			, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
+
+		if ( checkFlag( m_passFlags, PassFlag::eReflection ) )
+		{
+			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
+			return computeRefl( incident
+				, surface.worldNormal
+				, envMap
+				, phongMaterial );
+		}
+
+		return vec3( 0.0_f );
+		// TODO: Bind skybox with phong passes.
+		auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapSkybox" );
+		return computeRefl( incident
+			, surface.worldNormal
+			, envMap
+			, phongMaterial );
+	}
+
 	void PhongReflectionModel::computeForward( LightMaterial & material
 		, Surface const & surface
 		, SceneData const & sceneData

@@ -82,19 +82,19 @@ namespace castor3d
 		sdw::Vec4 MatrixData::viewToScreenUV( Utils & utils
 			, sdw::Vec4 vsPosition )const
 		{
-			return utils.perspectiveDivide( viewToProj( vsPosition ) );
+			return utils.clipToScreen( viewToProj( vsPosition ) );
 		}
 
 		sdw::Vec4 MatrixData::worldToCurScreenUV( Utils & utils
 			, sdw::Vec4 wsPosition )const
 		{
-			return utils.perspectiveDivide( worldToCurProj( wsPosition ) );
+			return utils.clipToScreen( worldToCurProj( wsPosition ) );
 		}
 
 		sdw::Vec4 MatrixData::worldToPrvScreenUV( Utils & utils
 			, sdw::Vec4 wsPosition )const
 		{
-			return utils.perspectiveDivide( worldToCurProj( wsPosition ) );
+			return utils.clipToScreen( worldToPrvProj( wsPosition ) );
 		}
 
 		sdw::Vec3 MatrixData::projToView( Utils & utils

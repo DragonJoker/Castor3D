@@ -286,16 +286,16 @@ namespace castor3d
 							: vec3( 0.0_f ) ) );
 
 					pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
-						, indirectDiffuse
-						, lightSpecular
-						, lightIndirectSpecular
-						, ambient
-						, indirectAmbient
-						, occlusion
-						, emissive
-						, reflected
-						, refracted
-						, lightMat->albedo )
+							, indirectDiffuse
+							, lightSpecular
+							, lightIndirectSpecular
+							, ambient
+							, indirectAmbient
+							, occlusion
+							, emissive
+							, reflected
+							, refracted
+							, lightMat->albedo )
 						, opacity );
 				}
 				else

@@ -38,6 +38,9 @@ namespace toon::shader
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )override;
+		sdw::Vec3 computeForward( c3d::LightMaterial & material
+			, c3d::Surface const & surface
+			, c3d::SceneData const & sceneData )override;
 		void computeForward( c3d::LightMaterial & material
 			, c3d::Surface const & surface
 			, c3d::SceneData const & sceneData
@@ -176,6 +179,9 @@ namespace toon::shader
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted )override;
+		sdw::Vec3 computeForward( c3d::LightMaterial & material
+			, c3d::Surface const & surface
+			, c3d::SceneData const & sceneData )override;
 		void computeForward( c3d::LightMaterial & material
 			, c3d::Surface const & surface
 			, c3d::SceneData const & sceneData

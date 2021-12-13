@@ -174,6 +174,34 @@ namespace castor3d::shader
 		FI;
 	}
 
+	sdw::Vec3 PbrReflectionModel::computeForward( LightMaterial & material
+		, Surface const & surface
+		, SceneData const & sceneData )
+	{
+		auto & pbrMaterial = static_cast< PbrLightMaterial const & >( material );
+
+		if ( checkFlag( m_passFlags, PassFlag::eReflection ) )
+		{
+			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
+			auto incident = m_writer.declLocale( "incident"
+				, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
+			return computeReflEnvMap( incident
+				, surface.worldNormal
+				, envMap
+				, pbrMaterial );
+		}
+
+		auto brdf = m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapBrdf" );
+		auto irradiance = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapIrradiance" );
+		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
+		return computeIBL( surface
+			, pbrMaterial
+			, sceneData.cameraPosition
+			, irradiance
+			, prefiltered
+			, brdf );
+	}
+
 	void PbrReflectionModel::computeForward( LightMaterial & material
 		, Surface const & surface
 		, SceneData const & sceneData
