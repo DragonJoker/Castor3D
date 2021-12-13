@@ -69,7 +69,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserPassDiffuse )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !parsingContext.pass )
 				{
@@ -87,7 +87,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserPassSpecular )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !parsingContext.pass )
 				{
@@ -105,7 +105,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserPassAmbient )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !parsingContext.pass )
 				{
@@ -123,7 +123,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserPassShininess )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !parsingContext.pass )
 				{
@@ -141,7 +141,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitChannel )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !params.empty() )
 				{
@@ -199,7 +199,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitDiffuseMask )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( params.empty() )
 				{
@@ -214,7 +214,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitSpecularMask )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( params.empty() )
 				{
@@ -229,7 +229,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitShininessMask )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( params.empty() )
 				{

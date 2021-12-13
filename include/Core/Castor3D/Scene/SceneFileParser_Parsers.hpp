@@ -10,7 +10,7 @@ namespace castor3d
 {
 	// General parsers
 	CU_DeclareAttributeParser( parserMaterial )
-		CU_DeclareAttributeParser( parserSamplerState )
+	CU_DeclareAttributeParser( parserSamplerState )
 
 	// Root parsers
 	CU_DeclareAttributeParser( parserRootScene )
@@ -191,6 +191,7 @@ namespace castor3d
 	// Material Parsers
 	CU_DeclareAttributeParser( parserMaterialType )
 	CU_DeclareAttributeParser( parserMaterialPass )
+	CU_DeclareAttributeParser( parserMaterialRenderPass )
 	CU_DeclareAttributeParser( parserMaterialEnd )
 
 	// Texture Config Parsers

@@ -19,7 +19,7 @@ namespace toon
 
 		ImplementTemplateAttributeParser( parserPassSmoothBandWidth )
 		{
-			auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+			auto & parsingContext = castor3d::getParserContext( context );
 
 			if ( !parsingContext.pass )
 			{

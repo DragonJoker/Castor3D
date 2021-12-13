@@ -74,6 +74,7 @@ namespace castor
 			return result;
 		}
 
+		m_context->preprocessed = this;
 		m_context->pendingSection = 0u;
 		m_context->sections.clear();
 		m_context->sections.push_back( m_parser.getRootSectionId() );
@@ -453,6 +454,17 @@ namespace castor
 		m_preprocessed = nullptr;
 	}
 
+	void FileParser::registerParsers( castor::String const & name
+		, AdditionalParsers const & parsers )
+	{
+		auto ires = m_additionalParsers.emplace( name, parsers );
+
+		if ( !ires.second )
+		{
+			CU_Exception( "Addiional parsers for name [" + string::stringCast< char >( name ) + "] already exist." );
+		}
+	}
+
 	PreprocessedFile FileParser::processFile( Path const & path )
 	{
 		PreprocessedFile result{ *this
@@ -772,6 +784,23 @@ namespace castor
 				, lineIndex
 				, cuT( "Missing parameters." ) );
 		}
+	}
+
+	FileParserContextSPtr FileParser::doInitialiseParser( Path const & path )
+	{
+		for ( auto & it : m_additionalParsers )
+		{
+			for ( auto const & parsers : it.second.parsers )
+			{
+				for ( auto & parser : parsers.second )
+				{
+					auto params = parser.second.params;
+					addParser( parser.first, parsers.first, parser.second.function, std::move( params ) );
+				}
+			}
+		}
+
+		return std::make_shared< FileParserContext >( *this, path );
 	}
 
 	void FileParser::doCheckDefines( String & text )

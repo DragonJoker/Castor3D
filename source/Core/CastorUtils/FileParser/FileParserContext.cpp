@@ -1,22 +1,33 @@
 #include "CastorUtils/FileParser/FileParserContext.hpp"
 
+#include "CastorUtils/FileParser/FileParser.hpp"
+
 namespace castor
 {
-	FileParserContext::FileParserContext( LoggerInstance & logger
-		, Path const & path )
-		: file{ path }
-		, logger{ &logger }
+	FileParserContext::FileParserContext( FileParser & pparser
+		, Path const & ppath )
+		: file{ ppath }
+		, parser{ &pparser }
+		, logger{ &parser->getLogger() }
 	{
+		for ( auto & parsers : parser->getAdditionalParsers() )
+		{
+			if ( parsers.second.contextCreator )
+			{
+				registerUserContext( parsers.first
+					, parsers.second.contextCreator( *this ) );
+			}
+		}
 	}
 
 	void FileParserContext::registerUserContext( String const & name, void * data )
 	{
-		if ( userContexts.find( name ) != userContexts.end() )
+		auto ires = userContexts.insert( std::make_pair( name, data ) );
+
+		if ( !ires.second )
 		{
 			CU_Exception( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
 		}
-
-		userContexts.insert( std::make_pair( name, data ) );
 	}
 
 	void * FileParserContext::unregisterUserContext( String const & name )

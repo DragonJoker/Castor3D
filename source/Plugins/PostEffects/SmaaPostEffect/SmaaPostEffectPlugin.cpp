@@ -105,6 +105,13 @@ namespace
 			{ uint32_t( smaa::SmaaSection::eRoot ), cuT( "smaa" ) },
 		};
 	}
+
+	void * createContext( castor::FileParserContext & context )
+	{
+		smaa::ParserContext * smaaContext = new smaa::ParserContext;
+		smaaContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
+		return smaaContext;
+	}
 }
 
 extern "C"
@@ -134,13 +141,14 @@ extern "C"
 	{
 		engine->getPostEffectFactory().registerType( smaa::PostEffect::Type
 			, &smaa::PostEffect::create );
-		engine->registerParsers( smaa::PostEffect::Type, createParsers() );
-		engine->registerSections( smaa::PostEffect::Type, createSections() );
+		engine->registerParsers( smaa::PostEffect::Type
+			, createParsers()
+			, createSections()
+			, &createContext );
 	}
 
 	C3D_Smaa_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterSections( smaa::PostEffect::Type );
 		engine->unregisterParsers( smaa::PostEffect::Type );
 		engine->getPostEffectFactory().unregisterType( smaa::PostEffect::Type );
 	}

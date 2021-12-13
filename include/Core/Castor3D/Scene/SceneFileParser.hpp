@@ -85,20 +85,17 @@ namespace castor3d
 	};
 
 	class SceneFileContext
-		: public castor::FileParserContext
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	path	The file access path.
 		 *\param[in]	parser	The parser.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	path	Le chemin d'accès au fichier.
 		 *\param[in]	parser	L'analyseur.
 		 */
-		C3D_API SceneFileContext( castor::Path const & path
+		C3D_API SceneFileContext( castor::LoggerInstance & logger
 			, SceneFileParser * parser );
 		/**
 		 *\~english
@@ -109,6 +106,7 @@ namespace castor3d
 		C3D_API void initialise();
 
 	public:
+		castor::LoggerInstance * logger{};
 		SceneSPtr scene{};
 		RenderWindowDesc window{};
 		bool inWindow{};
@@ -233,7 +231,6 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API castor::FileParserContextSPtr doInitialiseParser( castor::Path const & path )override;
 		C3D_API void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
 		C3D_API void doValidate( castor::PreprocessedFile & preprocessed )override;
 		C3D_API castor::String doGetSectionName( castor::SectionId section )const override;
@@ -244,39 +241,42 @@ namespace castor3d
 		ScenePtrStrMap m_mapScenes;
 		RenderWindowDesc m_renderWindow;
 
-		UInt32StrMap m_blendFactors;
-		UInt32StrMap m_types;
-		UInt32StrMap m_comparisonFuncs;
-		UInt32StrMap m_textureArguments;
-		UInt32StrMap m_textureBlendModes;
-		UInt32StrMap m_lightTypes;
-		UInt32StrMap m_primitiveTypes;
-		UInt32StrMap m_primitiveOutputTypes;
-		UInt32StrMap m_models;
-		UInt32StrMap m_viewportModes;
-		UInt32StrMap m_filters;
-		UInt32StrMap m_mipmapModes;
-		UInt32StrMap m_wrappingModes;
-		UInt32StrMap m_borderColours;
-		UInt32StrMap m_shaderTypes;
-		UInt32StrMap m_variableTypes;
-		UInt32StrMap m_elementTypes;
-		UInt32StrMap m_movables;
-		UInt32StrMap m_textWrappingModes;
-		UInt32StrMap m_borderPositions;
-		UInt32StrMap m_verticalAligns;
-		UInt32StrMap m_horizontalAligns;
-		UInt32StrMap m_toneMappings;
-		UInt32StrMap m_textTexturingModes;
-		UInt32StrMap m_lineSpacingModes;
-		UInt32StrMap m_fogTypes;
-		UInt32StrMap m_comparisonModes;
-		UInt32StrMap m_billboardTypes;
-		UInt32StrMap m_billboardSizes;
-		UInt32StrMap m_materialTypes;
-		UInt32StrMap m_shadowFilters;
-		UInt32StrMap m_globalIlluminations;
+	public:
+		C3D_API static UInt32StrMap blendFactors;
+		C3D_API static UInt32StrMap types;
+		C3D_API static UInt32StrMap comparisonFuncs;
+		C3D_API static UInt32StrMap textureArguments;
+		C3D_API static UInt32StrMap textureBlendModes;
+		C3D_API static UInt32StrMap lightTypes;
+		C3D_API static UInt32StrMap primitiveTypes;
+		C3D_API static UInt32StrMap primitiveOutputTypes;
+		C3D_API static UInt32StrMap models;
+		C3D_API static UInt32StrMap viewportModes;
+		C3D_API static UInt32StrMap filters;
+		C3D_API static UInt32StrMap mipmapModes;
+		C3D_API static UInt32StrMap wrappingModes;
+		C3D_API static UInt32StrMap borderColours;
+		C3D_API static UInt32StrMap shaderTypes;
+		C3D_API static UInt32StrMap variableTypes;
+		C3D_API static UInt32StrMap elementTypes;
+		C3D_API static UInt32StrMap movables;
+		C3D_API static UInt32StrMap textWrappingModes;
+		C3D_API static UInt32StrMap borderPositions;
+		C3D_API static UInt32StrMap verticalAligns;
+		C3D_API static UInt32StrMap horizontalAligns;
+		C3D_API static UInt32StrMap toneMappings;
+		C3D_API static UInt32StrMap textTexturingModes;
+		C3D_API static UInt32StrMap lineSpacingModes;
+		C3D_API static UInt32StrMap fogTypes;
+		C3D_API static UInt32StrMap comparisonModes;
+		C3D_API static UInt32StrMap billboardTypes;
+		C3D_API static UInt32StrMap billboardSizes;
+		C3D_API static UInt32StrMap materialTypes;
+		C3D_API static UInt32StrMap shadowFilters;
+		C3D_API static UInt32StrMap globalIlluminations;
 	};
+
+	C3D_API SceneFileContext & getParserContext( castor::FileParserContext & context );
 }
 
 #endif

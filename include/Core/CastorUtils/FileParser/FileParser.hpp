@@ -189,6 +189,20 @@ namespace castor
 		CU_API virtual ~FileParser();
 		/**
 		 *\~english
+		 *\brief		Registers additional parsers for SceneFileParser.
+		 *\param[in]	name		The registering name.
+		 *\param[in]	parsers		The parsers.
+		 *\param[in]	sections	The sections.
+		 *\~french
+		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
+		 *\param[in]	name		Le nom d'enregistrement.
+		 *\param[in]	parsers		Les analyseurs.
+		 *\param[in]	sections	Les sections.
+		 */
+		CU_API void registerParsers( castor::String const & name
+			, AdditionalParsers const & parsers );
+		/**
+		 *\~english
 		 *\brief		Parsing function.
 		 *\param[in]	path	The file access path.
 		 *\return		\p true if OK.
@@ -356,6 +370,11 @@ namespace castor
 			doCleanupParser( preprocessed );
 		}
 
+		std::map< castor::String, castor::AdditionalParsers > const & getAdditionalParsers()const
+		{
+			return m_additionalParsers;
+		}
+
 	protected:
 		/**
 		 *\~english
@@ -365,7 +384,7 @@ namespace castor
 		 *\brief		Initialisation spécifique.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 */
-		CU_API virtual FileParserContextSPtr doInitialiseParser( Path const & path ) = 0;
+		CU_API FileParserContextSPtr doInitialiseParser( Path const & path );
 		/**
 		 *\~english
 		 *\brief		Specific cleanup.
@@ -434,6 +453,7 @@ namespace castor
 		Path m_path;
 		String m_fileName;
 		String m_functionName;
+		std::map< castor::String, AdditionalParsers > m_additionalParsers;
 
 	protected:
 		LoggerInstance & m_logger;

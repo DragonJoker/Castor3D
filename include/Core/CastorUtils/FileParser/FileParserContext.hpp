@@ -28,7 +28,7 @@ namespace castor
 		 *\param[in]	logger	L'instance de logger.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 */
-		CU_API explicit FileParserContext( LoggerInstance & logger
+		CU_API explicit FileParserContext( FileParser & parser
 			, Path const & path );
 		/**
 		 *\~english
@@ -101,6 +101,9 @@ namespace castor
 		//!\~english	The user context data, useful in plug-ins.
 		//!\~french		Les données de contexte utilisateur, utile dans les plug-ins.
 		std::map< String, void * > userContexts{};
+		//!\~english	The parser.
+		//!\~french		Le parseur.
+		FileParser * parser{};
 		//!\~english	The logger instance.
 		//!\~french		L'instance de logger.
 		LoggerInstance * logger{};
