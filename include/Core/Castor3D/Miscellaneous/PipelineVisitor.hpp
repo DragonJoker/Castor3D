@@ -113,6 +113,14 @@ namespace castor3d
 			, uint64_t & value
 			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
+			, int32_t & enumValue
+			, castor::StringArray const & enumNames
+			, bool * control ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, uint32_t & enumValue
+			, castor::StringArray const & enumNames
+			, bool * control ) = 0;
+		C3D_API virtual void visit( castor::String const & name
 			, float & value
 			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
@@ -410,6 +418,20 @@ namespace castor3d
 
 		void visit( castor::String const & name
 			, uint64_t & value
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, int32_t & enumValue
+			, castor::StringArray const & enumNames
+			, bool * control )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, uint32_t & enumValue
+			, castor::StringArray const & enumNames
 			, bool * control )override
 		{
 		}
