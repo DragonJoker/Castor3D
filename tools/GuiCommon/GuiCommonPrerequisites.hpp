@@ -242,84 +242,33 @@ namespace GuiCommon
 	 */
 	void loadPlugins( castor3d::Engine & engine );
 	/**
-	 *\~english
-	 *\brief		Creates a WindowHandle from a wxWindow
-	 *\param[in]	p_window	The window
-	 *\return		The created WindowHandle
-	 *\~french
-	 *\brief		Crée un WindowHandle à partir d'un wxWindow
-	 *\param[in]	p_window	La fenêtre
-	 *\return		Le WindowHandle créé
-	 */
-	ashes::WindowHandle makeWindowHandle( wxWindow * p_window );
+	*\~english
+	*\name
+	*	Castor to wxWidgets conversions.
+	*\~english
+	*\name
+	*	Conversions de Castor vers wxWidgets.
+	*/
+	//@{
+	wxString make_wxString( castor::String const & value );
+	wxSize make_wxSize( castor::Size const & value );
+	wxArrayString make_wxArrayString( castor::StringArray const & values );
+	//@}
 	/**
-	 *\~english
-	 *\brief		Loads a font glyphs using wxWidgets
-	 *\remarks		Uses a custom SFontImpl
-	 *\param[in]	p_font	The wxWidgets font
-	 *\return		The loaded font
-	 *\~french
-	 *\brief		Charge les glyphes de la police en utilisant wxWidgets
-	 *\remarks		Utilise une version personnalisée de SFontImpl
-	 *\param[in]	p_font	La police wxWidgets
-	 *\return		La police chargée
-	 */
+	*\~english
+	*\name
+	*	wxWidgets to Castor conversions.
+	*\~english
+	*\name
+	*	Conversions de wxWidgets vers Castor.
+	*/
+	//@{
 	castor::FontSPtr make_Font( wxFont const & p_font );
-	/**
-	 *\~english
-	 *\brief		Creates a castor::String from a wxString
-	 *\param[in]	p_value	The wxString
-	 *\return		The castor::String
-	 *\~french
-	 *\brief		Cree un castor::String a partir d'un wxString
-	 *\param[in]	p_value	Le wxString
-	 *\return		Le castor::String
-	 */
 	castor::String make_String( wxString const & p_value );
-	/**
-	 *\~english
-	 *\brief		Creates a castor::Path from a wxString
-	 *\param[in]	p_value	The wxString
-	 *\return		The castor::Path
-	 *\~french
-	 *\brief		Cree un castor::Path a partir d'un wxString
-	 *\param[in]	p_value	Le wxString
-	 *\return		Le castor::Path
-	 */
 	castor::Path make_Path( wxString const & p_value );
-	/**
-	 *\~english
-	 *\brief		Creates a wxString from a castor::String
-	 *\param[in]	p_value	The castor::String
-	 *\return		The wxString
-	 *\~french
-	 *\brief		Cree wxString a partir d'un castor::String
-	 *\param[in]	p_value	Le castor::String
-	 *\return		Le wxString
-	 */
-	wxString make_wxString( castor::String const & p_value );
-	/**
-	 *\~english
-	 *\brief		Creates a castor::Size from a wxSize
-	 *\param[in]	p_value	The wxSize
-	 *\return		The castor::Size
-	 *\~french
-	 *\brief		Cree un castor::Size a partir d'un wxSize
-	 *\param[in]	p_value	Le wxSize
-	 *\return		Le castor::Size
-	 */
 	castor::Size makeSize( wxSize const & p_value );
-	/**
-	 *\~english
-	 *\brief		Creates a wxSize from a castor::Size
-	 *\param[in]	p_value	The castor::Size
-	 *\return		The wxSize
-	 *\~french
-	 *\brief		Cree wxString a partir d'un castor::Size
-	 *\param[in]	p_value	Le castor::Size
-	 *\return		Le wxSize
-	 */
-	wxSize make_wxSize( castor::Size const & p_value );
+	castor::StringArray make_StringArray( wxArrayString const & values );
+	//@}
 	/**
 	 *\brief		Builds a wxArrayString from a an array of wxString.
 	 *\param[in]	values	The array.
@@ -343,6 +292,7 @@ namespace GuiCommon
 		return result;
 	}
 
+	ashes::WindowHandle makeWindowHandle( wxWindow * p_window );
 	ast::ShaderStage convert( VkShaderStageFlagBits stage );
 
 #if wxVERSION_NUMBER >= 2900

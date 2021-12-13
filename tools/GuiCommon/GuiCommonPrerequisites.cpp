@@ -458,6 +458,30 @@ namespace GuiCommon
 		return wxString( value.c_str(), wxConvUTF8 );
 	}
 
+	wxArrayString make_wxArrayString( castor::StringArray const & values )
+	{
+		wxArrayString result;
+
+		for ( auto & value : values )
+		{
+			result.push_back( make_wxString( value ) );
+		}
+
+		return result;
+	}
+
+	castor::StringArray make_StringArray( wxArrayString const & values )
+	{
+		castor::StringArray result;
+
+		for ( auto & value : values )
+		{
+			result.push_back( make_String( value ) );
+		}
+
+		return result;
+	}
+
 	castor::Size makeSize( wxSize const & value )
 	{
 		return castor::Size( uint32_t( value.x )
