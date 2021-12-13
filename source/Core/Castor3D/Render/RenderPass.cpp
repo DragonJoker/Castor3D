@@ -49,8 +49,6 @@
 
 using namespace castor;
 
-CU_ImplementCUSmartPtr( castor3d, SceneRenderPass )
-
 namespace castor3d
 {
 	//*********************************************************************************************

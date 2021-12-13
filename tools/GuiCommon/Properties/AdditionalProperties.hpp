@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#include <CastorUtils/Graphics/Image.hpp>
+
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #include <wx/propgrid/propgrid.h>
@@ -329,6 +331,35 @@ namespace GuiCommon
 	{
 		return TypeNameSuffixGetterT< TypeT >::getValue();
 	}
+
+	class gcImageFileProperty
+		: public wxFileProperty
+	{
+		wxDECLARE_DYNAMIC_CLASS( gcImageFileProperty );
+
+	public:
+
+		gcImageFileProperty( castor::ImageLoader * loader = nullptr
+			, wxString const & label = wxPG_LABEL
+			, wxString const & name = wxPG_LABEL
+			, wxString const & value = wxEmptyString );
+
+		void OnSetValue()override;
+
+		wxSize OnMeasureImage( int item )const override;
+		void OnCustomPaint( wxDC & dc
+			, wxRect const & rect
+			, wxPGPaintData & paintdata ) override;
+
+	protected:
+		castor::ImageLoader * m_loader;
+		std::unique_ptr< castor::Image > m_image; // intermediate thumbnail area
+		std::unique_ptr< wxBitmap > m_bitmap; // final thumbnail area
+
+	private:
+		// Initialize m_image using the current file name.
+		void doLoadImageFromFile();
+	};
 }
 
 #include "GuiCommon/Properties/AdditionalProperties.inl"

@@ -119,11 +119,11 @@ namespace toon::shader
 
 		return vec3( 0.0_f );
 		// TODO: Bind skybox with phong passes.
-		auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapSkybox" );
-		return computeRefl( incident
-			, surface.worldNormal
-			, envMap
-			, toonMaterial );
+		//auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapSkybox" );
+		//return computeRefl( incident
+		//	, surface.worldNormal
+		//	, envMap
+		//	, toonMaterial );
 	}
 
 	void ToonPhongReflectionModel::computeForward( c3d::LightMaterial & material

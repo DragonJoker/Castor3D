@@ -3863,11 +3863,11 @@ namespace castor
 			}
 			static Type cast( float value )
 			{
-				return Type( value );
+				return Type( value * 255.0f );
 			}
 			static Type cast( double value )
 			{
-				return Type( value );
+				return Type( value * 255.0 );
 			}
 		};
 
@@ -3910,11 +3910,11 @@ namespace castor
 			}
 			static Type cast( float value )
 			{
-				return Type( value );
+				return Type( value * 128.0f );
 			}
 			static Type cast( double value )
 			{
-				return Type( value );
+				return Type( value * 128.0 );
 			}
 		};
 
@@ -3957,11 +3957,11 @@ namespace castor
 			}
 			static Type cast( float value )
 			{
-				return Type( value );
+				return Type( value * 65536.0f );
 			}
 			static Type cast( double value )
 			{
-				return Type( value );
+				return Type( value * 65536.0 );
 			}
 		};
 
@@ -4004,11 +4004,11 @@ namespace castor
 			}
 			static Type cast( float value )
 			{
-				return Type( value );
+				return Type( value * 32768.0f );
 			}
 			static Type cast( double value )
 			{
-				return Type( value );
+				return Type( value * 32765.0 );
 			}
 		};
 
@@ -4051,11 +4051,11 @@ namespace castor
 			}
 			static Type cast( float value )
 			{
-				return Type( value );
+				return Type( value * float( 65536.0 * 65536.0 ) );
 			}
 			static Type cast( double value )
 			{
-				return Type( value );
+				return Type( value * ( 65536.0 * 65536.0 ) );
 			}
 		};
 

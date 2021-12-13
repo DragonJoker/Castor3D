@@ -392,7 +392,8 @@ namespace GuiCommon
 
 			if ( unit->getTexture()->isStatic() )
 			{
-				addProperty( grid, PROPERTY_TEXTURE_IMAGE, castor::Path{ unit->getTexture()->getPath() }
+				m_path = castor::Path{ unit->getTexture()->getPath() };
+				addProperty( grid, PROPERTY_TEXTURE_IMAGE, m_path
 					, [this]( wxVariant const & var )
 					{
 						onImageChange( var );
