@@ -156,9 +156,14 @@ namespace castor3d
 		}
 	}
 
+	SceneFileContext & getParserContext( castor::FileParserContext & context )
+	{
+		return *static_cast< SceneFileContext * >( context.getUserContext( "c3d.scene" ) );
+	}
+
 	CU_ImplementAttributeParser( parserMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -184,7 +189,7 @@ namespace castor3d
 		
 	CU_ImplementAttributeParser( parserSamplerState )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -207,7 +212,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootScene )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -233,7 +238,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootLoadingScreen )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.scene = std::make_shared< Scene >( LoadingScreen::SceneName
 			, *parsingContext.parser->getEngine() );
 		parsingContext.sceneNode = parsingContext.scene->getRootNode();
@@ -242,7 +247,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootFont )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.path.clear();
 
 		if ( params.empty() )
@@ -259,7 +264,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootMaterials )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -276,7 +281,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootPanelOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -305,7 +310,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootBorderPanelOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -334,7 +339,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootTextOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -363,7 +368,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootDebugOverlays )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -379,7 +384,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootWindow )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -395,7 +400,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRootLpvGridSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -412,7 +417,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.targetType = TargetType::eWindow;
 		parsingContext.size = { 1u, 1u };
 		parsingContext.pixelFormat = castor::PixelFormat::eUNDEFINED;
@@ -421,7 +426,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserWindowVSync )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !params.empty() )
 		{
@@ -432,7 +437,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserWindowFullscreen )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !params.empty() )
 		{
@@ -444,14 +449,14 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserWindowEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.inWindow = false;
 	}
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserRenderTargetScene )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 
 		if ( !parsingContext.renderTarget )
@@ -476,7 +481,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetCamera )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 
 		if ( !parsingContext.renderTarget )
@@ -499,7 +504,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !params.empty() )
 		{
@@ -517,7 +522,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetFormat )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !params.empty() )
 		{
@@ -542,7 +547,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetStereo )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.renderTarget )
 		{
@@ -564,7 +569,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetPostEffect )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.renderTarget )
 		{
@@ -599,7 +604,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetToneMapping )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.renderTarget )
 		{
@@ -628,7 +633,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetSsao )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.renderTarget )
 		{
@@ -639,7 +644,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRenderTargetEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.renderTarget )
 		{
@@ -661,7 +666,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerMinFilter )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -678,7 +683,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerMagFilter )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -695,7 +700,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerMipFilter )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -712,7 +717,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerMinLod )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -737,7 +742,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerMaxLod )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -762,7 +767,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerLodBias )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -787,7 +792,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerUWrapMode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -804,7 +809,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerVWrapMode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -821,7 +826,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerWWrapMode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -838,7 +843,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerBorderColour )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -855,7 +860,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerAnisotropicFiltering )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -872,7 +877,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerMaxAnisotropy )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -889,7 +894,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerComparisonMode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -906,7 +911,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerComparisonFunc )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( auto sampler = parsingContext.sampler.lock() )
 		{
@@ -923,7 +928,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSamplerEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto sampler = parsingContext.sampler.lock();
 
 		if ( !parsingContext.ownSampler
@@ -947,7 +952,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneBkColour )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -964,7 +969,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneBkImage )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -984,7 +989,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneFont )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1000,7 +1005,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneCamera )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.viewport.reset();
 		parsingContext.point2f = { 2.2f, 1.0f };
 		parsingContext.sceneNode = parsingContext.scene->getCameraRootNode();
@@ -1018,7 +1023,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneLight )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.light.reset();
 		parsingContext.strName.clear();
 		parsingContext.sceneNode = parsingContext.scene->getObjectRootNode();
@@ -1036,7 +1041,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneCameraNode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1055,7 +1060,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneSceneNode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1074,7 +1079,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneObject )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.geometry.reset();
 		String name;
 
@@ -1093,7 +1098,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneAmbientLight )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1110,7 +1115,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneImport )
 	{
-		//auto & parsingContext = static_cast< SceneFileContext & >( context );
+		//auto & parsingContext = getParserContext( context );
 		//Path path;
 		//Path pathFile = context.file.getPath() / params[0]->get( path );
 
@@ -1131,7 +1136,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneBillboard )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1148,7 +1153,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneAnimatedObjectGroup )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1165,7 +1170,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserScenePanelOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1194,7 +1199,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneBorderPanelOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1223,7 +1228,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneTextOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1252,7 +1257,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneSkybox )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1268,7 +1273,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneFogType )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1285,7 +1290,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneFogDensity )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1302,7 +1307,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneParticleSystem )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1326,7 +1331,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVoxelConeTracing )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1337,7 +1342,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1362,7 +1367,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMesh )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		params[0]->get( name );
 
@@ -1386,7 +1391,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserDirectionalShadowCascades )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1403,7 +1408,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLpvIndirectAttenuation )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1420,7 +1425,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleSystemParent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1450,7 +1455,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleSystemCount )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1471,7 +1476,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleSystemMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1502,7 +1507,7 @@ namespace castor3d
 
 		CU_ImplementAttributeParser( parserParticleSystemDimensions )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1521,7 +1526,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleSystemParticle )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		
 		if ( !parsingContext.scene )
 		{
@@ -1560,7 +1565,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleSystemCSShader )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderProgram.reset();
 		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
 
@@ -1577,7 +1582,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleSystemEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderProgram.reset();
 		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
 		
@@ -1597,7 +1602,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleType )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.particleSystem )
 		{
@@ -1627,7 +1632,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserParticleVariable )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.particleSystem )
 		{
@@ -1657,7 +1662,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightParent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1687,7 +1692,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1705,7 +1710,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightType )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -1733,7 +1738,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightColour )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1750,7 +1755,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightIntensity )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1767,7 +1772,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightAttenuation )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1796,7 +1801,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightCutOff )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1821,7 +1826,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightExponent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1846,7 +1851,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightShadows )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1857,7 +1862,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLightShadowProducer )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1874,7 +1879,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsProducer )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1891,7 +1896,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsFilter )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1908,7 +1913,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsGlobalIllumination )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1925,7 +1930,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsVolumetricSteps )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1942,7 +1947,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsVolumetricScatteringFactor )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1959,7 +1964,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsRawConfig )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1970,7 +1975,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsPcfConfig )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1981,7 +1986,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsVsmConfig )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -1992,7 +1997,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsRsmConfig )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2003,7 +2008,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsLpvConfig )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2014,7 +2019,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsRawMinOffset )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2035,7 +2040,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsRawMaxSlopeOffset )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2056,7 +2061,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsPcfMinOffset )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2077,7 +2082,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsPcfMaxSlopeOffset )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2098,7 +2103,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsVsmVarianceMax )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2119,7 +2124,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShadowsVsmVarianceBias )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2140,7 +2145,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRsmIntensity )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2157,7 +2162,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRsmMaxRadius )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2174,7 +2179,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserRsmSampleCount )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2193,7 +2198,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserLpvTexelAreaModifier )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.light )
 		{
@@ -2210,7 +2215,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserNodeParent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.sceneNode )
 		{
@@ -2253,7 +2258,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserNodePosition )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.sceneNode )
 		{
@@ -2270,7 +2275,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserNodeOrientation )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.sceneNode )
 		{
@@ -2289,7 +2294,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserNodeDirection )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.sceneNode )
 		{
@@ -2308,7 +2313,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserNodeScale )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.sceneNode )
 		{
@@ -2325,7 +2330,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserNodeEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.sceneNode )
 		{
@@ -2342,7 +2347,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserObjectParent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.geometry )
 		{
@@ -2389,7 +2394,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserObjectMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.geometry )
 		{
@@ -2430,7 +2435,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserObjectCastShadows )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.geometry )
 		{
@@ -2447,7 +2452,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserObjectReceivesShadows )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.geometry )
 		{
@@ -2464,14 +2469,14 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserObjectEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.scene->getGeometryCache().add( std::move( parsingContext.geometry ) );
 	}
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserObjectMaterialsMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.geometry )
 		{
@@ -2518,7 +2523,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshType )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String type;
 		params[0]->get( type );
 
@@ -2544,7 +2549,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshSubmesh )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.face1 = -1;
 		parsingContext.face2 = -1;
 		parsingContext.submesh.reset();
@@ -2562,7 +2567,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshImport )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -2604,7 +2609,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshMorphImport )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.mesh.lock() )
 		{
@@ -2689,7 +2694,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshDivide )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		Engine * engine = parsingContext.parser->getEngine();
 
 		if ( !parsingContext.mesh.lock() )
@@ -2723,7 +2728,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshDefaultMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.mesh.lock() )
 		{
@@ -2757,7 +2762,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -2788,7 +2793,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMeshDefaultMaterialsMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.mesh.lock() )
 		{
@@ -2828,7 +2833,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshVertex )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -2847,7 +2852,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshUV )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -2866,7 +2871,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshUVW )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -2885,7 +2890,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshNormal )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -2904,7 +2909,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshTangent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -2923,7 +2928,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshFace )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -2967,7 +2972,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshFaceUV )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -3012,7 +3017,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshFaceUVW )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -3063,7 +3068,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshFaceNormals )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -3114,7 +3119,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshFaceTangents )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.submesh )
 		{
@@ -3165,7 +3170,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubmeshEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.vertexPos.empty() )
 		{
@@ -3230,7 +3235,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParserBlock( parserMaterialPass, CSCNSection::ePass )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.strName.clear();
 
 		if ( parsingContext.material )
@@ -3259,9 +3264,31 @@ namespace castor3d
 	}
 	CU_EndAttributeBlock()
 
+	CU_ImplementAttributeParser( parserMaterialRenderPass )
+	{
+		auto & parsingContext = getParserContext( context );
+		parsingContext.strName.clear();
+
+		if ( !parsingContext.material )
+		{
+			CU_ParsingError( cuT( "Material not initialised" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameters" ) );
+		}
+		else
+		{
+			castor::String typeName;
+			params[0]->get( typeName );
+			parsingContext.material->setRenderPassInfo( parsingContext.parser->getEngine()->getRenderPassInfo( typeName ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserMaterialEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.ownMaterial
 			&& !parsingContext.material )
@@ -3292,7 +3319,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexTransformRotate )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -3309,7 +3336,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexTransformTranslate )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -3326,7 +3353,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexTransformScale )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -3343,7 +3370,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexTile )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -3361,7 +3388,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexAnimRotate )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.textureAnimation )
 		{
@@ -3382,7 +3409,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexAnimTranslate )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.textureAnimation )
 		{
@@ -3403,7 +3430,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexAnimScale )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.textureAnimation )
 		{
@@ -3424,7 +3451,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTexAnimTile )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -3445,49 +3472,49 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVertexShader )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderStage = VK_SHADER_STAGE_VERTEX_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserPixelShader )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderStage = VK_SHADER_STAGE_FRAGMENT_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserGeometryShader )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderStage = VK_SHADER_STAGE_GEOMETRY_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserHullShader )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderStage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserDomainShader )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderStage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserComputeShader )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserConstantsBuffer )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.shaderProgram )
 		{
@@ -3507,7 +3534,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.shaderProgram )
 		{
@@ -3527,7 +3554,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderProgramFile )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.shaderProgram )
 		{
@@ -3552,7 +3579,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderGroupSizes )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.shaderProgram )
 		{
@@ -3583,7 +3610,7 @@ namespace castor3d
 
 			if ( value )
 			{
-				//auto & parsingContext = static_cast< SceneFileContext & >( context );
+				//auto & parsingContext = getParserContext( context );
 				//parsingContext.uniformBuffer = std::make_unique< UniformBuffer >( parsingContext.strName
 				//	, *parsingContext.shaderProgram->getRenderSystem()
 				//	, 1u );
@@ -3598,7 +3625,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderUboVariable )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		params[0]->get( parsingContext.strName2 );
 
 		if ( !parsingContext.uniformBuffer )
@@ -3618,7 +3645,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderVariableCount )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		uint32_t param;
 		params[0]->get( param );
 
@@ -3635,7 +3662,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderVariableType )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		uint32_t uiType;
 		params[0]->get( uiType );
 
@@ -3659,7 +3686,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserShaderVariableValue )
 	{
-		//auto & parsingContext = static_cast< SceneFileContext & >( context );
+		//auto & parsingContext = getParserContext( context );
 		//String strParams;
 		//params[0]->get( strParams );
 
@@ -3676,21 +3703,21 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserFontFile )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		params[0]->get( parsingContext.path );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserFontHeight )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		params[0]->get( parsingContext.fontHeight );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserFontEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.strName.empty() && !parsingContext.path.empty() )
 		{
@@ -3712,7 +3739,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayPosition )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.overlay )
 		{
@@ -3729,7 +3756,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlaySize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.overlay )
 		{
@@ -3746,7 +3773,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayPixelSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.overlay )
 		{
@@ -3763,7 +3790,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayPixelPosition )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.overlay )
 		{
@@ -3780,7 +3807,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.overlay )
 		{
@@ -3798,7 +3825,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayPanelOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
@@ -3819,7 +3846,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayBorderPanelOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
@@ -3840,7 +3867,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayTextOverlay )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
 		auto parent = parsingContext.parentOverlays.back().get();
@@ -3861,7 +3888,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserOverlayEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.overlay->getType() == OverlayType::eText )
 		{
@@ -3903,7 +3930,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserPanelOverlayUvs )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::ePanel )
@@ -3921,7 +3948,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBorderPanelOverlaySizes )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
@@ -3939,7 +3966,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBorderPanelOverlayPixelSizes )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
@@ -3957,7 +3984,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBorderPanelOverlayMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
@@ -3976,7 +4003,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBorderPanelOverlayPosition )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
@@ -3994,7 +4021,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBorderPanelOverlayCenterUvs )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
@@ -4012,7 +4039,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBorderPanelOverlayOuterUvs )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
@@ -4030,7 +4057,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBorderPanelOverlayInnerUvs )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
@@ -4048,7 +4075,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTextOverlayFont )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
@@ -4075,7 +4102,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTextOverlayTextWrapping )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
@@ -4094,7 +4121,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTextOverlayVerticalAlign )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
@@ -4113,7 +4140,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTextOverlayHorizontalAlign )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
@@ -4132,7 +4159,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTextOverlayTexturingMode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
@@ -4151,7 +4178,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTextOverlayLineSpacingMode )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
@@ -4170,7 +4197,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTextOverlayText )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		auto overlay = parsingContext.overlay;
 		String strParams;
 		params[0]->get( strParams );
@@ -4189,7 +4216,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserCameraParent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		SceneNodeSPtr parent = parsingContext.scene->getSceneNodeCache().find( params[0]->get( name ) ).lock();
 
@@ -4219,7 +4246,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserCameraViewport )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.viewport = std::make_shared< Viewport >( *parsingContext.parser->getEngine() );
 		parsingContext.viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
 	}
@@ -4232,7 +4259,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserCameraPrimitive )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !params.empty() )
 		{
@@ -4248,7 +4275,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserCameraEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.sceneNode && parsingContext.viewport )
 		{
@@ -4265,7 +4292,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportType )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !params.empty() )
 		{
@@ -4281,7 +4308,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportLeft )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float rValue;
 		params[0]->get( rValue );
 		parsingContext.viewport->updateLeft( rValue );
@@ -4290,7 +4317,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportRight )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float rValue;
 		params[0]->get( rValue );
 		parsingContext.viewport->updateRight( rValue );
@@ -4299,7 +4326,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportTop )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float rValue;
 		params[0]->get( rValue );
 		parsingContext.viewport->updateTop( rValue );
@@ -4308,7 +4335,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportBottom )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float rValue;
 		params[0]->get( rValue );
 		parsingContext.viewport->updateBottom( rValue );
@@ -4317,7 +4344,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportNear )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float rValue;
 		params[0]->get( rValue );
 		parsingContext.viewport->updateNear( rValue );
@@ -4326,7 +4353,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportFar )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float rValue;
 		params[0]->get( rValue );
 		parsingContext.viewport->updateFar( rValue );
@@ -4335,7 +4362,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		Size size;
 		params[0]->get( size );
 		parsingContext.viewport->resize( size );
@@ -4344,7 +4371,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportFovY )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float fFovY;
 		params[0]->get( fFovY );
 		parsingContext.viewport->updateFovY( Angle::fromDegrees( fFovY ) );
@@ -4353,7 +4380,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserViewportAspectRatio )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float fRatio;
 		params[0]->get( fRatio );
 		parsingContext.viewport->updateRatio( fRatio );
@@ -4362,7 +4389,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBillboardParent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.billboards )
 		{
@@ -4388,7 +4415,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBillboardType )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.billboards )
 		{
@@ -4410,7 +4437,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBillboardSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.billboards )
 		{
@@ -4437,7 +4464,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBillboardMaterial )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.billboards )
 		{
@@ -4463,7 +4490,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBillboardDimensions )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		Point2f dimensions;
 		params[0]->get( dimensions );
 		parsingContext.billboards->setDimensions( dimensions );
@@ -4472,7 +4499,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBillboardEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		parsingContext.scene->getBillboardListCache().add( parsingContext.billboards->getName()
 			, parsingContext.billboards 
 			, true );
@@ -4482,7 +4509,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserBillboardPoint )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		Point3f position;
 		params[0]->get( position );
 		parsingContext.billboards->addPoint( position );
@@ -4491,7 +4518,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedObject )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		params[0]->get( name );
 
@@ -4546,7 +4573,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimation )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		params[0]->get( parsingContext.strName2 );
 
 		if ( parsingContext.animGroup )
@@ -4562,7 +4589,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimationStart )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		params[0]->get( name );
 
@@ -4579,7 +4606,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimationPause )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		String name;
 		params[0]->get( name );
 
@@ -4596,7 +4623,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimatedObjectGroupEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.animGroup )
 		{
@@ -4609,7 +4636,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimationLooped )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		bool value;
 		params[0]->get( value );
 
@@ -4626,7 +4653,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimationScale )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float value;
 		params[0]->get( value );
 
@@ -4643,7 +4670,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimationStartAt )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float value;
 		params[0]->get( value );
 
@@ -4661,7 +4688,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserAnimationStopAt )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 		float value;
 		params[0]->get( value );
 
@@ -4684,7 +4711,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxEqui )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.size() <= 1 )
 		{
@@ -4716,7 +4743,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxCross )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.size() < 1 )
 		{
@@ -4746,7 +4773,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxLeft )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.skybox )
 		{
@@ -4762,7 +4789,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxRight )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.skybox )
 		{
@@ -4778,7 +4805,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxTop )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.skybox )
 		{
@@ -4794,7 +4821,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxBottom )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.skybox )
 		{
@@ -4810,7 +4837,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxFront )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.skybox )
 		{
@@ -4826,7 +4853,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxBack )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.skybox )
 		{
@@ -4842,7 +4869,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSkyboxEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.skybox )
 		{
@@ -4857,7 +4884,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoEnabled )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -4881,7 +4908,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoHighQuality )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -4905,7 +4932,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoUseNormalsBuffer )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -4929,7 +4956,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoRadius )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -4953,7 +4980,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoMinRadius )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -4977,7 +5004,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoBias )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5001,7 +5028,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoIntensity )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5025,7 +5052,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoNumSamples )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5049,7 +5076,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoEdgeSharpness )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5073,7 +5100,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoBlurStepSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5097,7 +5124,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoBlurHighQuality )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5121,7 +5148,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoBlurRadius )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5145,7 +5172,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoBendStepCount )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5169,7 +5196,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoBendStepSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5193,7 +5220,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSsaoEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( parsingContext.renderTarget )
 		{
@@ -5209,7 +5236,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubsurfaceScatteringStrength )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.subsurfaceScattering )
 		{
@@ -5230,7 +5257,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubsurfaceScatteringGaussianWidth )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.subsurfaceScattering )
 		{
@@ -5251,7 +5278,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubsurfaceScatteringTransmittanceProfile )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.subsurfaceScattering )
 		{
@@ -5262,7 +5289,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSubsurfaceScatteringEnd )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.subsurfaceScattering )
 		{
@@ -5277,7 +5304,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserTransmittanceProfileFactor )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.subsurfaceScattering )
 		{
@@ -5298,7 +5325,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserHdrExponent )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -5313,7 +5340,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserHdrGamma )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( params.empty() )
 		{
@@ -5328,7 +5355,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctEnabled )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5348,7 +5375,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctGridSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5370,7 +5397,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctNumCones )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5392,7 +5419,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctMaxDistance )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5412,7 +5439,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctRayStepSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5432,7 +5459,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctVoxelSize )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5452,7 +5479,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctConservativeRasterization )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5472,7 +5499,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctTemporalSmoothing )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5492,7 +5519,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctOcclusion )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{
@@ -5512,7 +5539,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserVctSecondaryBounce )
 	{
-		auto & parsingContext = static_cast< SceneFileContext & >( context );
+		auto & parsingContext = getParserContext( context );
 
 		if ( !parsingContext.scene )
 		{

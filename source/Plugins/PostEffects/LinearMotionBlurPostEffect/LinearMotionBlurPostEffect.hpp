@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_MotionBlurPostEffect___
 #define ___C3D_MotionBlurPostEffect___
 
+#include "LinearMotionBlurParsers.hpp"
+
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
@@ -16,13 +18,6 @@ See LICENSE file in root folder
 
 namespace motion_blur
 {
-	struct Configuration
-	{
-		uint32_t samplesCount{ 4u };
-		float vectorDivider = 1.0f;
-		float blurScale = 1.0f;
-	};
-
 	class PostEffect
 		: public castor3d::PostEffect
 	{

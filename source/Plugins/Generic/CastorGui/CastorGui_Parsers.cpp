@@ -15,8 +15,6 @@
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
-#include <stack>
-
 using namespace CastorGui;
 using namespace castor3d;
 using namespace castor;
@@ -25,82 +23,9 @@ namespace CastorGui
 {
 	namespace
 	{
-		struct ParserContext
-		{
-			std::stack< ControlSPtr > m_parents;
-			Engine * m_engine{};
-			ButtonCtrlSPtr m_button;
-			ComboBoxCtrlSPtr m_combo;
-			EditCtrlSPtr m_edit;
-			ListBoxCtrlSPtr m_listbox;
-			SliderCtrlSPtr m_slider;
-			StaticCtrlSPtr m_static;
-			uint32_t m_flags{};
-			uint32_t m_ctrlId{};
-
-			ControlRPtr getTop()const
-			{
-				ControlRPtr result{};
-
-				if ( !m_parents.empty() )
-				{
-					result = m_parents.top().get();
-				}
-
-				return result;
-			}
-
-			void Pop()
-			{
-				m_button.reset();
-				m_edit.reset();
-				m_listbox.reset();
-				m_slider.reset();
-				m_static.reset();
-				m_combo.reset();
-
-				if ( !m_parents.empty() )
-				{
-					ControlSPtr top;
-					top = m_parents.top();
-
-					switch ( top->getType() )
-					{
-					case ControlType::eStatic:
-						m_static = std::static_pointer_cast< StaticCtrl >( top );
-						break;
-
-					case ControlType::eEdit:
-						m_edit = std::static_pointer_cast< EditCtrl >( top );
-						break;
-
-					case ControlType::eSlider:
-						m_slider = std::static_pointer_cast< SliderCtrl >( top );
-						break;
-
-					case ControlType::eComboBox:
-						m_combo = std::static_pointer_cast< ComboBoxCtrl >( top );
-						break;
-
-					case ControlType::eListBox:
-						m_listbox = std::static_pointer_cast< ListBoxCtrl >( top );
-						break;
-
-					case ControlType::eButton:
-						m_button = std::static_pointer_cast< ButtonCtrl >( top );
-						break;
-
-					default:
-						CU_Failure( "Unsupported Control Type" );
-						break;
-					}
-				}
-			}
-		};
-
 		ControlsManager & getControlsManager( FileParserContext & context )
 		{
-			return static_cast< ControlsManager & >( *static_cast< SceneFileContext & >( context ).parser->getEngine()->getUserInputListener() );
+			return static_cast< ControlsManager & >( *static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine()->getUserInputListener() );
 		}
 
 		ParserContext & getParserContext( FileParserContext & context )
@@ -128,11 +53,71 @@ namespace CastorGui
 		}
 	}
 
+	//*********************************************************************************************
+
+	ControlRPtr ParserContext::getTop()const
+	{
+		ControlRPtr result{};
+
+		if ( !m_parents.empty() )
+		{
+			result = m_parents.top().get();
+		}
+
+		return result;
+	}
+
+	void ParserContext::Pop()
+	{
+		m_button.reset();
+		m_edit.reset();
+		m_listbox.reset();
+		m_slider.reset();
+		m_static.reset();
+		m_combo.reset();
+
+		if ( !m_parents.empty() )
+		{
+			ControlSPtr top;
+			top = m_parents.top();
+
+			switch ( top->getType() )
+			{
+			case ControlType::eStatic:
+				m_static = std::static_pointer_cast< StaticCtrl >( top );
+				break;
+
+			case ControlType::eEdit:
+				m_edit = std::static_pointer_cast< EditCtrl >( top );
+				break;
+
+			case ControlType::eSlider:
+				m_slider = std::static_pointer_cast< SliderCtrl >( top );
+				break;
+
+			case ControlType::eComboBox:
+				m_combo = std::static_pointer_cast< ComboBoxCtrl >( top );
+				break;
+
+			case ControlType::eListBox:
+				m_listbox = std::static_pointer_cast< ListBoxCtrl >( top );
+				break;
+
+			case ControlType::eButton:
+				m_button = std::static_pointer_cast< ButtonCtrl >( top );
+				break;
+
+			default:
+				CU_Failure( "Unsupported Control Type" );
+				break;
+			}
+		}
+	}
+
+	//*********************************************************************************************
+
 	CU_ImplementAttributeParser( parserGui )
 	{
-		ParserContext * guiContext = new ParserContext;
-		guiContext->m_engine = static_cast< SceneFileContext & >( context ).parser->getEngine();
-		context.registerUserContext( PLUGIN_NAME, guiContext );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eGUI )
 

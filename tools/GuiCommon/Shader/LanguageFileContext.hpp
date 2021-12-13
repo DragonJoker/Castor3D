@@ -12,19 +12,15 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	/**
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 19/10/2011
 	\~english
 	\brief File parsing context for language files
 	\~french
 	\brief Contexte d'analyse pour les fichiers de langage
 	*/
 	class LanguageFileContext
-		: public castor::FileParserContext
 	{
 	public:
-		explicit LanguageFileContext( castor::Path const & path );
+		explicit LanguageFileContext();
 
 	public:
 		LanguageInfoPtr currentLanguage;

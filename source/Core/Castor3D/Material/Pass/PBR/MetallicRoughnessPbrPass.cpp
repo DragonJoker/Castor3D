@@ -68,7 +68,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserPassAlbedo )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !parsingContext.pass )
 				{
@@ -86,7 +86,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserPassMetalness )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !parsingContext.pass )
 				{
@@ -104,7 +104,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserPassRoughness )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !parsingContext.pass )
 				{
@@ -122,7 +122,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitChannel )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( !params.empty() )
 				{
@@ -180,7 +180,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitAlbedoMask )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( params.empty() )
 				{
@@ -195,7 +195,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitMetalnessMask )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( params.empty() )
 				{
@@ -210,7 +210,7 @@ namespace castor3d
 
 			CU_ImplementAttributeParser( parserUnitRoughnessMask )
 			{
-				auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+				auto & parsingContext = getParserContext( context );
 
 				if ( params.empty() )
 				{

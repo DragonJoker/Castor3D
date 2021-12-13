@@ -17,13 +17,6 @@ namespace motion_blur
 {
 	namespace
 	{
-		struct ParserContext
-		{
-			castor3d::Engine * engine{ nullptr };
-			Configuration data;
-			bool fpsScale;
-		};
-
 		ParserContext & getParserContext( castor::FileParserContext & context )
 		{
 			return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
@@ -32,9 +25,6 @@ namespace motion_blur
 
 	CU_ImplementAttributeParser( parserMotionBlur )
 	{
-		ParserContext * blurContext = new ParserContext;
-		blurContext->engine = static_cast< castor3d::SceneFileContext & >( context ).parser->getEngine();
-		context.registerUserContext( PostEffect::Type, blurContext );
 	}
 	CU_EndAttributePush( MotionBlurSection::eRoot )
 
@@ -93,7 +83,7 @@ namespace motion_blur
 	{
 		auto & blurContext = getParserContext( context );
 		auto engine = blurContext.engine;
-		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+		auto & parsingContext = castor3d::getParserContext( context );
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "vectorDivider" ), blurContext.data.vectorDivider );
 		parameters.add( cuT( "samplesCount" ), blurContext.data.samplesCount );

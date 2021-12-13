@@ -61,8 +61,10 @@ namespace castor3d
 		m_passTypeNames.emplace_back( passType, id );
 		m_lightingModels.emplace( id, info.lightingModel );
 		m_ibls.emplace( id, info.isIBLNeeded );
-		getEngine()->registerParsers( passType, info.parsers );
-		getEngine()->registerSections( passType, info.sections );
+		getEngine()->registerParsers( passType
+			, info.parsers
+			, info.sections
+			, nullptr );
 		getEngine()->registerLightingModel( info.lightingModel, info.lightingModelCreator );
 	}
 
@@ -79,7 +81,6 @@ namespace castor3d
 		auto lightingIt = m_lightingModels.find( id );
 		CU_Require( lightingIt != m_lightingModels.end() );
 		getEngine()->unregisterLightingModel( lightingIt->second );
-		getEngine()->unregisterSections( passType );
 		getEngine()->unregisterParsers( passType );
 		auto iblIt = m_ibls.find( id );
 		CU_Require( iblIt != m_ibls.end() );
