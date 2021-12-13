@@ -84,6 +84,13 @@ namespace
 			{ uint32_t( draw_edges::Section::eRoot ), draw_edges::PostEffect::Type },
 		};
 	}
+
+	void * createContext( castor::FileParserContext & context )
+	{
+		draw_edges::ParserContext * userContext = new draw_edges::ParserContext;
+		userContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
+		return userContext;
+	}
 }
 
 extern "C"
@@ -113,13 +120,14 @@ extern "C"
 	{
 		engine->getPostEffectFactory().registerType( draw_edges::PostEffect::Type
 			, &draw_edges::PostEffect::create );
-		engine->registerParsers( draw_edges::PostEffect::Type, createParsers() );
-		engine->registerSections( draw_edges::PostEffect::Type, createSections() );
+		engine->registerParsers( draw_edges::PostEffect::Type
+			, createParsers()
+			, createSections()
+			, &createContext );
 	}
 
 	C3D_DrawEdges_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterSections( draw_edges::PostEffect::Type );
 		engine->unregisterParsers( draw_edges::PostEffect::Type );
 		engine->getPostEffectFactory().unregisterType( draw_edges::PostEffect::Type );
 	}

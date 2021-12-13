@@ -4,11 +4,20 @@ See LICENSE file in root folder
 #ifndef ___Smaa_Parsers_H___
 #define ___Smaa_Parsers_H___
 
+#include "SmaaConfig.hpp"
+
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
 
 namespace smaa
 {
+	struct ParserContext
+	{
+		castor3d::Engine * engine{ nullptr };
+		Preset preset{};
+		SmaaConfig::Data data{};
+	};
+
 	enum class SmaaSection
 		: uint32_t
 	{

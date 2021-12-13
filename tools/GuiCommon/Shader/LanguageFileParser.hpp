@@ -39,7 +39,6 @@ namespace GuiCommon
 		//@}
 
 	private:
-		castor::FileParserContextSPtr doInitialiseParser( castor::Path const & path )override;
 		void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
 		bool doDiscardParser( castor::PreprocessedFile & preprocessed
 			, castor::String const & line )override;

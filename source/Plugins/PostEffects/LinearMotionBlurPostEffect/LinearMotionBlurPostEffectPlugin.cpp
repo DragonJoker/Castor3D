@@ -70,6 +70,13 @@ namespace
 			{ uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "motion_blur" ) },
 		};
 	}
+
+	void * createContext( castor::FileParserContext & context )
+	{
+		motion_blur::ParserContext * userContext = new motion_blur::ParserContext;
+		userContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
+		return userContext;
+	}
 }
 
 extern "C"
@@ -99,13 +106,14 @@ extern "C"
 	{
 		engine->getPostEffectFactory().registerType( motion_blur::PostEffect::Type
 			, &motion_blur::PostEffect::create );
-		engine->registerParsers( motion_blur::PostEffect::Type, createParsers() );
-		engine->registerSections( motion_blur::PostEffect::Type, createSections() );
+		engine->registerParsers( motion_blur::PostEffect::Type
+			, createParsers()
+			, createSections()
+			, &createContext );
 	}
 
 	C3D_LinearMotionBlur_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterSections( motion_blur::PostEffect::Type );
 		engine->unregisterParsers( motion_blur::PostEffect::Type );
 		engine->getPostEffectFactory().unregisterType( motion_blur::PostEffect::Type );
 	}
