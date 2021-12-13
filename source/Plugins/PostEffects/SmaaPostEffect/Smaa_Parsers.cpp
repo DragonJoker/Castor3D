@@ -16,13 +16,6 @@ namespace smaa
 {
 	namespace
 	{
-		struct ParserContext
-		{
-			castor3d::Engine * engine{ nullptr };
-			Preset preset{};
-			SmaaConfig::Data data{};
-		};
-
 		ParserContext & getParserContext( castor::FileParserContext & context )
 		{
 			return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
@@ -31,9 +24,6 @@ namespace smaa
 
 	CU_ImplementAttributeParser( parserSmaa )
 	{
-		ParserContext * smaaContext = new ParserContext;
-		smaaContext->engine = static_cast< castor3d::SceneFileContext & >( context ).parser->getEngine();
-		context.registerUserContext( PostEffect::Type, smaaContext );
 	}
 	CU_EndAttributePush( SmaaSection::eRoot )
 
@@ -287,7 +277,7 @@ namespace smaa
 	{
 		auto & smaaContext = getParserContext( context );
 		auto engine = smaaContext.engine;
-		auto & parsingContext = static_cast< castor3d::SceneFileContext & >( context );
+		auto & parsingContext = castor3d::getParserContext( context );
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "mode" ), getName( smaaContext.data.mode ) );
 		parameters.add( cuT( "preset" ), getName( smaaContext.preset ) );
