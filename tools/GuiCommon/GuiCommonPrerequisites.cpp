@@ -108,7 +108,7 @@ namespace GuiCommon
 		}
 	}
 
-	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
+	void createBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
 	{
 		p_bitmap.Create( int( p_width ), int( p_height ), 24 );
 		wxNativePixelData data( p_bitmap );
@@ -189,7 +189,7 @@ namespace GuiCommon
 		}
 	}
 
-	void CreateBitmapFromBuffer( castor::PxBufferBaseSPtr buffer, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( castor::PxBufferBaseSPtr buffer, bool flip, wxBitmap & bitmap )
 	{
 		if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
 		{
@@ -199,14 +199,14 @@ namespace GuiCommon
 				, buffer->getFormat() );
 		}
 
-		CreateBitmapFromBuffer( buffer->getConstPtr(), buffer->getWidth(), buffer->getHeight(), flip, bitmap );
+		createBitmapFromBuffer( buffer->getConstPtr(), buffer->getWidth(), buffer->getHeight(), flip, bitmap );
 	}
 
-	void CreateBitmapFromBuffer( TextureUnitSPtr unit, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( TextureUnitSPtr unit, bool flip, wxBitmap & bitmap )
 	{
 		if ( unit->getTexture()->getDefaultView().hasBuffer() )
 		{
-			CreateBitmapFromBuffer( unit->getTexture()->getImage().getPixels(), flip, bitmap );
+			createBitmapFromBuffer( unit->getTexture()->getImage().getPixels(), flip, bitmap );
 		}
 		else
 		{

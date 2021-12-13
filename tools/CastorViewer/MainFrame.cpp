@@ -554,7 +554,7 @@ namespace CastorViewer
 			window.enableSaveFrame();
 			castor.getRenderLoop().renderSyncFrame();
 			auto buffer = window.getSavedFrame();
-			CreateBitmapFromBuffer( buffer
+			createBitmapFromBuffer( buffer
 				, false
 				, bitmap );
 
