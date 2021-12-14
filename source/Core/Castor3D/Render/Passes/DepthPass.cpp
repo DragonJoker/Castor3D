@@ -198,7 +198,7 @@ namespace castor3d
 					, c3d_modelData.getEnvMapIndex()
 					, matFlags );
 				data0 = vec4( in.fragCoord.z()
-					, length( in.worldPosition - c3d_sceneData.cameraPosition )
+					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, writer.cast< sdw::Float >( in.material ) );
 				data1 = vec4( normal, matFlags );
