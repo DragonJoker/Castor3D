@@ -58,12 +58,8 @@ namespace castor
 				if ( result )
 				{
 					result = writeNamedSubOpt( file, "orientation", node.getOrientation(), castor::Quaternion::identity() )
-						&& writeNamedSubOpt( file, "position", node.getPosition(), castor::Point3f{} );
-				}
-
-				if ( result && ( node.getScale() != castor::Point3f{ 1, 1, 1 } || m_scale != 1.0f ) )
-				{
-					result = writeNamedSub( file, "scale", node.getScale() * m_scale );
+						&& writeNamedSubOpt( file, "position", node.getPosition() * m_scale, castor::Point3f{} )
+						&& writeNamedSubOpt( file, "scale", node.getScale() * m_scale, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
 				}
 			}
 		}

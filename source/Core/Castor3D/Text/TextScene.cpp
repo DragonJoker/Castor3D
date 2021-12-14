@@ -408,6 +408,7 @@ namespace castor
 		bool writeNodes( StringStream & file
 			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
+			, float scale
 			, TextWriterBase const & writer )
 		{
 			bool result = true;
@@ -423,7 +424,7 @@ namespace castor
 
 					if ( result && node && writable( *node ) )
 					{
-						result = writer.writeSub( file, *node );
+						result = writer.writeSub( file, *node, scale );
 					}
 				}
 			}
@@ -435,6 +436,7 @@ namespace castor
 			, SceneNode::SceneNodeMap const & nodes
 			, String const & elemsName
 			, Path const & includePath
+			, float scale
 			, TextWriterBase const & writer )
 		{
 			if ( !includePath.empty() )
@@ -442,7 +444,7 @@ namespace castor
 				return true;
 			}
 
-			return writeNodes( file, nodes, elemsName, writer );
+			return writeNodes( file, nodes, elemsName, scale, writer );
 		}
 	}
 
@@ -491,9 +493,9 @@ namespace castor
 						&& writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.rootFolder, m_options.materialsFile, m_options.subfolder, *this )
 						&& writeView( file, scene.getOverlayView(), cuT( "Overlays" ), *this, writable< Overlay > )
 						&& writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, m_options.subfolder, *this, writable< Mesh > )
-						&& writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), *this )
+						&& writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), m_options.scale, *this )
 						&& writeCache( file, scene.getCameraCache(), cuT( "Cameras" ), *this, writable< Camera > )
-						&& writeIncludedNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, *this )
+						&& writeIncludedNodes( file, scene.getObjectRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, m_options.scale, *this )
 						&& writeIncludedCache( file, scene.getLightCache(), cuT( "Lights" ), m_options.lightsFile, *this, writable< Light > )
 						&& writeIncludedCache( file, scene.getGeometryCache(), cuT( "Geometries" ), m_options.objectsFile, *this, writable< Geometry > )
 						&& writeCache( file, scene.getParticleSystemCache(), cuT( "Particle systems" ), *this, writable< ParticleSystem > )
