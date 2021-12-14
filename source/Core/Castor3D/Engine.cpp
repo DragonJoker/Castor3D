@@ -623,6 +623,7 @@ namespace castor3d
 
 		if ( it == m_passRenderPassTypes.end() )
 		{
+			log::error << cuT( "Can't find render pass info for [" ) << renderPassType << "]" << std::endl;
 			return nullptr;
 		}
 

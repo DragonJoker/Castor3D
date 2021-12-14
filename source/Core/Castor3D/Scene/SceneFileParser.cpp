@@ -206,7 +206,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eSubmesh ), cuT( "}" ), parserSubmeshEnd );
 
 			addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), parserMaterialPass );
-			addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "render_pass" ), parserMaterialRenderPass );
+			addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "render_pass" ), parserMaterialRenderPass, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "}" ), parserMaterialEnd );
 
 			addParser( result, uint32_t( CSCNSection::eTextureTransform ), cuT( "rotate" ), parserTexTransformRotate, { makeParameter< ParameterType::eFloat >() } );

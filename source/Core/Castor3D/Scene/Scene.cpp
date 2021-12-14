@@ -65,6 +65,20 @@ namespace castor3d
 
 			return result;
 		}
+
+		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
+		{
+			stream << std::setprecision( 4 ) << obj->x
+				<< ", " << std::setprecision( 4 ) << obj->y
+				<< ", " << std::setprecision( 4 ) << obj->z;
+			return stream;
+		}
+
+		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
+		{
+			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
+			return stream;
+		}
 	}
 
 	//*************************************************************************************************
@@ -281,6 +295,8 @@ namespace castor3d
 		m_lightCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		doUpdateLightsDependent();
+		doUpdateBoundingBox();
+		log::info << "Initialised scene [" << getName() << "], AABB: " << m_boundingBox << std::endl;
 		m_initialised = true;
 	}
 
