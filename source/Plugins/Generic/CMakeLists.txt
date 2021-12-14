@@ -1,10 +1,12 @@
 option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" TRUE )
 option( CASTOR_BUILD_GENERIC_CASTORGUI "Build CastorGui generic plugin" TRUE )
 option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" TRUE )
+option( CASTOR_BUILD_GENERIC_WATERRENDERING "Build water rendering plugin" TRUE )
 
 function( GenericInit )
 	set( Cgui "no (Not wanted)" PARENT_SCOPE )
 	set( Toon "no (Not wanted)" PARENT_SCOPE )
+	set( Watr "no (Not wanted)" PARENT_SCOPE )
 
 	if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 		set( Castor3D_MATERIAL_DIRS
@@ -48,6 +50,12 @@ function( GenericBuild )
 			set( Toon ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
+			set( Build ${Watr} )
+			add_subdirectory( Plugins/Generic/WaterRendering )
+			set( Watr ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -76,6 +84,9 @@ function( GenericSummary msg )
 		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 			set( msg_tmp "${msg_tmp}\n    ToonMaterial         ${Toon}" )
 		endif ()
+		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
+			set( msg_tmp "${msg_tmp}\n    WaterRendering       ${Watr}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( GenericSummary )
@@ -102,6 +113,15 @@ function( GenericSetup )
 			cpack_add_component( ToonMaterial
 				DISPLAY_NAME "ToonMaterial"
 				DESCRIPTION "Defines a toon material in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Developer Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
+			cpack_add_component( WaterRendering
+				DISPLAY_NAME "WaterRendering"
+				DESCRIPTION "Allows water rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
