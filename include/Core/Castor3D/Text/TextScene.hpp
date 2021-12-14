@@ -17,13 +17,14 @@ namespace castor
 	public:
 		struct Options
 		{
-			Path rootFolder;
-			Path materialsFile;
-			Path meshesFile;
-			Path nodesFile;
-			Path objectsFile;
-			Path lightsFile;
-			String subfolder;
+			Path rootFolder{};
+			Path materialsFile{};
+			Path meshesFile{};
+			Path nodesFile{};
+			Path objectsFile{};
+			Path lightsFile{};
+			String subfolder{};
+			float scale{ 1.0f };
 		};
 
 		C3D_API explicit TextWriter( String const & tabs
