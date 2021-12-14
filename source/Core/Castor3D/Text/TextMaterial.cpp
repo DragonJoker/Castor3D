@@ -1,6 +1,7 @@
 #include "Castor3D/Text/TextMaterial.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
 #include "Castor3D/Text/TextPass.hpp"
 
 using namespace castor3d;
@@ -25,6 +26,11 @@ namespace castor
 		if ( auto block{ beginBlock( file, cuT( "material" ), material.getName() ) } )
 		{
 			result = true;
+
+			if ( material.getRenderPassInfo() )
+			{
+				result = writeName( file, "render_pass", material.getRenderPassInfo()->name );
+			}
 
 			for ( auto pass : material )
 			{
