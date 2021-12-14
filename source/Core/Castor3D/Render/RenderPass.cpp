@@ -1036,8 +1036,8 @@ namespace castor3d
 					, c3d_matrixData.worldToPrvProj( prvMtxModel * curPosition ) );
 				auto worldPos = writer.declLocale( "worldPos"
 					, curMtxModel * curPosition );
-				out.worldPosition = worldPos.xyz();
-				out.viewPosition = c3d_matrixData.worldToCurView( worldPos ).xyz();
+				out.worldPosition = worldPos;
+				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				curPosition = c3d_matrixData.worldToCurProj( worldPos );
 				out.computeVelocity( c3d_matrixData
 					, curPosition
@@ -1115,7 +1115,7 @@ namespace castor3d
 				auto scaledUp = writer.declLocale( "scaledUp"
 					, up * position.y() * height );
 				auto worldPos = writer.declLocale( "worldPos"
-					, ( curBbcenter + scaledRight + scaledUp ) );
+					, vec4( ( curBbcenter + scaledRight + scaledUp ), 1.0_f ) );
 				out.worldPosition = worldPos;
 
 				if ( hasTextures )
@@ -1130,15 +1130,15 @@ namespace castor3d
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_matrixData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
 				auto curPosition = writer.declLocale( "curPosition"
-					, c3d_matrixData.worldToCurProj( vec4( worldPos, 1.0_f ) ) );
-				out.viewPosition = c3d_matrixData.worldToCurView( vec4( worldPos, 1.0_f ) ).xyz();
+					, c3d_matrixData.worldToCurProj( worldPos ) );
+				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				out.computeVelocity( c3d_matrixData
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
 
 				out.computeTangentSpace( c3d_sceneData.cameraPosition
-					, worldPos
+					, worldPos.xyz()
 					, curToCamera
 					, up
 					, right );

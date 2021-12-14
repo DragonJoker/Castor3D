@@ -136,10 +136,10 @@ namespace castor3d::shader
 		sdw::Vec2 getVelocity()const;
 
 	public:
-		sdw::Vec3 worldPosition;
-		sdw::Vec3 viewPosition;
-		sdw::Vec3 curPosition;
-		sdw::Vec3 prvPosition;
+		sdw::Vec4 worldPosition;
+		sdw::Vec4 viewPosition;
+		sdw::Vec4 curPosition;
+		sdw::Vec4 prvPosition;
 		sdw::Vec3 tangentSpaceFragPosition;
 		sdw::Vec3 tangentSpaceViewPosition;
 		sdw::Vec3 normal;

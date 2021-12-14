@@ -266,10 +266,10 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstance{ writer, std::move( expr ), enabled }
-		, worldPosition{ this->getMember< sdw::Vec3 >( "worldPosition", true ) }
-		, viewPosition{ this->getMember< sdw::Vec3 >( "viewPosition", true ) }
-		, curPosition{ this->getMember< sdw::Vec3 >( "curPosition", true ) }
-		, prvPosition{ this->getMember< sdw::Vec3 >( "prvPosition", true ) }
+		, worldPosition{ this->getMember< sdw::Vec4 >( "worldPosition", true ) }
+		, viewPosition{ this->getMember< sdw::Vec4 >( "viewPosition", true ) }
+		, curPosition{ this->getMember< sdw::Vec4 >( "curPosition", true ) }
+		, prvPosition{ this->getMember< sdw::Vec4 >( "prvPosition", true ) }
 		, tangentSpaceFragPosition{ this->getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true ) }
 		, tangentSpaceViewPosition{ this->getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true ) }
 		, normal{ this->getMember< sdw::Vec3 >( "normal", true ) }
@@ -304,19 +304,19 @@ namespace castor3d::shader
 				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
 					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
 			uint32_t index = 0u;
-			result->declMember( "worldPosition", ast::type::Kind::eVec3F
+			result->declMember( "worldPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
 				, ( checkFlag( shaderFlags, ShaderFlag::eWorldSpace ) ? index++ : 0 )
 				, checkFlag( shaderFlags, ShaderFlag::eWorldSpace ) );
-			result->declMember( "viewPosition", ast::type::Kind::eVec3F
+			result->declMember( "viewPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
 				, ( checkFlag( shaderFlags, ShaderFlag::eViewSpace ) ? index++ : 0 )
 				, checkFlag( shaderFlags, ShaderFlag::eViewSpace ) );
-			result->declMember( "curPosition", ast::type::Kind::eVec3F
+			result->declMember( "curPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
 				, ( checkFlag( shaderFlags, ShaderFlag::eVelocity ) ? index++ : 0 )
 				, checkFlag( shaderFlags, ShaderFlag::eVelocity ) );
-			result->declMember( "prvPosition", ast::type::Kind::eVec3F
+			result->declMember( "prvPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
 				, ( checkFlag( shaderFlags, ShaderFlag::eVelocity ) ? index++ : 0 )
 				, checkFlag( shaderFlags, ShaderFlag::eVelocity ) );
@@ -382,8 +382,8 @@ namespace castor3d::shader
 		matrixData.jitter( csCurPos );
 		matrixData.jitter( csPrvPos );
 
-		curPosition = csCurPos.xyw();
-		prvPosition = csPrvPos.xyw();
+		curPosition = vec4( csCurPos.xyw(), 1.0_f );
+		prvPosition = vec4( csPrvPos.xyw(), 1.0_f );
 
 		// Positions in projection space are in [-1, 1] range, while texture
 		// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in

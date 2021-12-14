@@ -35,6 +35,7 @@ namespace castor3d
 			C3D_API sdw::Int getNodeId( ProgramFlags programFlags
 				, sdw::Int const & instanceNodeId )const;
 			C3D_API sdw::Int getNodeId()const;
+			C3D_API sdw::Vec4 worldToModel( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToWorld( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToCurWorld( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
