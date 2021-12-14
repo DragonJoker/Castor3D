@@ -105,6 +105,11 @@ namespace castor3d
 			return m_nodeId;
 		}
 
+		sdw::Vec4 ModelData::worldToModel( sdw::Vec4 const & pos )const
+		{
+			return inverse( m_curMtxModel ) * pos;
+		}
+
 		sdw::Vec4 ModelData::modelToWorld( sdw::Vec4 const & pos )const
 		{
 			return m_curMtxModel * pos;

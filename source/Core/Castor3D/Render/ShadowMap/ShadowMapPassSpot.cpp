@@ -194,7 +194,7 @@ namespace castor3d
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				auto worldPos = writer.declLocale( "worldPos"
 					, mtxModel * curPosition );
-				out.worldPosition = worldPos.xyz();
+				out.worldPosition = worldPos;
 				out.vtx.position = c3d_matrixData.worldToCurProj( worldPos );
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
@@ -332,7 +332,7 @@ namespace castor3d
 				auto light = writer.declLocale( "light"
 					, c3d_shadowMapData.getSpotLight( *lightingModel ) );
 				auto lightToVertex = writer.declLocale( "lightToVertex"
-					, light.m_position.xyz() - in.worldPosition );
+					, light.m_position.xyz() - in.worldPosition.xyz() );
 				auto distance = writer.declLocale( "distance"
 					, length( lightToVertex ) );
 				auto attenuation = writer.declLocale( "attenuation"
@@ -360,7 +360,7 @@ namespace castor3d
 					, in.fragCoord.z() );
 				pxl_normalLinear.w() = depth;
 				pxl_normalLinear.xyz() = spotFactor * normal;
-				pxl_position.xyz() = in.worldPosition;
+				pxl_position.xyz() = in.worldPosition.xyz();
 
 				pxl_variance.x() = depth;
 				pxl_variance.y() = depth * depth;

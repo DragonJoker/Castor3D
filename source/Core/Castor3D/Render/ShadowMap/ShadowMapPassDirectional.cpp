@@ -296,7 +296,7 @@ namespace castor3d
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				auto worldPos = writer.declLocale( "worldPos"
 					, mtxModel * curPosition );
-				out.worldPosition = worldPos.xyz();
+				out.worldPosition = worldPos;
 
 #if C3D_UseTiledDirectionalShadowMap
 				auto ti = writer.declLocale( "tileIndex"
@@ -473,7 +473,7 @@ namespace castor3d
 					, in.fragCoord.z() );
 				pxl_normalLinear.w() = depth;
 				pxl_normalLinear.xyz() = normal;
-				pxl_position.xyz() = in.worldPosition;
+				pxl_position.xyz() = in.worldPosition.xyz();
 
 				pxl_variance.x() = depth;
 				pxl_variance.y() = depth * depth;
