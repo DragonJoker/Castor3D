@@ -20,7 +20,9 @@ namespace castor3d
 	void Plane::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
 		castor::String param;
+		bool flipYZ = false;
 		parameters.get( cuT( "tile_uv" ), m_tileUV );
+		parameters.get( cuT( "flipYZ" ), flipYZ );
 
 		if ( parameters.get( cuT( "width_subdiv" ), param ) )
 		{
@@ -55,14 +57,30 @@ namespace castor3d
 		castor::Point2f ptUv;
 		SubmeshSPtr submesh = mesh.createSubmesh();
 
-		for ( uint32_t i = 0; i < nbVertexW; i++ )
+		if ( flipYZ )
 		{
-			for ( uint32_t j = 0; j < nbVertexH; j++ )
+			for ( uint32_t i = 0; i < nbVertexW; i++ )
 			{
-				submesh->addPoint( InterleavedVertex{}
-					.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
-					.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
-					.texcoord( castor::Point2f{ float( i ) * gapW / m_width, float( j ) * gapH / m_depth } ) );
+				for ( uint32_t j = 0; j < nbVertexH; j++ )
+				{
+					submesh->addPoint( InterleavedVertex{}
+						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) } )
+						.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
+						.texcoord( castor::Point2f{ float( i ) * gapW / m_width, float( j ) * gapH / m_depth } ) );
+				}
+			}
+		}
+		else
+		{
+			for ( uint32_t i = 0; i < nbVertexW; i++ )
+			{
+				for ( uint32_t j = 0; j < nbVertexH; j++ )
+				{
+					submesh->addPoint( InterleavedVertex{}
+						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
+						.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
+						.texcoord( castor::Point2f{ float( i ) * gapW / m_width, float( j ) * gapH / m_depth } ) );
+				}
 			}
 		}
 
