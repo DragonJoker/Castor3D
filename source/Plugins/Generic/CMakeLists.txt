@@ -3,12 +3,14 @@ option( CASTOR_BUILD_GENERIC_CASTORGUI "Build CastorGui generic plugin" TRUE )
 option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" TRUE )
 option( CASTOR_BUILD_GENERIC_WATERRENDERING "Build water rendering plugin" TRUE )
 option( CASTOR_BUILD_GENERIC_OCEANRENDERING "Build ocean rendering plugin" TRUE )
+option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin" TRUE )
 
 function( GenericInit )
 	set( Cgui "no (Not wanted)" PARENT_SCOPE )
 	set( Toon "no (Not wanted)" PARENT_SCOPE )
 	set( Watr "no (Not wanted)" PARENT_SCOPE )
 	set( Ocen "no (Not wanted)" PARENT_SCOPE )
+	set( FftO "no (Not wanted)" PARENT_SCOPE )
 
 	if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 		set( Castor3D_MATERIAL_DIRS
@@ -64,6 +66,12 @@ function( GenericBuild )
 			set( Ocen ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_GENERIC_FFTOCEANRENDERING} )
+			set( Build ${FftO} )
+			add_subdirectory( Plugins/Generic/FFTOceanRendering )
+			set( FftO ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -97,6 +105,9 @@ function( GenericSummary msg )
 		endif ()
 		if( ${CASTOR_BUILD_GENERIC_OCEANRENDERING} )
 			set( msg_tmp "${msg_tmp}\n    OceanRendering       ${Ocen}" )
+		endif ()
+		if( ${CASTOR_BUILD_GENERIC_FFTOCEANRENDERING} )
+			set( msg_tmp "${msg_tmp}\n    FFTOceanRendering    ${FftO}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -142,6 +153,15 @@ function( GenericSetup )
 			cpack_add_component( OceanRendering
 				DISPLAY_NAME "OceanRendering"
 				DESCRIPTION "Allows ocean rendering in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Developer Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_GENERIC_FFTOCEANRENDERING} )
+			cpack_add_component( FFTOceanRendering
+				DISPLAY_NAME "OceanRendering"
+				DESCRIPTION "Allows FFT ocean rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
