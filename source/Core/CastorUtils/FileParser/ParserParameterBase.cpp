@@ -132,6 +132,24 @@ namespace castor
 	}
 
 	void getParameterValue( ParserParameterBase const & parameter
+		, Point2ui & value )
+	{
+		doGetParameterValue( parameter, value );
+	}
+
+	void getParameterValue( ParserParameterBase const & parameter
+		, Point3ui & value )
+	{
+		doGetParameterValue( parameter, value );
+	}
+
+	void getParameterValue( ParserParameterBase const & parameter
+		, Point4ui & value )
+	{
+		doGetParameterValue( parameter, value );
+	}
+
+	void getParameterValue( ParserParameterBase const & parameter
 		, Point2f & value )
 	{
 		doGetParameterValue( parameter, value );
