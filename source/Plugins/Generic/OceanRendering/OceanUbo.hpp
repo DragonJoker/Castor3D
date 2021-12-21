@@ -81,7 +81,7 @@ namespace ocean
 		castor::Point4f normalMapScroll{ 1.0f, 0.0f, 0.0f, 1.0f };
 		castor::Point4f ssrSettings{ 0.5f, 20.0f, 10.0f, 20.0f };
 #if Ocean_Debug
-		OceanDisplayData debug{ eResult };
+		uint32_t debug{ eResult };
 		uint32_t dummy[3]{};
 #endif
 		std::array< WaveConfigurationData, MaxWaves > waves{ WaveConfigurationData{ castor::Point4f{ 0.3f, 0.0f, -0.7f }, 1.79f, 3.75f, 0.85f, 1.21f }

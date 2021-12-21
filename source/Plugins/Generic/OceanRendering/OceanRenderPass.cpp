@@ -39,6 +39,8 @@
 
 #include <ashespp/Image/StagingTexture.hpp>
 
+#pragma clang diagnostic ignored "-Wunused-member-function"
+
 #define Ocean_DebugPixelShader 0
 
 namespace ocean
@@ -367,7 +369,7 @@ namespace ocean
 		{
 #if Ocean_Debug
 			visitor.visit( cuT( "Debug" )
-				, reinterpret_cast< uint32_t & >( m_configuration.debug )
+				, m_configuration.debug
 				, getOceanDisplayDataNames()
 				, nullptr );
 #endif
