@@ -80,6 +80,7 @@ namespace toon::shader
 					, envMaps
 					, envMapIndex
 					, toonMaterial );
+				material.albedo = vec3( 0.0_f );
 			}
 			ELSE
 			{
@@ -94,8 +95,6 @@ namespace toon::shader
 					, refracted );
 			}
 			FI;
-
-			toonMaterial.albedo = vec3( 0.0_f );
 		}
 		FI;
 	}
@@ -124,6 +123,36 @@ namespace toon::shader
 		//	, surface.worldNormal
 		//	, envMap
 		//	, toonMaterial );
+	}
+
+	sdw::Vec3 ToonPhongReflectionModel::computeForward( c3d::LightMaterial & material
+		, c3d::Surface const & surface
+		, c3d::SceneData const & sceneData
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission )
+	{
+		auto & toonMaterial = static_cast< ToonPhongLightMaterial & >( material );
+		auto incident = m_writer.declLocale( "incident"
+			, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
+
+		if ( checkFlag( m_passFlags, castor3d::PassFlag::eRefraction ) )
+		{
+			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
+			computeRefr( incident
+				, surface.worldNormal
+				, envMap
+				, refractionRatio
+				, transmission
+				, toonMaterial );
+		}
+
+		return vec3( 0.0_f );
+		// TODO: Bind skybox with phong passes.
+		//auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapSkybox" );
+		//return computeRefr( incident
+		//	, surface.worldNormal
+		//	, envMap
+		//	, phongMaterial );
 	}
 
 	void ToonPhongReflectionModel::computeForward( c3d::LightMaterial & material
@@ -162,6 +191,7 @@ namespace toon::shader
 					, surface.worldNormal
 					, envMap
 					, toonMaterial );
+				material.albedo = vec3( 0.0_f );
 			}
 			else
 			{
@@ -174,8 +204,6 @@ namespace toon::shader
 					, reflected
 					, refracted );
 			}
-
-			toonMaterial.albedo = vec3( 0.0_f );
 		}
 	}
 
@@ -197,17 +225,33 @@ namespace toon::shader
 			, material );
 	}
 
+	sdw::Vec3 ToonPhongReflectionModel::computeRefr( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeRgba32 const & envMap
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, ToonPhongLightMaterial & material )
+	{
+		doDeclareComputeRefr();
+		return m_computeRefr( wsIncident
+			, wsNormal
+			, envMap
+			, refractionRatio
+			, transmission
+			, material );
+	}
+
 	void ToonPhongReflectionModel::computeRefr( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, ToonPhongLightMaterial const & material
+		, ToonPhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefr();
-		m_computeRefr( wsIncident
+		doDeclareComputeMergeRefr();
+		m_computeMergeRefr( wsIncident
 			, wsNormal
 			, envMap
 			, refractionRatio
@@ -222,7 +266,7 @@ namespace toon::shader
 		, sdw::SampledImageCubeRgba32 const & envMap
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, ToonPhongLightMaterial const & material
+		, ToonPhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
@@ -251,18 +295,36 @@ namespace toon::shader
 			, material );
 	}
 
+	sdw::Vec3 ToonPhongReflectionModel::computeRefrs( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeArrayRgba32 const & envMap
+		, sdw::Int const & envMapIndex
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, ToonPhongLightMaterial & material )
+	{
+		doDeclareComputeRefrs();
+		return m_computeRefrs( wsIncident
+			, wsNormal
+			, envMap
+			, envMapIndex
+			, refractionRatio
+			, transmission
+			, material );
+	}
+
 	void ToonPhongReflectionModel::computeRefrs( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
 		, sdw::Int const & envMapIndex
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, ToonPhongLightMaterial const & material
+		, ToonPhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefrs();
-		m_computeRefrs( wsIncident
+		doDeclareComputeMergeRefrs();
+		m_computeMergeRefrs( wsIncident
 			, wsNormal
 			, envMap
 			, envMapIndex
@@ -279,7 +341,7 @@ namespace toon::shader
 		, sdw::Int const & envMapIndex
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, ToonPhongLightMaterial const & material
+		, ToonPhongLightMaterial & material
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
@@ -326,13 +388,45 @@ namespace toon::shader
 			return;
 		}
 
-		m_computeRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeRefr"
+		m_computeRefr = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_toon_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, ToonPhongLightMaterial const & material
+				, ToonPhongLightMaterial material )
+			{
+				auto albedo = m_writer.declLocale( "albedo"
+					, material.albedo );
+				auto refracted = m_writer.declLocale( "refracted"
+					, refract( wsIncident, wsNormal, refractionRatio ) );
+				material.albedo = vec3( 0.0_f );
+				m_writer.returnStmt( envMap.lod( refracted, ( 256.0f - material.shininess ) / 32.0f ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InOutToonPhongLightMaterial{ m_writer, "material" } );
+	}
+
+	void ToonPhongReflectionModel::doDeclareComputeMergeRefr()
+	{
+		if ( m_computeMergeRefr )
+		{
+			return;
+		}
+
+		m_computeMergeRefr = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeMergeRefr"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, ToonPhongLightMaterial material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -348,12 +442,16 @@ namespace toon::shader
 					, sdw::fma( pow( 1.0_f - product, 5.0_f )
 						, 1.0_f - reflectance
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, refract( wsIncident, wsNormal, refractionRatio ) );
+				refraction = computeRefr( wsIncident
+					, wsNormal
+					, envMap
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( refracted, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -362,7 +460,7 @@ namespace toon::shader
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, InToonPhongLightMaterial{ m_writer, "material" }
+			, InOutToonPhongLightMaterial{ m_writer, "material" }
 			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
@@ -380,7 +478,7 @@ namespace toon::shader
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, ToonPhongLightMaterial const & material
+				, ToonPhongLightMaterial material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -402,7 +500,7 @@ namespace toon::shader
 			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, InToonPhongLightMaterial{ m_writer, "material" }
+			, InOutToonPhongLightMaterial{ m_writer, "material" }
 			, sdw::OutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
@@ -441,14 +539,49 @@ namespace toon::shader
 			return;
 		}
 
-		m_computeRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeRefr"
+		m_computeRefrs = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_toon_computeRefr"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
 				, sdw::Int const & envMapIndex
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, ToonPhongLightMaterial const & material
+				, ToonPhongLightMaterial material )
+			{
+				auto albedo = m_writer.declLocale( "albedo"
+					, material.albedo );
+				auto refracted = m_writer.declLocale( "refracted"
+					, refract( wsIncident, wsNormal, refractionRatio ) );
+				material.albedo = vec3( 0.0_f );
+				m_writer.returnStmt( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
+						, ( 256.0f - material.shininess ) / 32.0f ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
+			, sdw::InInt{ m_writer, "envMapIndex" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InOutToonPhongLightMaterial{ m_writer, "material" } );
+	}
+
+	void ToonPhongReflectionModel::doDeclareComputeMergeRefrs()
+	{
+		if ( m_computeMergeRefrs )
+		{
+			return;
+		}
+
+		m_computeMergeRefrs = m_writer.implementFunction< sdw::Void >( "c3d_phong_toon_computeMergeRefr"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeArrayRgba32 const & envMap
+				, sdw::Int const & envMapIndex
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, ToonPhongLightMaterial material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -464,13 +597,17 @@ namespace toon::shader
 					, sdw::fma( pow( 1.0_f - product, 5.0_f )
 						, 1.0_f - reflectance
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, refract( wsIncident, wsNormal, refractionRatio ) );
+				refraction = computeRefrs( wsIncident
+					, wsNormal
+					, envMap
+					, envMapIndex
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, ( 256.0f - material.shininess ) / 32.0f ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -480,7 +617,7 @@ namespace toon::shader
 			, sdw::InInt{ m_writer, "envMapIndex" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, InToonPhongLightMaterial{ m_writer, "material" }
+			, InOutToonPhongLightMaterial{ m_writer, "material" }
 			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
@@ -499,7 +636,7 @@ namespace toon::shader
 				, sdw::Int const & envMapIndex
 				, sdw::Float const & refractionRatio
 				, sdw::Vec3 const & transmission
-				, ToonPhongLightMaterial const & material
+				, ToonPhongLightMaterial material
 				, sdw::Vec3 reflection
 				, sdw::Vec3 refraction )
 			{
@@ -524,7 +661,7 @@ namespace toon::shader
 			, sdw::InInt{ m_writer, "envMapIndex" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
 			, sdw::InVec3{ m_writer, "transmission" }
-			, InToonPhongLightMaterial{ m_writer, "material" }
+			, InOutToonPhongLightMaterial{ m_writer, "material" }
 			, sdw::OutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
@@ -717,6 +854,38 @@ namespace toon::shader
 			, brdf );
 	}
 
+	sdw::Vec3 ToonPbrReflectionModel::computeForward( c3d::LightMaterial & material
+		, c3d::Surface const & surface
+		, c3d::SceneData const & sceneData
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission )
+	{
+		auto & toonMaterial = static_cast< ToonPbrLightMaterial const & >( material );
+		auto incident = m_writer.declLocale( "incident"
+			, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
+
+		if ( checkFlag( m_passFlags, castor3d::PassFlag::eRefraction ) )
+		{
+			// Refraction from environment map.
+			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
+			return computeRefrEnvMap( incident
+				, surface.worldNormal
+				, envMap
+				, refractionRatio
+				, transmission
+				, toonMaterial );
+		}
+
+		// Refraction from background skybox.
+		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
+		return computeRefrSkybox( incident
+			, surface.worldNormal
+			, prefiltered
+			, refractionRatio
+			, transmission
+			, toonMaterial );
+	}
+
 	void ToonPbrReflectionModel::computeForward( c3d::LightMaterial & material
 		, c3d::Surface const & surface
 		, c3d::SceneData const & sceneData
@@ -877,6 +1046,22 @@ namespace toon::shader
 			, material );
 	}
 
+	sdw::Vec3 ToonPbrReflectionModel::computeRefrEnvMap( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeRgba32 const & envMap
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, ToonPbrLightMaterial const & material )
+	{
+		doDeclareComputeRefrEnvMap();
+		return m_computeRefrEnvMap( wsIncident
+			, wsNormal
+			, envMap
+			, refractionRatio
+			, transmission
+			, material );
+	}
+
 	sdw::Void ToonPbrReflectionModel::computeRefrEnvMap( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeRgba32 const & envMap
@@ -886,8 +1071,8 @@ namespace toon::shader
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefrEnvMap();
-		return m_computeRefrEnvMap( wsIncident
+		doDeclareComputeMergeRefrEnvMap();
+		return m_computeMergeRefrEnvMap( wsIncident
 			, wsNormal
 			, envMap
 			, refractionRatio
@@ -911,6 +1096,24 @@ namespace toon::shader
 			, material );
 	}
 
+	sdw::Vec3 ToonPbrReflectionModel::computeRefrEnvMaps( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeArrayRgba32 const & envMap
+		, sdw::Int const & envMapIndex
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, ToonPbrLightMaterial const & material )
+	{
+		doDeclareComputeRefrEnvMaps();
+		return m_computeRefrEnvMaps( wsIncident
+			, wsNormal
+			, envMap
+			, envMapIndex
+			, refractionRatio
+			, transmission
+			, material );
+	}
+
 	sdw::Void ToonPbrReflectionModel::computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -921,8 +1124,8 @@ namespace toon::shader
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefrEnvMaps();
-		return m_computeRefrEnvMaps( wsIncident
+		doDeclareComputeMergeRefrEnvMaps();
+		return m_computeMergeRefrEnvMaps( wsIncident
 			, wsNormal
 			, envMap
 			, envMapIndex
@@ -931,6 +1134,22 @@ namespace toon::shader
 			, material
 			, reflection
 			, refraction );
+	}
+
+	sdw::Vec3 ToonPbrReflectionModel::computeRefrSkybox( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeRgba32 const & envMap
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, ToonPbrLightMaterial const & material )
+	{
+		doDeclareComputeRefrSkybox();
+		return m_computeRefrSkybox( wsIncident
+			, wsNormal
+			, envMap
+			, refractionRatio
+			, transmission
+			, material );
 	}
 
 	sdw::Void ToonPbrReflectionModel::computeRefrSkybox( sdw::Vec3 const & wsIncident
@@ -942,8 +1161,8 @@ namespace toon::shader
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefrSkybox();
-		return m_computeRefrSkybox( wsIncident
+		doDeclareComputeMergeRefrSkybox();
+		return m_computeMergeRefrSkybox( wsIncident
 			, wsNormal
 			, envMap
 			, refractionRatio
@@ -1044,7 +1263,37 @@ namespace toon::shader
 			return;
 		}
 
-		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrEnvMap"
+		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeRefrEnvMap"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, ToonPbrLightMaterial const & material )
+			{
+				auto refracted = m_writer.declLocale( "refracted"
+					, refract( wsIncident, wsNormal, refractionRatio ) );
+				m_writer.returnStmt( envMap.lod( refracted
+						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InToonPbrLightMaterial{ m_writer, "material" } );
+	}
+
+	void ToonPbrReflectionModel::doDeclareComputeMergeRefrEnvMap()
+	{
+		if ( m_computeMergeRefrEnvMap )
+		{
+			return;
+		}
+
+		m_computeMergeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeMergeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -1066,13 +1315,16 @@ namespace toon::shader
 					, sdw::fma( max( 1.0_f - material.roughness, reflectance ) - reflectance
 						, pow( 1.0_f - product, 5.0_f )
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, refract( wsIncident, wsNormal, refractionRatio ) );
+				refraction = computeRefrEnvMap( wsIncident
+					, wsNormal
+					, envMap
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( refracted
-					, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -1121,7 +1373,39 @@ namespace toon::shader
 			return;
 		}
 
-		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrEnvMap"
+		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeRefrEnvMap"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeArrayRgba32 const & envMap
+				, sdw::Int const & envMapIndex
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, ToonPbrLightMaterial const & material )
+			{
+				auto refracted = m_writer.declLocale( "refracted"
+					, refract( wsIncident, wsNormal, refractionRatio ) );
+				m_writer.returnStmt( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
+						, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
+			, sdw::InInt{ m_writer, "envMapIndex" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InToonPbrLightMaterial{ m_writer, "material" } );
+	}
+
+	void ToonPbrReflectionModel::doDeclareComputeMergeRefrEnvMaps()
+	{
+		if ( m_computeMergeRefrEnvMaps )
+		{
+			return;
+		}
+
+		m_computeMergeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeMergeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -1144,13 +1428,17 @@ namespace toon::shader
 					, sdw::fma( max( 1.0_f - material.roughness, reflectance ) - reflectance
 						, pow( 1.0_f - product, 5.0_f )
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, refract( wsIncident, wsNormal, refractionRatio ) );
+				refraction = computeRefrEnvMaps( wsIncident
+					, wsNormal
+					, envMap
+					, envMapIndex
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-					, material.roughness * sdw::Float( float( castor::getBitSize( castor3d::EnvironmentMap::Size ) ) ) ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -1172,7 +1460,36 @@ namespace toon::shader
 			return;
 		}
 
-		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeRefrSkybox"
+		m_computeRefrSkybox = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_toon_computeRefrSkybox"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, ToonPbrLightMaterial const & material )
+			{
+				auto refracted = m_writer.declLocale( "refracted"
+					, m_utils.negateTopDownToBottomUp( refract( wsIncident, wsNormal, refractionRatio ) ) );
+				m_writer.returnStmt( envMap.sample( refracted ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InToonPbrLightMaterial{ m_writer, "material" } );
+	}
+
+	void ToonPbrReflectionModel::doDeclareComputeMergeRefrSkybox()
+	{
+		if ( m_computeMergeRefrSkybox )
+		{
+			return;
+		}
+
+		m_computeMergeRefrSkybox = m_writer.implementFunction< sdw::Void >( "c3d_pbr_toon_computeMergeRefrSkybox"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -1194,22 +1511,26 @@ namespace toon::shader
 					, sdw::fma( max( 1.0_f - material.roughness, reflectance ) - reflectance
 						, pow( 1.0_f - product, 5.0_f )
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, m_utils.negateTopDownToBottomUp( refract( wsIncident, wsNormal, refractionRatio ) ) );
+				refraction = computeRefrSkybox( wsIncident
+					, wsNormal
+					, envMap
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.sample( refracted ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
-				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "transmission" }
-				, InToonPbrLightMaterial{ m_writer, "material" }
-				, sdw::InOutVec3{ m_writer, "reflection" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InToonPbrLightMaterial{ m_writer, "material" }
+			, sdw::InOutVec3{ m_writer, "reflection" }
 			, sdw::OutVec3{ m_writer, "refraction" } );
 	}
 
