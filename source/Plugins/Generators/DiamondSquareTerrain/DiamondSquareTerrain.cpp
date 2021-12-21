@@ -48,6 +48,17 @@ namespace diamond_square_terrain
 			std::vector< float > m_map;
 			uint32_t m_size;
 		};
+
+		std::default_random_engine createRandomEngine( bool disableRandomSeed )
+		{
+			if ( disableRandomSeed )
+			{
+				return std::default_random_engine{};
+			}
+
+			std::random_device r;
+			return std::default_random_engine{ r() };
+		}
 	}
 
 	String const Generator::Type = cuT( "diamond_square_terrain" );
@@ -69,10 +80,22 @@ namespace diamond_square_terrain
 		String param;
 		uint32_t size = 0u;
 		float roughness = 0.0f;
+		float scale = 1.0f;
+		bool disableRandomSeed = false;
 
 		if ( p_parameters.get( cuT( "roughness" ), param ) )
 		{
 			roughness = string::toFloat( param );
+		}
+
+		if ( p_parameters.get( cuT( "disableRandomSeed" ), param ) )
+		{
+			disableRandomSeed = true;
+		}
+
+		if ( p_parameters.get( cuT( "scale" ), param ) )
+		{
+			scale = string::toFloat( param );
 		}
 
 		if ( p_parameters.get( cuT( "detail" ), param ) )
@@ -84,7 +107,7 @@ namespace diamond_square_terrain
 		{
 			Matrix map{ size };
 			auto max = size - 1;
-			std::random_device device;
+			auto engine = createRandomEngine( disableRandomSeed );
 
 			auto average = []( std::vector< float > p_values )
 			{
@@ -135,7 +158,7 @@ namespace diamond_square_terrain
 			std::function< void( uint32_t, float ) > divide = [&max
 				, &square
 				, &diamond
-				, &device
+				, &engine
 				, &divide]( uint32_t p_size
 				, float p_roughness )
 			{
@@ -149,7 +172,7 @@ namespace diamond_square_terrain
 				{
 					for ( auto x = half; x < max; x += p_size )
 					{
-						square( x, y, half, distribution( device ) * scale * 2 - scale );
+						square( x, y, half, distribution( engine ) * scale * 2 - scale );
 					}
 				}
 
@@ -157,7 +180,7 @@ namespace diamond_square_terrain
 				{
 					for ( auto x = ( y + half ) % p_size; x <= max; x += p_size )
 					{
-						diamond( x, y, half, distribution( device ) * scale * 2 - scale );
+						diamond( x, y, half, distribution( engine ) * scale * 2 - scale );
 					}
 				}
 
@@ -168,12 +191,18 @@ namespace diamond_square_terrain
 
 			auto submesh = p_mesh.createSubmesh();
 			auto mapping = std::make_shared< TriFaceMapping >( *submesh );
+			auto transform = [&]( uint32_t v )
+			{
+				return scale * ( float( v ) - float( max ) / 2.0f );
+			};
 
-			for ( auto y = 1u; y < max; y++ )
+			for ( auto z = 1u; z < max; z++ )
 			{
 				for ( auto x = 1u; x < max; x++ )
 				{
-					submesh->addPoint( float( x ), map( x, y ), float( y ) );
+					submesh->addPoint( InterleavedVertex{}
+						.position( castor::Point3f{ transform( x ), scale * map( x, z ), transform( z ) } )
+						.texcoord( castor::Point2f{ float( x ) / float( max - 1 ), float( z ) / float( max - 1 ) } ) );
 				}
 			}
 
