@@ -25,7 +25,9 @@
 [submodule "external/cvtt"]
 	path = external/cvtt
 	url = https://github.com/elasota/ConvectionKernels.git
-
 [submodule "external/RenderGraph"]
 	path = external/RenderGraph
 	url = https://github.com/DragonJoker/RenderGraph.git
+[submodule "external/VkFFT"]
+	path = external/VkFFT
+	url = https://github.com/DragonJoker/VkFFT.git
