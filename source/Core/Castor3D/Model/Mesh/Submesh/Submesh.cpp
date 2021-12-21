@@ -144,11 +144,15 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			doGenerateVertexBuffer( device );
-			m_indexBuffer = makeBuffer< uint32_t >( device
-				, VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount()
-				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );
+
+			if ( m_indexMapping )
+			{
+				m_indexBuffer = makeBuffer< uint32_t >( device
+					, VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount()
+					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );
+			}
 
 			for ( auto & component : m_components )
 			{
@@ -458,10 +462,15 @@ namespace castor3d
 			result.vbo = buffers;
 			result.vboOffsets = offsets;
 			result.layouts = layouts;
-			result.ibo = &m_indexBuffer->getBuffer();
-			result.iboOffset = 0u;
-			result.idxCount = uint32_t( m_indexBuffer->getCount() );
-			result.vtxCount = 0u;
+			result.vtxCount = uint32_t( m_vertexBuffer->getCount() );
+
+			if ( m_indexBuffer )
+			{
+				result.ibo = &m_indexBuffer->getBuffer();
+				result.iboOffset = 0u;
+				result.idxCount = uint32_t( m_indexBuffer->getCount() );
+			}
+
 			it = m_geometryBuffers.emplace( key, std::move( result ) ).first;
 		}
 
