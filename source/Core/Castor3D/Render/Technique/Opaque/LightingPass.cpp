@@ -368,7 +368,8 @@ namespace castor3d
 		}
 	}
 
-	void LightsPipeline::recordInto( VkCommandBuffer commandBuffer
+	void LightsPipeline::recordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t & index )
 	{
 		if ( !m_enabledLights.empty() )
@@ -422,12 +423,21 @@ namespace castor3d
 					, 0u
 					, 0u );
 				m_context.vkCmdEndRenderPass( commandBuffer );
+
+				for ( auto & attach : renderPass.attaches )
+				{
+					context.setLayoutState( attach.view
+						, { attach.output
+							, crg::getAccessMask( attach.output )
+							, crg::getStageMask( attach.output ) } );
+				}
 			}
 			index = 1u;
 
 			if ( m_enabledLights.size() > 1u )
 			{
 				auto & renderPasses = m_renderPasses[index];
+
 				VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 					, nullptr
 					, *renderPasses.renderPass
@@ -474,6 +484,14 @@ namespace castor3d
 						, 0u
 						, 0u );
 					m_context.vkCmdEndRenderPass( commandBuffer );
+
+					for ( auto & attach : renderPass.attaches )
+					{
+						context.setLayoutState( attach.view
+							, { attach.output
+								, crg::getAccessMask( attach.output )
+								, crg::getStageMask( attach.output ) } );
+					}
 				}
 			}
 		}
@@ -657,9 +675,8 @@ namespace castor3d
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; } )
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } }
-			, 1u
-			, false }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } }
+			, { 1u, false, true } }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_lpResult{ lpResult }
@@ -667,8 +684,6 @@ namespace castor3d
 		, m_smPointResult{ smPointResult }
 		, m_smSpotResult{ smSpotResult }
 	{
-		m_renderPasses.emplace_back( doCreateRenderPass( false, lpResult ) );
-		m_renderPasses.emplace_back( doCreateRenderPass( true, lpResult ) );
 	}
 
 	void RunnableLightingPass::clear()
@@ -696,18 +711,26 @@ namespace castor3d
 	void RunnableLightingPass::resetCommandBuffer()
 	{
 		crg::RunnablePass::resetCommandBuffer();
-		crg::RunnablePass::recordCurrent();
+		crg::RunnablePass::reRecordCurrent();
 	}
 
 	void RunnableLightingPass::doInitialise()
 	{
 	}
 
-	void RunnableLightingPass::doRecordInto( VkCommandBuffer commandBuffer
+	void RunnableLightingPass::doRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
 		if ( m_pipelines.empty() )
 		{
+			if ( m_renderPasses.empty() )
+			{
+				auto ctx = context;
+				m_renderPasses.emplace_back( doCreateRenderPass( context, false, m_lpResult ) );
+				m_renderPasses.emplace_back( doCreateRenderPass( ctx, true, m_lpResult ) );
+			}
+
 			auto & renderPass = m_renderPasses[0u];
 			VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 				, nullptr
@@ -720,6 +743,15 @@ namespace castor3d
 				, &beginRenderPass
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_context.vkCmdEndRenderPass( commandBuffer );
+
+			for ( auto & attach : renderPass.attaches )
+			{
+				context.setLayoutState( attach.view
+					, { attach.output
+						, crg::getAccessMask( attach.output )
+						, crg::getStageMask( attach.output ) } );
+			}
+
 			return;
 		}
 
@@ -727,22 +759,31 @@ namespace castor3d
 
 		for ( auto & pipeline : m_pipelines )
 		{
-			pipeline.second->recordInto( commandBuffer, pipelineIndex );
+			pipeline.second->recordInto( context, commandBuffer, pipelineIndex );
 		}
 	}
 
-	LightRenderPass RunnableLightingPass::doCreateRenderPass( bool blend
+	LightRenderPass RunnableLightingPass::doCreateRenderPass( crg::RecordContext & context
+		, bool blend
 		, LightPassResult const & lpResult )
 	{
 		castor::String name = blend
 			? castor::String{ cuT( "Blend" ) }
 			: castor::String{ cuT( "First" ) };
-		VkImageLayout layout = blend
-			? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			: VK_IMAGE_LAYOUT_UNDEFINED;
+		std::array< VkImageLayout, 3u > layouts{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+		, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
+		, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
 		VkAttachmentLoadOp loadOp = blend
 			? VK_ATTACHMENT_LOAD_OP_LOAD
 			: VK_ATTACHMENT_LOAD_OP_CLEAR;
+
+		if ( !blend )
+		{
+			layouts[0u] = context.getLayoutState( lpResult[LpTexture::eDepth].targetViewId ).layout;
+			layouts[1u] = context.getLayoutState( lpResult[LpTexture::eDiffuse].targetViewId ).layout;
+			layouts[2u] = context.getLayoutState( lpResult[LpTexture::eSpecular].targetViewId ).layout;
+		}
+
 		ashes::VkAttachmentDescriptionArray attaches{
 			{ 0u
 				, lpResult[LpTexture::eDepth].getFormat()
@@ -751,7 +792,7 @@ namespace castor3d
 				, VK_ATTACHMENT_STORE_OP_STORE
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+				, layouts[0u]
 				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
 			, { 0u
 				, lpResult[LpTexture::eDiffuse].getFormat()
@@ -760,7 +801,7 @@ namespace castor3d
 				, VK_ATTACHMENT_STORE_OP_STORE
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, layout
+				, layouts[1u]
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
 			, { 0u
 				, lpResult[LpTexture::eSpecular].getFormat()
@@ -769,7 +810,7 @@ namespace castor3d
 				, VK_ATTACHMENT_STORE_OP_STORE
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, layout
+				, layouts[2u]
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
 		ashes::VkAttachmentReferenceArray references{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
 			, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
@@ -825,6 +866,17 @@ namespace castor3d
 		result.clearValues.push_back( getClearValue( LpTexture::eDepth ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eDiffuse ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eSpecular ) );
+
+		result.attaches.push_back( { lpResult[LpTexture::eDepth].targetViewId
+			, layouts[0]
+			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL } );
+		result.attaches.push_back( { lpResult[LpTexture::eDiffuse].targetViewId
+			, layouts[1]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		result.attaches.push_back( { lpResult[LpTexture::eSpecular].targetViewId
+			, layouts[2]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+
 		return result;
 	}
 
@@ -966,10 +1018,8 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( previousPass );
-		pass.addTransferInputView( m_depth.wholeViewId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addTransferOutputView( m_lpResult[LpTexture::eDepth].wholeViewId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addTransferInputView( m_depth.wholeViewId );
+		pass.addTransferOutputView( m_lpResult[LpTexture::eDepth].wholeViewId );
 		return pass;
 	}
 
@@ -1008,20 +1058,15 @@ namespace castor3d
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( LightPassIdx::eScene ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-			, uint32_t( LightPassIdx::eData0 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( LightPassIdx::eData0 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
-			, uint32_t( LightPassIdx::eData1 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( LightPassIdx::eData1 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId
-			, uint32_t( LightPassIdx::eData2 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( LightPassIdx::eData2 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData3].sampledViewId
-			, uint32_t( LightPassIdx::eData3 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( LightPassIdx::eData3 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-			, uint32_t( LightPassIdx::eData4 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( LightPassIdx::eData4 ) );
 
 		pass.addInOutDepthStencilView( m_lpResult[LpTexture::eDepth].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );

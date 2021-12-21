@@ -284,10 +284,8 @@ namespace ocean
 				return result;
 			} );
 		blitColourPass.addDependencies( previousPasses );
-		blitColourPass.addTransferInputView( technique.getResultImgView()
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		blitColourPass.addTransferOutputView( colourInput->sampledViewId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		blitColourPass.addTransferInputView( technique.getResultImgView() );
+		blitColourPass.addTransferOutputView( colourInput->sampledViewId );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
 			, technique.getRenderTarget().getGraph().getHandler()
@@ -313,10 +311,8 @@ namespace ocean
 				return result;
 			} );
 		blitDepthPass.addDependencies( previousPasses );
-		blitDepthPass.addTransferInputView( technique.getDepthImgView()
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		blitDepthPass.addTransferOutputView( depthInput->sampledViewId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		blitDepthPass.addTransferInputView( technique.getDepthSampledView() );
+		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
 		auto & result = technique.getRenderTarget().getGraph().createPass( name
 			, [name, extent, colourInput, depthInput, &device, &technique, &renderPasses]( crg::FramePass const & framePass
@@ -1188,17 +1184,17 @@ namespace ocean
 				, TrianglesTessPatchInT< VoidT > patchIn
 				, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
-				out.vtx.position = mainIn.tessCoord.x() * listIn[0].vtx.position
-					+ mainIn.tessCoord.y() * listIn[1].vtx.position
-					+ mainIn.tessCoord.z() * listIn[2].vtx.position;
-				out.texture1 = mainIn.tessCoord.x() * listIn[0].texture1
-					+ mainIn.tessCoord.y() * listIn[1].texture1
-					+ mainIn.tessCoord.z() * listIn[2].texture1;
+				out.vtx.position = patchIn.tessCoord.x() * listIn[0].vtx.position
+					+ patchIn.tessCoord.y() * listIn[1].vtx.position
+					+ patchIn.tessCoord.z() * listIn[2].vtx.position;
+				out.texture1 = patchIn.tessCoord.x() * listIn[0].texture1
+					+ patchIn.tessCoord.y() * listIn[1].texture1
+					+ patchIn.tessCoord.z() * listIn[2].texture1;
 				out.material = listIn[0].material;
 				auto texcoord = writer.declLocale( "texcoord"
-					, mainIn.tessCoord.x() * listIn[0].texture0
-					+ mainIn.tessCoord.y() * listIn[1].texture0
-					+ mainIn.tessCoord.z() * listIn[2].texture0 );
+					, patchIn.tessCoord.x() * listIn[0].texture0
+					+ patchIn.tessCoord.y() * listIn[1].texture0
+					+ patchIn.tessCoord.z() * listIn[2].texture0 );
 
 				auto dampening = writer.declLocale( "dampening"
 					, 1.0_f - pow( utils.saturate( abs( texcoord.x() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor ) );

@@ -106,8 +106,7 @@ namespace castor3d
 		m_hdrConfigUbo.createPassBinding( result
 			, HdrCfgUboIdx );
 		result.addSampledView( source
-			, HdrMapIdx
-			, {} );
+			, HdrMapIdx );
 		result.addOutputColourView( target );
 		return result;
 	}

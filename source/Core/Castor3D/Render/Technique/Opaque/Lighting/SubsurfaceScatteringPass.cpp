@@ -383,7 +383,7 @@ namespace castor3d
 					auto result = std::make_unique< crg::RenderQuad >( pass
 						, context
 						, graph
-						, 1u
+						, crg::ru::Config{}
 						, createConfig( m_size, m_blurXShader, &m_enabled ) );
 					getEngine()->registerTimer( graph.getName() + "/SSS"
 						, result->getTimer() );
@@ -401,14 +401,11 @@ namespace castor3d
 				, "BlurCfg"
 				, BlurSssUboId );
 			blurX.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-				, BlurData0ImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+				, BlurData0ImgId );
 			blurX.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-				, BlurData4ImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+				, BlurData4ImgId );
 			blurX.addSampledView( blurXSource->sampledViewId
-				, BlurLgtDiffImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+				, BlurLgtDiffImgId );
 			blurX.addOutputColourView( m_intermediate->targetViewId );
 
 			auto & blurY = graph.createPass( "SSSBlurY" + std::to_string( i )
@@ -419,7 +416,7 @@ namespace castor3d
 					auto result = std::make_unique< crg::RenderQuad >( pass
 						, context
 						, graph
-						, 1u
+						, crg::ru::Config{}
 						, createConfig( m_size, m_blurYShader, &m_enabled ) );
 					getEngine()->registerTimer( graph.getName() + "/SSS"
 						, result->getTimer() );
@@ -437,14 +434,11 @@ namespace castor3d
 				, "BlurCfg"
 				, BlurSssUboId );
 			blurY.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-				, BlurData0ImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+				, BlurData0ImgId );
 			blurY.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-				, BlurData4ImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+				, BlurData4ImgId );
 			blurY.addSampledView( m_intermediate->sampledViewId
-				, BlurLgtDiffImgId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+				, BlurLgtDiffImgId );
 			blurY.addOutputColourView( blurYDestination->targetViewId );
 
 			blurXSource = blurYDestination;
@@ -459,6 +453,7 @@ namespace castor3d
 				stepProgressBar( progress, "Initialising SSS combine pass" );
 				auto config = createConfig( m_size, m_combineShader, &m_enabled );
 				config.recordDisabledInto( [this, &graph, &context]( crg::RunnablePass const & runnable
+						, crg::RecordContext & recordContext
 						, VkCommandBuffer commandBuffer
 						, uint32_t passIndex )
 					{
@@ -474,15 +469,21 @@ namespace castor3d
 							, { size.width, size.height, 1u } };
 						auto srcTransition = runnable.getTransition( passIndex, srcView );
 						auto dstTransition = runnable.getTransition( passIndex, dstView );
-						graph.memoryBarrier( commandBuffer
-							, srcView
-							, srcTransition.to
+						graph.memoryBarrier( recordContext
+							, commandBuffer
+							, srcView.data->image
+							, srcView.data->info.viewType
+							, srcView.data->info.subresourceRange
+							, srcTransition.to.layout
 							, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-						graph.memoryBarrier( commandBuffer
-							, dstView
-							, dstTransition.to
+						graph.memoryBarrier( recordContext
+							, commandBuffer
+							, dstView.data->image
+							, dstView.data->info.viewType
+							, dstView.data->info.subresourceRange
+							, dstTransition.to.layout
 							, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -493,23 +494,25 @@ namespace castor3d
 							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 							, 1u
 							, &region );
-						graph.memoryBarrier( commandBuffer
-							, dstView
-							, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+						graph.memoryBarrier( recordContext
+							, commandBuffer
+							, dstView.data->image
+							, dstView.data->info.viewType
+							, dstView.data->info.subresourceRange
+							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 							, dstTransition.to );
-						graph.memoryBarrier( commandBuffer
-							, srcView
-							, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+						graph.memoryBarrier( recordContext
+							, commandBuffer
+							, srcView.data->image
+							, srcView.data->info.viewType
+							, srcView.data->info.subresourceRange
+							, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 							, srcTransition.to );
 					} );
 				auto result = std::make_unique< crg::RenderQuad >( pass
 					, context
 					, graph
-					, 1u
+					, crg::ru::Config{}
 					, config );
 				getEngine()->registerTimer( graph.getName() + "/SSS"
 					, result->getTimer() );
@@ -520,23 +523,17 @@ namespace castor3d
 		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass
 			, CombMaterialsUboId );
 		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-			, CombData0ImgId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, CombData0ImgId );
 		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-			, CombData4ImgId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, CombData4ImgId );
 		pass.addSampledView( m_blurImages[0]->sampledViewId
-			, CombBlur1ImgId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, CombBlur1ImgId );
 		pass.addSampledView( m_blurImages[1]->sampledViewId
-			, CombBlur2ImgId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, CombBlur2ImgId );
 		pass.addSampledView( m_blurImages[2]->sampledViewId
-			, CombBlur3ImgId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, CombBlur3ImgId );
 		pass.addSampledView( m_lpResult[LpTexture::eDiffuse].sampledViewId
-			, CombLgtDiffImgId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, CombLgtDiffImgId );
 		pass.addOutputColourView( m_result->targetViewId );
 
 		m_result->create();

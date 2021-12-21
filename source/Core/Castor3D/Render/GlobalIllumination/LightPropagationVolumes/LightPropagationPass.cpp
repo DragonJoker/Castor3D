@@ -401,10 +401,11 @@ namespace castor3d
 		doCreatePipeline( 0u );
 	}
 
-	void LightPropagationPass::PipelineHolder::recordInto( VkCommandBuffer commandBuffer
+	void LightPropagationPass::PipelineHolder::recordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		m_holder.recordInto( commandBuffer, index );
+		m_holder.recordInto( context, commandBuffer, index );
 	}
 
 	void LightPropagationPass::PipelineHolder::doCreatePipeline( uint32_t index )
@@ -512,9 +513,8 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doSubInitialise(); }
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); } }
-			, { gridSize, gridSize }
-			, 1u }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
+			, { gridSize, gridSize } }
 		, m_gridSize{ gridSize }
 		, m_vertexBuffer{ createVertexBuffer( device, getName(), m_gridSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
@@ -544,10 +544,11 @@ namespace castor3d
 		m_holder.initialise( getRenderPass() );
 	}
 
-	void LightPropagationPass::doSubRecordInto( VkCommandBuffer commandBuffer
+	void LightPropagationPass::doSubRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		m_holder.recordInto( commandBuffer, index );
+		m_holder.recordInto( context, commandBuffer, index );
 		auto vplCount = m_gridSize * m_gridSize * m_gridSize;
 		VkDeviceSize offset{};
 		VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();

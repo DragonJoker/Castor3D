@@ -154,11 +154,11 @@ namespace castor3d
 	{
 		visitor.visit( "Voxelisation First Bounce"
 			, m_firstBounce
-			, m_graph.getFinalLayout( m_firstBounce.wholeViewId ).layout
+			, m_graph.getFinalLayoutState( m_firstBounce.wholeViewId ).layout
 			, TextureFactors::tex3D( &m_grid ) );
 		visitor.visit( "Voxelisation Secondary Bounce"
 			, m_secondaryBounce
-			, m_graph.getFinalLayout( m_secondaryBounce.wholeViewId ).layout
+			, m_graph.getFinalLayoutState( m_secondaryBounce.wholeViewId ).layout
 			, TextureFactors::tex3D( &m_grid ) );
 		m_voxelizePass->accept( visitor );
 		m_voxelToTexture->accept( visitor );
@@ -227,8 +227,7 @@ namespace castor3d
 			, 0u
 			, m_voxels->getBuffer().getSize() );
 		result.addOutputStorageView( m_firstBounce.wholeViewId
-			, 1u
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, 1u );
 		return result;
 	}
 
@@ -285,11 +284,9 @@ namespace castor3d
 		m_voxelizerUbo.createPassBinding( result
 			, 1u );
 		result.addSampledView( m_firstBounce.wholeViewId
-			, 2u
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, 2u );
 		result.addOutputStorageView( m_secondaryBounce.wholeViewId
-			, 3u
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, 3u );
 		return result;
 	}
 }

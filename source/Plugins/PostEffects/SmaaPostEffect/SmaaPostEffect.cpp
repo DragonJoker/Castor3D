@@ -274,7 +274,7 @@ namespace smaa
 				, m_renderTarget
 				, device
 				, m_ubo
-				, m_renderTarget.getTechnique().getDepthImgView()
+				, m_renderTarget.getTechnique().getDepthSampledView()
 				, m_config
 				, &m_enabled );
 			break;
@@ -373,7 +373,7 @@ namespace smaa
 					.passIndex( &m_config.subsampleIndex )
 					.enabled( &m_enabled )
 					.recordDisabledRenderPass( false )
-					.build( pass, context, graph, m_config.maxSubsampleIndices );
+					.build( pass, context, graph, { m_config.maxSubsampleIndices } );
 				getOwner()->getEngine()->registerTimer( graph.getName() + "/SMAA"
 					, result->getTimer() );
 				return result;
@@ -496,7 +496,7 @@ namespace smaa
 
 		if ( m_config.data.enablePredication )
 		{
-			predication = &m_renderTarget.getTechnique().getDepthImgView();
+			predication = &m_renderTarget.getTechnique().getDepthSampledView();
 		}
 
 		return predication;

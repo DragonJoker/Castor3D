@@ -241,7 +241,7 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
-					.build( pass, context, graph, config.maxSubsampleIndices );
+					.build( pass, context, graph, { config.maxSubsampleIndices } );
 				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
 					, result->getTimer() );
 				return result;
@@ -313,7 +313,7 @@ namespace smaa
 		{
 			visitor.visit( "SMAA NeighbourhoodBlending " + std::to_string( i )
 				, *m_images[i]
-				, m_graph.getFinalLayout( m_images[i]->wholeViewId ).layout
+				, m_graph.getFinalLayoutState( m_images[i]->wholeViewId ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
 	}

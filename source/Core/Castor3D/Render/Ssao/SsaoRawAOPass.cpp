@@ -538,7 +538,7 @@ namespace castor3d
 		: crg::RenderQuad{ pass
 			, context
 			, graph
-			, 2u
+			, { 2u, false, false }
 			, std::move( config ) }
 		, ssaoConfig{ ssaoConfig }
 	{
@@ -619,12 +619,8 @@ namespace castor3d
 		pass.addDependency( previousPass );
 		m_ssaoConfigUbo.createPassBinding( pass, SsaoCfgUboIdx );
 		m_gpInfoUbo.createPassBinding( pass, GpInfoUboIdx );
-		pass.addSampledView( linearisedDepthBuffer.sampledViewId
-			, DepthMapIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( normals.sampledViewId
-			, NormalMapIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( linearisedDepthBuffer.sampledViewId, DepthMapIdx );
+		pass.addSampledView( normals.sampledViewId, NormalMapIdx );
 		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
 		pass.addOutputColourView( m_bentNormals.targetViewId, transparentBlackClearColor );
 		m_result.create();
@@ -642,11 +638,11 @@ namespace castor3d
 	{
 		visitor.visit( "SSAO Raw AO"
 			, getResult()
-			, m_graph.getFinalLayout( getResult().sampledViewId ).layout
+			, m_graph.getFinalLayoutState( getResult().sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "SSAO Bent Normals"
 			, getBentResult()
-			, m_graph.getFinalLayout( getBentResult().sampledViewId ).layout
+			, m_graph.getFinalLayoutState( getBentResult().sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		auto index = m_ssaoConfig.useNormalsBuffer

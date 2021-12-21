@@ -171,7 +171,7 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
-					.build( pass, context, graph, config.maxSubsampleIndices );
+					.build( pass, context, graph, { config.maxSubsampleIndices } );
 				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
 					, result->getTimer() );
 				return result;
@@ -246,7 +246,7 @@ namespace smaa
 		visitor.visit( m_pixelShader );
 		visitor.visit( "SMAA Reprojection Result"
 			, m_result
-			, m_graph.getFinalLayout( m_result.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 

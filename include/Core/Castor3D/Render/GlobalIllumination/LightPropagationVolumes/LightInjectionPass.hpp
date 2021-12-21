@@ -124,7 +124,8 @@ namespace castor3d
 
 	protected:
 		C3D_API void doSubInitialise();
-		C3D_API void doSubRecordInto( VkCommandBuffer commandBuffer
+		C3D_API void doSubRecordInto( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
 			, uint32_t index );
 
 	private:
@@ -138,7 +139,8 @@ namespace castor3d
 				, uint32_t lpvSize );
 
 			void initialise( VkRenderPass renderPass );
-			void recordInto( VkCommandBuffer commandBuffer
+			void recordInto( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
 				, uint32_t index );
 
 		protected:

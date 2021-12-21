@@ -48,7 +48,8 @@ namespace castor3d
 
 	private:
 		void doSubInitialise();
-		void doSubRecordInto( VkCommandBuffer commandBuffer
+		void doSubRecordInto( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
 			, uint32_t index );
 		bool doIsEnabled()const;
 

@@ -408,7 +408,7 @@ namespace castor3d
 					.renderSize( makeExtent2D( m_result.getExtent() ) )
 					.passIndex( &m_programIndex )
 					.programs( createPrograms( m_programs ) )
-					.build( framePass, context, runnableGraph, uint32_t( m_programs.size() ) );
+					.build( framePass, context, runnableGraph, { uint32_t( m_programs.size() ) } );
 				engine.registerTimer( runnableGraph.getName() + "/Opaque"
 					, result->getTimer() );
 				return result;
@@ -425,38 +425,27 @@ namespace castor3d
 			, uint32_t( ResolveBind::eHdrConfig ) );
 
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData0].sampledViewId
-			, uint32_t( ResolveBind::eData0 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eData0 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData1].sampledViewId
-			, uint32_t( ResolveBind::eData1 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eData1 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData2].sampledViewId
-			, uint32_t( ResolveBind::eData2 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eData2 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData3].sampledViewId
-			, uint32_t( ResolveBind::eData3 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eData3 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData4].sampledViewId
-			, uint32_t( ResolveBind::eData4 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eData4 ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eData5].sampledViewId
-			, uint32_t( ResolveBind::eData5 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eData5 ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
-			, uint32_t( ResolveBind::eSsao )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eSsao ) );
 		pass.addSampledView( m_subsurfaceScattering.sampledViewId
-			, uint32_t( ResolveBind::eDirectDiffuse )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eDirectDiffuse ) );
 		pass.addSampledView( m_lightSpecular.sampledViewId
-			, uint32_t( ResolveBind::eDirectSpecular )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eDirectSpecular ) );
 		pass.addSampledView( m_lightIndirectDiffuse.sampledViewId
-			, uint32_t( ResolveBind::eIndirectDiffuse )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eIndirectDiffuse ) );
 		pass.addSampledView( m_lightIndirectSpecular.sampledViewId
-			, uint32_t( ResolveBind::eIndirectSpecular )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( ResolveBind::eIndirectSpecular ) );
 
 		auto & background = *m_scene.getBackground();
 		background.initialise( m_device );
