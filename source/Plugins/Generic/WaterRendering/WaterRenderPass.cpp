@@ -324,7 +324,7 @@ namespace water
 		{
 #if Water_Debug
 			visitor.visit( cuT( "Debug" )
-				, reinterpret_cast< uint32_t & >( m_configuration.debug )
+				, m_configuration.debug
 				, getWaterDisplayDataNames()
 				, nullptr );
 #endif

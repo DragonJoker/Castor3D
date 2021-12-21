@@ -57,7 +57,7 @@ namespace ocean
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( castor3d::RenderTechniqueVisitor & visitor );
+		void accept( castor3d::RenderTechniqueVisitor & visitor )override;
 		/**
 		*\~english
 		*name
