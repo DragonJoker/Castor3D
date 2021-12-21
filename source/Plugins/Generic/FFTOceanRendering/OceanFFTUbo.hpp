@@ -37,7 +37,19 @@ namespace ocean_fft
 		eLightIndirectSpecular,
 		eIndirectAmbient,
 		eIndirectDiffuse,
-		eBackgroundReflection,
+		eRawBackgroundReflection,
+		eFresnelBackgroundReflection,
+		eSSRResult,
+		eSSRFactor,
+		eSSRResultFactor,
+		eCombinedReflection,
+		eRefraction,
+		eDepthSoftenedAlpha,
+		eHeightMixedRefraction,
+		eDistanceMixedRefraction,
+		eFresnelFactor,
+		eFinalReflection,
+		eFinalRefraction,
 		CU_EnumBounds( OceanDisplayData, eResult )
 	};
 	castor::StringArray const & getOceanDisplayDataNames();
