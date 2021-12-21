@@ -104,7 +104,7 @@ namespace castor3d
 		if ( m_program->hasSource( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT )
 			|| m_program->hasSource( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) )
 		{
-			tessellationState = ashes::PipelineTessellationStateCreateInfo{ 0u, 3u };
+			tessellationState = ashes::PipelineTessellationStateCreateInfo{ 0u, m_flags.patchVertices };
 		}
 
 		m_pipelineLayout = device->createPipelineLayout( getOwner()->getName() + "RenderPipeline"

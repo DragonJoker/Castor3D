@@ -239,13 +239,43 @@ namespace castor3d
 		return doGetPixelShaderSource( flags );
 	}
 
+	PipelineFlags SceneRenderPass::createPipelineFlags( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, PassFlags passFlags
+		, RenderPassTypeID renderPassTypeID
+		, PassTypeID passTypeID
+		, uint32_t heightTextureIndex
+		, VkCompareOp alphaFunc
+		, VkCompareOp blendAlphaFunc
+		, TextureFlagsArray const & textures
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, VkPrimitiveTopology topology )
+	{
+		auto result = PipelineFlags{ colourBlendMode
+			, alphaBlendMode
+			, passFlags
+			, renderPassTypeID
+			, passTypeID
+			, heightTextureIndex
+			, programFlags
+			, sceneFlags
+			, topology
+			, 3u
+			, alphaFunc
+			, blendAlphaFunc
+			, textures };
+		updateFlags( result );
+		return result;
+	}
+
 	PipelineFlags SceneRenderPass::createPipelineFlags( Pass const & pass
 		, TextureFlagsArray const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology )
 	{
-		auto result = PipelineFlags{ pass.getColourBlendMode()
+		return createPipelineFlags( pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
 			, ( pass.getRenderPassInfo()
@@ -253,14 +283,12 @@ namespace castor3d
 				: RenderPassTypeID{} )
 			, pass.getTypeID()
 			, pass.getHeightTextureIndex()
-			, programFlags
-			, sceneFlags
-			, topology
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
-			, textures };
-		updateFlags( result );
-		return result;
+			, textures
+			, programFlags
+			, sceneFlags
+			, topology );
 	}
 
 	RenderPipeline * SceneRenderPass::prepareBackPipeline( PipelineFlags pipelineFlags

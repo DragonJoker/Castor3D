@@ -202,6 +202,7 @@ namespace castor3d
 			&& lhs.programFlags == rhs.programFlags
 			&& lhs.sceneFlags == rhs.sceneFlags
 			&& lhs.topology == rhs.topology
+			&& lhs.patchVertices == rhs.patchVertices
 			&& lhs.alphaFunc == rhs.alphaFunc
 			&& lhs.blendAlphaFunc == rhs.blendAlphaFunc
 			&& lhs.textures == rhs.textures
