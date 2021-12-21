@@ -202,6 +202,38 @@ namespace castor3d::shader
 			, brdf );
 	}
 
+	sdw::Vec3 PbrReflectionModel::computeForward( LightMaterial & material
+		, Surface const & surface
+		, SceneData const & sceneData
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission )
+	{
+		auto & pbrMaterial = static_cast< PbrLightMaterial const & >( material );
+		auto incident = m_writer.declLocale( "incident"
+			, computeIncident( surface.worldPosition, sceneData.cameraPosition ) );
+
+		if ( checkFlag( m_passFlags, PassFlag::eRefraction ) )
+		{
+			// Refraction from environment map.
+			auto envMap = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapEnvironment" );
+			return computeRefrEnvMap( incident
+				, surface.worldNormal
+				, envMap
+				, refractionRatio
+				, transmission
+				, pbrMaterial );
+		}
+
+		// Refraction from background skybox.
+		auto prefiltered = m_writer.getVariable< sdw::SampledImageCubeRgba32 >( "c3d_mapPrefiltered" );
+		return computeRefrSkybox( incident
+			, surface.worldNormal
+			, prefiltered
+			, refractionRatio
+			, transmission
+			, pbrMaterial );
+	}
+
 	void PbrReflectionModel::computeForward( LightMaterial & material
 		, Surface const & surface
 		, SceneData const & sceneData
@@ -371,8 +403,8 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefrEnvMap();
-		return m_computeRefrEnvMap( wsIncident
+		doDeclareComputeMergeRefrEnvMap();
+		return m_computeMergeRefrEnvMap( wsIncident
 			, wsNormal
 			, envMap
 			, refractionRatio
@@ -380,6 +412,22 @@ namespace castor3d::shader
 			, material
 			, reflection
 			, refraction );
+	}
+
+	sdw::Vec3 PbrReflectionModel::computeRefrEnvMap( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeRgba32 const & envMap
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, PbrLightMaterial const & material )
+	{
+		doDeclareComputeRefrEnvMap();
+		return m_computeRefrEnvMap( wsIncident
+			, wsNormal
+			, envMap
+			, refractionRatio
+			, transmission
+			, material );
 	}
 
 	sdw::Vec3 PbrReflectionModel::computeReflEnvMaps( sdw::Vec3 const & wsIncident
@@ -396,6 +444,24 @@ namespace castor3d::shader
 			, material );
 	}
 
+	sdw::Vec3 PbrReflectionModel::computeRefrEnvMaps( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeArrayRgba32 const & envMap
+		, sdw::Int const & envMapIndex
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, PbrLightMaterial const & material )
+	{
+		doDeclareComputeRefrEnvMaps();
+		return m_computeRefrEnvMaps( wsIncident
+			, wsNormal
+			, envMap
+			, envMapIndex
+			, refractionRatio
+			, transmission
+			, material );
+	}
+
 	sdw::Void PbrReflectionModel::computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -406,8 +472,8 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefrEnvMaps();
-		return m_computeRefrEnvMaps( wsIncident
+		doDeclareComputeMergeRefrEnvMaps();
+		return m_computeMergeRefrEnvMaps( wsIncident
 			, wsNormal
 			, envMap
 			, envMapIndex
@@ -416,6 +482,22 @@ namespace castor3d::shader
 			, material
 			, reflection
 			, refraction );
+	}
+
+	sdw::Vec3 PbrReflectionModel::computeRefrSkybox( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::SampledImageCubeRgba32 const & envMap
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 const & transmission
+		, PbrLightMaterial const & material )
+	{
+		doDeclareComputeRefrSkybox();
+		return m_computeRefrSkybox( wsIncident
+			, wsNormal
+			, envMap
+			, refractionRatio
+			, transmission
+			, material );
 	}
 
 	sdw::Void PbrReflectionModel::computeRefrSkybox( sdw::Vec3 const & wsIncident
@@ -427,8 +509,8 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{
-		doDeclareComputeRefrSkybox();
-		return m_computeRefrSkybox( wsIncident
+		doDeclareComputeMergeRefrSkybox();
+		return m_computeMergeRefrSkybox( wsIncident
 			, wsNormal
 			, envMap
 			, refractionRatio
@@ -529,7 +611,37 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeRefrEnvMap"
+		m_computeRefrEnvMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeRefrEnvMap"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, PbrLightMaterial const & material )
+			{
+				auto refracted = m_writer.declLocale( "refracted"
+					, refract( wsIncident, wsNormal, refractionRatio ) );
+				m_writer.returnStmt( envMap.lod( refracted
+						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InPbrLightMaterial{ m_writer, "material" } );
+	}
+
+	void PbrReflectionModel::doDeclareComputeMergeRefrEnvMap()
+	{
+		if ( m_computeMergeRefrEnvMap )
+		{
+			return;
+		}
+
+		m_computeMergeRefrEnvMap = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeMergeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -551,13 +663,16 @@ namespace castor3d::shader
 					, sdw::fma( max( 1.0_f - material.roughness, reflectance ) - reflectance
 						, pow( 1.0_f - product, 5.0_f )
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, refract( wsIncident, wsNormal, refractionRatio ) );
+				refraction = computeRefrEnvMap( wsIncident
+					, wsNormal
+					, envMap
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( refracted
-						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -606,7 +721,39 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeRefrEnvMap"
+		m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeRefrEnvMap"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeArrayRgba32 const & envMap
+				, sdw::Int const & envMapIndex
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, PbrLightMaterial const & material )
+			{
+				auto refracted = m_writer.declLocale( "refracted"
+					, refract( wsIncident, wsNormal, refractionRatio ) );
+				m_writer.returnStmt( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
+						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeArrayRgba32{ m_writer, "envMap" }
+			, sdw::InInt{ m_writer, "envMapIndex" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InPbrLightMaterial{ m_writer, "material" } );
+	}
+
+	void PbrReflectionModel::doDeclareComputeMergeRefrEnvMaps()
+	{
+		if ( m_computeMergeRefrEnvMaps )
+		{
+			return;
+		}
+
+		m_computeMergeRefrEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeMergeRefrEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeArrayRgba32 const & envMap
@@ -629,13 +776,17 @@ namespace castor3d::shader
 					, sdw::fma( max( 1.0_f - material.roughness, reflectance ) - reflectance
 						, pow( 1.0_f - product, 5.0_f )
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, refract( wsIncident, wsNormal, refractionRatio ) );
+				refraction = computeRefrEnvMaps( wsIncident
+					, wsNormal
+					, envMap
+					, envMapIndex
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, material.roughness * sdw::Float( float( castor::getBitSize( EnvironmentMap::Size ) ) ) ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}
@@ -657,7 +808,36 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_computeRefrSkybox = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeRefrSkybox"
+		m_computeRefrSkybox = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeRefrSkybox"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
+				, PbrLightMaterial const & material )
+			{
+				auto refracted = m_writer.declLocale( "refracted"
+					, m_utils.negateTopDownToBottomUp( refract( wsIncident, wsNormal, refractionRatio ) ) );
+				m_writer.returnStmt( envMap.sample( refracted ).xyz()
+					* transmission
+					* material.albedo );
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InSampledImageCubeRgba32{ m_writer, "envMap" }
+			, sdw::InFloat{ m_writer, "refractionRatio" }
+			, sdw::InVec3{ m_writer, "transmission" }
+			, InPbrLightMaterial{ m_writer, "material" } );
+	}
+
+	void PbrReflectionModel::doDeclareComputeMergeRefrSkybox()
+	{
+		if ( m_computeMergeRefrSkybox )
+		{
+			return;
+		}
+
+		m_computeMergeRefrSkybox = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeMergeRefrSkybox"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
@@ -679,12 +859,16 @@ namespace castor3d::shader
 					, sdw::fma( max( 1.0_f - material.roughness, reflectance ) - reflectance
 						, pow( 1.0_f - product, 5.0_f )
 						, reflectance ) );
-				auto refracted = m_writer.declLocale( "refracted"
-					, m_utils.negateTopDownToBottomUp( refract( wsIncident, wsNormal, refractionRatio ) ) );
+				refraction = computeRefrSkybox( wsIncident
+					, wsNormal
+					, envMap
+					, refractionRatio
+					, transmission
+					, material );
 				reflection = mix( vec3( 0.0_f )
 					, reflection
 					, vec3( fresnel ) );
-				refraction = mix( envMap.sample( refracted ).xyz() * transmission * material.albedo
+				refraction = mix( refraction
 					, vec3( 0.0_f )
 					, vec3( fresnel ) );
 			}

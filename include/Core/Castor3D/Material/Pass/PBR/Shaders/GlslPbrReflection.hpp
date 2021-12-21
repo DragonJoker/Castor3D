@@ -38,6 +38,11 @@ namespace castor3d::shader
 		C3D_API sdw::Vec3 computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData )override;
+		C3D_API sdw::Vec3 computeForward( LightMaterial & material
+			, Surface const & surface
+			, SceneData const & sceneData
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission )override;
 		C3D_API void computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -68,10 +73,23 @@ namespace castor3d::shader
 			, PbrLightMaterial const & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction );
+		sdw::Vec3 computeRefrEnvMap( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, PbrLightMaterial const & material );
 		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
+			, PbrLightMaterial const & material );
+		sdw::Vec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::Int const & envMapIndex
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
 			, PbrLightMaterial const & material );
 		sdw::Void computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
@@ -90,12 +108,21 @@ namespace castor3d::shader
 			, PbrLightMaterial const & material
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction );
+		sdw::Vec3 computeRefrSkybox( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission
+			, PbrLightMaterial const & material );
 		void doDeclareComputeIBL();
 		void doDeclareComputeReflEnvMap();
 		void doDeclareComputeRefrEnvMap();
+		void doDeclareComputeMergeRefrEnvMap();
 		void doDeclareComputeReflEnvMaps();
 		void doDeclareComputeRefrEnvMaps();
+		void doDeclareComputeMergeRefrEnvMaps();
 		void doDeclareComputeRefrSkybox();
+		void doDeclareComputeMergeRefrSkybox();
 
 	private:
 		sdw::Function< sdw::Vec3
@@ -110,6 +137,13 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InSampledImageCubeRgba32
 			, InPbrLightMaterial > m_computeReflEnvMap;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InSampledImageCubeRgba32
+			, sdw::InFloat
+			, sdw::InVec3
+			, InPbrLightMaterial > m_computeRefrEnvMap;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
@@ -118,7 +152,14 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, InPbrLightMaterial
 			, sdw::InOutVec3
-			, sdw::OutVec3 > m_computeRefrEnvMap;
+			, sdw::OutVec3 > m_computeMergeRefrEnvMap;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InSampledImageCubeRgba32
+			, sdw::InFloat
+			, sdw::InVec3
+			, InPbrLightMaterial > m_computeRefrSkybox;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
@@ -127,13 +168,21 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, InPbrLightMaterial
 			, sdw::InOutVec3
-			, sdw::OutVec3 > m_computeRefrSkybox;
+			, sdw::OutVec3 > m_computeMergeRefrSkybox;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InSampledImageCubeArrayRgba32
 			, sdw::InInt
 			, InPbrLightMaterial > m_computeReflEnvMaps;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InInt
+			, sdw::InFloat
+			, sdw::InVec3
+			, InPbrLightMaterial > m_computeRefrEnvMaps;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
@@ -143,7 +192,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, InPbrLightMaterial
 			, sdw::InOutVec3
-			, sdw::OutVec3 > m_computeRefrEnvMaps;
+			, sdw::OutVec3 > m_computeMergeRefrEnvMaps;
 	};
 }
 
