@@ -184,7 +184,7 @@ namespace castor3d
 		culledNodes.prepareCommandBuffers( *this
 			, m_viewport.value()
 			, m_scissor.value() );
-		getOwner()->recordCurrent();
+		getOwner()->reRecordCurrent();
 	}
 
 	void RenderQueue::doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps )

@@ -165,11 +165,13 @@ namespace grayscale
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
 					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
+						, crg::RecordContext & recContext
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
 							doCopyImage( graph
 								, runnable
+								, recContext
 								, commandBuffer
 								, index
 								, *m_target
@@ -185,8 +187,7 @@ namespace grayscale
 			, "GrayCfg"
 			, GrayCfgUboIdx );
 		m_pass->addSampledView( *m_target
-			, ColorTexIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, ColorTexIdx );
 		m_pass->addOutputColourView( m_resultView );
 		return &m_resultView;
 	}

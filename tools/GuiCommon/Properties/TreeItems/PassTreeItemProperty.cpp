@@ -217,6 +217,7 @@ namespace GuiCommon
 						, ProgramFlags{}
 						, scene.getFlags()
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+						, 3u
 						, pass.getAlphaFunc()
 						, pass.getBlendAlphaFunc()
 						, pass.getTexturesMask() }

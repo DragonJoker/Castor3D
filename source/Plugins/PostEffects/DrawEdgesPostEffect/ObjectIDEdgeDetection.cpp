@@ -200,7 +200,7 @@ namespace draw_edges
 					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-					.build( pass, context, graph, 1u );
+					.build( pass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
 					, result->getTimer() );
 				return result;
@@ -208,7 +208,7 @@ namespace draw_edges
 	{
 		m_pass.addDependency( previousPass );
 		passBuffer.createPassBinding( m_pass, eMaterials );
-		m_pass.addSampledView( data0, eData0, {} );
+		m_pass.addSampledView( data0, eData0 );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
 	}
@@ -219,7 +219,7 @@ namespace draw_edges
 		visitor.visit( m_pixelShader );
 		visitor.visit( "Object ID Edge Detection"
 			, m_result
-			, m_graph.getFinalLayout( m_result.wholeViewId ).layout
+			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 

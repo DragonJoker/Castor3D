@@ -605,7 +605,7 @@ namespace castor3d
 		}
 	}
 
-	Parameters Engine::getRenderPassTypeConfiguration( castor::String const & renderPassType )
+	Parameters Engine::getRenderPassTypeConfiguration( castor::String const & renderPassType )const
 	{
 		auto it = m_renderPassTypes.find( renderPassType );
 

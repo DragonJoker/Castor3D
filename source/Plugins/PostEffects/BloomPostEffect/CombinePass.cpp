@@ -112,6 +112,7 @@ namespace Bloom
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
 					.recordDisabledInto( [this, &context, &graph, &sceneView, size]( crg::RunnablePass const & runnable
+						, crg::RecordContext & recordContext
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
@@ -124,15 +125,17 @@ namespace Bloom
 								, { size.width, size.height, 1u } };
 							auto srcTransition = runnable.getTransition( index, sceneView );
 							auto dstTransition = runnable.getTransition( index, m_resultView );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, sceneView
-								, srcTransition.to
+								, srcTransition.to.layout
 								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, m_resultView
-								, dstTransition.to
+								, dstTransition.to.layout
 								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -143,17 +146,15 @@ namespace Bloom
 								, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 								, 1u
 								, &region );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, m_resultView
-								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+								, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 								, dstTransition.to );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, sceneView
-								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+								, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 								, srcTransition.to );
 						} )
 					.build( pass, context, graph );
@@ -175,7 +176,9 @@ namespace Bloom
 				, 0.0f
 				, 0.0f
 				, float( blurPassesCount ) } );
-		m_pass.addSampledView( sceneView, 1u );
+		m_pass.addSampledView( sceneView
+			, 1u
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		m_pass.addOutputColourView( m_resultView );
 	}
 

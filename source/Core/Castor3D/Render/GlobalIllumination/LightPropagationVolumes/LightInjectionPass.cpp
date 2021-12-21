@@ -491,10 +491,11 @@ namespace castor3d
 		doCreatePipeline( 0u );
 	}
 
-	void LightInjectionPass::PipelineHolder::recordInto( VkCommandBuffer commandBuffer
+	void LightInjectionPass::PipelineHolder::recordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		m_holder.recordInto( commandBuffer, index );
+		m_holder.recordInto( context, commandBuffer, index );
 	}
 
 	void LightInjectionPass::PipelineHolder::doCreatePipeline( uint32_t index )
@@ -602,9 +603,8 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doSubInitialise(); }
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); } }
-			, { gridSize, gridSize }
-			, 1u }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
+			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
@@ -635,9 +635,8 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doSubInitialise(); }
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); } }
-			, { gridSize, gridSize }
-			, 1u }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
+			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ createVertexBuffer( getName(), m_device, m_rsmSize ) }
@@ -661,10 +660,11 @@ namespace castor3d
 		m_holder.initialise( getRenderPass() );
 	}
 
-	void LightInjectionPass::doSubRecordInto( VkCommandBuffer commandBuffer
+	void LightInjectionPass::doSubRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		m_holder.recordInto( commandBuffer, index );
+		m_holder.recordInto( context, commandBuffer, index );
 		auto vplCount = m_rsmSize * m_rsmSize;
 		VkDeviceSize offset{};
 		VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();

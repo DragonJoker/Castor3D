@@ -155,7 +155,7 @@ namespace smaa
 		visitor.visit( m_pixelShader );
 		visitor.visit( "SMAA EdgeDetection Colour Result"
 			, m_outColour
-			, m_graph.getFinalLayout( m_outColour.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_outColour.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 }
