@@ -14,6 +14,9 @@ namespace castor
 	class GroupChangeTracked
 	{
 	public:
+		using Type = T;
+
+	public:
 		explicit GroupChangeTracked( bool & dirty )noexcept
 			: m_value{}
 			, m_dirty{ dirty }

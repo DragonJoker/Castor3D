@@ -140,6 +140,16 @@ namespace castor3d
 			cleanup();
 		} ) };
 
+#if defined( NDEBUG )
+
+		auto tslf = 0_ms;
+
+#else
+
+		auto tslf = 25_ms;
+
+#endif
+
 		try
 		{
 			// Tant qu'on n'est pas interrompu, on continue
@@ -159,7 +169,7 @@ namespace castor3d
 					if ( !isPaused() )
 					{
 						m_frameEnded = false;
-						doRenderFrame();
+						doRenderFrame( tslf );
 						m_frameEnded = true;
 					}
 
