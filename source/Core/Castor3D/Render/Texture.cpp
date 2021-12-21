@@ -111,6 +111,37 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags
 		, VkBorderColor const & borderColor
 		, bool createSubviews )
+		: Texture{ device
+			, handler
+			, name
+			, createFlags
+			, size
+			, layerCount
+			, mipLevels
+			, format
+			, usageFlags
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+			, borderColor
+			, createSubviews }
+	{
+	}
+
+	Texture::Texture( RenderDevice const & device
+		, crg::ResourceHandler & handler
+		, castor::String const & name
+		, VkImageCreateFlags createFlags
+		, VkExtent3D const & size
+		, uint32_t layerCount
+		, uint32_t mipLevels
+		, VkFormat format
+		, VkImageUsageFlags usageFlags
+		, VkFilter minFilter
+		, VkFilter magFilter
+		, VkSamplerMipmapMode mipFilter
+		, VkBorderColor const & borderColor
+		, bool createSubviews )
 		: handler{ &handler }
 		, device{ &device }
 	{
@@ -200,9 +231,9 @@ namespace castor3d
 
 		auto & engine = *device.renderSystem.getEngine();
 		SamplerResPtr c3dSampler;
-		auto splName = getSamplerName( VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+		auto splName = getSamplerName( minFilter
+			, magFilter
+			, mipFilter
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
@@ -214,9 +245,9 @@ namespace castor3d
 		else
 		{
 			auto created = castor::makeResource< Sampler, castor::String >( splName, engine );
-			created->setMinFilter( VK_FILTER_LINEAR );
-			created->setMagFilter( VK_FILTER_LINEAR );
-			created->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+			created->setMinFilter( minFilter );
+			created->setMagFilter( magFilter );
+			created->setMipFilter( mipFilter );
 			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
