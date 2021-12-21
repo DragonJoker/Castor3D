@@ -19,43 +19,55 @@ namespace castor3d
 
 	void Plane::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
-		castor::String param;
-		bool flipYZ = false;
-		parameters.get( cuT( "tile_uv" ), m_tileUV );
+		bool sortAroundCenter{};
+		parameters.get( cuT( "sort_around_center" ), sortAroundCenter );
+		bool tileUV{};
+		parameters.get( cuT( "tile_uv" ), tileUV );
+		bool flipYZ{};
 		parameters.get( cuT( "flipYZ" ), flipYZ );
 
+		castor::String param;
+		uint32_t subDivisionsW{};
 		if ( parameters.get( cuT( "width_subdiv" ), param ) )
 		{
-			m_subDivisionsW = castor::string::toUInt( param );
+			subDivisionsW = castor::string::toUInt( param );
 		}
 
+		uint32_t subDivisionsD{};
 		if ( parameters.get( cuT( "depth_subdiv" ), param ) )
 		{
-			m_subDivisionsD = castor::string::toUInt( param );
+			subDivisionsD = castor::string::toUInt( param );
 		}
 
+		float width{};
 		if ( parameters.get( cuT( "width" ), param ) )
 		{
-			m_width = castor::string::toFloat( param );
+			width = castor::string::toFloat( param );
 		}
 
+		float depth{};
 		if ( parameters.get( cuT( "depth" ), param ) )
 		{
-			m_depth = castor::string::toFloat( param );
+			depth = castor::string::toFloat( param );
 		}
 
-		uint32_t nbVertexW = m_subDivisionsW + 2;
-		uint32_t nbVertexH = m_subDivisionsD + 2;
-		float offsetW = -m_width / 2;
-		float offsetH = -m_depth / 2;
-		float gapW = m_width / float( m_subDivisionsW + 1 );
-		float gapH = m_depth / float( m_subDivisionsD + 1 );
+		uint32_t nbVertexW = subDivisionsW + 1;
+		uint32_t nbVertexH = subDivisionsD + 1;
+		float offsetW = ( sortAroundCenter 
+			? 0.0f
+			: -width / 2 );
+		float offsetH = ( sortAroundCenter 
+			? 0.0f
+			: -depth / 2 );
+		float gapW = width / float( subDivisionsW );
+		float gapH = depth / float( subDivisionsD );
 		castor::Point3f ptCurrentUV;
 		castor::Point3f ptPreviousUV;
 		castor::Point3f ptNormal( 0.0, 1.0, 0.0 );
 		castor::Point3f ptTangent;
 		castor::Point2f ptUv;
 		SubmeshSPtr submesh = mesh.createSubmesh();
+		InterleavedVertexArray points;
 
 		if ( flipYZ )
 		{
@@ -63,11 +75,23 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					submesh->addPoint( InterleavedVertex{}
+					points.push_back( InterleavedVertex{}
 						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) } )
 						.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
-						.texcoord( castor::Point2f{ float( i ) * gapW / m_width, float( j ) * gapH / m_depth } ) );
+						.texcoord( castor::Point2f{ float( i ) * gapW / width, float( j ) * gapH / depth } ) );
 				}
+			}
+
+			if ( sortAroundCenter )
+			{
+				std::sort( std::begin( points )
+					, std::end( points )
+					, [&]( InterleavedVertex a, InterleavedVertex b )
+					{
+							a.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, 0.0f, float( nbVertexH ) / 2.0f };
+							b.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, 0.0f, float( nbVertexH ) / 2.0f };
+							return castor::point::dot( a.pos, a.pos ) < castor::point::dot( b.pos, b.pos );
+					} );
 			}
 		}
 		else
@@ -76,15 +100,46 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					submesh->addPoint( InterleavedVertex{}
+					points.push_back( InterleavedVertex{}
 						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
 						.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
-						.texcoord( castor::Point2f{ float( i ) * gapW / m_width, float( j ) * gapH / m_depth } ) );
+						.texcoord( castor::Point2f{ float( i ) * gapW / width, float( j ) * gapH / depth } ) );
 				}
+			}
+
+			if ( sortAroundCenter )
+			{
+				std::sort( std::begin( points )
+					, std::end( points )
+					, [&]( InterleavedVertex a, InterleavedVertex b )
+					{
+							a.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, float( nbVertexH ) / 2.0f, 0.0f };
+							b.pos -= castor::Point3f{ float( nbVertexW ) / 2.0f, float( nbVertexH ) / 2.0f, 0.0f };
+							return castor::point::dot( a.pos, a.pos ) < castor::point::dot( b.pos, b.pos );
+					} );
 			}
 		}
 
-		if ( m_tileUV )
+		submesh->addPoints( points );
+
+		if ( !sortAroundCenter )
+		{
+			auto indexMapping = std::make_shared< TriFaceMapping >( *submesh );
+
+			for ( uint32_t i = 0; i < subDivisionsW; i++ )
+			{
+				for ( uint32_t j = i * subDivisionsD; j < ( i + 1 ) * subDivisionsD; j++ )
+				{
+					indexMapping->addFace( j + subDivisionsW + 1 + i, j + i, j + subDivisionsW + 2 + i );
+					indexMapping->addFace( j + i + 1, j + subDivisionsW + 2 + i, j + i );
+				}
+			}
+
+			indexMapping->computeTangentsFromNormals();
+			submesh->setIndexMapping( indexMapping );
+		}
+
+		if ( tileUV )
 		{
 			std::vector< castor::Point3f > tiledUV;
 
@@ -92,8 +147,8 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					tiledUV.push_back( castor::Point3f{ float( ( m_subDivisionsW + 1u )* i ) * gapW / m_width
-						, float( ( m_subDivisionsD + 1u ) * j ) * gapH / m_depth
+					tiledUV.push_back( castor::Point3f{ float( ( subDivisionsW + 1u )* i ) * gapW / width
+						, float( ( subDivisionsD + 1u ) * j ) * gapH / depth
 						, 0.0f } );
 				}
 			}
@@ -103,19 +158,6 @@ namespace castor3d
 			submesh->addComponent( secondaryUV );
 		}
 
-		auto indexMapping = std::make_shared< TriFaceMapping >( *submesh );
-
-		for ( uint32_t i = 0; i < m_subDivisionsW + 1; i++ )
-		{
-			for ( uint32_t j = i * ( m_subDivisionsD + 1 ); j < ( i + 1 ) * ( m_subDivisionsD + 1 ); j++ )
-			{
-				indexMapping->addFace( j + m_subDivisionsW + 2 + i, j + i, j + m_subDivisionsW + 3 + i );
-				indexMapping->addFace( j + i + 1, j + m_subDivisionsW + 3 + i, j + i );
-			}
-		}
-
-		indexMapping->computeTangentsFromNormals();
-		submesh->setIndexMapping( indexMapping );
 		mesh.computeContainers();
 	}
 }
