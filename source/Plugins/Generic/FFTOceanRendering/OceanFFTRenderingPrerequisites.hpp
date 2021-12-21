@@ -32,8 +32,8 @@ namespace ocean_fft
 	class OceanRenderPass;
 	class ProcessFFTPass;
 
-	template< typename GeneratePassT >
-	struct FullGeneratePassT;
+	template< typename DistributionPassT, typename FrequencyPassT >
+	struct GenerateFFTPassT;
 
 	using cfloat = std::complex< float >;
 
@@ -54,23 +54,21 @@ namespace ocean_fft
 		VkFFTApplication application{};
 	};
 
-	template< template< typename ValueT > typename WrapperT >
-	struct OceanFFTConfigT
+	struct OceanFFTConfig
 	{
-		WrapperT< castor::Point2f > size;
-		WrapperT< castor::Point2f > normalFreqMod;
-		WrapperT< castor::Point2f > windVelocity;
-		WrapperT< castor::Point2f > patchSize;
-		WrapperT< castor::Point2ui > blocksCount;
-		WrapperT< uint32_t > heightMapSamples;
-		WrapperT< uint32_t > displacementDownsample;
-		WrapperT< float > amplitude;
-		WrapperT< float > maxWaveLength;
-		WrapperT< float > lod0Distance;
-		WrapperT< bool > disableRandomSeed;
+		castor::Point2f size{ 200.0f, 200.0f };
+		castor::Point2f normalFreqMod{ 7.3f, 7.3f };
+		castor::Point2f windDirection{ 0.76339f, -0.64594f };
+		castor::Point2f patchSize{ 32.0f, 32.0f };
+		castor::Point2ui blocksCount{ 64u, 64u };
+		uint32_t heightMapSamples{ 256u };
+		uint32_t displacementDownsample{ 1u };
+		float amplitude{ 1.0f };
+		float maxWaveLength{ 1.0f };
+		float windVelocity{ 340.0f };
+		float lod0Distance{ 50.0f };
+		bool disableRandomSeed{ false };
 	};
-	using OceanFFTConfig = OceanFFTConfigT< crg::RawTypeT >;
-	using OceanFFTTrackedConfig = OceanFFTConfigT< castor::GroupChangeTracked >;
 
 	enum class FFTMode
 	{
@@ -84,25 +82,6 @@ namespace ocean_fft
 		, VkFFTResult result );
 	void checkFFTResultMandat( castor::xchar const * action
 		, VkFFTResult result );
-	crg::FramePass const & createProcessFFTPass( castor::String const & name
-		, castor3d::RenderDevice const & device
-		, crg::FrameGraph & graph
-		, crg::FramePass const & previousPass
-		, VkExtent2D const & extent
-		, FFTConfig const & config
-		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output );
-	crg::FramePass const & createBakeHeightGradientPass( castor3d::RenderDevice const & device
-		, crg::FrameGraph & graph
-		, crg::FramePassArray previousPasses
-		, VkExtent2D const & extent
-		, castor::Point2f const & heightMapSize
-		, uint32_t displacementDownsample
-		, OceanUbo const & ubo
-		, ashes::BufferBase const & height
-		, ashes::BufferBase const & displacement
-		, std::array< castor3d::Texture, 2u > const & heightDisp
-		, std::array< castor3d::Texture, 2u > const & gradJacob );
 }
 
 #endif

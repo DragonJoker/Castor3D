@@ -399,7 +399,7 @@ namespace ocean_fft
 				return res;
 			} );
 		result.addDependency( previousPass );
-		result.addInputStorageBuffer( { input, name + "Generated" }
+		result.addInputStorageBuffer( { input, name + "Frequency" }
 			, ProcessFFTPass::eInput
 			, 0u
 			, input.getSize() );

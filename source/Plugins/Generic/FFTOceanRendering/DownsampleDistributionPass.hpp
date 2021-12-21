@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3DORFFT_ProcessFFTPass_H___
-#define ___C3DORFFT_ProcessFFTPass_H___
+#ifndef ___C3DORFFT_DownsampleDistributionPass_H___
+#define ___C3DORFFT_DownsampleDistributionPass_H___
 
 #include "OceanFFTRenderingPrerequisites.hpp"
 
@@ -13,12 +13,13 @@ See LICENSE file in root folder
 
 namespace ocean_fft
 {
-	class ProcessFFTPass
+	class DownsampleDistributionPass
 		: public crg::RunnablePass
 	{
 	public:
 		enum Bindings : uint32_t
 		{
+			eConfig,
 			eInput,
 			eOutput,
 		};
@@ -34,15 +35,12 @@ namespace ocean_fft
 		 *\param[in]	voxels		Le tampon de voxels.
 		 *\param[in]	result		La texture résultante.
 		 */
-		ProcessFFTPass( crg::FramePass const & pass
+		DownsampleDistributionPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, FFTConfig const & config
 			, VkExtent2D const & extent
-			, ashes::BufferBase const & input
-			, std::array< ashes::BufferBasePtr, 2u > const & output );
-		~ProcessFFTPass()override;
+			, uint32_t downsample );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -62,22 +60,24 @@ namespace ocean_fft
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		VkExtent2D m_extent;
-		VkDeviceSize m_inBufferSize{};
-		VkBuffer m_vkInput{};
-		VkDeviceSize m_outBufferSize{};
-		std::array< VkBuffer, 2u > m_vkOutput{};
-		VkFFTApplication m_app{};
+		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		castor3d::ShaderModule m_shader;
+		ashes::ComputePipelinePtr m_pipeline;
+		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
+		VkExtent3D m_extent;
 	};
-
-	crg::FramePass const & createProcessFFTPass( castor::String const & name
+	crg::FramePass const & createDownsampleDistributionPass( castor::String const & prefix
+		, castor::String const & name
 		, castor3d::RenderDevice const & device
 		, crg::FrameGraph & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray previousPasses
 		, VkExtent2D const & extent
-		, FFTConfig const & config
+		, uint32_t downsample
+		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output );
+		, ashes::BufferBase const & output );
 }
 
 #endif
