@@ -1,5 +1,6 @@
 #include "FFTOceanRendering/OceanFFT.hpp"
 
+#include "FFTOceanRendering/BakeHeightGradientPass.hpp"
 #include "FFTOceanRendering/GenerateHeightmapPass.hpp"
 #include "FFTOceanRendering/OceanFFTRenderPass.hpp"
 
@@ -23,13 +24,6 @@ namespace ocean_fft
 
 	namespace
 	{
-		int32_t alias( int32_t x, int32_t N )
-		{
-			if ( x > N / 2 )
-				x -= N;
-			return x;
-		}
-
 		crg::FramePass const & createGenerateMipmapsPass( castor::String const & name
 			, castor3d::RenderDevice const & device
 			, crg::FrameGraph & graph
@@ -155,39 +149,13 @@ namespace ocean_fft
 			return result;
 		}
 
-		OceanFFT::TrackedConfig getConfig( castor3d::Engine const & engine
-			, bool & dirty )
+		OceanFFT::Config getConfig( castor3d::Engine const & engine )
 		{
 			castor3d::initialiseGlslang();
 			OceanFFT::Config config{};
 			auto params = engine.getRenderPassTypeConfiguration( OceanRenderPass::Type );
-
-			if ( params.get( OceanRenderPass::ParamFFT, config ) )
-			{
-				return { castor::GroupChangeTracked< castor::Point2f >{ dirty, config.size }
-					, castor::GroupChangeTracked< castor::Point2f >{ dirty, config.normalFreqMod }
-					, castor::GroupChangeTracked< castor::Point2f >{ dirty, config.windVelocity }
-					, castor::GroupChangeTracked< castor::Point2f >{ dirty, config.patchSize }
-					, castor::GroupChangeTracked< castor::Point2ui >{ dirty, config.blocksCount }
-					, castor::GroupChangeTracked< uint32_t >{ dirty, config.heightMapSamples }
-					, castor::GroupChangeTracked< uint32_t >{ dirty, config.displacementDownsample }
-					, castor::GroupChangeTracked< float >{ dirty, config.amplitude }
-					, castor::GroupChangeTracked< float >{ dirty, config.maxWaveLength }
-					, castor::GroupChangeTracked< float >{ dirty, config.lod0Distance }
-					, castor::GroupChangeTracked< bool >{ dirty, config.disableRandomSeed } };
-			}
-			
-			return { castor::GroupChangeTracked< castor::Point2f >{ dirty, { 200.0f, 200.0f } }
-				, castor::GroupChangeTracked< castor::Point2f >{ dirty, { 7.3f, 7.3f } }
-				, castor::GroupChangeTracked< castor::Point2f >{ dirty, { 1.0f, 1.0f } }
-				, castor::GroupChangeTracked< castor::Point2f >{ dirty, { 32.0f, 32.0f } }
-				, castor::GroupChangeTracked< castor::Point2ui >{ dirty, { 64u, 64u } }
-				, castor::GroupChangeTracked< uint32_t >{ dirty, 256u }
-				, castor::GroupChangeTracked< uint32_t >{ dirty, 1u }
-				, castor::GroupChangeTracked< float >{ dirty, 1.0f }
-				, castor::GroupChangeTracked< float >{ dirty, 1.0f }
-				, castor::GroupChangeTracked< float >{ dirty, 50.0f }
-				, castor::GroupChangeTracked< bool >{ dirty, false } };
+			params.get( OceanRenderPass::ParamFFT, config );
+			return config;
 		}
 
 		std::default_random_engine createRandomEngine( bool disableRandomSeed )
@@ -210,45 +178,93 @@ namespace ocean_fft
 			, crg::FrameGraph & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo )
-		: m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine(), m_dirty ) }
-		, m_engine{ createRandomEngine( *m_config.disableRandomSeed ) }
-		, m_heightMapSamples{ m_config.heightMapSamples.value(), m_config.heightMapSamples.value() }
-		, m_displacementDownsample{ m_config.displacementDownsample.value() }
+		: m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine() ) }
+		, m_engine{ createRandomEngine( m_config.disableRandomSeed ) }
+		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
+		, m_displacementDownsample{ m_config.displacementDownsample }
 		, m_fftConfig{ device, m_heightMapSamples }
+		, m_heightSeeds{ castor3d::makeBuffer< cfloat >( device
+			, m_heightMapSamples.width * m_heightMapSamples.height
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, Name + "HeightSeeds" ) }
+		, m_heightDistribution{ castor3d::makeBuffer< cfloat >( device
+			, m_heightMapSamples.width * m_heightMapSamples.height
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, Name + "HeightDistribution" ) }
+		, m_generateHeightDistribution{ &createGenerateDistributionPass( Name
+			, "Height"
+			, device
+			, graph
+			, previousPasses
+			, m_heightMapSamples
+			, false
+			, ubo
+			, m_heightSeeds->getBuffer()
+			, m_heightDistribution->getBuffer() ) }
 		, m_height{ Name
 			, "Height"
 			, graph
-			, previousPasses
+			, { m_generateHeightDistribution }
 			, ubo
 			, m_heightMapSamples
 			, m_fftConfig
+			, *m_heightDistribution
 			, FFTMode::eC2R }
-		, m_normal{ Name
-			, "Normals"
+		, m_displacementDistribution{ castor3d::makeBuffer< cfloat >( device
+			, ( m_heightMapSamples.width >> m_displacementDownsample ) * ( m_heightMapSamples.height >> m_displacementDownsample )
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, Name + "NormalsDistribution" ) }
+		, m_generateDisplacementDistribution{ &createDownsampleDistributionPass( Name
+			, "Displacement"
+			, device
 			, graph
-			, previousPasses
-			, ubo
+			, { m_generateHeightDistribution }
 			, m_heightMapSamples
-			, m_fftConfig
-			, FFTMode::eC2C }
+			, m_displacementDownsample
+			, ubo
+			, m_heightDistribution->getBuffer()
+			, m_displacementDistribution->getBuffer() ) }
 		, m_displacement{ Name
 			, "Displacement"
 			, graph
-			, previousPasses
+			, { m_generateDisplacementDistribution }
 			, ubo
 			, { m_heightMapSamples.width >> m_displacementDownsample, m_heightMapSamples.height >> m_displacementDownsample }
 			, m_fftConfig
+			, *m_displacementDistribution
 			, FFTMode::eC2C }
-		, m_heightDisplacement{ createTexture( device, graph, m_heightMapSamples, "OceanFFTHeightDisplacement0", VK_FORMAT_R16G16B16A16_SFLOAT, VK_SAMPLER_MIPMAP_MODE_NEAREST )
-			, createTexture( device, graph, m_heightMapSamples, "OceanFFTHeightDisplacement1", VK_FORMAT_R16G16B16A16_SFLOAT, VK_SAMPLER_MIPMAP_MODE_NEAREST ) }
-		, m_gradientJacobian{ createTexture( device, graph, m_heightMapSamples, "OceanFFTGradientJacobian0", VK_FORMAT_R16G16B16A16_SFLOAT, VK_SAMPLER_MIPMAP_MODE_LINEAR )
-			, createTexture( device, graph, m_heightMapSamples, "OceanFFTGradientJacobian1", VK_FORMAT_R16G16B16A16_SFLOAT, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
-		, m_normals{ createTexture( device, graph, m_heightMapSamples, "OceanFFTNormals", VK_FORMAT_R32G32_SFLOAT, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
+		, m_heightDisplacement{ createTexture( device
+				, graph
+				, m_heightMapSamples
+				, "OceanFFTHeightDisplacement0"
+				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, VK_SAMPLER_MIPMAP_MODE_NEAREST )
+			, createTexture( device
+				, graph
+				, m_heightMapSamples
+				, "OceanFFTHeightDisplacement1"
+				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, VK_SAMPLER_MIPMAP_MODE_NEAREST ) }
+		, m_gradientJacobian{ createTexture( device
+				, graph
+				, m_heightMapSamples
+				, "OceanFFTGradientJacobian0"
+				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR )
+			, createTexture( device
+				, graph
+				, m_heightMapSamples
+				, "OceanFFTGradientJacobian1"
+				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
 		, m_bakeHeightGradient{ &createBakeHeightGradientPass( m_fftConfig.device
 			, graph
 			, { &m_height.getLastPass(), &m_displacement.getLastPass() }
 			, m_heightMapSamples
-			, m_config.size.value()
+			, m_config.size
 			, m_displacementDownsample
 			, ubo
 			, m_height.getResult()
@@ -265,6 +281,41 @@ namespace ocean_fft
 			, graph
 			, m_bakeHeightGradient
 			, m_gradientJacobian.front().sampledViewId ) }
+		, m_normalSeeds{ castor3d::makeBuffer< cfloat >( device
+			, m_heightMapSamples.width * m_heightMapSamples.height
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, Name + "NormalsSeeds" ) }
+		, m_normalDistribution{ castor3d::makeBuffer< cfloat >( device
+			, m_heightMapSamples.width * m_heightMapSamples.height
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, Name + "NormalsDistribution" ) }
+		, m_generateNormalDistribution{ &createGenerateDistributionPass( Name
+			, "Normals"
+			, device
+			, graph
+			, previousPasses
+			, m_heightMapSamples
+			, true
+			, ubo
+			, m_normalSeeds->getBuffer()
+			, m_normalDistribution->getBuffer() ) }
+		, m_normal{ Name
+			, "Normals"
+			, graph
+			, { m_generateNormalDistribution }
+			, ubo
+			, m_heightMapSamples
+			, m_fftConfig
+			, *m_normalDistribution
+			, FFTMode::eC2C }
+		, m_normals{ createTexture( device
+			, graph
+			, m_heightMapSamples
+			, "OceanFFTNormals"
+			, VK_FORMAT_R32G32_SFLOAT
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
 		, m_generateNormalsMips{ &createCopyAndGenerateMipmapsPass( "Normals"
 			, device
 			, graph
@@ -272,7 +323,8 @@ namespace ocean_fft
 			, m_normal.getResult()
 			, m_normals.sampledViewId ) }
 	{
-		m_dirty = true;
+		generateDistributionSeeds( *m_heightSeeds );
+		generateDistributionSeeds( *m_normalSeeds );
 	}
 
 	OceanFFT::~OceanFFT()
@@ -293,47 +345,32 @@ namespace ocean_fft
 	void OceanFFT::accept( castor3d::RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( cuT( "Tile XZ size" )
-			, m_config.size );
+			, m_config.size
+			, nullptr );
 		visitor.visit( cuT( "Amplitude" )
-			, m_config.amplitude );
+			, m_config.amplitude
+			, nullptr );
 		visitor.visit( cuT( "Max. wave length" )
-			, m_config.maxWaveLength );
-		visitor.visit( cuT( "Wind XZ velocity" )
-			, m_config.windVelocity );
+			, m_config.maxWaveLength
+			, nullptr );
+		visitor.visit( cuT( "Wind XZ direction" )
+			, m_config.windDirection
+			, nullptr );
+		visitor.visit( cuT( "Wind velocity" )
+			, m_config.windVelocity
+			, nullptr );
 		visitor.visit( cuT( "Normal Freq. Mod." )
-			, m_config.normalFreqMod );
-
+			, m_config.normalFreqMod
+			, nullptr );
 		visitor.visit( cuT( "Patch XZ size" )
-			, *m_config.patchSize
+			, m_config.patchSize
 			, nullptr );
 		visitor.visit( cuT( "Blocks XZ Count" )
-			, *m_config.blocksCount
+			, m_config.blocksCount
 			, nullptr );
 		visitor.visit( cuT( "LOD 0 Distance" )
-			, *m_config.lod0Distance
+			, m_config.lod0Distance
 			, nullptr );
-	}
-
-	void OceanFFT::update()
-	{
-		if ( m_dirty )
-		{
-			static constexpr float G = 9.81f;
-			L = castor::point::dot( m_config.windVelocity.value(), m_config.windVelocity.value() ) / G;
-			auto amplitude = float( m_config.amplitude.value() * 0.3f / sqrt( m_heightMapSamples.width * m_heightMapSamples.height ) );
-			auto height = generateDistribution( amplitude
-				, m_config.maxWaveLength.value()
-				, m_config.size
-				, m_height.getDistribution() );
-			generateDistribution( amplitude * sqrt( m_config.normalFreqMod.value()->x * m_config.normalFreqMod.value()->y )
-				, m_config.maxWaveLength.value()
-				, m_config.size.value() / m_config.normalFreqMod.value()
-				, m_normal.getDistribution() );
-			downsampleDistribution( height
-				, m_displacementDownsample
-				, m_displacement.getDistribution() );
-			m_dirty = false;
-		}
 	}
 
 	crg::FramePassArray OceanFFT::getLastPasses()
@@ -341,100 +378,28 @@ namespace ocean_fft
 		return { m_generateHeightDispMips, m_generateGradJacobMips, m_generateNormalsMips };
 	}
 
-	cfloat OceanFFT::phillips( castor::Point2f const & k
-		, float maxWaveLength
-		, castor::Point2f const & windDirection )
-	{
-		auto kLen = float( castor::point::length( k ) );
-
-		if ( kLen == 0.0f )
-		{
-			return 0.0f;
-		}
-
-		float kL = kLen * L;
-		auto kDir = castor::point::getNormalised( k );
-		float kw = castor::point::dot( kDir, windDirection );
-		return float( pow( kw * kw, 1.0f )								// Directional
-			* exp( -1.0 * kLen * kLen * maxWaveLength * maxWaveLength )	// Suppress small waves at ~maxWaveLength.
-			* exp( -1.0f / ( kL * kL ) )
-			* pow( kLen, -4.0f ) );
-	}
-
-	std::vector< cfloat > OceanFFT::generateDistribution( float amplitude
-		, float maxWaveLength
-		, castor::Point2f const & size
-		, ashes::Buffer< cfloat > & distribBuffer )
+	void OceanFFT::generateDistributionSeeds( ashes::Buffer< cfloat > & distribBuffer )
 	{
 		auto Nx = int32_t( m_heightMapSamples.width );
 		auto Nz = int32_t( m_heightMapSamples.height );
-		auto windDirection = castor::point::getNormalised( m_config.windVelocity.value() );
 		std::vector< cfloat > distribution;
 		distribution.resize( distribBuffer.getCount() );
-		auto mod = castor::Point2f{ castor::PiMult2< float >, castor::PiMult2< float > } / size;
 
 		for ( int32_t z = 0; z < Nz; z++ )
 		{
 			for ( int32_t x = 0; x < Nx; x++ )
 			{
-				auto & v = distribution[size_t( z * Nx + x )];
-				auto k = mod * castor::Point2f{ alias( x, Nx ), alias( z, Nz ) };
-				auto dist = cfloat{ m_normDis( m_engine ), m_normDis( m_engine ) };
-				v = dist * amplitude * sqrt( 0.5f * phillips( k, maxWaveLength, windDirection ) );
+				distribution[size_t( z * Nx + x )] = cfloat{ m_normDis( m_engine ), m_normDis( m_engine ) };
 			}
 		}
 
 		ashes::StagingBuffer staging{ *m_fftConfig.device
-			, "OceanFFTDistributionStaging"
+			, "OceanFFTDistributionSeedsStaging"
 			, VkBufferUsageFlags{}
 			, distribution.size() * sizeof( cfloat ) };
 		staging.uploadBufferData( *m_fftConfig.queueData.queue
 			, *m_fftConfig.queueData.commandPool
 			, distribution
-			, distribBuffer );
-		return distribution;
-	}
-
-	void OceanFFT::downsampleDistribution( std::vector< cfloat > const & distribution
-		, uint32_t downsample
-		, ashes::Buffer< cfloat > & distribBuffer )
-	{
-		auto Nx = int32_t( m_heightMapSamples.width );
-		auto Nz = int32_t( m_heightMapSamples.height );
-		std::vector< cfloat > downsampled;
-		downsampled.resize( distribBuffer.getCount() );
-		// Pick out the lower frequency samples only which is the same as downsampling "perfectly".
-		auto outWidth = Nx >> downsample;
-		auto outHeight = Nz >> downsample;
-
-		for ( int32_t z = 0; z < outHeight; z++ )
-		{
-			for ( int32_t x = 0; x < outWidth; x++ )
-			{
-				auto alias_x = alias( x, outWidth );
-				auto alias_z = alias( z, outHeight );
-
-				if ( alias_x < 0 )
-				{
-					alias_x += Nx;
-				}
-
-				if ( alias_z < 0 )
-				{
-					alias_z += Nz;
-				}
-
-				downsampled[size_t( z * outWidth + x )] = distribution[size_t( alias_z * Nx + alias_x )];
-			}
-		}
-
-		ashes::StagingBuffer staging{ *m_fftConfig.device
-			, "OceanFFTDownsampleStaging"
-			, VkBufferUsageFlags{}
-			, downsampled.size() * sizeof( cfloat ) };
-		staging.uploadBufferData( *m_fftConfig.queueData.queue
-			, *m_fftConfig.queueData.commandPool
-			, downsampled
 			, distribBuffer );
 	}
 
