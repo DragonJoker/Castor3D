@@ -25,24 +25,9 @@ namespace castor3d
 		C3D_API static MeshGeneratorSPtr create();
 
 	private:
-		C3D_API virtual void doGenerate( Mesh & mesh
+		C3D_API void doGenerate( Mesh & mesh
 			, Parameters const & parameters )override;
-
-	private:
-		float m_depth{};
-		float m_width{};
-		uint32_t m_subDivisionsW{};
-		uint32_t m_subDivisionsD{};
-		bool m_tileUV{};
-		friend std::ostream & operator <<( std::ostream & o
-			, Plane const & c );
 	};
-
-	inline std::ostream & operator <<( std::ostream & o
-		, Plane const & c )
-	{
-		return o << "Plane(" << c.m_depth << "," << c.m_width << "," << c.m_subDivisionsW << "," << c.m_subDivisionsD << ")";
-	}
 }
 
 #endif
