@@ -37,18 +37,18 @@ namespace GuiCommon
 				, castor3d::RenderTechniquePass & renderPass )
 			{
 				auto & engine = *renderPass.getEngine();
-				RenderPassConfigurationBuilder vis{ castor3d::PipelineFlags{ castor3d::BlendMode::eNoBlend
+				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( castor3d::BlendMode::eNoBlend
 						, castor3d::BlendMode::eNoBlend
 						, castor3d::PassFlag::eNone
 						, engine.getRenderPassTypeID( renderPass.getTypeName() )
 						, 0u
 						, castor3d::InvalidIndex
+						, VK_COMPARE_OP_ALWAYS
+						, VK_COMPARE_OP_ALWAYS
+						, castor3d::TextureFlagsArray{}
 						, castor3d::ProgramFlag::eNone
 						, castor3d::SceneFlag::eNone
-						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
-						, VK_COMPARE_OP_ALWAYS
-						, VK_COMPARE_OP_ALWAYS
-						, castor3d::TextureFlagsArray{} }
+						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST )
 					, renderPass.getScene()
 					, grid
 					, prop };

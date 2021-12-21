@@ -181,7 +181,8 @@ namespace castor3d
 			, graph
 			, { [this]() { doInitialise(); }
 				, crg::getDefaultV< crg::RunnablePass::GetSemaphoreWaitFlagsCallback >()
-				, [this]( VkCommandBuffer cmd, uint32_t i ){ doRecordInto( cmd, i ); } } }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cmd, uint32_t i ){ doRecordInto( context, cmd, i ); } }
+			, { 1u, false, true } }
 		, m_renderSize{ renderSize }
 		, m_renderPass{ renderPass }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, SceneName, getVertexProgram() }
@@ -209,7 +210,7 @@ namespace castor3d
 			m_renderQuad.resetRenderPass( m_renderSize
 				, m_renderPass
 				, SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
-			recordCurrent();
+			reRecordCurrent();
 		}
 	}
 
@@ -228,7 +229,8 @@ namespace castor3d
 			, SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
 	}
 
-	void LoadingScreen::WindowPass::doRecordInto( VkCommandBuffer commandBuffer
+	void LoadingScreen::WindowPass::doRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
 		if ( m_renderPass && m_framebuffer )
@@ -243,9 +245,9 @@ namespace castor3d
 			m_context.vkCmdBeginRenderPass( commandBuffer
 				, &beginInfo
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_renderQuad.record( commandBuffer, index );
+			m_renderQuad.record( context, commandBuffer, index );
 			m_context.vkCmdEndRenderPass( commandBuffer );
-			m_renderQuad.end( commandBuffer, index );
+			m_renderQuad.end( context, commandBuffer, index );
 		}
 	}
 
@@ -388,7 +390,7 @@ namespace castor3d
 			m_windowPass->resetCommandBuffer();
 			m_windowPass->setTarget( framebuffer
 				, { transparentBlackClearColor } );
-			m_windowPass->recordCurrent();
+			m_windowPass->reRecordCurrent();
 			result = { m_runnable->run( result, queue ) };
 			fence = &m_windowPass->getFence();
 		}
@@ -488,7 +490,7 @@ namespace castor3d
 				return result;
 			} );
 		result.addDependency( *previousPass );
-		result.addSampledView( m_colour.sampledViewId, 0u, {} );
+		result.addSampledView( m_colour.sampledViewId, 0u );
 		return result;
 	}
 }

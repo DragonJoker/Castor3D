@@ -237,12 +237,13 @@ namespace castor3d
 						, graph
 						, { [](){}
 							, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
-							, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
+							, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } } }
 				{
 				}
 
 			protected:
-				void doRecordInto( VkCommandBuffer commandBuffer
+				void doRecordInto( crg::RecordContext & context
+					, VkCommandBuffer commandBuffer
 					, uint32_t index )
 				{
 					auto clearValue = transparentBlackClearColor.color;
@@ -277,16 +278,14 @@ namespace castor3d
 
 			for ( auto & texture : lpvResult )
 			{
-				pass.addTransferOutputView( texture->wholeViewId
-					, VK_IMAGE_LAYOUT_UNDEFINED );
+				pass.addTransferOutputView( texture->wholeViewId );
 			}
 
 			for ( auto & textures : llpvResult )
 			{
 				for ( auto & texture : *textures )
 				{
-					pass.addTransferOutputView( texture->wholeViewId
-						, VK_IMAGE_LAYOUT_UNDEFINED );
+					pass.addTransferOutputView( texture->wholeViewId );
 				}
 			}
 
@@ -750,11 +749,11 @@ namespace castor3d
 	{
 		visitor.visit( "Technique Colour"
 			, m_colour
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, m_renderTarget.getGraph().getFinalLayoutState( m_colour.sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
 			, *m_depth
-			, m_renderTarget.getGraph().getFinalLayout( m_depth->sampledViewId ).layout
+			, m_renderTarget.getGraph().getFinalLayoutState( m_depth->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
@@ -997,8 +996,7 @@ namespace castor3d
 			} );
 		result.addDependency( *m_depthPassDecl );
 		result.addInputStorageView( m_depthObj->sampledViewId
-			, ComputeDepthRange::eInput
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, ComputeDepthRange::eInput );
 		result.addOutputStorageBuffer( { m_depthRange->getBuffer(), "DepthRange" }
 			, ComputeDepthRange::eOutput
 			, 0u
@@ -1067,7 +1065,7 @@ namespace castor3d
 			} );
 		result.addDependencies( previousPasses );
 		result.addDependency( m_ssao->getLastPass() );
-		result.addSampledView( m_ssao->getResult().sampledViewId, 0u, VK_IMAGE_LAYOUT_UNDEFINED );
+		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
 		result.addInOutDepthStencilView( m_depth->targetViewId );
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;

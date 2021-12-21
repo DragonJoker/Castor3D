@@ -153,10 +153,11 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doSubInitialise(); }
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } ) }
-			, makeExtent2D( desc.m_size ) }
+			, makeExtent2D( desc.m_size )
+			, { 1u, false, true } }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }
@@ -532,7 +533,8 @@ namespace castor3d
 		m_renderQueue->initialise();
 	}
 
-	void SceneRenderPass::doSubRecordInto( VkCommandBuffer commandBuffer
+	void SceneRenderPass::doSubRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
 		VkCommandBuffer secondary = m_renderQueue->initCommandBuffer();

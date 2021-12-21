@@ -242,10 +242,8 @@ namespace water
 				return result;
 			} );
 		blitColourPass.addDependencies( previousPasses );
-		blitColourPass.addTransferInputView( technique.getResultImgView()
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		blitColourPass.addTransferOutputView( colourInput->sampledViewId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		blitColourPass.addTransferInputView( technique.getResultImgView() );
+		blitColourPass.addTransferOutputView( colourInput->sampledViewId );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
 			, technique.getRenderTarget().getGraph().getHandler()
@@ -271,10 +269,8 @@ namespace water
 				return result;
 			} );
 		blitDepthPass.addDependencies( previousPasses );
-		blitDepthPass.addTransferInputView( technique.getDepthImgView()
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		blitDepthPass.addTransferOutputView( depthInput->sampledViewId
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		blitDepthPass.addTransferInputView( technique.getDepthSampledView() );
+		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
 		auto & result = technique.getRenderTarget().getGraph().createPass( name
 			, [name, extent, colourInput, depthInput, &device, &technique, &renderPasses]( crg::FramePass const & framePass

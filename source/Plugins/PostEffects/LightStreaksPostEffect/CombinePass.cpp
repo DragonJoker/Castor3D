@@ -116,6 +116,7 @@ namespace light_streaks
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
 					.recordDisabledInto( [this, &context, &graph, &sceneView, size]( crg::RunnablePass const & runnable
+						, crg::RecordContext & recordContext
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
@@ -128,15 +129,17 @@ namespace light_streaks
 							, { size.width, size.height, 1u } };
 							auto srcTransition = runnable.getTransition( index, sceneView );
 							auto dstTransition = runnable.getTransition( index, m_resultView );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, sceneView
-								, srcTransition.to
+								, srcTransition.to.layout
 								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, m_resultView
-								, dstTransition.to
+								, dstTransition.to.layout
 								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -147,17 +150,15 @@ namespace light_streaks
 								, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 								, 1u
 								, &region );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, m_resultView
-								, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+								, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 								, dstTransition.to );
-							graph.memoryBarrier( commandBuffer
+							graph.memoryBarrier( recordContext
+								, commandBuffer
 								, sceneView
-								, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-									, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-									, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+								, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 								, srcTransition.to );
 						} )
 					.build( pass, context, graph );

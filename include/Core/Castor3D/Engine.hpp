@@ -355,7 +355,7 @@ namespace castor3d
 			, castor::UniquePtr< RenderPassRegisterInfo > info );
 		C3D_API void setRenderPassTypeConfiguration( castor::String const & renderPassType
 			, Parameters parameters );
-		C3D_API Parameters getRenderPassTypeConfiguration( castor::String const & renderPassType );
+		C3D_API Parameters getRenderPassTypeConfiguration( castor::String const & renderPassType )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the ID for given scene render pass type name.

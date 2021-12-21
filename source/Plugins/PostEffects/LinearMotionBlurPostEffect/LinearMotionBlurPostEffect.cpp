@@ -182,11 +182,13 @@ namespace motion_blur
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
 					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
+						, crg::RecordContext & recContext
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
 							doCopyImage( graph
 								, runnable
+								, recContext
 								, commandBuffer
 								, index
 								, *m_target
@@ -202,11 +204,9 @@ namespace motion_blur
 			, "BlurCfg"
 			, BlurCfgUboIdx );
 		m_pass->addSampledView( *m_target
-			, ColorTexIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, ColorTexIdx );
 		m_pass->addSampledView( m_renderTarget.getVelocity()->sampledViewId
-			, VelocityTexIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, VelocityTexIdx );
 		m_pass->addOutputColourView( m_resultView );
 		m_saved = Clock::now();
 		return &m_resultView;

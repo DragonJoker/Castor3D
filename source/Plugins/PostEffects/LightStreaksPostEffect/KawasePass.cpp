@@ -182,7 +182,7 @@ namespace light_streaks
 			, index );
 		pass.addSampledView( srcView
 			, DifImgIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED
+			, {}
 			, linearSampler );
 		pass.addOutputColourView( dstView );
 	}

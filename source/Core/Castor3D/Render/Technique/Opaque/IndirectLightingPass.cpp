@@ -339,7 +339,7 @@ namespace castor3d
 					.renderSize( makeExtent2D( ( *m_lpResult.begin() )->getExtent() ) )
 					.programs( convertPrograms( m_programs ) )
 					.passIndex( &m_programIndex )
-					.build( pass, context, graph, uint32_t( m_programs.size() ) );
+					.build( pass, context, graph, { uint32_t( m_programs.size() ) } );
 				engine.registerTimer( graph.getName() + "/IndirectLighting"
 					, result->getTimer() );
 				return result;
@@ -361,17 +361,13 @@ namespace castor3d
 		m_vctConfigUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eVoxelData ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
-			, uint32_t( IndirectLightingPass::eDepth )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( IndirectLightingPass::eDepth ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
-			, uint32_t( IndirectLightingPass::eData1 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( IndirectLightingPass::eData1 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId
-			, uint32_t( IndirectLightingPass::eData2 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( IndirectLightingPass::eData2 ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData3].sampledViewId
-			, uint32_t( IndirectLightingPass::eData3 )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( IndirectLightingPass::eData3 ) );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR };

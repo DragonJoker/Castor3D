@@ -235,7 +235,7 @@ namespace castor3d
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
 				, layer
-				, m_graph.getFinalLayout( layer ).layout
+				, m_graph.getFinalLayoutState( layer ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 
@@ -259,15 +259,13 @@ namespace castor3d
 					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_lineariseStages ) )
 					.renderSize( m_size )
 					.enabled( &m_ssaoConfig.enabled )
-					.build( pass, context, graph, 1u );
+					.build( pass, context, graph );
 				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
 					, result->getTimer() );
 				return result;
 			} );
 		pass.addDependency( *m_lastPass );
-		pass.addSampledView( m_srcDepthBuffer
-			, DepthImgIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( m_srcDepthBuffer, DepthImgIdx );
 		m_clipInfo.createPassBinding( pass, "ClipInfoCfg", ClipInfoUboIdx );
 		pass.addOutputColourView( m_result.targetViewId );
 		m_result.create();
@@ -310,15 +308,13 @@ namespace castor3d
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )
 						.enabled( &m_ssaoConfig.enabled )
-						.build( pass, context, graph, 1u );
+						.build( pass, context, graph );
 					m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
 						, result->getTimer() );
 					return result;
 				} );
 			pass.addDependency( *m_lastPass );
-			pass.addSampledView( source
-				, DepthImgIdx
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+			pass.addSampledView( source, DepthImgIdx );
 			previousLevel.createPassBinding( pass, "PreviousLvlCfg", PrevLvlUboIdx );
 			pass.addOutputColourView( destination );
 			m_lastPass = &pass;

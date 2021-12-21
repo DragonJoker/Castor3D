@@ -50,6 +50,13 @@ namespace castor3d
 		ashes::RenderPassPtr renderPass;
 		ashes::FrameBufferPtr framebuffer;
 		ashes::VkClearValueArray clearValues;
+		struct Entry
+		{
+			crg::ImageViewId view;
+			VkImageLayout input;
+			VkImageLayout output;
+		};
+		std::vector< Entry > attaches;
 	};
 
 	struct LightDescriptors
@@ -120,7 +127,8 @@ namespace castor3d
 			, Light const & light );
 		void removeLight( Camera const & camera
 			, Light const & light );
-		void recordInto( VkCommandBuffer commandBuffer
+		void recordInto( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
 			, uint32_t & index );
 
 	private:
@@ -174,11 +182,13 @@ namespace castor3d
 
 	protected:
 		void doInitialise();
-		void doRecordInto( VkCommandBuffer commandBuffer
+		void doRecordInto( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
 			, uint32_t index );
 
 	private:
-		LightRenderPass doCreateRenderPass( bool blend
+		LightRenderPass doCreateRenderPass( crg::RecordContext & context
+			, bool blend
 			, LightPassResult const & result );
 		LightsPipeline & doFindPipeline( Light const & light );
 
