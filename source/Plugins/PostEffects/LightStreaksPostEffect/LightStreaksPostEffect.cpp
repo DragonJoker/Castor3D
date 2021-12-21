@@ -63,7 +63,7 @@ namespace light_streaks
 		{
 			visitor.visit( "PostFX: LS - Hi " + std::to_string( view.data->info.subresourceRange.baseArrayLayer )
 				, view
-				, m_renderTarget.getGraph().getFinalLayout( view ).layout
+				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
 
@@ -71,7 +71,7 @@ namespace light_streaks
 		{
 			visitor.visit( "PostFX: LS - Kawase " + std::to_string( view.data->info.subresourceRange.baseArrayLayer )
 				, view
-				, m_renderTarget.getGraph().getFinalLayout( view ).layout
+				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
 

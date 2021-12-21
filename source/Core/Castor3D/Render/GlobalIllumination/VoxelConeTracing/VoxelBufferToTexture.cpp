@@ -176,12 +176,12 @@ namespace castor3d
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, 2u }
+			, { 2u, false, false } }
 		, m_device{ device }
 		, m_vctConfig{ vctConfig }
 		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
@@ -201,7 +201,8 @@ namespace castor3d
 	{
 	}
 
-	void VoxelBufferToTexture::doRecordInto( VkCommandBuffer commandBuffer
+	void VoxelBufferToTexture::doRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
 		auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
@@ -213,9 +214,12 @@ namespace castor3d
 
 		if ( !temporalSmoothing )
 		{
-			m_graph.memoryBarrier( commandBuffer
-				, view
-				, transition.needed
+			m_graph.memoryBarrier( context
+				, commandBuffer
+				, view.data->image
+				, view.data->info.viewType
+				, view.data->info.subresourceRange
+				, transition.needed.layout
 				, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 					, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 					, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -225,11 +229,12 @@ namespace castor3d
 				, &transparentBlackClearColor.color
 				, 1
 				, &view.data->info.subresourceRange );
-			m_graph.memoryBarrier( commandBuffer
-				, view
-				, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-					, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+			m_graph.memoryBarrier( context
+				, commandBuffer
+				, view.data->image
+				, view.data->info.viewType
+				, view.data->info.subresourceRange
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, transition.needed );
 		}
 

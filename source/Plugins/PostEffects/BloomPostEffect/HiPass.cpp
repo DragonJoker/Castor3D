@@ -41,12 +41,12 @@ namespace Bloom
 				: crg::RenderQuad{ pass
 					, context
 					, graph
-					, 1u
+					, crg::ru::Config{}
 					, crg::rq::Config{}
 						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
-						.recordInto( [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } )
+						.recordInto( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
 						.renderSize( renderSize ) }
 #if !Bloom_DebugHiPass
 				, m_viewDesc{ pass.images.back().view() }
@@ -77,7 +77,8 @@ namespace Bloom
 			}
 
 		private:
-			void doRecordInto( VkCommandBuffer commandBuffer
+			void doRecordInto( crg::RecordContext & recordContext
+				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
 #if !Bloom_DebugHiPass
@@ -88,9 +89,10 @@ namespace Bloom
 				auto transition = getTransition( index, m_viewDesc );
 
 				// Transition source view to transfer src layout
-				m_graph.memoryBarrier( commandBuffer
+				m_graph.memoryBarrier( recordContext
+					, commandBuffer
 					, m_viewDesc
-					, transition.to
+					, transition.to.layout
 					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
@@ -124,11 +126,10 @@ namespace Bloom
 					imageBlit.dstOffsets[1].z = getSubresourceDimension( depth, imageBlit.dstSubresource.mipLevel );
 
 					// Transition destination mip level to transfer dst layout
-					m_graph.memoryBarrier( commandBuffer
+					m_graph.memoryBarrier( recordContext
+						, commandBuffer
 						, mipGen.dst
-						, { VK_IMAGE_LAYOUT_UNDEFINED
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_UNDEFINED )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_UNDEFINED ) }
+						, VK_IMAGE_LAYOUT_UNDEFINED
 						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -144,31 +145,28 @@ namespace Bloom
 						, VK_FILTER_LINEAR );
 
 					// Transition destination mip level to transfer src layout
-					m_graph.memoryBarrier( commandBuffer
+					m_graph.memoryBarrier( recordContext
+						, commandBuffer
 						, mipGen.dst
-						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
 
 					// Transition source mip level to wanted output layout
-					m_graph.memoryBarrier( commandBuffer
+					m_graph.memoryBarrier( recordContext
+						, commandBuffer
 						, mipGen.src
-						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 						, transition.to );
 				}
 
 				// Transition last destination mip level to wanted output layout
 				auto & mipGen = m_mipGens.back();
-				m_graph.memoryBarrier( commandBuffer
+				m_graph.memoryBarrier( recordContext
+					, commandBuffer
 					, mipGen.dst
-					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 					, transition.to );
 #endif
 			}
@@ -314,7 +312,7 @@ namespace Bloom
 		{
 			visitor.visit( "PostFX: HDRB - Hi " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
 				, view
-				, m_graph.getFinalLayout( view ).layout
+				, m_graph.getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
 	}

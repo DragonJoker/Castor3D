@@ -166,11 +166,11 @@ namespace castor3d
 	{
 		visitor.visit( "Transparent Accumulation"
 			, m_transparentPassResult[WbTexture::eAccumulation]
-			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Transparent Revealage"
 			, m_transparentPassResult[WbTexture::eRevealage]
-			, m_graph.getFinalLayout( m_transparentPassResult[WbTexture::eRevealage].sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_transparentPassResult[WbTexture::eRevealage].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
@@ -208,12 +208,13 @@ namespace castor3d
 		hdrConfigUbo.createPassBinding( result
 			, uint32_t( HdrUboIndex ) );
 		result.addSampledView( m_depthOnlyView
-			, uint32_t( DepthTexIndex )
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, uint32_t( DepthTexIndex ) );
 		result.addSampledView( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId
-			, uint32_t( AccumTexIndex ) );
+			, uint32_t( AccumTexIndex )
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addSampledView( m_transparentPassResult[WbTexture::eRevealage].sampledViewId
-			, uint32_t( RevealTexIndex ) );
+			, uint32_t( RevealTexIndex )
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		result.addInOutColourView( targetColourView
 			, { VK_TRUE

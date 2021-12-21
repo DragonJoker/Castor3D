@@ -42,12 +42,13 @@ namespace castor3d
 					, graph
 					, { [](){}
 						, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
-						, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
+						, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } } }
 			{
 			}
 
 		private:
-			void doRecordInto( VkCommandBuffer commandBuffer
+			void doRecordInto( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
 				auto clearValue = transparentBlackClearColor.color;
@@ -515,7 +516,7 @@ namespace castor3d
 					auto tex = LpvTexture( i );
 					visitor.visit( "Layered LPV Injection" + std::to_string( layer ) + " " + castor3d::getName( tex )
 						, injection[tex]
-						, m_graph.getFinalLayout( injection[tex].wholeViewId ).layout
+						, m_graph.getFinalLayoutState( injection[tex].wholeViewId ).layout
 						, TextureFactors::tex3D( &m_gridsSizes[i] ) );
 				}
 
@@ -528,7 +529,7 @@ namespace castor3d
 			{
 				visitor.visit( "Layered LPV Geometry" + std::to_string( layer )
 					, *geometry
-					, m_graph.getFinalLayout( geometry->wholeViewId ).layout
+					, m_graph.getFinalLayoutState( geometry->wholeViewId ).layout
 					, TextureFactors::tex3D( &m_gridsSizes[layer] ) );
 				++layer;
 			}
@@ -546,7 +547,7 @@ namespace castor3d
 						auto tex = LpvTexture( i );
 						visitor.visit( "Layered LPV Propagation" + std::to_string( level ) + "_" + std::to_string( layer ) + " " + castor3d::getName( tex )
 							, propagate[tex]
-							, m_graph.getFinalLayout( propagate[tex].wholeViewId ).layout
+							, m_graph.getFinalLayoutState( propagate[tex].wholeViewId ).layout
 							, TextureFactors::tex3D( &m_gridsSizes[i] ) );
 					}
 
@@ -574,8 +575,7 @@ namespace castor3d
 		{
 			for ( auto & texture : injection )
 			{
-				result.addTransferOutputView( texture->wholeViewId
-					, VK_IMAGE_LAYOUT_UNDEFINED );
+				result.addTransferOutputView( texture->wholeViewId );
 			}
 		}
 
@@ -583,8 +583,7 @@ namespace castor3d
 		{
 			for ( auto & texture : m_geometry )
 			{
-				result.addTransferOutputView( texture->wholeViewId
-					, VK_IMAGE_LAYOUT_UNDEFINED );
+				result.addTransferOutputView( texture->wholeViewId );
 			}
 		}
 

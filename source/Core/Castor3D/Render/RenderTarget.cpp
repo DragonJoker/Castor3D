@@ -761,8 +761,7 @@ namespace castor3d
 				return result;
 			} );
 		result.addSampledView( m_objects.sampledViewId
-			, CombineLhsIdx
-			, {} );
+			, CombineLhsIdx );
 		result.addSampledView( m_overlays.sampledViewId
 			, CombineRhsIdx
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );

@@ -204,7 +204,12 @@ namespace castor3d
 			return m_depth->imageId;
 		}
 
-		crg::ImageViewId const & getDepthImgView()const
+		crg::ImageViewId const & getDepthWholeView()const
+		{
+			return m_depth->wholeViewId;
+		}
+
+		crg::ImageViewId const & getDepthSampledView()const
 		{
 			return m_depth->sampledViewId;
 		}

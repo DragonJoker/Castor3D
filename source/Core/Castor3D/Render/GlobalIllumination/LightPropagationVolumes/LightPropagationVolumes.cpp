@@ -46,12 +46,13 @@ namespace castor3d
 					, graph
 					, { [](){}
 						, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_TRANSFER_BIT; } )
-						, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } } }
+						, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } } }
 			{
 			}
 
 		protected:
-			void doRecordInto( VkCommandBuffer commandBuffer
+			void doRecordInto( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
 				auto clearValue = transparentBlackClearColor.color;
@@ -663,7 +664,7 @@ namespace castor3d
 				auto tex = LpvTexture( i );
 				visitor.visit( "LPV Injection " + castor3d::getName( tex )
 					, m_injection[tex]
-					, m_graph.getFinalLayout( m_injection[tex].wholeViewId ).layout
+					, m_graph.getFinalLayoutState( m_injection[tex].wholeViewId ).layout
 					, TextureFactors::tex3D( &m_gridsSize ) );
 			}
 
@@ -671,7 +672,7 @@ namespace castor3d
 			{
 				visitor.visit( "LPV Geometry"
 					, *m_geometry
-					, m_graph.getFinalLayout( m_geometry->wholeViewId ).layout
+					, m_graph.getFinalLayoutState( m_geometry->wholeViewId ).layout
 					, TextureFactors::tex3D( &m_gridsSize ) );
 			}
 
@@ -684,7 +685,7 @@ namespace castor3d
 					auto tex = LpvTexture( i );
 					visitor.visit( "Layered LPV Propagation" + std::to_string( level ) + " " + castor3d::getName( tex )
 						, propagate[tex]
-						, m_graph.getFinalLayout( propagate[tex].wholeViewId ).layout
+						, m_graph.getFinalLayoutState( propagate[tex].wholeViewId ).layout
 						, TextureFactors::tex3D( &m_gridsSize ) );
 				}
 
@@ -707,14 +708,12 @@ namespace castor3d
 
 		for ( auto & texture : m_injection )
 		{
-			result.addTransferOutputView( texture->wholeViewId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+			result.addTransferOutputView( texture->wholeViewId );
 		}
 
 		if ( m_geometryVolumes )
 		{
-			result.addTransferOutputView( m_geometry->wholeViewId
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+			result.addTransferOutputView( m_geometry->wholeViewId );
 		}
 
 		return result;

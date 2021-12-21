@@ -303,11 +303,13 @@ namespace film_grain
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
 					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
+						, crg::RecordContext & context
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
 							doCopyImage( graph
 								, runnable
+								, context
 								, commandBuffer
 								, index
 								, *m_target
@@ -332,8 +334,7 @@ namespace film_grain
 				, VK_SAMPLER_ADDRESS_MODE_REPEAT
 				, VK_SAMPLER_ADDRESS_MODE_REPEAT } );
 		m_pass->addSampledView( *m_target
-			, SourceTexIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+			, SourceTexIdx );
 		m_pass->addOutputColourView( m_resultView );
 		return &m_resultView;
 	}

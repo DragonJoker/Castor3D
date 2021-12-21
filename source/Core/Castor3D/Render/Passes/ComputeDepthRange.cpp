@@ -139,12 +139,12 @@ namespace castor3d
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, 2u }
+			, { 2u, false, false } }
 		, m_device{ device }
 		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
@@ -164,7 +164,8 @@ namespace castor3d
 	{
 	}
 
-	void ComputeDepthRange::doRecordInto( VkCommandBuffer commandBuffer
+	void ComputeDepthRange::doRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
 		VkDescriptorSet descriptorSet = *m_descriptorSet;

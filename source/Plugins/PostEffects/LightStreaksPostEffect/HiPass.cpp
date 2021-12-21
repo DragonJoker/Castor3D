@@ -42,12 +42,12 @@ namespace light_streaks
 				: crg::RenderQuad{ pass
 					, context
 					, graph
-					, 1u
+					, crg::ru::Config{}
 					, crg::rq::Config{}
 						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
-						.recordInto( [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } )
+						.recordInto( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
 						.renderSize( renderSize ) }
 				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
@@ -71,7 +71,8 @@ namespace light_streaks
 			}
 
 		private:
-			void doRecordInto( VkCommandBuffer commandBuffer
+			void doRecordInto( crg::RecordContext & recordContext
+				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -92,9 +93,10 @@ namespace light_streaks
 				imageCopy.dstOffset = {};
 
 				// Transition source layer to transfer src layout
-				m_graph.memoryBarrier( commandBuffer
+				m_graph.memoryBarrier( recordContext
+					, commandBuffer
 					, m_viewDesc
-					, transition.to
+					, transition.to.layout
 					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
@@ -104,11 +106,10 @@ namespace light_streaks
 					imageCopy.dstSubresource.baseArrayLayer = dst.data->info.subresourceRange.baseArrayLayer;
 
 					// Transition destination layer to transfer dst layout
-					m_graph.memoryBarrier( commandBuffer
+					m_graph.memoryBarrier( recordContext
+						, commandBuffer
 						, dst
-						, { VK_IMAGE_LAYOUT_UNDEFINED
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_UNDEFINED )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_UNDEFINED ) }
+						, VK_IMAGE_LAYOUT_UNDEFINED
 						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -123,20 +124,18 @@ namespace light_streaks
 						, &imageCopy );
 
 					// Transition destination layer to wanted output layout
-					m_graph.memoryBarrier( commandBuffer
+					m_graph.memoryBarrier( recordContext
+						, commandBuffer
 						, dst
-						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, transition.to );
 				}
 
 				// Transition source layer to wanted output layout
-				m_graph.memoryBarrier( commandBuffer
+				m_graph.memoryBarrier( recordContext
+					, commandBuffer
 					, m_viewDesc
-					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 					, transition.to );
 			}
 
@@ -241,7 +240,7 @@ namespace light_streaks
 		hiPass.addDependency( *m_lastPass );
 		hiPass.addSampledView( sceneView
 			, 0u
-			, VK_IMAGE_LAYOUT_UNDEFINED
+			, {}
 			, linearSampler );
 		hiPass.addOutputColourView( resultViews[0] );
 		m_lastPass = &hiPass;
@@ -257,8 +256,7 @@ namespace light_streaks
 						, context
 						, graph
 						, VkExtent3D{ size.width, size.height, 1u }
-						, 1u
-						, false
+						, crg::ru::Config{}
 						, nullptr
 						, enabled );
 					device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
@@ -266,10 +264,8 @@ namespace light_streaks
 					return result;
 				} );
 			pass.addDependency( *m_lastPass );
-			pass.addTransferInputView( resultViews[i - 1u]
-				, VK_IMAGE_LAYOUT_UNDEFINED );
-			pass.addTransferOutputView( resultViews[i]
-				, VK_IMAGE_LAYOUT_UNDEFINED );
+			pass.addTransferInputView( resultViews[i - 1u] );
+			pass.addTransferOutputView( resultViews[i] );
 			m_lastPass = &pass;
 		}
 	}

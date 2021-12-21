@@ -314,7 +314,7 @@ namespace castor3d
 				passX.addDependency( *m_lastPass );
 				m_lastPass = &passX;
 				m_blurUbo.createPassBinding( passX, "BlurCfgX", GaussCfgIdx );
-				passX.addSampledView( input, DifImgIdx );
+				passX.addSampledView( input, DifImgIdx, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				passX.addOutputColourView( m_intermediateView );
 			}
 			{
@@ -338,7 +338,7 @@ namespace castor3d
 				passY.addDependency( *m_lastPass );
 				m_lastPass = &passY;
 				m_blurUbo.createPassBinding( passY, "BlurCfgY", GaussCfgIdx );
-				passY.addSampledView( m_intermediateView, DifImgIdx );
+				passY.addSampledView( m_intermediateView, DifImgIdx, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				passY.addOutputColourView( input
 					, {}
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );

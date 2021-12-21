@@ -74,8 +74,8 @@ namespace castor3d
 			, graph
 			, crg::RunnablePass::Callbacks{ [this](){ doInitialise(); }
 				, crg::defaultV< crg::RunnablePass::GetSemaphoreWaitFlagsCallback >
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); } }
-			, 1u }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } }
+			, { 1u, false, true } }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_renderPass{ pass
@@ -95,7 +95,7 @@ namespace castor3d
 		auto preparer = m_renderer->getPreparer( m_device );
 		doParseOverlays( m_scene, *m_renderer, preparer );
 		m_renderer->endPrepare();
-		recordCurrent();
+		reRecordCurrent();
 	}
 
 	void OverlayPass::update( GpuUpdater & updater )
@@ -105,22 +105,28 @@ namespace castor3d
 
 	void OverlayPass::doInitialise()
 	{
-		m_renderPass.initialise( *this );
-		m_renderer->beginPrepare( m_renderPass.getRenderPass()
-			, m_renderPass.getFramebuffer( 0u ) );
-		m_renderer->endPrepare();
 	}
 
-	void OverlayPass::doRecordInto( VkCommandBuffer commandBuffer
+	void OverlayPass::doRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
+		if ( m_renderPass.initialise( context, *this ) )
+		{
+			m_renderer->beginPrepare( m_renderPass.getRenderPass()
+				, m_renderPass.getFramebuffer( 0u ) );
+			m_renderer->endPrepare();
+		}
+
 		VkCommandBuffer secondary = m_renderer->getCommands();
-		m_renderPass.begin( commandBuffer
+		m_renderPass.begin( context
+			, commandBuffer
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
 			, 0u );
 		m_context.vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );
-		m_renderPass.end( commandBuffer );
+		m_renderPass.end( context
+			, commandBuffer );
 	}
 }

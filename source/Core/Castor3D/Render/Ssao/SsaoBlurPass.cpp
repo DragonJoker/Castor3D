@@ -397,7 +397,7 @@ namespace castor3d
 		: crg::RenderQuad{ pass
 			, context
 			, graph
-			, 2u
+			, { 2u, false, false }
 			, std::move( config ) }
 			, ssaoConfig{ ssaoConfig }
 	{
@@ -477,15 +477,9 @@ namespace castor3d
 		m_ssaoConfigUbo.createPassBinding( pass, SsaoCfgUboIdx );
 		m_gpInfoUbo.createPassBinding( pass, GpInfoUboIdx );
 		m_configurationUbo.createPassBinding( pass, "SsaoBlurCfg", BlurCfgUboIdx );
-		pass.addSampledView( normals.sampledViewId
-			, NmlImgIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( input.sampledViewId
-			, InpImgIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
-		pass.addSampledView( bentInput.sampledViewId
-			, BntImgIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED );
+		pass.addSampledView( normals.sampledViewId, NmlImgIdx );
+		pass.addSampledView( input.sampledViewId, InpImgIdx );
+		pass.addSampledView( bentInput.sampledViewId, BntImgIdx );
 		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
 		pass.addOutputColourView( m_bentResult.targetViewId, transparentBlackClearColor );
 		m_result.create();
@@ -557,14 +551,14 @@ namespace castor3d
 		{
 			visitor.visit( "SSAO HBlurred AO"
 				, getResult()
-				, m_graph.getFinalLayout( getResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getResult().sampledViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 		else
 		{
 			visitor.visit( "SSAO Blurred AO"
 				, getResult()
-				, m_graph.getFinalLayout( getResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getResult().sampledViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 
@@ -572,14 +566,14 @@ namespace castor3d
 		{
 			visitor.visit( "HBlurred Bent Normals"
 				, getBentResult()
-				, m_graph.getFinalLayout( getBentResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getBentResult().sampledViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 		else
 		{
 			visitor.visit( "Blurred Bent Normals"
 				, getBentResult()
-				, m_graph.getFinalLayout( getBentResult().sampledViewId ).layout
+				, m_graph.getFinalLayoutState( getBentResult().sampledViewId ).layout
 				, TextureFactors{}.invert( true ) );
 		}
 
