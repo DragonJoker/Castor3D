@@ -623,6 +623,51 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::ePoint2U.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::ePoint2U.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::ePoint2U >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = Point2ui;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::ePoint2U;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/**
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::ePoint3U.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::ePoint3U.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::ePoint3U >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = Point3ui;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::ePoint3U;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/**
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::ePoint4U.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::ePoint4U.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::ePoint4U >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = Point4ui;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::ePoint4U;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0

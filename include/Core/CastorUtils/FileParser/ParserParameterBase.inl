@@ -254,6 +254,45 @@ namespace castor
 	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
+	\remarks	Specialisation for castor::Point2ui.
+	\~french
+	\brief		Récupère le type de paramètre à partir du type C++.
+	\remarks	Spécialisation pour castor::Point2ui.
+	*/
+	template<>
+	struct ParserValueTyper< Point2ui >
+	{
+		static const ParameterType Type = ParameterType::ePoint2U;
+	};
+	/**
+	\~english
+	\brief		Retrieves parameter type from c++ type.
+	\remarks	Specialisation for castor::Point3ui.
+	\~french
+	\brief		Récupère le type de paramètre à partir du type C++.
+	\remarks	Spécialisation pour castor::Point3ui.
+	*/
+	template<>
+	struct ParserValueTyper< Point3ui >
+	{
+		static const ParameterType Type = ParameterType::ePoint3U;
+	};
+	/**
+	\~english
+	\brief		Retrieves parameter type from c++ type.
+	\remarks	Specialisation for castor::Point4ui.
+	\~french
+	\brief		Récupère le type de paramètre à partir du type C++.
+	\remarks	Spécialisation pour castor::Point4ui.
+	*/
+	template<>
+	struct ParserValueTyper< Point4ui >
+	{
+		static const ParameterType Type = ParameterType::ePoint4U;
+	};
+	/**
+	\~english
+	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point2f.
 	\~french
 	\brief		Récupère le type de paramètre à partir du type C++.
