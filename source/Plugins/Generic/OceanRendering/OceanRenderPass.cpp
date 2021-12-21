@@ -450,7 +450,7 @@ namespace ocean
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
-		m_configuration.time += float( tslf.count() ) / 100.0f;
+		m_configuration.time += float( tslf.count() ) / 1000.0f;
 		m_ubo.cpuUpdate( m_configuration );
 		RenderTechniquePass::doUpdateUbos( updater );
 	}
