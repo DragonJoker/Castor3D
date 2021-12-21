@@ -235,8 +235,8 @@ namespace draw_edges
 	{
 		m_pass.addDependency( previousPass );
 		passBuffer.createPassBinding( m_pass, eMaterials );
-		m_pass.addSampledView( data0, eData0, VK_IMAGE_LAYOUT_UNDEFINED );
-		m_pass.addSampledView( data1, eData1, VK_IMAGE_LAYOUT_UNDEFINED );
+		m_pass.addSampledView( data0, eData0 );
+		m_pass.addSampledView( data1, eData1 );
 		m_pass.addInputStorageBuffer( { depthRange.getBuffer(), "DepthRange" }, eDepthRange, 0u, depthRange.getBuffer().getSize() );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
@@ -254,7 +254,7 @@ namespace draw_edges
 		visitor.visit( m_pixelShader );
 		visitor.visit( "Depth Normal Edge Detection Result"
 			, m_result
-			, m_graph.getFinalLayout( m_result.sampledViewId ).layout
+			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
 	}
 }

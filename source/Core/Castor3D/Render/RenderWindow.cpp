@@ -1315,93 +1315,7 @@ namespace castor3d
 			} ) );
 		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
 			, bufferSize );
-		auto pass = 0u;
 		m_transferCommands.resize( m_intermediates.size() );
-		auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
-		auto & context = m_device.makeContext();
-
-		for ( auto & transferCommands : m_transferCommands )
-		{
-			transferCommands = { getDevice(), queueData, "Snapshot" };
-			auto & intermediate = m_intermediates[pass];
-			auto & intermediateBarrierView = m_intermediateBarrierViews[pass];
-			auto & intermediateSampledView = m_intermediateSampledViews[pass];
-			auto & commands = *transferCommands.commandBuffer;
-			commands.begin();
-			commands.beginDebugBlock( { "Staging Texture Download"
-				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-			VkImage srcImage = handler.createImage( context, intermediateBarrierView.viewId.data->image );
-
-			if ( intermediate.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-			{
-				commands.memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, makeLayoutTransition( srcImage
-						, intermediateBarrierView.viewId.data->info.subresourceRange
-						, intermediateBarrierView.layout
-						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, VK_QUEUE_FAMILY_IGNORED
-						, VK_QUEUE_FAMILY_IGNORED ) );
-			}
-
-			commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_stagingBuffer->makeTransferDestination() );
-			auto srcExtent = getExtent( intermediateBarrierView.viewId );
-			auto dstExtent = targetExtent;
-			VkOffset3D srcOffset{};
-
-			if ( srcExtent.width > dstExtent.width )
-			{
-				srcOffset.x = int32_t( srcExtent.width - dstExtent.width ) / 2;
-			}
-
-			if ( srcExtent.height > dstExtent.height )
-			{
-				srcOffset.y = int32_t( srcExtent.height - dstExtent.height ) / 2;
-			}
-
-			dstExtent.width = std::min( dstExtent.width, srcExtent.width );
-			dstExtent.height = std::min( dstExtent.height, srcExtent.height );
-
-			auto subresourceRange = intermediateSampledView.viewId.data->info.subresourceRange;
-			auto mipLevel = subresourceRange.baseMipLevel;
-			dstExtent.width = std::max( 1u, dstExtent.width >> mipLevel );
-			dstExtent.height = std::max( 1u, dstExtent.height >> mipLevel );
-			srcOffset.x = srcOffset.x >> mipLevel;
-			srcOffset.y = srcOffset.y >> mipLevel;
-			commands.copyToBuffer( VkBufferImageCopy{ 0u
-					, 0u
-					, 0u
-					, { subresourceRange.aspectMask
-						, mipLevel
-						, subresourceRange.baseArrayLayer
-						, subresourceRange.layerCount }
-					, srcOffset
-					, makeExtent3D( dstExtent ) }
-				, srcImage
-				, *m_stagingBuffer );
-			commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_HOST_BIT
-				, m_stagingBuffer->makeHostRead() );
-
-			if ( intermediate.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-				&& intermediate.layout != VK_IMAGE_LAYOUT_UNDEFINED )
-			{
-				commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, ashes::getStageMask( intermediateBarrierView.layout )
-					, makeLayoutTransition( srcImage
-						, intermediateBarrierView.viewId.data->info.subresourceRange
-						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, intermediateBarrierView.layout
-						, VK_QUEUE_FAMILY_IGNORED
-						, VK_QUEUE_FAMILY_IGNORED ) );
-			}
-
-			commands.endDebugBlock();
-			commands.end();
-			++pass;
-		}
 	}
 
 	void RenderWindow::doDestroySaveData()
@@ -1531,6 +1445,98 @@ namespace castor3d
 		resources.imageIndex = ~0u;
 	}
 
+	void RenderWindow::doInitialisTransferCommands( CommandsSemaphore & transferCommands
+			, uint32_t index )
+	{
+		if ( transferCommands.commandBuffer )
+		{
+			return;
+		}
+
+		auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
+		auto & context = m_device.makeContext();
+		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
+
+		transferCommands = { getDevice(), *m_queue, "Snapshot" };
+		auto & intermediate = m_intermediates[index];
+		auto & intermediateBarrierView = m_intermediateBarrierViews[index];
+		auto & intermediateSampledView = m_intermediateSampledViews[index];
+		auto & commands = *transferCommands.commandBuffer;
+		commands.begin();
+		commands.beginDebugBlock( { "Staging Texture Download"
+			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+		VkImage srcImage = handler.createImage( context, intermediateBarrierView.viewId.data->image );
+
+		if ( intermediate.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
+		{
+			commands.memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, makeLayoutTransition( srcImage
+					, intermediateBarrierView.viewId.data->info.subresourceRange
+					, intermediateBarrierView.layout
+					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+					, VK_QUEUE_FAMILY_IGNORED
+					, VK_QUEUE_FAMILY_IGNORED ) );
+		}
+
+		commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_stagingBuffer->makeTransferDestination() );
+		auto srcExtent = getExtent( intermediateBarrierView.viewId );
+		auto dstExtent = targetExtent;
+		VkOffset3D srcOffset{};
+
+		if ( srcExtent.width > dstExtent.width )
+		{
+			srcOffset.x = int32_t( srcExtent.width - dstExtent.width ) / 2;
+		}
+
+		if ( srcExtent.height > dstExtent.height )
+		{
+			srcOffset.y = int32_t( srcExtent.height - dstExtent.height ) / 2;
+		}
+
+		dstExtent.width = std::min( dstExtent.width, srcExtent.width );
+		dstExtent.height = std::min( dstExtent.height, srcExtent.height );
+
+		auto subresourceRange = intermediateSampledView.viewId.data->info.subresourceRange;
+		auto mipLevel = subresourceRange.baseMipLevel;
+		dstExtent.width = std::max( 1u, dstExtent.width >> mipLevel );
+		dstExtent.height = std::max( 1u, dstExtent.height >> mipLevel );
+		srcOffset.x = srcOffset.x >> mipLevel;
+		srcOffset.y = srcOffset.y >> mipLevel;
+		commands.copyToBuffer( VkBufferImageCopy{ 0u
+				, 0u
+				, 0u
+				, { subresourceRange.aspectMask
+					, mipLevel
+					, subresourceRange.baseArrayLayer
+					, subresourceRange.layerCount }
+				, srcOffset
+				, makeExtent3D( dstExtent ) }
+			, srcImage
+			, *m_stagingBuffer );
+		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_HOST_BIT
+			, m_stagingBuffer->makeHostRead() );
+
+		if ( intermediate.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+			&& intermediate.layout != VK_IMAGE_LAYOUT_UNDEFINED )
+		{
+			commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, ashes::getStageMask( intermediateBarrierView.layout )
+				, makeLayoutTransition( srcImage
+					, intermediateBarrierView.viewId.data->info.subresourceRange
+					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+					, intermediateBarrierView.layout
+					, VK_QUEUE_FAMILY_IGNORED
+					, VK_QUEUE_FAMILY_IGNORED ) );
+		}
+
+		commands.endDebugBlock();
+		commands.end();
+	}
+
 	void RenderWindow::doWaitFrame( crg::SemaphoreWaitArray toWait )
 	{
 		auto target = getRenderTarget();
@@ -1545,6 +1551,7 @@ namespace castor3d
 			{
 				m_savedFormat = m_intermediates[m_debugConfig.debugIndex].viewId.data->info.format;
 				auto & transferCommands = m_transferCommands[m_debugConfig.debugIndex];
+				doInitialisTransferCommands( transferCommands, m_debugConfig.debugIndex );
 				m_queue->queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 					, semaphores
 					, stages
@@ -1576,6 +1583,7 @@ namespace castor3d
 		{
 			m_savedFormat = m_intermediates[m_debugConfig.debugIndex].viewId.data->info.format;
 			auto & transferCommands = m_transferCommands[m_debugConfig.debugIndex];
+			doInitialisTransferCommands( transferCommands, m_debugConfig.debugIndex );
 			m_queue->queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 				, semaphores
 				, stages

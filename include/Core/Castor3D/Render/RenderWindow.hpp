@@ -509,6 +509,8 @@ namespace castor3d
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
+		void doInitialisTransferCommands( CommandsSemaphore & commands
+			, uint32_t index );
 
 	private:
 		static uint32_t s_nbRenderWindows;

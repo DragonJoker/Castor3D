@@ -86,7 +86,7 @@ namespace Bloom
 		{
 			visitor.visit( "PostFX: HDRB - Blur " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
 				, view
-				, m_renderTarget.getGraph().getFinalLayout( view ).layout
+				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
 		}
 

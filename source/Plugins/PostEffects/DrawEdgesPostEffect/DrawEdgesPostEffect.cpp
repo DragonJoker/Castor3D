@@ -275,11 +275,13 @@ namespace draw_edges
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
 					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
+						, crg::RecordContext & recContext
 						, VkCommandBuffer commandBuffer
 						, uint32_t index )
 						{
 							doCopyImage( graph
 								, runnable
+								, recContext
 								, commandBuffer
 								, index
 								, *m_target
@@ -293,11 +295,11 @@ namespace draw_edges
 		pass.addDependency( m_depthNormal->getPass() );
 		pass.addDependency( m_objectID->getPass() );
 		passBuffer.createPassBinding( pass,eMaterials );
-		pass.addSampledView( data0, eData0, {} );
-		pass.addSampledView( data1, eData1, {} );
-		pass.addSampledView( *m_target, eSource, {} );
-		pass.addSampledView( m_depthNormal->getResult(), eEdgeDN, {} );
-		pass.addSampledView( m_objectID->getResult(), eEdgeO, {} );
+		pass.addSampledView( data0, eData0 );
+		pass.addSampledView( data1, eData1 );
+		pass.addSampledView( *m_target, eSource );
+		pass.addSampledView( m_depthNormal->getResult(), eEdgeDN );
+		pass.addSampledView( m_objectID->getResult(), eEdgeO );
 		m_ubo.createPassBinding( pass, eDrawEdges );
 		pass.addOutputColourView( m_resultView );
 

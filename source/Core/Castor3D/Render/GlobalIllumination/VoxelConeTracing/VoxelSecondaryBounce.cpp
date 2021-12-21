@@ -203,12 +203,12 @@ namespace castor3d
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doRecordInto( cb, i ); }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, 2u }
+			, { 2u, false, false } }
 		, m_vctConfig{ vctConfig }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }
@@ -228,7 +228,8 @@ namespace castor3d
 	{
 	}
 
-	void VoxelSecondaryBounce::doRecordInto( VkCommandBuffer commandBuffer
+	void VoxelSecondaryBounce::doRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
 		auto voxelGridSize = m_vctConfig.gridSize.value();
@@ -238,9 +239,10 @@ namespace castor3d
 		auto image = m_graph.createImage( view.data->image );
 
 		// Clear result
-		m_graph.memoryBarrier( commandBuffer
+		m_graph.memoryBarrier( context
+			, commandBuffer
 			, view
-			, transition.needed
+			, transition.needed.layout
 			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -250,11 +252,10 @@ namespace castor3d
 			, &transparentBlackClearColor.color
 			, 1
 			, &view.data->info.subresourceRange );
-		m_graph.memoryBarrier( commandBuffer
+		m_graph.memoryBarrier( context
+			, commandBuffer
 			, view
-			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, transition.needed );
 
 		m_context.vkCmdBindPipeline( commandBuffer

@@ -75,6 +75,7 @@ namespace castor3d
 
 	void PostEffect::doCopyImage( crg::RunnableGraph & graph
 		, crg::RunnablePass const & runnable
+		, crg::RecordContext & recordContext
 		, VkCommandBuffer commandBuffer
 		, uint32_t index
 		, crg::ImageViewId const & source
@@ -91,15 +92,21 @@ namespace castor3d
 			, { extent.width, extent.height, 1u } };
 		auto srcTransition = runnable.getTransition( index, source );
 		auto dstTransition = runnable.getTransition( index, target );
-		graph.memoryBarrier( commandBuffer
-			, source
-			, srcTransition.to
+		graph.memoryBarrier( recordContext
+			, commandBuffer
+			, source.data->image
+			, source.data->info.viewType
+			, source.data->info.subresourceRange
+			, srcTransition.to.layout
 			, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-		graph.memoryBarrier( commandBuffer
-			, target
-			, dstTransition.to
+		graph.memoryBarrier( recordContext
+			, commandBuffer
+			, target.data->image
+			, target.data->info.viewType
+			, target.data->info.subresourceRange
+			, dstTransition.to.layout
 			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -110,17 +117,19 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, 1u
 			, &region );
-		graph.memoryBarrier( commandBuffer
-			, target
-			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) }
+		graph.memoryBarrier( recordContext
+			, commandBuffer
+			, target.data->image
+			, target.data->info.viewType
+			, target.data->info.subresourceRange
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, dstTransition.to );
-		graph.memoryBarrier( commandBuffer
-			, source
-			, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) }
+		graph.memoryBarrier( recordContext
+			, commandBuffer
+			, source.data->image
+			, source.data->info.viewType
+			, source.data->info.subresourceRange
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 			, srcTransition.to );
 	}
 }

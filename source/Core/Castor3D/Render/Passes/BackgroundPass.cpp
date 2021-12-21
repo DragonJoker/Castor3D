@@ -40,14 +40,13 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doSubInitialise(); }
-				, [this]( VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( cb, i ); }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RenderPass::RecordCallback >
 				, crg::defaultV< crg::RenderPass::GetSubpassContentsCallback >
 				, crg::defaultV< crg::RenderPass::GetPassIndexCallback >
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } ) }
 			, size
-			, 1u
-			, true }
+			, { 1u, true, true } }
 		, m_device{ device }
 		, m_background{ &background }
 		, m_size{ size }
@@ -88,7 +87,8 @@ namespace castor3d
 		}
 	}
 
-	void BackgroundPass::doSubRecordInto( VkCommandBuffer commandBuffer
+	void BackgroundPass::doSubRecordInto( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
 		if ( doIsEnabled() )
@@ -348,7 +348,7 @@ namespace castor3d
 			m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 			doCreateDescriptorSet();
 			doCreatePipeline();
-			recordCurrent();
+			reRecordCurrent();
 		}
 	}
 	
@@ -450,7 +450,8 @@ namespace castor3d
 		sceneUbo.createPassBinding( result
 			, SceneBackground::SceneUboIdx );
 		result.addSampledView( background.getTextureId().sampledViewId
-			, SceneBackground::SkyBoxImgIdx );
+			, SceneBackground::SkyBoxImgIdx
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		if ( depth )
 		{
