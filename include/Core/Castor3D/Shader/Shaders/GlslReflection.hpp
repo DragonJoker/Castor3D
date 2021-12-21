@@ -32,6 +32,11 @@ namespace castor3d::shader
 		C3D_API virtual sdw::Vec3 computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData ) = 0;
+		C3D_API virtual sdw::Vec3 computeForward( LightMaterial & material
+			, Surface const & surface
+			, SceneData const & sceneData
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & transmission ) = 0;
 		C3D_API virtual void computeForward( LightMaterial & material
 			, Surface const & surface
 			, SceneData const & sceneData
