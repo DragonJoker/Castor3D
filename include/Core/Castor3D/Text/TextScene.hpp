@@ -17,14 +17,33 @@ namespace castor
 	public:
 		struct Options
 		{
-			Path rootFolder{};
-			Path materialsFile{};
-			Path meshesFile{};
-			Path nodesFile{};
-			Path objectsFile{};
-			Path lightsFile{};
-			String subfolder{};
-			float scale{ 1.0f };
+			Options( Path prootFolder = {}
+				, Path pmaterialsFile = {}
+				, Path pmeshesFile = {}
+				, Path pnodesFile = {}
+				, Path pobjectsFile = {}
+				, Path plightsFile = {}
+				, String psubfolder = {}
+				, float pscale = 1.0f )
+				: rootFolder{ std::move( prootFolder ) }
+				, materialsFile{ std::move( pmaterialsFile ) }
+				, meshesFile{ std::move( pmeshesFile ) }
+				, nodesFile{ std::move( pnodesFile ) }
+				, objectsFile{ std::move( pobjectsFile ) }
+				, lightsFile{ std::move( plightsFile ) }
+				, subfolder{ std::move( psubfolder ) }
+				, scale{ std::move( pscale ) }
+			{
+			}
+
+			Path rootFolder;
+			Path materialsFile;
+			Path meshesFile;
+			Path nodesFile;
+			Path objectsFile;
+			Path lightsFile;
+			String subfolder;
+			float scale;
 		};
 
 		C3D_API explicit TextWriter( String const & tabs
