@@ -382,6 +382,7 @@ namespace castor3d
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, SceneFlags sceneFlags = SceneFlag::eNone
 			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+			, uint32_t patchVertices = 3u
 			, VkCompareOp alphaFunc = VK_COMPARE_OP_ALWAYS
 			, VkCompareOp blendAlphaFunc = VK_COMPARE_OP_ALWAYS
 			, TextureFlagsArray textures = {} )
@@ -394,6 +395,7 @@ namespace castor3d
 			, programFlags{ programFlags }
 			, sceneFlags{ sceneFlags }
 			, topology{ topology }
+			, patchVertices{ patchVertices }
 			, alphaFunc{ alphaFunc }
 			, blendAlphaFunc{ blendAlphaFunc }
 			, textures{ textures }
@@ -410,6 +412,7 @@ namespace castor3d
 		ProgramFlags programFlags{ ProgramFlag::eNone };
 		SceneFlags sceneFlags{ SceneFlag::eNone };
 		VkPrimitiveTopology topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
+		uint32_t patchVertices{ 3u };
 		VkCompareOp alphaFunc{ VK_COMPARE_OP_ALWAYS };
 		VkCompareOp blendAlphaFunc{ VK_COMPARE_OP_ALWAYS };
 		TextureFlagsArray textures;
