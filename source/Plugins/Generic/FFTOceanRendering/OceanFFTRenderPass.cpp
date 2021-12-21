@@ -472,7 +472,6 @@ namespace ocean_fft
 		m_ubo->cpuUpdate( m_configuration
 			, m_oceanFFT->getConfig()
 			, updater.camera->getParent()->getDerivedPosition() );
-		m_oceanFFT->update();
 		RenderTechniquePass::doUpdateUbos( updater );
 	}
 

@@ -70,14 +70,19 @@ namespace ocean_fft
 		castor::Point2f maxTessLevel{};
 
 		castor::Point2f invHeightmapSize{};
-		castor::Point2f dummy2{};
+		castor::Point2f windDirection{};
+
+		float amplitude{};
+		float maxWaveLength{};
+		float L{};
+		float dummy2{};
 
 		castor::Point2ui size{};
 		uint32_t displacementDownsample{};
 #if Ocean_Debug
 		uint32_t debug{ eResult };
 #else
-		uint32_t dummy4;
+		uint32_t dummy3;
 #endif
 	};
 
@@ -107,6 +112,7 @@ namespace ocean_fft
 		sdw::Vec4 m_blockOffFftScale;
 		sdw::Vec4 m_patchSizes;
 		sdw::Vec4 m_fftSizes;
+		sdw::Vec4 m_fftDistrib;
 		sdw::UVec4 m_size;
 
 	public:
@@ -126,6 +132,10 @@ namespace ocean_fft
 		sdw::Vec2 patchSize;
 		sdw::Vec2 maxTessLevel;
 		sdw::Vec2 invHeightmapSize;
+		sdw::Vec2 windDirection;
+		sdw::Float amplitude;
+		sdw::Float maxWaveLength;
+		sdw::Float L;
 		sdw::UVec2 size;
 		sdw::Int displacementDownsample;
 #if Ocean_Debug
@@ -142,7 +152,7 @@ namespace ocean_fft
 		explicit OceanUbo( castor3d::RenderDevice const & device );
 		~OceanUbo();
 		void cpuUpdate( OceanUboConfiguration const & config
-			, OceanFFTTrackedConfig const & fftConfig
+			, OceanFFTConfig const & fftConfig
 			, castor::Point3f const & cameraPosition );
 
 		void createPassBinding( crg::FramePass & pass

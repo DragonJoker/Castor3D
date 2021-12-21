@@ -56,7 +56,8 @@ namespace
 		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "normalMapFreqMod" ), &ocean_fft::parserFftNormalMapFreqMod, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "maxWaveLength" ), &ocean_fft::parserFftMaxWaveLength, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "amplitude" ), &ocean_fft::parserFftAmplitude, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "windVelocity" ), &ocean_fft::parserFftWindVelocity, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "windDirection" ), &ocean_fft::parserFftWindDirection, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "windVelocity" ), &ocean_fft::parserFftWindVelocity, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "patchSize" ), &ocean_fft::parserFftPatchSize, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "blocksCount" ), &ocean_fft::parserFftBlocksCount, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eFFT ), cuT( "lod0Distance" ), &ocean_fft::parserFftLOD0Distance, { castor::makeParameter< castor::ParameterType::eFloat >() } );

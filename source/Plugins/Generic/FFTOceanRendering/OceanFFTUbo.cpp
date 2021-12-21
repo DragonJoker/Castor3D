@@ -48,6 +48,7 @@ namespace ocean_fft
 		, m_blockOffFftScale{ getMember< sdw::Vec4 >( "blockOffFftScale" ) }
 		, m_patchSizes{ getMember< sdw::Vec4 >( "patchSizes" ) }
 		, m_fftSizes{ getMember< sdw::Vec4 >( "fftSizes" ) }
+		, m_fftDistrib{ getMember< sdw::Vec4 >( "fftDistrib" ) }
 		, m_size{ getMember< sdw::UVec4 >( "size" ) }
 		, time{ m_base.x() }
 		, depthSofteningDistance{ m_base.y() }
@@ -65,6 +66,10 @@ namespace ocean_fft
 		, patchSize{ m_patchSizes.xy() }
 		, maxTessLevel{ m_patchSizes.zw() }
 		, invHeightmapSize{ m_fftSizes.xy() }
+		, windDirection{ m_fftSizes.zw() }
+		, amplitude{ m_fftDistrib.x() }
+		, maxWaveLength{ m_fftDistrib.y() }
+		, L{ m_fftDistrib.z() }
 		, size{ m_size.xy() }
 		, displacementDownsample{ writer.cast< sdw::Int >( m_size.z() ) }
 #if Ocean_Debug
@@ -88,6 +93,7 @@ namespace ocean_fft
 			result->declMember( "blockOffFftScale", sdw::type::Kind::eVec4F, sdw::type::NotArray );
 			result->declMember( "patchSizes", sdw::type::Kind::eVec4F, sdw::type::NotArray );
 			result->declMember( "fftSizes", sdw::type::Kind::eVec4F, sdw::type::NotArray );
+			result->declMember( "fftDistrib", sdw::type::Kind::eVec4F, sdw::type::NotArray );
 			result->declMember( "size", sdw::type::Kind::eVec4U, sdw::type::NotArray );
 			result->end();
 		}
@@ -112,31 +118,37 @@ namespace ocean_fft
 	}
 
 	void OceanUbo::cpuUpdate( OceanUboConfiguration const & config
-		, OceanFFTTrackedConfig const & fftConfig
+		, OceanFFTConfig const & fftConfig
 		, castor::Point3f const & cameraPosition )
 	{
-		auto tileExtent = castor::Point2f{ float( *fftConfig.heightMapSamples ), float( *fftConfig.heightMapSamples ) };
-		auto patchSizeMod = *fftConfig.patchSize * tileExtent / *fftConfig.size;
-		auto sizeNormal = *fftConfig.size / *fftConfig.normalFreqMod;
+		static constexpr float G = 9.81f;
+		auto tileExtent = castor::Point2f{ float( fftConfig.heightMapSamples ), float( fftConfig.heightMapSamples ) };
+		auto patchSizeMod = fftConfig.patchSize * tileExtent / fftConfig.size;
+		auto sizeNormal = fftConfig.size / fftConfig.normalFreqMod;
 		auto blockOffset = castor::Point2i{ castor::point::getRounded( castor::Point2f{ cameraPosition->x, cameraPosition->z } / patchSizeMod ) };
-		blockOffset -= castor::Point2i{ fftConfig.blocksCount.value()->x >> 1, fftConfig.blocksCount.value()->y >> 1 };
+		blockOffset -= castor::Point2i{ fftConfig.blocksCount->x >> 1, fftConfig.blocksCount->y >> 1 };
+		auto amplitude = float( fftConfig.amplitude * 0.3f / sqrt( fftConfig.heightMapSamples * fftConfig.heightMapSamples ) );
 
 		auto & data = m_ubo.getData();
 		data = config;
-		data.patchSize = *fftConfig.patchSize;
-		data.size->x = *fftConfig.heightMapSamples;
-		data.size->y = *fftConfig.heightMapSamples;
-		data.displacementDownsample = *fftConfig.displacementDownsample;
-		data.otherMod = castor::Point2f{ castor::PiMult2< float >, castor::PiMult2< float > } / *fftConfig.size;
+		data.patchSize = fftConfig.patchSize;
+		data.size->x = fftConfig.heightMapSamples;
+		data.size->y = fftConfig.heightMapSamples;
+		data.displacementDownsample = fftConfig.displacementDownsample;
+		data.otherMod = castor::Point2f{ castor::PiMult2< float >, castor::PiMult2< float > } / fftConfig.size;
 		data.normalMod = castor::Point2f{ castor::PiMult2< float >, castor::PiMult2< float > } / sizeNormal;
-		data.tileScale = tileExtent / *fftConfig.size;
-		data.normalScale = *fftConfig.normalFreqMod;
+		data.tileScale = tileExtent / fftConfig.size;
+		data.normalScale = fftConfig.normalFreqMod;
 		//data.blockOffset = castor::Point2f{ blockOffset };
-		data.fftScale = *fftConfig.size / tileExtent;
+		data.fftScale = fftConfig.size / tileExtent;
 		data.maxTessLevel->x = log2( data.patchSize->x );
 		data.maxTessLevel->y = data.patchSize->y;
-		data.invHeightmapSize = castor::Point2f{ 1.0f, 1.0f } / *fftConfig.size;
-		data.distanceMod = 1.0f / *fftConfig.lod0Distance;
+		data.invHeightmapSize = castor::Point2f{ 1.0f, 1.0f } / fftConfig.size;
+		data.distanceMod = 1.0f / fftConfig.lod0Distance;
+		data.amplitude = amplitude;
+		data.maxWaveLength = fftConfig.maxWaveLength;
+		data.L = ( fftConfig.windVelocity * fftConfig.windVelocity ) / G;
+		data.windDirection = castor::point::getNormalised( fftConfig.windDirection );
 	}
 
 	//************************************************************************************************

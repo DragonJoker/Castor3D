@@ -225,6 +225,20 @@ namespace ocean_fft
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserFftWindDirection )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waveContext = getParserContext( context );
+			params[0]->get( waveContext.fftConfig.windDirection );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserFftWindVelocity )
 	{
 		if ( params.empty() )
