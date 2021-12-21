@@ -51,6 +51,8 @@ namespace castor3d
 			depth = castor::string::toFloat( param );
 		}
 
+		++subDivisionsW;
+		++subDivisionsD;
 		uint32_t nbVertexW = subDivisionsW + 1;
 		uint32_t nbVertexH = subDivisionsD + 1;
 		float offsetW = ( sortAroundCenter 
