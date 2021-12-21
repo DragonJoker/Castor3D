@@ -136,6 +136,9 @@ namespace castor
 	xchar const * const ParserParameterHelper< ParameterType::ePoint2I >::StringType = cuT( "2 integers point" );
 	xchar const * const ParserParameterHelper< ParameterType::ePoint3I >::StringType = cuT( "3 integers point" );
 	xchar const * const ParserParameterHelper< ParameterType::ePoint4I >::StringType = cuT( "4 integers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint2U >::StringType = cuT( "2 unsigned integers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint3U >::StringType = cuT( "3 unsigned integers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint4U >::StringType = cuT( "4 unsigned integers point" );
 	xchar const * const ParserParameterHelper< ParameterType::ePoint2F >::StringType = cuT( "2 simple precision floating point numbers point" );
 	xchar const * const ParserParameterHelper< ParameterType::ePoint3F >::StringType = cuT( "3 simple precision floating point numbers point" );
 	xchar const * const ParserParameterHelper< ParameterType::ePoint4F >::StringType = cuT( "4 simple precision floating point numbers point" );
@@ -174,6 +177,9 @@ namespace castor
 		cuT( "2 integers point" ),
 		cuT( "3 integers point" ),
 		cuT( "4 integers point" ),
+		cuT( "2 unsigned integers point" ),
+		cuT( "3 unsigned integers point" ),
+		cuT( "4 unsigned integers point" ),
 		cuT( "2 simple precision floating point numbers point" ),
 		cuT( "3 simple precision floating point numbers point" ),
 		cuT( "4 simple precision floating point numbers point" ),
@@ -194,4 +200,3 @@ namespace castor
 		return TypeName[uint32_t( p_type )];
 	}
 }
-

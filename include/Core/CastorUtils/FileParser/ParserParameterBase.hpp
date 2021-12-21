@@ -137,6 +137,12 @@ namespace castor
 	CU_API void getParameterValue( ParserParameterBase const & parameter
 		, Point4i & value );
 	CU_API void getParameterValue( ParserParameterBase const & parameter
+		, Point2ui & value );
+	CU_API void getParameterValue( ParserParameterBase const & parameter
+		, Point3ui & value );
+	CU_API void getParameterValue( ParserParameterBase const & parameter
+		, Point4ui & value );
+	CU_API void getParameterValue( ParserParameterBase const & parameter
 		, Point2f & value );
 	CU_API void getParameterValue( ParserParameterBase const & parameter
 		, Point3f & value );
