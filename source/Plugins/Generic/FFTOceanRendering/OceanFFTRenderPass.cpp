@@ -1392,6 +1392,8 @@ namespace ocean_fft
 			, [&]( FragmentInT< PatchT > in
 				, FragmentOut out )
 			{
+				auto hdrCoords = writer.declLocale( "hdrCoords"
+					, in.fragCoord.xy() / c3d_sceneData.renderSize );
 				auto gradJacobian = writer.declLocale( "gradJacobian"
 					, c3d_gradientJacobianMap.sample( in.gradNormalTexcoord.xy() ).xyz() );
 				displayDebugData( eGradJacobian, gradJacobian, 1.0_f );
@@ -1460,11 +1462,13 @@ namespace ocean_fft
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
 						, surface
 						, indirectOcclusion );
+					auto worldToCam = writer.declLocale( "worldToCam"
+						, c3d_sceneData.getPosToCamera( surface.worldPosition ) );
 					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
 					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
 						, worldEye
-						, c3d_sceneData.getPosToCamera( surface.worldPosition )
+						, worldToCam
 						, surface
 						, lightMat->specular
 						, lightMat->getRoughness()
@@ -1478,7 +1482,7 @@ namespace ocean_fft
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 								, c3d_sceneData.cameraPosition
-								, surface.worldNormal
+								, normal
 								, lightMat->specular
 								, lightMat->getMetalness()
 								, surface )
@@ -1491,21 +1495,83 @@ namespace ocean_fft
 						, reflections->computeForward( *lightMat
 							, surface
 							, c3d_sceneData ) );
-					displayDebugData( eBackgroundReflection, reflected, 1.0_f );
-					auto worldToCam = writer.declLocale( "worldToCam"
-						, c3d_sceneData.cameraPosition - in.worldPosition );
+					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
 					auto NdotV = writer.declLocale( "NdotV"
 						, dot( worldToCam, normal ) );
-					auto colour = writer.declLocale( "colour"
-						, utils.fresnelSchlick( NdotV, lightMat->specular ) * reflected * colorMod );
+					reflected = utils.fresnelSchlick( NdotV, lightMat->specular ) * reflected;
+					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );
+					auto ssrResult = writer.declLocale( "ssrResult"
+						, reflections->computeScreenSpace( c3d_matrixData
+							, surface.viewPosition
+							, normal
+							, hdrCoords
+							, c3d_oceanData.ssrSettings
+							, c3d_sceneDepth
+							, c3d_sceneNormals
+							, c3d_sceneColour ) );
+					displayDebugData( eSSRResult, ssrResult.xyz(), 1.0_f );
+					displayDebugData( eSSRFactor, ssrResult.www(), 1.0_f );
+					displayDebugData( eSSRResultFactor, ssrResult.xyz() * ssrResult.www(), 1.0_f );
+					auto reflectionResult = writer.declLocale( "reflectionResult"
+						, mix( reflected, ssrResult.xyz(), ssrResult.www() ) );
+					displayDebugData( eCombinedReflection, reflectionResult, 1.0_f );
+
+
+					// Wobbly refractions
+					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
+						, ( hdrCoords + ( ( normal.xz() + normal.xy() ) * 0.5 ) * c3d_oceanData.refractionDistortionFactor ) );
+					auto distortedDepth = writer.declLocale( "distortedDepth"
+						, c3d_sceneDepth.sample( distortedTexCoord ) );
+					auto distortedPosition = writer.declLocale( "distortedPosition"
+						, c3d_matrixData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
+					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
+						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
+					auto refractionResult = writer.declLocale( "refractionResult"
+						, c3d_sceneColour.sample( refractionTexCoord ).rgb() * material.transmission );
+					displayDebugData( eRefraction, refractionResult, 1.0_f );
+					//  Retrieve non distorted scene colour.
+					auto sceneDepth = writer.declLocale( "sceneDepth"
+						, c3d_sceneDepth.sample( hdrCoords ) );
+					auto scenePosition = writer.declLocale( "scenePosition"
+						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
+					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
+					auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
+						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_oceanData.depthSofteningDistance, 0.0_f, 1.0_f ) );
+					displayDebugData( eDepthSoftenedAlpha, vec3( depthSoftenedAlpha ), 1.0_f );
+					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
+						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
+					auto waterTransmission = writer.declLocale( "waterTransmission"
+						, material.transmission.rgb() * ( indirectAmbient + indirectDiffuse ) );
+					auto heightFactor = writer.declLocale( "heightFactor"
+						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+					refractionResult = mix( refractionResult
+						, waterTransmission
+						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
+					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
+					auto distanceFactor = writer.declLocale( "distanceFactor"
+						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+					refractionResult = mix( refractionResult
+						, waterTransmission
+						, utils.saturate( vec3( utils.saturate( length( viewPosition ) / distanceFactor ) ) ) );
+					displayDebugData( eDistanceMixedRefraction, refractionResult, 1.0_f );
 
 
 					//Combine all that
+					auto fresnelFactor = writer.declLocale( "fresnelFactor"
+						, vec3( reflections->computeFresnel( *lightMat
+							, surface
+							, c3d_sceneData
+							, c3d_oceanData.refractionRatio ) ) );
+					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
+					reflectionResult *= fresnelFactor;
+					displayDebugData( eFinalReflection, reflectionResult, 1.0_f );
+					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
+					displayDebugData( eFinalRefraction, refractionResult, 1.0_f );
 					pxl_colour = vec4( lightSpecular + lightIndirectSpecular
 							+ emissive
-							//+ refractionResult
-							+ ( colour * indirectAmbient )
-						, 1.0_f );
+							+ refractionResult * colorMod
+							+ ( reflectionResult * colorMod * indirectAmbient )
+						, depthSoftenedAlpha );
 				}
 				else
 				{

@@ -29,7 +29,19 @@ namespace ocean_fft
 			, "LightIndirectSpecular"
 			, "IndirectAmbient"
 			, "IndirectDiffuse"
-			, "BackgroundReflection" };
+			, "RawBackgroundReflection"
+			, "FresnelBackgroundReflection"
+			, "SSRResult"
+			, "SSRFactor"
+			, "SSRResultFactor"
+			, "CombinedReflection"
+			, "Refraction"
+			, "DepthSoftenedAlpha"
+			, "HeightMixedRefraction"
+			, "DistanceMixedRefraction"
+			, "FresnelFactor"
+			, "FinalReflection"
+			, "FinalRefraction" };
 		return result;
 	}
 #endif
