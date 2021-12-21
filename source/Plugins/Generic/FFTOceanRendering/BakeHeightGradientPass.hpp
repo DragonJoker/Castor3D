@@ -80,6 +80,18 @@ namespace ocean_fft
 		uint32_t m_displacementDownsample{};
 		Data m_data{};
 	};
+
+	crg::FramePass const & createBakeHeightGradientPass( castor3d::RenderDevice const & device
+		, crg::FrameGraph & graph
+		, crg::FramePassArray previousPasses
+		, VkExtent2D const & extent
+		, castor::Point2f const & heightMapSize
+		, uint32_t displacementDownsample
+		, OceanUbo const & ubo
+		, ashes::BufferBase const & height
+		, ashes::BufferBase const & displacement
+		, std::array< castor3d::Texture, 2u > const & heightDisp
+		, std::array< castor3d::Texture, 2u > const & gradJacob );
 }
 
 #endif
