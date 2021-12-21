@@ -862,6 +862,7 @@ namespace ocean
 
 #if !Ocean_DebugPixelShader
 		flags.topology = VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
+		flags.patchVertices = 3u;
 #endif
 	}
 

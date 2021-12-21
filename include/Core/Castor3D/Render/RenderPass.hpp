@@ -251,6 +251,34 @@ namespace castor3d
 		 *\param[in,out]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]		topology		La topologie de rendu.
 		 */
+		C3D_API PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, PassFlags passFlags
+			, RenderPassTypeID renderPassTypeID
+			, PassTypeID passTypeID
+			, uint32_t heightTextureIndex
+			, VkCompareOp alphaFunc
+			, VkCompareOp blendAlphaFunc
+			, TextureFlagsArray const & textures
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, VkPrimitiveTopology topology );
+		/**
+		 *\~english
+		 *\brief			Creates the pipeline flags for given configuration.
+		 *\param[in]		pass			The pass for whic the pipeline is created.
+		 *\param[in,out]	textures		The textures configuration.
+		 *\param[in,out]	programFlags	A combination of ProgramFlag.
+		 *\param[in,out]	sceneFlags		Scene related flags.
+		 *\param[in]		topology		The render topology.
+		 *\~french
+		 *\brief			Crée les indicateurs de pipeline pour la configuration donnée.
+		 *\param[in]		pass			La passe pour laquelle le pipeline est créé.
+		 *\param[in,out]	textures		La configuration des textures.
+		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
+		 *\param[in,out]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]		topology		La topologie de rendu.
+		 */
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
 			, TextureFlagsArray const & textures
 			, ProgramFlags const & programFlags
