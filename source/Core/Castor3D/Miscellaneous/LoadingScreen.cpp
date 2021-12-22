@@ -182,7 +182,7 @@ namespace castor3d
 			, { [this]() { doInitialise(); }
 				, crg::getDefaultV< crg::RunnablePass::GetSemaphoreWaitFlagsCallback >()
 				, [this]( crg::RecordContext & context, VkCommandBuffer cmd, uint32_t i ){ doRecordInto( context, cmd, i ); } }
-			, { 1u, false, true } }
+			, { 1u, true } }
 		, m_renderSize{ renderSize }
 		, m_renderPass{ renderPass }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, SceneName, getVertexProgram() }

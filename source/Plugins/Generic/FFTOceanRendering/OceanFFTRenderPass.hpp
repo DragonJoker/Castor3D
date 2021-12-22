@@ -51,7 +51,8 @@ namespace ocean_fft
 			, std::shared_ptr< castor3d::Texture > colourInput
 			, std::shared_ptr< castor3d::Texture > depthInput
 			, castor3d::SceneRenderPassDesc const & renderPassDesc
-			, castor3d::RenderTechniquePassDesc const & techniquePassDesc );
+			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 		~OceanRenderPass()override;
 		static crg::FramePassArray create( castor3d::RenderDevice const & device
 			, castor3d::RenderTechnique & technique
@@ -111,6 +112,7 @@ namespace ocean_fft
 		castor3d::ShaderPtr doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const override;
 
 	private:
+		std::shared_ptr< IsRenderPassEnabled > m_isEnabled;
 		std::shared_ptr< OceanUbo > m_ubo;
 		std::shared_ptr< OceanFFT > m_oceanFFT;
 		std::shared_ptr< castor3d::Texture > m_colourInput;

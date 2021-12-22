@@ -155,16 +155,16 @@ namespace ocean_fft
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
 		, VkExtent2D const & extent
-		, uint32_t downsample )
+		, uint32_t downsample
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
@@ -235,10 +235,11 @@ namespace ocean_fft
 		, uint32_t downsample
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output )
+		, ashes::BufferBase const & output
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 	{
 		auto & result = graph.createPass( prefix + "/GenerateDistribution" + name
-			, [&device, downsample, extent]( crg::FramePass const & framePass
+			, [&device, downsample, extent, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -247,7 +248,8 @@ namespace ocean_fft
 					, runnableGraph
 					, device
 					, extent
-					, downsample );
+					, downsample
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
 					, res->getTimer() );
 				return res;

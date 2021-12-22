@@ -306,7 +306,7 @@ namespace castor3d
 		, Camera const & camera )
 	{
 		auto queueData = m_device.graphicsData();
-		auto toWait = m_runnable->run( crg::SemaphoreWait{}, *queueData->queue );
+		auto toWait = m_runnable->run( crg::SemaphoreWaitArray{}, *queueData->queue );
 
 		m_copyRegion.imageOffset.x = std::clamp( position.x() - PickingOffset
 			, 0
@@ -371,9 +371,12 @@ namespace castor3d
 
 		m_commandBuffer->end();
 
+		std::vector< VkSemaphore > semaphores;
+		std::vector< VkPipelineStageFlags > dstStageMasks;
+		convert( toWait, semaphores, dstStageMasks );
 		queueData->queue->submit( *m_commandBuffer
-			, toWait.semaphore
-			, toWait.dstStageMask
+			, semaphores
+			, dstStageMasks
 			, {}
 			, *m_transferFence );
 		m_transferFence->wait( ashes::MaxTimeout );

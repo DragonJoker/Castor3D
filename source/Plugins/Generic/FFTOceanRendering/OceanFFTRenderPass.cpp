@@ -190,18 +190,22 @@ namespace ocean_fft
 			, crg::FrameGraph & graph
 			, crg::FramePassArray const & previousPasses
 			, crg::ImageViewId input
-			, crg::ImageViewId output )
+			, crg::ImageViewId output
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
 			auto extent = getExtent( input );
 			auto & result = graph.createPass( name + "Copy"
-				, [name, extent, &device]( crg::FramePass const & framePass
+				, [name, extent, isEnabled, &device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
 						auto result = std::make_unique< crg::ImageCopy >( framePass
 							, context
 							, runnableGraph
-							, extent );
+							, extent
+							, crg::ru::Config{}
+							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 						device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
 							, result->getTimer() );
 						return result;
@@ -221,11 +225,12 @@ namespace ocean_fft
 			, std::shared_ptr< OceanUbo > oceanUbo
 			, std::shared_ptr< OceanFFT > oceanFFT
 			, castor3d::TexturePtr colourInput
-			, castor3d::TexturePtr depthInput )
+			, castor3d::TexturePtr depthInput
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
 			auto extent = getExtent( technique.getResultImg() );
 			auto & result = graph.createPass( name +"/NodesPass"
-				, [name, extent, colourInput, depthInput, oceanUbo, oceanFFT, &device, &technique, &renderPasses]( crg::FramePass const & framePass
+				, [name, extent, colourInput, depthInput, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 			{
@@ -250,7 +255,8 @@ namespace ocean_fft
 							.lpvResult( technique.getLpvResult() )
 							.llpvResult( technique.getLlpvResult() )
 							.vctFirstBounce( technique.getFirstVctBounce() )
-							.vctSecondaryBounce( technique.getSecondaryVctBounce() ) );
+							.vctSecondaryBounce( technique.getSecondaryVctBounce() )
+						, isEnabled );
 					renderPasses[size_t( OceanRenderPass::Event )].push_back( res.get() );
 					device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + name
 						, res->getTimer() );
@@ -302,7 +308,8 @@ namespace ocean_fft
 		, std::shared_ptr< castor3d::Texture > colourInput
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::SceneRenderPassDesc const & renderPassDesc
-		, castor3d::RenderTechniquePassDesc const & techniquePassDesc )
+		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		: castor3d::RenderTechniquePass{ parent
 			, pass
 			, context
@@ -313,6 +320,7 @@ namespace ocean_fft
 			, "Wave"
 			, renderPassDesc
 			, techniquePassDesc }
+		, m_isEnabled{ isEnabled }
 		, m_ubo{ oceanUbo }
 		, m_oceanFFT{ std::move( oceanFFT ) }
 		, m_colourInput{ std::move( colourInput ) }
@@ -332,6 +340,7 @@ namespace ocean_fft
 			, VK_FILTER_NEAREST
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST ) }
 	{
+		m_isEnabled->setPass( *this );
 		auto params = getEngine()->getRenderPassTypeConfiguration( Type );
 
 		if ( params.get( Param, m_configuration ) )
@@ -354,6 +363,7 @@ namespace ocean_fft
 		, castor3d::TechniquePasses & renderPasses
 		, crg::FramePassArray previousPasses )
 	{
+		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
 		auto & graph = technique.getRenderTarget().getGraph();
 		auto extent = getExtent( technique.getResultImg() );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
@@ -372,7 +382,8 @@ namespace ocean_fft
 			, graph
 			, previousPasses
 			, technique.getResultImgView()
-			, colourInput->sampledViewId ) );
+			, colourInput->sampledViewId
+			, isEnabled ) );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
 			, graph.getHandler()
@@ -389,7 +400,8 @@ namespace ocean_fft
 			, graph
 			, previousPasses
 			, technique.getDepthWholeView()
-			, depthInput->wholeViewId ) );
+			, depthInput->wholeViewId
+			, isEnabled ) );
 
 		auto oceanUbo = std::make_shared< OceanUbo >( device );
 #if Ocean_DebugFFTGraph
@@ -410,7 +422,8 @@ namespace ocean_fft
 		auto oceanFFT = std::make_shared< OceanFFT >( device
 			, graph
 			, previousPasses
-			, *oceanUbo );
+			, *oceanUbo
+			, isEnabled );
 #endif
 
 		return createNodesPass( OceanFFT::Name
@@ -422,7 +435,8 @@ namespace ocean_fft
 			, std::move( oceanUbo )
 			, std::move( oceanFFT )
 			, std::move( colourInput )
-			, std::move( depthInput ) );
+			, std::move( depthInput )
+			, isEnabled );
 	}
 
 	castor3d::TextureFlags OceanRenderPass::getTexturesMask()const

@@ -76,7 +76,10 @@ namespace castor3d
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			result.push_back( target->render( device, info, queue, signalsToWait ) );
+			auto toWait = target->render( device, info, queue, signalsToWait );
+			result.insert( result.end()
+				, toWait.begin()
+				, toWait.end() );
 			signalsToWait.clear();
 		}
 

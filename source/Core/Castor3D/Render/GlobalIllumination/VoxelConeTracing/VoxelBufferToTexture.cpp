@@ -177,11 +177,10 @@ namespace castor3d
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, { 2u, false, false } }
+			, { 2u, false } }
 		, m_device{ device }
 		, m_vctConfig{ vctConfig }
 		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }

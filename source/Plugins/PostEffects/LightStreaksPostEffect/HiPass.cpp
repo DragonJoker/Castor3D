@@ -257,8 +257,8 @@ namespace light_streaks
 						, graph
 						, VkExtent3D{ size.width, size.height, 1u }
 						, crg::ru::Config{}
-						, nullptr
-						, enabled );
+						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+						, crg::RunnablePass::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
 					device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
 						, result->getTimer() );
 					return result;

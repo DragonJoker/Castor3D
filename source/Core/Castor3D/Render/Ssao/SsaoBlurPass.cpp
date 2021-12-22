@@ -352,7 +352,8 @@ namespace castor3d
 			, crg::ResourceHandler & handler
 			, String const & name
 			, VkFormat format
-			, VkExtent2D const & size )
+			, VkExtent2D const & size
+			, bool transferDst )
 		{
 			return { device
 				, handler
@@ -364,7 +365,8 @@ namespace castor3d
 				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+					| VkImageUsageFlags( transferDst ? VK_IMAGE_USAGE_TRANSFER_DST_BIT : VkImageUsageFlagBits{} ) ) };
 		}
 
 		castor::String getName( bool useNormalsBuffer )
@@ -385,6 +387,22 @@ namespace castor3d
 			return result;
 		}
 
+		crg::ru::Config makeConfig( bool isVertical
+			, crg::Attachment const & attach
+			, crg::Attachment const & bentAttach )
+		{
+			crg::ru::Config result{ 2u, false };
+
+			if ( isVertical )
+			{
+				result.implicitAction( attach.view()
+					, crg::RecordContext::clearAttachment( attach ) );
+				result.implicitAction( bentAttach.view()
+					, crg::RecordContext::clearAttachment( bentAttach ) );
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -392,14 +410,15 @@ namespace castor3d
 	SsaoBlurPass::RenderQuad::RenderQuad( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, crg::rq::Config config
+		, crg::rq::Config rqConfig
+		, crg::ru::Config ruConfig
 		, SsaoConfig const & ssaoConfig )
 		: crg::RenderQuad{ pass
 			, context
 			, graph
-			, { 2u, false, false }
-			, std::move( config ) }
-			, ssaoConfig{ ssaoConfig }
+			, std::move( ruConfig )
+			, std::move( rqConfig ) }
+		, ssaoConfig{ ssaoConfig }
 	{
 	}
 
@@ -446,8 +465,8 @@ namespace castor3d
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size)}
-		, m_bentResult{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size ) }
+		, m_result{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size, axis->y != 0 ) }
+		, m_bentResult{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
 		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 		, m_programs{ Program{ device, false, graph.getName() }, Program{ device, true, graph.getName() } }
 	{
@@ -455,11 +474,13 @@ namespace castor3d
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 		auto & pass = graph.createPass( "SsaoBlur" + prefix
-			, [this, progress, prefix, config]( crg::FramePass const & pass
+			, [this, progress, prefix, config, axis]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBar( progress, "Initialising SSAO " + prefix + " blur pass" );
+				auto bentResIt = pass.images.rbegin();
+				auto resIt = std::next( bentResIt );
 				auto result = std::make_unique< RenderQuad >( pass
 					, context
 					, graph
@@ -467,6 +488,9 @@ namespace castor3d
 						, config
 						, m_programs[0].stages
 						, m_programs[1].stages )
+					, makeConfig( axis->y != 0
+						, *resIt
+						, *bentResIt )
 					, m_config );
 				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
 					, result->getTimer() );
