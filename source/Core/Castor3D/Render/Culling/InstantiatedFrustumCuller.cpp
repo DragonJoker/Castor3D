@@ -32,7 +32,8 @@ namespace castor3d
 				{
 					CulledT & node = *objectIt;
 
-					if ( isVisible( frustum, node ) )
+					if ( !isCulled( node )
+						|| isVisible( frustum, node ) )
 					{
 						UInt32Array & instances = *instanceIt;
 						instances[*indexIt] = frustumIndex;

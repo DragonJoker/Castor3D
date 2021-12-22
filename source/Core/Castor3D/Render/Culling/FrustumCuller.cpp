@@ -25,7 +25,8 @@ namespace castor3d
 				CulledT & node = *objectIt;
 				UInt32Array & instances = *instanceIt;
 
-				if ( isVisible( camera, node ) )
+				if ( !isCulled( node )
+					|| isVisible( camera, node ) )
 				{
 					culled.push_back( &node, &instances );
 				}

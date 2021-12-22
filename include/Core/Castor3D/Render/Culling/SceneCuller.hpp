@@ -20,6 +20,7 @@ namespace castor3d
 	size_t hash( CulledSubmesh const & culled );
 	size_t hash( CulledSubmesh const & culled
 		, uint32_t instanceMult );
+	bool isCulled( CulledSubmesh const & node );
 	bool isVisible( Camera const & camera
 		, CulledSubmesh const & node );
 	bool isVisible( Frustum const & frustum
@@ -35,6 +36,7 @@ namespace castor3d
 	size_t hash( CulledBillboard const & culled );
 	size_t hash( CulledBillboard const & culled
 		, uint32_t instanceMult );
+	bool isCulled( CulledBillboard const & node );
 	bool isVisible( Camera const & camera
 		, CulledBillboard const & node );
 	bool isVisible( Frustum const & frustum
