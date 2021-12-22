@@ -202,7 +202,7 @@ namespace diamond_square_terrain
 				{
 					submesh->addPoint( InterleavedVertex{}
 						.position( castor::Point3f{ transform( x ), scale * map( x, z ), transform( z ) } )
-						.texcoord( castor::Point2f{ float( x ) / float( max - 1 ), float( z ) / float( max - 1 ) } ) );
+						.texcoord( castor::Point2f{ float( x ) / scale, float( z ) / scale } ) );
 				}
 			}
 
