@@ -276,7 +276,6 @@ namespace smaa
 	CU_ImplementAttributeParser( parserSmaaEnd )
 	{
 		auto & smaaContext = getParserContext( context );
-		auto engine = smaaContext.engine;
 		auto & parsingContext = castor3d::getParserContext( context );
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "mode" ), getName( smaaContext.data.mode ) );
@@ -304,11 +303,9 @@ namespace smaa
 			parameters.add( cuT( "reprojectionWeightScale" ), smaaContext.data.reprojectionWeightScale );
 		}
 
-		auto effect = engine->getPostEffectFactory().create( PostEffect::Type
-			, *parsingContext.renderTarget
-			, *engine->getRenderSystem()
-			, parameters );
-		parsingContext.renderTarget->addPostEffect( effect );
+		auto effect = parsingContext.renderTarget->getPostEffect( PostEffect::Type );
+		effect->enable( true );
+		effect->setParameters( parameters );
 
 		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}

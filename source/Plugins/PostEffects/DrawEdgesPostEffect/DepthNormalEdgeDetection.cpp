@@ -193,7 +193,8 @@ namespace draw_edges
 		, castor3d::PassBuffer const & passBuffer
 		, crg::ImageViewId const & data0
 		, crg::ImageViewId const & data1
-		, ashes::Buffer< int32_t > const & depthRange )
+		, ashes::Buffer< int32_t > const & depthRange
+		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
@@ -213,7 +214,7 @@ namespace draw_edges
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "EdgesDetection"
-			, [this, &device]( crg::FramePass const & framePass
+			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -228,6 +229,7 @@ namespace draw_edges
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
+					.enabled( enabled )
 					.build( framePass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );

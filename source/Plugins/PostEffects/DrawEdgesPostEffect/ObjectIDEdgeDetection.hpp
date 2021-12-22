@@ -21,7 +21,8 @@ namespace draw_edges
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, castor3d::PassBuffer const & passBuffer
-			, crg::ImageViewId const & data0 );
+			, crg::ImageViewId const & data0
+			, bool const * enabled );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const

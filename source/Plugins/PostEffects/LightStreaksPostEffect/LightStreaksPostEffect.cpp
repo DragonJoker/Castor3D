@@ -43,6 +43,7 @@ namespace light_streaks
 			, Count + 2u }
 		, m_kawaseUbo{ renderSystem.getRenderDevice() }
 	{
+		setParameters( params );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
@@ -80,6 +81,10 @@ namespace light_streaks
 			, m_kawaseCfg.attenuation );
 		visitor.visit( cuT( "Samples" )
 			, m_kawaseCfg.samples );
+	}
+
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device

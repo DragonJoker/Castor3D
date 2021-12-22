@@ -61,15 +61,14 @@ namespace draw_edges
 	{
 		auto & parsingContext = castor3d::getParserContext( context );
 		auto & deContext = getParserContext( context );
-		auto engine = deContext.engine;
 		castor3d::Parameters parameters;
 		parameters.add( PostEffect::NormalDepthWidth, castor::string::toString( deContext.data.normalDepthWidth ) );
 		parameters.add( PostEffect::ObjectWidth, castor::string::toString( deContext.data.objectWidth ) );
-		auto effect = engine->getPostEffectFactory().create( PostEffect::Type
-			, *parsingContext.renderTarget
-			, *engine->getRenderSystem()
-			, parameters );
-		parsingContext.renderTarget->addPostEffect( effect );
+
+		auto effect = parsingContext.renderTarget->getPostEffect( PostEffect::Type );
+		effect->enable( true );
+		effect->setParameters( parameters );
+
 		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
 	CU_EndAttributePop()

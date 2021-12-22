@@ -130,9 +130,7 @@ namespace motion_blur
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 	{
-		parameters.get( cuT( "vectorDivider" ), m_configuration.vectorDivider );
-		parameters.get( cuT( "samplesCount" ), m_configuration.samplesCount );
-		parameters.get( cuT( "fpsScale" ), m_fpsScale );
+		setParameters( parameters );
 	}
 
 	PostEffect::~PostEffect()
@@ -151,6 +149,13 @@ namespace motion_blur
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
+	}
+
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
+		parameters.get( cuT( "vectorDivider" ), m_configuration.vectorDivider );
+		parameters.get( cuT( "samplesCount" ), m_configuration.samplesCount );
+		parameters.get( cuT( "fpsScale" ), m_fpsScale );
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
