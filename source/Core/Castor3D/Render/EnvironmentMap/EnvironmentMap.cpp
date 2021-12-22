@@ -317,7 +317,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait EnvironmentMap::render( crg::SemaphoreWait const & toWait
+	crg::SemaphoreWaitArray EnvironmentMap::render( crg::SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		if ( !m_count )
@@ -325,7 +325,7 @@ namespace castor3d
 			return toWait;
 		}
 
-		crg::SemaphoreWait result = toWait;
+		crg::SemaphoreWaitArray result = toWait;
 
 		if ( m_first )
 		{

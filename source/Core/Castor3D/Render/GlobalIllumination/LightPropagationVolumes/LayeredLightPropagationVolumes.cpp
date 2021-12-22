@@ -457,7 +457,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait LayeredLightPropagationVolumesBase::render( crg::SemaphoreWait const & toWait
+	crg::SemaphoreWaitArray LayeredLightPropagationVolumesBase::render( crg::SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		if ( !m_initialised

@@ -587,10 +587,10 @@ namespace castor3d
 
 			if ( target && target->isInitialised() )
 			{
-				auto toWait = { target->render( m_device
+				auto toWait = target->render( m_device
 					, info
 					, *m_queue->queue
-					, baseToWait ) };
+					, baseToWait );
 				baseToWait.clear();
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking

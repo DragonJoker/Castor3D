@@ -43,7 +43,8 @@ namespace ocean_fft
 			, castor3d::RenderDevice const & device
 			, VkExtent2D const & extent
 			, castor::Point2f const & heightMapSize
-			, uint32_t displacementDownsample );
+			, uint32_t displacementDownsample
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -91,7 +92,8 @@ namespace ocean_fft
 		, ashes::BufferBase const & height
 		, ashes::BufferBase const & displacement
 		, std::array< castor3d::Texture, 2u > const & heightDisp
-		, std::array< castor3d::Texture, 2u > const & gradJacob );
+		, std::array< castor3d::Texture, 2u > const & gradJacob
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 }
 
 #endif

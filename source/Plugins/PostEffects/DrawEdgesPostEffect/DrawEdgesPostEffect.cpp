@@ -274,20 +274,14 @@ namespace draw_edges
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
-						, crg::RecordContext & recContext
-						, VkCommandBuffer commandBuffer
-						, uint32_t index )
-						{
-							doCopyImage( graph
-								, runnable
-								, recContext
-								, commandBuffer
-								, index
-								, *m_target
-								, m_resultView );
-						} )
-					.build( pass, context, graph );
+					.build( pass
+						, context
+						, graph
+						, crg::ru::Config{}
+							.implicitAction( m_resultView
+								, crg::RecordContext::copyImage( *m_target
+									, m_resultView
+									, { extent.width, extent.height } ) ) );
 				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
 					, result->getTimer() );
 				return result;

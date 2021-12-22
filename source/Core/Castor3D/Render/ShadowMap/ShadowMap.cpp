@@ -159,7 +159,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait ShadowMap::render( crg::SemaphoreWait const & toWait
+	crg::SemaphoreWaitArray ShadowMap::render( crg::SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue
 		, uint32_t index )
 	{
