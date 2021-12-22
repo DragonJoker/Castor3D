@@ -42,7 +42,6 @@
 
 #include <ashespp/Image/StagingTexture.hpp>
 
-#define Ocean_DebugPixelShader 0
 #define Ocean_DebugFFTGraph 0
 
 namespace ocean_fft
@@ -870,6 +869,7 @@ namespace ocean_fft
 	void OceanRenderPass::doUpdateFlags( castor3d::PipelineFlags & flags )const
 	{
 		addFlag( flags.programFlags, castor3d::ProgramFlag::eLighting );
+		addFlag( flags.programFlags, castor3d::ProgramFlag::eHasTessellation );
 
 		remFlag( flags.programFlags, castor3d::ProgramFlag::eMorphing );
 		remFlag( flags.programFlags, castor3d::ProgramFlag::eInstantiation );
@@ -886,11 +886,8 @@ namespace ocean_fft
 		remFlag( flags.passFlags, castor3d::PassFlag::eAlphaTest );
 		remFlag( flags.passFlags, castor3d::PassFlag::eBlendAlphaTest );
 
-#if !Ocean_DebugPixelShader
-		addFlag( flags.programFlags, castor3d::ProgramFlag::eHasTessellation );
 		flags.topology = VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
 		flags.patchVertices = OutputVertices;
-#endif
 	}
 
 	void OceanRenderPass::doUpdatePipeline( castor3d::RenderPipeline & pipeline )
@@ -939,26 +936,6 @@ namespace ocean_fft
 				out.patchWorldPosition = out.vtx.position.xyz();
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
-
-#if Ocean_DebugPixelShader
-				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, c3d_modelData.getModelMtx() );
-				out.worldPosition = curMtxModel * out.vtx.position;
-				out.viewPosition = c3d_matrixData.worldToCurView( out.worldPosition );
-				out.vtx.position = c3d_matrixData.viewToProj( out.viewPosition );
-				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( in.normal, 0.0_f ) );
-				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( in.tangent, 0.0_f ) );
-				out.computeTangentSpace( flags.programFlags
-					, c3d_sceneData.cameraPosition
-					, out.worldPosition.xyz()
-					, mtxNormal
-					, v4Normal
-					, v4Tangent );
-#endif
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -1030,9 +1007,6 @@ namespace ocean_fft
 
 	castor3d::ShaderPtr OceanRenderPass::doGetHullShaderSource( castor3d::PipelineFlags const & flags )const
 	{
-#if Ocean_DebugPixelShader
-		return nullptr;
-#else
 		using namespace sdw;
 		using namespace castor3d;
 		TessellationControlWriter writer;
@@ -1161,14 +1135,10 @@ namespace ocean_fft
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-#endif
 	}
 
 	castor3d::ShaderPtr OceanRenderPass::doGetDomainShaderSource( castor3d::PipelineFlags const & flags )const
 	{
-#if Ocean_DebugPixelShader
-		return nullptr;
-#else
 		using namespace sdw;
 		using namespace castor3d;
 		TessellationEvaluationWriter writer;
@@ -1288,7 +1258,6 @@ namespace ocean_fft
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-#endif
 	}
 
 	castor3d::ShaderPtr OceanRenderPass::doGetGeometryShaderSource( castor3d::PipelineFlags const & flags )const
