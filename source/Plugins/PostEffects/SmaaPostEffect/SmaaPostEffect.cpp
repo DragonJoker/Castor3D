@@ -260,6 +260,11 @@ namespace smaa
 			, m_config.data.predicationThreshold );
 	}
 
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
+		m_config = SmaaConfig{ parameters };
+	}
+
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{

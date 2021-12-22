@@ -177,17 +177,7 @@ namespace draw_edges
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
 	{
-		castor::String param;
-
-		if ( parameters.get( NormalDepthWidth, param ) )
-		{
-			m_config.normalDepthWidth = castor::string::toInt( param );
-		}
-
-		if ( parameters.get( ObjectWidth, param ) )
-		{
-			m_config.objectWidth = castor::string::toInt( param );
-		}
+		setParameters( parameters );
 	}
 
 	PostEffect::~PostEffect()
@@ -223,6 +213,21 @@ namespace draw_edges
 			, m_config.objectWidth );
 	}
 
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
+		castor::String param;
+
+		if ( parameters.get( NormalDepthWidth, param ) )
+		{
+			m_config.normalDepthWidth = castor::string::toInt( param );
+		}
+
+		if ( parameters.get( ObjectWidth, param ) )
+		{
+			m_config.objectWidth = castor::string::toInt( param );
+		}
+	}
+
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
@@ -242,13 +247,15 @@ namespace draw_edges
 			, passBuffer
 			, data0
 			, data1
-			, depthRange );
+			, depthRange
+			, &isEnabled() );
 		m_objectID = std::make_unique< ObjectIDEdgeDetection >( m_graph
 			, *previous
 			, m_renderTarget
 			, device
 			, passBuffer
-			, data0 );
+			, data0
+			, &isEnabled() );
 		previous = &m_objectID->getPass();
 
 		m_resultImg = m_graph.createImage( crg::ImageData{ "DECombineRes"

@@ -82,18 +82,15 @@ namespace motion_blur
 	CU_ImplementAttributeParser( parserMotionBlurEnd )
 	{
 		auto & blurContext = getParserContext( context );
-		auto engine = blurContext.engine;
 		auto & parsingContext = castor3d::getParserContext( context );
 		castor3d::Parameters parameters;
 		parameters.add( cuT( "vectorDivider" ), blurContext.data.vectorDivider );
 		parameters.add( cuT( "samplesCount" ), blurContext.data.samplesCount );
 		parameters.add( cuT( "fpsScale" ), blurContext.fpsScale );
 
-		auto effect = engine->getPostEffectFactory().create( PostEffect::Type
-			, *parsingContext.renderTarget
-			, *engine->getRenderSystem()
-			, parameters );
-		parsingContext.renderTarget->addPostEffect( effect );
+		auto effect = parsingContext.renderTarget->getPostEffect( PostEffect::Type );
+		effect->enable( true );
+		effect->setParameters( parameters );
 
 		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
