@@ -75,7 +75,7 @@ namespace castor3d
 			, crg::RunnablePass::Callbacks{ [this](){ doInitialise(); }
 				, crg::defaultV< crg::RunnablePass::GetSemaphoreWaitFlagsCallback >
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } }
-			, { 1u, false, true } }
+			, { 1u, true } }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_renderPass{ pass

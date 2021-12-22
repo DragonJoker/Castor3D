@@ -39,7 +39,8 @@ namespace ocean_fft
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, VkExtent2D const & extent );
+			, VkExtent2D const & extent
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

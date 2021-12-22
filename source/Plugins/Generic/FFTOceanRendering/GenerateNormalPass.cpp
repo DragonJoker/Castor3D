@@ -181,16 +181,16 @@ namespace ocean_fft
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-			, VkExtent2D const & extent )
+		, VkExtent2D const & extent
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }

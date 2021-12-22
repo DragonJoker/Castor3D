@@ -122,6 +122,40 @@ namespace castor3d
 			m_safeBand = value;
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	The max frame pass variants count.
+		 *\~french
+		 *\param[in]	value	Le nombre maximum de variantes de la frame pass.
+		 */
+		SceneRenderPassDesc & passCount( uint32_t value )
+		{
+			m_ruConfig.maxPassCount = value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The frame pass resettable status.
+		 *\~french
+		 *\param[in]	value	Le statut resettable de la frame pass.
+		 */
+		SceneRenderPassDesc & resettable( bool value )
+		{
+			m_ruConfig.resettable = value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The frame pass resettable status.
+		 *\~french
+		 *\param[in]	value	Le statu resettable de la frame pass.
+		 */
+		SceneRenderPassDesc & implicitAction( crg::ImageViewId view
+			, crg::RecordContext::ImplicitAction action )
+		{
+			m_ruConfig.implicitAction( view, action );
+			return *this;
+		}
 
 		VkExtent3D m_size;
 		MatrixUbo & m_matrixUbo;
@@ -133,6 +167,7 @@ namespace castor3d
 		SceneNode const * m_ignored{};
 		uint32_t m_index{ 0u };
 		uint32_t m_instanceMult{ 1u };
+		crg::ru::Config m_ruConfig{ 1u, true };
 	};
 
 	class SceneRenderPass

@@ -538,7 +538,7 @@ namespace castor3d
 		: crg::RenderQuad{ pass
 			, context
 			, graph
-			, { 2u, false, false }
+			, { 2u, false }
 			, std::move( config ) }
 		, ssaoConfig{ ssaoConfig }
 	{

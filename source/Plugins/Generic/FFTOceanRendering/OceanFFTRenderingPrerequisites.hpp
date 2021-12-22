@@ -18,6 +18,7 @@ See LICENSE file in root folder
 #pragma warning( pop )
 
 #include <Castor3D/Render/Technique/TechniqueModule.hpp>
+#include <Castor3D/Render/RenderPass.hpp>
 
 #include <complex>
 
@@ -76,6 +77,29 @@ namespace ocean_fft
 		eR2C,
 		eC2R,
 		eR2R
+	};
+
+	struct IsRenderPassEnabled
+	{
+		IsRenderPassEnabled( castor3d::SceneRenderPass const & pass )
+			: m_pass{ &pass }
+		{}
+
+		IsRenderPassEnabled()
+			: m_pass{}
+		{}
+
+		void setPass( castor3d::SceneRenderPass const & pass )
+		{
+			m_pass = &pass;
+		}
+
+		bool operator()()const
+		{
+			return m_pass->hasNodes();
+		}
+
+		castor3d::SceneRenderPass const * m_pass;
 	};
 
 	bool checkFFTResult( castor::xchar const * action

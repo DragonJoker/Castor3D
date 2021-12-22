@@ -551,19 +551,17 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait RenderTarget::render( RenderDevice const & device
+	crg::SemaphoreWaitArray RenderTarget::render( RenderDevice const & device
 		, RenderInfo & info
 		, ashes::Queue const & queue
 		, crg::SemaphoreWaitArray const & signalsToWait )
 	{
 		if ( !m_initialised )
 		{
-			return signalsToWait.empty()
-				? crg::SemaphoreWait{}
-				: signalsToWait.front();
+			return signalsToWait;
 		}
 
-		crg::SemaphoreWait result{};
+		crg::SemaphoreWaitArray result{};
 		SceneSPtr scene = getScene();
 
 		if ( scene )
@@ -737,8 +735,7 @@ namespace castor3d
 
 	void RenderTarget::resetSemaphore()
 	{
-		m_signalFinished.semaphore = nullptr;
-		m_signalFinished.dstStageMask = 0u;
+		m_signalFinished.clear();
 	}
 
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress )
@@ -910,7 +907,7 @@ namespace castor3d
 		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combinePxl ) );
 	}
 
-	crg::SemaphoreWait RenderTarget::doRender( RenderDevice const & device
+	crg::SemaphoreWaitArray RenderTarget::doRender( RenderDevice const & device
 		, RenderInfo & info
 		, ashes::Queue const & queue
 		, CameraSPtr camera
@@ -942,7 +939,7 @@ namespace castor3d
 		return m_signalFinished;
 	}
 
-	crg::SemaphoreWait RenderTarget::doRenderOverlays( RenderDevice const & device
+	crg::SemaphoreWaitArray RenderTarget::doRenderOverlays( RenderDevice const & device
 		, ashes::Queue const & queue
 		, crg::SemaphoreWaitArray const & toWait )
 	{

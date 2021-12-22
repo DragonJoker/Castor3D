@@ -158,4 +158,10 @@ namespace castor3d
 	{
 		return m_lightPassResult[LpTexture::eDepth].targetViewId;
 	}
+
+	Texture const & DeferredRendering::getLightDiffuse()
+	{
+		m_lightPassResult.create();
+		return m_lightPassResult[LpTexture::eDiffuse];
+	}
 }

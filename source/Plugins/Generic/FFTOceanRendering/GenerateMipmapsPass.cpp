@@ -144,16 +144,18 @@ namespace ocean_fft
 	GenerateMipmapsPass::GenerateMipmapsPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, castor3d::RenderDevice const & device )
+		, castor3d::RenderDevice const & device
+		, crg::ru::Config ruConfig
+		, crg::RunnablePass::GetPassIndexCallback passIndex
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i );}
-				, crg::defaultV< crg::RunnablePass::RecordCallback >
-				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, passIndex
+				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
@@ -314,11 +316,6 @@ namespace ocean_fft
 	VkPipelineStageFlags GenerateMipmapsPass::doGetSemaphoreWaitFlags()const
 	{
 		return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-	}
-
-	uint32_t GenerateMipmapsPass::doGetPassIndex()const
-	{
-		return 0u;
 	}
 
 	bool GenerateMipmapsPass::doIsComputePass()const

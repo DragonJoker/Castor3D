@@ -103,7 +103,7 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
-		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait
+		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue
 			, uint32_t index );
 		/**

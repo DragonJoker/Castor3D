@@ -81,7 +81,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API crg::SemaphoreWait render( crg::SemaphoreWait const & toWait
+		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		/**
 		 *\~english

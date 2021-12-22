@@ -84,7 +84,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API crg::SemaphoreWait render( RenderDevice const & device
+		C3D_API crg::SemaphoreWaitArray render( RenderDevice const & device
 			, RenderInfo & info
 			, ashes::Queue const & queue
 			, crg::SemaphoreWaitArray const & signalsToWait = {} );
@@ -287,7 +287,7 @@ namespace castor3d
 			return m_toneMapping;
 		}
 
-		crg::SemaphoreWait const & getSemaphore()const
+		crg::SemaphoreWaitArray const & getSemaphore()const
 		{
 			return m_signalFinished;
 		}
@@ -360,12 +360,12 @@ namespace castor3d
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
 		void doInitCombineProgram( ProgressBar * progress );
-		crg::SemaphoreWait doRender( RenderDevice const & device
+		crg::SemaphoreWaitArray doRender( RenderDevice const & device
 			, RenderInfo & info
 			, ashes::Queue const & queue
 			, CameraSPtr camera
 			, crg::SemaphoreWaitArray signalsToWait );
-		crg::SemaphoreWait doRenderOverlays( RenderDevice const & device
+		crg::SemaphoreWaitArray doRenderOverlays( RenderDevice const & device
 			, ashes::Queue const & queue
 			, crg::SemaphoreWaitArray const & toWait );
 
@@ -400,7 +400,7 @@ namespace castor3d
 		castor::Point2f m_jitter;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::SemaphorePtr m_signalReady;
-		crg::SemaphoreWait m_signalFinished{};
+		crg::SemaphoreWaitArray m_signalFinished;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		TexturePtr m_velocity;

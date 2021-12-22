@@ -600,7 +600,10 @@ namespace castor3d
 		{
 			if ( target->getScene().get() != this )
 			{
-				result.emplace_back( target->getSemaphore() );
+				auto toWait = target->getSemaphore();
+				result.insert( result.end()
+					, toWait.begin()
+					, toWait.end() );
 			}
 		}
 

@@ -303,16 +303,16 @@ namespace ocean_fft
 		, FFTConfig const & config
 		, VkExtent2D const & extent
 		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output )
+		, std::array< ashes::BufferBasePtr, 2u > const & output
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
@@ -379,10 +379,11 @@ namespace ocean_fft
 		, VkExtent2D const & extent
 		, FFTConfig const & config
 		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output )
+		, std::array< ashes::BufferBasePtr, 2u > const & output
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 	{
 		auto & result = graph.createPass( OceanFFT::Name + "/Process" + name
-			, [&device, extent, &input, &output, &config]( crg::FramePass const & framePass
+			, [&device, extent, isEnabled, &input, &output, &config]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -393,7 +394,8 @@ namespace ocean_fft
 					, config
 					, extent
 					, input
-					, output );
+					, output
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
 					, res->getTimer() );
 				return res;

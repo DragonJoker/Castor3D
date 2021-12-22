@@ -41,10 +41,11 @@ namespace ocean_fft
 		, VkExtent2D const & extent
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output )
+		, ashes::BufferBase const & output
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 	{
 		auto & result = graph.createPass( prefix + "/GenerateFrequency" + name
-			, [&device, extent]( crg::FramePass const & framePass
+			, [&device, extent, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -52,7 +53,8 @@ namespace ocean_fft
 					, context
 					, runnableGraph
 					, device
-					, extent );
+					, extent
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
 					, res->getTimer() );
 				return res;
@@ -82,7 +84,8 @@ namespace ocean_fft
 			, VkExtent2D dimensions
 			, FFTConfig const & pfftConfig
 			, ashes::Buffer< cfloat > const & distribution
-			, FFTMode mode )
+			, FFTMode mode
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 			: fftConfig{ pfftConfig }
 			, frequency{ castor3d::makeBuffer< cfloat >( fftConfig.device
 					, dimensions.width * dimensions.height
@@ -107,7 +110,8 @@ namespace ocean_fft
 				, dimensions
 				, ubo
 				, distribution.getBuffer()
-				, frequency->getBuffer() ) }
+				, frequency->getBuffer()
+				, isEnabled ) }
 			, processFFT( &createProcessFFTPass( name
 				, fftConfig.device
 				, graph
@@ -115,7 +119,8 @@ namespace ocean_fft
 				, dimensions
 				, fftConfig
 				, frequency->getBuffer()
-				, result ) )
+				, result
+				, isEnabled ) )
 		{
 		}
 
@@ -146,7 +151,8 @@ namespace ocean_fft
 		OceanFFT( castor3d::RenderDevice const & device
 			, crg::FrameGraph & graph
 			, crg::FramePassArray previousPasses
-			, OceanUbo const & ubo );
+			, OceanUbo const & ubo
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 		~OceanFFT();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept

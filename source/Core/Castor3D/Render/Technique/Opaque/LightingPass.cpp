@@ -676,7 +676,7 @@ namespace castor3d
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } }
-			, { 1u, false, true } }
+			, { 1u, true } }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_lpResult{ lpResult }

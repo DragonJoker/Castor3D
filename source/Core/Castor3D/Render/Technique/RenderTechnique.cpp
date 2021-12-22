@@ -729,7 +729,7 @@ namespace castor3d
 			} );
 	}
 
-	crg::SemaphoreWait RenderTechnique::preRender( crg::SemaphoreWait const & toWait
+	crg::SemaphoreWaitArray RenderTechnique::preRender( crg::SemaphoreWaitArray const & toWait
 		, ashes::Queue const & queue )
 	{
 		auto result = toWait;
@@ -901,7 +901,7 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		return m_deferredRendering->getLightDepthImgView();
 #else
-		return getDepthImgView();
+		return getDepthSampledView();
 #endif
 	}
 
@@ -918,6 +918,27 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	Texture const & RenderTechnique::getDiffuseLightingResult()const
+	{
+		if ( m_deferredRendering )
+		{
+			return m_deferredRendering->getLightDiffuse();
+		}
+
+		return m_colour;
+	}
+
+	Texture const & RenderTechnique::getBaseColourResult()const
+	{
+		if ( m_opaquePassResult )
+		{
+			m_opaquePassResult->create();
+			return ( *m_opaquePassResult )[DsTexture::eData2];
+		}
+
+		return m_colour;
 	}
 
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
@@ -953,6 +974,10 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
+				auto depthIt = framePass.images.begin();
+				auto depthObjIt = std::next( depthIt );
+				auto normalIt = std::next( depthObjIt );
+				auto velocityIt = std::next( normalIt );
 				stepProgressBar( progress, "Initialising depth pass" );
 				auto res = std::make_unique< DepthPass >( this
 					, framePass
@@ -960,7 +985,12 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, getSsaoConfig()
-					, SceneRenderPassDesc{ m_depth->getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true ) );
+					, SceneRenderPassDesc{ m_depth->getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
+						.safeBand( true )
+						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
+						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
+						.implicitAction( normalIt->view(), crg::RecordContext::clearAttachment( *normalIt ) )
+						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) ) );
 				m_depthPass = res.get();
 				getEngine()->registerTimer( runnableGraph.getName() + "/Depth"
 					, res->getTimer() );
@@ -1041,6 +1071,12 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque pass" );
+#if C3D_UseDeferredRendering
+				auto data2It = std::next( framePass.images.begin(), 2u );
+				auto data3It = std::next( data2It );
+				auto data4It = std::next( data3It );
+				auto data5It = std::next( data4It );
+#endif
 				auto res = std::make_unique< OpaquePassType >( this
 					, framePass
 					, context
@@ -1048,7 +1084,14 @@ namespace castor3d
 					, m_device
 					, cuT( "Opaque" )
 					, name
-					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }.safeBand( true )
+					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
+						.safeBand( true )
+#if C3D_UseDeferredRendering
+						.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
+						.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
+						.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) )
+						.implicitAction( data5It->view(), crg::RecordContext::clearAttachment( *data5It ) )
+#endif
 					, RenderTechniquePassDesc{ false, getSsaoConfig() }
 						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
@@ -1103,6 +1146,8 @@ namespace castor3d
 				castor::String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
 				static constexpr bool hasVelocity = true;
+				auto accumIt = std::next( framePass.images.begin() );
+				auto revealIt = std::next( accumIt );
 #else
 				castor::String name = cuT( "Forward" );
 				static constexpr bool isOit = false;
@@ -1115,7 +1160,12 @@ namespace castor3d
 					, m_device
 					, cuT( "Transparent" )
 					, name
-					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }.safeBand( true )
+					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }
+						.safeBand( true )
+#if C3D_UseWeightedBlendedRendering
+						.implicitAction( accumIt->view(), crg::RecordContext::clearAttachment( *accumIt ) )
+						.implicitAction( revealIt->view(), crg::RecordContext::clearAttachment( *revealIt ) )
+#endif
 					, RenderTechniquePassDesc{ false, getSsaoConfig() }
 						.ssao( m_ssao->getResult() )
 						.lpvConfigUbo( m_lpvConfigUbo )
@@ -1351,10 +1401,10 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderLPV( crg::SemaphoreWait const & semaphore
+	crg::SemaphoreWaitArray RenderTechnique::doRenderLPV( crg::SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )
 	{
-		crg::SemaphoreWait result = semaphore;
+		crg::SemaphoreWaitArray result = semaphore;
 
 		if ( m_renderTarget.getScene()->needsGlobalIllumination() )
 		{
@@ -1387,10 +1437,10 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderShadowMaps( crg::SemaphoreWait const & semaphore
+	crg::SemaphoreWaitArray RenderTechnique::doRenderShadowMaps( crg::SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )const
 	{
-		crg::SemaphoreWait result = semaphore;
+		crg::SemaphoreWaitArray result = semaphore;
 		auto & scene = *m_renderTarget.getScene();
 
 		if ( scene.hasShadows() )
@@ -1410,10 +1460,10 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore
+	crg::SemaphoreWaitArray RenderTechnique::doRenderEnvironmentMaps( crg::SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )const
 	{
-		crg::SemaphoreWait result = semaphore;
+		crg::SemaphoreWaitArray result = semaphore;
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
@@ -1428,10 +1478,10 @@ namespace castor3d
 		return result;
 	}
 
-	crg::SemaphoreWait RenderTechnique::doRenderVCT( crg::SemaphoreWait const & semaphore
+	crg::SemaphoreWaitArray RenderTechnique::doRenderVCT( crg::SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )const
 	{
-		crg::SemaphoreWait result = semaphore;
+		crg::SemaphoreWaitArray result = semaphore;
 		auto scene = m_renderTarget.getScene();
 
 		if ( scene
