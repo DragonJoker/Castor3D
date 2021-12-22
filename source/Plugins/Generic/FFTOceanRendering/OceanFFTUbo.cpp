@@ -15,7 +15,7 @@ namespace ocean_fft
 	castor::StringArray const & getOceanDisplayDataNames()
 	{
 		static castor::StringArray const result{ "Result"
-			, "GradientJacobian"
+			, "GradJacobian"
 			, "NoiseGradient"
 			, "Jacobian"
 			, "Turbulence"
@@ -35,7 +35,10 @@ namespace ocean_fft
 			, "SSRFactor"
 			, "SSRResultFactor"
 			, "CombinedReflection"
-			, "Refraction"
+			, "RawRefraction"
+			, "LightAbsorbtion"
+			, "WaterTransmission"
+			, "RefractionResult"
 			, "DepthSoftenedAlpha"
 			, "HeightMixedRefraction"
 			, "DistanceMixedRefraction"
@@ -65,6 +68,7 @@ namespace ocean_fft
 		, time{ m_base.x() }
 		, depthSofteningDistance{ m_base.y() }
 		, distanceMod{ m_base.z() }
+		, density{ m_base.w() }
 		, refractionRatio{ m_refraction.x() }
 		, refractionDistortionFactor{ m_refraction.y() }
 		, refractionHeightFactor{ m_refraction.z() }
