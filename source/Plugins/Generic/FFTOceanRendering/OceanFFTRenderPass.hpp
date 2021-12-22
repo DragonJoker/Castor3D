@@ -75,7 +75,9 @@ namespace ocean_fft
 
 		castor3d::ShaderFlags getShaderFlags()const override
 		{
-			return castor3d::ShaderFlag::eWorldSpace;
+			return castor3d::ShaderFlag::eWorldSpace
+				| castor3d::ShaderFlag::eViewSpace
+				| castor3d::ShaderFlag::eVelocity;
 		}
 		/**@}*/
 
