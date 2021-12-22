@@ -113,6 +113,20 @@ namespace ocean_fft
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserDensity )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waveContext = getParserContext( context );
+			params[0]->get( waveContext.config.density );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserFftConfig )
 	{
 	}
