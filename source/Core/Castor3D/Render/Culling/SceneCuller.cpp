@@ -59,6 +59,11 @@ namespace castor3d
 		return hash( culled.instance, culled.data, *culled.pass, instanceMult );
 	}
 
+	bool isCulled( CulledSubmesh const & node )
+	{
+		return node.instance.isCulled();
+	}
+
 	bool isVisible( Camera const & camera
 		, CulledSubmesh const & node )
 	{
@@ -89,6 +94,11 @@ namespace castor3d
 		, uint32_t instanceMult )
 	{
 		return hash( culled.data, *culled.pass, instanceMult );
+	}
+
+	bool isCulled( CulledBillboard const & node )
+	{
+		return node.instance.isCulled();
 	}
 
 	bool isVisible( Camera const & camera

@@ -14,77 +14,51 @@ namespace castor3d
 		: public std::enable_shared_from_this< RenderedObject >
 	{
 	public:
-		/**
-		 *\~english
-		 *\return		The visibility status.
-		 *\~french
-		 *\return		Le statut de visibilité.
-		 */
-		bool isVisible()const
-		{
-			return m_visible;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the visibility status.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le statut de visibilité.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
 		void setVisible( bool value )
 		{
 			m_visible = value;
 		}
-		/**
-		 *\~english
-		 *\return		The shadow casting status.
-		 *\~french
-		 *\return		Le statut de projection d'ombres.
-		 */
-		bool isShadowCaster()const
-		{
-			return m_castsShadows;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the shadow caster status.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le statut de projection d'ombres.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+
 		void setShadowCaster( bool value )
 		{
 			m_castsShadows = value;
 		}
-		/**
-		 *\~english
-		 *\return		The shadow receiving status.
-		 *\~french
-		 *\return		Le statut de réception d'ombres.
-		 */
+
+		void setShadowReceiver( bool value )
+		{
+			m_receivesShadows = value;
+		}
+
+		void setCulled( bool value )
+		{
+			m_culled = value;
+		}
+
+		bool isVisible()const
+		{
+			return m_visible;
+		}
+
+		bool isShadowCaster()const
+		{
+			return m_castsShadows;
+		}
+
 		bool isShadowReceiver()const
 		{
 			return m_receivesShadows;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the shadow receiving status.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le statut de réception d'ombres.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		void setShadowReceiver( bool value )
+
+		bool isCulled()const
 		{
-			m_receivesShadows = value;
+			return m_culled;
 		}
 
 	private:
 		bool m_visible{ true };
 		bool m_castsShadows{ true };
 		bool m_receivesShadows{ true };
+		bool m_culled{ true };
 	};
 }
 
