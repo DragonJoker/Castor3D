@@ -100,6 +100,7 @@ jobs:
         git submodule update --init --recursive -- "external/ShaderWriter"
         git submodule update --init --recursive -- "external/RenderGraph"
         git submodule update --init --recursive -- "external/gli"
+        git submodule update --init -- "external/VkFFT"
         git submodule update --init -- "external/cvtt"
 
     - name: Checkout dependencies submodule (Windows)
