@@ -111,7 +111,7 @@ namespace castor3d
 		 *\brief			Dessine les environment maps.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API crg::SemaphoreWait preRender( crg::SemaphoreWait const & toWait
+		C3D_API crg::SemaphoreWaitArray preRender( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		/**
 		 *\~english
@@ -152,6 +152,8 @@ namespace castor3d
 		C3D_API Texture const & getSecondaryVctBounce()const;
 		C3D_API crg::ImageViewId const & getLightDepthImgView()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
+		C3D_API Texture const & getDiffuseLightingResult()const;
+		C3D_API Texture const & getBaseColourResult()const;
 
 		castor::Size const & getSize()const
 		{
@@ -323,13 +325,13 @@ namespace castor3d
 		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
 
-		crg::SemaphoreWait doRenderShadowMaps( crg::SemaphoreWait const & semaphore
+		crg::SemaphoreWaitArray doRenderShadowMaps( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
-		crg::SemaphoreWait doRenderLPV( crg::SemaphoreWait const & semaphore
+		crg::SemaphoreWaitArray doRenderLPV( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue );
-		crg::SemaphoreWait doRenderEnvironmentMaps( crg::SemaphoreWait const & semaphore
+		crg::SemaphoreWaitArray doRenderEnvironmentMaps( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
-		crg::SemaphoreWait doRenderVCT( crg::SemaphoreWait const & semaphore
+		crg::SemaphoreWaitArray doRenderVCT( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;
 
 	private:

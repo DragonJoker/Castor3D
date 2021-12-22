@@ -642,7 +642,7 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	crg::SemaphoreWait OverlayRenderer::render( FramePassTimer & timer
+	crg::SemaphoreWaitArray OverlayRenderer::render( FramePassTimer & timer
 		, ashes::Queue const & queue
 		, crg::SemaphoreWaitArray const & toWait )
 	{
@@ -655,8 +655,9 @@ namespace castor3d
 			, semaphores
 			, dstStageMasks
 			, *m_finished );
-		return { *m_finished
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+		return { 1u
+			, { *m_finished
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( RenderDevice const & device

@@ -40,7 +40,8 @@ namespace ocean_fft
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
 			, VkExtent2D const & extent
-			, uint32_t downsample );
+			, uint32_t downsample
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -77,7 +78,8 @@ namespace ocean_fft
 		, uint32_t downsample
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output );
+		, ashes::BufferBase const & output
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 }
 
 #endif

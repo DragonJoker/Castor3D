@@ -237,16 +237,16 @@ namespace ocean_fft
 		, castor3d::RenderDevice const & device
 		, VkExtent2D const & extent
 		, castor::Point2f const & heightMapSize
-		, uint32_t displacementDownsample )
+		, uint32_t displacementDownsample
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, crg::defaultV< crg::RunnablePass::RecordCallback >
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 1u } }
 		, m_device{ device }
@@ -336,10 +336,11 @@ namespace ocean_fft
 		, ashes::BufferBase const & height
 		, ashes::BufferBase const & displacement
 		, std::array< castor3d::Texture, 2u > const & heightDisp
-		, std::array< castor3d::Texture, 2u > const & gradJacob )
+		, std::array< castor3d::Texture, 2u > const & gradJacob
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 	{
 		auto & result = graph.createPass( OceanFFT::Name + "/BakeHeightGradient"
-			, [&device, extent, heightMapSize, displacementDownsample]( crg::FramePass const & framePass
+			, [&device, extent, heightMapSize, displacementDownsample, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -349,7 +350,8 @@ namespace ocean_fft
 					, device
 					, extent
 					, heightMapSize
-					, displacementDownsample );
+					, displacementDownsample
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
 					, res->getTimer() );
 				return res;
