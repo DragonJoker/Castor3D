@@ -36,19 +36,7 @@ namespace Bloom
 		, m_blurKernelSize{ BaseKernelSize }
 		, m_blurPassesCount{ BaseFilterCount }
 	{
-		castor::String count;
-
-		if ( params.get( cuT( "Size" ), count ) )
-		{
-			m_blurKernelSize = uint32_t( castor::string::toLong( count ) );
-		}
-
-		if ( params.get( cuT( "Passes" ), count ) )
-		{
-			m_blurPassesCount = uint32_t( castor::string::toLong( count ) );
-		}
-
-		m_passesCount = m_blurPassesCount * 2u + 2u;
+		setParameters( params );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
@@ -94,6 +82,23 @@ namespace Bloom
 		visitor.visit( cuT( "Kernel Size" )
 			, m_blurKernelSize );
 #endif
+	}
+
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
+		castor::String count;
+
+		if ( parameters.get( cuT( "Size" ), count ) )
+		{
+			m_blurKernelSize = uint32_t( castor::string::toLong( count ) );
+		}
+
+		if ( parameters.get( cuT( "Passes" ), count ) )
+		{
+			m_blurPassesCount = uint32_t( castor::string::toLong( count ) );
+		}
+
+		m_passesCount = m_blurPassesCount * 2u + 2u;
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device

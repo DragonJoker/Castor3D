@@ -150,6 +150,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API virtual crg::FramePass const & getPass()const = 0;
+		C3D_API virtual void setParameters( Parameters parameters ) = 0;
 
 		bool isAfterToneMapping()const
 		{

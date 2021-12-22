@@ -180,7 +180,7 @@ namespace castor3d
 		 *\brief		Ajoute un effet post rendu à la liste.
 		 *\param[in]	effect	L'effet.
 		 */
-		C3D_API void addPostEffect( PostEffectSPtr effect );
+		C3D_API PostEffectSPtr getPostEffect( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief			Lists the intermediate views used by this render target.
