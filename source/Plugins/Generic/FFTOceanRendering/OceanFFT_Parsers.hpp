@@ -37,6 +37,7 @@ namespace ocean_fft
 	CU_DeclareAttributeParser( parserRefrHeightFactor )
 	CU_DeclareAttributeParser( parserRefrDistanceFactor )
 	CU_DeclareAttributeParser( parserSsrSettings )
+	CU_DeclareAttributeParser( parserDensity )
 	CU_DeclareAttributeParser( parserFftConfig )
 	CU_DeclareAttributeParser( parserOceanRenderingEnd )
 	CU_DeclareAttributeParser( parserFftDisableRandomSeed )

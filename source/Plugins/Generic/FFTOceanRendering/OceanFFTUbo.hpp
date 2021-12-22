@@ -43,7 +43,10 @@ namespace ocean_fft
 		eSSRFactor,
 		eSSRResultFactor,
 		eCombinedReflection,
-		eRefraction,
+		eRawRefraction,
+		eLightAbsorbtion,
+		eWaterTransmission,
+		eRefractionResult,
 		eDepthSoftenedAlpha,
 		eHeightMixedRefraction,
 		eDistanceMixedRefraction,
@@ -60,7 +63,7 @@ namespace ocean_fft
 		float time{ 0.0f };
 		float depthSofteningDistance{ 0.5f };
 		float distanceMod{};
-		float dummy1{};
+		float density{ 1.0f };
 
 		float refractionRatio{ 1.2f };
 		float refractionDistortionFactor{ 0.04f };
@@ -131,6 +134,7 @@ namespace ocean_fft
 		sdw::Float time;
 		sdw::Float depthSofteningDistance;
 		sdw::Float distanceMod;
+		sdw::Float density;
 		sdw::Float refractionRatio;
 		sdw::Float refractionDistortionFactor;
 		sdw::Float refractionHeightFactor;
