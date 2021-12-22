@@ -46,6 +46,7 @@ namespace
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "refractionHeightFactor" ), &ocean_fft::parserRefrHeightFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "refractionDistanceFactor" ), &ocean_fft::parserRefrDistanceFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "ssrSettings" ), &ocean_fft::parserSsrSettings, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
+		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "density" ), &ocean_fft::parserDensity, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "fft_config" ), &ocean_fft::parserFftConfig );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "}" ), &ocean_fft::parserOceanRenderingEnd );
 
