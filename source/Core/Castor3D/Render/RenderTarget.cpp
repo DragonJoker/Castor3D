@@ -304,13 +304,31 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_combinePass{ doCreateCombinePass( nullptr ) }
 	{
-		auto sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), *getEngine() ).lock();
+		auto sampler = engine.getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), engine ).lock();
 		sampler->setMinFilter( VK_FILTER_LINEAR );
 		sampler->setMagFilter( VK_FILTER_LINEAR );
 
-		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ), *getEngine() ).lock();
+		sampler = engine.getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ), engine ).lock();
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
+
+		for ( auto name : engine.getPostEffectFactory().listRegisteredTypes() )
+		{
+			PostEffectSPtr effect = engine.getPostEffectFactory().create( name
+				, *this
+				, *engine.getRenderSystem()
+				, Parameters{} );
+			effect->enable( false );
+
+			if ( effect->isAfterToneMapping() )
+			{
+				m_srgbPostEffects.push_back( effect );
+			}
+			else
+			{
+				m_hdrPostEffects.push_back( effect );
+			}
+		}
 	}
 
 	RenderTarget::~RenderTarget()
@@ -643,16 +661,33 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::addPostEffect( PostEffectSPtr effect )
+	PostEffectSPtr RenderTarget::getPostEffect( castor::String const & name )const
 	{
-		if ( effect->isAfterToneMapping() )
+		auto it = std::find_if( m_srgbPostEffects.begin()
+			, m_srgbPostEffects.end()
+			, [&name]( PostEffectSPtr lookup )
+			{
+				return lookup->getName() == name;
+			} );
+
+		if ( it != m_srgbPostEffects.end() )
 		{
-			m_srgbPostEffects.push_back( effect );
+			return *it;
 		}
-		else
+
+		it = std::find_if( m_hdrPostEffects.begin()
+			, m_hdrPostEffects.end()
+			, [&name]( PostEffectSPtr lookup )
+			{
+				return lookup->getName() == name;
+			} );
+
+		if ( it != m_hdrPostEffects.end() )
 		{
-			m_hdrPostEffects.push_back( effect );
+			return *it;
 		}
+
+		return nullptr;
 	}
 
 	HdrConfig const & RenderTarget::getHdrConfig()const

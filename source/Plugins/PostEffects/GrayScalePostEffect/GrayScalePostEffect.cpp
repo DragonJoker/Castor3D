@@ -111,6 +111,7 @@ namespace grayscale
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 	{
+		setParameters( params );
 	}
 
 	PostEffect::~PostEffect()
@@ -133,6 +134,10 @@ namespace grayscale
 		visitor.visit( m_pixelShader );
 		visitor.visit( cuT( "Factors" )
 			, m_factors );
+	}
+
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device

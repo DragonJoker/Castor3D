@@ -33,6 +33,7 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -587,16 +588,16 @@ namespace castor3d
 				parameters.parse( params[1]->get( tmp ) );
 			}
 
-			Engine * engine = parsingContext.parser->getEngine();
+			auto effect = parsingContext.renderTarget->getPostEffect( name );
 
-			if ( !engine->getPostEffectFactory().isTypeRegistered( string::lowerCase( name ) ) )
+			if ( !effect )
 			{
 				CU_ParsingError( cuT( "PostEffect [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				PostEffectSPtr effect = engine->getPostEffectFactory().create( name, *parsingContext.renderTarget, *engine->getRenderSystem(), parameters );
-				parsingContext.renderTarget->addPostEffect( effect );
+				effect->enable( true );
+				effect->setParameters( std::move( parameters ) );
 			}
 		}
 	}
