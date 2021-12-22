@@ -403,7 +403,7 @@ namespace toon::shader
 				material.albedo = vec3( 0.0_f );
 				m_writer.returnStmt( envMap.lod( refracted, ( 256.0f - material.shininess ) / 32.0f ).xyz()
 					* transmission
-					* material.albedo );
+					* albedo );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
 			, sdw::InVec3{ m_writer, "wsNormal" }
@@ -556,7 +556,7 @@ namespace toon::shader
 				m_writer.returnStmt( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
 						, ( 256.0f - material.shininess ) / 32.0f ).xyz()
 					* transmission
-					* material.albedo );
+					* albedo );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
 			, sdw::InVec3{ m_writer, "wsNormal" }
