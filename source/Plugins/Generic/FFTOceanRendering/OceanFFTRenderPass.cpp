@@ -167,6 +167,9 @@ namespace ocean_fft
 			eSceneNormals,
 			eSceneDepth,
 			eSceneResult,
+			eSceneBaseColour,
+			eSceneDiffuseLighting,
+			eCount,
 		};
 
 		void bindTexture( VkImageView view
@@ -266,6 +269,10 @@ namespace ocean_fft
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitDepthView( depthInput->sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			result.addImplicitColourView( technique.getBaseColourResult().sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			result.addImplicitDepthView( technique.getDiffuseLightingResult().sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addInOutDepthStencilView( technique.getDepthTargetView() );
 			result.addInOutColourView( technique.getResultTargetView() );
 #else
@@ -273,6 +280,10 @@ namespace ocean_fft
 			result.addImplicitColourView( colourInput->sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitDepthView( depthInput->sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			result.addImplicitColourView( technique.getBaseColourResult().sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			result.addImplicitDepthView( technique.getDiffuseLightingResult().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitColourView( oceanFFT->getNormals().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -469,6 +480,9 @@ namespace ocean_fft
 			visitor.visit( cuT( "SSR settings" )
 				, m_configuration.ssrSettings
 				, nullptr );
+			visitor.visit( cuT( "Water density" )
+				, m_configuration.density
+				, nullptr );
 
 			m_oceanFFT->accept( visitor );
 		}
@@ -522,8 +536,14 @@ namespace ocean_fft
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneResult
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneBaseColour
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneDiffuseLighting
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto index = uint32_t( WaveIdx::eSceneResult ) + 1u;
+		auto index = uint32_t( WaveIdx::eCount );
 
 		for ( uint32_t j = 0u; j < uint32_t( castor3d::LightType::eCount ); ++j )
 		{
@@ -684,7 +704,9 @@ namespace ocean_fft
 			, VkImageView const & normals
 			, VkImageView const & sceneNormals
 			, VkImageView const & sceneDepth
-			, VkImageView const & sceneColour )
+			, VkImageView const & sceneColour
+			, VkImageView const & sceneBaseColour
+			, VkImageView const & sceneDiffuseLighting )
 		{
 			auto & flags = pipeline.getFlags();
 			descriptorWrites.push_back( scene.getLightCache().getBinding( WaveIdx::eLightBuffer ) );
@@ -696,6 +718,8 @@ namespace ocean_fft
 			bindTexture( sceneNormals, pointClampSampler, descriptorWrites, index );
 			bindTexture( sceneDepth, pointClampSampler, descriptorWrites, index );
 			bindTexture( sceneColour, pointClampSampler, descriptorWrites, index );
+			bindTexture( sceneBaseColour, pointClampSampler, descriptorWrites, index );
+			bindTexture( sceneDiffuseLighting, pointClampSampler, descriptorWrites, index );
 
 			castor3d::bindShadowMaps( graph
 				, pipeline.getFlags()
@@ -834,7 +858,9 @@ namespace ocean_fft
 			, m_oceanFFT->getNormals().sampledView
 			, m_parent->getNormalTexture().sampledView
 			, m_depthInput->sampledView
-			, m_colourInput->sampledView );
+			, m_colourInput->sampledView
+			, m_parent->getBaseColourResult().sampledView
+			, m_parent->getDiffuseLightingResult().sampledView );
 	}
 
 	void OceanRenderPass::doFillAdditionalDescriptor( castor3d::RenderPipeline const & pipeline
@@ -863,7 +889,9 @@ namespace ocean_fft
 			, m_oceanFFT->getNormals().sampledView
 			, m_parent->getNormalTexture().sampledView
 			, m_depthInput->sampledView
-			, m_colourInput->sampledView );
+			, m_colourInput->sampledView
+			, m_parent->getBaseColourResult().sampledView
+			, m_parent->getDiffuseLightingResult().sampledView );
 	}
 
 	void OceanRenderPass::doUpdateFlags( castor3d::PipelineFlags & flags )const
@@ -1349,6 +1377,12 @@ namespace ocean_fft
 		auto c3d_sceneColour = writer.declSampledImage< FImg2DRgba32 >( "c3d_sceneColour"
 			, index++
 			, RenderPipeline::eAdditional );
+		auto c3d_sceneBaseColour = writer.declSampledImage< FImg2DRgba32 >( "c3d_sceneBaseColour"
+			, index++
+			, RenderPipeline::eAdditional );
+		auto c3d_sceneDiffuseLighting = writer.declSampledImage< FImg2DRgba32 >( "c3d_sceneDiffuseLighting"
+			, index++
+			, RenderPipeline::eAdditional );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
@@ -1369,6 +1403,19 @@ namespace ocean_fft
 
 		// Fragment Outputs
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
+
+		auto getLightAbsorbtion = writer.implementFunction< sdw::Vec3 >( "getLightAbsorbtion"
+			, [&]( sdw::Vec2 const & fftTexcoord
+				, sdw::Vec3 const & surfacePosition
+				, sdw::Vec3 const & refractedPosition
+				, sdw::Vec3 const & diffuseLighting )
+			{
+				writer.returnStmt( diffuseLighting * ( 1.0_f - utils.saturate( sdw::log( surfacePosition.y() - refractedPosition.y() ) * c3d_oceanData.density ) ) );
+			}
+			, sdw::InVec2{ writer, "fftTexcoord" }
+			, sdw::InVec3{ writer, "surfacePosition" }
+			, sdw::InVec3{ writer, "refractedPosition" }
+			, sdw::InVec3{ writer, "diffuseColour" } );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
 				, flags.programFlags
@@ -1480,6 +1527,13 @@ namespace ocean_fft
 					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
 
 
+					//  Retrieve non distorted scene data.
+					auto sceneDepth = writer.declLocale( "sceneDepth"
+						, c3d_sceneDepth.sample( hdrCoords ) );
+					auto scenePosition = writer.declLocale( "scenePosition"
+						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
+
+
 					// Reflection
 					auto reflected = writer.declLocale( "reflected"
 						, reflections->computeForward( *lightMat
@@ -1506,8 +1560,15 @@ namespace ocean_fft
 
 
 					// Wobbly refractions
+					auto heightFactor = writer.declLocale( "heightFactor"
+						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+					auto distanceFactor = writer.declLocale( "distanceFactor"
+						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
-						, ( hdrCoords + ( ( normal.xz() + normal.xy() ) * 0.5 ) * c3d_oceanData.refractionDistortionFactor ) );
+						, fma( vec2( ( normal.xz() + normal.xy() ) * 0.5_f )
+							, vec2( c3d_oceanData.refractionDistortionFactor
+								* utils.saturate( length( scenePosition - surface.worldPosition ) * 0.5 ) )
+							, hdrCoords ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_sceneDepth.sample( distortedTexCoord ) );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
@@ -1515,29 +1576,29 @@ namespace ocean_fft
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
-						, c3d_sceneColour.sample( refractionTexCoord ).rgb() * material.transmission );
-					displayDebugData( eRefraction, refractionResult, 1.0_f );
-					//  Retrieve non distorted scene colour.
-					auto sceneDepth = writer.declLocale( "sceneDepth"
-						, c3d_sceneDepth.sample( hdrCoords ) );
-					auto scenePosition = writer.declLocale( "scenePosition"
-						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
+						, c3d_sceneColour.sample( distortedTexCoord ).xyz() );
+					displayDebugData( eRawRefraction, refractionResult, 1.0_f );
+					auto lightAbsorbtion = writer.declLocale( "lightAbsorbtion"
+						, getLightAbsorbtion( in.prvPosition.xy()
+							, in.curPosition.xyz()
+							, distortedPosition
+							, refractionResult ) );
+					displayDebugData( eLightAbsorbtion, lightAbsorbtion, 1.0_f );
+					auto waterTransmission = writer.declLocale( "waterTransmission"
+						, material.transmission * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
+					displayDebugData( eWaterTransmission, waterTransmission, 1.0_f );
+					refractionResult *= waterTransmission;
+					displayDebugData( eRefractionResult, refractionResult, 1.0_f );
 					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
 					auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
 						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_oceanData.depthSofteningDistance, 0.0_f, 1.0_f ) );
 					displayDebugData( eDepthSoftenedAlpha, vec3( depthSoftenedAlpha ), 1.0_f );
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
-					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, material.transmission.rgb() * ( indirectAmbient + indirectDiffuse ) );
-					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
 					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
-					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition.xyz() ) / distanceFactor ) ) ) );
