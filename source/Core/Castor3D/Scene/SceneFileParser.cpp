@@ -176,6 +176,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eObject ), cuT( "materials" ), parserObjectMaterials );
 			addParser( result, uint32_t( CSCNSection::eObject ), cuT( "cast_shadows" ), parserObjectCastShadows, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eObject ), cuT( "receive_shadows" ), parserObjectReceivesShadows, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( CSCNSection::eObject ), cuT( "culled" ), parserObjectCulled, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eObject ), cuT( "}" ), parserObjectEnd );
 
 			addParser( result, uint32_t( CSCNSection::eObjectMaterials ), cuT( "material" ), parserObjectMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );
