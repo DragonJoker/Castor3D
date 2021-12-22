@@ -2467,6 +2467,23 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserObjectCulled )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.geometry )
+		{
+			CU_ParsingError( cuT( "No Geometry initialised." ) );
+		}
+		else if ( !params.empty() )
+		{
+			bool value;
+			params[0]->get( value );
+			parsingContext.geometry->setCulled( value );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserObjectEnd )
 	{
 		auto & parsingContext = getParserContext( context );
