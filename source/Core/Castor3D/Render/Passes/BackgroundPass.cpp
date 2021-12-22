@@ -41,12 +41,11 @@ namespace castor3d
 			, graph
 			, { [this](){ doSubInitialise(); }
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); }
-				, crg::defaultV< crg::RenderPass::RecordCallback >
 				, crg::defaultV< crg::RenderPass::GetSubpassContentsCallback >
 				, crg::defaultV< crg::RenderPass::GetPassIndexCallback >
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } ) }
 			, size
-			, { 1u, true, true } }
+			, { 1u, true } }
 		, m_device{ device }
 		, m_background{ &background }
 		, m_size{ size }

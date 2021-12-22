@@ -68,7 +68,7 @@ namespace castor3d
 		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 *\param[in]	ssaoConfig			La configuration du SSAO.
 		 */
-		DeferredRendering( crg::FrameGraph & graph
+		C3D_API DeferredRendering( crg::FrameGraph & graph
 			, crg::FramePass const & opaquePass
 			, RenderDevice const & device
 			, ProgressBar * progress
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau CPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		void update( CpuUpdater & updater );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -109,9 +109,10 @@ namespace castor3d
 		 *\brief		Fonction d'acceptation de visiteur.
 		 *\param		visitor	Le ... visiteur.
 		 */
-		void accept( RenderTechniqueVisitor & visitor );
+		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
-		crg::ImageViewId const & getLightDepthImgView()const;
+		C3D_API crg::ImageViewId const & getLightDepthImgView()const;
+		C3D_API Texture const & getLightDiffuse();
 
 		crg::FramePass const & getLastPass()const
 		{

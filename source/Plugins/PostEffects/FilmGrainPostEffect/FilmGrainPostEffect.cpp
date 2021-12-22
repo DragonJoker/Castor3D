@@ -296,26 +296,21 @@ namespace film_grain
 						, noiseView );
 				}
 
+				auto extent = getExtent( *m_target );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.recordDisabledInto( [this, &graph]( crg::RunnablePass const & runnable
-						, crg::RecordContext & context
-						, VkCommandBuffer commandBuffer
-						, uint32_t index )
-						{
-							doCopyImage( graph
-								, runnable
-								, context
-								, commandBuffer
-								, index
-								, *m_target
-								, m_resultView );
-						} )
-					.build( pass, context, graph );
+					.build( pass
+						, context
+						, graph
+						, crg::ru::Config{}
+							.implicitAction( m_resultView
+								, crg::RecordContext::copyImage( *m_target
+									, m_resultView
+									, { extent.width, extent.height } ) ) );
 				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/FilmGrain"
 					, result->getTimer() );
 				return result;

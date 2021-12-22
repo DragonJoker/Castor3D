@@ -17,6 +17,29 @@ See LICENSE file in root folder
 
 namespace water
 {
+	struct IsRenderPassEnabled
+	{
+		IsRenderPassEnabled( castor3d::SceneRenderPass const & pass )
+			: m_pass{ &pass }
+		{}
+
+		IsRenderPassEnabled()
+			: m_pass{}
+		{}
+
+		void setPass( castor3d::SceneRenderPass const & pass )
+		{
+			m_pass = &pass;
+		}
+
+		bool operator()()const
+		{
+			return m_pass->hasNodes();
+		}
+
+		castor3d::SceneRenderPass const * m_pass;
+	};
+
 	class WaterRenderPass
 		: public castor3d::RenderTechniquePass
 	{
@@ -30,7 +53,8 @@ namespace water
 			, std::shared_ptr< castor3d::Texture > colourInput
 			, std::shared_ptr< castor3d::Texture > depthInput
 			, castor3d::SceneRenderPassDesc const & renderPassDesc
-			, castor3d::RenderTechniquePassDesc const & techniquePassDesc );
+			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 		~WaterRenderPass()override;
 		static crg::FramePassArray create( castor3d::RenderDevice const & device
 			, castor3d::RenderTechnique & technique
@@ -94,6 +118,7 @@ namespace water
 		castor3d::ShaderPtr doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const override;
 
 	private:
+		std::shared_ptr< IsRenderPassEnabled > m_isEnabled;
 		std::shared_ptr< castor3d::Texture > m_colourInput;
 		std::shared_ptr< castor3d::Texture > m_depthInput;
 		WaterUboConfiguration m_configuration;

@@ -41,7 +41,8 @@ namespace ocean_fft
 			, FFTConfig const & config
 			, VkExtent2D const & extent
 			, ashes::BufferBase const & input
-			, std::array< ashes::BufferBasePtr, 2u > const & output );
+			, std::array< ashes::BufferBasePtr, 2u > const & output
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		~ProcessFFTPass()override;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -77,7 +78,8 @@ namespace ocean_fft
 		, VkExtent2D const & extent
 		, FFTConfig const & config
 		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output );
+		, std::array< ashes::BufferBasePtr, 2u > const & output
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 }
 
 #endif

@@ -22,7 +22,10 @@ namespace ocean_fft
 		GenerateMipmapsPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
-			, castor3d::RenderDevice const & device );
+			, castor3d::RenderDevice const & device
+			, crg::ru::Config ruConfig = {}
+			, crg::RunnablePass::GetPassIndexCallback passIndex = crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 
 	private:
 		void doInitialise();
@@ -30,7 +33,6 @@ namespace ocean_fft
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
 		VkPipelineStageFlags doGetSemaphoreWaitFlags()const;
-		uint32_t doGetPassIndex()const;
 		bool doIsComputePass()const;
 
 	public:

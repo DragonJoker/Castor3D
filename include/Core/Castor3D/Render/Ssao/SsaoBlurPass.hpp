@@ -120,7 +120,8 @@ namespace castor3d
 			RenderQuad( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
-				, crg::rq::Config config
+				, crg::rq::Config rqConfig
+				, crg::ru::Config ruConfig
 				, SsaoConfig const & ssaoConfig );
 
 		protected:

@@ -160,7 +160,8 @@ namespace water
 		, std::shared_ptr< castor3d::Texture > colourInput
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::SceneRenderPassDesc const & renderPassDesc
-		, castor3d::RenderTechniquePassDesc const & techniquePassDesc )
+		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
+		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		: castor3d::RenderTechniquePass{ parent
 			, pass
 			, context
@@ -171,6 +172,7 @@ namespace water
 			, "Water"
 			, renderPassDesc
 			, techniquePassDesc }
+		, m_isEnabled{ std::move( isEnabled ) }
 		, m_colourInput{ std::move( colourInput ) }
 		, m_depthInput{ std::move( depthInput ) }
 		, m_linearWrapSampler{ device->createSampler( getName()
@@ -189,6 +191,7 @@ namespace water
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST ) }
 		, m_ubo{ device }
 	{
+		m_isEnabled->setPass( *this );
 		auto params = getEngine()->getRenderPassTypeConfiguration( Type );
 
 		if ( params.get( Param, m_configuration ) )
@@ -217,6 +220,7 @@ namespace water
 		, crg::FramePassArray previousPasses )
 	{
 		std::string name{ Name };
+		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
 		auto extent = getExtent( technique.getResultImg() );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
 			, technique.getRenderTarget().getGraph().getHandler()
@@ -229,14 +233,17 @@ namespace water
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
 		auto & blitColourPass = technique.getRenderTarget().getGraph().createPass( name + "CopyColour"
-			, [name, extent, &device]( crg::FramePass const & framePass
+			, [name, extent, &device, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
 				auto result = std::make_unique< crg::ImageCopy >( framePass
 					, context
 					, runnableGraph
-					, extent );
+					, extent
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
 					, result->getTimer() );
 				return result;
@@ -256,14 +263,17 @@ namespace water
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
 		auto & blitDepthPass = technique.getRenderTarget().getGraph().createPass( name + "CopyDepth"
-			, [name, extent, &device]( crg::FramePass const & framePass
+			, [name, extent, &device, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
 				auto result = std::make_unique< crg::ImageCopy >( framePass
 					, context
 					, runnableGraph
-					, extent );
+					, extent
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
 					, result->getTimer() );
 				return result;
@@ -273,7 +283,7 @@ namespace water
 		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
 		auto & result = technique.getRenderTarget().getGraph().createPass( name
-			, [name, extent, colourInput, depthInput, &device, &technique, &renderPasses]( crg::FramePass const & framePass
+			, [name, extent, colourInput, depthInput, &device, &technique, &renderPasses, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 		{
@@ -295,7 +305,8 @@ namespace water
 					.lpvResult( technique.getLpvResult() )
 					.llpvResult( technique.getLlpvResult() )
 					.vctFirstBounce( technique.getFirstVctBounce() )
-					.vctSecondaryBounce( technique.getSecondaryVctBounce() ) );
+					.vctSecondaryBounce( technique.getSecondaryVctBounce() )
+				, isEnabled );
 			renderPasses[size_t( Event )].push_back( res.get() );
 			device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + name
 				, res->getTimer() );

@@ -372,7 +372,6 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &m_config.subsampleIndex )
 					.enabled( &m_enabled )
-					.recordDisabledRenderPass( false )
 					.build( pass, context, graph, { m_config.maxSubsampleIndices } );
 				getOwner()->getEngine()->registerTimer( graph.getName() + "/SMAA"
 					, result->getTimer() );
@@ -408,19 +407,26 @@ namespace smaa
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
 	{
-		if ( m_config.maxSubsampleIndices > 1u )
+		if ( m_enabled )
 		{
-			m_frameIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
-		}
+			if ( m_config.maxSubsampleIndices > 1u )
+			{
+				m_frameIndex = ( m_config.subsampleIndex + 1 ) % m_config.maxSubsampleIndices;
+			}
 
-		if ( m_blendingWeightCalculation )
-		{
-			m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
+			if ( m_blendingWeightCalculation )
+			{
+				m_renderTarget.setJitter( m_config.jitters[m_frameIndex] );
+			}
+
+			m_ubo.cpuUpdate( castor3d::getSafeBandedSize( m_renderTarget.getSize() )
+				, m_config );
+			m_config.subsampleIndex = m_frameIndex;
 		}
-		
-		m_ubo.cpuUpdate( castor3d::getSafeBandedSize( m_renderTarget.getSize() )
-			, m_config );
-		m_config.subsampleIndex = m_frameIndex;
+		else
+		{
+			m_renderTarget.setJitter( { 0.0f, 0.0f } );
+		}
 	}
 
 	bool PostEffect::doWriteInto( StringStream & p_file, String const & tabs )

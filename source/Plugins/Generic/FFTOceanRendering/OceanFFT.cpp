@@ -28,17 +28,21 @@ namespace ocean_fft
 			, castor3d::RenderDevice const & device
 			, crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
-			, crg::ImageViewId imageView )
+			, crg::ImageViewId imageView
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
 			auto & result = graph.createPass( OceanFFT::Name + "/GenMips" + name
-				, [&device]( crg::FramePass const & pass
+				, [&device, isEnabled]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 						auto res = std::make_unique< crg::GenerateMipmaps >( pass
 							, context
 							, graph
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, crg::ru::Config{}
+							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 						device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
 							, res->getTimer() );
 						return res;
@@ -52,17 +56,21 @@ namespace ocean_fft
 			, castor3d::RenderDevice const & device
 			, crg::FrameGraph & graph
 			, crg::FramePass const * previousPass
-			, crg::ImageViewId imageView )
+			, crg::ImageViewId imageView
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
 			auto & result = graph.createPass( OceanFFT::Name + "/GenMips" + name
-				, [&device]( crg::FramePass const & pass
+				, [&device, isEnabled]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 						auto res = std::make_unique< GenerateMipmapsPass >( pass
 							, context
 							, graph
-							, device );
+							, device
+							, crg::ru::Config{}
+							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 						device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
 							, res->getTimer() );
 						return res;
@@ -78,7 +86,8 @@ namespace ocean_fft
 			, crg::FrameGraph & graph
 			, crg::FramePass const & previousPass
 			, ashes::BufferBase const & srcBuffer
-			, crg::ImageViewId dstImageView )
+			, crg::ImageViewId dstImageView
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
 			auto data = *dstImageView.data;
 			data.name = data.image.data->name + "_L0";
@@ -86,7 +95,7 @@ namespace ocean_fft
 			auto viewId = graph.createView( data );
 			auto extent = getExtent( viewId );
 			auto & copy = graph.createPass( OceanFFT::Name + "/CopyTo" + name
-				, [&device, extent]( crg::FramePass const & pass
+				, [&device, isEnabled, extent]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -94,7 +103,10 @@ namespace ocean_fft
 						, context
 						, graph
 						, VkOffset3D{}
-						, extent );
+						, extent
+						, crg::ru::Config{}
+						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+						, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 					device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
 						, res->getTimer() );
 					return res;
@@ -104,14 +116,17 @@ namespace ocean_fft
 			copy.addTransferOutputView( dstImageView );
 
 			auto & result = graph.createPass( OceanFFT::Name + "/GenMips" + name
-				, [&device]( crg::FramePass const & pass
+				, [&device, isEnabled]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
 						auto res = std::make_unique< crg::GenerateMipmaps >( pass
 							, context
 							, graph
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, crg::ru::Config{}
+							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
 						device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
 							, res->getTimer() );
 						return res;
@@ -177,7 +192,8 @@ namespace ocean_fft
 	OceanFFT::OceanFFT( castor3d::RenderDevice const & device
 			, crg::FrameGraph & graph
 			, crg::FramePassArray previousPasses
-			, OceanUbo const & ubo )
+			, OceanUbo const & ubo
+			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		: m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine() ) }
 		, m_engine{ createRandomEngine( m_config.disableRandomSeed ) }
 		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
@@ -202,7 +218,8 @@ namespace ocean_fft
 			, false
 			, ubo
 			, m_heightSeeds->getBuffer()
-			, m_heightDistribution->getBuffer() ) }
+			, m_heightDistribution->getBuffer()
+			, isEnabled ) }
 		, m_height{ Name
 			, "Height"
 			, graph
@@ -211,7 +228,8 @@ namespace ocean_fft
 			, m_heightMapSamples
 			, m_fftConfig
 			, *m_heightDistribution
-			, FFTMode::eC2R }
+			, FFTMode::eC2R
+			, isEnabled }
 		, m_displacementDistribution{ castor3d::makeBuffer< cfloat >( device
 			, ( m_heightMapSamples.width >> m_displacementDownsample ) * ( m_heightMapSamples.height >> m_displacementDownsample )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -226,7 +244,8 @@ namespace ocean_fft
 			, m_displacementDownsample
 			, ubo
 			, m_heightDistribution->getBuffer()
-			, m_displacementDistribution->getBuffer() ) }
+			, m_displacementDistribution->getBuffer()
+			, isEnabled ) }
 		, m_displacement{ Name
 			, "Displacement"
 			, graph
@@ -235,7 +254,8 @@ namespace ocean_fft
 			, { m_heightMapSamples.width >> m_displacementDownsample, m_heightMapSamples.height >> m_displacementDownsample }
 			, m_fftConfig
 			, *m_displacementDistribution
-			, FFTMode::eC2C }
+			, FFTMode::eC2C
+			, isEnabled }
 		, m_heightDisplacement{ createTexture( device
 				, graph
 				, m_heightMapSamples
@@ -270,17 +290,20 @@ namespace ocean_fft
 			, m_height.getResult()
 			, m_displacement.getResult()
 			, m_heightDisplacement
-			, m_gradientJacobian ) }
+			, m_gradientJacobian
+			, isEnabled ) }
 		, m_generateHeightDispMips{ &createGenerateSpecMipmapsPass( "HeightDisplacement"
 			, device
 			, graph
 			, m_bakeHeightGradient
-			, m_heightDisplacement.front().sampledViewId ) }
+			, m_heightDisplacement.front().sampledViewId
+			, isEnabled ) }
 		, m_generateGradJacobMips{ &createGenerateMipmapsPass( "GradientJacobian"
 			, device
 			, graph
 			, m_bakeHeightGradient
-			, m_gradientJacobian.front().sampledViewId ) }
+			, m_gradientJacobian.front().sampledViewId
+			, isEnabled ) }
 		, m_normalSeeds{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -300,7 +323,8 @@ namespace ocean_fft
 			, true
 			, ubo
 			, m_normalSeeds->getBuffer()
-			, m_normalDistribution->getBuffer() ) }
+			, m_normalDistribution->getBuffer()
+			, isEnabled ) }
 		, m_normal{ Name
 			, "Normals"
 			, graph
@@ -309,7 +333,8 @@ namespace ocean_fft
 			, m_heightMapSamples
 			, m_fftConfig
 			, *m_normalDistribution
-			, FFTMode::eC2C }
+			, FFTMode::eC2C
+			, isEnabled }
 		, m_normals{ createTexture( device
 			, graph
 			, m_heightMapSamples
@@ -321,7 +346,8 @@ namespace ocean_fft
 			, graph
 			, m_normal.getLastPass()
 			, m_normal.getResult()
-			, m_normals.sampledViewId ) }
+			, m_normals.sampledViewId
+			, isEnabled ) }
 	{
 		generateDistributionSeeds( *m_heightSeeds );
 		generateDistributionSeeds( *m_normalSeeds );

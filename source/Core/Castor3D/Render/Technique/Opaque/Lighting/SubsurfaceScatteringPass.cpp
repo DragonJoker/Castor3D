@@ -451,69 +451,18 @@ namespace castor3d
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBar( progress, "Initialising SSS combine pass" );
-				auto config = createConfig( m_size, m_combineShader, &m_enabled );
-				config.recordDisabledInto( [this, &graph, &context]( crg::RunnablePass const & runnable
-						, crg::RecordContext & recordContext
-						, VkCommandBuffer commandBuffer
-						, uint32_t passIndex )
-					{
-						auto & srcView = m_lpResult[LpTexture::eDiffuse].wholeViewId;
-						auto & dstView = m_result->wholeViewId;
-						auto size = m_result->getExtent();
-						auto & srcSubresource = srcView.data->info.subresourceRange;
-						auto & dstSubresource = dstView.data->info.subresourceRange;
-						VkImageCopy region{ VkImageSubresourceLayers{ srcSubresource.aspectMask, srcSubresource.baseMipLevel, srcSubresource.baseArrayLayer, 1u }
-							, VkOffset3D{ 0u, 0u, 0u }
-							, VkImageSubresourceLayers{ dstSubresource.aspectMask, dstSubresource.baseMipLevel, dstSubresource.baseArrayLayer, 1u }
-							, VkOffset3D{ 0u, 0u, 0u }
-							, { size.width, size.height, 1u } };
-						auto srcTransition = runnable.getTransition( passIndex, srcView );
-						auto dstTransition = runnable.getTransition( passIndex, dstView );
-						graph.memoryBarrier( recordContext
-							, commandBuffer
-							, srcView.data->image
-							, srcView.data->info.viewType
-							, srcView.data->info.subresourceRange
-							, srcTransition.to.layout
-							, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-						graph.memoryBarrier( recordContext
-							, commandBuffer
-							, dstView.data->image
-							, dstView.data->info.viewType
-							, dstView.data->info.subresourceRange
-							, dstTransition.to.layout
-							, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-								, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-								, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
-						context.vkCmdCopyImage( commandBuffer
-							, graph.createImage( srcView.data->image )
-							, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-							, graph.createImage( dstView.data->image )
-							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, 1u
-							, &region );
-						graph.memoryBarrier( recordContext
-							, commandBuffer
-							, dstView.data->image
-							, dstView.data->info.viewType
-							, dstView.data->info.subresourceRange
-							, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, dstTransition.to );
-						graph.memoryBarrier( recordContext
-							, commandBuffer
-							, srcView.data->image
-							, srcView.data->info.viewType
-							, srcView.data->info.subresourceRange
-							, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-							, srcTransition.to );
-					} );
+				auto extent = m_result->getExtent();
+				auto ruConfig = crg::ru::Config{}
+					.implicitAction( m_result->wholeViewId
+						, crg::RecordContext::copyImage( m_lpResult[LpTexture::eDiffuse].wholeViewId
+							, m_result->wholeViewId
+							, { extent.width, extent.height } ) );
+				auto rqConfig = createConfig( m_size, m_combineShader, &m_enabled );
 				auto result = std::make_unique< crg::RenderQuad >( pass
 					, context
 					, graph
-					, crg::ru::Config{}
-					, config );
+					, ruConfig
+					, rqConfig );
 				getEngine()->registerTimer( graph.getName() + "/SSS"
 					, result->getTimer() );
 				return result;

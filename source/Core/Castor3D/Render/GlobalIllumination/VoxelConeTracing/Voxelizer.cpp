@@ -165,7 +165,7 @@ namespace castor3d
 		m_voxelSecondaryBounce->accept( visitor );
 	}
 
-	crg::SemaphoreWait Voxelizer::render( crg::SemaphoreWait const & semaphore
+	crg::SemaphoreWaitArray Voxelizer::render( crg::SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )
 	{
 		return m_runnable->run( semaphore, queue );
