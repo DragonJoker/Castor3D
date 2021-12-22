@@ -144,12 +144,12 @@ namespace castor3d
 
 		if ( camera )
 		{
-			configuration.clipInfo[0] = float( camera->getWidth() );
-			configuration.clipInfo[1] = float( camera->getHeight() );
 			configuration.clipInfo[2] = camera->getNear();
 			configuration.clipInfo[3] = camera->getFar();
 			cpuUpdateCameraPosition( *camera );
 		}
+
+		setWindowSize( { camera->getWidth(), camera->getHeight() } );
 	}
 
 	void SceneUbo::cpuUpdate( Scene const & scene
@@ -176,8 +176,9 @@ namespace castor3d
 	{
 		CU_Require( m_ubo );
 		auto & data = m_ubo.getData();
-		data.clipInfo[0] = float( window[0] );
-		data.clipInfo[1] = float( window[1] );
+		auto size = getSafeBandedSize( window );
+		data.clipInfo[0] = float( size[0] );
+		data.clipInfo[1] = float( size[1] );
 	}
 
 	//*********************************************************************************************
