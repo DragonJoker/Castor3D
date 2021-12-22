@@ -31,6 +31,10 @@ namespace grayscale
 		 *\copydoc		castor3d::PostEffect::accept
 		 */
 		void accept( castor3d::PipelineVisitorBase & visitor )override;
+		/**
+		 *\copydoc		castor3d::PostEffect::setParameters
+		 */
+		void setParameters( castor3d::Parameters parameters )override;
 
 		crg::FramePass const & getPass()const override
 		{

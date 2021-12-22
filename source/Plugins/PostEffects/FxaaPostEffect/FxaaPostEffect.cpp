@@ -173,22 +173,7 @@ namespace fxaa
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getSize() }
 	{
-		String param;
-
-		if ( parameters.get( cuT( "SubpixShift" ), param ) )
-		{
-			m_subpixShift = string::toFloat( param );
-		}
-
-		if ( parameters.get( cuT( "MaxSpan" ), param ) )
-		{
-			m_spanMax = string::toFloat( param );
-		}
-
-		if ( parameters.get( cuT( "ReduceMul" ), param ) )
-		{
-			m_reduceMul = string::toFloat( param );
-		}
+		setParameters( parameters );
 	}
 
 	PostEffect::~PostEffect()
@@ -214,6 +199,26 @@ namespace fxaa
 			, m_spanMax );
 		visitor.visit( cuT( "Reduce mul." )
 			, m_reduceMul );
+	}
+
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
+		String param;
+
+		if ( parameters.get( cuT( "SubpixShift" ), param ) )
+		{
+			m_subpixShift = string::toFloat( param );
+		}
+
+		if ( parameters.get( cuT( "MaxSpan" ), param ) )
+		{
+			m_spanMax = string::toFloat( param );
+		}
+
+		if ( parameters.get( cuT( "ReduceMul" ), param ) )
+		{
+			m_reduceMul = string::toFloat( param );
+		}
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device

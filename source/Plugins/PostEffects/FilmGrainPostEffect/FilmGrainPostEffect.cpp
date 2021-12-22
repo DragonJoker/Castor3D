@@ -181,6 +181,13 @@ namespace film_grain
 		, m_configUbo{ renderSystem.getRenderDevice().uboPools->getBuffer< Configuration >( 0u ) }
 		, m_noiseImages{ loadImages( *renderTarget.getEngine() ) }
 	{
+		m_config.pixelSize = Point2f{ m_renderTarget.getSize().getWidth()
+			, m_renderTarget.getSize().getHeight() };
+		m_config.noiseIntensity = 1.0f;
+		m_config.exposure = 1.0f;
+		m_config.time = 0.0f;
+		setParameters( params );
+
 		for ( auto & image : m_noiseImages )
 		{
 			auto format = image.getPixelFormat();
@@ -199,11 +206,7 @@ namespace film_grain
 		}
 
 		auto & data = m_configUbo.getData();
-		data.pixelSize = Point2f{ m_renderTarget.getSize().getWidth()
-			, m_renderTarget.getSize().getHeight() };
-		data.noiseIntensity = 1.0f;
-		data.exposure = 1.0f;
-		data.time = 0.0f;
+		data = m_config;
 	}
 
 	PostEffect::~PostEffect()
@@ -228,6 +231,21 @@ namespace film_grain
 			, m_config.exposure );
 		visitor.visit( cuT( "NoiseIntensity" )
 			, m_config.noiseIntensity );
+	}
+
+	void PostEffect::setParameters( castor3d::Parameters parameters )
+	{
+		castor::String param;
+
+		if ( parameters.get( "exposure", param ) )
+		{
+			m_config.exposure = castor::string::toFloat( param );
+		}
+
+		if ( parameters.get( "noiseIntensity", param ) )
+		{
+			m_config.noiseIntensity = castor::string::toFloat( param );
+		}
 	}
 
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device

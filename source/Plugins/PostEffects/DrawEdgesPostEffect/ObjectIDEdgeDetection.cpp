@@ -171,7 +171,8 @@ namespace draw_edges
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, castor3d::PassBuffer const & passBuffer
-		, crg::ImageViewId const & data0 )
+		, crg::ImageViewId const & data0
+		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
@@ -192,7 +193,7 @@ namespace draw_edges
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) }
 		, m_pass{ m_graph.createPass( "ObjectIDDetection"
-			, [this, &device]( crg::FramePass const & framePass
+			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -201,6 +202,7 @@ namespace draw_edges
 					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.enabled( enabled )
 					.build( framePass, context, graph );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
