@@ -111,10 +111,9 @@ namespace ocean_fft
 				, ast::expr::ExprPtr expr
 				, bool enabled )
 				: StructInstance{ writer, std::move( expr ), enabled }
-				, patchPosBase{ getMember< sdw::Vec3 >( "patchPosBaseWorldPos" ) }
+				, patchWorldPosition{ getMember< sdw::Vec3 >( "patchWorldPosition" ) }
 				, patchLods{ getMember< sdw::Vec4 >( "patchLodsGradNormTex" ) }
 				, material{ getMember< sdw::UInt >( "material" ) }
-				, worldPosition{ patchPosBase }
 				, gradNormalTexcoord{ patchLods }
 			{
 			}
@@ -132,7 +131,7 @@ namespace ocean_fft
 				if ( result->empty() )
 				{
 					uint32_t index = 0u;
-					result->declMember( "patchPosBaseWorldPos"
+					result->declMember( "patchWorldPosition"
 						, ast::type::Kind::eVec3F
 						, ast::type::NotArray
 						, index++ );
@@ -149,10 +148,9 @@ namespace ocean_fft
 				return result;
 			}
 
-			sdw::Vec3 patchPosBase;
+			sdw::Vec3 patchWorldPosition;
 			sdw::Vec4 patchLods;
 			sdw::UInt material;
-			sdw::Vec3 worldPosition;
 			sdw::Vec4 gradNormalTexcoord;
 
 		private:
@@ -931,14 +929,14 @@ namespace ocean_fft
 				, textureFlags
 				, flags.passFlags
 				, false /* force no texcoords*/ }
-		, sdw::VertexOutT< PatchT >{ writer }
-		, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
+			, sdw::VertexOutT< PatchT >{ writer }
+			, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
 			, VertexOutT< PatchT > out )
-		{
-			auto pos = writer.declLocale( "pos"
-				, ( ( in.position.xz() / c3d_oceanData.patchSize ) + c3d_oceanData.blockOffset ) * c3d_oceanData.patchSize );
+			{
+				auto pos = writer.declLocale( "pos"
+					, ( ( in.position.xz() / c3d_oceanData.patchSize ) + c3d_oceanData.blockOffset ) * c3d_oceanData.patchSize );
 				out.vtx.position = vec4( pos.x(), 0.0_f, pos.y(), 1.0_f );
-				out.worldPosition = out.vtx.position.xyz();
+				out.patchWorldPosition = out.vtx.position.xyz();
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 
@@ -1022,7 +1020,7 @@ namespace ocean_fft
 					, up * position.y() * height );
 				auto worldPos = writer.declLocale( "worldPos"
 					, ( curBbcenter + scaledRight + scaledUp ) );
-				out.worldPosition = worldPos;
+				out.patchWorldPosition = worldPos;
 				out.material = c3d_modelData.getMaterialIndex();
 				out.vtx.position = c3d_modelData.worldToModel( vec4( worldPos, 1.0_f ) );
 			} );
@@ -1098,8 +1096,7 @@ namespace ocean_fft
 				auto patchSize = writer.declLocale( "patchSize"
 					, vec3( c3d_oceanData.patchSize.x(), 0.0_f, c3d_oceanData.patchSize.y() ) );
 				auto p0 = writer.declLocale( "p0"
-					, listIn[0u].worldPosition );
-				patchOut.patchPosBase = p0;
+					, listIn[0u].patchWorldPosition );
 
 				auto l0 = writer.declLocale( "l0"
 					, lodFactor( p0 + vec3( 0.0_f, 0.0f, 1.0f ) * patchSize
@@ -1128,6 +1125,7 @@ namespace ocean_fft
 
 				auto lods = writer.declLocale( "lods"
 					, vec4( l0, l1, l2, l3 ) );
+				patchOut.patchWorldPosition = p0;
 				patchOut.patchLods = lods;
 				patchOut.material = listIn[0u].material;
 
@@ -1243,21 +1241,26 @@ namespace ocean_fft
 			, sdw::InVec2{ writer, "off" }
 			, sdw::InVec2{ writer, "lod" } );
 
-		writer.implementMainT< PatchT, OutputVertices, PatchT, PatchT >( TessEvalListInT< PatchT, OutputVertices >{ writer
+		writer.implementMainT< PatchT, OutputVertices, PatchT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< PatchT, OutputVertices >{ writer
 				, ast::type::PatchDomain::eQuads
 				, type::Partitioning::eFractionalEven
 				, type::PrimitiveOrdering::eCW }
 			, QuadsTessPatchInT< PatchT >{ writer, 9u }
-			, TessEvalDataOutT< PatchT >{ writer }
+			, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, false /* force no texcoords*/ }
 			, [&]( TessEvalMainIn mainIn
 				, TessEvalListInT< PatchT, OutputVertices > listIn
 				, QuadsTessPatchInT< PatchT > patchIn
-				, TessEvalDataOutT< PatchT > out )
+				, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
 				auto tessCoord = writer.declLocale( "tessCoord"
 					, patchIn.tessCoord.xy() );
 				auto pos = writer.declLocale( "pos"
-					, lerpVertex( patchIn.patchPosBase, tessCoord, c3d_oceanData.patchSize ) );
+					, lerpVertex( patchIn.patchWorldPosition, tessCoord, c3d_oceanData.patchSize ) );
 				auto lod = writer.declLocale( "lod"
 					, lodFactor( tessCoord, patchIn.patchLods ) );
 
@@ -1270,21 +1273,18 @@ namespace ocean_fft
 				auto off = writer.declLocale( "off"
 					, c3d_oceanData.invHeightmapSize.xy() * deltaMod );
 
-				out.gradNormalTexcoord = vec4( tex + vec2( 0.5_f ) * c3d_oceanData.invHeightmapSize.xy()
+				out.prvPosition = vec4( tex + vec2( 0.5_f ) * c3d_oceanData.invHeightmapSize.xy()
 					, tex * c3d_oceanData.normalScale );
 				auto heightDisplacement = writer.declLocale( "heightDisplacement"
 					, sampleHeightDisplacement( tex, off, lod ) );
 
 				pos += heightDisplacement.yz();
-				out.worldPosition = vec3( pos.x(), heightDisplacement.x(), pos.y() );
 
 				out.material = patchIn.material;
-
-				auto worldPosition = writer.declLocale( "worldPosition"
-					, c3d_modelData.modelToWorld( vec4( out.worldPosition, 1.0_f ) ) );
-				auto viewPosition = writer.declLocale( "viewPosition"
-					, c3d_matrixData.worldToCurView( worldPosition ) );
-				out.vtx.position = c3d_matrixData.viewToProj( viewPosition );
+				out.curPosition = vec4( pos.x(), heightDisplacement.x(), pos.y(), 1.0_f );
+				out.worldPosition = c3d_modelData.modelToWorld( out.curPosition );
+				out.viewPosition = c3d_matrixData.worldToCurView( out.worldPosition );
+				out.vtx.position = c3d_matrixData.viewToProj( out.viewPosition );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1401,18 +1401,23 @@ namespace ocean_fft
 		// Fragment Outputs
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
 
-		writer.implementMainT< PatchT, VoidT >( sdw::FragmentInT< PatchT >{ writer }
+		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, false /* force no texcoords*/ }
 			, FragmentOut{ writer }
-			, [&]( FragmentInT< PatchT > in
+			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
 				auto hdrCoords = writer.declLocale( "hdrCoords"
 					, in.fragCoord.xy() / c3d_sceneData.renderSize );
 				auto gradJacobian = writer.declLocale( "gradJacobian"
-					, c3d_gradientJacobianMap.sample( in.gradNormalTexcoord.xy() ).xyz() );
+					, c3d_gradientJacobianMap.sample( in.prvPosition.xy() ).xyz() );
 				displayDebugData( eGradJacobian, gradJacobian, 1.0_f );
 				auto noiseGradient = writer.declLocale( "noiseGradient"
-					, vec2( 0.3_f ) * c3d_normalsMap.sample( in.gradNormalTexcoord.zw() ) );
+					, vec2( 0.3_f ) * c3d_normalsMap.sample( in.prvPosition.zw() ) );
 				displayDebugData( eNoiseGradient, vec3( noiseGradient, 0.0_f ), 1.0_f );
 
 				auto jacobian = writer.declLocale( "jacobian"
@@ -1430,6 +1435,11 @@ namespace ocean_fft
 				normal = normalize( normal );
 				displayDebugData( eNormal, normal, 1.0_f );
 
+				auto worldToCam = writer.declLocale( "worldToCam"
+					, c3d_sceneData.getPosToCamera( in.worldPosition.xyz() ) );
+				auto NdotV = writer.declLocale( "NdotV"
+					, dot( worldToCam, normal ) );
+
 				// Make water brighter based on how turbulent the water is.
 				// This is rather "arbitrary", but looks pretty good in practice.
 				auto colorMod = writer.declLocale( "colorMod"
@@ -1446,9 +1456,6 @@ namespace ocean_fft
 				lightMat->create( material );
 				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
 
-				auto viewPosition = writer.declLocale( "viewPosition"
-					, c3d_matrixData.worldToCurView( vec4( in.worldPosition, 1.0_f ) ) );
-
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
 					// Direct Lighting
@@ -1458,7 +1465,9 @@ namespace ocean_fft
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), viewPosition.xyz(), in.worldPosition, normal );
+					surface.create( in.fragCoord.xy(), in.viewPosition.xyz()
+						, in.worldPosition.xyz()
+						, normal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
 						, surface
@@ -1476,8 +1485,6 @@ namespace ocean_fft
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
 						, surface
 						, indirectOcclusion );
-					auto worldToCam = writer.declLocale( "worldToCam"
-						, c3d_sceneData.getPosToCamera( surface.worldPosition ) );
 					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
 					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
@@ -1510,8 +1517,6 @@ namespace ocean_fft
 							, surface
 							, c3d_sceneData ) );
 					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
-					auto NdotV = writer.declLocale( "NdotV"
-						, dot( worldToCam, normal ) );
 					reflected = utils.fresnelSchlick( NdotV, lightMat->specular ) * reflected;
 					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
@@ -1566,7 +1571,7 @@ namespace ocean_fft
 						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
-						, utils.saturate( vec3( utils.saturate( length( viewPosition ) / distanceFactor ) ) ) );
+						, utils.saturate( vec3( utils.saturate( length( in.viewPosition.xyz() ) / distanceFactor ) ) ) );
 					displayDebugData( eDistanceMixedRefraction, refractionResult, 1.0_f );
 
 
@@ -1596,8 +1601,8 @@ namespace ocean_fft
 				{
 					pxl_colour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
 						, pxl_colour
-						, length( viewPosition )
-						, viewPosition.y()
+						, length( in.viewPosition.xyz() )
+						, in.viewPosition.y()
 						, c3d_sceneData );
 				}
 			} );
