@@ -155,7 +155,7 @@ namespace ocean_fft
 		data.normalMod = castor::Point2f{ castor::PiMult2< float >, castor::PiMult2< float > } / sizeNormal;
 		data.tileScale = tileExtent / fftConfig.size;
 		data.normalScale = fftConfig.normalFreqMod;
-		//data.blockOffset = castor::Point2f{ blockOffset };
+		data.blockOffset = castor::Point2f{ blockOffset };
 		data.fftScale = fftConfig.size / tileExtent;
 		data.maxTessLevel->x = log2( data.patchSize->x );
 		data.maxTessLevel->y = data.patchSize->y;
