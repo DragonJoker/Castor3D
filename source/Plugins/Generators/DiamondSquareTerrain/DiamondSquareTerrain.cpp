@@ -163,7 +163,7 @@ namespace diamond_square_terrain
 				, float p_roughness )
 			{
 				uint32_t half = p_size / 2;
-				auto scale = p_roughness * float( p_size );
+				auto lscale = p_roughness * float( p_size );
 				std::uniform_real_distribution< float > distribution;
 
 				if ( half < 1 ) return;
@@ -172,7 +172,7 @@ namespace diamond_square_terrain
 				{
 					for ( auto x = half; x < max; x += p_size )
 					{
-						square( x, y, half, distribution( engine ) * scale * 2 - scale );
+						square( x, y, half, distribution( engine ) * lscale * 2 - lscale );
 					}
 				}
 
@@ -180,7 +180,7 @@ namespace diamond_square_terrain
 				{
 					for ( auto x = ( y + half ) % p_size; x <= max; x += p_size )
 					{
-						diamond( x, y, half, distribution( engine ) * scale * 2 - scale );
+						diamond( x, y, half, distribution( engine ) * lscale * 2 - lscale );
 					}
 				}
 
