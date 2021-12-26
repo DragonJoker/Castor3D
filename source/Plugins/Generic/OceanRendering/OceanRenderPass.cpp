@@ -1423,6 +1423,11 @@ namespace ocean
 				finalNormal = normalize( finalNormal );
 				displayDebugData( eFinalNormal, finalNormal, 1.0_f );
 
+				if ( checkFlag( flags.programFlags, castor3d::ProgramFlag::eInvertNormals ) )
+				{
+					finalNormal = -finalNormal;
+				}
+
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( in.material ) );
 				auto emissive = writer.declLocale( "emissive"
