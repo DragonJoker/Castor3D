@@ -187,8 +187,7 @@ namespace castor3d
 			, uint32_t index );
 
 	private:
-		LightRenderPass doCreateRenderPass( crg::RecordContext & context
-			, bool blend
+		LightRenderPass doCreateRenderPass( bool blend
 			, LightPassResult const & result );
 		LightsPipeline & doFindPipeline( Light const & light );
 

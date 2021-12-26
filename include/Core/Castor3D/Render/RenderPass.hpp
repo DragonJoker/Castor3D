@@ -331,7 +331,7 @@ namespace castor3d
 		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API RenderPipeline * prepareBackPipeline( PipelineFlags pipelineFlags
+		C3D_API RenderPipeline & prepareBackPipeline( PipelineFlags pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
@@ -346,7 +346,7 @@ namespace castor3d
 		 *\param[in]		vertexLayouts		Les layouts des tampons de sommets.
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
-		C3D_API RenderPipeline * prepareFrontPipeline( PipelineFlags pipelineFlags
+		C3D_API RenderPipeline & prepareFrontPipeline( PipelineFlags pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
 		/**
@@ -778,7 +778,7 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > & doGetBackPipelines();
 		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
-		RenderPipeline * doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		RenderPipeline & doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 			, PipelineFlags flags
 			, VkCullModeFlags cullMode );

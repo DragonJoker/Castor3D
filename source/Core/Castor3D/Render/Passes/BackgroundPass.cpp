@@ -75,6 +75,11 @@ namespace castor3d
 
 		if ( doIsEnabled() )
 		{
+			if ( m_descriptorSetLayout )
+			{
+				return;
+			}
+
 			doFillDescriptorBindings();
 			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
 				, m_descriptorBindings );
@@ -110,6 +115,11 @@ namespace castor3d
 
 	void BackgroundPass::doInitialiseVertexBuffer()
 	{
+		if ( m_vertexBuffer )
+		{
+			return;
+		}
+
 		using castor::Point3f;
 		auto data = m_device.graphicsData();
 		ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, sizeof( Cube ) };
@@ -248,6 +258,8 @@ namespace castor3d
 	void BackgroundPass::doFillDescriptorBindings()
 	{
 		VkShaderStageFlags shaderStage = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+		m_descriptorBindings.clear();
+		m_descriptorWrites.clear();
 
 		for ( auto & uniform : m_pass.buffers )
 		{
