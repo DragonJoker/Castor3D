@@ -96,6 +96,9 @@ namespace castor3d
 	//@{
 
 	template< typename NodeT >
+	using NodeArrayT = std::vector< NodeCulledT< NodeT > const *, NodeT * >;
+
+	template< typename NodeT >
 	using NodeMapT = std::map< NodeCulledT< NodeT > const *, NodeT * >;
 
 	using SubmeshRenderNodeMap = NodeMapT< SubmeshRenderNode >;

@@ -42,6 +42,13 @@ namespace castor3d
 		using MorphingNodesMap = RenderNodesT< SubmeshRenderNode, SubmeshRenderNodeByPipelineMap >;
 		using BillboardNodesMap = RenderNodesT< BillboardRenderNode, BillboardRenderNodeByPipelineMap >;
 
+		//!\~english	The static render nodes, unsorted.
+		//!\~french		Les noeuds de rendu statiques, non triés.
+		NodePtrArrayT< CulledSubmesh const > allSubmeshNodes;
+		//!\~english	The billboards render nodes, unsorted.
+		//!\~french		Les noeuds de rendu de billboards, nont triés.
+		NodePtrArrayT< CulledBillboard const > allBillboardNodes;
+
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
 		StaticNodesMap staticNodes;
@@ -63,7 +70,8 @@ namespace castor3d
 
 		C3D_API explicit QueueRenderNodes( RenderQueue const & queue );
 
-		C3D_API void parse( ShadowMapLightTypeArray & shadowMaps );
+		C3D_API void parse();
+		C3D_API void sort( ShadowMapLightTypeArray & shadowMaps );
 		C3D_API void addRenderNode( RenderPipeline & pipeline
 			, AnimatedObjects const & animated
 			, CulledSubmesh const & culledNode
