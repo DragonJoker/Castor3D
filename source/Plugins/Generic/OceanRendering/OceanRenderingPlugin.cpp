@@ -53,7 +53,10 @@ namespace
 		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "foamBrightness" ), &ocean::parserFoamBrightness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "normalMapScrollSpeed" ), &ocean::parserNormalMapScrollSpeed, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "normalMapScroll" ), &ocean::parserNormalMapScroll, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
-		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "ssrSettings" ), &ocean::parserSsrSettings, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
+		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "ssrStepSize" ), &ocean::parserSsrStepSize, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "ssrForwardStepsCount" ), &ocean::parserSsrFwdStepCount, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "ssrBackwardStepsCount" ), &ocean::parserSsrBckStepCount, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "ssrDepthMult" ), &ocean::parserSsrDepthMult, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "foam" ), &ocean::parserFoam, { castor::makeParameter< castor::ParameterType::ePath >() } );
 		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "normals1" ), &ocean::parserNormals1, { castor::makeParameter< castor::ParameterType::ePath >() } );
 		addParser( result, uint32_t( ocean::OceanSection::eRoot ), cuT( "normals2" ), &ocean::parserNormals2, { castor::makeParameter< castor::ParameterType::ePath >() } );

@@ -37,8 +37,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.config.refractionRatio );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.refractionRatio );
 		}
 	}
 	CU_EndAttribute()
@@ -51,8 +51,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.config.refractionDistortionFactor );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.refractionDistortionFactor );
 		}
 	}
 	CU_EndAttribute()
@@ -65,8 +65,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.config.refractionHeightFactor );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.refractionHeightFactor );
 		}
 	}
 	CU_EndAttribute()
@@ -79,8 +79,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.config.refractionDistanceFactor );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.refractionDistanceFactor );
 		}
 	}
 	CU_EndAttribute()
@@ -93,13 +93,13 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.config.depthSofteningDistance );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.depthSofteningDistance );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSsrSettings )
+	CU_ImplementAttributeParser( parserSsrStepSize )
 	{
 		if ( params.empty() )
 		{
@@ -107,8 +107,50 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.config.ssrSettings );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.ssrStepSize );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrFwdStepCount )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.ssrForwardStepsCount );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrBckStepCount )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.ssrBackwardStepsCount );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrDepthMult )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.ssrDepthMult );
 		}
 	}
 	CU_EndAttribute()
@@ -121,8 +163,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.config.density );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.config.density );
 		}
 	}
 	CU_EndAttribute()
@@ -134,10 +176,10 @@ namespace ocean_fft
 
 	CU_ImplementAttributeParser( parserOceanRenderingEnd )
 	{
-		auto & waveContext = getParserContext( context );
-		waveContext.parameters.add( OceanRenderPass::Param, waveContext.config );
-		waveContext.engine->setRenderPassTypeConfiguration( OceanRenderPass::Type
-			, std::move( waveContext.parameters ) );
+		auto & oceanContext = getParserContext( context );
+		oceanContext.parameters.add( OceanRenderPass::Param, oceanContext.config );
+		oceanContext.engine->setRenderPassTypeConfiguration( OceanRenderPass::Type
+			, std::move( oceanContext.parameters ) );
 	}
 	CU_EndAttributePop()
 
@@ -149,8 +191,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.disableRandomSeed );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.disableRandomSeed );
 		}
 	}
 	CU_EndAttribute()
@@ -163,8 +205,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.size );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.size );
 		}
 	}
 	CU_EndAttribute()
@@ -177,8 +219,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.heightMapSamples );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.heightMapSamples );
 		}
 	}
 	CU_EndAttribute()
@@ -191,8 +233,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.displacementDownsample );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.displacementDownsample );
 		}
 	}
 	CU_EndAttribute()
@@ -205,8 +247,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.normalFreqMod );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.normalFreqMod );
 		}
 	}
 	CU_EndAttribute()
@@ -219,8 +261,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.amplitude );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.amplitude );
 		}
 	}
 	CU_EndAttribute()
@@ -233,8 +275,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.windDirection );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.windDirection );
 		}
 	}
 	CU_EndAttribute()
@@ -247,8 +289,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.windVelocity );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.windVelocity );
 		}
 	}
 	CU_EndAttribute()
@@ -261,8 +303,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.patchSize );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.patchSize );
 		}
 	}
 	CU_EndAttribute()
@@ -275,8 +317,8 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.blocksCount );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.blocksCount );
 		}
 	}
 	CU_EndAttribute()
@@ -289,16 +331,16 @@ namespace ocean_fft
 		}
 		else
 		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.lod0Distance );
+			auto & oceanContext = getParserContext( context );
+			params[0]->get( oceanContext.fftConfig.lod0Distance );
 		}
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserFftConfigEnd )
 	{
-		auto & waveContext = getParserContext( context );
-		waveContext.parameters.add( OceanRenderPass::ParamFFT, waveContext.fftConfig );
+		auto & oceanContext = getParserContext( context );
+		oceanContext.parameters.add( OceanRenderPass::ParamFFT, oceanContext.fftConfig );
 	}
 	CU_EndAttributePop()
 }

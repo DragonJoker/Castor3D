@@ -45,7 +45,10 @@ namespace
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "refractionDistortionFactor" ), &ocean_fft::parserRefrDistortionFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "refractionHeightFactor" ), &ocean_fft::parserRefrHeightFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "refractionDistanceFactor" ), &ocean_fft::parserRefrDistanceFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "ssrSettings" ), &ocean_fft::parserSsrSettings, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
+		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "ssrStepSize" ), &ocean_fft::parserSsrStepSize, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "ssrForwardStepsCount" ), &ocean_fft::parserSsrFwdStepCount, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "ssrBackwardStepsCount" ), &ocean_fft::parserSsrBckStepCount, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "ssrDepthMult" ), &ocean_fft::parserSsrDepthMult, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "density" ), &ocean_fft::parserDensity, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "fft_config" ), &ocean_fft::parserFftConfig );
 		addParser( result, uint32_t( ocean_fft::OceanSection::eRoot ), cuT( "}" ), &ocean_fft::parserOceanRenderingEnd );
