@@ -39,6 +39,7 @@ namespace test_launcher
 		{
 			bool validate{ false };
 			bool generate{ false };
+			uint32_t maxFrameCount{ 10u };
 			castor::LogType log{ castor::LogType::eInfo };
 			castor::String renderer;
 			castor::Path fileName;
