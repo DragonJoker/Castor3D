@@ -80,6 +80,11 @@ namespace castor3d
 			return m_secondaryBounce;
 		}
 
+		crg::FrameGraph const & getGraph()const
+		{
+			return m_graph;
+		}
+
 		static uint32_t countInitialisationSteps()
 		{
 			uint32_t result = 0u;
@@ -98,6 +103,7 @@ namespace castor3d
 		crg::FramePass & doCreateVoxelMipGen( crg::FramePass const & previousPass
 			, std::string const & name
 			, crg::ImageViewId const & view
+			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass
 			, ProgressBar * progress );

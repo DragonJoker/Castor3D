@@ -30,12 +30,12 @@ namespace CastorGui
 		/** Constructor.
 		 *\param[in]	p_name		The control name.
 		 *\param[in]	p_type		The type.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	engine		The engine.
 		 *\param[in]	p_parent	The parent control, if any.
 		 *\param[in]	p_id		The control ID.
 		 *\param[in]	p_position	The position.
 		 *\param[in]	p_size		The size.
-		 *\param[in]	p_style		The style.
+		 *\param[in]	p_flags		The configuration flags
 		 *\param[in]	p_visible	Initial visibility status.
 		 */
 		Control( ControlType p_type
@@ -45,7 +45,7 @@ namespace CastorGui
 			, uint32_t p_id
 			, castor::Position const & p_position
 			, castor::Size const & p_size
-			, uint32_t p_style = 0
+			, uint32_t p_flags = 0
 			, bool p_visible = true );
 		/** Sets the position.
 		 *\param[in]	p_value		The new value.
@@ -100,12 +100,12 @@ namespace CastorGui
 		/** Retrieves the style
 		 *\return		The value
 		 */
-		void addStyle( uint32_t );
+		void addFlag( uint32_t );
 
 		/** Retrieves the style
 		 *\return		The value
 		 */
-		void removeStyle( uint32_t );
+		void removeFlag( uint32_t );
 
 		/** Retrieves the control ID.
 		 *\return		The value.
@@ -126,9 +126,9 @@ namespace CastorGui
 		/** Retrieves the style
 		 *\return		The value
 		*/
-		inline uint32_t getStyle()const
+		inline uint32_t getFlags()const
 		{
-			return m_style;
+			return m_flags;
 		}
 
 		/** Retrieves the position
@@ -311,7 +311,7 @@ namespace CastorGui
 
 		/** Updates the style relative stuff.
 		*/
-		virtual void doUpdateStyle()
+		virtual void doUpdateFlags()
 		{
 		}
 
@@ -330,8 +330,8 @@ namespace CastorGui
 		const uint32_t m_id;
 		//! The type
 		const ControlType m_type;
-		//! The style
-		uint32_t m_style;
+		//! The configuration flags
+		uint32_t m_flags;
 		//! The position
 		castor::Position m_position;
 		//! The dimensions

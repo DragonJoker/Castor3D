@@ -156,7 +156,7 @@ namespace castor3d
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); }
 				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
 				, GetPassIndexCallback( [](){ return 0u; } )
-				, IsEnabledCallback( [](){ return true; } ) }
+				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
 			, makeExtent2D( desc.m_size )
 			, desc.m_ruConfig }
 		, m_device{ device }
@@ -500,6 +500,11 @@ namespace castor3d
 	bool SceneRenderPass::hasNodes()const
 	{
 		return m_renderQueue->hasNodes();
+	}
+
+	bool SceneRenderPass::isPassEnabled()const
+	{
+		return hasNodes();
 	}
 
 	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline

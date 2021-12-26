@@ -263,7 +263,7 @@ namespace castor3d
 		, castor::Size const & size )
 		: m_device{ device }
 		, m_progressBar{ progressBar }
-		, m_graph{ handler }
+		, m_graph{ handler, SceneName }
 		, m_scene{ std::move( scene ) }
 		, m_background{ *m_scene->getBackground() }
 		, m_renderPass{ renderPass }

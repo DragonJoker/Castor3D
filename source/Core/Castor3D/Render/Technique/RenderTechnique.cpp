@@ -316,6 +316,9 @@ namespace castor3d
 		, castor::Named{ name }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
+#if C3D_DebugSSAOGraph
+		, m_ssaoGraph{ getOwner()->getGraphResourceHandler(), "SSAO" }
+#endif
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_colour{ device
@@ -328,8 +331,8 @@ namespace castor3d
 			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_colourTexture{ doCreateTextureUnit( m_device
 			, queueData
@@ -346,7 +349,8 @@ namespace castor3d
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
 		, m_depthBuffer{ doCreateTextureUnit( m_device
 			, queueData
@@ -384,7 +388,11 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, getName() + "DepthRange" ) }
 		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
+#if C3D_DebugSSAOGraph
+		, m_ssao{ castor::makeUnique< SsaoPass >( m_ssaoGraph
+#else
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
+#endif
 			, device
 			, progress
 			, *m_depthPassDecl
@@ -472,7 +480,7 @@ namespace castor3d
 			, m_rawSize
 			, m_sceneUbo
 			, m_renderTarget.getHdrConfigUbo()
-			, m_gpInfoUbo )}
+			, m_gpInfoUbo ) }
 #else
 		, m_transparentPassDesc{ &doCreateTransparentPass( progress ) }
 #endif
@@ -481,6 +489,12 @@ namespace castor3d
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 		, m_particleTimer{ castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Particles" ) ) }
 	{
+		m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
+#if C3D_DebugSSAOGraph
+		m_renderTarget.getGraph().addDependency( m_ssaoGraph );
+		m_ssaoRunnable = m_ssaoGraph.compile( device.makeContext() );
+		m_ssaoRunnable->record();
+#endif
 		doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforePostEffects
 #if C3D_UseWeightedBlendedRendering
@@ -641,6 +655,9 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #endif
+#if C3D_UseWeightedBlendedRendering
+		m_weightedBlendRendering->enable( m_transparentPass->hasNodes() );
+#endif
 
 		auto jitter = m_renderTarget.getJitter();
 		auto jitterProjSpace = jitter * 2.0f;
@@ -737,6 +754,9 @@ namespace castor3d
 		result = doRenderLPV( result, queue );
 		result = doRenderEnvironmentMaps( result, queue );
 		result = doRenderVCT( result, queue );
+#if C3D_DebugSSAOGraph
+		result= m_ssaoRunnable->run( result, queue );
+#endif
 		return result;
 	}
 
@@ -1019,7 +1039,8 @@ namespace castor3d
 				auto res = std::make_unique< ComputeDepthRange >( framePass
 					, context
 					, runnableGraph
-					, m_device );
+					, m_device
+					, m_needsDepthRange );
 				getEngine()->registerTimer( runnableGraph.getName() + "/DepthRange"
 					, res->getTimer() );
 				return res;

@@ -1,8 +1,8 @@
-#include "CastorGui/CtrlComboBox.hpp"
+#include "CastorGui/Controls/CtrlComboBox.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
-#include "CastorGui/CtrlButton.hpp"
-#include "CastorGui/CtrlListBox.hpp"
+#include "CastorGui/Controls/CtrlButton.hpp"
+#include "CastorGui/Controls/CtrlListBox.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
@@ -42,7 +42,7 @@ namespace CastorGui
 		, int p_selected
 		, Position const & p_position
 		, Size const & p_size
-		, uint32_t p_style
+		, uint32_t p_flags
 		, bool p_visible )
 		: Control( ControlType::eComboBox
 			, p_name
@@ -51,7 +51,7 @@ namespace CastorGui
 			, p_id
 			, p_position
 			, p_size
-			, p_style
+			, p_flags
 			, p_visible )
 		, m_values( p_values )
 		, m_selected( p_selected )

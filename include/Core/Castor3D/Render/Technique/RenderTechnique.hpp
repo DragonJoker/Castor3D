@@ -30,6 +30,8 @@ See LICENSE file in root folder
 #include <RenderGraph/Attachment.hpp>
 #include <RenderGraph/FramePass.hpp>
 
+#define C3D_DebugSSAOGraph 1
+
 namespace castor3d
 {
 	class RenderTechnique
@@ -242,6 +244,16 @@ namespace castor3d
 			return *m_depthRange;
 		}
 
+		bool needsDepthRange()const
+		{
+			return m_needsDepthRange;
+		}
+
+		void setNeedsDepthRange( bool value )
+		{
+			m_needsDepthRange = value;
+		}
+
 		LightVolumePassResult const & getLpvResult()const
 		{
 			CU_Require( m_lpvResult );
@@ -337,6 +349,10 @@ namespace castor3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
+#if C3D_DebugSSAOGraph
+		crg::FrameGraph m_ssaoGraph;
+		crg::RunnableGraphPtr m_ssaoRunnable;
+#endif
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
 		Texture m_colour;
@@ -382,6 +398,7 @@ namespace castor3d
 		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
 		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
 		TechniquePasses m_renderPasses;
+		bool m_needsDepthRange{};
 	};
 }
 

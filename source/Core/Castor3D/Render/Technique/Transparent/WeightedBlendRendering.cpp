@@ -195,6 +195,7 @@ namespace castor3d
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_size ) )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
+					.enabled( &m_enabled )
 					.build( pass, context, graph );
 				m_device.renderSystem.getEngine()->registerTimer( m_graph.getName() + "/Transparent"
 					, result->getTimer() );

@@ -134,6 +134,7 @@ namespace castor3d
 		VoxelizerUbo const & m_vctConfigUbo;
 		std::vector< Program > m_programs;
 		uint32_t m_programIndex{};
+		bool m_enabled{};
 	};
 }
 

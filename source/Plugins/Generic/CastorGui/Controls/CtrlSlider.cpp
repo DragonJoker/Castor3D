@@ -1,7 +1,7 @@
-#include "CastorGui/CtrlSlider.hpp"
+#include "CastorGui/Controls/CtrlSlider.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
-#include "CastorGui/CtrlStatic.hpp"
+#include "CastorGui/Controls/CtrlStatic.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
@@ -37,7 +37,7 @@ namespace CastorGui
 		, RangedValue< int32_t > const & p_value
 		, Position const & p_position
 		, Size const & p_size
-		, uint32_t p_style
+		, uint32_t p_flags
 		, bool p_visible )
 		: Control{ ControlType::eSlider
 			, p_name
@@ -46,7 +46,7 @@ namespace CastorGui
 			, p_id
 			, p_position
 			, p_size
-			, p_style
+			, p_flags
 			, p_visible }
 		, m_value( p_value )
 		, m_scrolling( false )
@@ -131,7 +131,7 @@ namespace CastorGui
 		Size tickSize( getSize() );
 		Position tickPosition;
 
-		if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
+		if ( checkFlag( getFlags(), SliderFlag::eVertical ) )
 		{
 			lineSize.getWidth() = 3;
 			lineSize.getHeight() -= 4;
@@ -336,7 +336,7 @@ namespace CastorGui
 	{
 		if ( !m_scrolling )
 		{
-			if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
+			if ( checkFlag( getFlags(), SliderFlag::eVertical ) )
 			{
 				if ( p_event.getKey() == KeyboardKey::eUp )
 				{
@@ -374,7 +374,7 @@ namespace CastorGui
 	{
 		Position delta = p_delta;
 
-		if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
+		if ( checkFlag( getFlags(), SliderFlag::eVertical ) )
 		{
 			delta.x() = 0;
 		}
@@ -397,7 +397,7 @@ namespace CastorGui
 				size = line->getSize();
 			}
 
-			if ( checkFlag( getStyle(), SliderStyle::eVertical ) )
+			if ( checkFlag( getFlags(), SliderFlag::eVertical ) )
 			{
 				position[1] = std::min( int32_t( size.getHeight() ), std::max( 0, position[1] ) );
 				tickValue = ( position[1] - line->getPosition().y() ) / double( size.getHeight() );
@@ -422,7 +422,7 @@ namespace CastorGui
 		doUpdateTick( Position( delta[0], delta[1] ) );
 	}
 
-	void SliderCtrl::doUpdateStyle()
+	void SliderCtrl::doUpdateFlags()
 	{
 		doUpdateLineAndTick();
 	}

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_STATIC_H___
 #define ___CI_CTRL_STATIC_H___
 
-#include "CastorGui/CtrlControl.hpp"
+#include "CtrlControl.hpp"
 
 namespace CastorGui
 {
@@ -18,7 +18,7 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
-		 *\param[in]	engine	The engine
+		 *\param[in]	engine		The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID.
 		*/
@@ -28,12 +28,12 @@ namespace CastorGui
 			, uint32_t p_id );
 
 		/** Constructor
-		 *\param[in]	engine	The engine
+		 *\param[in]	engine		The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_caption	The static caption
 		 *\param[in]	p_position	The control position
-		 *\param[in]	p_size		The control siz
-		 *\param[in]	p_style		The control styly
+		 *\param[in]	p_size		The control size
+		 *\param[in]	p_flags		The configuration flags
 		 *\param[in]	p_visible	Initial visibility status
 		 */
 		StaticCtrl( castor::String const & p_name
@@ -42,7 +42,7 @@ namespace CastorGui
 			, castor::String const & p_caption
 			, castor::Position const & p_position
 			, castor::Size const & p_size
-			, uint32_t p_style = 0
+			, uint32_t p_flags = 0
 			, bool p_visible = true );
 
 		/** Sets the caption font.
@@ -114,9 +114,9 @@ namespace CastorGui
 		*/
 		virtual void doSetVisible( bool p_visible )override;
 
-		/** @copydoc CastorGui::Control::doUpdateStyle
+		/** @copydoc CastorGui::Control::doUpdateFlags
 		*/
-		virtual void doUpdateStyle()override;
+		virtual void doUpdateFlags()override;
 
 	private:
 		//! The static caption
