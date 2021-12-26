@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_SLIDER_H___
 #define ___CI_CTRL_SLIDER_H___
 
-#include "CastorGui/CtrlControl.hpp"
+#include "CtrlControl.hpp"
 
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -21,7 +21,7 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
-		 *\param[in]	engine	The engine
+		 *\param[in]	engine		The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
@@ -31,13 +31,13 @@ namespace CastorGui
 			, uint32_t p_id );
 
 		/** Constructor
-		 *\param[in]	engine	The engine
+		 *\param[in]	engine		The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_value		The slider initial value, and its range
 		 *\param[in]	p_id		The control ID
 		 *\param[in]	p_position	The position
 		 *\param[in]	p_size		The size
-		 *\param[in]	p_style		The style
+		 *\param[in]	p_flags		The configuration flags
 		 *\param[in]	p_visible	Initial visibility status
 		 */
 		SliderCtrl( castor::String const & p_name
@@ -47,7 +47,7 @@ namespace CastorGui
 			, castor::RangedValue< int32_t > const & p_value
 			, castor::Position const & p_position
 			, castor::Size const & p_size
-			, uint32_t p_style = 0
+			, uint32_t p_flags = 0
 			, bool p_visible = true );
 
 		/** sets the range
@@ -121,9 +121,9 @@ namespace CastorGui
 		 */
 		void doSetVisible( bool p_visible )override;
 
-		/** @copydoc CastorGui::Control::doUpdateStyle
+		/** @copydoc CastorGui::Control::doUpdateFlags
 		*/
-		void doUpdateStyle()override;
+		void doUpdateFlags()override;
 
 		/** Event when mouse moves over the control
 		 *\param[in]	p_event		The mouse event

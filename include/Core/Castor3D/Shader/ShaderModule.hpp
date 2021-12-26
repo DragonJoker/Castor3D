@@ -34,6 +34,8 @@ namespace castor3d
 		C3D_API ShaderModule( ShaderModule && rhs )noexcept;
 		C3D_API ShaderModule & operator=( ShaderModule && rhs )noexcept;
 
+		C3D_API ShaderModule() = default;
+
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
 			, std::string const & name );
 		C3D_API ShaderModule( VkShaderStageFlagBits stage

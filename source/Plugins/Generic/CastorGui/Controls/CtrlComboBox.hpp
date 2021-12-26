@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_COMBO_BOX_H___
 #define ___CI_CTRL_COMBO_BOX_H___
 
-#include "CastorGui/CtrlButton.hpp"
-#include "CastorGui/CtrlListBox.hpp"
+#include "CtrlButton.hpp"
+#include "CtrlListBox.hpp"
 
 namespace CastorGui
 {
@@ -29,15 +29,15 @@ namespace CastorGui
 			, uint32_t id );
 
 		/** Constructor
-		 *\param[in]	engine	The engine
-		 *\param[in]	parent	The parent control, if any
-		 *\param[in]	values	The list value
+		 *\param[in]	engine		The engine
+		 *\param[in]	parent		The parent control, if any
+		 *\param[in]	values		The list value
 		 *\param[in]	selected	The selected value
-		 *\param[in]	id		The control ID
+		 *\param[in]	id			The control ID
 		 *\param[in]	position	The position
 		 *\param[in]	size		The size
 		 *\param[in]	style		The style
-		 *\param[in]	visible	Initial visibility status
+		 *\param[in]	visible		Initial visibility status
 		 */
 		ComboBoxCtrl( castor::String const & name
 			, castor3d::Engine & engine
@@ -47,7 +47,7 @@ namespace CastorGui
 			, int selected
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t style = 0
+			, uint32_t flags = 0
 			, bool visible = true );
 
 		/** Constructor
@@ -57,7 +57,7 @@ namespace CastorGui
 		*\param[in]	id			The control ID
 		*\param[in]	position	The positio
 		*\param[in]	size		The size
-		*\param[in]	style		The style
+		*\param[in]	flags		The configuration flags
 		*\param[in]	visible		Initial visibility statu
 		*/
 		template< size_t N >
