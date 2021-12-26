@@ -162,7 +162,7 @@ namespace ocean_fft
 		data.invHeightmapSize = castor::Point2f{ 1.0f, 1.0f } / fftConfig.size;
 		data.distanceMod = 1.0f / fftConfig.lod0Distance;
 		data.amplitude = amplitude;
-		data.maxWaveLength = fftConfig.maxWaveLength;
+		data.maxWaveLength = 2.0f / float( fftConfig.blocksCount->x );
 		data.L = ( fftConfig.windVelocity * fftConfig.windVelocity ) / G;
 		data.windDirection = castor::point::getNormalised( fftConfig.windDirection );
 	}
