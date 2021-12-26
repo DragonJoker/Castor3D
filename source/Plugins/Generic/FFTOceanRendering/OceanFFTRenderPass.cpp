@@ -477,8 +477,17 @@ namespace ocean_fft
 			visitor.visit( cuT( "Depth softening distance" )
 				, m_configuration.depthSofteningDistance
 				, nullptr );
-			visitor.visit( cuT( "SSR settings" )
-				, m_configuration.ssrSettings
+			visitor.visit( cuT( "SSR step size" )
+				, m_configuration.ssrStepSize
+				, nullptr );
+			visitor.visit( cuT( "SSR forward steps count" )
+				, m_configuration.ssrForwardStepsCount
+				, nullptr );
+			visitor.visit( cuT( "SSR backward steps count" )
+				, m_configuration.ssrBackwardStepsCount
+				, nullptr );
+			visitor.visit( cuT( "SSR depth mult." )
+				, m_configuration.ssrDepthMult
 				, nullptr );
 			visitor.visit( cuT( "Water density" )
 				, m_configuration.density
