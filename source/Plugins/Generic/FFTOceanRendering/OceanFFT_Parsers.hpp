@@ -45,7 +45,6 @@ namespace ocean_fft
 	CU_DeclareAttributeParser( parserFftHeightMapSamples )
 	CU_DeclareAttributeParser( parserFftDisplacementDownsample )
 	CU_DeclareAttributeParser( parserFftNormalMapFreqMod )
-	CU_DeclareAttributeParser( parserFftMaxWaveLength )
 	CU_DeclareAttributeParser( parserFftAmplitude )
 	CU_DeclareAttributeParser( parserFftWindDirection )
 	CU_DeclareAttributeParser( parserFftWindVelocity )
