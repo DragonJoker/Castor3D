@@ -533,6 +533,7 @@ namespace castor3d
 		C3D_API virtual TextureFlags getTexturesMask()const;
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool hasNodes()const;
+		C3D_API bool isPassEnabled()const;
 
 		C3D_API virtual ShaderFlags getShaderFlags()const
 		{

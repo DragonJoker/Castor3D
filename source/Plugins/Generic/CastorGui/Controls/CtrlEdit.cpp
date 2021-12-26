@@ -1,4 +1,4 @@
-#include "CastorGui/CtrlEdit.hpp"
+#include "CastorGui/Controls/CtrlEdit.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
 
@@ -40,7 +40,7 @@ namespace CastorGui
 		, String const & caption
 		, Position const & position
 		, Size const & size
-		, uint32_t style
+		, uint32_t flags
 		, bool visible )
 		: Control( ControlType::eEdit
 			, name
@@ -49,7 +49,7 @@ namespace CastorGui
 			, id
 			, position
 			, size
-			, style
+			, flags
 			, visible )
 		, m_caption( caption )
 		, m_caretIt( m_caption.end() )
@@ -98,7 +98,7 @@ namespace CastorGui
 		text->setVisible( visible );
 		m_text = text;
 
-		doUpdateStyle();
+		doUpdateFlags();
 	}
 
 	void EditCtrl::setFont( castor::String const & p_font )
@@ -200,7 +200,7 @@ namespace CastorGui
 		}
 	}
 
-	void EditCtrl::doUpdateStyle()
+	void EditCtrl::doUpdateFlags()
 	{
 		TextOverlaySPtr text = m_text.lock();
 

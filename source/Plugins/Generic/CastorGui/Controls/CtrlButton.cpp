@@ -1,4 +1,4 @@
-#include "CastorGui/CtrlButton.hpp"
+#include "CastorGui/Controls/CtrlButton.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
 
@@ -42,7 +42,7 @@ namespace CastorGui
 		, String const & p_caption
 		, Position const & p_position
 		, Size const & p_size
-		, uint32_t p_style
+		, uint32_t p_flags
 		, bool p_visible )
 		: Control( ControlType::eButton
 			, p_name
@@ -51,7 +51,7 @@ namespace CastorGui
 			, p_id
 			, p_position
 			, p_size
-			, p_style
+			, p_flags
 			, p_visible )
 		, m_caption( p_caption )
 	{

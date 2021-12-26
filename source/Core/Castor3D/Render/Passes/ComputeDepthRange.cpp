@@ -133,7 +133,8 @@ namespace castor3d
 	ComputeDepthRange::ComputeDepthRange( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
-		, RenderDevice const & device )
+		, RenderDevice const & device
+		, bool & enabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -141,7 +142,7 @@ namespace castor3d
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, IsEnabledCallback( [&enabled](){ return enabled; } )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, { 2u, false } }
 		, m_device{ device }

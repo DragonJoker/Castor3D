@@ -64,6 +64,11 @@ namespace castor3d
 			return result;
 		}
 
+		void enable( bool value )
+		{
+			m_enabled = value;
+		}
+
 	private:
 		crg::FramePass & doCreateFinalCombine( crg::FrameGraph & graph
 			, crg::FramePass const & transparentPassDesc
@@ -83,6 +88,7 @@ namespace castor3d
 		ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_finalCombinePassDesc;
+		bool m_enabled{};
 	};
 }
 

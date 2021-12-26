@@ -163,7 +163,8 @@ namespace castor3d
 		: public crg::RunnablePass
 	{
 	public:
-		RunnableLightingPass( crg::FramePass const & pass
+		RunnableLightingPass( LightingPass const & lightingPass
+			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
@@ -179,6 +180,7 @@ namespace castor3d
 		void disableLight( Camera const & camera
 			, Light const & light );
 		void resetCommandBuffer();
+		bool hasEnabledLights()const;
 
 	protected:
 		void doInitialise();
@@ -260,6 +262,12 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( PipelineVisitorBase & visitor );
+
+		bool isEnabled()const
+		{
+			return m_lightPass
+				&& m_lightPass->hasEnabledLights();
+		}
 
 	private:
 		crg::FramePass const & doCreateDepthBlitPass( crg::FrameGraph & graph

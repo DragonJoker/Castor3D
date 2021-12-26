@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_EDIT_H___
 #define ___CI_CTRL_EDIT_H___
 
-#include "CastorGui/CtrlControl.hpp"
+#include "CtrlControl.hpp"
 
 namespace CastorGui
 {
@@ -29,13 +29,13 @@ namespace CastorGui
 			, uint32_t p_id );
 
 		/** Constructor
-		 *\param[in]	engine	The engine
+		 *\param[in]	engine		The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_caption	The caption
 		 *\param[in]	p_id		The control ID
 		 *\param[in]	p_position	The position
 		 *\param[in]	p_size		The size
-		 *\param[in]	p_style		The style
+		 *\param[in]	p_flags		The configuration flags
 		 *\param[in]	p_visible	Initial visibility status
 		 */
 		EditCtrl( castor::String const & p_name
@@ -45,7 +45,7 @@ namespace CastorGui
 			, castor::String const & p_caption
 			, castor::Position const & p_position
 			, castor::Size const & p_size
-			, uint32_t p_style = 0
+			, uint32_t p_flags = 0
 			, bool p_visible = true );
 
 		/** sets the caption font.
@@ -89,7 +89,7 @@ namespace CastorGui
 		 */
 		bool isMultiLine()const
 		{
-			return castor::checkFlag( getStyle(), EditStyle::eMultiline );
+			return castor::checkFlag( getFlags(), EditFlag::eMultiline );
 		}
 
 		/**
@@ -133,9 +133,9 @@ namespace CastorGui
 		*/
 		void doSetVisible( bool p_visible )override;
 
-		/** @copydoc CastorGui::Control::doUpdateStyle
+		/** @copydoc CastorGui::Control::doUpdateFlags
 		*/
-		void doUpdateStyle()override;
+		void doUpdateFlags()override;
 
 		/** Event when the control is activated
 		 *\param[in]	p_event		The control event

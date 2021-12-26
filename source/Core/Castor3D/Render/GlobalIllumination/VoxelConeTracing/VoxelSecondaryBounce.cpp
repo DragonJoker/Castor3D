@@ -205,9 +205,10 @@ namespace castor3d
 				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, crg::defaultV< crg::RunnablePass::IsEnabledCallback >
+				, crg::RunnablePass::IsEnabledCallback( [&vctConfig](){ return vctConfig.enabled && vctConfig.enableSecondaryBounce; } )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, { 2u, false } }
+			, crg::ru::Config{ 2u, false }.implicitAction( pass.images.back().view()
+				, crg::RecordContext::clearAttachment( pass.images.back().view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }

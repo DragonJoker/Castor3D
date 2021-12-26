@@ -44,6 +44,7 @@ namespace
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "refractionDistortionFactor" ), &water::parserRefrDistortionFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "refractionHeightFactor" ), &water::parserRefrHeightFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "refractionDistanceFactor" ), &water::parserRefrDistanceFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "refractionRatio" ), &water::parserRefrRatio, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "depthSofteningDistance" ), &water::parserDepthSofteningDistance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "normalMapScrollSpeed" ), &water::parserNormalMapScrollSpeed, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "normalMapScroll" ), &water::parserNormalMapScroll, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
