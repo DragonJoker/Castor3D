@@ -376,9 +376,6 @@ namespace ocean_fft
 		visitor.visit( cuT( "Amplitude" )
 			, m_config.amplitude
 			, nullptr );
-		visitor.visit( cuT( "Max. wave length" )
-			, m_config.maxWaveLength
-			, nullptr );
 		visitor.visit( cuT( "Wind XZ direction" )
 			, m_config.windDirection
 			, nullptr );
