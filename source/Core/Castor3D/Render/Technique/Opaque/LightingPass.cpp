@@ -661,7 +661,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RunnableLightingPass::RunnableLightingPass( crg::FramePass const & pass
+	RunnableLightingPass::RunnableLightingPass( LightingPass const & lightingPass
+		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
@@ -675,8 +676,14 @@ namespace castor3d
 			, graph
 			, { [this](){ doInitialise(); }
 				, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); } }
-			, { 1u, true } }
+				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
+				, GetPassIndexCallback( [](){ return 0u; } )
+				, IsEnabledCallback([&lightingPass](){ return lightingPass.isEnabled(); } ) }
+			, crg::ru::Config{ 1u, true }
+				.implicitAction( lpResult[LpTexture::eDiffuse].targetViewId
+					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eDiffuse].targetViewId, getClearValue( LpTexture::eDiffuse ) ) )
+				.implicitAction( lpResult[LpTexture::eSpecular].targetViewId
+					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eSpecular].targetViewId, getClearValue( LpTexture::eSpecular ) ) ) }
 		, m_device{ device }
 		, m_scene{ scene }
 		, m_lpResult{ lpResult }
@@ -714,47 +721,24 @@ namespace castor3d
 		crg::RunnablePass::reRecordCurrent();
 	}
 
+	bool RunnableLightingPass::hasEnabledLights()const
+	{
+		return !m_pipelines.empty();
+	}
+
 	void RunnableLightingPass::doInitialise()
 	{
+		if ( m_renderPasses.empty() )
+		{
+			m_renderPasses.emplace_back( doCreateRenderPass( false, m_lpResult ) );
+			m_renderPasses.emplace_back( doCreateRenderPass( true, m_lpResult ) );
+		}
 	}
 
 	void RunnableLightingPass::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		if ( m_pipelines.empty() )
-		{
-			if ( m_renderPasses.empty() )
-			{
-				auto ctx = context;
-				m_renderPasses.emplace_back( doCreateRenderPass( context, false, m_lpResult ) );
-				m_renderPasses.emplace_back( doCreateRenderPass( ctx, true, m_lpResult ) );
-			}
-
-			auto & renderPass = m_renderPasses[0u];
-			VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-				, nullptr
-				, *renderPass.renderPass
-				, *renderPass.framebuffer
-				, { {}, renderPass.framebuffer->getDimensions() }
-				, uint32_t( renderPass.clearValues.size() )
-				, renderPass.clearValues.data() };
-			m_context.vkCmdBeginRenderPass( commandBuffer
-				, &beginRenderPass
-				, VK_SUBPASS_CONTENTS_INLINE );
-			m_context.vkCmdEndRenderPass( commandBuffer );
-
-			for ( auto & attach : renderPass.attaches )
-			{
-				context.setLayoutState( attach.view
-					, { attach.output
-						, crg::getAccessMask( attach.output )
-						, crg::getStageMask( attach.output ) } );
-			}
-
-			return;
-		}
-
 		uint32_t pipelineIndex = 0u;
 
 		for ( auto & pipeline : m_pipelines )
@@ -763,26 +747,18 @@ namespace castor3d
 		}
 	}
 
-	LightRenderPass RunnableLightingPass::doCreateRenderPass( crg::RecordContext & context
-		, bool blend
+	LightRenderPass RunnableLightingPass::doCreateRenderPass( bool blend
 		, LightPassResult const & lpResult )
 	{
 		castor::String name = blend
 			? castor::String{ cuT( "Blend" ) }
 			: castor::String{ cuT( "First" ) };
-		std::array< VkImageLayout, 3u > layouts{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-		, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
-		, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
+		std::array< VkImageLayout, 3u > layouts{ ( blend ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
+			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
+			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
 		VkAttachmentLoadOp loadOp = blend
 			? VK_ATTACHMENT_LOAD_OP_LOAD
 			: VK_ATTACHMENT_LOAD_OP_CLEAR;
-
-		if ( !blend )
-		{
-			layouts[0u] = context.getLayoutState( lpResult[LpTexture::eDepth].targetViewId ).layout;
-			layouts[1u] = context.getLayoutState( lpResult[LpTexture::eDiffuse].targetViewId ).layout;
-			layouts[2u] = context.getLayoutState( lpResult[LpTexture::eSpecular].targetViewId ).layout;
-		}
 
 		ashes::VkAttachmentDescriptionArray attaches{
 			{ 0u
@@ -1012,7 +988,10 @@ namespace castor3d
 				auto result = std::make_unique< crg::ImageCopy >( pass
 					, context
 					, graph
-					, makeExtent3D( m_size ) );
+					, makeExtent3D( m_size )
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [this](){ return isEnabled(); } ) );
 				engine.registerTimer( graph.getName() + "/Lighting"
 					, result->getTimer() );
 				return result;
@@ -1036,7 +1015,8 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising lighting pass" );
-				auto result = std::make_unique< RunnableLightingPass >( framePass
+				auto result = std::make_unique< RunnableLightingPass >( *this
+					, framePass
 					, context
 					, runnableGraph
 					, m_device

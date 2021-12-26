@@ -1,7 +1,7 @@
-#include "CastorGui/CtrlListBox.hpp"
+#include "CastorGui/Controls/CtrlListBox.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
-#include "CastorGui/CtrlStatic.hpp"
+#include "CastorGui/Controls/CtrlStatic.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
@@ -46,7 +46,7 @@ namespace CastorGui
 		, int p_selected
 		, Position const & p_position
 		, Size const & p_size
-		, uint32_t p_style
+		, uint32_t p_flags
 		, bool p_visible )
 		: Control( ControlType::eListBox
 			, p_name
@@ -55,7 +55,7 @@ namespace CastorGui
 			, p_id
 			, p_position
 			, p_size
-			, p_style
+			, p_flags
 			, p_visible )
 		, m_initialValues( p_values )
 		, m_values( p_values )
@@ -265,7 +265,7 @@ namespace CastorGui
 			, this
 			, p_value
 			, Position()
-			, Size( getSize().getWidth(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
+			, Size( getSize().getWidth(), DEFAULT_HEIGHT ), uint32_t( StaticFlag::eVAlignCenter ) );
 		item->setCatchesMouseEvents( true );
 
 		item->connectNC( MouseEventType::eEnter, [this]( ControlSPtr p_control, MouseEvent const & p_event )

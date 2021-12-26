@@ -96,7 +96,7 @@ namespace ocean_fft
 
 		bool operator()()const
 		{
-			return m_pass->hasNodes();
+			return m_pass->isPassEnabled();
 		}
 
 		castor3d::SceneRenderPass const * m_pass;

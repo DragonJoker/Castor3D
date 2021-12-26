@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_LIST_BOX_H___
 #define ___CI_CTRL_LIST_BOX_H___
 
-#include "CastorGui/CtrlControl.hpp"
+#include "CtrlControl.hpp"
 
 namespace CastorGui
 {
@@ -31,11 +31,11 @@ namespace CastorGui
 		 *\param[in]	engine		The engine
 		 *\param[in]	parent		The parent control, if any
 		 *\param[in]	values		The values list
-		 *\param[in]	selected		The selected value index (-1 for no selection)
+		 *\param[in]	selected	The selected value index (-1 for no selection)
 		 *\param[in]	id			The control ID
-		 *\param[in]	position		The position
-		 *\param[in]	size			The size
-		 *\param[in]	style			The style
+		 *\param[in]	position	The position
+		 *\param[in]	size		The size
+		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
 		ListBoxCtrl( castor::String const & name
@@ -46,7 +46,7 @@ namespace CastorGui
 			, int selected
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t style = 0
+			, uint32_t flags = 0
 			, bool visible = true );
 
 		/** Constructor

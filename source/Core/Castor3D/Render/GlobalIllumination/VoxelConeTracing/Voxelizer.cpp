@@ -96,9 +96,17 @@ namespace castor3d
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelizePassDesc{ doCreateVoxelizePass( progress ) }
 		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_voxelizePassDesc, progress ) }
-		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc, "FirstBounceMip", m_firstBounce.wholeViewId, progress ) }
+		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc
+			, "FirstBounceMip"
+			, m_firstBounce.wholeViewId
+			, crg::RunnablePass::IsEnabledCallback( [&voxelConfig](){ return voxelConfig.enabled; } )
+			, progress ) }
 		, m_voxelSecondaryBounceDesc{ doCreateVoxelSecondaryBounce( m_voxelMipGen, progress ) }
-		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc, "SecondaryBounceMip", m_secondaryBounce.wholeViewId, progress ) }
+		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc
+			, "SecondaryBounceMip"
+			, m_secondaryBounce.wholeViewId
+			, crg::RunnablePass::IsEnabledCallback( [&voxelConfig](){ return voxelConfig.enabled && voxelConfig.enableSecondaryBounce; } )
+			, progress ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
 		m_firstBounce.create();
@@ -234,11 +242,12 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateVoxelMipGen( crg::FramePass const & previousPass
 		, std::string const & name
 		, crg::ImageViewId const & view
+		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating voxel mipmap generation pass" );
 		auto & result = m_graph.createPass( name
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -246,7 +255,10 @@ namespace castor3d
 				auto res = std::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, crg::ru::Config{}
+					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
+					, isEnabled );
 				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
 					, res->getTimer() );
 				return res;

@@ -309,6 +309,7 @@ namespace castor3d
 	void IndirectLightingPass::update( CpuUpdater & updater )
 	{
 		m_programIndex = Config{ updater.camera->getScene()->getFlags() }.index;
+		m_enabled = m_programIndex > 0u;
 	}
 
 	void IndirectLightingPass::accept( PipelineVisitorBase & visitor )
@@ -339,7 +340,15 @@ namespace castor3d
 					.renderSize( makeExtent2D( ( *m_lpResult.begin() )->getExtent() ) )
 					.programs( convertPrograms( m_programs ) )
 					.passIndex( &m_programIndex )
-					.build( pass, context, graph, { uint32_t( m_programs.size() ) } );
+					.enabled( &m_enabled )
+					.build( pass
+						, context
+						, graph
+						, crg::ru::Config{ uint32_t( m_programs.size() ) }
+							.implicitAction( m_lpResult[LpTexture::eIndirectDiffuse].targetViewId
+								, crg::RecordContext::clearAttachment( m_lpResult[LpTexture::eIndirectDiffuse].targetViewId, getClearValue( LpTexture::eIndirectDiffuse ) ) )
+							.implicitAction( m_lpResult[LpTexture::eIndirectSpecular].targetViewId
+								, crg::RecordContext::clearAttachment( m_lpResult[LpTexture::eIndirectSpecular].targetViewId, getClearValue( LpTexture::eIndirectSpecular ) ) ) );
 				engine.registerTimer( graph.getName() + "/IndirectLighting"
 					, result->getTimer() );
 				return result;
@@ -373,11 +382,11 @@ namespace castor3d
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR };
 		pass.addSampledView( m_vctFirstBounce.sampledViewId
 			, uint32_t( IndirectLightingPass::eVctFirstBounce )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addSampledView( m_vctSecondaryBounce.sampledViewId
 			, uint32_t( IndirectLightingPass::eVctSecondBounce )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addSampledView( m_lpvResult[LpvTexture::eR].sampledViewId
 			, uint32_t( IndirectLightingPass::eLpvR )

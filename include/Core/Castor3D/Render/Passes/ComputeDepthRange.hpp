@@ -41,7 +41,8 @@ namespace castor3d
 		C3D_API ComputeDepthRange( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
-			, RenderDevice const & device );
+			, RenderDevice const & device
+			, bool & enabled );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

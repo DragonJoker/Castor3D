@@ -309,6 +309,8 @@ namespace draw_edges
 	{
 		m_ubo.cpuUpdate( m_config.normalDepthWidth
 			, m_config.objectWidth );
+		auto & technique = m_renderTarget.getTechnique();
+		technique.setNeedsDepthRange( isEnabled() );
 	}
 
 	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )

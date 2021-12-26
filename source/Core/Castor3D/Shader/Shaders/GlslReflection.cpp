@@ -319,25 +319,30 @@ namespace castor3d::shader
 				, sdw::SampledImage2DRgba32 const & colourMap )
 			{
 				auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
+				auto ssrStepSize = ssrSettings.x();
+				auto ssrForwardMaxStepCount = ssrSettings.y();
+				auto ssrBackwardMaxStepCount = ssrSettings.z();
 
+				auto viewNormal = m_writer.declLocale( "viewNormal"
+					, matrixData.worldToCurView( vec4( worldNormal, 1.0_f ) ).xyz() );
 				auto viewDir = m_writer.declLocale( "viewDir"
-					, -normalize( viewPosition ) );
+					, normalize( viewPosition ) );
 				auto reflectionVector = m_writer.declLocale( "reflectionVector"
-					, normalize( reflect( -viewDir, worldNormal ) ) );
+					, normalize( reflect( -viewDir, viewNormal ) ) );
 				auto sceneZ = m_writer.declLocale( "sceneZ"
 					, 0.0_f );
 				auto stepCount = m_writer.declLocale( "stepCount"
 					, 0.0_f );
 				auto forwardStepCount = m_writer.declLocale( "forwardStepCount"
-					, ssrSettings.y() );
+					, ssrForwardMaxStepCount );
 				auto rayMarchPosition = m_writer.declLocale( "rayMarchPosition"
 					, viewPosition );
 				auto rayMarchTexPosition = m_writer.declLocale( "rayMarchTexPosition"
 					, vec4( 0.0_f ) );
 
-				WHILE( m_writer, stepCount < ssrSettings.y() )
+				WHILE( m_writer, stepCount < ssrForwardMaxStepCount )
 				{
-					rayMarchPosition += reflectionVector.xyz() * ssrSettings.x();
+					rayMarchPosition += reflectionVector.xyz() * ssrStepSize;
 					rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
 					sceneZ = depthMap.lod( rayMarchTexPosition.xy(), 0.0_f );
@@ -346,7 +351,7 @@ namespace castor3d::shader
 					IF( m_writer, -sceneZ <= -rayMarchPosition.z() )
 					{
 						forwardStepCount = stepCount;
-						stepCount = ssrSettings.y();
+						stepCount = ssrForwardMaxStepCount;
 					}
 					ELSE
 					{
@@ -356,13 +361,13 @@ namespace castor3d::shader
 				}
 				ELIHW;
 
-				IF( m_writer, forwardStepCount < ssrSettings.y() )
+				IF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
 				{
 					stepCount = 0.0_f;
 
-					WHILE( m_writer, stepCount < ssrSettings.z() )
+					WHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
 					{
-						rayMarchPosition -= reflectionVector.xyz() * ssrSettings.x() / ssrSettings.z();
+						rayMarchPosition -= reflectionVector.xyz() * ssrStepSize / ssrBackwardMaxStepCount;
 						rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
 						sceneZ = depthMap.lod( rayMarchTexPosition.xy(), 0.0_f );
@@ -370,7 +375,7 @@ namespace castor3d::shader
 
 						IF( m_writer, -sceneZ > -rayMarchPosition.z() )
 						{
-							stepCount = ssrSettings.z();
+							stepCount = ssrBackwardMaxStepCount;
 						}
 						ELSE
 						{
@@ -383,17 +388,17 @@ namespace castor3d::shader
 				FI;
 
 				auto nDotV = m_writer.declLocale( "nDotV"
-					, abs( dot( worldNormal, viewDir ) ) + epsilon );
+					, abs( dot( viewNormal, viewDir ) ) + epsilon );
 				auto ssrReflectionNormal = m_writer.declLocale( "ssrReflectionNormal"
 					, normalMap.sample( rayMarchTexPosition.xy() ).xyz() );
 				auto ssrDistanceFactor = m_writer.declLocale( "ssrDistanceFactor"
 					, vec2( distance( 0.5_f, texcoord.x() ), distance( 0.5_f, texcoord.y() ) ) * 2 );
 				auto ssrFactor = m_writer.declLocale( "ssrFactor"
 					, ( 1.0_f - abs( nDotV ) )
-						* ( 1.0 - forwardStepCount / ssrSettings.y() )
+						* ( 1.0 - forwardStepCount / ssrForwardMaxStepCount )
 						* clamp( 1.0 - ssrDistanceFactor.x() - ssrDistanceFactor.y(), 0.0_f, 1.0_f )
 						* ( 1.0 / ( 1.0 + abs( sceneZ - rayMarchPosition.z() ) * ssrSettings.w() ) )
-						* ( 1.0 - clamp( dot( ssrReflectionNormal, worldNormal ), 0.0_f, 1.0_f ) ) );
+						* ( 1.0 - clamp( dot( ssrReflectionNormal, viewNormal ), 0.0_f, 1.0_f ) ) );
 
 				auto reflectionColor = m_writer.declLocale( "reflectionColor"
 					, colourMap.sample( rayMarchTexPosition.xy() ).rgb() );

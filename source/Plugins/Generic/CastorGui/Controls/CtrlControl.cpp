@@ -1,4 +1,4 @@
-#include "CastorGui/CtrlControl.hpp"
+#include "CastorGui/Controls/CtrlControl.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
 
@@ -23,7 +23,7 @@ namespace CastorGui
 		, uint32_t p_id
 		, Position const & p_position
 		, Size const & p_size
-		, uint32_t p_style
+		, uint32_t p_flags
 		, bool p_visible )
 		: NonClientEventHandler< Control >( p_type != ControlType::eStatic )
 		, Named( p_name )
@@ -31,7 +31,7 @@ namespace CastorGui
 		, m_cursor( MouseCursor::eHand )
 		, m_id( p_id )
 		, m_type( p_type )
-		, m_style( p_style )
+		, m_flags( p_flags )
 		, m_position( p_position )
 		, m_size( p_size )
 		, m_borders( 0, 0, 0, 0 )
@@ -233,16 +233,16 @@ namespace CastorGui
 		return it->lock();
 	}
 
-	void Control::addStyle( uint32_t p_style )
+	void Control::addFlag( uint32_t p_flags )
 	{
-		m_style |= p_style;
-		doUpdateStyle();
+		m_flags |= p_flags;
+		doUpdateFlags();
 	}
 
-	void Control::removeStyle( uint32_t p_style )
+	void Control::removeFlag( uint32_t p_flags )
 	{
-		m_style &= ~p_style;
-		doUpdateStyle();
+		m_flags &= ~p_flags;
+		doUpdateFlags();
 	}
 
 	bool Control::doIsVisible()const
