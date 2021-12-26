@@ -79,7 +79,10 @@ namespace ocean
 		float depthSofteningDistance{ 0.5f };
 		castor::Point2f normalMapScrollSpeed{ 0.01f, 0.01f };
 		castor::Point4f normalMapScroll{ 1.0f, 0.0f, 0.0f, 1.0f };
-		castor::Point4f ssrSettings{ 0.5f, 20.0f, 10.0f, 20.0f };
+		float ssrStepSize{ 0.5f };
+		float ssrForwardStepsCount{ 20.0f };
+		float ssrBackwardStepsCount{ 10.0f };
+		float ssrDepthMult{ 20.0f };
 #if Ocean_Debug
 		uint32_t debug{ eResult };
 		uint32_t dummy[3]{};

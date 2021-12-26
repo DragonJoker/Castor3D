@@ -70,7 +70,10 @@ namespace ocean_fft
 		float refractionHeightFactor{ 2.5f };
 		float refractionDistanceFactor{ 15.0f };
 
-		castor::Point4f ssrSettings{ 0.5f, 20.0f, 10.0f, 20.0f };
+		float ssrStepSize{ 0.5f };
+		float ssrForwardStepsCount{ 20.0f };
+		float ssrBackwardStepsCount{ 10.0f };
+		float ssrDepthMult{ 20.0f };
 
 		castor::Point2f otherMod{};
 		castor::Point2f normalMod{};

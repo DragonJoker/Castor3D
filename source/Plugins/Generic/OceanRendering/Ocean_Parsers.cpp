@@ -250,17 +250,58 @@ namespace ocean
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSsrSettings )
+	CU_ImplementAttributeParser( parserSsrStepSize )
 	{
-		auto & waveContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( waveContext.config.ssrSettings );
+			auto & waveContext = getParserContext( context );
+			params[0]->get( waveContext.config.ssrStepSize );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrFwdStepCount )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waveContext = getParserContext( context );
+			params[0]->get( waveContext.config.ssrForwardStepsCount );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrBckStepCount )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waveContext = getParserContext( context );
+			params[0]->get( waveContext.config.ssrBackwardStepsCount );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrDepthMult )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waveContext = getParserContext( context );
+			params[0]->get( waveContext.config.ssrDepthMult );
 		}
 	}
 	CU_EndAttribute()
