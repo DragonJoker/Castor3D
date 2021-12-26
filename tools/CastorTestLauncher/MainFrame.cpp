@@ -260,9 +260,11 @@ namespace test_launcher
 		}
 	}
 
-	MainFrame::MainFrame( castor3d::Engine & engine )
+	MainFrame::MainFrame( castor3d::Engine & engine
+		, uint32_t maxFrameCount )
 		: wxFrame{ nullptr, wxID_ANY, wxT( "Castor3D Test Launcher" ), wxDefaultPosition, wxSize( 800, 700 ) }
 		, m_engine{ engine }
+		, m_maxFrameCount{ maxFrameCount }
 	{
 		SetClientSize( 800, 600 );
 	}
@@ -335,8 +337,7 @@ namespace test_launcher
 		{
 			wxBitmap bitmap;
 
-			// Prerender 10 frames, for environment maps.
-			for ( auto i = 0; i <= 10; ++i )
+			for ( uint32_t i = 0u; i <= m_maxFrameCount; ++i )
 			{
 				m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			}
