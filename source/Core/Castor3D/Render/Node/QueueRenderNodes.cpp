@@ -234,20 +234,14 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		void doSortRenderNodes( SceneRenderPass & renderPass
+		void doListRenderNodes( SceneRenderPass & renderPass
 			, RenderMode mode
 			, SceneNode const * ignored
 			, QueueRenderNodes & nodes )
 		{
-			uint32_t instanceMult = renderPass.getInstanceMult();
-			auto & scene = nodes.getOwner()->getCuller().getScene();
-
 			for ( auto & culledNode : renderPass.getCuller().getAllSubmeshes( mode ).objects )
 			{
-				auto & submesh = culledNode.data;
 				auto pass = culledNode.pass;
-				auto & instance = culledNode.instance;
-				auto material = pass->getOwner();
 
 				if ( ignored != &culledNode.sceneNode )
 				{
@@ -255,72 +249,7 @@ namespace castor3d
 
 					if ( renderPass.isValidPass( *pass ) )
 					{
-						auto programFlags = submesh.getProgramFlags( material );
-						auto sceneFlags = scene.getFlags();
-						auto textures = pass->getTexturesMask();
-						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
-							, programFlags
-							, sceneFlags
-							, scene
-							, *pass
-							, renderPass
-							, instance.getName() );
-						auto pipelineFlags = renderPass.createPipelineFlags( *pass
-							, textures
-							, programFlags
-							, sceneFlags
-							, submesh.getTopology() );
-						auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
-							, pipelineFlags.programFlags
-							, material
-							, instanceMult
-							, textures
-							, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
-						auto backPipeline = renderPass.prepareBackPipeline( pipelineFlags
-							, vertexLayouts
-							, nodes.getDescriptorSetLayouts( *pass
-								, submesh
-								, animated.mesh.get()
-								, animated.skeleton.get() ) );
-
-						if ( backPipeline )
-						{
-							nodes.addRenderNode( *backPipeline
-								, animated
-								, culledNode
-								, instance
-								, *pass
-								, submesh
-								, renderPass
-								, false );
-						}
-
-						auto needsFront = ( mode == RenderMode::eTransparentOnly )
-							|| pass->isTwoSided()
-							|| renderPass.forceTwoSided()
-							|| checkFlags( textures, TextureFlag::eOpacity ) != textures.end();
-
-						if ( needsFront )
-						{
-							auto frontPipeline = renderPass.prepareFrontPipeline( pipelineFlags
-								, vertexLayouts
-								, nodes.getDescriptorSetLayouts( *pass
-									, submesh
-									, animated.mesh.get()
-									, animated.skeleton.get() ) );
-
-							if ( frontPipeline )
-							{
-								nodes.addRenderNode( *frontPipeline
-									, animated
-									, culledNode
-									, instance
-									, *pass
-									, submesh
-									, renderPass
-									, true );
-							}
-						}
+						nodes.allSubmeshNodes.push_back( &culledNode );
 					}
 				}
 			}
@@ -329,35 +258,113 @@ namespace castor3d
 			{
 				auto & billboard = culledNode.data;
 				auto & pass = culledNode.pass;
-
 				pass->prepareTextures();
-				auto programFlags = billboard.getProgramFlags();
-				addFlag( programFlags, ProgramFlag::eBillboards );
 
 				if ( renderPass.isValidPass( *pass )
-					&& !isShadowMapProgram( programFlags ) )
+					&& !isShadowMapProgram( billboard.getProgramFlags() ) )
 				{
-					auto sceneFlags = scene.getFlags();
-					auto textures = pass->getTexturesMask();
-					auto pipelineFlags = renderPass.createPipelineFlags( *pass
-						, textures
-						, programFlags
-						, sceneFlags
-						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
-					auto pipeline = renderPass.prepareBackPipeline( pipelineFlags
-						, billboard.getGeometryBuffers().layouts
-						, nodes.getDescriptorSetLayouts( *pass
-							, billboard ) );
-
-					if ( pipeline )
-					{
-						nodes.addRenderNode( *pipeline
-							, culledNode
-							, *pass
-							, billboard
-							, renderPass );
-					}
+					nodes.allBillboardNodes.push_back( &culledNode );
 				}
+			}
+		}
+
+		void doSortRenderNodes( SceneRenderPass & renderPass
+			, RenderMode mode
+			, SceneNode const * ignored
+			, QueueRenderNodes & nodes )
+		{
+			uint32_t instanceMult = renderPass.getInstanceMult();
+			auto & scene = nodes.getOwner()->getCuller().getScene();
+
+			for ( auto it : nodes.allSubmeshNodes )
+			{
+				auto & culledNode = *it;
+				auto & submesh = culledNode.data;
+				auto pass = culledNode.pass;
+				auto & instance = culledNode.instance;
+				auto material = pass->getOwner();
+				auto programFlags = submesh.getProgramFlags( material );
+				auto sceneFlags = scene.getFlags();
+				auto textures = pass->getTexturesMask();
+				auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
+					, programFlags
+					, sceneFlags
+					, scene
+					, *pass
+					, renderPass
+					, instance.getName() );
+				auto pipelineFlags = renderPass.createPipelineFlags( *pass
+					, textures
+					, programFlags
+					, sceneFlags
+					, submesh.getTopology() );
+				auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
+					, pipelineFlags.programFlags
+					, material
+					, instanceMult
+					, textures
+					, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
+				auto & backPipeline = renderPass.prepareBackPipeline( pipelineFlags
+					, vertexLayouts
+					, nodes.getDescriptorSetLayouts( *pass
+						, submesh
+						, animated.mesh.get()
+						, animated.skeleton.get() ) );
+				nodes.addRenderNode( backPipeline
+					, animated
+					, culledNode
+					, instance
+					, *pass
+					, submesh
+					, renderPass
+					, false );
+
+				auto needsFront = ( mode == RenderMode::eTransparentOnly )
+					|| pass->isTwoSided()
+					|| renderPass.forceTwoSided()
+					|| checkFlags( textures, TextureFlag::eOpacity ) != textures.end();
+
+				if ( needsFront )
+				{
+					auto & frontPipeline = renderPass.prepareFrontPipeline( pipelineFlags
+						, vertexLayouts
+						, nodes.getDescriptorSetLayouts( *pass
+							, submesh
+							, animated.mesh.get()
+							, animated.skeleton.get() ) );
+					nodes.addRenderNode( frontPipeline
+						, animated
+						, culledNode
+						, instance
+						, *pass
+						, submesh
+						, renderPass
+						, true );
+				}
+			}
+
+			for ( auto & it : nodes.allBillboardNodes )
+			{
+				auto & culledNode = *it;
+				auto & billboard = culledNode.data;
+				auto & pass = culledNode.pass;
+				auto programFlags = billboard.getProgramFlags();
+				auto sceneFlags = scene.getFlags();
+				auto textures = pass->getTexturesMask();
+				auto pipelineFlags = renderPass.createPipelineFlags( *pass
+					, textures
+					, programFlags
+					, sceneFlags
+					, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
+				auto & pipeline = renderPass.prepareBackPipeline( pipelineFlags
+					, billboard.getGeometryBuffers().layouts
+					, nodes.getDescriptorSetLayouts( *pass
+						, billboard ) );
+				nodes.addRenderNode( pipeline
+					, culledNode
+					, *pass
+					, billboard
+					, renderPass );
 			}
 		}
 
@@ -421,9 +428,20 @@ namespace castor3d
 	{
 	}
 
-	void QueueRenderNodes::parse( ShadowMapLightTypeArray & shadowMaps )
+	void QueueRenderNodes::parse()
 	{
+		allSubmeshNodes.clear();
+		allBillboardNodes.clear();
+
 		auto & queue = *getOwner();
+		castor3d::doListRenderNodes( *queue.getOwner()
+			, queue.getMode()
+			, queue.getIgnoredNode()
+			, *this );
+	}
+
+	void QueueRenderNodes::sort( ShadowMapLightTypeArray & shadowMaps )
+	{
 		instancedStaticNodes.backCulled.clear();
 		instancedStaticNodes.frontCulled.clear();
 		staticNodes.backCulled.clear();
@@ -437,6 +455,7 @@ namespace castor3d
 		billboardNodes.backCulled.clear();
 		billboardNodes.frontCulled.clear();
 
+		auto & queue = *getOwner();
 		castor3d::doSortRenderNodes( *queue.getOwner()
 			, queue.getMode()
 			, queue.getIgnoredNode()
@@ -533,18 +552,8 @@ namespace castor3d
 
 	bool QueueRenderNodes::hasNodes()const
 	{
-		return !staticNodes.backCulled.empty()
-			|| !staticNodes.frontCulled.empty()
-			|| !skinnedNodes.backCulled.empty()
-			|| !skinnedNodes.frontCulled.empty()
-			|| !instancedStaticNodes.backCulled.empty()
-			|| !instancedStaticNodes.frontCulled.empty()
-			|| !instancedSkinnedNodes.backCulled.empty()
-			|| !instancedSkinnedNodes.frontCulled.empty()
-			|| !morphingNodes.backCulled.empty()
-			|| !morphingNodes.frontCulled.empty()
-			|| !billboardNodes.backCulled.empty()
-			|| !billboardNodes.frontCulled.empty();
+		return !allBillboardNodes.empty()
+			|| !allSubmeshNodes.empty();
 	}
 
 	SubmeshRenderNode & QueueRenderNodes::createNode( PassRenderNode passNode

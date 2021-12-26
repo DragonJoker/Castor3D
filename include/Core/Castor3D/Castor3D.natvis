@@ -167,4 +167,8 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::SceneRenderPass">
+		<DisplayString>{m_name}({m_pass})</DisplayString>
+	</Type>
+
 </AutoVisualizer>
