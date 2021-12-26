@@ -157,7 +157,7 @@ namespace ocean_fft
 			using sdw::StructInstance::getMemberArray;
 		};
 
-		enum WaveIdx : uint32_t
+		enum OceanFFTIdx : uint32_t
 		{
 			eLightBuffer = uint32_t( castor3d::PassUboIdx::eCount ),
 			eOceanUbo,
@@ -325,7 +325,7 @@ namespace ocean_fft
 			, device
 			, Type
 			, category
-			, "Wave"
+			, "OceanFFT"
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ isEnabled }
@@ -510,40 +510,40 @@ namespace ocean_fft
 	void OceanRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaveIdx::eLightBuffer ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eOceanUbo
+		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( OceanFFTIdx::eLightBuffer ) );
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eOceanUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_VERTEX_BIT
 				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
 				| VK_SHADER_STAGE_FRAGMENT_BIT ) ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eHeightDisplacement
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eHeightDisplacement
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eGradientJacobian
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eGradientJacobian
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eNormals
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eNormals
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneNormals
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneNormals
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneDepth
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneDepth
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneResult
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneResult
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneBaseColour
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneBaseColour
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneDiffuseLighting
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eSceneDiffuseLighting
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto index = uint32_t( WaveIdx::eCount );
+		auto index = uint32_t( OceanFFTIdx::eCount );
 
 		for ( uint32_t j = 0u; j < uint32_t( castor3d::LightType::eCount ); ++j )
 		{
@@ -709,9 +709,9 @@ namespace ocean_fft
 			, VkImageView const & sceneDiffuseLighting )
 		{
 			auto & flags = pipeline.getFlags();
-			descriptorWrites.push_back( scene.getLightCache().getBinding( WaveIdx::eLightBuffer ) );
-			descriptorWrites.push_back( OceanUbo.getDescriptorWrite( WaveIdx::eOceanUbo ) );
-			auto index = uint32_t( WaveIdx::eHeightDisplacement );
+			descriptorWrites.push_back( scene.getLightCache().getBinding( OceanFFTIdx::eLightBuffer ) );
+			descriptorWrites.push_back( OceanUbo.getDescriptorWrite( OceanFFTIdx::eOceanUbo ) );
+			auto index = uint32_t( OceanFFTIdx::eHeightDisplacement );
 			bindTexture( heightDisplView, linearWrapSampler, descriptorWrites, index );
 			bindTexture( gradJacobView, linearWrapSampler, descriptorWrites, index );
 			bindTexture( normals, linearWrapSampler, descriptorWrites, index );
@@ -945,7 +945,7 @@ namespace ocean_fft
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		UBO_OCEAN( writer
-			, WaveIdx::eOceanUbo
+			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< castor3d::shader::VertexSurfaceT, PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
@@ -994,7 +994,7 @@ namespace ocean_fft
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		UBO_OCEAN( writer
-			, WaveIdx::eOceanUbo
+			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< VoidT, PatchT >( sdw::VertexInT< sdw::VoidT >{ writer }
@@ -1044,7 +1044,7 @@ namespace ocean_fft
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		UBO_OCEAN( writer
-			, WaveIdx::eOceanUbo
+			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eAdditional );
 
 		auto tessLevel1f = writer.implementFunction< Float >( "tessLevel1f"
@@ -1189,11 +1189,11 @@ namespace ocean_fft
 			, uint32_t( PassUboIdx::eScene )
 			, RenderPipeline::eAdditional );
 		UBO_OCEAN( writer
-			, WaveIdx::eOceanUbo
+			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eAdditional );
 
 		auto c3d_heightDisplacementMap = writer.declSampledImage< sdw::SampledImage2DRgba32 >( "c3d_heightDisplacementMap"
-			, WaveIdx::eHeightDisplacement
+			, OceanFFTIdx::eHeightDisplacement
 			, RenderPipeline::eAdditional );
 
 		auto lerpVertex = writer.implementFunction< Vec2 >( "lerpVertex"
