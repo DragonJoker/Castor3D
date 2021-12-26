@@ -292,7 +292,7 @@ namespace castor3d
 			, topology );
 	}
 
-	RenderPipeline * SceneRenderPass::prepareBackPipeline( PipelineFlags pipelineFlags
+	RenderPipeline & SceneRenderPass::prepareBackPipeline( PipelineFlags pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
 	{
@@ -302,7 +302,7 @@ namespace castor3d
 			, VK_CULL_MODE_BACK_BIT );
 	}
 
-	RenderPipeline * SceneRenderPass::prepareFrontPipeline( PipelineFlags pipelineFlags
+	RenderPipeline & SceneRenderPass::prepareFrontPipeline( PipelineFlags pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
 	{
@@ -874,7 +874,7 @@ namespace castor3d
 		return m_backPipelines;
 	}
 
-	RenderPipeline * SceneRenderPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+	RenderPipeline & SceneRenderPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 		, PipelineFlags flags
 		, VkCullModeFlags cullMode )
@@ -942,7 +942,7 @@ namespace castor3d
 			result = it->get();
 		}
 
-		return result;
+		return *result;
 	}
 
 	SubmeshRenderNode * SceneRenderPass::doCreateSubmeshNode( Pass & pass

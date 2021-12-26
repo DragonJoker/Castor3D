@@ -145,7 +145,8 @@ namespace castor3d
 	private:
 		void doInitialise( QueueData const & queueData );
 		void doPrepareCommandBuffer();
-		void doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps );
+		void doParseAllRenderNodes();
+		void doSortAllRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void doParseCulledRenderNodes();
 		void doOnCullerCompute( SceneCuller const & culler );
 
@@ -159,9 +160,12 @@ namespace castor3d
 		GpuFrameEvent * m_initEvent{};
 		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged{};
+		bool m_sortedChanged{};
 		bool m_culledChanged{};
+		bool m_commandsChanged{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
 		castor::GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
+		VkRenderPass m_renderPassAtInit{};
 	};
 }
 
