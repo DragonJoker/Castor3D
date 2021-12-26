@@ -363,8 +363,17 @@ namespace water
 			visitor.visit( cuT( "Normal map scroll" )
 				, m_configuration.normalMapScroll
 				, nullptr );
-			visitor.visit( cuT( "SSR settings" )
-				, m_configuration.ssrSettings
+			visitor.visit( cuT( "SSR step size" )
+				, m_configuration.ssrStepSize
+				, nullptr );
+			visitor.visit( cuT( "SSR forward steps count" )
+				, m_configuration.ssrForwardStepsCount
+				, nullptr );
+			visitor.visit( cuT( "SSR backward steps count" )
+				, m_configuration.ssrBackwardStepsCount
+				, nullptr );
+			visitor.visit( cuT( "SSR depth mult." )
+				, m_configuration.ssrDepthMult
 				, nullptr );
 		}
 	}
