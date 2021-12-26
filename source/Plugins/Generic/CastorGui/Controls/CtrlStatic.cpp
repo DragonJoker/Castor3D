@@ -1,4 +1,4 @@
-#include "CastorGui/CtrlStatic.hpp"
+#include "CastorGui/Controls/CtrlStatic.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
 
@@ -63,7 +63,7 @@ namespace CastorGui
 		text->setCaption( m_caption );
 		text->setVisible( p_visible );
 		text->setVAlign( VAlign::eCenter );
-		doUpdateStyle();
+		doUpdateFlags();
 	}
 
 	void StaticCtrl::setFont( String const & p_font )
@@ -182,17 +182,17 @@ namespace CastorGui
 		}
 	}
 
-	void StaticCtrl::doUpdateStyle()
+	void StaticCtrl::doUpdateFlags()
 	{
 		TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			if ( checkFlag( getStyle(), StaticStyle::eHAlignCenter ) )
+			if ( checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
 			{
 				text->setHAlign( HAlign::eCenter );
 			}
-			else if ( checkFlag( getStyle(), StaticStyle::eHAlignRight ) )
+			else if ( checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
 			{
 				text->setHAlign( HAlign::eRight );
 			}
@@ -201,11 +201,11 @@ namespace CastorGui
 				text->setHAlign( HAlign::eLeft );
 			}
 
-			if ( checkFlag( getStyle(), StaticStyle::eVAlignCenter ) )
+			if ( checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
 			{
 				text->setVAlign( VAlign::eCenter );
 			}
-			else if ( checkFlag( getStyle(), StaticStyle::eVAlignBottom ) )
+			else if ( checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
 			{
 				text->setVAlign( VAlign::eBottom );
 			}
