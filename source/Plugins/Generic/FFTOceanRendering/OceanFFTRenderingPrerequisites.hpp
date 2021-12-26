@@ -65,7 +65,6 @@ namespace ocean_fft
 		uint32_t heightMapSamples{ 256u };
 		uint32_t displacementDownsample{ 1u };
 		float amplitude{ 1.0f };
-		float maxWaveLength{ 1.0f };
 		float windVelocity{ 340.0f };
 		float lod0Distance{ 50.0f };
 		bool disableRandomSeed{ false };

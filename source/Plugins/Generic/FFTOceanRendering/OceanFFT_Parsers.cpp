@@ -211,20 +211,6 @@ namespace ocean_fft
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserFftMaxWaveLength )
-	{
-		if ( params.empty() )
-		{
-			CU_ParsingError( "Missing parameter" );
-		}
-		else
-		{
-			auto & waveContext = getParserContext( context );
-			params[0]->get( waveContext.fftConfig.maxWaveLength );
-		}
-	}
-	CU_EndAttribute()
-
 	CU_ImplementAttributeParser( parserFftAmplitude )
 	{
 		if ( params.empty() )
