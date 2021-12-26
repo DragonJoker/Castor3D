@@ -48,7 +48,10 @@ namespace
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "depthSofteningDistance" ), &water::parserDepthSofteningDistance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "normalMapScrollSpeed" ), &water::parserNormalMapScrollSpeed, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "normalMapScroll" ), &water::parserNormalMapScroll, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
-		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "ssrSettings" ), &water::parserSsrSettings, { castor::makeParameter< castor::ParameterType::ePoint4F >() } );
+		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "ssrStepSize" ), &water::parserSsrStepSize, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "ssrForwardStepsCount" ), &water::parserSsrFwdStepCount, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "ssrBackwardStepsCount" ), &water::parserSsrBckStepCount, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "ssrDepthMult" ), &water::parserSsrDepthMult, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "normals1" ), &water::parserNormals1, { castor::makeParameter< castor::ParameterType::ePath >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "normals2" ), &water::parserNormals2, { castor::makeParameter< castor::ParameterType::ePath >() } );
 		addParser( result, uint32_t( water::WaterSection::eRoot ), cuT( "noise" ), &water::parserNoise, { castor::makeParameter< castor::ParameterType::ePath >() } );

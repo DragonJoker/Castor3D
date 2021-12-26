@@ -173,17 +173,58 @@ namespace water
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSsrSettings )
+	CU_ImplementAttributeParser( parserSsrStepSize )
 	{
-		auto & waterContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( waterContext.config.ssrSettings );
+			auto & waterContext = getParserContext( context );
+			params[0]->get( waterContext.config.ssrStepSize );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrFwdStepCount )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waterContext = getParserContext( context );
+			params[0]->get( waterContext.config.ssrForwardStepsCount );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrBckStepCount )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waterContext = getParserContext( context );
+			params[0]->get( waterContext.config.ssrBackwardStepsCount );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsrDepthMult )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & waterContext = getParserContext( context );
+			params[0]->get( waterContext.config.ssrDepthMult );
 		}
 	}
 	CU_EndAttribute()
