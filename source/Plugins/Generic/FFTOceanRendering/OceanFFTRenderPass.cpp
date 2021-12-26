@@ -1445,16 +1445,22 @@ namespace ocean_fft
 				displayDebugData( eTurbulence, vec3( turbulence ), 1.0_f );
 
 				// Add low frequency gradient from heightmap with gradient from high frequency noisemap.
-				auto normal = writer.declLocale( "normal"
+				auto finalNormal = writer.declLocale( "finalNormal"
 					, vec3( -gradJacobian.x(), 1.0, -gradJacobian.y() ) );
-				normal.xz() -= noiseGradient;
-				normal = normalize( normal );
-				displayDebugData( eNormal, normal, 1.0_f );
+				finalNormal.xz() -= noiseGradient;
+				finalNormal = normalize( finalNormal );
+
+				if ( checkFlag( flags.programFlags, castor3d::ProgramFlag::eInvertNormals ) )
+				{
+					finalNormal = -finalNormal;
+				}
+
+				displayDebugData( eNormal, finalNormal, 1.0_f );
 
 				auto worldToCam = writer.declLocale( "worldToCam"
 					, c3d_sceneData.getPosToCamera( in.worldPosition.xyz() ) );
 				auto NdotV = writer.declLocale( "NdotV"
-					, dot( worldToCam, normal ) );
+					, dot( worldToCam, finalNormal ) );
 
 				// Make water brighter based on how turbulent the water is.
 				// This is rather "arbitrary", but looks pretty good in practice.
@@ -1483,7 +1489,7 @@ namespace ocean_fft
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( in.fragCoord.xy(), in.viewPosition.xyz()
 						, in.worldPosition.xyz()
-						, normal );
+						, finalNormal );
 					lightingModel->computeCombined( *lightMat
 						, c3d_sceneData
 						, surface
@@ -1519,7 +1525,7 @@ namespace ocean_fft
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 								, c3d_sceneData.cameraPosition
-								, normal
+								, finalNormal
 								, lightMat->specular
 								, lightMat->getMetalness()
 								, surface )
@@ -1545,7 +1551,7 @@ namespace ocean_fft
 					auto ssrResult = writer.declLocale( "ssrResult"
 						, reflections->computeScreenSpace( c3d_matrixData
 							, surface.viewPosition
-							, normal
+							, finalNormal
 							, hdrCoords
 							, c3d_oceanData.ssrSettings
 							, c3d_sceneDepth
@@ -1565,7 +1571,7 @@ namespace ocean_fft
 					auto distanceFactor = writer.declLocale( "distanceFactor"
 						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
-						, fma( vec2( ( normal.xz() + normal.xy() ) * 0.5_f )
+						, fma( vec2( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f )
 							, vec2( c3d_oceanData.refractionDistortionFactor
 								* utils.saturate( length( scenePosition - surface.worldPosition ) * 0.5 ) )
 							, hdrCoords ) );
