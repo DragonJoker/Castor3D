@@ -120,7 +120,7 @@ namespace castor
 					}
 					else
 					{
-						parseError( "Section " + m_parser.getSectionName( section ) + " not found for directive [" + action.name + "]" );
+						parseError( "Directive [" + action.name + "] not found for section " + m_parser.getSectionName( section ) );
 					}
 				}
 				else if ( isNextOpenBrace && action.name != "{" )
