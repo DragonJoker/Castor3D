@@ -21,12 +21,6 @@ namespace test_launcher
 {
 	namespace
 	{
-#if defined( NDEBUG )
-		static constexpr castor::LogType DefaultLogType = castor::LogType::eInfo;
-#else
-		static constexpr castor::LogType DefaultLogType = castor::LogType::eTrace;
-#endif
-
 		namespace option
 		{
 			namespace lg
@@ -36,6 +30,7 @@ namespace test_launcher
 				static const wxString LogLevel{ wxT( "log" ) };
 				static const wxString Validate{ wxT( "validate" ) };
 				static const wxString Generate{ wxT( "generate" ) };
+				static const wxString FrameCount{ wxT( "frames" ) };
 			}
 
 			namespace st
@@ -45,6 +40,17 @@ namespace test_launcher
 				static const wxString LogLevel{ wxT( "l" ) };
 				static const wxString Validate{ wxT( "a" ) };
 				static const wxString Generate{ wxT( "e" ) };
+				static const wxString FrameCount{ wxT( "f" ) };
+			}
+
+			namespace df
+			{
+#if defined( NDEBUG )
+				static constexpr castor::LogType LogLevel = castor::LogType::eInfo;
+#else
+				static constexpr castor::LogType LogLevel = castor::LogType::eTrace;
+#endif
+				static constexpr uint32_t FrameCount{ 10u };
 			}
 		}
 	}
@@ -72,6 +78,7 @@ namespace test_launcher
 		static const wxString LogLevel{ _( "Defines log level (from 0=trace to 4=error)." ) };
 		static const wxString Validate{ _( "Enables rendering API validation." ) };
 		static const wxString Generate{ _( "Generates the reference image, using Vulkan renderer." ) };
+		static const wxString FrameCount{ _( "The number of frames before capture." ) };
 		static const wxString SceneFile{ _( "The tested scene file." ) };
 
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
@@ -80,6 +87,7 @@ namespace test_launcher
 		parser.AddSwitch( option::st::Validate, option::lg::Validate, Validate );
 		parser.AddOption( option::st::LogLevel, option::lg::LogLevel, LogLevel, wxCMD_LINE_VAL_NUMBER );
 		parser.AddSwitch( option::st::Generate, option::lg::Generate, Generate );
+		parser.AddOption( option::st::FrameCount, option::lg::FrameCount, FrameCount, wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
 
 		for ( auto & plugin : list )
@@ -124,9 +132,10 @@ namespace test_launcher
 			return result;
 		};
 
-		m_config.log = getLong( option::st::LogLevel, DefaultLogType );
+		m_config.log = getLong( option::st::LogLevel, option::df::LogLevel );
 		m_config.validate = has( option::st::Validate );
 		m_config.generate = has( option::st::Generate );
+		m_config.maxFrameCount = getLong( option::st::FrameCount, option::df::FrameCount );
 
 		if ( result )
 		{
@@ -222,7 +231,7 @@ namespace test_launcher
 			{
 				if ( auto engine = doInitialiseCastor() )
 				{
-					MainFrame * mainFrame{ new MainFrame{ *engine } };
+					MainFrame * mainFrame{ new MainFrame{ *engine, m_config.maxFrameCount } };
 
 					try
 					{
