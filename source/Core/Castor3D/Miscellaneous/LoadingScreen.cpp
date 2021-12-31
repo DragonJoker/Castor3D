@@ -247,7 +247,6 @@ namespace castor3d
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_renderQuad.record( context, commandBuffer, index );
 			m_context.vkCmdEndRenderPass( commandBuffer );
-			m_renderQuad.end( context, commandBuffer, index );
 		}
 	}
 
