@@ -158,6 +158,7 @@ namespace ocean_fft
 				, VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, mipMode
+				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
 				, true };
 			result.create();
