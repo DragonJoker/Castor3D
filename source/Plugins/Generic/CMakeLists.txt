@@ -1,9 +1,10 @@
-option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" TRUE )
-option( CASTOR_BUILD_GENERIC_CASTORGUI "Build CastorGui generic plugin" TRUE )
-option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" TRUE )
-option( CASTOR_BUILD_GENERIC_WATERRENDERING "Build water rendering plugin" TRUE )
-option( CASTOR_BUILD_GENERIC_OCEANRENDERING "Build ocean rendering plugin" TRUE )
-option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin" TRUE )
+option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" ON )
+option( CASTOR_BUILD_GENERIC_CASTORGUI "Build CastorGui generic plugin" ON )
+option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" ON )
+option( CASTOR_BUILD_GENERIC_WATERRENDERING "Build water rendering plugin" ON )
+option( CASTOR_BUILD_GENERIC_OCEANRENDERING "Build ocean rendering plugin" ON )
+option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin" ON )
+option( CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING "Build Atmosphere scattering plugin" ON )
 
 function( GenericInit )
 	set( Cgui "no (Not wanted)" PARENT_SCOPE )
@@ -11,6 +12,7 @@ function( GenericInit )
 	set( Watr "no (Not wanted)" PARENT_SCOPE )
 	set( Ocen "no (Not wanted)" PARENT_SCOPE )
 	set( FftO "no (Not wanted)" PARENT_SCOPE )
+	set( AtmS "no (Not wanted)" PARENT_SCOPE )
 
 	if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 		set( Castor3D_MATERIAL_DIRS
@@ -72,6 +74,12 @@ function( GenericBuild )
 			set( FftO ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING} )
+			set( Build ${AtmS} )
+			add_subdirectory( Plugins/Generic/AtmosphereScattering )
+			set( AtmS ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -112,6 +120,9 @@ function( GenericSummary msg )
 		endif ()
 		if( ${CASTOR_BUILD_GENERIC_FFTOCEANRENDERING} )
 			set( msg_tmp "${msg_tmp}\n    FFTOceanRendering    ${FftO}" )
+		endif ()
+		if( ${CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING} )
+			set( msg_tmp "${msg_tmp}\n    AtmosphereScattering ${AtmS}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -155,6 +166,14 @@ function( GenericSetup )
 			cpack_add_component( FFTOceanRendering
 				DISPLAY_NAME "FFTOceanRendering"
 				DESCRIPTION "Allows FFT ocean rendering in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+			)
+		endif()
+		if( ${CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING} )
+			cpack_add_component( AtmosphereScattering
+				DISPLAY_NAME "AtmosphereScattering"
+				DESCRIPTION "Allows Atmosphere Scattering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 			)
