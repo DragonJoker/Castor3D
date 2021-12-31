@@ -123,6 +123,7 @@ namespace castor3d
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, borderColor
 			, createSubviews }
 	{
@@ -140,6 +141,7 @@ namespace castor3d
 		, VkFilter minFilter
 		, VkFilter magFilter
 		, VkSamplerMipmapMode mipFilter
+		, VkSamplerAddressMode addressMode
 		, VkBorderColor const & borderColor
 		, bool createSubviews )
 		: handler{ &handler }
@@ -234,9 +236,9 @@ namespace castor3d
 		auto splName = getSamplerName( minFilter
 			, magFilter
 			, mipFilter
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			, addressMode
+			, addressMode
+			, addressMode );
 
 		if ( engine.getSamplerCache().has( splName ) )
 		{
@@ -248,9 +250,9 @@ namespace castor3d
 			created->setMinFilter( minFilter );
 			created->setMagFilter( magFilter );
 			created->setMipFilter( mipFilter );
-			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setWrapS( addressMode );
+			created->setWrapT( addressMode );
+			created->setWrapR( addressMode );
 			created->setBorderColour( borderColor );
 			created->initialise( device );
 			c3dSampler = engine.getSamplerCache().add( splName, created, false );
