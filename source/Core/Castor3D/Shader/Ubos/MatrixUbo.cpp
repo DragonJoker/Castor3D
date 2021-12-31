@@ -104,6 +104,11 @@ namespace castor3d
 			return utils.calcWSPosition( texCoord, depth, m_invProjection );
 		}
 
+		sdw::Vec4 MatrixData::curProjToWorld( sdw::Vec4 const & position )const
+		{
+			return inverse( m_curViewProj ) * position;
+		}
+
 		sdw::Vec3 MatrixData::curProjToWorld( Utils & utils
 			, sdw::Vec2 const & texCoord
 			, sdw::Float const & depth )const
