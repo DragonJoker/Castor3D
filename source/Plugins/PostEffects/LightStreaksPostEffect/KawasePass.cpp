@@ -86,7 +86,7 @@ namespace light_streaks
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FrameGraph & graph
+		std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -143,7 +143,7 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	KawasePass::Subpass::Subpass( crg::FrameGraph & graph
+	KawasePass::Subpass::Subpass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & srcView
@@ -189,7 +189,7 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	KawasePass::KawasePass( crg::FrameGraph & graph
+	KawasePass::KawasePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & hiViews

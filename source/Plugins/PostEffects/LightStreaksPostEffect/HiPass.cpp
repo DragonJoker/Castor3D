@@ -203,7 +203,7 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	HiPass::HiPass( crg::FrameGraph & graph
+	HiPass::HiPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView

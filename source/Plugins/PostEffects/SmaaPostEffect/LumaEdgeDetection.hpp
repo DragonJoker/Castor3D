@@ -12,7 +12,8 @@ namespace smaa
 		: public EdgeDetection
 	{
 	public:
-		LumaEdgeDetection( crg::FramePass const & previousPass
+		LumaEdgeDetection( crg::FramePassGroup & graph
+			, crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo

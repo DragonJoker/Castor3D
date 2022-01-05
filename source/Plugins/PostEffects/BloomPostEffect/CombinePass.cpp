@@ -74,7 +74,7 @@ namespace Bloom
 	String const CombinePass::CombineMapPasses = cuT( "c3d_mapPasses" );
 	String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
 
-	CombinePass::CombinePass( crg::FrameGraph & graph
+	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView

@@ -42,7 +42,7 @@ namespace castor3d
 		 *\param[in]	gpResult	Le résultat de la geometry pass.
 		 *\param[in]	lpResult	Le résultat de la light pass.
 		 */
-		C3D_API SubsurfaceScatteringPass( crg::FrameGraph & graph
+		C3D_API SubsurfaceScatteringPass( crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
@@ -103,6 +103,7 @@ namespace castor3d
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		Scene const & m_scene;
+		crg::FramePassGroup & m_group;
 		bool m_enabled;
 		castor::Size m_size;
 		TexturePtr m_intermediate;

@@ -76,7 +76,7 @@ namespace ocean_fft
 		};
 
 		void createFakeCombinePass( castor::String const & name
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, castor3d::Texture const & a
 			, castor3d::Texture const & b
@@ -187,7 +187,7 @@ namespace ocean_fft
 
 		crg::FramePass const & createCopyPass( castor::String const & name
 			, castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, crg::ImageViewId input
 			, crg::ImageViewId output
@@ -218,7 +218,7 @@ namespace ocean_fft
 
 		crg::FramePassArray createNodesPass( castor::String const & name
 			, castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, castor3d::RenderTechnique & technique
 			, castor3d::TechniquePasses & renderPasses
 			, crg::FramePassArray previousPasses
@@ -372,7 +372,7 @@ namespace ocean_fft
 		, crg::FramePassArray previousPasses )
 	{
 		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
-		auto & graph = technique.getRenderTarget().getGraph();
+		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( OceanFFT::Name );
 		auto extent = getExtent( technique.getResultImg() );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
 			, graph.getHandler()
@@ -414,12 +414,13 @@ namespace ocean_fft
 		auto oceanUbo = std::make_shared< OceanUbo >( device );
 #if Ocean_DebugFFTGraph
 		crg::FrameGraph fftGraph{ graph.getHandler(), OceanFFT::Name };
+		auto & group = fftGraph.createPassGroup( OceanFFT::Name );
 		auto oceanFFT = std::make_shared< OceanFFT >( device
-			, fftGraph
+			, group
 			, previousPasses
 			, *oceanUbo );
 		createFakeCombinePass( OceanFFT::Name
-			, fftGraph
+			, group
 			, oceanFFT->getLastPasses()
 			, oceanFFT->getGradientJacobian()
 			, oceanFFT->getHeightDisplacement()

@@ -17,7 +17,8 @@ namespace smaa
 	class Reproject
 	{
 	public:
-		Reproject( crg::FramePass const & previousPass
+		Reproject( crg::FramePassGroup & graph
+			, crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
@@ -42,7 +43,7 @@ namespace smaa
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		crg::ImageViewIdArray m_currentColourViews;
 		crg::ImageViewIdArray m_previousColourViews;
 		crg::ImageViewId const * m_velocityView;

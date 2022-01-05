@@ -166,13 +166,14 @@ namespace draw_edges
 
 	//*********************************************************************************************
 
-	ObjectIDEdgeDetection::ObjectIDEdgeDetection( crg::FramePass const & previousPass
+	ObjectIDEdgeDetection::ObjectIDEdgeDetection( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, castor3d::PassBuffer const & passBuffer
 		, crg::ImageViewId const & data0 )
 		: m_device{ device }
-		, m_graph{ renderTarget.getGraph() }
+		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DEObjDetection", getVertexShader( m_extent ) }
 	, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DEObjDetection", getPixelShader( m_extent, 1 ) }

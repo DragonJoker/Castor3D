@@ -67,7 +67,8 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	EdgeDetection::EdgeDetection( crg::FramePass const & previousPass
+	EdgeDetection::EdgeDetection( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
@@ -75,7 +76,7 @@ namespace smaa
 		, std::unique_ptr< ast::Shader > pixelShader
 		, bool const * enabled )
 		: m_device{ device }
-		, m_graph{ renderTarget.getGraph() }
+		, m_graph{ graph }
 		, m_config{ config }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_outColour{ m_device

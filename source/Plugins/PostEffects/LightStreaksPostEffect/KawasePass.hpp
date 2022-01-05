@@ -17,7 +17,7 @@ namespace light_streaks
 	class KawasePass
 	{
 	public:
-		KawasePass( crg::FrameGraph & graph
+		KawasePass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & hiViews
@@ -37,7 +37,7 @@ namespace light_streaks
 
 		struct Subpass
 		{
-			Subpass( crg::FrameGraph & graph
+			Subpass( crg::FramePassGroup & graph
 				, crg::FramePass const & previousPass
 				, castor3d::RenderDevice const & device
 				, crg::ImageViewId const & srcView

@@ -274,7 +274,7 @@ namespace castor3d
 		, m_matrixUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ createSceneUbo( m_device, m_renderSize ) }
-		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
+		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
 			, nullptr
 			, m_device
 			, SceneName
@@ -399,7 +399,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateOpaquePass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.createPass( SceneName + "Opaque"
+		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Opaque"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -426,7 +426,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateTransparentPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.createPass( SceneName + "Transparent"
+		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Transparent"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -452,7 +452,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateOverlayPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.createPass( SceneName + "Overlay"
+		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Overlay"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -474,7 +474,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateWindowPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.createPass( SceneName + "Window"
+		auto & result = m_graph.getDefaultGroup().createPass( SceneName + "Window"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
