@@ -246,6 +246,7 @@ namespace castor3d
 			//!\~english	Tells if the smaphore has been used in previous frame.
 			//!\~french		Dit si le sémaphore a été utilisé pendant la précédente frame.
 			bool used{ true };
+			uint32_t waitCount{ 1u };
 		};
 		std::array< UploadResources, 2u > m_uploadResources;
 		uint32_t m_currentUpdate{ 0u };
