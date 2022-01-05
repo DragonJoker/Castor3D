@@ -366,7 +366,7 @@ namespace castor3d
 			auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
 			size->x = std::max( 1u, size->x );
 			size->y = std::max( 1u, size->y );
-			auto & commandBuffer = *m_renderer.m_commandBuffer;
+			auto & commandBuffer = *m_renderer.m_commands.commandBuffer;
 			commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
 			commandBuffer.setViewport( makeViewport( m_renderer.m_size ) );
 			commandBuffer.setScissor( makeScissor( position, size ) );
@@ -468,7 +468,8 @@ namespace castor3d
 		: OwnedBy< RenderSystem >( device.renderSystem )
 		, m_uboPools{ *device.uboPools }
 		, m_target{ target }
-		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "OverlayRenderer", level ) }
+		, m_commands{ device, *device.graphicsData(), "OverlayRenderer" }
+		, m_fence{ device->createFence( "OverlayRenderer", VK_FENCE_CREATE_SIGNALED_BIT ) }
 		, m_noTexDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
 				, sizeof( OverlayCategory::Vertex )
@@ -495,7 +496,6 @@ namespace castor3d
 				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
 		, m_size{ makeSize( m_target.getExtent() ) }
 		, m_matrixUbo{ device }
-		, m_finished{ device->createSemaphore( "OverlayRenderer" ) }
 	{
 		doCreateRenderPass( device );
 
@@ -543,10 +543,9 @@ namespace castor3d
 		m_panelVertexBuffers.clear();
 		m_borderVertexBuffers.clear();
 		m_textVertexBuffers.clear();
-		m_commandBuffer.reset();
+		m_commands = {};
 		m_frameBuffer.reset();
 		m_renderPass.reset();
-		m_finished.reset();
 	}
 
 	void OverlayRenderer::update( GpuUpdater & updater )
@@ -568,14 +567,17 @@ namespace castor3d
 
 	void OverlayRenderer::beginPrepare( FramePassTimer const & timer )
 	{
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_commandBuffer->beginDebugBlock(
+		m_fence->wait( ashes::MaxTimeout );
+		m_fence->reset();
+		auto & cb = m_commands.commandBuffer;
+		cb->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		cb->beginDebugBlock(
 			{
 				"Overlays",
 				makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
-		timer.beginPass( *m_commandBuffer );
-		m_commandBuffer->beginRenderPass( *m_renderPass
+		timer.beginPass( *cb );
+		cb->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
@@ -583,33 +585,17 @@ namespace castor3d
 
 	void OverlayRenderer::endPrepare( FramePassTimer const & timer )
 	{
-		m_commandBuffer->endRenderPass();
-		timer.endPass( *m_commandBuffer );
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
-
-		for ( auto & pool : m_panelVertexBuffers )
-		{
-			pool->upload();
-		}
-
-		for ( auto & pool : m_borderVertexBuffers )
-		{
-			pool->upload();
-		}
-
-		for ( auto & pool : m_textVertexBuffers )
-		{
-			pool->upload();
-		}
-		
-		m_sizeChanged = false;
+		auto & cb = m_commands.commandBuffer;
+		cb->endRenderPass();
+		timer.endPass( *cb );
+		cb->endDebugBlock();
+		endPrepare();
 	}
 
 	void OverlayRenderer::beginPrepare( VkRenderPass renderPass
 		, VkFramebuffer framebuffer )
 	{
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
+		m_commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
 			, VkCommandBufferInheritanceInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO
 				, nullptr
 				, renderPass
@@ -622,7 +608,7 @@ namespace castor3d
 
 	void OverlayRenderer::endPrepare()
 	{
-		m_commandBuffer->end();
+		m_commands.commandBuffer->end();
 
 		for ( auto & pool : m_panelVertexBuffers )
 		{
@@ -651,12 +637,13 @@ namespace castor3d
 		std::vector< VkSemaphore > semaphores;
 		std::vector< VkPipelineStageFlags > dstStageMasks;
 		crg::convert( toWait, semaphores, dstStageMasks );
-		queue.submit( *m_commandBuffer
+		queue.submit( *m_commands.commandBuffer
 			, semaphores
 			, dstStageMasks
-			, *m_finished );
+			, *m_commands.semaphore
+			, *m_fence );
 		return { 1u
-			, { *m_finished
+			, { *m_commands.semaphore
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
 	}
 
