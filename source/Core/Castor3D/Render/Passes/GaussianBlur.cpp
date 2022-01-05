@@ -203,7 +203,7 @@ namespace castor3d
 			return result;
 		}
 
-		crg::ImageViewId createIntermediate( crg::FrameGraph & graph
+		crg::ImageViewId createIntermediate( crg::FramePassGroup & graph
 			, castor::String const & prefix
 			, VkFormat format
 			, VkExtent3D const & size
@@ -228,7 +228,7 @@ namespace castor3d
 				, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, 1u } } );
 		}
 
-		crg::ImageViewIdArray createViews( crg::FrameGraph & graph
+		crg::ImageViewIdArray createViews( crg::FramePassGroup & graph
 			, crg::ImageViewId input )
 		{
 			crg::ImageViewIdArray result;
@@ -257,7 +257,7 @@ namespace castor3d
 	String const GaussianBlur::CoefficientsCount = cuT( "c3d_coefficientsCount" );
 	String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
 
-	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & category
@@ -346,7 +346,7 @@ namespace castor3d
 		}
 	}
 
-	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & category
@@ -364,7 +364,7 @@ namespace castor3d
 	{
 	}
 
-	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & category
@@ -382,7 +382,7 @@ namespace castor3d
 	{
 	}
 
-	GaussianBlur::GaussianBlur( crg::FrameGraph & graph
+	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, castor::String const & category

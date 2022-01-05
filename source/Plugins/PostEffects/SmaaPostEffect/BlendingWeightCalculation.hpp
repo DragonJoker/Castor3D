@@ -18,7 +18,8 @@ namespace smaa
 	class BlendingWeightCalculation
 	{
 	public:
-		BlendingWeightCalculation( crg::FramePass const & previousPass
+		BlendingWeightCalculation( crg::FramePassGroup & graph
+			, crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
@@ -41,7 +42,7 @@ namespace smaa
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		VkExtent3D m_extent;
 		crg::ImageViewId m_areaView;
 		crg::ImageViewId m_searchView;

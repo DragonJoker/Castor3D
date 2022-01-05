@@ -25,7 +25,7 @@ CU_ImplementCUSmartPtr( castor3d, DeferredRendering )
 
 namespace castor3d
 {
-	DeferredRendering::DeferredRendering( crg::FrameGraph & graph
+	DeferredRendering::DeferredRendering( crg::FramePassGroup & graph
 		, crg::FramePass const & opaquePass
 		, RenderDevice const & device
 		, ProgressBar * progress

@@ -276,7 +276,7 @@ namespace castor3d
 	IndirectLightingPass::IndirectLightingPass( RenderDevice const & device
 		, ProgressBar * progress
 		, Scene const & scene
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePass const *& previousPass
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult
@@ -301,9 +301,10 @@ namespace castor3d
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
+		, m_group{ graph.createPassGroup( "IndirectLighting" ) }
 		, m_programs{ createPrograms( device, scene ) }
 	{
-		previousPass = &doCreateLightingPass( graph, *previousPass, progress );
+		previousPass = &doCreateLightingPass( m_group, *previousPass, progress );
 	}
 
 	void IndirectLightingPass::update( CpuUpdater & updater )
@@ -324,7 +325,7 @@ namespace castor3d
 			, TextureFactors{}.invert( true ) );
 	}
 
-	crg::FramePass const & IndirectLightingPass::doCreateLightingPass( crg::FrameGraph & graph
+	crg::FramePass const & IndirectLightingPass::doCreateLightingPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{

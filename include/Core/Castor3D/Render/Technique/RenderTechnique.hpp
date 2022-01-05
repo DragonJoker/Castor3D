@@ -30,7 +30,7 @@ See LICENSE file in root folder
 #include <RenderGraph/Attachment.hpp>
 #include <RenderGraph/FramePass.hpp>
 
-#define C3D_DebugSSAOGraph 1
+#define C3D_DebugSSAOGraph 0
 
 namespace castor3d
 {

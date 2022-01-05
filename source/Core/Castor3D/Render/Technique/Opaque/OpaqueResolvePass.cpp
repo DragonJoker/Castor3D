@@ -336,7 +336,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OpaqueResolvePass::OpaqueResolvePass( crg::FrameGraph & graph
+	OpaqueResolvePass::OpaqueResolvePass( crg::FramePassGroup & graph
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
@@ -390,7 +390,7 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass const & OpaqueResolvePass::doCreatePass( crg::FrameGraph & graph
+	crg::FramePass const & OpaqueResolvePass::doCreatePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{

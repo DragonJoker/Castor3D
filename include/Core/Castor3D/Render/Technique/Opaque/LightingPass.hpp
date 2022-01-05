@@ -235,7 +235,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo			L'UBO de scène.
 		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
 		 */
-		LightingPass( crg::FrameGraph & graph
+		LightingPass( crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
@@ -270,10 +270,10 @@ namespace castor3d
 		}
 
 	private:
-		crg::FramePass const & doCreateDepthBlitPass( crg::FrameGraph & graph
+		crg::FramePass const & doCreateDepthBlitPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
-		crg::FramePass const & doCreateLightingPass( crg::FrameGraph & graph
+		crg::FramePass const & doCreateLightingPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, Scene const & scene
 			, ProgressBar * progress );
@@ -290,6 +290,7 @@ namespace castor3d
 		LightPassResult const & m_lpResult;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
+		crg::FramePassGroup & m_group;
 		castor::Size const m_size;
 		RunnableLightingPass * m_lightPass{};
 	};

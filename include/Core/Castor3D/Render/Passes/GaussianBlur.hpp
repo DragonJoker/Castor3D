@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	view		La texture.
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
-		C3D_API GaussianBlur( crg::FrameGraph & graph
+		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & category
@@ -49,21 +49,21 @@ namespace castor3d
 			, crg::ImageViewIdArray const & views
 			, crg::ImageViewId const & intermediateView
 			, uint32_t kernelSize );
-		C3D_API GaussianBlur( crg::FrameGraph & graph
+		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
 			, uint32_t kernelSize );
-		C3D_API GaussianBlur( crg::FrameGraph & graph
+		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, uint32_t kernelSize );
-		C3D_API GaussianBlur( crg::FrameGraph & graph
+		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, castor::String const & category

@@ -143,8 +143,9 @@ namespace castor3d
 
 		for ( auto & queue : m_allQueuesData )
 		{
+			std::string name = "Queue_" + std::to_string( familyIndex ) + "_" + std::to_string( index );
 			queue = std::make_unique< QueueData >( this );
-			queue->queue = device.getQueue( familyIndex, index );
+			queue->queue = device.getQueue( name, familyIndex, index );
 			queue->commandPool = device.createCommandPool( familyIndex
 				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT );
 			m_remainingQueuesData.push_back( queue.get() );

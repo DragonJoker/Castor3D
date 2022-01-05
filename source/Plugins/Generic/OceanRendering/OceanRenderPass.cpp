@@ -266,8 +266,9 @@ namespace ocean
 		std::string name{ Name };
 		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
 		auto extent = getExtent( technique.getResultImg() );
+		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
-			, technique.getRenderTarget().getGraph().getHandler()
+			, graph.getHandler()
 			, name +"Colour"
 			, 0u
 			, extent
@@ -276,7 +277,7 @@ namespace ocean
 			, technique.getResultImg().data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
-		auto & blitColourPass = technique.getRenderTarget().getGraph().createPass( name + "CopyColour"
+		auto & blitColourPass = graph.createPass( name + "CopyColour"
 			, [name, extent, isEnabled, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -297,7 +298,7 @@ namespace ocean
 		blitColourPass.addTransferOutputView( colourInput->sampledViewId );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
-			, technique.getRenderTarget().getGraph().getHandler()
+			, graph.getHandler()
 			, name + "Depth"
 			, 0u
 			, extent
@@ -306,7 +307,7 @@ namespace ocean
 			, technique.getDepthImg().data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
-		auto & blitDepthPass = technique.getRenderTarget().getGraph().createPass( name + "CopyDepth"
+		auto & blitDepthPass = graph.createPass( name + "CopyDepth"
 			, [name, extent, isEnabled, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -326,7 +327,7 @@ namespace ocean
 		blitDepthPass.addTransferInputView( technique.getDepthSampledView() );
 		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
-		auto & result = technique.getRenderTarget().getGraph().createPass( name
+		auto & result = graph.createPass( name
 			, [name, extent, colourInput, depthInput, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )

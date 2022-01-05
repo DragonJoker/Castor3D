@@ -15,7 +15,7 @@ namespace Bloom
 	class BlurPass
 	{
 	public:
-		BlurPass( crg::FrameGraph & graph
+		BlurPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -25,7 +25,7 @@ namespace Bloom
 			, uint32_t blurPassesCount
 			, bool isVertical
 			, bool const * enabled );
-		BlurPass( crg::FrameGraph & graph
+		BlurPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -49,7 +49,7 @@ namespace Bloom
 
 		struct Subpass
 		{
-			Subpass( crg::FrameGraph & graph
+			Subpass( crg::FramePassGroup & graph
 				, crg::FramePass const & previousPass
 				, castor3d::RenderDevice const & device
 				, crg::ImageViewId const & srcView

@@ -280,7 +280,8 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	LumaEdgeDetection::LumaEdgeDetection( crg::FramePass const & previousPass
+	LumaEdgeDetection::LumaEdgeDetection( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
@@ -288,7 +289,8 @@ namespace smaa
 		, crg::ImageViewId const * predication
 		, SmaaConfig const & config
 		, bool const * enabled )
-		: EdgeDetection{ previousPass
+		: EdgeDetection{ graph
+			, previousPass
 			, renderTarget
 			, device
 			, ubo
@@ -299,7 +301,7 @@ namespace smaa
 			, enabled }
 		, m_colourView{ colourView }
 		, m_predicationView{ ( predication
-			? renderTarget.getGraph().createView( doCreatePredicationView( *predication ) )
+			? m_graph.createView( doCreatePredicationView( *predication ) )
 			: crg::ImageViewId{} ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR

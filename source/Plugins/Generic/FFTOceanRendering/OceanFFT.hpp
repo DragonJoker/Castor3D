@@ -36,7 +36,7 @@ namespace ocean_fft
 	crg::FramePass const & createGenerateFrequencyPassT( castor::String const & prefix
 		, castor::String const & name
 		, castor3d::RenderDevice const & device
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
 		, VkExtent2D const & extent
 		, OceanUbo const & ubo
@@ -78,7 +78,7 @@ namespace ocean_fft
 	{
 		GenerateFFTPassT( castor::String const & prefix
 			, castor::String const & name
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
 			, VkExtent2D dimensions
@@ -149,7 +149,7 @@ namespace ocean_fft
 
 	public:
 		OceanFFT( castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled );
@@ -188,6 +188,7 @@ namespace ocean_fft
 		void generateDistributionSeeds( ashes::Buffer< cfloat > & distribBuffer );
 
 	private:
+		crg::FramePassGroup & m_group;
 		Config m_config;
 		std::default_random_engine m_engine;
 		std::normal_distribution< float > m_normDis{ 0.0f, 1.0f };

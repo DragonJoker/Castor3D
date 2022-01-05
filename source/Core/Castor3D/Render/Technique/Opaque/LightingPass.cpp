@@ -886,7 +886,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightingPass::LightingPass( crg::FrameGraph & graph
+	LightingPass::LightingPass( crg::FramePassGroup & graph
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
@@ -909,12 +909,13 @@ namespace castor3d
 		, m_lpResult{ lpResult }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
+		, m_group{ graph.createPassGroup( "DirectLighting" ) }
 		, m_size{ size }
 	{
-		previousPass = &doCreateDepthBlitPass( graph
+		previousPass = &doCreateDepthBlitPass( m_group
 			, *previousPass
 			, progress );
-		previousPass = &doCreateLightingPass( graph
+		previousPass = &doCreateLightingPass( m_group
 			, *previousPass
 			, scene
 			, progress );
@@ -973,7 +974,7 @@ namespace castor3d
 		}
 	}
 
-	crg::FramePass const & LightingPass::doCreateDepthBlitPass( crg::FrameGraph & graph
+	crg::FramePass const & LightingPass::doCreateDepthBlitPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{
@@ -1002,7 +1003,7 @@ namespace castor3d
 		return pass;
 	}
 
-	crg::FramePass const & LightingPass::doCreateLightingPass( crg::FrameGraph & graph
+	crg::FramePass const & LightingPass::doCreateLightingPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, Scene const & scene
 		, ProgressBar * progress )

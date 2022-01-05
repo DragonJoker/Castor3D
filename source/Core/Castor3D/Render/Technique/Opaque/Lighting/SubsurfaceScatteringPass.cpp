@@ -277,7 +277,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		TexturePtr doCreateImage( crg::FrameGraph & graph
+		TexturePtr doCreateImage( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, castor::Size const & size
 			, VkFormat format
@@ -320,7 +320,7 @@ namespace castor3d
 	castor::String const SubsurfaceScatteringPass::Weights = "c3d_weights";
 	castor::String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
-	SubsurfaceScatteringPass::SubsurfaceScatteringPass( crg::FrameGraph & graph
+	SubsurfaceScatteringPass::SubsurfaceScatteringPass( crg::FramePassGroup & graph
 		, crg::FramePass const *& previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
@@ -337,6 +337,7 @@ namespace castor3d
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_scene{ scene }
+		, m_group{ graph.createPassGroup( "SSSSS" ) }
 		, m_enabled{ m_scene.needsSubsurfaceScattering() }
 		, m_size{ textureSize }
 		, m_intermediate{ doCreateImage( graph, m_device, textureSize, m_lpResult[LpTexture::eDiffuse].getFormat(), "SSSIntermediate" ) }
@@ -375,7 +376,7 @@ namespace castor3d
 		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
 			auto blurYDestination = m_blurImages[i].get();
-			auto & blurX = graph.createPass( "SSSBlurX" + std::to_string( i )
+			auto & blurX = m_group.createPass( "SSSBlurX" + std::to_string( i )
 				, [this]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
@@ -408,7 +409,7 @@ namespace castor3d
 				, BlurLgtDiffImgId );
 			blurX.addOutputColourView( m_intermediate->targetViewId );
 
-			auto & blurY = graph.createPass( "SSSBlurY" + std::to_string( i )
+			auto & blurY = m_group.createPass( "SSSBlurY" + std::to_string( i )
 				, [this]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
@@ -445,7 +446,7 @@ namespace castor3d
 		}
 
 		stepProgressBar( progress, "Creating SSS combine pass" );
-		auto & pass = graph.createPass("SSSCombine"
+		auto & pass = m_group.createPass("SSSCombine"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

@@ -27,7 +27,8 @@ namespace draw_edges
 		};
 
 	public:
-		DepthNormalEdgeDetection( crg::FramePass const & previousPass
+		DepthNormalEdgeDetection( crg::FramePassGroup & graph
+			, crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, castor3d::PassBuffer const & passBuffer
@@ -50,7 +51,7 @@ namespace draw_edges
 
 	protected:
 		castor3d::RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		VkExtent3D m_extent;
 		castor3d::Texture m_result;
 		castor3d::ShaderModule m_vertexShader;

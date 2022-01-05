@@ -445,7 +445,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SsaoBlurPass::SsaoBlurPass( crg::FrameGraph & graph
+	SsaoBlurPass::SsaoBlurPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePass const & previousPass
@@ -465,15 +465,15 @@ namespace castor3d
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size, axis->y != 0 ) }
-		, m_bentResult{ doCreateTexture( m_device, graph.getHandler(), graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
+		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size, axis->y != 0 ) }
+		, m_bentResult{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
 		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
-		, m_programs{ Program{ device, false, graph.getName() }, Program{ device, true, graph.getName() } }
+		, m_programs{ Program{ device, false, m_graph.getName() }, Program{ device, true, m_graph.getName() } }
 	{
-		stepProgressBar( progress, "Creating " + graph.getName() + " SSAO " + prefix + " blur pass" );
+		stepProgressBar( progress, "Creating " + m_graph.getName() + " SSAO " + prefix + " blur pass" );
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
-		auto & pass = graph.createPass( "SsaoBlur" + prefix
+		auto & pass = m_graph.createPass( "SsaoBlur" + prefix
 			, [this, progress, prefix, config, axis]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

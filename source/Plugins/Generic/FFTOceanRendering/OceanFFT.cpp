@@ -26,7 +26,7 @@ namespace ocean_fft
 	{
 		crg::FramePass const & createGenerateMipmapsPass( castor::String const & name
 			, castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
@@ -54,7 +54,7 @@ namespace ocean_fft
 
 		crg::FramePass const & createGenerateSpecMipmapsPass( castor::String const & name
 			, castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
@@ -83,7 +83,7 @@ namespace ocean_fft
 
 		crg::FramePass const & createCopyAndGenerateMipmapsPass( castor::String const & name
 			, castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, ashes::BufferBase const & srcBuffer
 			, crg::ImageViewId dstImageView
@@ -137,7 +137,7 @@ namespace ocean_fft
 		}
 
 		castor3d::Texture createTexture( castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, VkExtent2D heightMapSamples
 			, std::string const & name
 			, VkFormat format
@@ -191,11 +191,12 @@ namespace ocean_fft
 	castor::String const OceanFFT::Name{ cuT( "OceanFFT" ) };
 
 	OceanFFT::OceanFFT( castor3d::RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
-		: m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine() ) }
+		: m_group{ graph }
+		, m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine() ) }
 		, m_engine{ createRandomEngine( m_config.disableRandomSeed ) }
 		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
 		, m_displacementDownsample{ m_config.displacementDownsample }
@@ -213,7 +214,7 @@ namespace ocean_fft
 		, m_generateHeightDistribution{ &createGenerateDistributionPass( Name
 			, "Height"
 			, device
-			, graph
+			, m_group
 			, previousPasses
 			, m_heightMapSamples
 			, false
@@ -223,7 +224,7 @@ namespace ocean_fft
 			, isEnabled ) }
 		, m_height{ Name
 			, "Height"
-			, graph
+			, m_group
 			, { m_generateHeightDistribution }
 			, ubo
 			, m_heightMapSamples
@@ -239,7 +240,7 @@ namespace ocean_fft
 		, m_generateDisplacementDistribution{ &createDownsampleDistributionPass( Name
 			, "Displacement"
 			, device
-			, graph
+			, m_group
 			, { m_generateHeightDistribution }
 			, m_heightMapSamples
 			, m_displacementDownsample
@@ -249,7 +250,7 @@ namespace ocean_fft
 			, isEnabled ) }
 		, m_displacement{ Name
 			, "Displacement"
-			, graph
+			, m_group
 			, { m_generateDisplacementDistribution }
 			, ubo
 			, { m_heightMapSamples.width >> m_displacementDownsample, m_heightMapSamples.height >> m_displacementDownsample }
@@ -282,7 +283,7 @@ namespace ocean_fft
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
 		, m_bakeHeightGradient{ &createBakeHeightGradientPass( m_fftConfig.device
-			, graph
+			, m_group
 			, { &m_height.getLastPass(), &m_displacement.getLastPass() }
 			, m_heightMapSamples
 			, m_config.size
@@ -295,13 +296,13 @@ namespace ocean_fft
 			, isEnabled ) }
 		, m_generateHeightDispMips{ &createGenerateSpecMipmapsPass( "HeightDisplacement"
 			, device
-			, graph
+			, m_group
 			, m_bakeHeightGradient
 			, m_heightDisplacement.front().sampledViewId
 			, isEnabled ) }
 		, m_generateGradJacobMips{ &createGenerateMipmapsPass( "GradientJacobian"
 			, device
-			, graph
+			, m_group
 			, m_bakeHeightGradient
 			, m_gradientJacobian.front().sampledViewId
 			, isEnabled ) }
@@ -318,7 +319,7 @@ namespace ocean_fft
 		, m_generateNormalDistribution{ &createGenerateDistributionPass( Name
 			, "Normals"
 			, device
-			, graph
+			, m_group
 			, previousPasses
 			, m_heightMapSamples
 			, true
@@ -328,7 +329,7 @@ namespace ocean_fft
 			, isEnabled ) }
 		, m_normal{ Name
 			, "Normals"
-			, graph
+			, m_group
 			, { m_generateNormalDistribution }
 			, ubo
 			, m_heightMapSamples
@@ -344,7 +345,7 @@ namespace ocean_fft
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
 		, m_generateNormalsMips{ &createCopyAndGenerateMipmapsPass( "Normals"
 			, device
-			, graph
+			, m_group
 			, m_normal.getLastPass()
 			, m_normal.getResult()
 			, m_normals.sampledViewId

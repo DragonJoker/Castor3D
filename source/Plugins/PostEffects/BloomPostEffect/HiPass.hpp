@@ -13,7 +13,7 @@ namespace Bloom
 	class HiPass
 	{
 	public:
-		HiPass( crg::FrameGraph & graph
+		HiPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & sceneView
@@ -33,7 +33,7 @@ namespace Bloom
 		}
 
 	private:
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		crg::ImageViewId const & m_sceneView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;

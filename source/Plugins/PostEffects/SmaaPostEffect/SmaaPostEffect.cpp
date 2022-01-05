@@ -265,12 +265,14 @@ namespace smaa
 		m_srgbTextureView = m_target;
 		m_hdrTextureView = &m_renderTarget.getTechnique().getResultImgView();
 		auto previous = &previousPass;
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "SMAA" );
 		crg::ImageViewIdArray smaaResult;
 
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
-			m_edgeDetection = std::make_unique< DepthEdgeDetection >( *previous
+			m_edgeDetection = std::make_unique< DepthEdgeDetection >( graph
+				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
@@ -280,7 +282,8 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eColour:
-			m_edgeDetection = std::make_unique< ColourEdgeDetection >( *previous
+			m_edgeDetection = std::make_unique< ColourEdgeDetection >( graph
+				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
@@ -291,7 +294,8 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eLuma:
-			m_edgeDetection = std::make_unique< LumaEdgeDetection >( *previous
+			m_edgeDetection = std::make_unique< LumaEdgeDetection >( graph
+				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
@@ -306,7 +310,8 @@ namespace smaa
 		smaaResult = { m_edgeDetection->getColourResult() };
 
 #if !C3D_DebugEdgeDetection
-		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( *previous
+		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( graph
+			, *previous
 			, m_renderTarget
 			, device
 			, m_ubo
@@ -319,7 +324,8 @@ namespace smaa
 
 #	if !C3D_DebugBlendingWeightCalculation
 		auto * velocityView = doGetVelocityView();
-		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( *previous
+		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( graph
+			, *previous
 			, m_renderTarget
 			, device
 			, m_ubo
@@ -344,7 +350,8 @@ namespace smaa
 					: currentViews[i - 1u] );
 			}
 
-			m_reproject = std::make_unique< Reproject >( *previous
+			m_reproject = std::make_unique< Reproject >( graph
+				, *previous
 				, m_renderTarget
 				, device
 				, m_ubo
@@ -360,7 +367,7 @@ namespace smaa
 #	endif
 #endif
 
-		auto & pass = m_renderTarget.getGraph().createPass( "SmaaCopy"
+		auto & pass = graph.createPass( "SmaaCopy"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
