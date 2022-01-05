@@ -11,7 +11,7 @@ namespace light_streaks
 	class HiPass
 	{
 	public:
-		HiPass( crg::FrameGraph & graph
+		HiPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & sceneView

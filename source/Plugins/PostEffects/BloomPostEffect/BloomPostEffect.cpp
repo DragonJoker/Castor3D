@@ -100,7 +100,7 @@ namespace Bloom
 	{
 		VkExtent2D size{ m_target->data->image.data->info.extent.width
 			, m_target->data->image.data->info.extent.height };
-		auto & graph = m_renderTarget.getGraph();
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "Bloom" );
 
 #if !Bloom_DebugHiPass
 		m_blurImg = graph.createImage( crg::ImageData{ "Blur"

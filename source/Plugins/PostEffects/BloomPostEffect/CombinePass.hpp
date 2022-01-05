@@ -13,7 +13,7 @@ namespace Bloom
 	class CombinePass
 	{
 	public:
-		CombinePass( crg::FrameGraph & graph
+		CombinePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & sceneView

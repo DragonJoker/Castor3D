@@ -161,7 +161,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LineariseDepthPass::LineariseDepthPass( crg::FrameGraph & graph
+	LineariseDepthPass::LineariseDepthPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
 		, ProgressBar * progress
@@ -174,7 +174,7 @@ namespace castor3d
 		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_srcDepthBuffer{ depthBuffer }
-		, m_prefix{ graph.getName() + prefix }
+		, m_prefix{ graph.name + prefix }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPools->getBuffer< Point3f >( 0u ) }

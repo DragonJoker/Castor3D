@@ -125,28 +125,6 @@ namespace castor3d
 	using TexturePtr = std::shared_ptr< Texture >;
 	using TextureArray = std::vector< TexturePtr >;
 	using RenderPassTypeID = uint16_t;
-
-	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
-		, VkImageLayout sourceLayout
-		, VkImageLayout destinationLayout
-		, uint32_t srcQueueFamily
-		, uint32_t dstQueueFamily );
-	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
-		, VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
-		, uint32_t srcQueueFamily
-		, uint32_t dstQueueFamily );
-	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
-		, VkImageSubresourceRange const & range
-		, VkImageLayout srcLayout
-		, VkImageLayout dstLayout
-		, VkAccessFlags srcAccessFlags
-		, VkAccessFlags dstAccessMask
-		, uint32_t srcQueueFamily
-		, uint32_t dstQueueFamily );
 	/**
 	*\~english
 	*\brief
@@ -346,23 +324,7 @@ namespace castor3d
 	};
 	C3D_API castor::String getName( RenderMode value );
 
-	C3D_API FilteredTextureFlags::const_iterator checkFlags( FilteredTextureFlags const & flags, TextureFlag flag );
-	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag );
 	C3D_API TextureFlags merge( TextureFlagsArray const & flags );
-	/**
-	 *\~english
-	 *\brief		Filters the given textures flags using the given mask.
-	 *\param[in]	textures	The textures flags.
-	 *\param[in]	mask		The mask used to filter out textures.
-	 *\return		The filtered flags.
-	 *\~french
-	 *\brief		Filtre les indicateurs de textures donnés en utilisant le masque donné.
-	 *\param[in]	textures	Les indicateurs de textures.
-	 *\param[in]	mask		Le masque utilisé pour le filtre.
-	 *\return		Les indicateurs filtrés.
-	 */
-	C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures
-		, TextureFlags mask );
 	/**
 	*\~english
 	*\brief
@@ -746,6 +708,61 @@ namespace castor3d
 		, castor::Size const & size );
 	C3D_API float getSafeBandedAspect( float aspect
 		, castor::Size const & size );
+	C3D_API FilteredTextureFlags::const_iterator checkFlags( FilteredTextureFlags const & flags, TextureFlag flag );
+	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag );
+	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout sourceLayout
+		, VkImageLayout destinationLayout
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily );
+	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily );
+	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
+		, VkImageSubresourceRange const & range
+		, VkImageLayout srcLayout
+		, VkImageLayout dstLayout
+		, VkAccessFlags srcAccessFlags
+		, VkAccessFlags dstAccessMask
+		, uint32_t srcQueueFamily
+		, uint32_t dstQueueFamily );
+	/**
+	 *\~english
+	 *\brief		Filters the given textures flags using the given mask.
+	 *\param[in]	textures	The textures flags.
+	 *\param[in]	mask		The mask used to filter out textures.
+	 *\return		The filtered flags.
+	 *\~french
+	 *\brief		Filtre les indicateurs de textures donnés en utilisant le masque donné.
+	 *\param[in]	textures	Les indicateurs de textures.
+	 *\param[in]	mask		Le masque utilisé pour le filtre.
+	 *\return		Les indicateurs filtrés.
+	 */
+	C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures
+		, TextureFlags mask );
+	C3D_API ashes::Image makeImage( ashes::Device const & device
+		, VkImage image
+		, crg::ImageId data );
+	C3D_API ashes::Image makeImage( ashes::Device const & device
+		, Texture const & texture );
+	C3D_API ashes::ImageView makeImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, VkImageView view
+		, crg::ImageViewId data );
+	C3D_API ashes::ImageView makeTargetImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, Texture const & texture );
+	C3D_API ashes::ImageView makeSampledImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, Texture const & texture );
+	C3D_API ashes::ImageView makeWholeImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, Texture const & texture );
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )

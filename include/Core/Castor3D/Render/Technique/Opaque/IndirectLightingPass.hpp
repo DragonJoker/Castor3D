@@ -87,7 +87,7 @@ namespace castor3d
 		IndirectLightingPass( RenderDevice const & device
 			, ProgressBar * progress
 			, Scene const & scene
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult
@@ -115,7 +115,7 @@ namespace castor3d
 		void accept( PipelineVisitorBase & visitor );
 
 	private:
-		crg::FramePass const & doCreateLightingPass( crg::FrameGraph & graph
+		crg::FramePass const & doCreateLightingPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
 
@@ -132,6 +132,7 @@ namespace castor3d
 		LpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
 		VoxelizerUbo const & m_vctConfigUbo;
+		crg::FramePassGroup & m_group;
 		std::vector< Program > m_programs;
 		uint32_t m_programIndex{};
 		bool m_enabled{};

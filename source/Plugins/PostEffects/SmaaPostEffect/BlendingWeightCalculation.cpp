@@ -808,7 +808,7 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		crg::ImageViewId createImage( crg::FrameGraph & graph
+		crg::ImageViewId createImage( crg::FramePassGroup & graph
 			, castor3d::RenderDevice const & device
 			, std::string const & name
 			, VkFormat format
@@ -856,7 +856,8 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	BlendingWeightCalculation::BlendingWeightCalculation( crg::FramePass const & previousPass
+	BlendingWeightCalculation::BlendingWeightCalculation( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
@@ -865,7 +866,7 @@ namespace smaa
 		, SmaaConfig const & config
 		, bool const * enabled )
 		: m_device{ device }
-		, m_graph{ renderTarget.getGraph() }
+		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_areaView{ createImage( m_graph
 			, m_device

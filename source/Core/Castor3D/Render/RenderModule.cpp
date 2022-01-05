@@ -191,6 +191,59 @@ namespace castor3d
 		return result;
 	}
 
+	ashes::Image makeImage( ashes::Device const & device
+		, VkImage image
+		, crg::ImageId data )
+	{
+		return ashes::Image{ device, image, data.data->info };
+	}
+
+	ashes::Image makeImage( ashes::Device const & device
+		, Texture const & texture )
+	{
+		return makeImage( device
+			, texture.image
+			, texture.imageId );
+	}
+
+	ashes::ImageView makeImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, VkImageView view
+		, crg::ImageViewId data )
+	{
+		return ashes::ImageView{ data.data->info, view, &image };
+	}
+
+	ashes::ImageView makeTargetImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, Texture const & texture )
+	{
+		return makeImageView( device
+			, image
+			, texture.targetView
+			, texture.targetViewId );
+	}
+
+	ashes::ImageView makeSampledImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, Texture const & texture )
+	{
+		return makeImageView( device
+			, image
+			, texture.sampledView
+			, texture.sampledViewId );
+	}
+
+	ashes::ImageView makeWholeImageView( ashes::Device const & device
+		, ashes::Image const & image
+		, Texture const & texture )
+	{
+		return makeImageView( device
+			, image
+			, texture.wholeView
+			, texture.wholeViewId );
+	}
+
 	bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
 		return lhs.colourBlendMode == rhs.colourBlendMode

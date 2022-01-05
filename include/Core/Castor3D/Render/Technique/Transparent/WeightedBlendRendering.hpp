@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	hdrConfigUbo			L'UBO de configuration HDR.
 		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
 		 */
-		WeightedBlendRendering( crg::FrameGraph & graph
+		WeightedBlendRendering( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePass const & transparentPassDesc
@@ -70,7 +70,7 @@ namespace castor3d
 		}
 
 	private:
-		crg::FramePass & doCreateFinalCombine( crg::FrameGraph & graph
+		crg::FramePass & doCreateFinalCombine( crg::FramePassGroup & graph
 			, crg::FramePass const & transparentPassDesc
 			, crg::ImageViewId const & targetColourView
 			, SceneUbo & sceneUbo
@@ -80,7 +80,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		TransparentPassResult const & m_transparentPassResult;
 		crg::ImageViewId m_depthOnlyView;
 		castor::Size m_size;

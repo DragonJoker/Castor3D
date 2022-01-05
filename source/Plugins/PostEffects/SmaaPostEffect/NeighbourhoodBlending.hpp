@@ -19,7 +19,8 @@ namespace smaa
 	class NeighbourhoodBlending
 	{
 	public:
-		NeighbourhoodBlending( crg::FramePass const & previousPass
+		NeighbourhoodBlending( crg::FramePassGroup & graph
+			, crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
@@ -44,7 +45,7 @@ namespace smaa
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		crg::ImageViewId const & m_sourceView;
 		crg::ImageViewId const & m_blendView;
 		crg::ImageViewId const * m_velocityView;

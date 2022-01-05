@@ -157,7 +157,7 @@ namespace Bloom
 			return result;
 		}
 
-		std::vector< BlurPass::Subpass > doCreateSubpasses( crg::FrameGraph & graph
+		std::vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePassArray & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -195,7 +195,7 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	BlurPass::Subpass::Subpass( crg::FrameGraph & graph
+	BlurPass::Subpass::Subpass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & srcView
@@ -242,7 +242,7 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	BlurPass::BlurPass( crg::FrameGraph & graph
+	BlurPass::BlurPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & srcImages
@@ -274,7 +274,7 @@ namespace Bloom
 	{
 	}
 
-	BlurPass::BlurPass( crg::FrameGraph & graph
+	BlurPass::BlurPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & srcImages

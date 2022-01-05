@@ -68,7 +68,7 @@ namespace castor3d
 		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 *\param[in]	ssaoConfig			La configuration du SSAO.
 		 */
-		C3D_API DeferredRendering( crg::FrameGraph & graph
+		C3D_API DeferredRendering( crg::FramePassGroup & graph
 			, crg::FramePass const & opaquePass
 			, RenderDevice const & device
 			, ProgressBar * progress

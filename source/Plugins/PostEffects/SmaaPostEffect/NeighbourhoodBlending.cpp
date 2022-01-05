@@ -210,7 +210,8 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	NeighbourhoodBlending::NeighbourhoodBlending( crg::FramePass const & previousPass
+	NeighbourhoodBlending::NeighbourhoodBlending( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
@@ -220,7 +221,7 @@ namespace smaa
 		, SmaaConfig const & config
 		, bool const * enabled )
 		: m_device{ device }
-		, m_graph{ renderTarget.getGraph() }
+		, m_graph{ graph }
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }

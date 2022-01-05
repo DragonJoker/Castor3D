@@ -233,22 +233,25 @@ namespace draw_edges
 		auto & data1 = technique.getNormalImgView();
 		auto & depthRange = technique.getDepthRange();
 		auto previous = &previousPass;
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "DrawEdges" );
 
-		m_depthNormal = std::make_unique< DepthNormalEdgeDetection >( *previous
+		m_depthNormal = std::make_unique< DepthNormalEdgeDetection >( graph
+			, *previous
 			, m_renderTarget
 			, device
 			, passBuffer
 			, data0
 			, data1
 			, depthRange );
-		m_objectID = std::make_unique< ObjectIDEdgeDetection >( *previous
+		m_objectID = std::make_unique< ObjectIDEdgeDetection >( graph
+			, *previous
 			, m_renderTarget
 			, device
 			, passBuffer
 			, data0 );
 		previous = &m_objectID->getPass();
 
-		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "DECombineRes"
+		m_resultImg = graph.createImage( crg::ImageData{ "DECombineRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -257,13 +260,13 @@ namespace draw_edges
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "DECombineRes"
+		m_resultView = graph.createView( crg::ImageViewData{ "DECombineRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		auto & pass = m_renderTarget.getGraph().createPass( "DECombine"
+		auto & pass = graph.createPass( "DECombine"
 			, [this, &device, extent]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

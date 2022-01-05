@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	bentInput		La texture de bent normals à flouter
 		 *\param[in]	normals			Le tampon de normales.
 		 */
-		C3D_API SsaoBlurPass( crg::FrameGraph & graph
+		C3D_API SsaoBlurPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePass const & previousPass
@@ -151,7 +151,7 @@ namespace castor3d
 		};
 
 		RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		Texture const & m_bentInput;

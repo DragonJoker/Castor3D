@@ -129,7 +129,8 @@ namespace smaa
 	
 	//*********************************************************************************************
 
-	Reproject::Reproject( crg::FramePass const & previousPass
+	Reproject::Reproject( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
@@ -139,7 +140,7 @@ namespace smaa
 		, SmaaConfig const & config
 		, bool const * enabled )
 		: m_device{ device }
-		, m_graph{ renderTarget.getGraph() }
+		, m_graph{ graph }
 		, m_currentColourViews{ currentColourViews }
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }

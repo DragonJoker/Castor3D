@@ -19,7 +19,8 @@ namespace smaa
 	class EdgeDetection
 	{
 	public:
-		EdgeDetection( crg::FramePass const & previousPass
+		EdgeDetection( crg::FramePassGroup & graph
+			, crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
@@ -47,7 +48,7 @@ namespace smaa
 
 	protected:
 		castor3d::RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		SmaaConfig const & m_config;
 		VkExtent3D m_extent;
 		castor3d::Texture m_outColour;

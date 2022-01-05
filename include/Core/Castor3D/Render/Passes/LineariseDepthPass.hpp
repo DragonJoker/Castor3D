@@ -48,7 +48,7 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	depthBuffer	Le tampon de profondeur non linéarisé.
 		 */
-		C3D_API LineariseDepthPass( crg::FrameGraph & graph
+		C3D_API LineariseDepthPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
@@ -105,7 +105,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		Engine & m_engine;
 		SsaoConfig const & m_ssaoConfig;
 		crg::ImageViewId m_srcDepthBuffer;

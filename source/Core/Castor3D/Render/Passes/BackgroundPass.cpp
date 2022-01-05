@@ -365,7 +365,7 @@ namespace castor3d
 	
 	//*********************************************************************************************
 	
-	BackgroundRenderer::BackgroundRenderer( crg::FrameGraph & graph
+	BackgroundRenderer::BackgroundRenderer( crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
@@ -419,7 +419,7 @@ namespace castor3d
 		}
 	}
 
-	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FrameGraph & graph
+	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
 		, castor::String const & name
 		, SceneBackground & background
