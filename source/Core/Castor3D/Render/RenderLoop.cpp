@@ -74,6 +74,7 @@ namespace castor3d
 				uploadResources.commands = {};
 				uploadResources.fence.reset();
 				uploadResources.used = false;
+				uploadResources.waitCount = 1u;
 			}
 		}
 		else
@@ -214,6 +215,8 @@ namespace castor3d
 		getEngine()->update( updater );
 
 		uploadResources.fence->wait( ashes::MaxTimeout );
+		uploadResources.waitCount--;
+		CU_Require( uploadResources.waitCount == 0u );
 		uploadResources.fence->reset();
 		uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		device.uboPools->upload( *uploadResources.commands.commandBuffer );
@@ -234,6 +237,8 @@ namespace castor3d
 				: VK_PIPELINE_STAGE_TRANSFER_BIT )
 			, *uploadResources.commands.semaphore
 			, *uploadResources.fence );
+		uploadResources.waitCount++;
+		CU_Require( uploadResources.waitCount == 1u );
 
 		// Render
 		toWait = getEngine()->getRenderTargetCache().render( device
