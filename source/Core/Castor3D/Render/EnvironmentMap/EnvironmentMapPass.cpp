@@ -60,7 +60,7 @@ namespace castor3d
 		: OwnedBy< EnvironmentMap >{ environmentMap }
 		, Named{ "Env" + castor::string::toString( index ) + "_" + castor::string::toString( uint32_t( face ) ) }
 		, m_device{ device }
-		, m_graph{ graph }
+		, m_graph{ graph.createPassGroup( getName() ) }
 		, m_background{ background }
 		, m_node{ faceNode }
 		, m_index{ index }

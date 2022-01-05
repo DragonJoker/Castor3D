@@ -111,21 +111,23 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	DepthEdgeDetection::DepthEdgeDetection( crg::FramePass const & previousPass
+	DepthEdgeDetection::DepthEdgeDetection( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, crg::ImageViewId const & depthView
 		, SmaaConfig const & config
 		, bool const * enabled )
-		: EdgeDetection{ previousPass
+		: EdgeDetection{ graph
+			, previousPass
 			, renderTarget
 			, device
 			, ubo
 			, config
 			, doGetEdgeDetectionFP( *renderTarget.getEngine() )
 			, enabled }
-		, m_depthView{ renderTarget.getGraph().createView( doCreateDepthView( depthView ) ) }
+		, m_depthView{ m_graph.createView( doCreateDepthView( depthView ) ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR

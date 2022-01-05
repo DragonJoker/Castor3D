@@ -133,7 +133,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	WeightedBlendRendering::WeightedBlendRendering( crg::FrameGraph & graph
+	WeightedBlendRendering::WeightedBlendRendering( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePass const & transparentPassDesc
@@ -176,7 +176,7 @@ namespace castor3d
 		visitor.visit( m_pixelShader );
 	}
 
-	crg::FramePass & WeightedBlendRendering::doCreateFinalCombine( crg::FrameGraph & graph
+	crg::FramePass & WeightedBlendRendering::doCreateFinalCombine( crg::FramePassGroup & graph
 		, crg::FramePass const & transparentPassDesc
 		, crg::ImageViewId const & targetColourView
 		, SceneUbo & sceneUbo

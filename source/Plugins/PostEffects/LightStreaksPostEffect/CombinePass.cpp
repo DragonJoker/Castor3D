@@ -78,7 +78,7 @@ namespace light_streaks
 	String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
 	String const CombinePass::CombineMapKawase = cuT( "c3d_mapKawase" );
 
-	CombinePass::CombinePass( crg::FrameGraph & graph
+	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView

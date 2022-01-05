@@ -186,7 +186,8 @@ namespace draw_edges
 
 	//*********************************************************************************************
 
-	DepthNormalEdgeDetection::DepthNormalEdgeDetection( crg::FramePass const & previousPass
+	DepthNormalEdgeDetection::DepthNormalEdgeDetection( crg::FramePassGroup & graph
+		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, castor3d::PassBuffer const & passBuffer
@@ -194,7 +195,7 @@ namespace draw_edges
 		, crg::ImageViewId const & data1
 		, ashes::Buffer< int32_t > const & depthRange )
 		: m_device{ device }
-		, m_graph{ renderTarget.getGraph() }
+		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_result{ m_device
 			, m_graph.getHandler()

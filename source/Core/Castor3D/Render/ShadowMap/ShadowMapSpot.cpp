@@ -60,7 +60,7 @@ namespace castor3d
 
 			std::string debugName = "SpotSM" + std::to_string( shadowMapIndex );
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
-			auto & graph = *graphs.back();
+			auto & graph = graphs.back()->getDefaultGroup();
 			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
 				, std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 					, scene

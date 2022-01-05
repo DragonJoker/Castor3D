@@ -32,9 +32,10 @@ namespace castor3d
 		: m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_gpInfoUbo{ gpInfoUbo }
+		, m_group{ graph.createPassGroup( "SSAO" ) }
 		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ m_device }
-		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( graph
+		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_group
 			, previousPass
 			, m_device
 			, progress
@@ -43,7 +44,7 @@ namespace castor3d
 			, m_size
 			, depth.sampledViewId ) }
 		, m_ssaoConfigUbo{ m_device }
-		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( graph
+		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( m_group
 			, m_device
 			, progress
 			, m_linearisePass->getLastPass()
@@ -54,7 +55,7 @@ namespace castor3d
 			, m_linearisePass->getResult()
 			, normal ) }
 #if !C3D_DebugRawPass
-		, m_horizontalBlur{ castor::makeUnique< SsaoBlurPass >( graph
+		, m_horizontalBlur{ castor::makeUnique< SsaoBlurPass >( m_group
 			, m_device
 			, progress
 			, m_rawAoPass->getLastPass()
@@ -67,7 +68,7 @@ namespace castor3d
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
 			, normal ) }
-		, m_verticalBlur{ castor::makeUnique< SsaoBlurPass >( graph
+		, m_verticalBlur{ castor::makeUnique< SsaoBlurPass >( m_group
 			, m_device
 			, progress
 			, m_horizontalBlur->getLastPass()
