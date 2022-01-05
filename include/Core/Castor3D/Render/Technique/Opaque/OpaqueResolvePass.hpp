@@ -67,7 +67,7 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
 		 *\param[in]	hdrConfigUbo			L'UBO HDR.
 		 */
-		C3D_API OpaqueResolvePass( crg::FrameGraph & graph
+		C3D_API OpaqueResolvePass( crg::FramePassGroup & graph
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
@@ -99,7 +99,7 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:
-		crg::FramePass const & doCreatePass( crg::FrameGraph & graph
+		crg::FramePass const & doCreatePass( crg::FramePassGroup & graph
 			, crg::FramePass const & pass
 			, ProgressBar * progress );
 		std::vector< Program > doCreatePrograms();

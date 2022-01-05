@@ -438,7 +438,7 @@ namespace castor3d
 			, m_normal
 			, m_renderTarget.getVelocity() ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass( progress ) }
-		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph()
+		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph().createPassGroup( "Opaque" )
 			, *m_opaquePassDesc
 			, m_device
 			, progress
@@ -471,7 +471,7 @@ namespace castor3d
 			, m_depth
 			, m_renderTarget.getVelocity() ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass( progress ) }
-		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_renderTarget.getGraph()
+		, m_weightedBlendRendering{ castor::makeUnique< WeightedBlendRendering >( m_renderTarget.getGraph().createPassGroup( "Transparent" )
 			, m_device
 			, progress
 			, *m_transparentPassDesc
@@ -988,8 +988,9 @@ namespace castor3d
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeDepth
 			, nullptr );
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "Base" );
 		stepProgressBar( progress, "Creating depth pass" );
-		auto & result = m_renderTarget.getGraph().createPass( "Depth"
+		auto & result = graph.createPass( "Depth"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -1030,7 +1031,8 @@ namespace castor3d
 	crg::FramePass & RenderTechnique::doCreateComputeDepthRange( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating compute depth range pass" );
-		auto & result = m_renderTarget.getGraph().createPass( "DepthRange"
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "Base" );
+		auto & result = graph.createPass( "DepthRange"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -1060,7 +1062,8 @@ namespace castor3d
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeBackground
 			, m_computeDepthRangeDesc );
-		auto result = castor::makeUnique< BackgroundRenderer >( m_renderTarget.getGraph()
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "Base" );
+		auto result = castor::makeUnique< BackgroundRenderer >( graph
 			, previousPasses
 			, m_device
 			, progress
@@ -1080,13 +1083,14 @@ namespace castor3d
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeOpaque
 			, &m_backgroundRenderer->getPass() );
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "Opaque" );
 		stepProgressBar( progress, "Creating opaque pass" );
 #if C3D_UseDeferredRendering
 		castor::String name = cuT( "Geometry" );
 #else
 		castor::String name = cuT( "Forward" );
 #endif
-		auto & result = m_renderTarget.getGraph().createPass( "Opaque"
+		auto & result = graph.createPass( "Opaque"
 			, [this, progress, name]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -1157,7 +1161,8 @@ namespace castor3d
 			, m_opaquePassDesc );
 #endif
 		stepProgressBar( progress, "Creating transparent pass" );
-		auto & result = m_renderTarget.getGraph().createPass( "Transparent"
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "Transparent" );
+		auto & result = graph.createPass( "Transparent"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )

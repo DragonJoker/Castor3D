@@ -567,7 +567,7 @@ namespace castor3d
 	
 	//*********************************************************************************************
 
-	SsaoRawAOPass::SsaoRawAOPass( crg::FrameGraph & graph
+	SsaoRawAOPass::SsaoRawAOPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePass const & previousPass
@@ -583,21 +583,21 @@ namespace castor3d
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ size }
-		, m_result{ doCreateTexture( graph.getHandler()
+		, m_result{ doCreateTexture( m_graph.getHandler()
 			, m_device
-			, graph.getName() + "SsaoRawAOResult"
+			, m_graph.getName() + "SsaoRawAOResult"
 			, SsaoRawAOPass::ResultFormat
 			, m_size ) }
-		, m_bentNormals{ doCreateTexture( graph.getHandler()
+		, m_bentNormals{ doCreateTexture( m_graph.getHandler()
 			, m_device
-			, graph.getName() + "BentNormals"
+			, m_graph.getName() + "BentNormals"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, m_size ) }
-		, m_programs{ Program{ device, false, graph.getName() }
-			, Program{ device, true, graph.getName() } }
+		, m_programs{ Program{ device, false, m_graph.getName() }
+			, Program{ device, true, m_graph.getName() } }
 	{
 		stepProgressBar( progress, "Creating SSAO raw AO pass" );
-		auto & pass = graph.createPass( "SsaoRawAO"
+		auto & pass = m_graph.createPass( "SsaoRawAO"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

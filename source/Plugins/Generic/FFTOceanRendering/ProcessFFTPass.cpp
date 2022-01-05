@@ -374,7 +374,7 @@ namespace ocean_fft
 
 	crg::FramePass const & createProcessFFTPass( castor::String const & name
 		, castor3d::RenderDevice const & device
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, VkExtent2D const & extent
 		, FFTConfig const & config

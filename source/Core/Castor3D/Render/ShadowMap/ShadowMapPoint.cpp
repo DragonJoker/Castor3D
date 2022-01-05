@@ -59,7 +59,7 @@ namespace castor3d
 
 			std::string debugName = "PointSM" + std::to_string( shadowMapIndex );
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
-			auto & graph = *graphs.back();
+			auto & graph = graphs.back()->getDefaultGroup();
 			crg::FramePass const * previousPass{};
 
 			for ( uint32_t face = 0u; face < 6u; ++face )

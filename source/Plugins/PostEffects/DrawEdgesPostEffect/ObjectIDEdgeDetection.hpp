@@ -16,7 +16,8 @@ namespace draw_edges
 	class ObjectIDEdgeDetection
 	{
 	public:
-		ObjectIDEdgeDetection( crg::FramePass const & previousPass
+		ObjectIDEdgeDetection( crg::FramePassGroup & graph
+			, crg::FramePass const & previousPass
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, castor3d::PassBuffer const & passBuffer
@@ -35,7 +36,7 @@ namespace draw_edges
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		VkExtent3D m_extent;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;

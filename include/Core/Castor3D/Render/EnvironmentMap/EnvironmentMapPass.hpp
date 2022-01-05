@@ -84,7 +84,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		crg::FrameGraph & m_graph;
+		crg::FramePassGroup & m_graph;
 		SceneBackground & m_background;
 		SceneNodeSPtr m_node;
 		uint32_t m_index;

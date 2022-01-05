@@ -83,7 +83,7 @@ namespace ocean_fft
 	};
 
 	crg::FramePass const & createBakeHeightGradientPass( castor3d::RenderDevice const & device
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
 		, VkExtent2D const & extent
 		, castor::Point2f const & heightMapSize

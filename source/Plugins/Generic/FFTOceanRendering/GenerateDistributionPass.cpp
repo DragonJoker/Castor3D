@@ -260,7 +260,7 @@ namespace ocean_fft
 	crg::FramePass const & createGenerateDistributionPass( castor::String const & prefix
 		, castor::String const & name
 		, castor3d::RenderDevice const & device
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
 		, VkExtent2D const & extent
 		, bool normals

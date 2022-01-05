@@ -85,7 +85,7 @@ namespace light_streaks
 		, crg::FramePass const & previousPass )
 	{
 		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
-		auto & graph = m_renderTarget.getGraph();
+		auto & graph = m_renderTarget.getGraph().createPassGroup( "LightStreaks" );
 
 		auto size = castor3d::makeExtent2D( extent );
 		size.width >>= 2;

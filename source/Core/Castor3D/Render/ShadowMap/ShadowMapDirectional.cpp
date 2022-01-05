@@ -105,7 +105,7 @@ namespace castor3d
 
 #else
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler,  "DirectionalSMC" ) );
-			auto & graph = *graphs.back();
+			auto & graph = graphs.back()->getDefaultGroup();
 			crg::FramePass const * previousPass{};
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
