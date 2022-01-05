@@ -1,14 +1,12 @@
 get_filename_component( CASTOR_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY )
 get_filename_component( CASTOR_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY )
 
-option( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING "Build Ocean Lighting FFT sample (needs wxWidgets library)" FALSE )
 option( CASTOR_BUILD_SAMPLE_CASTOR_TD "Build Castor Tower Defense (needs GuiCommon library)" TRUE )
 if ( MSVC )
 	option( CASTOR_BUILD_SAMPLE_CASTOR_VIEWER_SHARP "Build CastorViewerSharp (needs ComCastor3D library)" FALSE )
 endif ()
 
 function( SamplesInit )
-	set( Ocean "no (Not wanted)" PARENT_SCOPE )
 	set( CTd "no (Not wanted)" PARENT_SCOPE )
 	if ( MSVC )
 		set( CViewSh "no (Not wanted)" PARENT_SCOPE )
@@ -21,8 +19,7 @@ function( SamplesBuild )
 	if( CASTOR_BUILDGRP_SAMPLE )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libwxgtk3.0 (>= 3.0)" )
 		set( SAMPLES_TARGETS )
-		if( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING
-			OR CASTOR_BUILD_SAMPLE_CASTOR_TD )
+		if( CASTOR_BUILD_SAMPLE_CASTOR_TD )
 			if( APPLE )
 				set( GTK_FOUND TRUE )
 				set( GTK_LIBRARIES
@@ -74,24 +71,12 @@ function( SamplesBuild )
 				elseif ( CASTOR_BUILD_SAMPLE_CASTOR_TD )
 					message( WARNING "You need GuiCommon to be able to build CastorDvpTD" )
 				endif()
-
-				if( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING )
-					set( Build ${Ocean} )
-					add_subdirectory( OceanLighting )
-					set( Ocean ${Build} PARENT_SCOPE )
-					set( CPACK_PACKAGE_EXECUTABLES
-						${CPACK_PACKAGE_EXECUTABLES}
-						OceanLighting "OceanLighting"
-						PARENT_SCOPE )
-				endif()
 			else()
 				if( NOT wxWidgets_FOUND )
 					set( CTestLcr "no (wxWidgets libraries not found)" PARENT_SCOPE )
-					set( Ocean "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( CTd "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
 					set( CTestLcr "no (GTK libraries not found)" PARENT_SCOPE )
-					set( Ocean "no (GTK libraries not found)" PARENT_SCOPE )
 					set( CTd "no (GTK libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
@@ -130,9 +115,6 @@ endfunction( SamplesBuild )
 function( SamplesSummary )
 	if( CASTOR_BUILDGRP_SAMPLE )
 		set( msg "  Sample apps:" )
-		if( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING )
-			set( msg_tmp "${msg_tmp}\n    OceanLighting        ${Ocean}" )
-		endif ()
 		if( CASTOR_BUILD_SAMPLE_CASTOR_TD )
 			set( msg_tmp "${msg_tmp}\n    Castor TD            ${CTd}" )
 		endif ()
@@ -156,15 +138,6 @@ function( SamplesSetup )
 					INSTALL_TYPES Full
 				)
 			endif ()
-		endif ()
-		if( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING )
-			cpack_add_component( OceanLighting
-				DISPLAY_NAME "OceanLighting"
-				DESCRIPTION "Eric Bruneton's OceanLightingFFT demo adapted for Castor3D."
-				GROUP Samples
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
 		endif ()
 		if( CASTOR_BUILD_SAMPLE_CASTOR_VIEWER_SHARP )
 			if ( MSVC )
