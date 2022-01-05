@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
@@ -153,8 +154,8 @@ namespace castor3d
 		/**@{*/
 		ashes::CommandBuffer const & getCommands()const
 		{
-			CU_Require( m_commandBuffer );
-			return *m_commandBuffer;
+			CU_Require( m_commands.commandBuffer );
+			return *m_commands.commandBuffer;
 		}
 
 		castor::Size const & getSize()const
@@ -174,7 +175,7 @@ namespace castor3d
 
 		ashes::Semaphore const & getSemaphore()
 		{
-			return *m_finished;
+			return *m_commands.semaphore;
 		}
 		/**@}*/
 
@@ -296,7 +297,8 @@ namespace castor3d
 	private:
 		UniformBufferPools & m_uboPools;
 		Texture const & m_target;
-		ashes::CommandBufferPtr m_commandBuffer;
+		CommandsSemaphore m_commands;
+		ashes::FencePtr m_fence;
 		std::vector< std::unique_ptr< PanelVertexBufferPool > > m_panelVertexBuffers;
 		std::vector< std::unique_ptr< BorderPanelVertexBufferPool > > m_borderVertexBuffers;
 		std::vector< std::unique_ptr< TextVertexBufferPool > > m_textVertexBuffers;
@@ -317,7 +319,6 @@ namespace castor3d
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;
-		ashes::SemaphorePtr m_finished;
 	};
 }
 
