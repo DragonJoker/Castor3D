@@ -100,6 +100,7 @@ namespace grayscale
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "GrayScale"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -138,7 +139,7 @@ namespace grayscale
 		, crg::FramePass const & previousPass )
 	{
 		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
-		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "GSRes"
+		m_resultImg = m_graph.createImage( crg::ImageData{ "GSRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -147,14 +148,14 @@ namespace grayscale
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "GSRes"
+		m_resultView = m_graph.createView( crg::ImageViewData{ "GSRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		m_pass = &m_renderTarget.getGraph().createPass( "GrayScalePass"
-			, [this, &device, extent]( crg::FramePass const & pass
+		m_pass = &m_graph.createPass( "GrayScale"
+			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -164,7 +165,7 @@ namespace grayscale
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.build( pass
+					.build( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -172,7 +173,7 @@ namespace grayscale
 								, crg::RecordContext::copyImage( *m_target
 									, m_resultView
 									, { extent.width, extent.height } ) ) );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/GrayScale"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

@@ -160,13 +160,13 @@ namespace castor3d
 
 	crg::FramePass & EnvironmentMapPass::doCreateOpaquePass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.createPass( getName() + "OpaquePass"
-			, [this]( crg::FramePass const & pass
+		auto & result = m_graph.createPass( "OpaquePass"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto res = std::make_unique< ForwardRenderTechniquePass >( nullptr
-					, pass
+					, framePass
 					, context
 					, graph
 					, m_device
@@ -175,7 +175,7 @@ namespace castor3d
 					, getName() + cuT( "Opaque" )
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
-				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
+				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				m_opaquePass = res.get();
 				return res;
@@ -189,13 +189,13 @@ namespace castor3d
 
 	crg::FramePass & EnvironmentMapPass::doCreateTransparentPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.createPass( getName() + "TransparentPass"
-			, [this]( crg::FramePass const & pass
+		auto & result = m_graph.createPass( "TransparentPass"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				auto res = std::make_unique< ForwardRenderTechniquePass >( nullptr
-					, pass
+					, framePass
 					, context
 					, graph
 					, m_device
@@ -204,7 +204,7 @@ namespace castor3d
 					, getName() + cuT( "Transparent" )
 					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
-				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
+				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				m_transparentPass = res.get();
 				return res;
@@ -217,16 +217,16 @@ namespace castor3d
 
 	void EnvironmentMapPass::doCreateGenMipmapsPass( crg::FramePass const * previousPass )
 	{
-		auto & mipsGen = m_graph.createPass( getName() + "GenMips"
-			, [this]( crg::FramePass const & pass
+		auto & mipsGen = m_graph.createPass( "GenMips"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::GenerateMipmaps >( pass
+				auto result = std::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, graph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-				m_node->getScene()->getEngine()->registerTimer( graph.getName() + "/EnvironmentMap" + std::to_string( m_index )
+				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

@@ -473,7 +473,7 @@ namespace castor3d
 		stepProgressBar( progress, "Creating " + m_graph.getName() + " SSAO " + prefix + " blur pass" );
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
-		auto & pass = m_graph.createPass( "SsaoBlur" + prefix
+		auto & pass = m_graph.createPass( "Blur" + prefix
 			, [this, progress, prefix, config, axis]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

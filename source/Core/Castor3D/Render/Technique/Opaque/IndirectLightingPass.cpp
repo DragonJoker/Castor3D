@@ -332,7 +332,7 @@ namespace castor3d
 		stepProgressBar( progress, "Creating indirect light pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "IndirectLighting"
-			, [this, progress, &engine]( crg::FramePass const & pass
+			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -342,7 +342,7 @@ namespace castor3d
 					.programs( convertPrograms( m_programs ) )
 					.passIndex( &m_programIndex )
 					.enabled( &m_enabled )
-					.build( pass
+					.build( framePass
 						, context
 						, graph
 						, crg::ru::Config{ uint32_t( m_programs.size() ) }
@@ -350,7 +350,7 @@ namespace castor3d
 								, crg::RecordContext::clearAttachment( m_lpResult[LpTexture::eIndirectDiffuse].targetViewId, getClearValue( LpTexture::eIndirectDiffuse ) ) )
 							.implicitAction( m_lpResult[LpTexture::eIndirectSpecular].targetViewId
 								, crg::RecordContext::clearAttachment( m_lpResult[LpTexture::eIndirectSpecular].targetViewId, getClearValue( LpTexture::eIndirectSpecular ) ) ) );
-				engine.registerTimer( graph.getName() + "/IndirectLighting"
+				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

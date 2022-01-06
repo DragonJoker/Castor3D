@@ -468,7 +468,7 @@ namespace castor3d
 		: OwnedBy< RenderSystem >( device.renderSystem )
 		, m_uboPools{ *device.uboPools }
 		, m_target{ target }
-		, m_commands{ device, *device.graphicsData(), "OverlayRenderer" }
+		, m_commands{ device, *device.graphicsData(), "OverlayRenderer", level }
 		, m_fence{ device->createFence( "OverlayRenderer", VK_FENCE_CREATE_SIGNALED_BIT ) }
 		, m_noTexDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
@@ -707,8 +707,9 @@ namespace castor3d
 		{
 			auto config = unit->getConfiguration();
 
-			if ( config.colourMask[0]
-				|| config.opacityMask[0] )
+			if ( unit->isInitialised()
+				&& ( config.colourMask[0]
+				|| config.opacityMask[0] ) )
 			{
 				result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( OverlayBindingId::eMaps ) )
 					, unit->getTexture()->getDefaultView().getSampledView()

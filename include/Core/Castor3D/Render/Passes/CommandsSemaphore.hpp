@@ -19,7 +19,8 @@ namespace castor3d
 			, ashes::SemaphorePtr semaphore = nullptr );
 		C3D_API CommandsSemaphore( RenderDevice const & device
 			, QueueData const & queueData
-			, castor::String const & name );
+			, castor::String const & name
+			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 
 		C3D_API void submit( ashes::Queue const & queue
 			, VkPipelineStageFlags stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT )const;

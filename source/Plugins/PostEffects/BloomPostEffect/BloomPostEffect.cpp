@@ -28,6 +28,7 @@ namespace Bloom
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "Bloom"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -100,10 +101,9 @@ namespace Bloom
 	{
 		VkExtent2D size{ m_target->data->image.data->info.extent.width
 			, m_target->data->image.data->info.extent.height };
-		auto & graph = m_renderTarget.getGraph().createPassGroup( "Bloom" );
 
 #if !Bloom_DebugHiPass
-		m_blurImg = graph.createImage( crg::ImageData{ "Blur"
+		m_blurImg = m_graph.createImage( crg::ImageData{ "Blur"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -115,7 +115,7 @@ namespace Bloom
 
 		for ( uint32_t i = 0u; i < m_blurPassesCount; ++i )
 		{
-			m_blurViews.push_back( graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toString( i )
+			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toString( i )
 				, m_blurImg
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
@@ -124,7 +124,7 @@ namespace Bloom
 		}
 #endif
 
-		m_hiPass = std::make_unique< HiPass >( graph
+		m_hiPass = std::make_unique< HiPass >( m_graph
 			, previousPass
 			, device
 			, *m_target
@@ -132,7 +132,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, &isEnabled() );
 #if !Bloom_DebugHiPass
-		m_blurXPass = std::make_unique< BlurPass >( graph
+		m_blurXPass = std::make_unique< BlurPass >( m_graph
 			, m_hiPass->getPass()
 			, device
 			, m_hiPass->getResult()
@@ -142,7 +142,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, false
 			, &isEnabled() );
-		m_blurYPass = std::make_unique< BlurPass >( graph
+		m_blurYPass = std::make_unique< BlurPass >( m_graph
 			, m_blurXPass->getPasses()
 			, device
 			, m_blurViews
@@ -152,7 +152,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, true
 			, &isEnabled() );
-		m_combinePass = std::make_unique< CombinePass >( graph
+		m_combinePass = std::make_unique< CombinePass >( m_graph
 			, m_blurYPass->getPasses()
 			, device
 			, *m_target

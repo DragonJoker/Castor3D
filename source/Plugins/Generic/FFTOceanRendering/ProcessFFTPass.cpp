@@ -382,7 +382,7 @@ namespace ocean_fft
 		, std::array< ashes::BufferBasePtr, 2u > const & output
 		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 	{
-		auto & result = graph.createPass( OceanFFT::Name + "/Process" + name
+		auto & result = graph.createPass( "Process" + name
 			, [&device, extent, isEnabled, &input, &output, &config]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -396,7 +396,7 @@ namespace ocean_fft
 					, input
 					, output
 					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );

@@ -397,7 +397,7 @@ namespace castor3d
 		stepProgressBar( progress, "Creating opaque resolve pass" );
 		auto & engine = *getEngine();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
-		auto & pass = graph.createPass( "DeferredResolve"
+		auto & pass = graph.createPass( "Resolve"
 			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -409,7 +409,7 @@ namespace castor3d
 					.passIndex( &m_programIndex )
 					.programs( createPrograms( m_programs ) )
 					.build( framePass, context, runnableGraph, { uint32_t( m_programs.size() ) } );
-				engine.registerTimer( runnableGraph.getName() + "/Opaque"
+				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

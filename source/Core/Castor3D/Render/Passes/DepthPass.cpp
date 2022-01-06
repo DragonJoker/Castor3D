@@ -52,7 +52,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, pass.name
+			, pass.getName()
 			, "DepthPass"
 			, renderPassDesc
 			, { false, ssaoConfig } }

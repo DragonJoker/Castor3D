@@ -585,8 +585,8 @@ namespace castor3d
 			, &createInfo
 			, m_holder.getContext().allocator
 			, &pipeline );
-		crg::checkVkResult( res, m_holder.getPass().name + " - Pipeline creation" );
-		crgRegisterObject( m_holder.getContext(), m_holder.getPass().name, pipeline );
+		crg::checkVkResult( res, m_holder.getPass().getGroupName() + " - Pipeline creation" );
+		crgRegisterObject( m_holder.getContext(), m_holder.getPass().getGroupName(), pipeline );
 	}
 
 	//*********************************************************************************************
@@ -598,7 +598,7 @@ namespace castor3d
 		, LightType lightType
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: Named{ pass.name }
+		: Named{ pass.getName() }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -630,7 +630,7 @@ namespace castor3d
 		, CubeMapFace face
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: Named{ pass.name }
+		: Named{ pass.getName() }
 		, crg::RenderPass{ pass
 			, context
 			, graph

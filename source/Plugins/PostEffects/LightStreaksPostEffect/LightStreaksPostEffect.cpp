@@ -35,6 +35,7 @@ namespace light_streaks
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "LightStreaks"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -85,7 +86,6 @@ namespace light_streaks
 		, crg::FramePass const & previousPass )
 	{
 		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
-		auto & graph = m_renderTarget.getGraph().createPassGroup( "LightStreaks" );
 
 		auto size = castor3d::makeExtent2D( extent );
 		size.width >>= 2;
@@ -103,7 +103,7 @@ namespace light_streaks
 		};
 
 		m_hiImage = { device
-			, graph.getHandler()
+			, m_graph.getHandler()
 			, "LSHi"
 			, 0u
 			, VkExtent3D{ size.width, size.height, 1u }
@@ -115,7 +115,7 @@ namespace light_streaks
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 		m_kawaseImage = { device
-			, graph.getHandler()
+			, m_graph.getHandler()
 			, "LSKaw"
 			, 0u
 			, VkExtent3D{ size.width, size.height, 1u }
@@ -139,14 +139,14 @@ namespace light_streaks
 			}
 		}
 
-		m_hiPass = std::make_unique< HiPass >( graph
+		m_hiPass = std::make_unique< HiPass >( m_graph
 			, previousPass
 			, device
 			, *m_target
 			, m_hiImage.subViewsId
 			, size
 			, &isEnabled() );
-		m_kawasePass = std::make_unique< KawasePass >( graph
+		m_kawasePass = std::make_unique< KawasePass >( m_graph
 			, m_hiPass->getLastPass()
 			, device
 			, m_hiImage.subViewsId
@@ -154,7 +154,7 @@ namespace light_streaks
 			, m_kawaseUbo
 			, size
 			, &isEnabled() );
-		m_combinePass = std::make_unique< CombinePass >( graph
+		m_combinePass = std::make_unique< CombinePass >( m_graph
 			, m_kawasePass->getLastPass()
 			, device
 			, *m_target

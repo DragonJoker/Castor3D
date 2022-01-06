@@ -238,7 +238,7 @@ namespace ocean_fft
 		, ashes::BufferBase const & output
 		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 	{
-		auto & result = graph.createPass( prefix + "/GenerateDistribution" + name
+		auto & result = graph.createPass( "GenerateDistribution" + name
 			, [&device, downsample, extent, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -250,7 +250,7 @@ namespace ocean_fft
 					, extent
 					, downsample
 					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
