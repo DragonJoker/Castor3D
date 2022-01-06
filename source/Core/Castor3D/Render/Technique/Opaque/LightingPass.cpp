@@ -194,8 +194,8 @@ namespace castor3d
 				, &createInfo
 				, m_holder.getContext().allocator
 				, &pipeline );
-			crg::checkVkResult( res, m_holder.getPass().name + " - Pipeline creation" );
-			crgRegisterObject( m_holder.getContext(), m_holder.getPass().name, pipeline );
+			crg::checkVkResult( res, m_holder.getPass().getGroupName() + " - Pipeline creation" );
+			crgRegisterObject( m_holder.getContext(), m_holder.getPass().getGroupName(), pipeline );
 		}
 	}
 
@@ -981,19 +981,19 @@ namespace castor3d
 		stepProgressBar( progress, "Creating depth blit pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & pass = graph.createPass( "DepthBlit"
-			, [this, progress, &engine]( crg::FramePass const & pass
+			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBar( progress, "Initialising depth blit pass" );
-				auto result = std::make_unique< crg::ImageCopy >( pass
+				auto result = std::make_unique< crg::ImageCopy >( framePass
 					, context
 					, graph
 					, makeExtent3D( m_size )
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return isEnabled(); } ) );
-				engine.registerTimer( graph.getName() + "/Lighting"
+				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -1026,7 +1026,7 @@ namespace castor3d
 					, m_smDirectionalResult
 					, m_smPointResult
 					, m_smSpotResult );
-				engine.registerTimer( runnableGraph.getName() + "/Lighting"
+				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				m_lightPass = result.get();
 				return result;

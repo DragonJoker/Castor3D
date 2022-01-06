@@ -81,9 +81,9 @@ namespace castor3d
 			}
 
 			doFillDescriptorBindings();
-			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
+			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.getGroupName()
 				, m_descriptorBindings );
-			m_pipelineLayout = m_device->createPipelineLayout( m_pass.name
+			m_pipelineLayout = m_device->createPipelineLayout( m_pass.getGroupName()
 				, *m_descriptorSetLayout );
 			m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 			doCreateDescriptorSet();
@@ -286,7 +286,7 @@ namespace castor3d
 
 	void BackgroundPass::doCreateDescriptorSet()
 	{
-		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( m_pass.name );
+		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( m_pass.getGroupName() );
 
 		for ( auto & write : m_descriptorWrites )
 		{
@@ -352,9 +352,9 @@ namespace castor3d
 			m_descriptorBindings.clear();
 			m_descriptorWrites.clear();
 			doFillDescriptorBindings();
-			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.name
+			m_descriptorSetLayout = m_device->createDescriptorSetLayout( m_pass.getGroupName()
 				, m_descriptorBindings );
-			m_pipelineLayout = m_device->createPipelineLayout( m_pass.name
+			m_pipelineLayout = m_device->createPipelineLayout( m_pass.getGroupName()
 				, *m_descriptorSetLayout );
 			m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 			doCreateDescriptorSet();
@@ -432,7 +432,7 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating background pass" );
 		auto size = makeExtent2D( getExtent( colour ) );
-		auto & result = graph.createPass( name + "Background"
+		auto & result = graph.createPass( "Background"
 			, [this, &background, progress, size, depth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -446,7 +446,7 @@ namespace castor3d
 					, size
 					, depth != nullptr );
 				m_backgroundPass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Background"
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );

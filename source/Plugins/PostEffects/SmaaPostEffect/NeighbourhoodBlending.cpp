@@ -230,10 +230,10 @@ namespace smaa
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", doGetNeighbourhoodBlendingFP( velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_pass{ m_graph.createPass( "SmaaNeighbourhood"
+		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
 			, [this, &device, &config, enabled]( crg::FramePass const & pass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & framePass )
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
@@ -242,8 +242,8 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
-					.build( pass, context, graph, { config.maxSubsampleIndices } );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
+					.build( pass, context, framePass, { config.maxSubsampleIndices } );
+				device.renderSystem.getEngine()->registerTimer( framePass.getName()
 					, result->getTimer() );
 				return result;
 			} ) }

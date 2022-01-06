@@ -161,6 +161,7 @@ namespace fxaa
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "FXAA"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -219,7 +220,7 @@ namespace fxaa
 		, crg::FramePass const & previousPass )
 	{
 		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
-		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "FxaaRes"
+		m_resultImg = m_graph.createImage( crg::ImageData{ "FxaaRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -228,14 +229,14 @@ namespace fxaa
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "FxaaRes"
+		m_resultView = m_graph.createView( crg::ImageViewData{ "FxaaRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		m_pass = &m_renderTarget.getGraph().createPass( "FxaaPass"
-			, [this, &device, extent]( crg::FramePass const & pass
+		m_pass = &m_graph.createPass( "FXAA"
+			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -245,7 +246,7 @@ namespace fxaa
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.build( pass
+					.build( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -253,7 +254,7 @@ namespace fxaa
 								, crg::RecordContext::copyImage( *m_target
 									, m_resultView
 									, { extent.width, extent.height } ) ) );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/FXAA"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

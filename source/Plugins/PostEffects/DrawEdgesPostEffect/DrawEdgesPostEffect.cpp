@@ -165,6 +165,7 @@ namespace draw_edges
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "DrawEdges"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -233,9 +234,8 @@ namespace draw_edges
 		auto & data1 = technique.getNormalImgView();
 		auto & depthRange = technique.getDepthRange();
 		auto previous = &previousPass;
-		auto & graph = m_renderTarget.getGraph().createPassGroup( "DrawEdges" );
 
-		m_depthNormal = std::make_unique< DepthNormalEdgeDetection >( graph
+		m_depthNormal = std::make_unique< DepthNormalEdgeDetection >( m_graph
 			, *previous
 			, m_renderTarget
 			, device
@@ -243,7 +243,7 @@ namespace draw_edges
 			, data0
 			, data1
 			, depthRange );
-		m_objectID = std::make_unique< ObjectIDEdgeDetection >( graph
+		m_objectID = std::make_unique< ObjectIDEdgeDetection >( m_graph
 			, *previous
 			, m_renderTarget
 			, device
@@ -251,7 +251,7 @@ namespace draw_edges
 			, data0 );
 		previous = &m_objectID->getPass();
 
-		m_resultImg = graph.createImage( crg::ImageData{ "DECombineRes"
+		m_resultImg = m_graph.createImage( crg::ImageData{ "DECombineRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -260,14 +260,14 @@ namespace draw_edges
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = graph.createView( crg::ImageViewData{ "DECombineRes"
+		m_resultView = m_graph.createView( crg::ImageViewData{ "DECombineRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		auto & pass = graph.createPass( "DECombine"
-			, [this, &device, extent]( crg::FramePass const & pass
+		auto & pass = m_graph.createPass( "Combine"
+			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -277,7 +277,7 @@ namespace draw_edges
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.build( pass
+					.build( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -285,7 +285,7 @@ namespace draw_edges
 								, crg::RecordContext::copyImage( *m_target
 									, m_resultView
 									, { extent.width, extent.height } ) ) );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

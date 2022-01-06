@@ -153,8 +153,8 @@ namespace light_streaks
 		, KawaseUbo const & kawaseUbo
 		, uint32_t index
 		, bool const * enabled )
-		: pass{ graph.createPass( "LightStreaksKawasePass" + std::to_string( index )
-			, [&device, &stages, dimensions, enabled]( crg::FramePass const & pass
+		: pass{ graph.createPass( "Kawase" + std::to_string( index )
+			, [&device, &stages, dimensions, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -164,8 +164,8 @@ namespace light_streaks
 					.texcoordConfig( crg::Texcoord{} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
-					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
+					.build( framePass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }

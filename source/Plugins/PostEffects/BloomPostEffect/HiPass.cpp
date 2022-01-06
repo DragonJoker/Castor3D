@@ -272,18 +272,18 @@ namespace Bloom
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
 #endif
-		, m_pass{ graph.createPass( "BloomHiPass"
-			, [this, &device, enabled]( crg::FramePass const & pass
+		, m_pass{ graph.createPass( "HDR"
+			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< HiPassQuad >( pass
+				auto result = std::make_unique< HiPassQuad >( framePass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
 					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
 					, enabled );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Bloom"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }
