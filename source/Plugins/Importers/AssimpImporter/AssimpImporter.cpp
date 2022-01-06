@@ -202,6 +202,7 @@ namespace C3dAssimp
 				PassFiller vis{ material, sampler, importer, pass };
 				pass.accept( vis );
 				vis.finish();
+				pass.prepareTextures();
 			}
 
 		private:
@@ -257,6 +258,18 @@ namespace C3dAssimp
 					m_texInfos.spcTex.transform = m_texInfos.colTex.transform;
 					m_texInfos.opaTex.transform = m_texInfos.colTex.transform;
 				}
+
+				castor::Point2ui mask;
+				visit( "", castor3d::TextureFlag::eHeight, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eOpacity, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eNormal, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eEmissive, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eOcclusion, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eColour, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eSpecular, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eMetalness, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eGlossiness, mask, uint32_t{}, nullptr );
+				visit( "", castor3d::TextureFlag::eRoughness, mask, uint32_t{}, nullptr );
 
 				loadTexture( m_texInfos.colTex, TextureConfiguration::DiffuseTexture );
 				loadTexture( m_texInfos.emiTex, TextureConfiguration::EmissiveTexture );
@@ -481,8 +494,7 @@ namespace C3dAssimp
 				, bool * control )override
 			{
 				castor3d::TextureConfiguration lconfig;
-				auto info = getTextureInfo( name
-					, textureFlag
+				auto info = getTextureInfo( textureFlag
 					, lconfig );
 				loadTexture( info, lconfig );
 			}
@@ -519,8 +531,7 @@ namespace C3dAssimp
 				return result;
 			}
 
-			TextureInfo getTextureInfo( castor::String const & name
-				, castor3d::TextureFlag flag
+			TextureInfo getTextureInfo( castor3d::TextureFlag flag
 				, castor3d::TextureConfiguration & pconfig )
 			{
 				TextureInfo result{};
@@ -853,7 +864,17 @@ namespace C3dAssimp
 		}
 
 		// And have it read the given file with some postprocessing
-		aiScene const * aiScene = importer.ReadFile( castor::string::stringCast< char >( m_fileName ), flags );
+		aiScene const * aiScene;
+
+		try
+		{
+			aiScene = importer.ReadFile( castor::string::stringCast< char >( m_fileName ), flags );
+		}
+		catch ( std::exception & exc )
+		{
+			castor3d::log::error << exc.what() << std::endl;
+			return false;
+		}
 
 		if ( aiScene )
 		{
