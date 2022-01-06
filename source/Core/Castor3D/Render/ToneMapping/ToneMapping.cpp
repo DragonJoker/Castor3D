@@ -86,7 +86,7 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		auto & result = graph.createPass( "ToneMapping"
-			, [this, progress, target]( crg::FramePass const & pass
+			, [this, progress, target]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -96,8 +96,8 @@ namespace castor3d
 					.renderSize( makeExtent2D( getExtent( target ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
-					.build( pass, context, graph );
-				getEngine()->registerTimer( graph.getName() + "/ToneMapping"
+					.build( framePass, context, graph );
+				getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				m_quad = result.get();
 				return result;

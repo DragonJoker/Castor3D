@@ -216,7 +216,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				lightInjectionPasses.push_back( res.get() );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LLPV"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -268,7 +268,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				geometryInjectionPasses.push_back( res.get() );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LLPV"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -598,7 +598,7 @@ namespace castor3d
 		, uint32_t cascade
 		, uint32_t index )
 	{
-		auto & result = m_graph.createPass( getName() + name + std::to_string( cascade )
+		auto & result = m_graph.createPass( name + std::to_string( cascade )
 			, [this, index]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -611,7 +611,7 @@ namespace castor3d
 					, m_scene.getLpvGridSize()
 					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
 				m_lightPropagationPasses.push_back( res.get() );
-				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LLPV"
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );

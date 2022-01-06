@@ -31,19 +31,19 @@ namespace ocean_fft
 			, crg::ImageViewId imageView
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
-			auto & result = graph.createPass( OceanFFT::Name + "/GenMips" + name
-				, [&device, isEnabled]( crg::FramePass const & pass
+			auto & result = graph.createPass( "GenMips" + name
+				, [&device, isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = std::make_unique< crg::GenerateMipmaps >( pass
+						auto res = std::make_unique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-						device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
+						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
 						return res;
 				} );
@@ -59,19 +59,19 @@ namespace ocean_fft
 			, crg::ImageViewId imageView
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
-			auto & result = graph.createPass( OceanFFT::Name + "/GenMips" + name
-				, [&device, isEnabled]( crg::FramePass const & pass
+			auto & result = graph.createPass( "GenMips" + name
+				, [&device, isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = std::make_unique< GenerateMipmapsPass >( pass
+						auto res = std::make_unique< GenerateMipmapsPass >( framePass
 							, context
 							, graph
 							, device
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-						device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
+						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
 						return res;
 				} );
@@ -94,12 +94,12 @@ namespace ocean_fft
 			data.info.subresourceRange.levelCount = 1u;
 			auto viewId = graph.createView( data );
 			auto extent = getExtent( viewId );
-			auto & copy = graph.createPass( OceanFFT::Name + "/CopyTo" + name
-				, [&device, isEnabled, extent]( crg::FramePass const & pass
+			auto & copy = graph.createPass( "CopyTo" + name
+				, [&device, isEnabled, extent]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto res = std::make_unique< crg::BufferToImageCopy >( pass
+					auto res = std::make_unique< crg::BufferToImageCopy >( framePass
 						, context
 						, graph
 						, VkOffset3D{}
@@ -107,7 +107,7 @@ namespace ocean_fft
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-					device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
+					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, res->getTimer() );
 					return res;
 				} );
@@ -115,19 +115,19 @@ namespace ocean_fft
 			copy.addInputStorageBuffer( { srcBuffer, name + "FFTResult" }, 0u, 0u, ashes::WholeSize );
 			copy.addTransferOutputView( dstImageView );
 
-			auto & result = graph.createPass( OceanFFT::Name + "/GenMips" + name
-				, [&device, isEnabled]( crg::FramePass const & pass
+			auto & result = graph.createPass( "GenMips" + name
+				, [&device, isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = std::make_unique< crg::GenerateMipmaps >( pass
+						auto res = std::make_unique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-						device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + pass.name
+						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
 						return res;
 				} );

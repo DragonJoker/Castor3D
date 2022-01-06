@@ -371,22 +371,22 @@ namespace castor3d
 		weights.blurWeights[2] = castor::Point4f{ 0.46, 0.0, 0.0402, 0.25 };
 		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
 		auto blurXSource = &m_lpResult[LpTexture::eDiffuse];
-		stepProgressBar( progress, "Creating SSS Blur passes" );
+		stepProgressBar( progress, "Creating SSSSS Blur passes" );
 
 		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
 			auto blurYDestination = m_blurImages[i].get();
-			auto & blurX = m_group.createPass( "SSSBlurX" + std::to_string( i )
-				, [this]( crg::FramePass const & pass
+			auto & blurX = m_group.createPass( "BlurX" + std::to_string( i )
+				, [this]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::RenderQuad >( pass
+					auto result = std::make_unique< crg::RenderQuad >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
 						, createConfig( m_size, m_blurXShader, &m_enabled ) );
-					getEngine()->registerTimer( graph.getName() + "/SSS"
+					getEngine()->registerTimer( framePass.getFullName()
 						, result->getTimer() );
 					return result;
 				} );
@@ -409,17 +409,17 @@ namespace castor3d
 				, BlurLgtDiffImgId );
 			blurX.addOutputColourView( m_intermediate->targetViewId );
 
-			auto & blurY = m_group.createPass( "SSSBlurY" + std::to_string( i )
-				, [this]( crg::FramePass const & pass
+			auto & blurY = m_group.createPass( "BlurY" + std::to_string( i )
+				, [this]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::RenderQuad >( pass
+					auto result = std::make_unique< crg::RenderQuad >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
 						, createConfig( m_size, m_blurYShader, &m_enabled ) );
-					getEngine()->registerTimer( graph.getName() + "/SSS"
+					getEngine()->registerTimer( framePass.getFullName()
 						, result->getTimer() );
 					return result;
 				} );
@@ -445,13 +445,13 @@ namespace castor3d
 			blurXSource = blurYDestination;
 		}
 
-		stepProgressBar( progress, "Creating SSS combine pass" );
-		auto & pass = m_group.createPass("SSSCombine"
-			, [this, progress]( crg::FramePass const & pass
+		stepProgressBar( progress, "Creating SSSSS combine pass" );
+		auto & pass = m_group.createPass("Combine"
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising SSS combine pass" );
+				stepProgressBar( progress, "Initialising SSSSS combine pass" );
 				auto extent = m_result->getExtent();
 				auto ruConfig = crg::ru::Config{}
 					.implicitAction( m_result->wholeViewId
@@ -459,12 +459,12 @@ namespace castor3d
 							, m_result->wholeViewId
 							, { extent.width, extent.height } ) );
 				auto rqConfig = createConfig( m_size, m_combineShader, &m_enabled );
-				auto result = std::make_unique< crg::RenderQuad >( pass
+				auto result = std::make_unique< crg::RenderQuad >( framePass
 					, context
 					, graph
 					, ruConfig
 					, rqConfig );
-				getEngine()->registerTimer( graph.getName() + "/SSS"
+				getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

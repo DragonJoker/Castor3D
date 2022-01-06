@@ -216,18 +216,18 @@ namespace light_streaks
 			, makeShaderState( device, m_pixelShader ) }
 		, m_lastPass{ &previousPass }
 	{
-		auto & hiPass = graph.createPass( "LightStreaksHiPass"
-			, [this, &device, size, enabled]( crg::FramePass const & pass
+		auto & hiPass = graph.createPass( "HDR"
+			, [this, &device, size, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< HiPassQuad >( pass
+				auto result = std::make_unique< HiPassQuad >( framePass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
 					, size
 					, enabled );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -247,19 +247,19 @@ namespace light_streaks
 
 		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
 		{
-			auto & pass = graph.createPass( "LightStreaksCopy" + std::to_string( i )
-				, [&device, size, enabled]( crg::FramePass const & pass
+			auto & pass = graph.createPass( "Copy" + std::to_string( i )
+				, [&device, size, enabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::ImageCopy >( pass
+					auto result = std::make_unique< crg::ImageCopy >( framePass
 						, context
 						, graph
 						, VkExtent3D{ size.width, size.height, 1u }
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::RunnablePass::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
-					device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LightStreaks"
+					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, result->getTimer() );
 					return result;
 				} );

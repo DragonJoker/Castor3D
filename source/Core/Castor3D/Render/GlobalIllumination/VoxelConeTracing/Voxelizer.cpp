@@ -182,7 +182,7 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateVoxelizePass( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating voxelize pass" );
-		auto & result = m_graph.createPass( "VoxelizePass"
+		auto & result = m_graph.createPass( "NodesPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -198,7 +198,7 @@ namespace castor3d
 					, *m_voxels
 					, m_voxelConfig );
 				m_voxelizePass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -225,7 +225,7 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelToTexture = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -259,7 +259,7 @@ namespace castor3d
 					, crg::ru::Config{}
 					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 					, isEnabled );
-				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
@@ -272,7 +272,7 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating voxel secondary bounce pass" );
-		auto & result = m_graph.createPass( "VoxelSecondaryBounce"
+		auto & result = m_graph.createPass( "SecondaryBounce"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -284,7 +284,7 @@ namespace castor3d
 					, m_device
 					, m_voxelConfig );
 				m_voxelSecondaryBounce = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/Voxelizer"
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );

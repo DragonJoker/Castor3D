@@ -15,6 +15,7 @@
 namespace castor3d
 {
 	PostEffect::PostEffect( castor::String const & name
+		, castor::String const & groupName
 		, castor::String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
@@ -25,6 +26,7 @@ namespace castor3d
 		, castor::Named{ name }
 		, m_fullName{ fullName }
 		, m_renderTarget{ renderTarget }
+		, m_graph{ m_renderTarget.getGraph().createPassGroup( groupName ) }
 		, m_passesCount{ passesCount }
 		, m_kind{ kind }
 		, m_enabled{ true }
