@@ -173,7 +173,7 @@ namespace CastorViewer
 				{
 					auto target = GuiCommon::loadScene( *engine
 						, m_filePath
-						, &window.getProgressBar() );
+						, nullptr );
 					doSceneLoadEnd( target );
 				}
 			}
