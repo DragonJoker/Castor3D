@@ -411,7 +411,7 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, SceneName
-					, pass.name
+					, pass.getName()
 					, SceneRenderPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_opaquePass = result.get();
@@ -438,7 +438,7 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, SceneName
-					, pass.name
+					, pass.getName()
 					, SceneRenderPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler, false }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_transparentPass = result.get();

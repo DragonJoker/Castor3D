@@ -118,6 +118,7 @@ namespace motion_blur
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "LinearMotionBlur"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -155,7 +156,7 @@ namespace motion_blur
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
-		m_resultImg = m_renderTarget.getGraph().createImage( crg::ImageData{ "LMBRes"
+		m_resultImg = m_graph.createImage( crg::ImageData{ "LMBRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -164,14 +165,14 @@ namespace motion_blur
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "LMBRes"
+		m_resultView = m_graph.createView( crg::ImageViewData{ "LMBRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		m_pass = &m_renderTarget.getGraph().createPass( "LinearMotionBlurPass"
-			, [this, &device]( crg::FramePass const & pass
+		m_pass = &m_graph.createPass( "LinearMotionBlur"
+			, [this, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -182,7 +183,7 @@ namespace motion_blur
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.build( pass
+					.build( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -190,7 +191,7 @@ namespace motion_blur
 								, crg::RecordContext::copyImage( *m_target
 									, m_resultView
 									, { extent.width, extent.height } ) ) );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/LinearMotionBlur"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

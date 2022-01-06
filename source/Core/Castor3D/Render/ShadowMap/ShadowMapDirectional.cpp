@@ -76,7 +76,7 @@ namespace castor3d
 			passData.culler = std::make_unique< InstantiatedFrustumCuller >( scene
 				, *passData.camera
 				, scene.getDirectionalShadowCascades() );
-			auto & pass = graph.createPass( passData.camera->getName()
+			auto & pass = graph.createPass( passData.camera->getName() + cuT( "ShadowMapDirectional" )
 				, [&passData, &matrixUbo, &culler, &device, &shadowMap, &scene]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
@@ -90,7 +90,7 @@ namespace castor3d
 						, shadowMap
 						, scene.getDirectionalShadowCascades() );
 					passData.pass = res.get();
-					device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + cuT( "/ShadowMapDirectional" )
+					device.renderSystem.getEngine()->registerTimer( framePass.getName()
 						, res->getTimer() );
 					return res;
 				} );
@@ -134,7 +134,7 @@ namespace castor3d
 							, shadowMap
 							, cascade );
 						passData.pass = res.get();
-						device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + cuT( "/ShadowMapDirectional" )
+						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
 						return res;
 					} );

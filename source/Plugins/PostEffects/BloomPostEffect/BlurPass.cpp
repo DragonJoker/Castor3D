@@ -206,8 +206,8 @@ namespace Bloom
 		, uint32_t index
 		, bool isVertical
 		, bool const * enabled )
-		: pass{ graph.createPass( "BloomBlurPass" + std::to_string( index ) + ( isVertical ? "Y" : "X" )
-			, [&device, &stages, dimensions, index, enabled]( crg::FramePass const & pass
+		: pass{ graph.createPass( "Blur" + std::to_string( index ) + ( isVertical ? "Y" : "X" )
+			, [&device, &stages, dimensions, index, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -217,8 +217,8 @@ namespace Bloom
 						, dimensions.height >> ( index + 1 ) } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
-					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Bloom"
+					.build( framePass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }

@@ -187,6 +187,7 @@ namespace smaa
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "SMAA"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -265,13 +266,12 @@ namespace smaa
 		m_srgbTextureView = m_target;
 		m_hdrTextureView = &m_renderTarget.getTechnique().getResultImgView();
 		auto previous = &previousPass;
-		auto & graph = m_renderTarget.getGraph().createPassGroup( "SMAA" );
 		crg::ImageViewIdArray smaaResult;
 
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
-			m_edgeDetection = std::make_unique< DepthEdgeDetection >( graph
+			m_edgeDetection = std::make_unique< DepthEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -282,7 +282,7 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eColour:
-			m_edgeDetection = std::make_unique< ColourEdgeDetection >( graph
+			m_edgeDetection = std::make_unique< ColourEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -294,7 +294,7 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eLuma:
-			m_edgeDetection = std::make_unique< LumaEdgeDetection >( graph
+			m_edgeDetection = std::make_unique< LumaEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -310,7 +310,7 @@ namespace smaa
 		smaaResult = { m_edgeDetection->getColourResult() };
 
 #if !C3D_DebugEdgeDetection
-		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( graph
+		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_graph
 			, *previous
 			, m_renderTarget
 			, device
@@ -324,7 +324,7 @@ namespace smaa
 
 #	if !C3D_DebugBlendingWeightCalculation
 		auto * velocityView = doGetVelocityView();
-		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( graph
+		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( m_graph
 			, *previous
 			, m_renderTarget
 			, device
@@ -350,7 +350,7 @@ namespace smaa
 					: currentViews[i - 1u] );
 			}
 
-			m_reproject = std::make_unique< Reproject >( graph
+			m_reproject = std::make_unique< Reproject >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -367,8 +367,8 @@ namespace smaa
 #	endif
 #endif
 
-		auto & pass = graph.createPass( "SmaaCopy"
-			, [this]( crg::FramePass const & pass
+		auto & pass = m_graph.createPass( "Copy"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -379,8 +379,8 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &m_config.subsampleIndex )
 					.enabled( &m_enabled )
-					.build( pass, context, graph, { m_config.maxSubsampleIndices } );
-				getOwner()->getEngine()->registerTimer( graph.getName() + "/SMAA"
+					.build( framePass, context, graph, { m_config.maxSubsampleIndices } );
+				getOwner()->getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

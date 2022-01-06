@@ -212,8 +212,8 @@ namespace draw_edges
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DNEdgesDetection", getFragmentProgram( m_extent ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_pass{ m_graph.createPass( "DNEdgesDetection"
-			, [this, &device]( crg::FramePass const & pass
+		, m_pass{ m_graph.createPass( "EdgesDetection"
+			, [this, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -228,8 +228,8 @@ namespace draw_edges
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
-					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
+					.build( framePass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }

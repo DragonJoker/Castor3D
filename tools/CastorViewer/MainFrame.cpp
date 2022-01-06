@@ -729,7 +729,7 @@ namespace CastorViewer
 #	endif
 #endif
 		m_title = wxT( "Castor Viewer - " )
-			+ make_wxString( scene->getEngine()->getRenderSystem()->getRendererType() )
+			+ make_wxString( target->getEngine()->getRenderSystem()->getRendererType() )
 			+ wxT( " - " )
 			+ m_filePath.getFileName( true );
 		SetTitle( m_title );

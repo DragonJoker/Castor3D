@@ -185,8 +185,8 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating transparent resolve pass" );
-		auto & result = graph.createPass( "TransparentCombine"
-			, [this, progress]( crg::FramePass const & pass
+		auto & result = graph.createPass( "Combine"
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -196,8 +196,8 @@ namespace castor3d
 					.renderSize( makeExtent2D( m_size ) )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &m_enabled )
-					.build( pass, context, graph );
-				m_device.renderSystem.getEngine()->registerTimer( m_graph.getName() + "/Transparent"
+					.build( framePass, context, graph );
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

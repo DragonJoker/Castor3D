@@ -597,7 +597,7 @@ namespace castor3d
 			, Program{ device, true, m_graph.getName() } }
 	{
 		stepProgressBar( progress, "Creating SSAO raw AO pass" );
-		auto & pass = m_graph.createPass( "SsaoRawAO"
+		auto & pass = m_graph.createPass( "RawAO"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

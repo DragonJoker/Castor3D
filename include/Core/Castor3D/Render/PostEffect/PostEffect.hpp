@@ -32,6 +32,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	name			The effect name.
+		 *\param[in]	groupName		The effect passes group name.
 		 *\param[in]	fullName		The effect full (fancy) name.
 		 *\param[in]	renderTarget	The render target to which is attached this effect.
 		 *\param[in]	renderSystem	The render system.
@@ -41,6 +42,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name			Le nom de l'effet.
+		 *\param[in]	groupName		Le nom du groupe de passes de l'effet.
 		 *\param[in]	fullName		Le nom complet (et joli) de l'effet.
 		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 		 *\param[in]	renderSystem	Le render system.
@@ -49,6 +51,7 @@ namespace castor3d
 		 *\param[in]	kind			Le type d'effet.
 		 */
 		C3D_API PostEffect( castor::String const & name
+			, castor::String const & groupName
 			, castor::String const & fullName
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
@@ -237,6 +240,7 @@ namespace castor3d
 	protected:
 		castor::String m_fullName;
 		RenderTarget & m_renderTarget;
+		crg::FramePassGroup & m_graph;
 		uint32_t m_passesCount{ 1u };
 		Kind m_kind{ Kind::eHDR };
 		crg::ImageViewId const * m_target{ nullptr };

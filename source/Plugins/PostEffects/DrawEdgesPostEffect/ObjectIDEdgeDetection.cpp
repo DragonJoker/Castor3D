@@ -191,8 +191,8 @@ namespace draw_edges
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) }
-		, m_pass{ m_graph.createPass( "DEObjDetection"
-			, [this, &device]( crg::FramePass const & pass
+		, m_pass{ m_graph.createPass( "ObjectIDDetection"
+			, [this, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -201,8 +201,8 @@ namespace draw_edges
 					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/Draw Edges"
+					.build( framePass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }

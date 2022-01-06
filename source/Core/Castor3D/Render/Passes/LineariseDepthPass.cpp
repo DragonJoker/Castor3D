@@ -174,7 +174,7 @@ namespace castor3d
 		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_srcDepthBuffer{ depthBuffer }
-		, m_prefix{ graph.name + prefix }
+		, m_prefix{ graph.getName() + prefix }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPools->getBuffer< Point3f >( 0u ) }
@@ -250,7 +250,7 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating depth linearise pass" );
 		auto & pass = m_graph.createPass( "LineariseDepth"
-			, [this, progress]( crg::FramePass const & pass
+			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -259,8 +259,8 @@ namespace castor3d
 					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_lineariseStages ) )
 					.renderSize( m_size )
 					.enabled( &m_ssaoConfig.enabled )
-					.build( pass, context, graph );
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
+					.build( framePass, context, graph );
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -299,7 +299,7 @@ namespace castor3d
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + std::to_string( index )
-				, [this, progress, size]( crg::FramePass const & pass
+				, [this, progress, size]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -308,8 +308,8 @@ namespace castor3d
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )
 						.enabled( &m_ssaoConfig.enabled )
-						.build( pass, context, graph );
-					m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
+						.build( framePass, context, graph );
+					m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, result->getTimer() );
 					return result;
 				} );
