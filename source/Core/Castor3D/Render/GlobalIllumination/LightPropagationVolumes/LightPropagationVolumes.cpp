@@ -180,7 +180,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				lightInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LPV"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -232,7 +232,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				lightInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LPV"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -330,7 +330,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				geometryInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LPV"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -377,7 +377,7 @@ namespace castor3d
 					, device.renderSystem.getEngine()->getLpvGridSize()
 					, rsmSize );
 				geometryInjectionPasses.push_back( result.get() );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LPV"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -726,7 +726,7 @@ namespace castor3d
 		, LightVolumePassResult const & propagation
 		, uint32_t index )
 	{
-		auto & result = m_graph.createPass( getName() + name
+		auto & result = m_graph.createPass( name
 			, [this, index]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -739,7 +739,7 @@ namespace castor3d
 					, m_scene.getLpvGridSize()
 					, ( index == 0u ? BlendMode::eNoBlend : BlendMode::eAdditive ) );
 				m_lightPropagationPasses.push_back( res.get() );
-				m_device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/LPV"
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );

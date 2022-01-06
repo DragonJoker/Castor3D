@@ -160,8 +160,8 @@ namespace smaa
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_pass{ m_graph.createPass( "SmaaReproject"
-			, [this, &device, &config, enabled]( crg::FramePass const & pass
+		, m_pass{ m_graph.createPass( "Reproject"
+			, [this, &device, &config, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -172,8 +172,8 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
-					.build( pass, context, graph, { config.maxSubsampleIndices } );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
+					.build( framePass, context, graph, { config.maxSubsampleIndices } );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }

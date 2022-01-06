@@ -296,7 +296,7 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurX";
 				auto & passX = graph.createPass( name
-					, [this, category, &input]( crg::FramePass const & pass
+					, [this, category, &input]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
@@ -306,8 +306,8 @@ namespace castor3d
 							.renderSize( { extent.width, extent.height } )
 							.texcoordConfig( {} )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
-							.build( pass, context, graph );
-						m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + category
+							.build( framePass, context, graph );
+						m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, result->getTimer() );
 						return result;
 					} );
@@ -320,7 +320,7 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurY";
 				auto & passY = graph.createPass( name
-					, [this, category, &input]( crg::FramePass const & pass
+					, [this, category, &input]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
@@ -330,8 +330,8 @@ namespace castor3d
 							.renderSize( { extent.width, extent.height } )
 							.texcoordConfig( {} )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
-							.build( pass, context, graph );
-						m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/" + category
+							.build( framePass, context, graph );
+						m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, result->getTimer() );
 						return result;
 					} );

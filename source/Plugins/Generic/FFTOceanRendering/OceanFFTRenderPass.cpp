@@ -82,7 +82,7 @@ namespace ocean_fft
 			, castor3d::Texture const & b
 			, castor3d::Texture const & c )
 		{
-			auto & result = graph.createPass( name + "/FakeCombine"
+			auto & result = graph.createPass( "FakeCombine"
 				, []( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
@@ -206,7 +206,7 @@ namespace ocean_fft
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-						device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
+						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, result->getTimer() );
 						return result;
 				} );
@@ -229,7 +229,7 @@ namespace ocean_fft
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
 			auto extent = getExtent( technique.getResultImg() );
-			auto & result = graph.createPass( name +"/NodesPass"
+			auto & result = graph.createPass( "NodesPass"
 				, [name, extent, colourInput, depthInput, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
@@ -258,7 +258,7 @@ namespace ocean_fft
 							.vctSecondaryBounce( technique.getSecondaryVctBounce() )
 						, isEnabled );
 					renderPasses[size_t( OceanRenderPass::Event )].push_back( res.get() );
-					device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + name
+					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, res->getTimer() );
 					return res;
 			} );
@@ -385,7 +385,7 @@ namespace ocean_fft
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
 		crg::FramePassArray passes;
-		passes.push_back( &createCopyPass( OceanFFT::Name + "/Colour"
+		passes.push_back( &createCopyPass( "Colour"
 			, device
 			, graph
 			, previousPasses
@@ -403,7 +403,7 @@ namespace ocean_fft
 			, technique.getDepthImg().data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
-		passes.push_back( &createCopyPass( OceanFFT::Name + "/Depth"
+		passes.push_back( &createCopyPass( "Depth"
 			, device
 			, graph
 			, previousPasses

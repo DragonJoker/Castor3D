@@ -277,8 +277,8 @@ namespace ocean
 			, technique.getResultImg().data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
-		auto & blitColourPass = graph.createPass( name + "CopyColour"
-			, [name, extent, isEnabled, &device]( crg::FramePass const & framePass
+		auto & blitColourPass = graph.createPass( "CopyColour"
+			, [extent, isEnabled, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -289,7 +289,7 @@ namespace ocean
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -307,8 +307,8 @@ namespace ocean
 			, technique.getDepthImg().data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
-		auto & blitDepthPass = graph.createPass( name + "CopyDepth"
-			, [name, extent, isEnabled, &device]( crg::FramePass const & framePass
+		auto & blitDepthPass = graph.createPass( "CopyDepth"
+			, [extent, isEnabled, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -319,7 +319,7 @@ namespace ocean
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -327,7 +327,7 @@ namespace ocean
 		blitDepthPass.addTransferInputView( technique.getDepthSampledView() );
 		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
-		auto & result = graph.createPass( name
+		auto & result = graph.createPass( "NodesPass"
 			, [name, extent, colourInput, depthInput, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -354,7 +354,7 @@ namespace ocean
 					.vctSecondaryBounce( technique.getSecondaryVctBounce() )
 				, isEnabled );
 			renderPasses[size_t( Event )].push_back( res.get() );
-			device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + name
+			device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 				, res->getTimer() );
 			return res;
 		} );

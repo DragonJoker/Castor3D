@@ -169,6 +169,7 @@ namespace film_grain
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
+			, "FilmGrain"
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
@@ -232,23 +233,22 @@ namespace film_grain
 	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
 		, crg::FramePass const & previousPass )
 	{
-		auto & graph = m_renderTarget.getGraph();
 		auto dim = m_noiseImages[0].getDimensions();
 		auto format = castor3d::convert( m_noiseImages[0].getPixelFormat() );
-		m_noiseImg = graph.createImage( crg::ImageData{ "FGNoise"
+		m_noiseImg = m_graph.createImage( crg::ImageData{ "FGNoise"
 			, 0u
 			, VK_IMAGE_TYPE_3D
 			, format
 			, { dim.getWidth(), dim.getHeight(), NoiseMapCount }
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_noiseView = graph.createView( crg::ImageViewData{ "FGNoise"
+		m_noiseView = m_graph.createView( crg::ImageViewData{ "FGNoise"
 			, m_noiseImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_3D
 			, m_noiseImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		m_resultImg = graph.createImage( crg::ImageData{ "FGRes"
+		m_resultImg = m_graph.createImage( crg::ImageData{ "FGRes"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, m_target->data->info.format
@@ -257,14 +257,14 @@ namespace film_grain
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_renderTarget.getGraph().createView( crg::ImageViewData{ "FGRes"
+		m_resultView = m_graph.createView( crg::ImageViewData{ "FGRes"
 			, m_resultImg
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_resultImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		m_pass = &m_renderTarget.getGraph().createPass( "FilmGrainPass"
-			, [this]( crg::FramePass const & pass
+		m_pass = &m_graph.createPass( "FilmGrain"
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -303,7 +303,7 @@ namespace film_grain
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
-					.build( pass
+					.build( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -311,7 +311,7 @@ namespace film_grain
 								, crg::RecordContext::copyImage( *m_target
 									, m_resultView
 									, { extent.width, extent.height } ) ) );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/FilmGrain"
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

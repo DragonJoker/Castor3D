@@ -339,7 +339,7 @@ namespace ocean_fft
 		, std::array< castor3d::Texture, 2u > const & gradJacob
 		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 	{
-		auto & result = graph.createPass( OceanFFT::Name + "/BakeHeightGradient"
+		auto & result = graph.createPass( "BakeHeightGradient"
 			, [&device, extent, heightMapSize, displacementDownsample, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -352,7 +352,7 @@ namespace ocean_fft
 					, heightMapSize
 					, displacementDownsample
 					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-				device.renderSystem.getEngine()->registerTimer( runnableGraph.getName() + "/" + framePass.name
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );

@@ -110,8 +110,8 @@ namespace smaa
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdge", std::move( pixelShader ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_pass{ m_graph.createPass( "SmaaEdge"
-			, [this, &device, enabled]( crg::FramePass const & pass
+		, m_pass{ m_graph.createPass( "EdgeDetection"
+			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -127,8 +127,8 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
 					.enabled( enabled )
-					.build( pass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SMAA"
+					.build( framePass, context, graph );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }
