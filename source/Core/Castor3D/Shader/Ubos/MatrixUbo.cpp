@@ -54,6 +54,11 @@ namespace castor3d
 				, makeType( writer.getTypesCache() ) );
 		}
 
+		sdw::Vec4 MatrixData::projToView( sdw::Vec4 const & psPosition )const
+		{
+			return m_invProjection * psPosition;
+		}
+
 		sdw::Vec4 MatrixData::viewToProj( sdw::Vec4 const & vsPosition )const
 		{
 			return m_projection * vsPosition;
@@ -67,6 +72,16 @@ namespace castor3d
 		sdw::Vec4 MatrixData::worldToPrvView( sdw::Vec4 const & wsPosition )const
 		{
 			return m_prvView * wsPosition;
+		}
+
+		sdw::Vec4 MatrixData::curViewToWorld( sdw::Vec4 const & vsPosition )const
+		{
+			return inverse( m_curView ) * vsPosition;
+		}
+
+		sdw::Vec4 MatrixData::prvViewToWorld( sdw::Vec4 const & vsPosition )const
+		{
+			return inverse( m_prvView ) * vsPosition;
 		}
 
 		sdw::Vec4 MatrixData::worldToCurProj( sdw::Vec4 const & wsPosition )const

@@ -728,6 +728,44 @@ namespace castor
 		return result;
 	}
 
+	inline constexpr PixelFormat getPFWithAlpha( PixelFormat format )
+	{
+		PixelFormat result = PixelFormat::eCount;
+
+		switch ( format )
+		{
+		case PixelFormat::eR5G6B5_UNORM:
+			result = PixelFormat::eR5G5B5A1_UNORM;
+			break;
+		case PixelFormat::eR8G8B8_UNORM:
+			result = PixelFormat::eR8G8B8A8_UNORM;
+			break;
+		case PixelFormat::eB8G8R8_UNORM:
+			result = PixelFormat::eA8B8G8R8_UNORM;
+			break;
+		case PixelFormat::eR8G8B8_SRGB:
+			result = PixelFormat::eR8G8B8A8_UNORM;
+			break;
+		case PixelFormat::eB8G8R8_SRGB:
+			result = PixelFormat::eA8B8G8R8_UNORM;
+			break;
+		case PixelFormat::eR16G16B16_SFLOAT:
+			result = PixelFormat::eR16G16B16A16_SFLOAT;
+			break;
+		case PixelFormat::eR32G32B32_SFLOAT:
+			result = PixelFormat::eR32G32B32A32_SFLOAT;
+			break;
+		case PixelFormat::eR64G64B64_SFLOAT:
+			result = PixelFormat::eR64G64B64A64_SFLOAT;
+			break;
+		default:
+			result = format;
+			break;
+		}
+
+		return result;
+	}
+
 	inline constexpr uint32_t getComponentIndex( PixelComponent component )
 	{
 		switch ( component )
