@@ -27,8 +27,10 @@ namespace castor3d
 
 	String const LinesMapping::Name = "lines_mapping";
 
-	LinesMapping::LinesMapping( Submesh & submesh )
-		: IndexMapping{ submesh, Name }
+	LinesMapping::LinesMapping( Submesh & submesh
+		, VkMemoryPropertyFlags bufferMemoryFlags
+		, VkBufferUsageFlags bufferUsageFlags )
+		: IndexMapping{ submesh, Name, bufferMemoryFlags, bufferUsageFlags }
 	{
 	}
 
@@ -157,7 +159,9 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_lines.size() * 2 );
 
-		if ( count && getOwner()->hasIndexBuffer() )
+		if ( count
+			&& getOwner()->hasIndexBuffer()
+			&& !castor::checkFlag( getMemoryFlags(), VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 

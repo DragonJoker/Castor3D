@@ -23,7 +23,9 @@ namespace castor3d
 		 *\param[in]	type	Le type de composant.
 		 */
 		C3D_API IndexMapping( Submesh & submesh
-			, castor::String const & type );
+			, castor::String const & type
+			, VkMemoryPropertyFlags bufferMemoryFlags
+			, VkBufferUsageFlags bufferUsageFlags );
 		/**
 		 *\~english
 		 *\return		The elements count.
@@ -59,7 +61,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		inline void gather( ShaderFlags const & shaderFlags
+		void gather( ShaderFlags const & shaderFlags
 			, ProgramFlags const & programFlags
 			, MaterialRPtr material
 			, ashes::BufferCRefArray & buffers
@@ -73,24 +75,38 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags( MaterialRPtr material )const override
+		ProgramFlags getProgramFlags( MaterialRPtr material )const override
 		{
 			return ProgramFlags{};
 		}
 
+		VkBufferUsageFlags getUsageFlags()const override
+		{
+			return m_bufferUsageFlags;
+		}
+
+		VkMemoryPropertyFlags getMemoryFlags()const
+		{
+			return m_bufferMemoryFlags;
+		}
+
 	private:
-		inline bool doInitialise( RenderDevice const & device )override
+		bool doInitialise( RenderDevice const & device )override
 		{
 			return true;
 		}
 
-		inline void doCleanup()override
+		void doCleanup()override
 		{
 		}
 
-		inline void doUpload()override
+		void doUpload()override
 		{
 		}
+
+	private:
+		VkMemoryPropertyFlags m_bufferMemoryFlags;
+		VkBufferUsageFlags m_bufferUsageFlags;
 	};
 }
 
