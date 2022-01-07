@@ -126,10 +126,15 @@ namespace castor3d
 		}
 	}
 
-	Submesh::Submesh( Mesh & mesh, uint32_t id )
+	Submesh::Submesh( Mesh & mesh
+		, uint32_t id
+		, VkMemoryPropertyFlags bufferMemoryFlags
+		, VkBufferUsageFlags bufferUsageFlags )
 		: OwnedBy< Mesh >{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
+		, m_bufferMemoryFlags{ bufferMemoryFlags }
+		, m_bufferUsageFlags{ bufferUsageFlags }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
 	}
@@ -149,8 +154,8 @@ namespace castor3d
 			{
 				m_indexBuffer = makeBuffer< uint32_t >( device
 					, VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount()
-					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, ( VK_BUFFER_USAGE_INDEX_BUFFER_BIT | m_indexMapping->getUsageFlags() )
+					, m_indexMapping->getMemoryFlags()
 					, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );
 			}
 
@@ -498,18 +503,21 @@ namespace castor3d
 			{
 				m_vertexBuffer = makeVertexBuffer< InterleavedVertex >( device
 					, size
-					, 0u
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, m_bufferUsageFlags
+					, m_bufferMemoryFlags
 					, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "VertexBuffer" );
 			}
 
-			if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
-				, ~( 0ull )
-				, 0u ) )
+			if ( !castor::checkFlag( m_bufferMemoryFlags, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
 			{
-				std::memcpy( buffer, m_points.data(), m_points.size() * sizeof( InterleavedVertex ) );
-				m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
-				m_vertexBuffer->getBuffer().unlock();
+				if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
+					, ~( 0ull )
+					, 0u ) )
+				{
+					std::memcpy( buffer, m_points.data(), m_points.size() * sizeof( InterleavedVertex ) );
+					m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
+					m_vertexBuffer->getBuffer().unlock();
+				}
 			}
 
 			//m_points.clear();
