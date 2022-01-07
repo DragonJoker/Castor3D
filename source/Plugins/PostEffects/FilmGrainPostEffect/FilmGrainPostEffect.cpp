@@ -291,7 +291,7 @@ namespace film_grain
 							, m_noiseView.data->info.subresourceRange.layerCount }
 						, format
 						, { 0, 0, int32_t( i ) }
-						, castor3d::makeExtent2D( dim )
+						, castor3d::makeExtent3D( dim )
 						, m_noiseImages[i].getBuffer().data()
 						, noiseView );
 				}
