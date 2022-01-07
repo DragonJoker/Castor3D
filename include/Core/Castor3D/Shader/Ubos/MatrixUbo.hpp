@@ -31,9 +31,12 @@ namespace castor3d
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			C3D_API sdw::Vec4 projToView( sdw::Vec4 const & psPosition )const;
 			C3D_API sdw::Vec4 viewToProj( sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 worldToCurView( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToPrvView( sdw::Vec4 const & wsPosition )const;
+			C3D_API sdw::Vec4 curViewToWorld( sdw::Vec4 const & vsPosition )const;
+			C3D_API sdw::Vec4 prvViewToWorld( sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 worldToCurProj( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToPrvProj( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 viewToScreenUV( Utils & utils
