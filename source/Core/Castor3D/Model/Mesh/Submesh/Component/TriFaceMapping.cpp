@@ -29,8 +29,10 @@ namespace castor3d
 
 	String const TriFaceMapping::Name = "triface_mapping";
 
-	TriFaceMapping::TriFaceMapping( Submesh & submesh )
-		: IndexMapping{ submesh, Name }
+	TriFaceMapping::TriFaceMapping( Submesh & submesh
+		, VkMemoryPropertyFlags bufferMemoryFlags
+		, VkBufferUsageFlags bufferUsageFlags )
+		: IndexMapping{ submesh, Name, bufferMemoryFlags, bufferUsageFlags }
 	{
 	}
 
@@ -208,7 +210,9 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_faces.size() * 3 );
 
-		if ( count && getOwner()->hasIndexBuffer() )
+		if ( count
+			&& getOwner()->hasIndexBuffer()
+			&& !castor::checkFlag( getMemoryFlags(), VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
