@@ -275,6 +275,16 @@ namespace castor3d
 			return m_matrixUbo;
 		}
 
+		SceneUbo const & getSceneUbo()const
+		{
+			return m_sceneUbo;
+		}
+
+		SceneUbo & getSceneUbo()
+		{
+			return m_sceneUbo;
+		}
+
 		LpvGridConfigUbo const & getLpvConfigUbo()const
 		{
 			return m_lpvConfigUbo;
