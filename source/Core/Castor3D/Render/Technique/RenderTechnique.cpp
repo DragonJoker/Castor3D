@@ -974,10 +974,15 @@ namespace castor3d
 
 		for ( auto renderPassInfo : getEngine()->getRenderPassInfos( event ) )
 		{
-			result = renderPassInfo->create( m_device
+			auto passes = renderPassInfo->create( m_device
 				, *this
 				, m_renderPasses
-				, std::move( result ) );
+				, result );
+
+			if ( !passes.empty() )
+			{
+				result = passes;
+			}
 		}
 
 		return result;

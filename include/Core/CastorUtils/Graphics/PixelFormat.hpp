@@ -129,7 +129,7 @@ namespace castor
 	inline constexpr bool isDepthOrStencilFormat( PixelFormat format );
 	/**
 	 *\~english
-	 *\brief		Retrieves the pixel format without alpha that is near from the one given
+	 *\brief		Retrieves the pixel format without alpha that is close to the one given
 	 *\param[in]	format	The pixel format
 	 *\return		The given pixel format if none found
 	 *\~french
@@ -138,6 +138,17 @@ namespace castor
 	 *\return		Le format de pixels donné si non trouvé
 	 */
 	inline constexpr PixelFormat getPFWithoutAlpha( PixelFormat format );
+	/**
+	 *\~english
+	 *\brief		Retrieves the pixel format with alpha that is close to the one given
+	 *\param[in]	format	The pixel format
+	 *\return		The given pixel format if none found
+	 *\~french
+	 *\brief		Récupère le format de pixel avec alpha le plus proche de celui donné
+	 *\param[in]	format	Le format de pixel
+	 *\return		Le format de pixels donné si non trouvé
+	 */
+	inline constexpr PixelFormat getPFWithAlpha( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		The index matching the given PixelComponent.
