@@ -67,7 +67,7 @@ namespace castor3d
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
-			, { Dim, Dim } );
+			, VkExtent2D{ Dim, Dim } );
 		auto result = m_texture->initialise( device, *data );
 		m_colour.reset();
 

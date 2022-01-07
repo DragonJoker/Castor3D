@@ -830,8 +830,7 @@ namespace smaa
 				, VK_IMAGE_VIEW_TYPE_2D
 				, imageId.data->info.format
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-			auto dim = castor3d::makeExtent2D( dimensions );
-			auto staging = device->createStagingTexture( format, dim );
+			auto staging = device->createStagingTexture( format, dimensions );
 			auto image = std::make_unique< ashes::Image >( *device
 				, handler.createImage( context, imageId )
 				, imageId.data->info );
@@ -847,7 +846,7 @@ namespace smaa
 					, result.data->info.subresourceRange.layerCount }
 				, format
 				, { 0, 0, 0 }
-				, dim
+				, dimensions
 				, bytes.data()
 				, view );
 			return result;
