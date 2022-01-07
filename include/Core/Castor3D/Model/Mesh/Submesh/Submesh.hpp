@@ -52,7 +52,10 @@ namespace castor3d
 		 *\param[in]	mesh	Le mesh parent.
 		 *\param[in]	id		L'ID du sous-maillage.
 		 */
-		C3D_API explicit Submesh( Mesh & mesh, uint32_t id = 1 );
+		C3D_API explicit Submesh( Mesh & mesh
+			, uint32_t id = 1
+			, VkMemoryPropertyFlags bufferMemoryFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, VkBufferUsageFlags bufferUsageFlags = {} );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -385,6 +388,8 @@ namespace castor3d
 	private:
 		uint32_t m_id;
 		MaterialRPtr m_defaultMaterial;
+		VkMemoryPropertyFlags m_bufferMemoryFlags;
+		VkBufferUsageFlags m_bufferUsageFlags;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		InterleavedVertexArray m_points;
