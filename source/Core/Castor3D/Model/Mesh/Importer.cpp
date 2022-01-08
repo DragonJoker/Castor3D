@@ -253,8 +253,15 @@ namespace castor3d
 		, PassTextureConfig const & config
 		, Pass & pass )const
 	{
-		pass.registerTexture( loadTexture( sampler, path, config.config )
-			, config );
+		try
+		{
+			pass.registerTexture( loadTexture( sampler, path, config.config )
+				, config );
+		}
+		catch ( std::exception & exc )
+		{
+			log::error << exc.what() << std::endl;
+		}
 	}
 
 	bool MeshImporter::convertToNormalMap( castor::Path & path

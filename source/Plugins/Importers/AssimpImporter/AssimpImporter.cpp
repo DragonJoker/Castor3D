@@ -201,6 +201,8 @@ namespace C3dAssimp
 			{
 				PassFiller vis{ material, sampler, importer, pass };
 				pass.accept( vis );
+				castor3d::TextureConfiguration config;
+				pass.fillConfig( config, vis );
 				vis.finish();
 				pass.prepareTextures();
 			}
@@ -258,18 +260,6 @@ namespace C3dAssimp
 					m_texInfos.spcTex.transform = m_texInfos.colTex.transform;
 					m_texInfos.opaTex.transform = m_texInfos.colTex.transform;
 				}
-
-				castor::Point2ui mask;
-				visit( "", castor3d::TextureFlag::eHeight, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eOpacity, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eNormal, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eEmissive, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eOcclusion, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eColour, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eSpecular, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eMetalness, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eGlossiness, mask, uint32_t{}, nullptr );
-				visit( "", castor3d::TextureFlag::eRoughness, mask, uint32_t{}, nullptr );
 
 				loadTexture( m_texInfos.colTex, TextureConfiguration::DiffuseTexture );
 				loadTexture( m_texInfos.emiTex, TextureConfiguration::EmissiveTexture );
