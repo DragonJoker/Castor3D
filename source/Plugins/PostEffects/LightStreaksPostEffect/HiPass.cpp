@@ -47,7 +47,7 @@ namespace light_streaks
 						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
-						.recordInto( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
+						.end( [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); } )
 						.renderSize( renderSize ) }
 				, m_viewDesc{ pass.images.back().view() }
 				, m_imageDesc{ m_viewDesc.data->image }
