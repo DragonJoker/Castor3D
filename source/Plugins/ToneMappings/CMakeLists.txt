@@ -3,6 +3,7 @@ option( CASTOR_BUILD_TONEMAP_HAARM "Build Haarm Pieter Duiker Tone mapping plug-
 option( CASTOR_BUILD_TONEMAP_HEJL "Build Hejl Burgess Dawson Tone mapping plug-in" TRUE )
 option( CASTOR_BUILD_TONEMAP_REINHARD "Build Reinhard Tone mapping plug-in" TRUE )
 option( CASTOR_BUILD_TONEMAP_UNCHARTED2 "Build Uncharted 2 Tone mapping plug-in" TRUE )
+option( CASTOR_BUILD_TONEMAP_ACES "Build ACES Tone mapping plug-in" TRUE )
 
 function( ToneMappingsInit )
 	set( Linear "no (Not wanted)" PARENT_SCOPE )
@@ -10,6 +11,7 @@ function( ToneMappingsInit )
 	set( Hejl "no (Not wanted)" PARENT_SCOPE )
 	set( Reinhard "no (Not wanted)" PARENT_SCOPE )
 	set( Uncharted2 "no (Not wanted)" PARENT_SCOPE )
+	set( Aces "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToneMappingsInit )
 
 function( ToneMappingsBuild )
@@ -48,6 +50,12 @@ function( ToneMappingsBuild )
 			add_subdirectory( Plugins/ToneMappings/Uncharted2ToneMapping )
 			set( Uncharted2 ${Build} PARENT_SCOPE )
 		endif()
+
+		if( ${CASTOR_BUILD_TONEMAP_ACES} )
+			set( Build ${Aces} )
+			add_subdirectory( Plugins/ToneMappings/ACESToneMapping )
+			set( Aces ${Build} PARENT_SCOPE )
+		endif()
 	endif ()
 
 	set( CastorMinLibraries
@@ -79,6 +87,9 @@ function( ToneMappingsSummary msg )
 		endif ()
 		if( ${CASTOR_BUILD_TONEMAP_UNCHARTED2} )
 			set( msg_tmp "${msg_tmp}\n    Uncharted2           ${Uncharted2}" )
+		endif ()
+		if( ${CASTOR_BUILD_TONEMAP_ACES} )
+			set( msg_tmp "${msg_tmp}\n    ACES                 ${Aces}" )
 		endif ()
 	endif ()
 
@@ -125,6 +136,15 @@ function( ToneMappingsSetup )
 			cpack_add_component( Uncharted2ToneMapping
 				DISPLAY_NAME "Uncharted 2 ToneMapping"
 				DESCRIPTION "Allows Uncharted 2 Tone mapping."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Developer Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_TONEMAP_ACES} )
+			cpack_add_component( ACESToneMapping
+				DISPLAY_NAME "ACES ToneMapping"
+				DESCRIPTION "Allows ACES Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
