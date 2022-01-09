@@ -35,22 +35,22 @@ source_group( "Source Files"
 		${${PROJECT_NAME}_SRC_FILES}
 )
 set( ${PROJECT_NAME}_CTRLS_HDR_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlButton.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlComboBox.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlControl.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlEdit.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlListBox.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlSlider.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlStatic.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlButton.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlComboBox.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlControl.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlEdit.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlListBox.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlSlider.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlStatic.hpp
 )
 set( ${PROJECT_NAME}_CTRLS_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlButton.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlComboBox.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlControl.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlEdit.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlListBox.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlSlider.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CtrlStatic.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlButton.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlComboBox.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlControl.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlEdit.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlListBox.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlSlider.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Controls/CtrlStatic.cpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

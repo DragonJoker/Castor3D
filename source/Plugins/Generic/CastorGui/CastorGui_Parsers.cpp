@@ -1,12 +1,12 @@
 #include "CastorGui/CastorGui_Parsers.hpp"
 
 #include "CastorGui/ControlsManager.hpp"
-#include "CastorGui/CtrlButton.hpp"
-#include "CastorGui/CtrlComboBox.hpp"
-#include "CastorGui/CtrlEdit.hpp"
-#include "CastorGui/CtrlListBox.hpp"
-#include "CastorGui/CtrlSlider.hpp"
-#include "CastorGui/CtrlStatic.hpp"
+#include "CastorGui/Controls/CtrlButton.hpp"
+#include "CastorGui/Controls/CtrlComboBox.hpp"
+#include "CastorGui/Controls/CtrlEdit.hpp"
+#include "CastorGui/Controls/CtrlListBox.hpp"
+#include "CastorGui/Controls/CtrlSlider.hpp"
+#include "CastorGui/Controls/CtrlStatic.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
@@ -37,7 +37,7 @@ namespace CastorGui
 		std::shared_ptr< T > CreateControl( ParserContext & context, String const & p_name, std::shared_ptr< T > & p_control )
 		{
 			p_control = std::make_shared< T >( p_name, *context.m_engine, context.getTop(), context.m_ctrlId++ );
-			p_control->addStyle( context.m_flags );
+			p_control->addFlag( context.m_flags );
 			context.m_parents.push( p_control );
 			context.m_flags = 0;
 			return p_control;
@@ -667,9 +667,9 @@ namespace CastorGui
 		{
 			bool value;
 			params[0]->get( value );
-			guiContext.m_edit->addStyle( uint32_t( EditStyle::eMultiline )/*
-				| uint32_t( EditStyle::eProcessEnter )
-				| uint32_t( EditStyle::eProcessTab )*/ );
+			guiContext.m_edit->addFlag( uint32_t( EditFlag::eMultiline )/*
+				| uint32_t( EditFlag::eProcessEnter )
+				| uint32_t( EditFlag::eProcessTab )*/ );
 		}
 		else
 		{
