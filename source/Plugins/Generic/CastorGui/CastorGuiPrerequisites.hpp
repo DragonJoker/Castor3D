@@ -29,9 +29,6 @@ namespace CastorGui
 	const castor::String PLUGIN_NAME = cuT( "CastorGui" );
 	static const uint32_t DEFAULT_HEIGHT = 25;
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		23/05/2012
-	 *\version		0.1.0
 	 *\brief		Enumeration of supported controls in a OptionsPanel
 	*/
 	enum class ControlType
@@ -52,9 +49,6 @@ namespace CastorGui
 		eButton,
 	};
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		06/03/2015
-	 *\version		0.1.0
 	 *\brief		Enumeration of supported combobox events
 	*/
 	enum class ComboBoxEvent
@@ -66,9 +60,6 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		06/03/2015
-	 *\version		0.1.0
 	 *\brief		Enumeration of supported listbox events
 	*/
 	enum class ListBoxEvent
@@ -80,9 +71,6 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		06/03/2015
-	 *\version		0.1.0
 	 *\brief		Enumeration of supported button events
 	*/
 	enum class ButtonEvent
@@ -94,9 +82,6 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		06/03/2015
-	 *\version		0.1.0
 	 *\brief		Enumeration of supported slider events
 	*/
 	enum class SliderEvent
@@ -110,9 +95,6 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		06/03/2015
-	 *\version		0.1.0
 	 *\brief		Enumeration of supported edit events
 	*/
 	enum class EditEvent
@@ -126,25 +108,19 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		11/02/2015
-	 *\version		0.1.0
-	 *\brief		Comb control supported styles
+	 *\brief		Combobox control supported styles
 	*/
-	enum class ComboBoxStyle
+	enum class ComboBoxFlag
 		: uint32_t
 	{
 		//! read only combo box
 		eReadOnly = 0x00000001,
 	};
-	CU_ImplementFlags( ComboBoxStyle )
+	CU_ImplementFlags( ComboBoxFlag )
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		11/02/2015
-	 *\version		0.1.0
 	 *\brief		Edit control supported styles
 	*/
-	enum class EditStyle
+	enum class EditFlag
 		: uint32_t
 	{
 		//! The edit control process 'return' hit as an event and not as a newline
@@ -156,14 +132,11 @@ namespace CastorGui
 		//! Words are not cut
 		eWordWrap = 0x00000800,
 	};
-	CU_ImplementFlags( EditStyle )
+	CU_ImplementFlags( EditFlag )
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		11/02/2015
-	 *\version		0.1.0
 	 *\brief		Slider control supported styles
 	*/
-	enum class SliderStyle
+	enum class SliderFlag
 		: uint32_t
 	{
 		// The slider is displaye horizontally (default mode)
@@ -171,14 +144,11 @@ namespace CastorGui
 		// The slider is displaye vertically
 		eVertical = 0x000200000,
 	};
-	CU_ImplementFlags( SliderStyle )
+	CU_ImplementFlags( SliderFlag )
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		11/02/2015
-	 *\version		0.1.0
 	 *\brief		Static control supported styles
 	*/
-	enum class StaticStyle
+	enum class StaticFlag
 		: uint32_t
 	{
 		//! The static's text is left aligned
@@ -194,11 +164,8 @@ namespace CastorGui
 		//! The static's text is aligned on bottom
 		eVAlignBottom = 0x40000000,
 	};
-	CU_ImplementFlags( StaticStyle )
+	CU_ImplementFlags( StaticFlag )
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		23/05/2012
-	 *\version		0.1.0
 	 *\brief		Enumeration of supported GUI events in ControlInfos
 	*/
 	enum class GuiEvent
@@ -210,9 +177,6 @@ namespace CastorGui
 		eResizeParent,
 	};
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\date		10/03/2015
-	 *\version		0.1.0
 	 *\brief		Mouse cursors enumeration
 	*/
 	enum class MouseCursor
