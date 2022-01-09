@@ -636,7 +636,7 @@ namespace castor
 
 			if ( ires.second )
 			{
-				ires.first->second = std::move( element );
+				ires.first->second = element;
 				auto & elem = ires.first->second;
 
 				if ( initialise && elem && m_initialise )
