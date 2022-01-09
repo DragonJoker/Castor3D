@@ -9,6 +9,7 @@
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
 #include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
@@ -44,6 +45,20 @@ namespace C3dAssimp
 
 	namespace
 	{
+		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
+		{
+			stream << std::setprecision( 4 ) << obj->x
+				<< ", " << std::setprecision( 4 ) << obj->y
+				<< ", " << std::setprecision( 4 ) << obj->z;
+			return stream;
+		}
+
+		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
+		{
+			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
+			return stream;
+		}
+
 		aiNodeAnim const * doFindNodeAnim( const aiAnimation & animation
 			, const castor::String & nodeName )
 		{
@@ -820,15 +835,218 @@ namespace C3dAssimp
 		bool result{ false };
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
+
+		if ( auto aiScene = doLoadScene() )
+		{
+			if ( aiScene->HasMeshes() )
+			{
+				std::vector< aiMesh * > aiMeshes;
+
+				for ( auto aiMesh : castor::makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
+				{
+					aiMeshes.push_back( aiMesh );
+				}
+
+				result = doProcessMeshAndAnims( *aiScene
+					, aiMeshes
+					, mesh );
+			}
+
+			m_importer.FreeScene();
+		}
+
+		return result;
+	}
+
+	bool AssimpImporter::doImportScene( Scene & scene )
+	{
+		bool result{ false };
+
+		if ( auto aiScene = doLoadScene() )
+		{
+			castor::Matrix4x4f transform;
+			doProcessSceneNodes( *aiScene
+				, *aiScene->mRootNode
+				, scene
+				, scene.getObjectRootNode()
+				, transform );
+			result = true;
+		}
+		else
+		{
+			// The import failed, report it
+			log::error << "Scene import failed : " << m_importer.GetErrorString() << std::endl;
+		}
+
+		return result;
+	}
+
+	void AssimpImporter::doProcessSceneNodes( aiScene const & aiScene
+		, aiNode const & aiNode
+		, Scene & scene
+		, SceneNodeSPtr parent
+		, castor::Matrix4x4f accTransform )
+	{
+		if ( aiNode.mNumMeshes > 0 )
+		{
+			castor::String name = aiNode.mName.C_Str();
+			auto node = std::make_shared< SceneNode >( name
+				, scene );
+			parent->addChild( node );
+			aiVector3D scale, position;
+			aiQuaternion orientation;
+			aiNode.mTransformation.Decompose( scale, orientation, position );
+			node->setPosition( { position.x, position.y, position.z } );
+			node->setScale( { scale.x, scale.y, scale.z } );
+			node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
+			scene.getSceneNodeCache().add( node->getName(), node );
+			MeshRes mesh;
+			auto lmesh = scene.getMeshCache().tryFind( name );
+
+			if ( !lmesh.lock() )
+			{
+				mesh = scene.getMeshCache().create( name, scene );
+			}
+			else
+			{
+				mesh = lmesh.lock();
+			}
+
+			std::vector< aiMesh * > aiMeshes;
+
+			for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
+			{
+				aiMeshes.push_back( aiScene.mMeshes[aiMeshIndex] );
+			}
+
+			if ( doProcessMeshAndAnims( aiScene
+				, aiMeshes
+				, *mesh ) )
+			{
+				mesh->computeContainers();
+				log::info << "Loaded mesh [" << mesh->getName() << "]"
+					<< " AABB (" << mesh->getBoundingBox() << ")"
+					<< ", " << mesh->getVertexCount() << " vertices"
+					<< ", " << mesh->getSubmeshCount() << " submeshes" << std::endl;
+
+				for ( auto submesh : *mesh )
+				{
+					scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
+				}
+
+				scene.getMeshCache().add( mesh->getName()
+					, mesh
+					, true );
+				auto geom = std::make_shared< Geometry >( name
+					, scene
+					, *node
+					, scene.getMeshCache().find( name ) );
+				geom->setCulled( false );
+				node->attachObject( *geom );
+				scene.getGeometryCache().add( std::move( geom ) );
+			}
+
+			parent = node;
+			accTransform.setIdentity();
+		}
+		else
+		{
+			// if no meshes, skip the node, but keep its transformation
+			accTransform = makeMatrix4x4f( aiNode.mTransformation ) * accTransform;
+		}
+
+		// continue for all child nodes
+		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		{
+			doProcessSceneNodes( aiScene, *aiChild, scene, parent, accTransform );
+		}
+	}
+
+	bool AssimpImporter::doProcessMeshAndAnims( aiScene const & aiScene
+		, std::vector< aiMesh * > aiMeshes
+		, castor3d::Mesh & mesh )
+	{
+		SkeletonSPtr skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
+		skeleton->setGlobalInverseTransform( makeMatrix4x4f( aiScene.mRootNode->mTransformation.Transpose().Inverse() ) );
+
+		bool create = true;
+		uint32_t aiMeshIndex = 0u;
 		SubmeshSPtr submesh;
-		Assimp::Importer importer;
-		uint32_t flags = 0u;
+
+		for ( auto aiMesh : aiMeshes )
+		{
+			if ( create )
+			{
+				submesh = mesh.createSubmesh();
+			}
+
+			create = doProcessMesh( *mesh.getScene(), mesh, *skeleton, *aiMesh, aiMeshIndex, aiScene, *submesh );
+			++aiMeshIndex;
+		}
+
+		if ( m_arrayBones.empty() )
+		{
+			skeleton.reset();
+		}
+		else
+		{
+			mesh.setSkeleton( skeleton );
+		}
+
+		if ( skeleton )
+		{
+			for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
+			{
+				doProcessAnimation( mesh
+					, m_fileName.getFileName()
+					, *skeleton
+					, *aiScene.mRootNode
+					, *aiAnimation );
+			}
+
+			if ( castor::string::upperCase( m_fileName.getExtension() ) == cuT( "MD5MESH" ) )
+			{
+				// Workaround to load multiple animations with MD5 models.
+				castor::PathArray files;
+				castor::File::listDirectoryFiles( m_fileName.getPath(), files );
+
+				for ( auto file : files )
+				{
+					if ( castor::string::lowerCase( file.getExtension() ) == cuT( "md5anim" ) )
+					{
+						// The .md5anim with the same name as the .md5mesh has already been loaded by assimp.
+						if ( file.getFileName() != m_fileName.getFileName() )
+						{
+							Assimp::Importer importer;
+							auto scene = importer.ReadFile( file, m_flags );
+
+							for ( auto aiAnimation : castor::makeArrayView( scene->mAnimations, scene->mNumAnimations ) )
+							{
+								doProcessAnimation( mesh
+									, file.getFileName()
+									, *skeleton
+									, *scene->mRootNode
+									, *aiAnimation );
+							}
+
+							importer.FreeScene();
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	aiScene const * AssimpImporter::doLoadScene()
+	{
 		bool noOptim = false;
 		auto found = m_parameters.get( "no_optimisations", noOptim );
 
 		if ( !found || !noOptim )
 		{
-			flags = aiProcess_Triangulate
+			m_flags = aiProcess_Triangulate
 				| aiProcess_JoinIdenticalVertices
 				| aiProcess_OptimizeMeshes
 				| aiProcess_OptimizeGraph
@@ -844,13 +1062,13 @@ namespace C3dAssimp
 		{
 			if ( normals == cuT( "smooth" ) )
 			{
-				flags |= aiProcess_GenSmoothNormals;
+				m_flags |= aiProcess_GenSmoothNormals;
 			}
 		}
 
 		if ( m_parameters.get( cuT( "tangent_space" ), tangentSpace ) && tangentSpace )
 		{
-			flags |= aiProcess_CalcTangentSpace;
+			m_flags |= aiProcess_CalcTangentSpace;
 		}
 
 		// And have it read the given file with some postprocessing
@@ -858,106 +1076,15 @@ namespace C3dAssimp
 
 		try
 		{
-			aiScene = importer.ReadFile( castor::string::stringCast< char >( m_fileName ), flags );
+			aiScene = m_importer.ReadFile( castor::string::stringCast< char >( m_fileName ), m_flags );
 		}
 		catch ( std::exception & exc )
 		{
 			castor3d::log::error << exc.what() << std::endl;
-			return false;
+			return nullptr;
 		}
 
-		if ( aiScene )
-		{
-			SkeletonSPtr skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
-			skeleton->setGlobalInverseTransform( makeMatrix4x4f( aiScene->mRootNode->mTransformation.Transpose().Inverse() ) );
-
-			if ( aiScene->HasMeshes() )
-			{
-				bool create = true;
-				uint32_t aiMeshIndex = 0u;
-
-				for ( auto aiMesh : castor::makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
-				{
-					if ( create )
-					{
-						submesh = mesh.createSubmesh();
-					}
-
-					create = doProcessMesh( *mesh.getScene(), mesh, *skeleton, *aiMesh, aiMeshIndex, *aiScene, *submesh );
-					++aiMeshIndex;
-				}
-
-				if ( m_arrayBones.empty() )
-				{
-					skeleton.reset();
-				}
-				else
-				{
-					mesh.setSkeleton( skeleton );
-				}
-
-				if ( skeleton )
-				{
-					for ( auto aiAnimation : castor::makeArrayView( aiScene->mAnimations, aiScene->mNumAnimations ) )
-					{
-						doProcessAnimation( mesh
-							, m_fileName.getFileName()
-							, *skeleton
-							, *aiScene->mRootNode
-							, *aiAnimation );
-					}
-
-					importer.FreeScene();
-
-					if ( castor::string::upperCase( m_fileName.getExtension() ) == cuT( "MD5MESH" ) )
-					{
-						// Workaround to load multiple animations with MD5 models.
-						castor::PathArray files;
-						castor::File::listDirectoryFiles( m_fileName.getPath(), files );
-
-						for ( auto file : files )
-						{
-							if ( castor::string::lowerCase( file.getExtension() ) == cuT( "md5anim" ) )
-							{
-								// The .md5anim with the same name as the .md5mesh has already been loaded by assimp.
-								if ( file.getFileName() != m_fileName.getFileName() )
-								{
-									auto scene = importer.ReadFile( file, flags );
-
-									for ( auto aiAnimation : castor::makeArrayView( scene->mAnimations, scene->mNumAnimations ) )
-									{
-										doProcessAnimation( mesh
-											, file.getFileName()
-											, *skeleton
-											, *scene->mRootNode
-											, *aiAnimation );
-									}
-
-									importer.FreeScene();
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					importer.FreeScene();
-				}
-
-				result = true;
-			}
-			else
-			{
-				importer.FreeScene();
-			}
-		}
-		else
-		{
-			// The import failed, report it
-			log::error << "Scene import failed : " << importer.GetErrorString() << std::endl;
-		}
-
-		return result;
+		return aiScene;
 	}
 
 	bool AssimpImporter::doProcessMesh( Scene & scene

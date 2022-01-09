@@ -109,20 +109,6 @@ namespace castor3d
 		C3D_API void setBackground( SceneBackgroundSPtr value );
 		/**
 		 *\~english
-		 *\brief		Imports a scene from an foreign file
-		 *\param[in]	fileName	file to read from
-		 *\param[in]	importer	The importer, which is in charge of loading the scene
-		 *\return		\p true if successful, false if not
-		 *\~french
-		 *\brief		Importe une scène à partir d'un fichier
-		 *\param[in]	fileName	L'adresse du fichier
-		 *\param[in]	importer	L'importeur chargé de la récupération des données
-		 *\return		\p false si un problème quelconque a été rencontré
-		 */
-		C3D_API bool importExternal( castor::Path const & fileName
-			, SceneImporter & importer );
-		/**
-		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
 		 *\param[in]	scene	The scene to merge into this one
 		 *\~french
