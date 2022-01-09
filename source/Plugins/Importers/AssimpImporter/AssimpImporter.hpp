@@ -41,14 +41,7 @@ namespace C3dAssimp
 {
 	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
 	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
-	/**
-	\author		Sylvain DOREMUS
-	\date		25/08/2010
-	\~english
-	\brief		ASE file importer
-	\~french
-	\brief		Importeur de fichiers ASE
-	*/
+
 	class AssimpImporter
 		: public castor3d::MeshImporter
 	{
@@ -62,7 +55,17 @@ namespace C3dAssimp
 		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
 		bool doImportMesh( castor3d::Mesh & p_mesh )override;
+		bool doImportScene( castor3d::Scene & scene )override;
 
+		void doProcessSceneNodes( aiScene const & aiScene
+			, aiNode const & aiNode
+			, castor3d::Scene & scene
+			, castor3d::SceneNodeSPtr targetParent
+			, castor::Matrix4x4f accTransform );
+		aiScene const * doLoadScene();
+		bool doProcessMeshAndAnims( aiScene const & aiScene
+			, std::vector< aiMesh * > aiMeshes
+			, castor3d::Mesh & mesh );
 		bool doProcessMesh( castor3d::Scene & scene
 			, castor3d::Mesh & mesh
 			, castor3d::Skeleton & skeleton
@@ -109,6 +112,8 @@ namespace C3dAssimp
 
 	private:
 		int m_anonymous;
+		Assimp::Importer m_importer;
+		uint32_t m_flags{};
 		std::map< castor::String, uint32_t > m_mapBoneByID;
 		std::vector< castor3d::BoneSPtr > m_arrayBones;
 		std::map< uint32_t, uint32_t > m_submeshByID;

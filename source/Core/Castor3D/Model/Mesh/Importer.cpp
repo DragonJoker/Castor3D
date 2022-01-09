@@ -195,6 +195,19 @@ namespace castor3d
 		return result;
 	}
 
+	bool MeshImporter::import( Scene & scene
+		, castor::Path const & fileName
+		, Parameters const & parameters
+		, bool initialise )
+	{
+		m_fileName = fileName;
+		m_filePath = m_fileName.getPath();
+		m_parameters = parameters;
+		m_nodes.clear();
+		m_geometries.clear();
+		return doImportScene( scene );
+	}
+
 	castor::ImageUPtr MeshImporter::loadImage( castor::Path const & path )const
 	{
 		castor::ImageUPtr result;
