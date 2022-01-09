@@ -386,13 +386,6 @@ namespace castor3d
 		scene->cleanup();
 	}
 
-	bool Scene::importExternal( castor::Path const & fileName, SceneImporter & importer )
-	{
-		setChanged();
-		//return importer.importScene( *this, fileName, Parameters() );
-		return false;
-	}
-
 	uint32_t Scene::getVertexCount()const
 	{
 		uint32_t result = 0;

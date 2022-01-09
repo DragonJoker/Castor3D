@@ -51,6 +51,26 @@ namespace castor3d
 			, bool initialise );
 		/**
 		 *\~english
+		 *\brief		Scene import Function.
+		 *\param[out]	scene		Receives the imported data.
+		 *\param[in]	pathFile	The location of the file to import.
+		 *\param[in]	parameters	Import configuration parameters.
+		 *\param[in]	initialise	Tells if the imported mesh must be initialised.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Scene.
+		 *\param[out]	scene		Reçoit les données importées.
+		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
+		 *\param[in]	parameters	Paramètres de configuration de l'import.
+		 *\param[in]	initialise	Dit si le mesh importé doit être initialisé.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API bool import( Scene & scene
+			, castor::Path const & pathFile
+			, Parameters const & parameters
+			, bool initialise );
+		/**
+		 *\~english
 		 *\brief		Loads an image from a file.
 		 *\param[in]	path	The image file path (can be relative or absolute).
 		 *\return		The image.
@@ -115,11 +135,22 @@ namespace castor3d
 		 *\param[out]	mesh	Receives the imported data.
 		 *\return		\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import de maillage.
+		 *\brief		Fonction d'import de Mesh.
 		 *\param[out]	mesh	Reçoit les données importées.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
 		C3D_API virtual bool doImportMesh( Mesh & mesh ) = 0;
+		/**
+		 *\~english
+		 *\brief		Scene import Function.
+		 *\param[out]	scene	Receives the imported data.
+		 *\return		\p false if any problem occured.
+		 *\~french
+		 *\brief		Fonction d'import de Scene.
+		 *\param[out]	scene	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
+		 */
+		C3D_API virtual bool doImportScene( Scene & scene ) = 0;
 
 	protected:
 		//!\~english The file name	\~french Le nom du fichier
