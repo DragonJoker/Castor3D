@@ -1115,22 +1115,34 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserSceneImport )
 	{
-		//auto & parsingContext = getParserContext( context );
-		//Path path;
-		//Path pathFile = context.file.getPath() / params[0]->get( path );
+		auto & parsingContext = getParserContext( context );
+		Path path;
+		Path pathFile = context.file.getPath() / params[0]->get( path );
+		Parameters parameters;
 
-		//Engine * engine = parsingContext.parser->getEngine();
-		//auto extension = string::lowerCase( pathFile.getExtension() );
+		if ( params.size() > 1 )
+		{
+			String meshParams;
+			params[1]->get( meshParams );
+			fillMeshImportParameters( context, meshParams, parameters );
+		}
 
-		//if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
-		//{
-		//	CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
-		//}
-		//else
-		//{
-		//	auto importer = engine->getImporterFactory().create( extension, *engine );
-		//	parsingContext.scene->importExternal( pathFile, *importer );
-		//}
+		Engine * engine = parsingContext.parser->getEngine();
+		auto extension = string::lowerCase( pathFile.getExtension() );
+
+		if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+		{
+			CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+		}
+		else
+		{
+			auto importer = engine->getImporterFactory().create( extension, *engine );
+
+			if ( !importer->import( *parsingContext.scene, pathFile, parameters, true ) )
+			{
+				CU_ParsingError( cuT( "External scene Import failed" ) );
+			}
+		}
 	}
 	CU_EndAttribute()
 
