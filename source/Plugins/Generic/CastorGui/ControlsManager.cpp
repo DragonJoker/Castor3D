@@ -1,12 +1,12 @@
 #include "CastorGui/ControlsManager.hpp"
 
-#include "CastorGui/CtrlControl.hpp"
-#include "CastorGui/CtrlButton.hpp"
-#include "CastorGui/CtrlComboBox.hpp"
-#include "CastorGui/CtrlEdit.hpp"
-#include "CastorGui/CtrlListBox.hpp"
-#include "CastorGui/CtrlSlider.hpp"
-#include "CastorGui/CtrlStatic.hpp"
+#include "CastorGui/Controls/CtrlControl.hpp"
+#include "CastorGui/Controls/CtrlButton.hpp"
+#include "CastorGui/Controls/CtrlComboBox.hpp"
+#include "CastorGui/Controls/CtrlEdit.hpp"
+#include "CastorGui/Controls/CtrlListBox.hpp"
+#include "CastorGui/Controls/CtrlSlider.hpp"
+#include "CastorGui/Controls/CtrlStatic.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
