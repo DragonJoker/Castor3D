@@ -23,6 +23,10 @@
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
+#include <Castor3D/Scene/Light/SpotLight.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -671,6 +675,21 @@ namespace C3dAssimp
 			return castor::Matrix4x4f{ castor::Matrix3x3f{ data.data() } };
 		}
 
+		castor::Matrix4x4f makeMatrix4x4f( castor::Point3f const & direction
+			, castor::Point3f const & up )
+		{
+			castor::Matrix4x4f result;
+			result.setIdentity();
+			castor::Point3f xaxis = castor::point::getNormalised( castor::point::cross( up, direction ) );
+			castor::Point3f yaxis = castor::point::getNormalised( castor::point::cross( direction, xaxis ) );
+
+			result.setColumn( 0u, { xaxis->x, yaxis->x, direction->x, 0.0f } );
+			result.setColumn( 1u, { xaxis->y, yaxis->y, direction->y, 0.0f } );
+			result.setColumn( 2u, { xaxis->z, yaxis->z, direction->z, 0.0f } );
+
+			return result;
+		}
+
 		void doProcessMaterialPass( Scene & scene
 			, SamplerRes sampler
 			, Pass & pass
@@ -864,7 +883,13 @@ namespace C3dAssimp
 
 		if ( auto aiScene = doLoadScene() )
 		{
+			for ( aiLight * aiLight : castor::makeArrayView( aiScene->mLights, aiScene->mNumLights ) )
+			{
+				doProcessLight( *aiLight, scene );
+			}
+
 			castor::Matrix4x4f transform;
+			transform.setIdentity();
 			doProcessSceneNodes( *aiScene
 				, *aiScene->mRootNode
 				, scene
@@ -881,6 +906,69 @@ namespace C3dAssimp
 		return result;
 	}
 
+	void AssimpImporter::doProcessLight( aiLight const & aiLight
+		, Scene & scene )
+	{
+		auto position = castor::Point3f{ aiLight.mPosition.x, aiLight.mPosition.y, aiLight.mPosition.z };
+		auto direction = castor::point::getNormalised( castor::Point3f{ aiLight.mDirection.x, aiLight.mDirection.y, aiLight.mDirection.z } );
+		auto up = castor::point::getNormalised( castor::Point3f{ aiLight.mUp.x, aiLight.mUp.y, aiLight.mUp.z } );
+		castor::String name = aiLight.mName.C_Str();
+		auto node = std::make_shared< SceneNode >( name
+			, scene );
+		LightSPtr light;
+
+		switch ( aiLight.mType )
+		{
+		case aiLightSource_DIRECTIONAL:
+			{
+				node->setOrientation( castor::Quaternion::fromMatrix( makeMatrix4x4f( direction, up ) ) );
+				light = std::make_shared< Light >( name
+					, scene
+					, *node
+					, scene.getLightsFactory()
+					, castor3d::LightType::eDirectional );
+			}
+			break;
+		case aiLightSource_POINT:
+			{
+				node->setPosition( position );
+				light = std::make_shared< Light >( name
+					, scene
+					, *node
+					, scene.getLightsFactory()
+					, castor3d::LightType::ePoint );
+				auto point = light->getPointLight();
+				point->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
+			}
+			break;
+		case aiLightSource_SPOT:
+			{
+				node->setOrientation( castor::Quaternion::fromMatrix( makeMatrix4x4f( direction, up ) ) );
+				node->setPosition( position );
+				light = std::make_shared< Light >( name
+					, scene
+					, *node
+					, scene.getLightsFactory()
+					, castor3d::LightType::eSpot );
+				auto spot = light->getSpotLight();
+				spot->setAttenuation( { aiLight.mAttenuationConstant, aiLight.mAttenuationLinear, aiLight.mAttenuationQuadratic } );
+				spot->setCutOff( castor::Angle::fromRadians( aiLight.mAngleOuterCone ) );
+			}
+			break;
+		default:
+			break;
+		}
+
+		if ( light )
+		{
+			node->attachTo( *scene.getObjectRootNode() );
+			node = scene.getSceneNodeCache().add( name, node ).lock();
+			light->setColour( castor::RgbColour::fromComponents( aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b ) );
+			node->attachObject( *light );
+			scene.getLightCache().add( name, light );
+		}
+	}
+
 	void AssimpImporter::doProcessSceneNodes( aiScene const & aiScene
 		, aiNode const & aiNode
 		, Scene & scene
@@ -892,14 +980,13 @@ namespace C3dAssimp
 			castor::String name = aiNode.mName.C_Str();
 			auto node = std::make_shared< SceneNode >( name
 				, scene );
-			parent->addChild( node );
+			node->attachTo( *parent );
 			aiVector3D scale, position;
 			aiQuaternion orientation;
 			aiNode.mTransformation.Decompose( scale, orientation, position );
-			node->setPosition( { position.x, position.y, position.z } );
 			node->setScale( { scale.x, scale.y, scale.z } );
 			node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
-			scene.getSceneNodeCache().add( node->getName(), node );
+			node = scene.getSceneNodeCache().add( node->getName(), node ).lock();
 			MeshRes mesh;
 			auto lmesh = scene.getMeshCache().tryFind( name );
 
@@ -934,14 +1021,13 @@ namespace C3dAssimp
 					scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 				}
 
-				scene.getMeshCache().add( mesh->getName()
+				lmesh = scene.getMeshCache().add( mesh->getName()
 					, mesh
 					, true );
 				auto geom = std::make_shared< Geometry >( name
 					, scene
 					, *node
-					, scene.getMeshCache().find( name ) );
-				geom->setCulled( false );
+					, lmesh );
 				node->attachObject( *geom );
 				scene.getGeometryCache().add( std::move( geom ) );
 			}
