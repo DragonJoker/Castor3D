@@ -16,97 +16,63 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace CastorGui
 {
-	ListBoxCtrl::ListBoxCtrl( String const & p_name
-		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id )
-		: ListBoxCtrl( p_name
-			, engine
-			, p_parent
-			, p_id
-			, StringArray()
+	ListBoxCtrl::ListBoxCtrl( castor::String const & name
+		, ListBoxStyle * style
+		, ControlRPtr parent
+		, uint32_t id )
+		: ListBoxCtrl{ name
+			, style
+			, parent
+			, id
+			, castor::StringArray{}
 			, -1
-			, Position()
-			, Size()
+			, castor::Position{}
+			, castor::Size{}
 			, 0
-			, true )
+			, true }
 	{
 	}
 
-	ListBoxCtrl::ListBoxCtrl( String const & p_name
-		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id
-		, StringArray const & p_values
-		, int p_selected
-		, Position const & p_position
-		, Size const & p_size
-		, uint32_t p_flags
-		, bool p_visible )
-		: Control( ControlType::eListBox
-			, p_name
-			, engine
-			, p_parent
-			, p_id
-			, p_position
-			, p_size
-			, p_flags
-			, p_visible )
-		, m_initialValues( p_values )
-		, m_values( p_values )
-		, m_selected( p_selected )
+	ListBoxCtrl::ListBoxCtrl( castor::String const & name
+		, ListBoxStyle * style
+		, ControlRPtr parent
+		, uint32_t id
+		, castor::StringArray const & values
+		, int selected
+		, castor::Position const & position
+		, castor::Size const & size
+		, uint32_t flags
+		, bool visible )
+		: Control{ Type
+			, name
+			, style
+			, parent
+			, id
+			, position
+			, size
+			, flags
+			, visible }
+		, m_initialValues{ values }
+		, m_values{ values }
+		, m_selected{ selected }
 	{
+		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
+		doUpdateStyle();
 	}
 
-	void ListBoxCtrl::setTextMaterial( MaterialRPtr p_material )
+	void ListBoxCtrl::appendItem( castor::String const & value )
 	{
-		m_textMaterial = p_material;
-	}
-
-	void ListBoxCtrl::setSelectedItemBackgroundMaterial( MaterialRPtr p_value )
-	{
-		m_selectedItemBackgroundMaterial = p_value;
-		int i = 0;
-
-		for ( auto item : m_items )
-		{
-			if ( i++ == m_selected )
-			{
-				item->setBackgroundMaterial( p_value );
-			}
-		}
-	}
-
-	void ListBoxCtrl::setSelectedItemForegroundMaterial( MaterialRPtr p_value )
-	{
-		m_selectedItemForegroundMaterial = p_value;
-		int i = 0;
-
-		for ( auto item : m_items )
-		{
-			if ( i++ == m_selected )
-			{
-				item->setForegroundMaterial( p_value );
-			}
-		}
-	}
-
-	void ListBoxCtrl::appendItem( String const & p_value )
-	{
-		m_values.push_back( p_value );
+		m_values.push_back( value );
 
 		if ( getControlsManager() )
 		{
-			StaticCtrlSPtr item = doCreateItemCtrl( p_value
+			auto item = doCreateItemCtrl( value
 				, uint32_t( m_values.size() - 1u ) );
-			getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, item]( RenderDevice const & device
-					, QueueData const & queueData )
+			getEngine().postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+				, [this, item]( castor3d::RenderDevice const & device
+					, castor3d::QueueData const & queueData )
 				{
 					getControlsManager()->create( item );
 				} ) );
@@ -115,36 +81,36 @@ namespace CastorGui
 		}
 		else
 		{
-			m_initialValues.push_back( p_value );
+			m_initialValues.push_back( value );
 		}
 	}
 
-	void ListBoxCtrl::removeItem( int p_value )
+	void ListBoxCtrl::removeItem( int value )
 	{
-		if ( uint32_t( p_value ) < m_values.size() && p_value >= 0 )
+		if ( uint32_t( value ) < m_values.size() && value >= 0 )
 		{
-			m_values.erase( m_values.begin() + p_value );
+			m_values.erase( m_values.begin() + value );
 
-			if ( uint32_t( p_value ) < m_items.size() )
+			if ( uint32_t( value ) < m_items.size() )
 			{
-				if ( p_value < m_selected )
+				if ( value < m_selected )
 				{
 					setSelected( m_selected - 1 );
 				}
-				else if ( p_value == m_selected )
+				else if ( value == m_selected )
 				{
 					m_selectedItem.reset();
 					m_selected = -1;
 				}
 
-				auto it = m_items.begin() + p_value;
+				auto it = std::next( m_items.begin(), value );
 
 				if ( getControlsManager() )
 				{
-					ControlSPtr control = *it;
-					getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, control]( RenderDevice const & device
-							, QueueData const & queueData )
+					auto control = *it;
+					getEngine().postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+						, [this, control]( castor3d::RenderDevice const & device
+							, castor3d::QueueData const & queueData )
 						{
 							getControlsManager()->destroy( control );
 						} ) );
@@ -156,30 +122,30 @@ namespace CastorGui
 		}
 	}
 
-	void ListBoxCtrl::setItemText( int p_index, String const & p_text )
+	void ListBoxCtrl::setItemText( int pindex, castor::String const & text )
 	{
-		auto index = uint32_t( p_index );
+		auto index = uint32_t( pindex );
 
-		if ( index < m_values.size() && p_index >= 0 )
+		if ( index < m_values.size() && pindex >= 0 )
 		{
-			m_values[index] = p_text;
+			m_values[index] = text;
 
 			if ( index < m_items.size() )
 			{
-				StaticCtrlSPtr item = m_items[index];
+				auto item = m_items[index];
 
 				if ( item )
 				{
-					item->setCaption( p_text );
+					item->setCaption( text );
 				}
 			}
 		}
 	}
 
-	String ListBoxCtrl::getItemText( int p_index )
+	castor::String ListBoxCtrl::getItemText( int pindex )
 	{
-		auto index = uint32_t( p_index );
-		String result;
+		auto index = uint32_t( pindex );
+		castor::String result;
 
 		if ( index < m_values.size() )
 		{
@@ -197,159 +163,128 @@ namespace CastorGui
 		m_selected = -1;
 	}
 
-	void ListBoxCtrl::setSelected( int p_value )
+	void ListBoxCtrl::setSelected( int value )
 	{
+		auto & style = getStyle();
 		auto selected = uint32_t( m_selected );
 
 		if ( m_selected >= 0 && selected < m_items.size() )
 		{
-			StaticCtrlSPtr item = m_items[selected];
+			auto item = m_items[selected];
 
 			if ( item )
 			{
-				item->setBackgroundMaterial( getItemBackgroundMaterial() );
-				item->setForegroundMaterial( getForegroundMaterial() );
+				item->setStyle( &style.getItemStyle() );
 				m_selectedItem.reset();
 			}
 		}
 
-		m_selected = p_value;
+		m_selected = value;
 
 		if ( m_selected >= 0 && selected < m_items.size() )
 		{
-			StaticCtrlSPtr item = m_items[selected];
+			auto item = m_items[selected];
 
 			if ( item )
 			{
-				item->setBackgroundMaterial( getSelectedItemBackgroundMaterial() );
-				item->setForegroundMaterial( getSelectedItemForegroundMaterial() );
+				item->setStyle( &style.getSelectedItemStyle() );
 				m_selectedItem = item;
 			}
 		}
 	}
 
-	void ListBoxCtrl::setFont( castor::String const & p_font )
+	void ListBoxCtrl::doUpdateStyle()
 	{
-		m_fontName = p_font;
+		auto & style = getStyle();
+		int i = 0;
 
 		for ( auto item : m_items )
 		{
-			item->setFont( m_fontName );
+			if ( i++ == m_selected )
+			{
+				item->setStyle( &style.getSelectedItemStyle() );
+			}
+			else
+			{
+				item->setStyle( &style.getItemStyle() );
+			}
 		}
 	}
 
 	void ListBoxCtrl::doUpdateItems()
 	{
-		Position position;
+		castor::Position position;
 
 		for ( auto item : m_items )
 		{
 			item->setPosition( position );
-			item->setSize( Size( getSize().getWidth(), DEFAULT_HEIGHT ) );
+			item->setSize( castor::Size( getSize().getWidth(), DEFAULT_HEIGHT ) );
 			position.y() += DEFAULT_HEIGHT;
 		}
 
-		BorderPanelOverlaySPtr background = getBackground();
+		auto background = getBackground();
 
 		if ( background )
 		{
-			background->setPixelSize( Size( getSize().getWidth(), uint32_t( m_items.size() * DEFAULT_HEIGHT ) ) );
+			background->setPixelSize( castor::Size( getSize().getWidth(), uint32_t( m_items.size() * DEFAULT_HEIGHT ) ) );
 		}
 	}
 
-	StaticCtrlSPtr ListBoxCtrl::doCreateItemCtrl( String const & p_value
+	StaticCtrlSPtr ListBoxCtrl::doCreateItemCtrl( castor::String const & value
 		, uint32_t itemIndex )
 	{
-		StaticCtrlSPtr item = std::make_shared< StaticCtrl >( getName() + cuT( "_Item" ) + string::toString( itemIndex )
-			, getEngine()
+		auto & style = getStyle();
+		auto item = std::make_shared< StaticCtrl >( getName() + cuT( "_Item" ) + castor::string::toString( itemIndex )
+			, &style.getItemStyle()
 			, this
-			, p_value
-			, Position()
-			, Size( getSize().getWidth(), DEFAULT_HEIGHT ), uint32_t( StaticFlag::eVAlignCenter ) );
+			, value
+			, castor::Position{}
+			, castor::Size{ getSize().getWidth(), DEFAULT_HEIGHT }
+			, uint32_t( StaticFlag::eVAlignCenter ) );
 		item->setCatchesMouseEvents( true );
 
-		item->connectNC( MouseEventType::eEnter, [this]( ControlSPtr p_control, MouseEvent const & p_event )
-		{
-			onItemMouseEnter( p_control, p_event );
-		} );
-		item->connectNC( MouseEventType::eLeave, [this]( ControlSPtr p_control, MouseEvent const & p_event )
-		{
-			onItemMouseLeave( p_control, p_event );
-		} );
-		item->connectNC( MouseEventType::eReleased, [this]( ControlSPtr p_control, MouseEvent const & p_event )
-		{
-			onItemMouseLButtonUp( p_control, p_event );
-		} );
-		item->connectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
-		{
-			onItemKeyDown( p_control, p_event );
-		} );
-
-		if ( m_fontName.empty() )
-		{
-			item->setFont( getControlsManager()->getDefaultFont().lock()->getName() );
-		}
-		else
-		{
-			item->setFont( m_fontName );
-		}
-
+		item->connectNC( castor3d::MouseEventType::eEnter
+			, [this]( ControlSPtr control, castor3d::MouseEvent const & event )
+			{
+				onItemMouseEnter( control, event );
+			} );
+		item->connectNC( castor3d::MouseEventType::eLeave
+			, [this]( ControlSPtr control, castor3d::MouseEvent const & event )
+			{
+				onItemMouseLeave( control, event );
+			} );
+		item->connectNC( castor3d::MouseEventType::eReleased
+			, [this]( ControlSPtr control, castor3d::MouseEvent const & event )
+			{
+				onItemMouseLButtonUp( control, event );
+			} );
+		item->connectNC( castor3d::KeyboardEventType::ePushed
+			, [this]( ControlSPtr control, castor3d::KeyboardEvent const & event )
+			{
+				onItemKeyDown( control, event );
+			} );
 		m_items.push_back( item );
 		return item;
 	}
 
-	void ListBoxCtrl::doCreateItem( String const & p_value
+	void ListBoxCtrl::doCreateItem( castor::String const & value
 		, uint32_t itemIndex )
 	{
-		StaticCtrlSPtr item = doCreateItemCtrl( p_value, itemIndex );
+		auto item = doCreateItemCtrl( value, itemIndex );
 		getControlsManager()->create( item );
-		item->setBackgroundMaterial( getItemBackgroundMaterial() );
-		item->setForegroundMaterial( getForegroundMaterial() );
-		item->setTextMaterial( getTextMaterial() );
 		item->setVisible( doIsVisible() );
 	}
 
 	void ListBoxCtrl::doCreate()
 	{
-		auto material = getTextMaterial();
+		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
+		setSize( castor::Size( getSize().getWidth(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
 
-		if ( !material )
-		{
-			m_textMaterial = getForegroundMaterial();
-		}
-
-		material = getSelectedItemBackgroundMaterial();
-
-		if ( !material )
-		{
-			setSelectedItemBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "DarkBlue" ) ).lock().get() );
-		}
-
-		material = getSelectedItemForegroundMaterial();
-
-		if ( !material )
-		{
-			setSelectedItemForegroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ).lock().get() );
-		}
-
-		material = getHighlightedItemBackgroundMaterial();
-
-		if ( !material )
-		{
-			RgbColour colour = getMaterialColour( *getBackgroundMaterial()->getPass( 0u ) );
-			colour.red() = std::min( 1.0f, float( colour.red() ) / 2.0f );
-			colour.green() = std::min( 1.0f, float( colour.green() ) / 2.0f );
-			colour.blue() = std::min( 1.0f, float( colour.blue() ) / 2.0f );
-			setHighlightedItemBackgroundMaterial( createMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
-		}
-
-		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
-		setSize( Size( getSize().getWidth(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
-
-		EventHandler::connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
-		{
-			onKeyDown( p_event );
-		} );
+		EventHandler::connect( castor3d::KeyboardEventType::ePushed
+			, [this]( castor3d::KeyboardEvent const & event )
+			{
+				onKeyDown( event );
+			} );
 		uint32_t index = 0u;
 
 		for ( auto value : m_initialValues )
@@ -379,94 +314,65 @@ namespace CastorGui
 		m_selectedItem.reset();
 	}
 
-	void ListBoxCtrl::doSetPosition( Position const & p_value )
+	void ListBoxCtrl::doSetPosition( castor::Position const & value )
 	{
 		doUpdateItems();
 	}
 
-	void ListBoxCtrl::doSetSize( Size const & p_value )
+	void ListBoxCtrl::doSetSize( castor::Size const & value )
 	{
 		doUpdateItems();
 	}
 
-	void ListBoxCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
-	{
-		int i = 0;
-		RgbColour colour = getMaterialColour( *p_material->getPass( 0u ) );
-		setItemBackgroundMaterial( p_material );
-		colour.red() = std::min( 1.0f, colour.red() / 2.0f );
-		colour.green() = std::min( 1.0f, colour.green() / 2.0f );
-		colour.blue() = std::min( 1.0f, colour.blue() / 2.0f );
-		setHighlightedItemBackgroundMaterial( createMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
-
-		setMaterialColour( *p_material->getPass( 0u ), colour );
-
-		for ( auto item : m_items )
-		{
-			if ( i++ != m_selected )
-			{
-				item->setBackgroundMaterial( p_material );
-			}
-		}
-	}
-
-	void ListBoxCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
-	{
-		int i = 0;
-
-		for ( auto item : m_items )
-		{
-			if ( i++ != m_selected )
-			{
-				item->setForegroundMaterial( p_material );
-			}
-		}
-	}
-
-	void ListBoxCtrl::doSetVisible( bool p_visible )
+	void ListBoxCtrl::doSetVisible( bool visible )
 	{
 		for ( auto item : m_items )
 		{
-			item->setVisible( p_visible );
+			item->setVisible( visible );
 		}
 	}
 
-	void ListBoxCtrl::onItemMouseEnter( ControlSPtr p_control, MouseEvent const & p_event )
+	void ListBoxCtrl::onItemMouseEnter( ControlSPtr control
+		, castor3d::MouseEvent const & event )
 	{
-		p_control->setBackgroundMaterial( getHighlightedItemBackgroundMaterial() );
+		auto & style = getStyle();
+		control->setStyle( &style.getHighlightedItemStyle() );
 	}
 
-	void ListBoxCtrl::onItemMouseLeave( ControlSPtr p_control, MouseEvent const & p_event )
+	void ListBoxCtrl::onItemMouseLeave( ControlSPtr control
+		, castor3d::MouseEvent const & event )
 	{
-		if ( m_selectedItem.lock() == p_control )
+		auto & style = getStyle();
+
+		if ( m_selectedItem.lock() == control )
 		{
-			p_control->setBackgroundMaterial( getSelectedItemBackgroundMaterial() );
+			control->setStyle( &style.getSelectedItemStyle() );
 		}
 		else
 		{
-			p_control->setBackgroundMaterial( getItemBackgroundMaterial() );
+			control->setStyle( &style.getItemStyle() );
 		}
 	}
 
-	void ListBoxCtrl::onItemMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event )
+	void ListBoxCtrl::onItemMouseLButtonUp( ControlSPtr control
+		, castor3d::MouseEvent const & event )
 	{
-		if ( p_event.getButton() == MouseButton::eLeft )
+		if ( event.getButton() == castor3d::MouseButton::eLeft )
 		{
-			if ( m_selectedItem.lock() != p_control )
+			if ( m_selectedItem.lock() != control )
 			{
-				int index = -1;
-				auto it = m_items.begin();
-				int i = 0;
-
-				while ( index == -1 && it != m_items.end() )
-				{
-					if ( *it == p_control )
+				auto it = std::find_if( m_items.begin()
+					, m_items.end()
+					, [&control]( StaticCtrlSPtr const & lookup )
 					{
-						index = i;
-					}
+						return lookup == control;
+					} );
 
-					++it;
-					++i;
+				int index = -1;
+
+				if ( it != m_items.end() )
+				{
+					index = int( std::distance( m_items.begin(), it ) );
 				}
 
 				setSelected( index );
@@ -475,19 +381,19 @@ namespace CastorGui
 		}
 	}
 
-	void ListBoxCtrl::onKeyDown( KeyboardEvent const & p_event )
+	void ListBoxCtrl::onKeyDown( castor3d::KeyboardEvent const & event )
 	{
 		if ( m_selected != -1 )
 		{
 			bool changed = false;
 			int index = m_selected;
 
-			if ( p_event.getKey() == KeyboardKey::eUp )
+			if ( event.getKey() == castor3d::KeyboardKey::eUp )
 			{
 				index--;
 				changed = true;
 			}
-			else if ( p_event.getKey() == KeyboardKey::edown )
+			else if ( event.getKey() == castor3d::KeyboardKey::edown )
 			{
 				index++;
 				changed = true;
@@ -502,8 +408,9 @@ namespace CastorGui
 		}
 	}
 
-	void ListBoxCtrl::onItemKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event )
+	void ListBoxCtrl::onItemKeyDown( ControlSPtr control
+		, castor3d::KeyboardEvent const & event )
 	{
-		onKeyDown( p_event );
+		onKeyDown( event );
 	}
 }

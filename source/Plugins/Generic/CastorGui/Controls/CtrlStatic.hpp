@@ -4,51 +4,47 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_STATIC_H___
 #define ___CI_CTRL_STATIC_H___
 
-#include "CtrlControl.hpp"
+#include "CastorGui/Controls/CtrlControl.hpp"
+#include "CastorGui/Theme/StyleStatic.hpp"
 
 namespace CastorGui
 {
 	/**
-	 *\author		Sylvain DOREMUS
-	 *\version		0.1.0
-	 *\brief		Description of a control, in order to be able to create it completely
+	 *\brief	Static control.
 	*/
 	class StaticCtrl
 		: public Control
 	{
 	public:
 		/** Constructor
-		 *\param[in]	engine		The engine
-		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_id		The control ID.
+		 *\param[in]	name	The control name
+		 *\param[in]	style	The control style
+		 *\param[in]	parent	The parent control, if any
+		 *\param[in]	id		The control ID.
 		*/
-		StaticCtrl( castor::String const & p_name
-			, castor3d::Engine & engine
-			, ControlRPtr p_parent
-			, uint32_t p_id );
+		StaticCtrl( castor::String const & name
+			, StaticStyle * style
+			, ControlRPtr parent
+			, uint32_t id );
 
 		/** Constructor
-		 *\param[in]	engine		The engine
-		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_caption	The static caption
-		 *\param[in]	p_position	The control position
-		 *\param[in]	p_size		The control size
-		 *\param[in]	p_flags		The configuration flags
-		 *\param[in]	p_visible	Initial visibility status
+		 *\param[in]	name		The control name
+		 *\param[in]	style		The control style
+		 *\param[in]	parent		The parent control, if any
+		 *\param[in]	caption		The static caption
+		 *\param[in]	position	The control position
+		 *\param[in]	size		The control size
+		 *\param[in]	flags		The configuration flags
+		 *\param[in]	visible		Initial visibility status
 		 */
-		StaticCtrl( castor::String const & p_name
-			, castor3d::Engine & engine
-			, ControlRPtr p_parent
-			, castor::String const & p_caption
-			, castor::Position const & p_position
-			, castor::Size const & p_size
-			, uint32_t p_flags = 0
-			, bool p_visible = true );
-
-		/** Sets the caption font.
-		*\param[in]	p_font	The new value.
-		*/
-		void setFont( castor::String const & value );
+		StaticCtrl( castor::String const & name
+			, StaticStyle * style
+			, ControlRPtr parent
+			, castor::String const & caption
+			, castor::Position const & position
+			, castor::Size const & size
+			, uint32_t flags = 0
+			, bool visible = true );
 
 		/** Sets the horizontal alignment for the text.
 		*\param[in]	value	The new value.
@@ -60,51 +56,48 @@ namespace CastorGui
 		*/
 		void setVAlign( castor3d::VAlign value );
 
-		/** Sets the text material.
-		*\param[in]	value	The new value.
-		*/
-		void setTextMaterial( castor3d::MaterialRPtr value );
-
 		/**
 		*\return	The static caption
 		*/
-		inline castor::String const & getCaption()const
+		castor::String const & getCaption()const
 		{
 			return m_caption;
 		}
 
 		/**
-		*\return	The text material
+		*\return	The static style
 		*/
-		inline castor3d::MaterialRPtr getTextMaterial()const
+		StaticStyle const & getStyle()const
 		{
-			return m_textMaterial;
+			return static_cast< StaticStyle const & >( getBaseStyle() );
 		}
 
+		static ControlType constexpr Type{ ControlType::eStatic };
+
 	private:
+		StaticStyle & getStyle()
+		{
+			return static_cast< StaticStyle & >( getBaseStyle() );
+		}
 		/** @copydoc CastorGui::Control::doCreate
 		*/
-		virtual void doCreate()override;
+		void doCreate()override;
 
 		/** @copydoc CastorGui::Control::doDestroy
 		*/
-		virtual void doDestroy()override;
+		void doDestroy()override;
 
 		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		virtual void doSetPosition( castor::Position const & p_value )override;
+		void doSetPosition( castor::Position const & p_value )override;
 
 		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		virtual void doSetSize( castor::Size const & p_value )override;
+		void doSetSize( castor::Size const & p_value )override;
 
-		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
+		/** @copydoc CastorGui::Control::doUpdateStyle
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material )override;
-
-		/** @copydoc CastorGui::Control::doSetForegroundMaterial
-		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr p_material )override;
+		void doUpdateStyle()override;
 
 		/** @copydoc CastorGui::Control::doSetCaption
 		*/
@@ -112,22 +105,15 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetVisible
 		*/
-		virtual void doSetVisible( bool p_visible )override;
+		void doSetVisible( bool p_visible )override;
 
 		/** @copydoc CastorGui::Control::doUpdateFlags
 		*/
-		virtual void doUpdateFlags()override;
+		void doUpdateFlags()override;
 
 	private:
-		//! The static caption
 		castor::String m_caption;
-		//! The font material
-		castor3d::MaterialRPtr m_textMaterial{};
-
-	protected:
-		//! The text overlay used to display the caption
 		castor3d::TextOverlayWPtr m_text;
-		// The statics count
 		static uint32_t m_count;
 	};
 }

@@ -5,11 +5,11 @@ See LICENSE file in root folder
 #define ___CI_CONTROLS_CACHE_H___
 
 #include "CastorGui/CastorGuiPrerequisites.hpp"
+#include "CastorGui/Theme/Theme.hpp"
 
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Event/UserInput/EventHandler.hpp>
 
-#include <CastorUtils/Graphics/FontCache.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 
 namespace CastorGui
@@ -41,26 +41,25 @@ namespace CastorGui
 		*	The engine
 		*/
 		C3D_CGui_API explicit ControlsManager( castor3d::Engine & engine );
+
+		//@}
+		/**@name Style management */
+		//@{
+
 		/**
 		*\brief
-		*	Retrieves the default font used by controls
+		*	Creates a theme if it doesn't exist, returns the existing one if it exists
+		*\param[in] name
+		*	The theme name
 		*\return
-		*	The font
+		*	The theme.
 		*/
-		castor::FontResPtr getDefaultFont()const
-		{
-			return m_defaultFont;
-		}
+		C3D_CGui_API ThemeRPtr createTheme( castor::String const & name );
 		/**
-		*\brief
-		*	sets the default font used by controls
-		*\param[in] p_font
-		*	The font
+		*\return
+		*	The theme for given name (\p nullptr if it doesn't exist).
 		*/
-		void setDefaultFont( castor::FontResPtr p_font )
-		{
-			m_defaultFont = p_font;
-		}
+		C3D_CGui_API ThemeRPtr getTheme( castor::String const & name );
 
 		//@}
 		/**@name Controls management */
@@ -231,29 +230,17 @@ namespace CastorGui
 		virtual void doFlush();
 
 	private:
-		//! The mutex used to protect the controls by z-index.
 		mutable std::mutex m_mutexControlsByZIndex;
-		//! The controls array
 		mutable std::vector< Control *  > m_controlsByZIndex;
-		//! The mutex used to protect the controls by ID.
 		mutable std::mutex m_mutexControlsById;
-		//! The controls map, sorted by ID
 		std::map< uint32_t, ControlWPtr > m_controlsById;
-		//! Tells the controls array has changed
 		bool m_changed;
-		//! The default font used by controls
-		castor::FontResPtr m_defaultFont;
-		//! The button click event connections.
+		std::map< castor::String, ThemeUPtr > m_themes;
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
-		//! The combo-box item selected event connections.
 		std::map< Control const *, OnComboEventConnection > m_onComboSelects;
-		//! The text updated event connections.
 		std::map< Control const *, OnEditEventConnection > m_onEditUpdates;
-		//! The list-box item selected event connections.
 		std::map< Control const *, OnListEventConnection > m_onListSelects;
-		//! The slider thumb track event connections.
 		std::map< Control const *, OnSliderEventConnection > m_onSliderTracks;
-		//! The slider thumb release event connections.
 		std::map< Control const *, OnSliderEventConnection > m_onSliderReleases;
 	};
 }
