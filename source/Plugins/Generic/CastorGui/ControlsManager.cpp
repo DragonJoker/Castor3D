@@ -29,6 +29,31 @@ namespace CastorGui
 	{
 	}
 
+	ThemeRPtr ControlsManager::createTheme( castor::String const & name )
+	{
+		auto ires = m_themes.emplace( name, nullptr );
+		auto it = ires.first;
+
+		if ( ires.second )
+		{
+			it->second = std::make_unique< Theme >( name, *getEngine() );
+		}
+
+		return it->second.get();
+	}
+
+	ThemeRPtr ControlsManager::getTheme( castor::String const & name )
+	{
+		auto it = m_themes.find( name );
+
+		if ( it == m_themes.end() )
+		{
+			return nullptr;
+		}
+
+		return it->second.get();
+	}
+
 	void ControlsManager::create( ControlSPtr p_control )
 	{
 		addControl( p_control );
@@ -212,13 +237,13 @@ namespace CastorGui
 
 			if ( material )
 			{
-				auto control = *it;
-				m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [control, material]( RenderDevice const & device
-						, QueueData const & queueData )
-					{
-						control->setBackgroundMaterial( material );
-					} ) );
+				//auto control = *it;
+				//m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				//	, [control, material]( RenderDevice const & device
+				//		, QueueData const & queueData )
+				//	{
+				//		control->setBackgroundMaterial( material );
+				//	} ) );
 				result = true;
 			}
 		}

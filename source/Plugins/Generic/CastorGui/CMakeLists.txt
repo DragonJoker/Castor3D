@@ -68,6 +68,34 @@ source_group( "Source Files\\Controls"
 	FILES
 		${${PROJECT_NAME}_CTRLS_SRC_FILES}
 )
+set( ${PROJECT_NAME}_STYLS_HDR_FILES
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/StyleButton.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/StyleComboBox.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/StyleControl.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/StyleEdit.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/StyleListBox.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/StyleSlider.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/StyleStatic.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Theme/Theme.hpp
+)
+set( ${PROJECT_NAME}_STYLS_SRC_FILES
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_STYLS_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_STYLS_HDR_FILES}
+)
+source_group( "Header Files\\Style"
+	FILES
+		${${PROJECT_NAME}_STYLS_HDR_FILES}
+)
+source_group( "Source Files\\Style"
+	FILES
+		${${PROJECT_NAME}_STYLS_SRC_FILES}
+)
 add_target_min(
 	${PROJECT_NAME}
 	plugin

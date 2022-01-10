@@ -29,7 +29,7 @@ namespace CastorGui
 	const castor::String PLUGIN_NAME = cuT( "CastorGui" );
 	static const uint32_t DEFAULT_HEIGHT = 25;
 	/**
-	 *\brief		Enumeration of supported controls in a OptionsPanel
+	*\brief	Enumeration of supported controls in a OptionsPanel
 	*/
 	enum class ControlType
 		: uint8_t
@@ -49,7 +49,7 @@ namespace CastorGui
 		eButton,
 	};
 	/**
-	 *\brief		Enumeration of supported combobox events
+	*\brief	Enumeration of supported combobox events
 	*/
 	enum class ComboBoxEvent
 		: uint8_t
@@ -60,7 +60,7 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\brief		Enumeration of supported listbox events
+	*\brief	Enumeration of supported listbox events
 	*/
 	enum class ListBoxEvent
 		: uint8_t
@@ -71,7 +71,7 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\brief		Enumeration of supported button events
+	*\brief	Enumeration of supported button events
 	*/
 	enum class ButtonEvent
 		: uint8_t
@@ -82,7 +82,7 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\brief		Enumeration of supported slider events
+	*\brief	Enumeration of supported slider events
 	*/
 	enum class SliderEvent
 		: uint8_t
@@ -95,7 +95,7 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\brief		Enumeration of supported edit events
+	*\brief	Enumeration of supported edit events
 	*/
 	enum class EditEvent
 		: uint8_t
@@ -108,7 +108,7 @@ namespace CastorGui
 		eCount,
 	};
 	/**
-	 *\brief		Combobox control supported styles
+	*\brief	Combo control supported flags.
 	*/
 	enum class ComboBoxFlag
 		: uint32_t
@@ -118,7 +118,7 @@ namespace CastorGui
 	};
 	CU_ImplementFlags( ComboBoxFlag )
 	/**
-	 *\brief		Edit control supported styles
+	*\brief	Edit control supported flags.
 	*/
 	enum class EditFlag
 		: uint32_t
@@ -134,7 +134,7 @@ namespace CastorGui
 	};
 	CU_ImplementFlags( EditFlag )
 	/**
-	 *\brief		Slider control supported styles
+	*\brief	Slider control supported flags.
 	*/
 	enum class SliderFlag
 		: uint32_t
@@ -146,7 +146,7 @@ namespace CastorGui
 	};
 	CU_ImplementFlags( SliderFlag )
 	/**
-	 *\brief		Static control supported styles
+	*\brief	Static control supported flags.
 	*/
 	enum class StaticFlag
 		: uint32_t
@@ -166,7 +166,7 @@ namespace CastorGui
 	};
 	CU_ImplementFlags( StaticFlag )
 	/**
-	 *\brief		Enumeration of supported GUI events in ControlInfos
+	*\brief	Enumeration of supported GUI events in ControlInfos
 	*/
 	enum class GuiEvent
 		: uint8_t
@@ -177,7 +177,7 @@ namespace CastorGui
 		eResizeParent,
 	};
 	/**
-	 *\brief		Mouse cursors enumeration
+	*\brief	Mouse cursors enumeration
 	*/
 	enum class MouseCursor
 	{
@@ -201,6 +201,15 @@ namespace CastorGui
 	class ListBoxCtrl;
 	class SliderCtrl;
 	class StaticCtrl;
+
+	class Theme;
+	class ControlStyle;
+	class ButtonStyle;
+	class ComboBoxStyle;
+	class EditStyle;
+	class ListBoxStyle;
+	class SliderStyle;
+	class StaticStyle;
 
 	using OnButtonEventFunction = std::function< void() >;
 	using OnButtonEvent = castor::SignalT< OnButtonEventFunction >;
@@ -230,8 +239,17 @@ namespace CastorGui
 	CU_DeclareSmartPtr( ListBoxCtrl );
 	CU_DeclareSmartPtr( SliderCtrl );
 	CU_DeclareSmartPtr( StaticCtrl );
+	CU_DeclareSmartPtr( Theme );
+	CU_DeclareSmartPtr( ControlStyle );
+	CU_DeclareSmartPtr( ButtonStyle );
+	CU_DeclareSmartPtr( ComboBoxStyle );
+	CU_DeclareSmartPtr( EditStyle );
+	CU_DeclareSmartPtr( ListBoxStyle );
+	CU_DeclareSmartPtr( SliderStyle );
+	CU_DeclareSmartPtr( StaticStyle );
 
 	typedef std::vector< ControlSPtr > ControlArray;
+
 	/** Sets the pass colour.
 	 *\param[in]	pass	The pass.
 	 *\param[in]	colour	The material colour.
