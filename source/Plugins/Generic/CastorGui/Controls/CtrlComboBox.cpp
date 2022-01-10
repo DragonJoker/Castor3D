@@ -17,67 +17,67 @@ using namespace castor3d;
 
 namespace CastorGui
 {
-	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
-		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id )
-		: ComboBoxCtrl( p_name
-			, engine
-			, p_parent
-			, p_id
-			, StringArray()
+	ComboBoxCtrl::ComboBoxCtrl( String const & name
+		, ComboBoxStyle * style
+		, ControlRPtr parent
+		, uint32_t id )
+		: ComboBoxCtrl{ name
+			, style
+			, parent
+			, id
+			, castor::StringArray{}
 			, -1
-			, Position()
-			, Size()
+			, castor::Position{}
+			, castor::Size{}
 			, 0
-			, true )
+			, true }
 	{
 	}
 
-	ComboBoxCtrl::ComboBoxCtrl( String const & p_name
-		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id
-		, StringArray const & p_values
-		, int p_selected
-		, Position const & p_position
-		, Size const & p_size
-		, uint32_t p_flags
-		, bool p_visible )
-		: Control( ControlType::eComboBox
-			, p_name
-			, engine
-			, p_parent
-			, p_id
-			, p_position
-			, p_size
-			, p_flags
-			, p_visible )
-		, m_values( p_values )
-		, m_selected( p_selected )
+	ComboBoxCtrl::ComboBoxCtrl( String const & name
+		, ComboBoxStyle * style
+		, ControlRPtr parent
+		, uint32_t id
+		, castor::StringArray const & values
+		, int selected
+		, castor::Position const & position
+		, castor::Size const & size
+		, uint32_t flags
+		, bool visible )
+		: Control{ Type
+			, name
+			, style
+			, parent
+			, id
+			, position
+			, size
+			, flags
+			, visible }
+		, m_values{ values }
+		, m_selected{ selected }
 	{
-		m_expand = std::make_shared< ButtonCtrl >( p_name + cuT( "_Expand" )
-			, engine
+		m_expand = std::make_shared< ButtonCtrl >( name + cuT( "_Expand" )
+			, &style->getButtonStyle()
 			, this
 			, getId() << 12
 			, cuT( "+" )
-			, Position( int32_t( p_size.getWidth() - p_size.getHeight() ), 0 )
-			, Size( p_size.getHeight(), p_size.getHeight() ) );
-		m_expand->setVisible( p_visible );
+			, castor::Position{ int32_t( size.getWidth() - size.getHeight() ), 0 }
+			, castor::Size{ size.getHeight(), size.getHeight() } );
+		m_expand->setVisible( visible );
 		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked
 			, [this]()
 			{
 				doSwitchExpand();
 			} );
 
-		m_choices = std::make_shared< ListBoxCtrl >( p_name + cuT( "_Choices" )
-			, engine
+		m_choices = std::make_shared< ListBoxCtrl >( name + cuT( "_Choices" )
+			, &style->getListBoxStyle()
 			, this
 			, ( getId() << 12 ) + 1
 			, m_values
 			, m_selected
-			, Position( 0, int32_t( p_size.getHeight() ) )
-			, Size( p_size.getWidth() - p_size.getHeight(), ~( 0u ) )
+			, castor::Position{ 0, int32_t( size.getHeight() ) }
+			, castor::Size{ size.getWidth() - size.getHeight(), ~( 0u ) }
 			, 0
 			, false );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
@@ -86,7 +86,7 @@ namespace CastorGui
 				onSelected( selected );
 			} );
 
-		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + string::toString( getId() )
+		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )
 			, getEngine()
 			, OverlayType::eText
 			, nullptr
@@ -94,67 +94,24 @@ namespace CastorGui
 		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 		text->setVAlign( VAlign::eCenter );
 		m_text = text;
+
+		doUpdateStyle();
 	}
 
-	void ComboBoxCtrl::setTextMaterial( castor3d::MaterialRPtr p_material )
+	void ComboBoxCtrl::appendItem( castor::String const & value )
 	{
-		m_choices->setTextMaterial( p_material );
-		m_expand->setTextMaterial( p_material );
+		m_choices->appendItem( value );
 	}
 
-	void ComboBoxCtrl::setSelectedItemBackgroundMaterial( MaterialRPtr p_material )
+	void ComboBoxCtrl::removeItem( int value )
 	{
-		m_choices->setSelectedItemBackgroundMaterial( p_material );
+		m_choices->removeItem( value );
 	}
 
-	void ComboBoxCtrl::setSelectedItemForegroundMaterial( MaterialRPtr p_material )
+	void ComboBoxCtrl::setItemText( int index
+		, castor::String const & text )
 	{
-		m_choices->setSelectedItemForegroundMaterial( p_material );
-	}
-
-	void ComboBoxCtrl::setHighlightedItemBackgroundMaterial( MaterialRPtr p_material )
-	{
-		m_choices->setHighlightedItemBackgroundMaterial( p_material );
-	}
-
-	void ComboBoxCtrl::setItemBackgroundMaterial( MaterialRPtr p_material )
-	{
-		m_choices->setItemBackgroundMaterial( p_material );
-	}
-
-	MaterialRPtr ComboBoxCtrl::getSelectedItemBackgroundMaterial()const
-	{
-		return m_choices->getSelectedItemBackgroundMaterial();
-	}
-
-	MaterialRPtr ComboBoxCtrl::getSelectedItemForegroundMaterial()const
-	{
-		return m_choices->getSelectedItemForegroundMaterial();
-	}
-
-	MaterialRPtr ComboBoxCtrl::getHighlightedItemBackgroundMaterial()const
-	{
-		return m_choices->getHighlightedItemBackgroundMaterial();
-	}
-
-	MaterialRPtr ComboBoxCtrl::getItemBackgroundMaterial()const
-	{
-		return m_choices->getItemBackgroundMaterial();
-	}
-
-	void ComboBoxCtrl::appendItem( String  const & p_value )
-	{
-		m_choices->appendItem( p_value );
-	}
-
-	void ComboBoxCtrl::removeItem( int p_value )
-	{
-		m_choices->removeItem( p_value );
-	}
-
-	void ComboBoxCtrl::setItemText( int p_index, String const & p_text )
-	{
-		return m_choices->setItemText( p_index, p_text );
+		return m_choices->setItemText( index, text );
 	}
 
 	void ComboBoxCtrl::clear()
@@ -162,12 +119,12 @@ namespace CastorGui
 		return m_choices->clear();
 	}
 
-	void ComboBoxCtrl::setSelected( int p_value )
+	void ComboBoxCtrl::setSelected( int value )
 	{
-		return m_choices->setSelected( p_value );
+		return m_choices->setSelected( value );
 	}
 
-	StringArray const & ComboBoxCtrl::getItems()const
+	castor::StringArray const & ComboBoxCtrl::getItems()const
 	{
 		return m_choices->getItems();
 	}
@@ -182,49 +139,45 @@ namespace CastorGui
 		return m_choices->getSelected();
 	}
 
-	void ComboBoxCtrl::setFont( castor::String const & p_font )
+	void ComboBoxCtrl::doUpdateStyle()
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
-		{
-			text->setFont( p_font );
-		}
-
-		m_choices->setFont( p_font );
+		auto & style = getStyle();
+		m_expand->setStyle( &style.getButtonStyle() );
+		m_choices->setStyle( &style.getListBoxStyle() );
 	}
 
 	void ComboBoxCtrl::doCreate()
 	{
+		auto & style = getStyle();
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 
-		m_expand->setForegroundMaterial( getForegroundMaterial() );
-		m_expand->setPosition( Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
-		m_expand->setSize( Size( getSize().getHeight(), getSize().getHeight() ) );
+		m_expand->setPosition( castor::Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
+		m_expand->setSize( castor::Size( getSize().getHeight(), getSize().getHeight() ) );
 
-		m_choices->setBackgroundMaterial( getBackgroundMaterial() );
-		m_choices->setForegroundMaterial( getForegroundMaterial() );
-		m_choices->setPosition( Position( 0, int32_t( getSize().getHeight() ) ) );
-		m_choices->setSize( Size( getSize().getWidth() - getSize().getHeight(), ~( 0u ) ) );
+		m_choices->setPosition( castor::Position( 0, int32_t( getSize().getHeight() ) ) );
+		m_choices->setSize( castor::Size( getSize().getWidth() - getSize().getHeight(), ~( 0u ) ) );
 
-		EventHandler::connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
-		{
-			onKeyDown( p_event );
-		} );
-		NonClientEventHandler::connectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
-		{
-			onNcKeyDown( p_control, p_event );
-		} );
+		EventHandler::connect( castor3d::KeyboardEventType::ePushed
+			, [this]( castor3d::KeyboardEvent const & event )
+			{
+				onKeyDown( event );
+			} );
+		NonClientEventHandler::connectNC( castor3d::KeyboardEventType::ePushed
+			, [this]( ControlSPtr control
+				, castor3d::KeyboardEvent const & event )
+			{
+				onNcKeyDown( control, event );
+			} );
 
-		TextOverlaySPtr text = m_text.lock();
-		text->setMaterial( getTextMaterial() );
-		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
+		auto text = m_text.lock();
+		text->setMaterial( style.getButtonStyle().getTextMaterial() );
+		text->setPixelSize( castor::Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->setFont( manager.getDefaultFont().lock()->getName() );
+			text->setFont( style.getButtonStyle().getFontName() );
 		}
 
 		int sel = getSelected();
@@ -256,7 +209,7 @@ namespace CastorGui
 		}
 	}
 
-	void ComboBoxCtrl::doSetPosition( Position const & p_value )
+	void ComboBoxCtrl::doSetPosition( castor::Position const & p_value )
 	{
 		TextOverlaySPtr text = m_text.lock();
 
@@ -270,7 +223,7 @@ namespace CastorGui
 		m_choices->setPosition( Position( 0, int32_t( getSize().getHeight() ) ) );
 	}
 
-	void ComboBoxCtrl::doSetSize( Size const & p_value )
+	void ComboBoxCtrl::doSetSize( castor::Size const & p_value )
 	{
 		TextOverlaySPtr text = m_text.lock();
 
@@ -284,24 +237,6 @@ namespace CastorGui
 		m_choices->setSize( Size( p_value.getWidth() - p_value.getHeight(), ~( 0u ) ) );
 		m_expand->setPosition( Position( int32_t( p_value.getWidth() - p_value.getHeight() ), 0 ) );
 		m_choices->setPosition( Position( 0, int32_t( p_value.getHeight() ) ) );
-	}
-
-	void ComboBoxCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
-	{
-		m_choices->setBackgroundMaterial( getBackgroundMaterial() );
-	}
-
-	void ComboBoxCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
-	{
-		m_expand->setForegroundMaterial( getForegroundMaterial() );
-		m_choices->setForegroundMaterial( getForegroundMaterial() );
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
-		{
-			text->setMaterial( p_material );
-			text.reset();
-		}
 	}
 
 	bool ComboBoxCtrl::doCatchesMouseEvents()const

@@ -4,14 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_EDIT_H___
 #define ___CI_CTRL_EDIT_H___
 
-#include "CtrlControl.hpp"
+#include "CastorGui/Controls/CtrlControl.hpp"
+#include "CastorGui/Theme/StyleEdit.hpp"
 
 namespace CastorGui
 {
 	/**
-	\author		Sylvain DOREMUS
-	\date		16/02/201
-	\version	0.1.
 	\brief		Edit control
 	*/
 	class EditCtrl
@@ -19,49 +17,41 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
-		 *\param[in]	engine	The engine
-		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_id		The control ID
+		 *\param[in]	name	The control name
+		 *\param[in]	style	The control style
+		 *\param[in]	parent	The parent control, if any
+		 *\param[in]	id		The control ID
 		 */
-		EditCtrl( castor::String const & p_name
-			, castor3d::Engine & engine
-			, ControlRPtr p_parent
-			, uint32_t p_id );
+		EditCtrl( castor::String const & name
+			, EditStyleRPtr style
+			, ControlRPtr parent
+			, uint32_t id );
 
 		/** Constructor
-		 *\param[in]	engine		The engine
-		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_caption	The caption
-		 *\param[in]	p_id		The control ID
-		 *\param[in]	p_position	The position
-		 *\param[in]	p_size		The size
-		 *\param[in]	p_flags		The configuration flags
-		 *\param[in]	p_visible	Initial visibility status
+		 *\param[in]	name		The control name
+		 *\param[in]	style		The control style
+		 *\param[in]	parent		The parent control, if any
+		 *\param[in]	caption		The caption
+		 *\param[in]	id			The control ID
+		 *\param[in]	position	The position
+		 *\param[in]	size		The size
+		 *\param[in]	flags		The configuration flags
+		 *\param[in]	visible		Initial visibility status
 		 */
-		EditCtrl( castor::String const & p_name
-			, castor3d::Engine & engine
-			, ControlRPtr p_parent
-			, uint32_t p_id
-			, castor::String const & p_caption
-			, castor::Position const & p_position
-			, castor::Size const & p_size
-			, uint32_t p_flags = 0
-			, bool p_visible = true );
-
-		/** sets the caption font.
-		*\param[in]	p_font	The new value.
-		*/
-		void setFont( castor::String const & p_font );
-
-		/** Sets the text material.
-		*\param[in]	value	The new value.
-		*/
-		void setTextMaterial( castor3d::MaterialRPtr value );
+		EditCtrl( castor::String const & name
+			, EditStyleRPtr style
+			, ControlRPtr parent
+			, uint32_t id
+			, castor::String const & caption
+			, castor::Position const & position
+			, castor::Size const & size
+			, uint32_t flags = 0
+			, bool visible = true );
 
 		/** Retrieves the caption
 		 *\return		The value
 		 */
-		inline castor::String const & getCaption()const
+		castor::String const & getCaption()const
 		{
 			return m_caption;
 		}
@@ -69,9 +59,9 @@ namespace CastorGui
 		/** Updates the caption
 		 *\param[in]	p_value		The new value
 		 */
-		inline void updateCaption( castor::String const & p_value )
+		void updateCaption( castor::String const & value )
 		{
-			m_caption = p_value;
+			m_caption = value;
 		}
 
 		/** Connects a function to an edit event
@@ -79,9 +69,10 @@ namespace CastorGui
 		 *\param[in]	p_function	The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnEditEventConnection connect( EditEvent p_event, OnEditEventFunction p_function )
+		OnEditEventConnection connect( EditEvent event
+			, OnEditEventFunction function )
 		{
-			return m_signals[size_t( p_event )].connect( p_function );
+			return m_signals[size_t( event )].connect( function );
 		}
 
 		/** Retreves the multiline status of the edit.
@@ -93,14 +84,20 @@ namespace CastorGui
 		}
 
 		/**
-		*\return	The text material
+		*\return	The static style
 		*/
-		inline castor3d::MaterialRPtr getTextMaterial()const
+		EditStyle const & getStyle()const
 		{
-			return m_textMaterial;
+			return static_cast< EditStyle const & >( getBaseStyle() );
 		}
 
+		static ControlType constexpr Type{ ControlType::eEdit };
+
 	private:
+		EditStyle & getStyle()
+		{
+			return static_cast< EditStyle & >( getBaseStyle() );
+		}
 		/** @copydoc CastorGui::Control::doCreate
 		*/
 		void doCreate()override;
@@ -117,13 +114,9 @@ namespace CastorGui
 		*/
 		void doSetSize( castor::Size const & p_value )override;
 
-		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
+		/** @copydoc CastorGui::Control::doUpdateStyle
 		*/
-		void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material )override;
-
-		/** @copydoc CastorGui::Control::doSetForegroundMaterial
-		*/
-		void doSetForegroundMaterial( castor3d::MaterialRPtr p_material )override;
+		void doUpdateStyle()override;
 
 		/** @copydoc CastorGui::Control::doSetCaption
 		*/
@@ -194,17 +187,10 @@ namespace CastorGui
 		castor::String doGetCaptionWithCaret()const;
 
 	private:
-		//! The caption
 		castor::String m_caption;
-		//! The font material
-		castor3d::MaterialRPtr m_textMaterial{};
-		//! The caret index in the caption
 		castor::string::utf8::const_iterator m_caretIt;
-		//! The activation status
 		bool m_active;
-		//! The text overlay used to display the caption
 		castor3d::TextOverlayWPtr m_text;
-		//! The edit events signals
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
 	};
 }
