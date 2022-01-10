@@ -11,38 +11,32 @@
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace CastorGui
 {
-	Control::Control( ControlType p_type
-		, String const & p_name
-		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id
-		, Position const & p_position
-		, Size const & p_size
-		, uint32_t p_flags
-		, bool p_visible )
-		: NonClientEventHandler< Control >( p_type != ControlType::eStatic )
-		, Named( p_name )
-		, m_parent( p_parent )
-		, m_cursor( MouseCursor::eHand )
-		, m_id( p_id )
-		, m_type( p_type )
-		, m_flags( p_flags )
-		, m_position( p_position )
-		, m_size( p_size )
-		, m_borders( 0, 0, 0, 0 )
-		, m_engine( engine )
+	Control::Control( ControlType type
+		, castor::String const & name
+		, ControlStyleRPtr style
+		, ControlRPtr parent
+		, uint32_t id
+		, castor::Position const & position
+		, castor::Size const & size
+		, uint32_t flags
+		, bool visible )
+		: castor3d::NonClientEventHandler< Control >{ type != ControlType::eStatic }
+		, castor::Named{ name }
+		, m_parent{ parent }
+		, m_id{ id }
+		, m_type{ type }
+		, m_style{ style }
+		, m_flags{ flags }
+		, m_position{ position }
+		, m_size{ size }
 	{
-		OverlayRPtr parentOv{};
-		ControlRPtr parent = getParent();
+		castor3d::OverlayRPtr parentOv{};
 
-		if ( parent )
+		if ( m_parent )
 		{
-			auto bg = parent->getBackground();
+			auto bg = m_parent->getBackground();
 
 			if ( !bg )
 			{
@@ -52,9 +46,9 @@ namespace CastorGui
 			parentOv = &bg->getOverlay();
 		}
 
-		auto overlay = getEngine().getOverlayCache().add( p_name
+		auto overlay = getEngine().getOverlayCache().add( name
 			, getEngine()
-			, OverlayType::eBorderPanel
+			, castor3d::OverlayType::eBorderPanel
 			, nullptr
 			, parentOv ).lock();
 
@@ -65,15 +59,28 @@ namespace CastorGui
 
 		overlay->setPixelPosition( getPosition() );
 		overlay->setPixelSize( getSize() );
-		BorderPanelOverlaySPtr panel = overlay->getBorderPanelOverlay();
-		panel->setBorderPosition( BorderPosition::eInternal );
-		panel->setVisible( p_visible );
+		auto panel = overlay->getBorderPanelOverlay();
+		panel->setBorderPosition( castor3d::BorderPosition::eInternal );
+		panel->setVisible( visible );
 		m_background = panel;
 	}
 
-	void Control::create( ControlsManagerSPtr p_ctrlManager )
+	void Control::setStyle( ControlStyleRPtr value )
 	{
-		m_ctrlManager = p_ctrlManager;
+		m_style = value;
+
+		if ( auto background = getBackground() )
+		{
+			background->setMaterial( m_style->getBackgroundMaterial() );
+			background->setBorderMaterial( m_style->getForegroundMaterial() );
+		}
+
+		doUpdateStyle();
+	}
+
+	void Control::create( ControlsManagerSPtr ctrlManager )
+	{
+		m_ctrlManager = ctrlManager;
 		ControlRPtr parent = getParent();
 
 		if ( parent )
@@ -81,10 +88,13 @@ namespace CastorGui
 			parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
 		}
 
-		BorderPanelOverlaySPtr panel = getBackground();
-		panel->setMaterial( getBackgroundMaterial() );
-		panel->setBorderMaterial( getForegroundMaterial() );
-		panel->setBorderPixelSize( m_borders );
+		if ( auto background = getBackground() )
+		{
+			background->setMaterial( m_style->getBackgroundMaterial() );
+			background->setBorderMaterial( m_style->getForegroundMaterial() );
+			background->setBorderPixelSize( m_borders );
+		}
+
 		doCreate();
 	}
 
@@ -93,35 +103,32 @@ namespace CastorGui
 		doDestroy();
 	}
 
-	void Control::setBackgroundBorders( castor::Rectangle const & p_value )
+	void Control::setBackgroundBorders( castor::Rectangle const & value )
 	{
-		m_borders = p_value;
-		BorderPanelOverlaySPtr panel = getBackground();
+		m_borders = value;
 
-		if ( panel )
+		if ( auto background = getBackground() )
 		{
-			panel->setBorderPixelSize( m_borders );
+			background->setBorderPixelSize( m_borders );
 		}
 	}
 
-	void Control::setPosition( Position const & p_value )
+	void Control::setPosition( castor::Position const & value )
 	{
-		m_position = p_value;
-		BorderPanelOverlaySPtr panel = getBackground();
+		m_position = value;
 
-		if ( panel )
+		if ( auto background = getBackground() )
 		{
-			panel->setPixelPosition( m_position );
-			panel.reset();
+			background->setPixelPosition( m_position );
 		}
 
 		doSetPosition( m_position );
 	}
 
-	Position Control::getAbsolutePosition()const
+	castor::Position Control::getAbsolutePosition()const
 	{
 		ControlRPtr parent = getParent();
-		Position result = m_position;
+		auto result = m_position;
 
 		if ( parent )
 		{
@@ -131,97 +138,68 @@ namespace CastorGui
 		return result;
 	}
 
-	void Control::setSize( Size const & p_value )
+	void Control::setSize( castor::Size const & value )
 	{
-		m_size = p_value;
-		BorderPanelOverlaySPtr panel = getBackground();
+		m_size = value;
 
-		if ( panel )
+		if ( auto background = getBackground() )
 		{
-			panel->setPixelSize( m_size );
-			panel.reset();
+			background->setPixelSize( m_size );
 		}
 
 		doSetSize( m_size );
 	}
 
-	void Control::setBackgroundMaterial( MaterialRPtr p_value )
+	void Control::setCaption( castor::String const & caption )
 	{
-		CU_Require( p_value );
-		m_backgroundMaterial = p_value;
-		BorderPanelOverlaySPtr panel = getBackground();
+		doSetCaption( caption );
+	}
 
-		if ( panel )
+	void Control::setVisible( bool value )
+	{
+		if ( auto background = getBackground() )
 		{
-			panel->setMaterial( getBackgroundMaterial() );
-			panel.reset();
+			background->setVisible( value );
 		}
-
-		doSetBackgroundMaterial( getBackgroundMaterial() );
-	}
-
-	void Control::setForegroundMaterial( MaterialRPtr p_value )
-	{
-		m_foregroundMaterial = p_value;
-		BorderPanelOverlaySPtr panel = getBackground();
-
-		if ( panel )
-		{
-			panel->setBorderMaterial( getForegroundMaterial() );
-			panel.reset();
-		}
-
-		doSetForegroundMaterial( getForegroundMaterial() );
-	}
-
-	void Control::setCaption( castor::String const & p_caption )
-	{
-		doSetCaption( p_caption );
-	}
-
-	void Control::setVisible( bool p_value )
-	{
-		BorderPanelOverlaySPtr panel = getBackground();
-
-		if ( !panel )
+		else
 		{
 			CU_Exception( "No background set" );
 		}
 
-		panel->setVisible( p_value );
-		panel.reset();
-		doSetVisible( p_value );
+		doSetVisible( value );
 	}
 
 	bool Control::isVisible()const
 	{
-		BorderPanelOverlaySPtr panel = getBackground();
+		bool visible = false;
 
-		if ( !panel )
+		if ( auto background = getBackground() )
+		{
+			visible = background->isVisible();
+			ControlRPtr parent = getParent();
+
+			if ( visible && parent )
+			{
+				visible = parent->isVisible();
+			}
+		}
+		else
 		{
 			CU_Exception( "No background set" );
-		}
-
-		bool visible = panel->isVisible();
-		ControlRPtr parent = getParent();
-
-		if ( visible && parent )
-		{
-			visible = parent->isVisible();
 		}
 
 		return visible;
 	}
 
-	ControlSPtr Control::getChildControl( uint32_t p_id )
+	ControlSPtr Control::getChildControl( uint32_t id )
 	{
 		auto it = std::find_if( std::begin( m_children )
 			, std::end( m_children )
-			, [&p_id]( ControlWPtr p_ctrl )
+			, [&id]( ControlWPtr lookup )
 			{
-				auto ctrl = p_ctrl.lock();
+				auto ctrl = lookup.lock();
 				return ctrl
-					? ( ctrl->getId() == p_id )
+					? ( ctrl->getId() == id )
 					: false;
 			} );
 
@@ -233,27 +211,31 @@ namespace CastorGui
 		return it->lock();
 	}
 
-	void Control::addFlag( uint32_t p_flags )
+	void Control::addFlag( uint32_t flags )
 	{
-		m_flags |= p_flags;
+		m_flags |= flags;
 		doUpdateFlags();
 	}
 
-	void Control::removeFlag( uint32_t p_flags )
+	void Control::removeFlag( uint32_t flags )
 	{
-		m_flags &= ~p_flags;
+		m_flags &= ~flags;
 		doUpdateFlags();
 	}
 
 	bool Control::doIsVisible()const
 	{
-		auto panel = getBackground();
+		bool result = false;
 
-		if ( !panel )
+		if ( auto background = getBackground() )
+		{
+			result = background->isVisible();
+		}
+		else
 		{
 			CU_Exception( "No background set" );
 		}
 
-		return panel->isVisible();
+		return result;
 	}
 }

@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CI_CTRL_CONTROL_H___
 
 #include "CastorGui/CastorGuiPrerequisites.hpp"
+#include "CastorGui/Theme/StyleControl.hpp"
 
 #include <Castor3D/Event/UserInput/EventHandler.hpp>
 
@@ -17,8 +18,7 @@ See LICENSE file in root folder
 namespace CastorGui
 {
 	/**
-	 *\author		Sylvain DOREMU
-	 *\brief		Description of a contro
+	 *\brief		Description of a control.
 	*/
 	class Control
 		: public castor3d::NonClientEventHandler< Control >
@@ -28,29 +28,35 @@ namespace CastorGui
 
 	public:
 		/** Constructor.
-		 *\param[in]	p_name		The control name.
-		 *\param[in]	p_type		The type.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	p_parent	The parent control, if any.
-		 *\param[in]	p_id		The control ID.
-		 *\param[in]	p_position	The position.
-		 *\param[in]	p_size		The size.
-		 *\param[in]	p_flags		The configuration flags
-		 *\param[in]	p_visible	Initial visibility status.
+		 *\param[in]	name		The control name.
+		 *\param[in]	type		The type.
+		 *\param[in]	style		The control's style.
+		 *\param[in]	parent		The parent control, if any.
+		 *\param[in]	id			The control ID.
+		 *\param[in]	position	The position.
+		 *\param[in]	size		The size.
+		 *\param[in]	flags		The configuration flags
+		 *\param[in]	visible		Initial visibility status.
 		 */
-		Control( ControlType p_type
-			, castor::String const & p_name
-			, castor3d::Engine & engine
-			, ControlRPtr p_parent
-			, uint32_t p_id
-			, castor::Position const & p_position
-			, castor::Size const & p_size
-			, uint32_t p_flags = 0
-			, bool p_visible = true );
+		Control( ControlType type
+			, castor::String const & name
+			, ControlStyleRPtr style
+			, ControlRPtr parent
+			, uint32_t id
+			, castor::Position const & position
+			, castor::Size const & size
+			, uint32_t flags = 0
+			, bool visible = true );
+
+		/** Sets the style
+		 *\param[in]	value	The new value
+		 */
+		void setStyle( ControlStyleRPtr value );
+
 		/** Sets the position.
-		 *\param[in]	p_value		The new value.
+		 *\param[in]	value		The new value.
 		 */
-		void setPosition( castor::Position const & p_value );
+		void setPosition( castor::Position const & value );
 
 		/** Retrieves the absolute control position.
 		 *\return		The value.
@@ -58,34 +64,24 @@ namespace CastorGui
 		castor::Position getAbsolutePosition()const;
 
 		/** sets the size.
-		 *\param[in]	p_value		The new value.
+		 *\param[in]	value		The new value.
 		 */
-		void setSize( castor::Size const & p_value );
+		void setSize( castor::Size const & value );
 
 		/** sets the background borders size.
-		 *\param[in]	p_size		The new value.
+		 *\param[in]	value		The new value.
 		 */
-		void setBackgroundBorders( castor::Rectangle const & p_size );
-
-		/** sets the background material.
-		 *\param[in]	p_material		The new value.
-		 */
-		void setBackgroundMaterial( castor3d::MaterialRPtr p_material );
-
-		/** sets the foreground material.
-		 *\param[in]	p_material		The new value.
-		 */
-		void setForegroundMaterial( castor3d::MaterialRPtr p_material );
+		void setBackgroundBorders( castor::Rectangle const & value );
 
 		/** sets the caption.
-		 *\param[in]	p_caption	The new value
+		 *\param[in]	caption	The new value
 		 */
-		void setCaption( castor::String const & p_caption );
+		void setCaption( castor::String const & caption );
 
 		/** sets the visibility
-		 *\param[in]	p_value		The new value.
+		 *\param[in]	value		The new value.
 		 */
-		void setVisible( bool p_value );
+		void setVisible( bool value );
 
 		/** Retrieves the visibility status.
 		 *\return		The value.
@@ -93,9 +89,9 @@ namespace CastorGui
 		bool isVisible()const;
 
 		/** Retrieves a control.
-		 *\param[in]	p_id		The control ID.
+		 *\param[in]	id		The control ID.
 		 */
-		ControlSPtr getChildControl( uint32_t p_id );
+		ControlSPtr getChildControl( uint32_t id );
 
 		/** Retrieves the style
 		 *\return		The value
@@ -110,7 +106,7 @@ namespace CastorGui
 		/** Retrieves the control ID.
 		 *\return		The value.
 		 */
-		inline uint32_t getId()const
+		uint32_t getId()const
 		{
 			return m_id;
 		}
@@ -118,118 +114,106 @@ namespace CastorGui
 		/** Retrieves the type
 		 *\return		The value
 		*/
-		inline ControlType getType()const
+		ControlType getType()const
 		{
 			return m_type;
 		}
 
 		/** Retrieves the style
 		 *\return		The value
-		*/
-		inline uint32_t getFlags()const
+		 */
+		uint32_t getFlags()const
 		{
 			return m_flags;
 		}
 
 		/** Retrieves the position
 		 *\return		The value
-		*/
-		inline castor::Position const & getPosition()const
+		 */
+		castor::Position const & getPosition()const
 		{
 			return m_position;
 		}
 
 		/** Retrieves the size
 		 *\return		The value
-		*/
-		inline castor::Size const & getSize()const
+		 */
+		castor::Size const & getSize()const
 		{
 			return m_size;
 		}
 
-		/** Retrieves the background material
-		 *\return		The value
-		*/
-		inline castor3d::MaterialRPtr getBackgroundMaterial()const
-		{
-			return m_backgroundMaterial;
-		}
-
-		/** Retrieves the foreground material
-		 *\return		The value
-		*/
-		inline castor3d::MaterialRPtr getForegroundMaterial()const
-		{
-			return m_foregroundMaterial;
-		}
-
 		/** Shows the control
 		*/
-		inline void show()
+		void show()
 		{
 			setVisible( true );
 		}
 
 		/** Hides the control
 		*/
-		inline void hide()
+		void hide()
 		{
 			setVisible( false );
 		}
 
 		/** Retrieves the control's parent
 		 *\return		The parent
-		*/
-		inline ControlRPtr getParent()const
+		 */
+		ControlRPtr getParent()const
 		{
 			return m_parent;
 		}
 
 		/** Retrieves the control's main overlay (to be the parent of child controls' overlays)
 		 *\return		The main overlay
-		*/
-		inline castor3d::BorderPanelOverlaySPtr getBackground()const
+		 */
+		castor3d::BorderPanelOverlaySPtr getBackground()const
 		{
 			return m_background.lock();
 		}
 
-		/** Retrieves the cursor when mouse is over this control
-		 *\return		The main overlay
-		*/
-		inline MouseCursor getCursor()const
-		{
-			return m_cursor;
-		}
-
-		/** Retrieves the engine.
-		 *\return		The engine
-		*/
-		inline castor3d::Engine const & getEngine()const
-		{
-			return m_engine;
-		}
-
-		/** Retrieves the engine.
-		 *\return		The engine
-		*/
-		inline castor3d::Engine & getEngine()
-		{
-			return m_engine;
-		}
-
 		/** Retrieves the controls manager
 		 *\return		The manager
-		*/
-		inline ControlsManagerSPtr getControlsManager()const
+		 */
+		ControlsManagerSPtr getControlsManager()const
 		{
 			return m_ctrlManager.lock();
 		}
 
+		/** Retrieves the cursor when mouse is over this control
+		 *\return		The main overlay
+		 */
+		MouseCursor getCursor()const
+		{
+			return m_style->getCursor();
+		}
+
+		/** Retrieves the engine.
+		 *\return	The engine
+		 */
+		castor3d::Engine & getEngine()const
+		{
+			return m_style->getEngine();
+		}
+
+		/**
+		 *\return	The base style.
+		 */
+		ControlStyle const & getBaseStyle()const
+		{
+			return *m_style;
+		}
+
 	protected:
+		ControlStyle & getBaseStyle()
+		{
+			return *m_style;
+		}
 		/** Creates the control's overlays.
 		 *\param[in]	p_ctrlManager	The controls manager.
 		 */
-		void create( ControlsManagerSPtr p_ctrlManager );
+		void create( ControlsManagerSPtr ctrlManager );
 
 		/** Destroys the control's overlays.
 		 */
@@ -250,33 +234,27 @@ namespace CastorGui
 		virtual void doDestroy() = 0;
 
 		/** sets the position
-		*\param[in]	p_value		The new value
+		*\param[in]	value		The new value
 		*/
-		virtual void doSetPosition( castor::Position const & p_value ) = 0;
+		virtual void doSetPosition( castor::Position const & value ) = 0;
 
 		/** sets the size
-		*\param[in]	p_value		The new value
+		*\param[in]	value	The new value
 		*/
-		virtual void doSetSize( castor::Size const & p_value ) = 0;
+		virtual void doSetSize( castor::Size const & value ) = 0;
 
-		/** sets the background material
-		*\param[in]	p_material		The new value
+		/** Updates the style
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialRPtr p_material ) = 0;
-
-		/** sets the foreground material
-		*\param[in]	p_material		The new value
-		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialRPtr p_material ) = 0;
+		virtual void doUpdateStyle() = 0;
 
 		/** sets the caption.
-		 *\param[in]	p_caption	The new value
-		 */
-		virtual void doSetCaption( castor::String const & p_caption ){}
+		*\param[in]	caption	The new value
+		*/
+		virtual void doSetCaption( castor::String const & caption ){}
 
 		/** Tells if the control catches mouse events
-		 *\remarks		A control catches mouse events when it is visible, enabled, and when it explicitly catches it (enables by default, except for static controls
-		 *\return		false if the mouse events don't affect the contro
+		*\remarks	A control catches mouse events when it is visible, enabled, and when it explicitly catches it (enables by default, except for static controls
+		*\return	false if the mouse events don't affect the contro
 		*/
 		bool doCatchesMouseEvents()const override
 		{
@@ -326,25 +304,15 @@ namespace CastorGui
 		castor3d::MaterialRPtr m_foregroundMaterial{};
 
 	private:
-		//! The ID
 		const uint32_t m_id;
-		//! The type
 		const ControlType m_type;
-		//! The configuration flags
+		ControlStyleRPtr m_style;
 		uint32_t m_flags;
-		//! The position
 		castor::Position m_position;
-		//! The dimensions
 		castor::Size m_size;
-		//! The borders size
 		castor::Rectangle m_borders;
-		//! The border panel overlay used as a background
 		castor3d::BorderPanelOverlayWPtr m_background;
-		//! The child controls
 		std::vector< ControlWPtr > m_children;
-		//! The engine
-		castor3d::Engine & m_engine;
-		//! The controls manager
 		ControlsManagerWPtr m_ctrlManager;
 	};
 }

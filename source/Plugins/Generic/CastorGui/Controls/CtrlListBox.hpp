@@ -4,31 +4,32 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_LIST_BOX_H___
 #define ___CI_CTRL_LIST_BOX_H___
 
-#include "CtrlControl.hpp"
+#include "CastorGui/Controls/CtrlControl.hpp"
+#include "CastorGui/Theme/StyleListBox.hpp"
 
 namespace CastorGui
 {
 	/**
-	*\author	Sylvain DOREMUS
-	*\version	0.1.0
-	*\brief		ListBox control
+	*\brief		ListBox control.
 	*/
 	class ListBoxCtrl
 		: public Control
 	{
 	public:
 		/** Constructor
-		 *\param[in]	engine	The engine
+		 *\param[in]	name	The control name
+		 *\param[in]	style	The control style
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID
 		 */
 		ListBoxCtrl( castor::String const & name
-			, castor3d::Engine & engine
+			, ListBoxStyle * style
 			, ControlRPtr parent
 			, uint32_t id );
 
 		/** Constructor
-		 *\param[in]	engine		The engine
+		 *\param[in]	name		The control name
+		 *\param[in]	style		The control style
 		 *\param[in]	parent		The parent control, if any
 		 *\param[in]	values		The values list
 		 *\param[in]	selected	The selected value index (-1 for no selection)
@@ -39,7 +40,7 @@ namespace CastorGui
 		 *\param[in]	visible		Initial visibility status
 		 */
 		ListBoxCtrl( castor::String const & name
-			, castor3d::Engine & engine
+			, ListBoxStyle * style
 			, ControlRPtr parent
 			, uint32_t id
 			, castor::StringArray const & values
@@ -50,46 +51,41 @@ namespace CastorGui
 			, bool visible = true );
 
 		/** Constructor
+		 *\param[in]	name		The control name
+		 *\param[in]	style		The control style
 		 *\param[in]	parent		The parent control, if any
 		 *\param[in]	values		The values list
-		 *\param[in]	selected		The selected value index (-1 for no selection)
+		 *\param[in]	selected	The selected value index (-1 for no selection)
 		 *\param[in]	id			The control ID
-		 *\param[in]	position		The position
-		 *\param[in]	size			The size
-		 *\param[in]	style			The style
+		 *\param[in]	position	The position
+		 *\param[in]	size		The size
+		 *\param[in]	style		The style
 		 *\param[in]	visible		Initial visibility status
 		 */
 		template< size_t N >
 		ListBoxCtrl( castor::String const & name
-			, castor3d::Engine & engine
+			, ListBoxStyle * style
 			, ControlRPtr parent
 			, castor::String const( & values )[N]
 			, int selected
 			, uint32_t id
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t style = 0
+			, uint32_t flags = 0
 			, bool visible = true )
-			: Control( ControlType::eListBox, name, engine, parent, id, position, size, style, visible )
-			, m_values( castor::StringArray( &values[0], &values[N] ) )
-			, m_selected( selected )
+			: Control{ ControlType::eListBox
+				, name
+				, style
+				, parent
+				, id
+				, position
+				, size
+				, flags
+				, visible }
+			, m_values{ castor::StringArray( &values[0], &values[N] ) }
+			, m_selected{ selected }
 		{
 		}
-
-		/** sets the text material.
-		 *\param[in]	p_material	The new value.
-		 */
-		void setTextMaterial( castor3d::MaterialRPtr p_material );
-
-		/** sets the background colour for selected item
-		 *\param[in]	colour		The new value
-		 */
-		void setSelectedItemBackgroundMaterial( castor3d::MaterialRPtr colour );
-
-		/** sets the foreground colour for selected item
-		 *\param[in]	colour		The new value
-		 */
-		void setSelectedItemForegroundMaterial( castor3d::MaterialRPtr colour );
 
 		/** Appends a new item
 		 *\param[in]	value		The item
@@ -122,15 +118,10 @@ namespace CastorGui
 		 */
 		void setSelected( int index );
 
-		/** sets the caption font.
-		*\param[in]	font	The new value.
-		*/
-		void setFont( castor::String const & font );
-
 		/** Retrieves the items
 		 *\return		The value
 		 */
-		inline castor::StringArray const & getItems()const
+		castor::StringArray const & getItems()const
 		{
 			return m_values;
 		}
@@ -138,7 +129,7 @@ namespace CastorGui
 		/** Retrieves the items count
 		 *\return		The value
 		 */
-		inline uint32_t getItemCount()const
+		uint32_t getItemCount()const
 		{
 			return uint32_t( m_values.size() );
 		}
@@ -146,65 +137,9 @@ namespace CastorGui
 		/** Retrieves the selected item index
 		 *\return		The value
 		 */
-		inline int getSelected()const
+		int getSelected()const
 		{
 			return m_selected;
-		}
-
-		/**
-		*\return	The text material
-		*/
-		inline castor3d::MaterialRPtr getTextMaterial()const
-		{
-			return m_textMaterial;
-		}
-
-		/** Retrieves the background colour for selected item
-		 *\return		The value
-		 */
-		inline castor3d::MaterialRPtr getSelectedItemBackgroundMaterial()const
-		{
-			return m_selectedItemBackgroundMaterial;
-		}
-
-		/** Retrieves the foreground colour for selected item
-		 *\return		The value
-		 */
-		inline castor3d::MaterialRPtr getSelectedItemForegroundMaterial()const
-		{
-			return m_selectedItemForegroundMaterial;
-		}
-
-		/** Retrieves the background colour for an highlighted item
-		 *\return		The value
-		 */
-		inline castor3d::MaterialRPtr getHighlightedItemBackgroundMaterial()const
-		{
-			return m_highlightedItemBackgroundMaterial;
-		}
-
-		/** Retrieves the background colour for an unselected item
-		 *\return		The value
-		 */
-		inline castor3d::MaterialRPtr getItemBackgroundMaterial()const
-		{
-			return m_itemBackgroundMaterial;
-		}
-
-		/** sets the background colour for an highlighted item
-		 *\param[in]	material	The new value
-		 */
-		inline void setHighlightedItemBackgroundMaterial( castor3d::MaterialRPtr material )
-		{
-			m_highlightedItemBackgroundMaterial = material;
-		}
-
-		/** sets the background colour for an unselected item
-		 *\param[in]	material	The new value
-		 */
-		inline void setItemBackgroundMaterial( castor3d::MaterialRPtr material )
-		{
-			m_itemBackgroundMaterial = material;
 		}
 
 		/** Connects a function to a listbox event
@@ -212,12 +147,26 @@ namespace CastorGui
 		 *\param[in]	function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline OnListEventConnection connect( ListBoxEvent event, OnListEventFunction function )
+		OnListEventConnection connect( ListBoxEvent event, OnListEventFunction function )
 		{
 			return m_signals[size_t( event )].connect( function );
 		}
 
+		/**
+		*\return	The listbox style
+		*/
+		ListBoxStyle const & getStyle()const
+		{
+			return static_cast< ListBoxStyle const & >( getBaseStyle() );
+		}
+
+		static ControlType constexpr Type{ ControlType::eListBox };
+
 	private:
+		ListBoxStyle & getStyle()
+		{
+			return static_cast< ListBoxStyle & >( getBaseStyle() );
+		}
 		/** Creates a sub-control
 		 *\param[in]	value		The control label
 		 *\return		The static control.
@@ -251,13 +200,9 @@ namespace CastorGui
 		 */
 		void doSetSize( castor::Size const & value )override;
 
-		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
-		 */
-		void doSetBackgroundMaterial( castor3d::MaterialRPtr material )override;
-
-		/** @copydoc CastorGui::Control::doSetForegroundMaterial
-		 */
-		void doSetForegroundMaterial( castor3d::MaterialRPtr material )override;
+		/** @copydoc CastorGui::Control::doUpdateStyle
+		*/
+		void doUpdateStyle()override;
 
 		/** @copydoc CastorGui::Control::doSetVisible
 		 */
@@ -296,30 +241,12 @@ namespace CastorGui
 		void doConstruct();
 
 	private:
-		//! The values given on construction.
 		castor::StringArray m_initialValues;
-		//! All the combo box values
 		castor::StringArray m_values;
-		//! The selected value
 		int m_selected;
-		//! The selected item
 		StaticCtrlWPtr m_selectedItem;
-		//! All the items.
 		std::vector< StaticCtrlSPtr > m_items;
-		//! The text material.
-		castor3d::MaterialRPtr m_textMaterial{};
-		//! The background colour, for normal item
-		castor3d::MaterialRPtr m_itemBackgroundMaterial{};
-		//! The background colour, for highlighted item
-		castor3d::MaterialRPtr m_highlightedItemBackgroundMaterial{};
-		//! The background colour
-		castor3d::MaterialRPtr m_selectedItemBackgroundMaterial{};
-		//! The foreground colour
-		castor3d::MaterialRPtr m_selectedItemForegroundMaterial{};
-		//! The listbox events signals
 		OnListEvent m_signals[size_t( ListBoxEvent::eCount )];
-		//! The items font name.
-		castor::String m_fontName;
 	};
 }
 

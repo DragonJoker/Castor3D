@@ -14,140 +14,104 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace CastorGui
 {
-	ButtonCtrl::ButtonCtrl( String const & p_name
-		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id )
-		: ButtonCtrl( p_name
-			, engine
-			, p_parent
-			, p_id
-			, cuT( "" )
-			, Position()
-			, Size()
-			, 0
-			, true )
+	ButtonCtrl::ButtonCtrl( castor::String const & name
+			, ButtonStyleRPtr style
+		, ControlRPtr parent
+		, uint32_t id )
+		: ButtonCtrl{ name
+			, style
+			, parent
+			, id
+			, castor::String{}
+			, castor::Position{}
+			, castor::Size{}
+			, 0u
+			, true }
 	{
 	}
 
-	ButtonCtrl::ButtonCtrl( String const & p_name
-		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id
-		, String const & p_caption
-		, Position const & p_position
-		, Size const & p_size
-		, uint32_t p_flags
-		, bool p_visible )
-		: Control( ControlType::eButton
-			, p_name
-			, engine
-			, p_parent
-			, p_id
-			, p_position
-			, p_size
-			, p_flags
-			, p_visible )
-		, m_caption( p_caption )
+	ButtonCtrl::ButtonCtrl( castor::String const & name
+		, ButtonStyleRPtr style
+		, ControlRPtr parent
+		, uint32_t id
+		, castor::String const & caption
+		, castor::Position const & position
+		, castor::Size const & size
+		, uint32_t flags
+		, bool visible )
+		: Control{ Type
+			, name
+			, style
+			, parent
+			, id
+			, position
+			, size
+			, flags
+			, visible }
+		, m_caption{ caption }
 	{
-		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
-		EventHandler::connect( MouseEventType::eEnter, [this]( MouseEvent const & p_event )
-		{
-			onMouseEnter( p_event );
-		} );
-		EventHandler::connect( MouseEventType::eLeave, [this]( MouseEvent const & p_event )
-		{
-			onMouseLeave( p_event );
-		} );
-		EventHandler::connect( MouseEventType::ePushed, [this]( MouseEvent const & p_event )
-		{
-			onMouseButtonDown( p_event );
-		} );
-		EventHandler::connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
-		{
-			onMouseButtonUp( p_event );
-		} );
+		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
+		EventHandler::connect( castor3d::MouseEventType::eEnter
+			, [this]( castor3d::MouseEvent const & event )
+			{
+				onMouseEnter( event );
+			} );
+		EventHandler::connect( castor3d::MouseEventType::eLeave
+			, [this]( castor3d::MouseEvent const & event )
+			{
+				onMouseLeave( event );
+			} );
+		EventHandler::connect( castor3d::MouseEventType::ePushed
+			, [this]( castor3d::MouseEvent const & event )
+			{
+				onMouseButtonDown( event );
+			} );
+		EventHandler::connect( castor3d::MouseEventType::eReleased
+			, [this]( castor3d::MouseEvent const & event )
+			{
+				onMouseButtonUp( event );
+			} );
 
-		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlButton_" ) + string::toString( getId() )
+		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlButton_" ) + castor::string::toString( getId() )
 			, getEngine()
-			, OverlayType::eText
+			, castor3d::OverlayType::eText
 			, nullptr
 			, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
-		text->setHAlign( HAlign::eCenter );
-		text->setVAlign( VAlign::eCenter );
+		text->setHAlign( castor3d::HAlign::eCenter );
+		text->setVAlign( castor3d::VAlign::eCenter );
 		text->setCaption( m_caption );
-		text->setVisible( p_visible );
+		text->setVisible( visible );
 		m_text = text;
+
+		doUpdateStyle();
 	}
 
-	void ButtonCtrl::setTextMaterial( MaterialRPtr p_material )
+	void ButtonCtrl::setHAlign( castor3d::HAlign align )
 	{
-		m_textMaterial = p_material;
-	}
-
-	void ButtonCtrl::setHighlightedBackgroundMaterial( MaterialRPtr p_material )
-	{
-		m_highlightedBackgroundMaterial = p_material;
-	}
-
-	void ButtonCtrl::setHighlightedForegroundMaterial( MaterialRPtr p_material )
-	{
-		m_highlightedForegroundMaterial = p_material;
-	}
-
-	void ButtonCtrl::setHighlightedTextMaterial( MaterialRPtr p_material )
-	{
-		m_highlightedTextMaterial = p_material;
-	}
-
-	void ButtonCtrl::setPushedBackgroundMaterial( MaterialRPtr p_material )
-	{
-		m_pushedBackgroundMaterial = p_material;
-	}
-
-	void ButtonCtrl::setPushedForegroundMaterial( MaterialRPtr p_material )
-	{
-		m_pushedForegroundMaterial = p_material;
-	}
-
-	void ButtonCtrl::setPushedTextMaterial( MaterialRPtr p_material )
-	{
-		m_pushedTextMaterial = p_material;
-	}
-
-	void ButtonCtrl::setFont( castor::String const & p_font )
-	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setFont( p_font );
+			text->setHAlign( align );
 		}
 	}
 
-	void ButtonCtrl::setHAlign( HAlign p_align )
+	void ButtonCtrl::setVAlign( castor3d::VAlign align )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setHAlign( p_align );
+			text->setVAlign( align );
 		}
 	}
 
-	void ButtonCtrl::setVAlign( VAlign p_align )
+	void ButtonCtrl::doUpdateStyle()
 	{
-		TextOverlaySPtr text = m_text.lock();
+		auto & style = getStyle();
 
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setVAlign( p_align );
+			text->setFont( style.getFontName() );
 		}
 	}
 
@@ -160,59 +124,15 @@ namespace CastorGui
 			CU_Exception( "No background set" );
 		}
 
-		bg->setBorderPosition( BorderPosition::eInternal );
+		bg->setBorderPosition( castor3d::BorderPosition::eInternal );
 
-		if ( !getBackgroundMaterial() )
-		{
-			setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "Black" ) ).lock().get() );
-		}
-
-		if ( !getForegroundMaterial() )
-		{
-			setForegroundMaterial( getEngine().getMaterialCache().find( cuT( "White" ) ).lock().get() );
-		}
-
-		if ( !m_textMaterial )
-		{
-			m_textMaterial = getForegroundMaterial();
-		}
-
-		if ( !m_highlightedBackgroundMaterial )
-		{
-			m_highlightedBackgroundMaterial = doCreateMaterial( getBackgroundMaterial(), 0.1f );
-		}
-
-		if ( !m_highlightedForegroundMaterial )
-		{
-			m_highlightedForegroundMaterial = doCreateMaterial( getForegroundMaterial(), -0.1f );
-		}
-
-		if ( !m_highlightedTextMaterial )
-		{
-			m_highlightedTextMaterial = doCreateMaterial( getTextMaterial(), -0.1f );
-		}
-
-		if ( !m_pushedBackgroundMaterial )
-		{
-			m_pushedBackgroundMaterial = doCreateMaterial( getBackgroundMaterial(), 0.1f );
-		}
-
-		if ( !m_pushedForegroundMaterial )
-		{
-			m_pushedForegroundMaterial = doCreateMaterial( getForegroundMaterial(), -0.1f );
-		}
-
-		if ( !m_pushedTextMaterial )
-		{
-			m_pushedTextMaterial = doCreateMaterial( getTextMaterial(), -0.1f );
-		}
-
-		TextOverlaySPtr text = m_text.lock();
-		text->setMaterial( m_textMaterial );
+		auto & style = getStyle();
+		auto text = m_text.lock();
+		text->setMaterial( style.getTextMaterial() );
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->setFont( getControlsManager()->getDefaultFont().lock()->getName() );
+			text->setFont( style.getFontName() );
 		}
 
 		getControlsManager()->connectEvents( *this );
@@ -223,124 +143,97 @@ namespace CastorGui
 		getControlsManager()->disconnectEvents( *this );
 	}
 
-	void ButtonCtrl::doSetPosition( Position const & p_value )
+	void ButtonCtrl::doSetPosition( castor::Position const & value )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setPixelPosition( Position() );
+			text->setPixelPosition( castor::Position{} );
 			text.reset();
 		}
 	}
 
-	void ButtonCtrl::doSetSize( Size const & p_value )
+	void ButtonCtrl::doSetSize( castor::Size const & value )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setPixelSize( p_value );
+			text->setPixelSize( value );
 		}
 	}
 
-	void ButtonCtrl::doSetBackgroundMaterial( MaterialRPtr p_material )
+	void ButtonCtrl::doSetCaption( castor::String const & value )
 	{
-		m_highlightedBackgroundMaterial = doCreateMaterial( p_material, 0.1f );
-	}
+		m_caption = value;
 
-	void ButtonCtrl::doSetForegroundMaterial( MaterialRPtr p_material )
-	{
-		m_highlightedForegroundMaterial = doCreateMaterial( p_material, -0.1f );
-	}
-
-	void ButtonCtrl::doSetCaption( String const & p_value )
-	{
-		m_caption = p_value;
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setCaption( p_value );
+			text->setCaption( value );
 		}
 	}
 
-	void ButtonCtrl::doSetVisible( bool p_visible )
+	void ButtonCtrl::doSetVisible( bool visible )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setVisible( p_visible );
+			text->setVisible( visible );
 		}
 	}
 
-	void ButtonCtrl::onMouseEnter( MouseEvent const & p_event )
+	void ButtonCtrl::onMouseEnter( castor3d::MouseEvent const & event )
 	{
-		m_text.lock()->setMaterial( m_highlightedTextMaterial );
-		BorderPanelOverlaySPtr panel = getBackground();
+		auto & style = getStyle();
+		m_text.lock()->setMaterial( style.getHighlightedTextMaterial() );
 
-		if ( panel )
+		if ( auto panel = getBackground() )
 		{
-			panel->setMaterial( m_highlightedBackgroundMaterial );
-			panel->setBorderMaterial( m_highlightedForegroundMaterial );
+			panel->setMaterial( style.getHighlightedBackgroundMaterial() );
+			panel->setBorderMaterial( style.getHighlightedForegroundMaterial() );
+		}
+	}
+
+	void ButtonCtrl::onMouseLeave( castor3d::MouseEvent const & event )
+	{
+		auto & style = getStyle();
+		m_text.lock()->setMaterial( style.getTextMaterial() );
+
+		if ( auto panel = getBackground() )
+		{
+			panel->setMaterial( style.getBackgroundMaterial() );
+			panel->setBorderMaterial( style.getForegroundMaterial() );
 			panel.reset();
 		}
 	}
 
-	void ButtonCtrl::onMouseLeave( MouseEvent const & p_event )
+	void ButtonCtrl::onMouseButtonDown( castor3d::MouseEvent const & event )
 	{
-		m_text.lock()->setMaterial( m_textMaterial );
-		BorderPanelOverlaySPtr panel = getBackground();
-
-		if ( panel )
+		if ( event.getButton() == castor3d::MouseButton::eLeft )
 		{
-			panel->setMaterial( m_backgroundMaterial );
-			panel->setBorderMaterial( m_foregroundMaterial );
-			panel.reset();
-		}
-	}
+			auto & style = getStyle();
+			m_text.lock()->setMaterial( style.getPushedTextMaterial() );
 
-	void ButtonCtrl::onMouseButtonDown( MouseEvent const & p_event )
-	{
-		if ( p_event.getButton() == MouseButton::eLeft )
-		{
-			m_text.lock()->setMaterial( m_pushedTextMaterial );
-			BorderPanelOverlaySPtr panel = getBackground();
-
-			if ( panel )
+			if ( auto panel = getBackground() )
 			{
-				panel->setMaterial( m_pushedBackgroundMaterial );
-				panel->setBorderMaterial( m_pushedForegroundMaterial );
+				panel->setMaterial( style.getPushedBackgroundMaterial() );
+				panel->setBorderMaterial( style.getPushedForegroundMaterial() );
 				panel.reset();
 			}
 		}
 	}
 
-	void ButtonCtrl::onMouseButtonUp( MouseEvent const & p_event )
+	void ButtonCtrl::onMouseButtonUp( castor3d::MouseEvent const & event )
 	{
-		if ( p_event.getButton() == MouseButton::eLeft )
+		if ( event.getButton() == castor3d::MouseButton::eLeft )
 		{
-			m_text.lock()->setMaterial( m_highlightedTextMaterial );
-			BorderPanelOverlaySPtr panel = getBackground();
+			auto & style = getStyle();
+			m_text.lock()->setMaterial( style.getHighlightedTextMaterial() );
 
-			if ( panel )
+			if ( auto panel = getBackground() )
 			{
-				panel->setMaterial( m_highlightedBackgroundMaterial );
-				panel->setBorderMaterial( m_highlightedForegroundMaterial );
+				panel->setMaterial( style.getHighlightedBackgroundMaterial() );
+				panel->setBorderMaterial( style.getHighlightedForegroundMaterial() );
 				panel.reset();
 			}
 
 			m_signals[size_t( ButtonEvent::eClicked )]();
 		}
-	}
-
-	MaterialRPtr ButtonCtrl::doCreateMaterial( MaterialRPtr p_material, float p_offset )
-	{
-		RgbColour colour = getMaterialColour( *p_material->getPass( 0u ) );
-		colour.red() = float( colour.red() ) + p_offset;
-		colour.green() = float( colour.green() ) + p_offset;
-		colour.blue() = float( colour.blue() ) + p_offset;
-		return createMaterial( getEngine(), p_material->getName() + cuT( "_MO" ), colour );
 	}
 }

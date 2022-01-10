@@ -28,27 +28,86 @@ namespace CastorGui
 			return static_cast< ControlsManager & >( *static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine()->getUserInputListener() );
 		}
 
+		ControlsManager & getControlsManager( ParserContext & context )
+		{
+			return static_cast< ControlsManager & >( *context.engine->getUserInputListener() );
+		}
+
 		ParserContext & getParserContext( FileParserContext & context )
 		{
 			return *static_cast< ParserContext * >( context.getUserContext( PLUGIN_NAME ) );
 		}
 
-		template< typename T >
-		std::shared_ptr< T > CreateControl( ParserContext & context, String const & p_name, std::shared_ptr< T > & p_control )
+		template< typename ControlT >
+		std::shared_ptr< ControlT > createControl( ParserContext & context
+			, String const & controlName
+			, String const & themeName
+			, std::shared_ptr< ControlT > & control )
 		{
-			p_control = std::make_shared< T >( p_name, *context.m_engine, context.getTop(), context.m_ctrlId++ );
-			p_control->addFlag( context.m_flags );
-			context.m_parents.push( p_control );
-			context.m_flags = 0;
-			return p_control;
+			auto theme = getControlsManager( context ).getTheme( themeName );
+			CU_Require( theme != nullptr );
+
+			if constexpr ( ControlT::Type == ControlType::eButton )
+			{
+				control = std::make_shared< ControlT >( controlName
+					, theme->getButtonStyle()
+					, context.getTop()
+					, context.ctrlId++ );
+			}
+			else if constexpr ( ControlT::Type == ControlType::eComboBox )
+			{
+				control = std::make_shared< ControlT >( controlName
+					, theme->getComboBoxStyle()
+					, context.getTop()
+					, context.ctrlId++ );
+			}
+			else if constexpr ( ControlT::Type == ControlType::eEdit )
+			{
+				control = std::make_shared< ControlT >( controlName
+					, theme->getEditStyle()
+					, context.getTop()
+					, context.ctrlId++ );
+			}
+			else if constexpr ( ControlT::Type == ControlType::eListBox )
+			{
+				control = std::make_shared< ControlT >( controlName
+					, theme->getListBoxStyle()
+					, context.getTop()
+					, context.ctrlId++ );
+			}
+			else if constexpr ( ControlT::Type == ControlType::eSlider )
+			{
+				control = std::make_shared< ControlT >( controlName
+					, theme->getSliderStyle()
+					, context.getTop()
+					, context.ctrlId++ );
+			}
+			else if constexpr ( ControlT::Type == ControlType::eStatic )
+			{
+				control = std::make_shared< ControlT >( controlName
+					, theme->getStaticStyle()
+					, context.getTop()
+					, context.ctrlId++ );
+			}
+			else
+			{
+				CU_Exception( "Unsupported control type" );
+			}
+
+			control->addFlag( context.flags );
+			context.parents.push( control );
+			context.flags = 0;
+			return control;
 		}
 
-		template< typename T > void FinishControl( ControlsManager & p_manager, ParserContext & context, std::shared_ptr< T > p_control )
+		template< typename T > void finishControl( ControlsManager & manager
+			, ParserContext & context
+			, std::shared_ptr< T > control )
 		{
-			if ( p_control )
+			if ( control )
 			{
-				p_manager.create( p_control );
-				context.m_parents.pop();
+				manager.create( control );
+				context.parents.pop();
 			}
 		}
 	}
@@ -59,9 +118,9 @@ namespace CastorGui
 	{
 		ControlRPtr result{};
 
-		if ( !m_parents.empty() )
+		if ( !parents.empty() )
 		{
-			result = m_parents.top().get();
+			result = parents.top().get();
 		}
 
 		return result;
@@ -69,44 +128,38 @@ namespace CastorGui
 
 	void ParserContext::Pop()
 	{
-		m_button.reset();
-		m_edit.reset();
-		m_listbox.reset();
-		m_slider.reset();
-		m_static.reset();
-		m_combo.reset();
+		button.reset();
+		edit.reset();
+		listbox.reset();
+		slider.reset();
+		staticTxt.reset();
+		combo.reset();
 
-		if ( !m_parents.empty() )
+		if ( !parents.empty() )
 		{
 			ControlSPtr top;
-			top = m_parents.top();
+			top = parents.top();
 
 			switch ( top->getType() )
 			{
 			case ControlType::eStatic:
-				m_static = std::static_pointer_cast< StaticCtrl >( top );
+				staticTxt = std::static_pointer_cast< StaticCtrl >( top );
 				break;
-
 			case ControlType::eEdit:
-				m_edit = std::static_pointer_cast< EditCtrl >( top );
+				edit = std::static_pointer_cast< EditCtrl >( top );
 				break;
-
 			case ControlType::eSlider:
-				m_slider = std::static_pointer_cast< SliderCtrl >( top );
+				slider = std::static_pointer_cast< SliderCtrl >( top );
 				break;
-
 			case ControlType::eComboBox:
-				m_combo = std::static_pointer_cast< ComboBoxCtrl >( top );
+				combo = std::static_pointer_cast< ComboBoxCtrl >( top );
 				break;
-
 			case ControlType::eListBox:
-				m_listbox = std::static_pointer_cast< ListBoxCtrl >( top );
+				listbox = std::static_pointer_cast< ListBoxCtrl >( top );
 				break;
-
 			case ControlType::eButton:
-				m_button = std::static_pointer_cast< ButtonCtrl >( top );
+				button = std::static_pointer_cast< ButtonCtrl >( top );
 				break;
-
 			default:
 				CU_Failure( "Unsupported Control Type" );
 				break;
@@ -121,25 +174,15 @@ namespace CastorGui
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eGUI )
 
-	CU_ImplementAttributeParser( parserDefaultFont )
+	CU_ImplementAttributeParser( parserTheme )
 	{
 		ControlsManager & ctrlsManager = getControlsManager( context );
 		ParserContext & guiContext = getParserContext( context );
-		auto & cache = guiContext.m_engine->getFontCache();
-		String name;
+		castor::String name;
 		params[0]->get( name );
-		auto font = cache.find( name );
-
-		if ( font.lock() )
-		{
-			ctrlsManager.setDefaultFont( font );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Unknown font: " ) + name );
-		}
+		guiContext.theme = ctrlsManager.createTheme( name );
 	}
-	CU_EndAttribute()
+	CU_EndAttributePush( GUISection::eTheme )
 
 	CU_ImplementAttributeParser( parserGuiEnd )
 	{
@@ -150,251 +193,35 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserButton )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		String name;
-		params[0]->get( name );
-		CreateControl( guiContext, name, guiContext.m_button );
+		params[0]->get( guiContext.controlName );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eButton )
 
-	CU_ImplementAttributeParser( parserButtonFont )
+	CU_ImplementAttributeParser( parserButtonTheme )
 	{
+		castor::String themeName;
+		params[0]->get( themeName );
 		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			button->setFont( name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonCaption )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String text;
-			params[0]->get( text );
-			button->setCaption( text );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonTextMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				button->setTextMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonHighlightedBackgroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				button->setHighlightedBackgroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonHighlightedForegroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				button->setHighlightedForegroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonHighlightedTextMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				button->setHighlightedTextMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonPushedBackgroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				button->setPushedBackgroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonPushedForegroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				button->setPushedForegroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserButtonPushedTextMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
-
-		if ( button )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				button->setPushedTextMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No button initialised." ) );
-		}
+		createControl( guiContext
+			, guiContext.controlName
+			, themeName
+			, guiContext.button );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserButtonHAlign )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
 
-		if ( button )
+		if ( auto control = guiContext.button )
 		{
 			uint32_t value;
 			params[0]->get( value );
-			button->setHAlign( HAlign( value ) );
+			control->setHAlign( HAlign( value ) );
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -402,17 +229,33 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserButtonVAlign )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ButtonCtrlSPtr button = guiContext.m_button;
 
-		if ( button )
+		if ( auto control = guiContext.button )
 		{
 			uint32_t value;
 			params[0]->get( value );
-			button->setVAlign( VAlign( value ) );
+			control->setVAlign( VAlign( value ) );
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserButtonCaption )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto control = guiContext.button )
+		{
+			String text;
+			params[0]->get( text );
+			control->setCaption( text );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -420,7 +263,7 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserButtonEnd )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		FinishControl( getControlsManager( context ), guiContext, guiContext.m_button );
+		finishControl( getControlsManager( context ), guiContext, guiContext.button );
 		guiContext.Pop();
 	}
 	CU_EndAttributePop()
@@ -428,34 +271,26 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserComboBox )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		String name;
-		params[0]->get( name );
-		CreateControl( guiContext, name, guiContext.m_combo );
+		params[0]->get( guiContext.controlName );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eComboBox )
 
-	CU_ImplementAttributeParser( parserComboBoxFont )
+	CU_ImplementAttributeParser( parserComboBoxTheme )
 	{
+		castor::String themeName;
+		params[0]->get( themeName );
 		ParserContext & guiContext = getParserContext( context );
-		ComboBoxCtrlSPtr combo = guiContext.m_combo;
-
-		if ( combo )
-		{
-			String name;
-			params[0]->get( name );
-			combo->setFont( name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No combo box control initialised." ) );
-		}
+		createControl( guiContext
+			, guiContext.controlName
+			, themeName
+			, guiContext.combo );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserComboBoxItem )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ComboBoxCtrlSPtr combo = guiContext.m_combo;
+		ComboBoxCtrlSPtr combo = guiContext.combo;
 
 		if ( combo )
 		{
@@ -465,115 +300,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No combo box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserComboBoxTextMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ComboBoxCtrlSPtr combo = guiContext.m_combo;
-
-		if ( combo )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				combo->setTextMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No combo box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserComboBoxSelectedItemBackgroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ComboBoxCtrlSPtr combo = guiContext.m_combo;
-
-		if ( combo )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				combo->setSelectedItemBackgroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No combo box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserComboBoxSelectedItemForegroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ComboBoxCtrlSPtr combo = guiContext.m_combo;
-
-		if ( combo )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				combo->setSelectedItemForegroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No combo box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserComboBoxHighlightedItemBackgroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ComboBoxCtrlSPtr combo = guiContext.m_combo;
-
-		if ( combo )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				combo->setHighlightedItemBackgroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No combo box control initialised." ) );
+			CU_ParsingError( cuT( "No combobox control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -581,7 +308,7 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserComboBoxEnd )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		FinishControl( getControlsManager( context ), guiContext, guiContext.m_combo );
+		finishControl( getControlsManager( context ), guiContext, guiContext.combo );
 		guiContext.Pop();
 	}
 	CU_EndAttributePop()
@@ -589,61 +316,26 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserEdit )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		String name;
-		params[0]->get( name );
-		CreateControl( guiContext, name, guiContext.m_edit );
+		params[0]->get( guiContext.controlName );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eEdit )
 
-	CU_ImplementAttributeParser( parserEditFont )
+	CU_ImplementAttributeParser( parserEditTheme )
 	{
+		castor::String themeName;
+		params[0]->get( themeName );
 		ParserContext & guiContext = getParserContext( context );
-		EditCtrlSPtr edit = guiContext.m_edit;
-
-		if ( edit )
-		{
-			String name;
-			params[0]->get( name );
-			edit->setFont( name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No edit control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserEditTextMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		EditCtrlSPtr edit = guiContext.m_edit;
-
-		if ( edit )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				edit->setTextMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No edit control initialised." ) );
-		}
+		createControl( guiContext
+			, guiContext.controlName
+			, themeName
+			, guiContext.edit );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserEditCaption )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		EditCtrlSPtr edit = guiContext.m_edit;
+		EditCtrlSPtr edit = guiContext.edit;
 
 		if ( edit )
 		{
@@ -661,13 +353,13 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserEditMultiLine )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		EditCtrlSPtr edit = guiContext.m_edit;
+		EditCtrlSPtr edit = guiContext.edit;
 
 		if ( edit )
 		{
 			bool value;
 			params[0]->get( value );
-			guiContext.m_edit->addFlag( uint32_t( EditFlag::eMultiline )/*
+			guiContext.edit->addFlag( uint32_t( EditFlag::eMultiline )/*
 				| uint32_t( EditFlag::eProcessEnter )
 				| uint32_t( EditFlag::eProcessTab )*/ );
 		}
@@ -681,7 +373,7 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserEditEnd )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		FinishControl( getControlsManager( context ), guiContext, guiContext.m_edit );
+		finishControl( getControlsManager( context ), guiContext, guiContext.edit );
 		guiContext.Pop();
 	}
 	CU_EndAttributePop()
@@ -689,34 +381,26 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserListBox )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		String name;
-		params[0]->get( name );
-		CreateControl( guiContext, name, guiContext.m_listbox );
+		params[0]->get( guiContext.controlName );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eListBox )
 
-	CU_ImplementAttributeParser( parserListBoxFont )
+	CU_ImplementAttributeParser( parserListBoxTheme )
 	{
+		castor::String themeName;
+		params[0]->get( themeName );
 		ParserContext & guiContext = getParserContext( context );
-		ListBoxCtrlSPtr listbox = guiContext.m_listbox;
-
-		if ( listbox )
-		{
-			String name;
-			params[0]->get( name );
-			listbox->setFont( name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No list box control initialised." ) );
-		}
+		createControl( guiContext
+			, guiContext.controlName
+			, themeName
+			, guiContext.listbox );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserListBoxItem )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ListBoxCtrlSPtr listbox = guiContext.m_listbox;
+		ListBoxCtrlSPtr listbox = guiContext.listbox;
 
 		if ( listbox )
 		{
@@ -726,115 +410,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No list box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserListBoxTextMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ListBoxCtrlSPtr listbox = guiContext.m_listbox;
-
-		if ( listbox )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				listbox->setTextMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No list box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserListBoxSelectedItemBackgroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ListBoxCtrlSPtr listbox = guiContext.m_listbox;
-
-		if ( listbox )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				listbox->setSelectedItemBackgroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No list box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserListBoxHighlightedItemBackgroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ListBoxCtrlSPtr listbox = guiContext.m_listbox;
-
-		if ( listbox )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				listbox->setHighlightedItemBackgroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No list box control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserListBoxSelectedItemForegroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ListBoxCtrlSPtr listbox = guiContext.m_listbox;
-
-		if ( listbox )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				listbox->setSelectedItemForegroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No list box control initialised." ) );
+			CU_ParsingError( cuT( "No listbox control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -842,7 +418,7 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserListBoxEnd )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		FinishControl( getControlsManager( context ), guiContext, guiContext.m_listbox );
+		finishControl( getControlsManager( context ), guiContext, guiContext.listbox );
 		guiContext.Pop();
 	}
 	CU_EndAttributePop()
@@ -850,16 +426,26 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserSlider )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		String name;
-		params[0]->get( name );
-		CreateControl( guiContext, name, guiContext.m_slider );
+		params[0]->get( guiContext.controlName );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eSlider )
+
+	CU_ImplementAttributeParser( parserSliderTheme )
+	{
+		castor::String themeName;
+		params[0]->get( themeName );
+		ParserContext & guiContext = getParserContext( context );
+		createControl( guiContext
+			, guiContext.controlName
+			, themeName
+			, guiContext.slider );
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserSliderEnd )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		FinishControl( getControlsManager( context ), guiContext, guiContext.m_slider );
+		finishControl( getControlsManager( context ), guiContext, guiContext.slider );
 		guiContext.Pop();
 	}
 	CU_EndAttributePop()
@@ -867,58 +453,31 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserStatic )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		String name;
-		params[0]->get( name );
-		CreateControl( guiContext, name, guiContext.m_static );
+		params[0]->get( guiContext.controlName );
 	}
 	CU_EndAttributePush( CastorGui::GUISection::eStatic )
 
-	CU_ImplementAttributeParser( parserStaticFont )
+	CU_ImplementAttributeParser( parserStaticTheme )
 	{
+		castor::String themeName;
+		params[0]->get( themeName );
 		ParserContext & guiContext = getParserContext( context );
-		StaticCtrlSPtr ctrl = guiContext.m_static;
-
-		if ( ctrl )
-		{
-			String name;
-			params[0]->get( name );
-			ctrl->setFont( name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No static control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserStaticCaption )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		StaticCtrlSPtr ctrl = guiContext.m_static;
-
-		if ( ctrl )
-		{
-			String text;
-			params[0]->get( text );
-			ctrl->setCaption( text );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No static control initialised." ) );
-		}
+		createControl( guiContext
+			, guiContext.controlName
+			, themeName
+			, guiContext.staticTxt );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserStaticHAlign )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		StaticCtrlSPtr ctrl = guiContext.m_static;
 
-		if ( ctrl )
+		if ( auto control = guiContext.staticTxt )
 		{
 			uint32_t value;
 			params[0]->get( value );
-			ctrl->setHAlign( HAlign( value ) );
+			control->setHAlign( HAlign( value ) );
 		}
 		else
 		{
@@ -930,13 +489,12 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserStaticVAlign )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		StaticCtrlSPtr ctrl = guiContext.m_static;
 
-		if ( ctrl )
+		if ( auto control = guiContext.staticTxt )
 		{
 			uint32_t value;
 			params[0]->get( value );
-			ctrl->setVAlign( VAlign( value ) );
+			control->setVAlign( VAlign( value ) );
 		}
 		else
 		{
@@ -945,33 +503,19 @@ namespace CastorGui
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserStaticTextMaterial )
+	CU_ImplementAttributeParser( parserStaticCaption )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		StaticCtrlSPtr ctrl = guiContext.m_static;
 
-		if ( !ctrl )
+		if ( auto control = guiContext.staticTxt )
 		{
-			CU_ParsingError( cuT( "No static control initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [material name] parameter." ) );
+			String text;
+			params[0]->get( text );
+			control->setCaption( text );
 		}
 		else
 		{
-			castor::String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				ctrl->setTextMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
-			}
+			CU_ParsingError( cuT( "No static control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -979,7 +523,7 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserStaticEnd )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		FinishControl( getControlsManager( context ), guiContext, guiContext.m_static );
+		finishControl( getControlsManager( context ), guiContext, guiContext.staticTxt );
 		guiContext.Pop();
 	}
 	CU_EndAttributePop()
@@ -987,9 +531,8 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserControlPixelPosition )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
 
-		if ( control )
+		if ( auto control = guiContext.getTop() )
 		{
 			Position position;
 			params[0]->get( position );
@@ -1005,9 +548,8 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserControlPixelSize )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
 
-		if ( control )
+		if ( auto control = guiContext.getTop() )
 		{
 			Size size;
 			params[0]->get( size );
@@ -1023,9 +565,8 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserControlPixelBorderSize )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
 
-		if ( control )
+		if ( auto control = guiContext.getTop() )
 		{
 			castor::Rectangle size;
 			params[0]->get( size );
@@ -1038,93 +579,11 @@ namespace CastorGui
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserControlBackgroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
-
-		if ( control )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				control->setBackgroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserControlForegroundMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
-
-		if ( control )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				control->setForegroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserControlBorderMaterial )
-	{
-		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
-
-		if ( control )
-		{
-			String name;
-			params[0]->get( name );
-			auto material = guiContext.m_engine->getMaterialCache().find( name ).lock().get();
-
-			if ( material )
-			{
-				control->setForegroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No control initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
 	CU_ImplementAttributeParser( parserControlBorderInnerUv )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
 
-		if ( control )
+		if ( auto control = guiContext.getTop() )
 		{
 			Point4d value;
 			params[0]->get( value );
@@ -1140,9 +599,8 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserControlBorderOuterUv )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
 
-		if ( control )
+		if ( auto control = guiContext.getTop() )
 		{
 			Point4d value;
 			params[0]->get( value );
@@ -1158,9 +616,8 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserControlCenterUv )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
 
-		if ( control )
+		if ( auto control = guiContext.getTop() )
 		{
 			Point4d value;
 			params[0]->get( value );
@@ -1176,9 +633,8 @@ namespace CastorGui
 	CU_ImplementAttributeParser( parserControlVisible )
 	{
 		ParserContext & guiContext = getParserContext( context );
-		ControlRPtr control = guiContext.getTop();
 
-		if ( control )
+		if ( auto control = guiContext.getTop() )
 		{
 			bool value;
 			params[0]->get( value );
@@ -1187,6 +643,541 @@ namespace CastorGui
 		else
 		{
 			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserDefaultFont )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		auto & cache = guiContext.engine->getFontCache();
+		String name;
+		params[0]->get( name );
+		auto font = cache.find( name );
+
+		if ( font.lock() )
+		{
+			guiContext.theme->setDefaultFont( font );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "Unknown font: " ) + name );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserButtonStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.buttonStyle = guiContext.theme->createButtonStyle();
+		guiContext.style = guiContext.buttonStyle;
+	}
+	CU_EndAttributePush( GUISection::eButtonStyle )
+
+	CU_ImplementAttributeParser( parserStyleButtonEnd )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.buttonStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserComboBoxStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.comboStyle = guiContext.theme->createComboBoxStyle();
+		guiContext.style = guiContext.comboStyle;
+	}
+	CU_EndAttributePush( GUISection::eComboStyle )
+
+	CU_ImplementAttributeParser( parserComboButtonStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.buttonStyle = &guiContext.comboStyle->getButtonStyle();
+		guiContext.style = guiContext.buttonStyle;
+	}
+	CU_EndAttributePush( GUISection::eButtonStyle )
+
+	CU_ImplementAttributeParser( parserComboListBoxStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.listboxStyle = &guiContext.comboStyle->getListBoxStyle();
+		guiContext.style = guiContext.listboxStyle;
+	}
+	CU_EndAttributePush( GUISection::eListStyle )
+
+	CU_ImplementAttributeParser( parserStyleComboBoxEnd )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.comboStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserEditStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.editStyle = guiContext.theme->createEditStyle();
+		guiContext.style = guiContext.editStyle;
+	}
+	CU_EndAttributePush( GUISection::eEditStyle )
+
+	CU_ImplementAttributeParser( parserStyleEditEnd )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.editStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserListBoxStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.listboxStyle = guiContext.theme->createListBoxStyle();
+		guiContext.style = guiContext.listboxStyle;
+	}
+	CU_EndAttributePush( GUISection::eListStyle )
+
+	CU_ImplementAttributeParser( parserItemStaticStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.staticStyle = &guiContext.listboxStyle->getItemStyle();
+		guiContext.style = guiContext.staticStyle;
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserSelItemStaticStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.staticStyle = &guiContext.listboxStyle->getSelectedItemStyle();
+		guiContext.style = guiContext.staticStyle;
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserHighItemStaticStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.staticStyle = &guiContext.listboxStyle->getHighlightedItemStyle();
+		guiContext.style = guiContext.staticStyle;
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserStyleListBoxEnd )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.listboxStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserSliderStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.sliderStyle = guiContext.theme->createSliderStyle();
+		guiContext.style = guiContext.sliderStyle;
+	}
+	CU_EndAttributePush( GUISection::eSliderStyle )
+
+	CU_ImplementAttributeParser( parserStyleSliderEnd )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.sliderStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserStaticStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.staticStyle = guiContext.theme->createStaticStyle();
+		guiContext.style = guiContext.staticStyle;
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserLineStaticStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.staticStyle = &guiContext.sliderStyle->getLineStyle();
+		guiContext.style = guiContext.staticStyle;
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserTickStaticStyle )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.staticStyle = &guiContext.sliderStyle->getTickStyle();
+		guiContext.style = guiContext.staticStyle;
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserStyleStaticEnd )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.staticStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserThemeEnd )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		guiContext.theme = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserStyleButtonFont )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			style->setFont( name );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonHighlightedBackgroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setHighlightedBackgroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonHighlightedForegroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setHighlightedForegroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonHighlightedTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setHighlightedTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonPushedBackgroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setPushedBackgroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonPushedForegroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setPushedForegroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleButtonPushedTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.buttonStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setPushedTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No button style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleEditFont )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.editStyle )
+		{
+			String name;
+			params[0]->get( name );
+			style->setFont( name );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No edit style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleEditTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.editStyle )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No edit style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleStaticFont )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.staticStyle )
+		{
+			String name;
+			params[0]->get( name );
+			style->setFont( name );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No static style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleStaticTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.staticStyle )
+		{
+			castor::String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No static style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleBackgroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.style )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setBackgroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleForegroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.style )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setForegroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleBorderMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+
+		if ( auto style = guiContext.style )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->getMaterialCache().find( name ).lock().get();
+
+			if ( material )
+			{
+				style->setForegroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No style initialised." ) );
 		}
 	}
 	CU_EndAttribute()
