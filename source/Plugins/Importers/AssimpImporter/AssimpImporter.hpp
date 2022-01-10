@@ -57,6 +57,8 @@ namespace C3dAssimp
 		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 		bool doImportScene( castor3d::Scene & scene )override;
 
+		void doProcessLight( aiLight const & light
+			, castor3d::Scene & scene );
 		void doProcessSceneNodes( aiScene const & aiScene
 			, aiNode const & aiNode
 			, castor3d::Scene & scene
