@@ -61,10 +61,14 @@ namespace castor3d
 			{
 				ePass = CU_MakeSectionName( 'S', 'P', 'G', 'L' ),
 				eTextureUnit = CU_MakeSectionName( 'S', 'G', 'T', 'U' ),
+				eTextureRemap = CU_MakeSectionName( 'S', 'G', 'T', 'R' ),
+				eTextureRemapChannel = CU_MakeSectionName( 'S', 'G', 'T', 'C' ),
 			};
 
 			static castor::String const PassSectionName{ cuT( "pbrsg_pass" ) };
 			static castor::String const TextureSectionName{ cuT( "pbrsg_texture_unit" ) };
+			static castor::String const RemapSectionName{ cuT( "pbrsg_texture_remap" ) };
+			static castor::String const RemapChannelSectionName{ cuT( "pbrsg_texture_remap_channel" ) };
 
 			CU_ImplementAttributeParser( parserPassDiffuse )
 			{
@@ -222,6 +226,75 @@ namespace castor3d
 				}
 			}
 			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserSceneImportTexRemap )
+			{
+				auto & parsingContext = getParserContext( context );
+				parsingContext.sceneImportConfig.textureRemaps.clear();
+				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.end();
+			}
+			CU_EndAttributePush( pbrsg::Section::eTextureRemap )
+
+			CU_ImplementAttributeParser( parserTexRemapSpecular )
+			{
+				auto & parsingContext = getParserContext( context );
+				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eSpecular, TextureConfiguration{} ).first;
+				parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			}
+			CU_EndAttributePush( pbrsg::Section::eTextureRemapChannel )
+
+			CU_ImplementAttributeParser( parserTexRemapNormal )
+			{
+				auto & parsingContext = getParserContext( context );
+				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eNormal, TextureConfiguration{} ).first;
+				parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			}
+			CU_EndAttributePush( pbrsg::Section::eTextureRemapChannel )
+
+			CU_ImplementAttributeParser( parserTexRemapAlbedoMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.colourMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserTexRemapSpecularMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.specularMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserTexRemapGlossinessMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.glossinessMask[0] );
+				}
+			}
+			CU_EndAttribute()
 		}
 	}
 
@@ -258,11 +331,17 @@ namespace castor3d
 	castor::AttributeParsers SpecularGlossinessPbrPass::createParsers()
 	{
 		return createParsers( uint32_t( pbrsg::Section::ePass )
-			, uint32_t( pbrsg::Section::eTextureUnit ) );
+			, uint32_t( pbrsg::Section::eTextureUnit )
+			, uint32_t( pbrsg::Section::eTextureRemap )
+			, cuT( "pbrsg_texture_remap_config" )
+			, uint32_t( pbrsg::Section::eTextureRemapChannel ) );
 	}
 
 	castor::AttributeParsers SpecularGlossinessPbrPass::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
+		, uint32_t texSectionID
+		, uint32_t texRemapSectionID
+		, castor::String const & texRemapSectionName
+		, uint32_t remapChannelSectionID )
 	{
 		static UInt32StrMap const textureChannels = []()
 		{
@@ -290,7 +369,16 @@ namespace castor3d
 		Pass::addParser( result, texSectionID, cuT( "specular_mask" ), pbrsg::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "glossiness_mask" ), pbrsg::parserUnitGlossinessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "channel" ), pbrsg::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
-		Pass::addCommonParsers( mtlSectionID, texSectionID, result );
+		Pass::addCommonParsers( mtlSectionID, texSectionID, remapChannelSectionID, result );
+
+		Pass::addParser( result, uint32_t( CSCNSection::eSceneImport ), texRemapSectionName, pbrsg::parserSceneImportTexRemap );
+
+		Pass::addParser( result, texRemapSectionID, cuT( "specular" ), pbrsg::parserTexRemapSpecular );
+		Pass::addParser( result, texRemapSectionID, cuT( "normal" ), pbrsg::parserTexRemapNormal );
+
+		Pass::addParser( result, remapChannelSectionID, cuT( "albedo_mask" ), pbrsg::parserTexRemapAlbedoMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "specular_mask" ), pbrsg::parserTexRemapSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "glossiness_mask" ), pbrsg::parserTexRemapGlossinessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		return result;
 	}
@@ -301,6 +389,8 @@ namespace castor3d
 		{
 			{ uint32_t( pbrsg::Section::ePass ), pbrsg::PassSectionName },
 			{ uint32_t( pbrsg::Section::eTextureUnit ), pbrsg::TextureSectionName },
+			{ uint32_t( pbrsg::Section::eTextureRemap ), pbrsg::RemapSectionName },
+			{ uint32_t( pbrsg::Section::eTextureRemapChannel ), pbrsg::RemapChannelSectionName },
 		};
 	}
 

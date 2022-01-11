@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
 #include <CastorUtils/Data/Path.hpp>
@@ -68,6 +69,7 @@ namespace castor3d
 		C3D_API bool import( Scene & scene
 			, castor::Path const & pathFile
 			, Parameters const & parameters
+			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 			, bool initialise );
 		/**
 		 *\~english
@@ -163,6 +165,8 @@ namespace castor3d
 		GeometryPtrStrMap m_geometries;
 		//!\~english Import configuration parameters	\~french Paramètres de configuration de l'import
 		Parameters m_parameters;
+		//!\~english Import texture remapping parameters	\~french Paramètres de reaffectation des textures importées
+		std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
 	};
 }
 

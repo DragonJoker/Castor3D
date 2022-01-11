@@ -49,20 +49,6 @@ namespace C3dAssimp
 
 	namespace
 	{
-		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
-		{
-			stream << std::setprecision( 4 ) << obj->x
-				<< ", " << std::setprecision( 4 ) << obj->y
-				<< ", " << std::setprecision( 4 ) << obj->z;
-			return stream;
-		}
-
-		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
-		{
-			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
-			return stream;
-		}
-
 		aiNodeAnim const * doFindNodeAnim( const aiAnimation & animation
 			, const castor::String & nodeName )
 		{
@@ -216,9 +202,10 @@ namespace C3dAssimp
 			static void submit( aiMaterial const & material
 				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
+				, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
-				PassFiller vis{ material, sampler, importer, pass };
+				PassFiller vis{ material, sampler, importer, textureRemaps, pass };
 				pass.accept( vis );
 				castor3d::TextureConfiguration config;
 				pass.fillConfig( config, vis );
@@ -249,11 +236,13 @@ namespace C3dAssimp
 			PassFiller( aiMaterial const & material
 				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
+				, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & result )
 				: castor3d::PassVisitor{ {} }
 				, m_material{ material }
 				, m_sampler{ sampler }
 				, m_importer{ importer }
+				, m_textureRemaps{ textureRemaps }
 				, m_result{ result }
 			{
 			}
@@ -280,28 +269,28 @@ namespace C3dAssimp
 					m_texInfos.opaTex.transform = m_texInfos.colTex.transform;
 				}
 
-				loadTexture( m_texInfos.colTex, TextureConfiguration::DiffuseTexture );
-				loadTexture( m_texInfos.emiTex, TextureConfiguration::EmissiveTexture );
-				loadTexture( m_texInfos.occTex, TextureConfiguration::OcclusionTexture );
+				loadTexture( m_texInfos.colTex, getRemap( TextureFlag::eDiffuse, TextureConfiguration::DiffuseTexture ) );
+				loadTexture( m_texInfos.emiTex, getRemap( TextureFlag::eEmissive, TextureConfiguration::EmissiveTexture ) );
+				loadTexture( m_texInfos.occTex, getRemap( TextureFlag::eOcclusion, TextureConfiguration::OcclusionTexture ) );
 
 				// force non 0.0 opacity when an opacity map is set
 				if ( !m_texInfos.opaTex.name.empty()
 					&& m_result.getOpacity() == 0.0f )
 				{
-					loadTexture( m_texInfos.opaTex, TextureConfiguration::OpacityTexture );
+					loadTexture( m_texInfos.opaTex, getRemap( TextureFlag::eOpacity, TextureConfiguration::OpacityTexture ) );
 					m_result.setOpacity( 1.0f );
 				}
 
 				if ( !m_texInfos.nmlTex.name.empty() )
 				{
-					loadTexture( m_texInfos.nmlTex, TextureConfiguration::NormalTexture );
-					loadTexture( m_texInfos.hgtTex, TextureConfiguration::HeightTexture );
+					loadTexture( m_texInfos.nmlTex, getRemap( TextureFlag::eNormal, TextureConfiguration::NormalTexture ) );
+					loadTexture( m_texInfos.hgtTex, getRemap( TextureFlag::eHeight, TextureConfiguration::HeightTexture ) );
 				}
 				else
 				{
 					auto texConfig = TextureConfiguration::NormalTexture;
 					convertToNormalMap( m_texInfos.hgtTex, texConfig );
-					loadTexture( m_texInfos.hgtTex, texConfig );
+					loadTexture( m_texInfos.hgtTex, getRemap( TextureFlag::eNormal, texConfig ) );
 				}
 
 				if ( m_mtlInfos.ambient.IsBlack()
@@ -503,12 +492,46 @@ namespace C3dAssimp
 				, bool * control )override
 			{
 				castor3d::TextureConfiguration lconfig;
+				textureFlag = getRemapFlag( textureFlag, lconfig );
 				auto info = getTextureInfo( textureFlag
 					, lconfig );
-				loadTexture( info, lconfig );
+				loadTexture( info, getRemap( textureFlag, lconfig ) );
 			}
 
 		private:
+			castor3d::TextureFlag getRemapFlag( castor3d::TextureFlag flag
+				, castor3d::TextureConfiguration pconfig )
+			{
+				auto it = std::find_if( m_textureRemaps.begin()
+					, m_textureRemaps.end()
+					, [flag]( auto & lookupIt )
+					{
+						return castor::checkFlag( getFlags( lookupIt.second ), flag );
+					} );
+
+				if ( it == m_textureRemaps.end() )
+				{
+					return flag;
+				}
+
+				return it->first;
+			}
+
+			castor3d::TextureConfiguration getRemap( castor3d::TextureFlag flag
+				, castor3d::TextureConfiguration pconfig )
+			{
+				auto it = m_textureRemaps.find( flag );
+
+				if ( it == m_textureRemaps.end() )
+				{
+					return pconfig;
+				}
+
+				auto result = it->second;
+				m_textureRemaps.erase( it );
+				return result;
+			}
+
 			void loadTexture( TextureInfo const & info
 				, castor3d::TextureConfiguration pconfig )
 			{
@@ -573,7 +596,7 @@ namespace C3dAssimp
 					m_texInfos.colTex = getTextureInfo( aiTextureType_DIFFUSE );
 					break;
 				case castor3d::TextureFlag::eSpecular:
-					m_texInfos.spcTex = getTextureInfo( aiTextureType_SPECULAR );
+					result = getTextureInfo( aiTextureType_SPECULAR );
 					pconfig = TextureConfiguration::SpecularTexture;
 					break;
 				case castor3d::TextureFlag::eMetalness:
@@ -628,6 +651,7 @@ namespace C3dAssimp
 			aiMaterial const & m_material;
 			castor3d::SamplerRes m_sampler;
 			castor3d::MeshImporter const & m_importer;
+			std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
 			castor3d::Pass & m_result;
 			CommonTextureInfos m_texInfos{};
 			CommonMaterialInfos m_mtlInfos{};
@@ -692,6 +716,7 @@ namespace C3dAssimp
 
 		void doProcessMaterialPass( Scene & scene
 			, SamplerRes sampler
+			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 			, Pass & pass
 			, aiMaterial const & aiMaterial
 			, AssimpImporter & importer )
@@ -707,7 +732,7 @@ namespace C3dAssimp
 				log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}
 
-			PassFiller::submit( aiMaterial, sampler, importer, pass );
+			PassFiller::submit( aiMaterial, sampler, importer, textureRemaps, pass );
 
 			if ( !pass.getTextureUnits( TextureFlag::eOpacity ).empty()
 				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
@@ -963,6 +988,7 @@ namespace C3dAssimp
 		{
 			node->attachTo( *scene.getObjectRootNode() );
 			node = scene.getSceneNodeCache().add( name, node ).lock();
+			m_nodes.push_back( node );
 			light->setColour( castor::RgbColour::fromComponents( aiLight.mColorDiffuse.r, aiLight.mColorDiffuse.g, aiLight.mColorDiffuse.b ) );
 			node->attachObject( *light );
 			scene.getLightCache().add( name, light );
@@ -1010,12 +1036,6 @@ namespace C3dAssimp
 				, aiMeshes
 				, *mesh ) )
 			{
-				mesh->computeContainers();
-				log::info << "Loaded mesh [" << mesh->getName() << "]"
-					<< " AABB (" << mesh->getBoundingBox() << ")"
-					<< ", " << mesh->getVertexCount() << " vertices"
-					<< ", " << mesh->getSubmeshCount() << " submeshes" << std::endl;
-
 				for ( auto submesh : *mesh )
 				{
 					scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
@@ -1028,6 +1048,9 @@ namespace C3dAssimp
 					, scene
 					, *node
 					, lmesh );
+				geom->setCulled( false );
+				m_geometries.emplace( name, geom );
+				m_nodes.push_back( node );
 				node->attachObject( *geom );
 				scene.getGeometryCache().add( std::move( geom ) );
 			}
@@ -1317,6 +1340,7 @@ namespace C3dAssimp
 			auto pass = result.lock()->createPass();
 			doProcessMaterialPass( scene
 				, getEngine()->getDefaultSampler().lock()
+				, m_textureRemaps
 				, *pass
 				, aiMaterial
 				, *this );
