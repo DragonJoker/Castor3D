@@ -11,17 +11,13 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		static uint32_t constexpr minBlockSize = 96u;
-	}
-
 	GpuBufferPool::GpuBufferPool( RenderSystem & renderSystem
 		, RenderDevice const & device
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_device{ device }
 		, m_debugName{ std::move( debugName ) }
+		, m_minBlockSize{ uint32_t( renderSystem.getProperties().limits.minMemoryMapAlignment ) }
 	{
 	}
 
@@ -31,7 +27,7 @@ namespace castor3d
 	}
 
 	GpuBuffer & GpuBufferPool::doGetBuffer( VkDeviceSize size
-		, VkBufferUsageFlagBits target
+		, VkBufferUsageFlags target
 		, VkMemoryPropertyFlags memory
 		, MemChunk & chunk )
 	{
@@ -47,13 +43,13 @@ namespace castor3d
 
 		if ( itB == it->second.end() )
 		{
-			VkDeviceSize level = 20u;
-			VkDeviceSize maxSize = ( 1u << level ) * minBlockSize;
+			VkDeviceSize level = 21u;
+			VkDeviceSize maxSize = ( 1u << level ) * m_minBlockSize;
 
 			while ( size > maxSize && level <= 24 )
 			{
 				++level;
-				maxSize = ( 1u << level ) * minBlockSize;
+				maxSize = ( 1u << level ) * m_minBlockSize;
 			}
 
 			CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
@@ -65,7 +61,7 @@ namespace castor3d
 				, m_debugName
 				, ashes::QueueShare{}
 				, uint32_t( level )
-				, minBlockSize );
+				, m_minBlockSize );
 			buffer->initialise( m_device );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = std::next( it->second.begin()
@@ -77,7 +73,7 @@ namespace castor3d
 	}
 
 	void GpuBufferPool::doPutBuffer( GpuBuffer const & buffer
-		, VkBufferUsageFlagBits target
+		, VkBufferUsageFlags target
 		, VkMemoryPropertyFlags memory
 		, MemChunk const & chunk )
 	{
@@ -107,7 +103,7 @@ namespace castor3d
 		return it;
 	}
 
-	uint32_t GpuBufferPool::doMakeKey( VkBufferUsageFlagBits target
+	uint32_t GpuBufferPool::doMakeKey( VkBufferUsageFlags target
 		, VkMemoryPropertyFlags flags )
 	{
 		return ( uint32_t( target ) << 0u )

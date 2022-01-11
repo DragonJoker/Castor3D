@@ -292,7 +292,7 @@ namespace castor3d
 		{
 			for ( auto submesh : *mesh )
 			{
-				if ( auto indices = submesh->getIndexBuffer().lock( 0u, submesh->getIndexBuffer().getCount(), 0u ) )
+				if ( auto indices = submesh->getIndexBuffer().lock() )
 				{
 					sphere.load( center, submesh->getBoundingSphere().getRadius() );
 

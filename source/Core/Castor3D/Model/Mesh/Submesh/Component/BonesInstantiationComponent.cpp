@@ -73,7 +73,7 @@ namespace castor3d
 		return result;
 	}
 
-	void BonesInstantiationComponent::doCleanup()
+	void BonesInstantiationComponent::doCleanup( RenderDevice const & device )
 	{
 		if ( m_instancedBonesBuffer )
 		{

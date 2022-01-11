@@ -49,9 +49,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline ashes::VertexBuffer< InterleavedVertex > const & getAnimationBuffer()const
+		GpuBufferOffsetT< InterleavedVertex > const & getAnimationBuffer()const
 		{
-			return *m_animBuffer;
+			return m_animBuffer;
 		}
 		/**
 		 *\~english
@@ -59,9 +59,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline ashes::VertexBuffer< InterleavedVertex > & getAnimationBuffer()
+		GpuBufferOffsetT< InterleavedVertex > & getAnimationBuffer()
 		{
-			return *m_animBuffer;
+			return m_animBuffer;
 		}
 		/**
 		 *\~english
@@ -69,21 +69,21 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données du tampon de sommets animés.
 		 */
-		inline InterleavedVertexArray & getData()
+		InterleavedVertexArray & getData()
 		{
 			return m_data;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		inline ProgramFlags getProgramFlags( MaterialRPtr material )const override
+		ProgramFlags getProgramFlags( MaterialRPtr material )const override
 		{
 			return ProgramFlag::eMorphing;
 		}
 
 	private:
 		bool doInitialise( RenderDevice const & device )override;
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:
@@ -91,7 +91,7 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 1u;
 
 	private:
-		ashes::VertexBufferPtr< InterleavedVertex > m_animBuffer;
+		GpuBufferOffsetT< InterleavedVertex > m_animBuffer;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_animLayouts;
 		InterleavedVertexArray m_data;
 	};

@@ -26,7 +26,7 @@ namespace castor3d
 		struct Data
 		{
 			Data( uint32_t count
-				, ashes::VertexBufferPtr< InstantiationData > buffer
+				, GpuBufferOffsetT< InstantiationData > buffer
 				, std::vector< InstantiationData > data = {} )
 				: count{ count }
 				, buffer{ std::move( buffer ) }
@@ -34,7 +34,7 @@ namespace castor3d
 			{
 			}
 			uint32_t count;
-			ashes::VertexBufferPtr< InstantiationData > buffer;
+			GpuBufferOffsetT< InstantiationData > buffer;
 			std::vector< InstantiationData > data;
 		};
 		using DataArray = std::vector< Data >;
@@ -176,7 +176,7 @@ namespace castor3d
 
 	private:
 		bool doInitialise( RenderDevice const & device )override;
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		void doUpload()override;
 		inline bool doCheckInstanced( uint32_t count )const
 		{

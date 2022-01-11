@@ -21,11 +21,11 @@ namespace castor3d
 		return m_initialised;
 	}
 
-	void SubmeshComponent::cleanup()
+	void SubmeshComponent::cleanup( RenderDevice const & device )
 	{
 		if ( m_initialised )
 		{
-			doCleanup();
+			doCleanup( device );
 		}
 	}
 
