@@ -90,6 +90,7 @@ namespace castor3d
 			, PassTextureConfig const & config )
 		{
 			return ( !source.isRenderTarget() )
+				&& config.imageInfo->format != VK_FORMAT_UNDEFINED
 				&& !ashes::isCompressedFormat( config.imageInfo->format );
 		}
 

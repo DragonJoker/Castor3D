@@ -60,10 +60,14 @@ namespace castor3d
 		{
 			ePass = CU_MakeSectionName( 'B', 'L', 'P', 'N' ),
 			eTextureUnit = CU_MakeSectionName( 'B', 'L', 'P', 'T' ),
+			eTextureRemap = CU_MakeSectionName( 'B', 'L', 'P', 'R' ),
+			eTextureRemapChannel = CU_MakeSectionName( 'B', 'L', 'P', 'C' ),
 		};
 
 		static castor::String const PassSectionName{ cuT( "blinn_phong_pass" ) };
 		static castor::String const TextureSectionName{ cuT( "blinn_phong_texture_unit" ) };
+		static castor::String const RemapSectionName{ cuT( "blinn_phong_texture_remap" ) };
+		static castor::String const RemapChannelSectionName{ cuT( "blinn_phong_texture_remap_channel" ) };
 	}
 
 	//*********************************************************************************************
@@ -96,13 +100,23 @@ namespace castor3d
 	castor::AttributeParsers BlinnPhongPass::createParsers()
 	{
 		return createParsers( uint32_t( blinn_phong::Section::ePass )
-			, uint32_t( blinn_phong::Section::eTextureUnit ) );
+			, uint32_t( blinn_phong::Section::eTextureUnit )
+			, uint32_t( blinn_phong::Section::eTextureRemap )
+			, cuT( "blinn_phong_texture_remap_config" )
+			, uint32_t( blinn_phong::Section::eTextureRemapChannel ) );
 	}
 
 	castor::AttributeParsers BlinnPhongPass::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
+		, uint32_t texSectionID
+		, uint32_t remapSectionID
+		, castor::String const & texRemapSectionName
+		, uint32_t remapChannelSectionID )
 	{
-		return PhongPass::createParsers( mtlSectionID, texSectionID );
+		return PhongPass::createParsers( mtlSectionID
+			, texSectionID
+			, remapSectionID
+			, texRemapSectionName
+			, remapChannelSectionID );
 	}
 
 	castor::StrUInt32Map BlinnPhongPass::createSections()
@@ -111,6 +125,8 @@ namespace castor3d
 		{
 			{ uint32_t( blinn_phong::Section::ePass ), blinn_phong::PassSectionName },
 			{ uint32_t( blinn_phong::Section::eTextureUnit ), blinn_phong::TextureSectionName },
+			{ uint32_t( blinn_phong::Section::eTextureRemap ), blinn_phong::RemapSectionName },
+			{ uint32_t( blinn_phong::Section::eTextureRemapChannel ), blinn_phong::RemapChannelSectionName },
 		};
 	}
 

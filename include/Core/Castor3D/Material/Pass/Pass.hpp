@@ -641,6 +641,7 @@ namespace castor3d
 		C3D_API static void parseError( castor::String const & error );
 		C3D_API static void addCommonParsers( uint32_t mtlSectionID
 			, uint32_t texSectionID
+			, uint32_t remapChannelSectionID
 			, castor::AttributeParsers & result );
 		C3D_API virtual void doAccept( TextureConfiguration & config
 			, PassVisitorBase & vis ) = 0;

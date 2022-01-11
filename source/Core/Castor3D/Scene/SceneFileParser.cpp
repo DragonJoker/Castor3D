@@ -99,7 +99,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "scene_node" ), parserSceneSceneNode, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "object" ), parserSceneObject, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "ambient_light" ), parserSceneAmbientLight, { makeParameter< ParameterType::eRgbColour >() } );
-			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "import" ), parserSceneImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "import" ), parserSceneImport );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "billboard" ), parserSceneBillboard, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "animated_object_group" ), parserSceneAnimatedObjectGroup, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "panel_overlay" ), parserScenePanelOverlay, { makeParameter< ParameterType::eName >() } );
@@ -114,6 +114,13 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "lpv_indirect_attenuation" ), parserLpvIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "voxel_cone_tracing" ), parserVoxelConeTracing );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "}" ), parserSceneEnd );
+
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "file" ), parserSceneImportFile, { makeParameter< ParameterType::ePath >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "rescale" ), parserSceneImportRescale, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "pitch" ), parserSceneImportPitch, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "yaw" ), parserSceneImportYaw, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "roll" ), parserSceneImportRoll, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "}" ), parserSceneImportEnd );
 
 			addParser( result, uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eParticleSystem ), cuT( "particles_count" ), parserParticleSystemCount, { makeParameter< ParameterType::eUInt32 >() } );
@@ -678,7 +685,8 @@ namespace castor3d
 			, { CSCNSection::ePcf, cuT( "pcf" ) }
 			, { CSCNSection::eVsm, cuT( "vsm" ) }
 			, { CSCNSection::eTextureAnimation, cuT( "texture_animation" ) }
-			, { CSCNSection::eVoxelConeTracing, cuT( "voxel_cone_tracing" ) } };
+			, { CSCNSection::eVoxelConeTracing, cuT( "voxel_cone_tracing" ) }
+			, { CSCNSection::eSceneImport, cuT( "import" ) } };
 		auto it = baseSections.find( CSCNSection( section ) );
 
 		if ( it != baseSections.end() )

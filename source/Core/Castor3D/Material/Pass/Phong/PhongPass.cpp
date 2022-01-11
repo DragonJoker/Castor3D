@@ -62,10 +62,14 @@ namespace castor3d
 			{
 				ePass = CU_MakeSectionName( 'P', 'H', 'O', 'N' ),
 				eTextureUnit = CU_MakeSectionName( 'P', 'H', 'T', 'U' ),
+				eTextureRemap = CU_MakeSectionName( 'P', 'H', 'T', 'R' ),
+				eTextureRemapChannel = CU_MakeSectionName( 'P', 'H', 'T', 'C' ),
 			};
 
 			static castor::String const PassSectionName{ cuT( "phong_pass" ) };
 			static castor::String const TextureSectionName{ cuT( "phong_texture_unit" ) };
+			static castor::String const RemapSectionName{ cuT( "phong_texture_remap" ) };
+			static castor::String const RemapChannelSectionName{ cuT( "phong_texture_remap" ) };
 
 			CU_ImplementAttributeParser( parserPassDiffuse )
 			{
@@ -241,6 +245,75 @@ namespace castor3d
 				}
 			}
 			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserSceneImportTexRemap )
+			{
+				auto & parsingContext = getParserContext( context );
+				parsingContext.sceneImportConfig.textureRemaps.clear();
+				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.end();
+			}
+			CU_EndAttributePush( phong::Section::eTextureRemap )
+
+			CU_ImplementAttributeParser( parserTexRemapSpecular )
+			{
+				auto & parsingContext = getParserContext( context );
+				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eSpecular, TextureConfiguration{} ).first;
+				parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			}
+			CU_EndAttributePush( phong::Section::eTextureRemapChannel )
+
+			CU_ImplementAttributeParser( parserTexRemapNormal )
+			{
+				auto & parsingContext = getParserContext( context );
+				parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eNormal, TextureConfiguration{} ).first;
+				parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			}
+			CU_EndAttributePush( phong::Section::eTextureRemapChannel )
+
+			CU_ImplementAttributeParser( parserTexRemapDiffuseMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.colourMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserTexRemapSpecularMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.specularMask[0] );
+				}
+			}
+			CU_EndAttribute()
+
+			CU_ImplementAttributeParser( parserTexRemapShininessMask )
+			{
+				auto & parsingContext = getParserContext( context );
+
+				if ( params.empty() )
+				{
+					CU_ParsingError( cuT( "Missing parameter." ) );
+				}
+				else
+				{
+					params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.glossinessMask[0] );
+				}
+			}
+			CU_EndAttribute()
 		}
 	}
 
@@ -278,11 +351,17 @@ namespace castor3d
 	castor::AttributeParsers PhongPass::createParsers()
 	{
 		return createParsers( uint32_t( phong::Section::ePass )
-			, uint32_t( phong::Section::eTextureUnit ) );
+			, uint32_t( phong::Section::eTextureUnit )
+			, uint32_t( phong::Section::eTextureRemap )
+			, cuT( "phong_texture_remap_config" )
+			, uint32_t( phong::Section::eTextureRemapChannel ) );
 	}
 
 	castor::AttributeParsers PhongPass::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
+		, uint32_t texSectionID
+		, uint32_t texRemapSectionID
+		, castor::String const & texRemapSectionName
+		, uint32_t remapChannelSectionID )
 	{
 		static UInt32StrMap const textureChannels = []()
 		{
@@ -310,7 +389,16 @@ namespace castor3d
 		Pass::addParser( result, texSectionID, cuT( "specular_mask" ), phong::parserUnitSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "shininess_mask" ), phong::parserUnitShininessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "channel" ), phong::parserUnitChannel, { castor::makeParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
-		Pass::addCommonParsers( mtlSectionID, texSectionID, result );
+		Pass::addCommonParsers( mtlSectionID, texSectionID, remapChannelSectionID, result );
+
+		Pass::addParser( result, uint32_t( CSCNSection::eSceneImport ), texRemapSectionName, phong::parserSceneImportTexRemap );
+
+		Pass::addParser( result, texRemapSectionID, cuT( "specular" ), phong::parserTexRemapSpecular );
+		Pass::addParser( result, texRemapSectionID, cuT( "normal" ), phong::parserTexRemapNormal );
+
+		Pass::addParser( result, remapChannelSectionID, cuT( "diffuse_mask" ), phong::parserTexRemapDiffuseMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "specular_mask" ), phong::parserTexRemapSpecularMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "shininess_mask" ), phong::parserTexRemapShininessMask, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		return result;
 	}
@@ -321,6 +409,8 @@ namespace castor3d
 		{
 			{ uint32_t( phong::Section::ePass ), phong::PassSectionName },
 			{ uint32_t( phong::Section::eTextureUnit ), phong::TextureSectionName },
+			{ uint32_t( phong::Section::eTextureRemap ), phong::RemapSectionName },
+			{ uint32_t( phong::Section::eTextureRemapChannel ), phong::RemapChannelSectionName },
 		};
 	}
 

@@ -57,9 +57,16 @@ namespace toon
 
 	template< typename TypeT >
 	castor::AttributeParsers ToonPassT< TypeT >::createParsers( uint32_t mtlSectionID
-		, uint32_t texSectionID )
+		, uint32_t texSectionID
+		, uint32_t remapSectionID
+		, castor::String const & remapSectionName
+		, uint32_t remapChannelSectionID )
 	{
-		auto result = TypeT::createParsers( mtlSectionID, texSectionID );
+		auto result = TypeT::createParsers( mtlSectionID
+			, texSectionID
+			, remapSectionID
+			, remapSectionName
+			, remapChannelSectionID );
 		castor3d::Pass::addParser( result, mtlSectionID
 			, cuT( "smooth_band_width" )
 			, parserPassSmoothBandWidth< TypeT >
