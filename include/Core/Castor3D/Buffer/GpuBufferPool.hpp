@@ -56,7 +56,7 @@ namespace castor3d
 		 *\return		Le tampon GPU.
 		 */
 		template< typename DataT >
-		GpuBufferOffsetT< DataT > getBuffer( VkBufferUsageFlagBits target
+		GpuBufferOffsetT< DataT > getBuffer( VkBufferUsageFlags target
 			, VkDeviceSize count
 			, VkMemoryPropertyFlags flags );
 		/**
@@ -73,14 +73,14 @@ namespace castor3d
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
 			, BufferArray & array );
-		C3D_API uint32_t doMakeKey( VkBufferUsageFlagBits target
+		C3D_API uint32_t doMakeKey( VkBufferUsageFlags target
 			, VkMemoryPropertyFlags flags );
 		C3D_API GpuBuffer & doGetBuffer( VkDeviceSize size
-			, VkBufferUsageFlagBits target
+			, VkBufferUsageFlags target
 			, VkMemoryPropertyFlags memory
 			, MemChunk & chunk );
 		C3D_API void doPutBuffer( GpuBuffer const & buffer
-			, VkBufferUsageFlagBits target
+			, VkBufferUsageFlags target
 			, VkMemoryPropertyFlags memory
 			, MemChunk const & chunk );
 
@@ -89,6 +89,7 @@ namespace castor3d
 		castor::String m_debugName;
 		std::map< uint32_t, BufferArray > m_buffers;
 		BufferArray m_nonSharedBuffers;
+		uint32_t m_minBlockSize{};
 	};
 }
 

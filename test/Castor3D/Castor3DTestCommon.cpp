@@ -306,8 +306,8 @@ namespace Testing
 
 	bool C3DTestCase::compare( BonesComponent const & lhs, BonesComponent const & rhs )
 	{
-		auto * lhsData = lhs.getBonesBuffer().lock( 0u, lhs.getBonesBuffer().getCount(), 0u );
-		auto * rhsData = rhs.getBonesBuffer().lock( 0u, rhs.getBonesBuffer().getCount(), 0u );
+		auto * lhsData = lhs.getBonesBuffer().lock();
+		auto * rhsData = rhs.getBonesBuffer().lock();
 		auto result = CT_EQUAL( castor::makeArrayView( lhsData, lhs.getBonesBuffer().getCount() )
 			, castor::makeArrayView( rhsData, rhs.getBonesBuffer().getCount() ) );
 		lhs.getBonesBuffer().unlock();
@@ -331,14 +331,14 @@ namespace Testing
 	bool C3DTestCase::compare( Submesh const & lhs, Submesh const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getPointsCount(), rhs.getPointsCount() ) };
-		auto * lhsVtx = lhs.getVertexBuffer().lock( 0u, lhs.getVertexBuffer().getCount(), 0u );
-		auto * rhsVtx = rhs.getVertexBuffer().lock( 0u, rhs.getVertexBuffer().getCount(), 0u );
+		auto * lhsVtx = lhs.getVertexBuffer().lock();
+		auto * rhsVtx = rhs.getVertexBuffer().lock();
 		result = result && CT_EQUAL( castor::makeArrayView( lhsVtx, lhs.getVertexBuffer().getCount() )
 							  , castor::makeArrayView( rhsVtx, rhs.getVertexBuffer().getCount() ) );
 		lhs.getVertexBuffer().unlock();
 		rhs.getVertexBuffer().unlock();
-		auto * lhsIdx = lhs.getIndexBuffer().lock( 0u, lhs.getIndexBuffer().getCount(), 0u );
-		auto * rhsIdx = rhs.getIndexBuffer().lock( 0u, rhs.getIndexBuffer().getCount(), 0u );
+		auto * lhsIdx = lhs.getIndexBuffer().lock();
+		auto * rhsIdx = rhs.getIndexBuffer().lock();
 		result = result && CT_EQUAL( castor::makeArrayView( lhsIdx, lhs.getIndexBuffer().getCount() )
 								, castor::makeArrayView( rhsIdx, rhs.getIndexBuffer().getCount() ) );
 		lhs.getIndexBuffer().unlock();
