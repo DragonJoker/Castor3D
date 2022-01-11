@@ -44,10 +44,13 @@ namespace castor3d
 			{
 				CU_Require( !pos.getExpr()->isDummy() );
 				CU_Require( !pos2.getExpr()->isDummy() );
-				CU_Require( !uvw.getExpr()->isDummy() );
-				CU_Require( !uvw2.getExpr()->isDummy() );
 				pos = vec4( sdw::mix( pos.xyz(), pos2.xyz(), vec3( m_time ) ), 1.0f );
-				uvw = sdw::mix( uvw, uvw2, vec3( m_time ) );
+
+				if ( !uvw.getExpr()->isDummy()
+					&& !uvw2.getExpr()->isDummy() )
+				{
+					uvw = sdw::mix( uvw, uvw2, vec3( m_time ) );
+				}
 			}
 		}
 
