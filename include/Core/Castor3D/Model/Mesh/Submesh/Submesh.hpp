@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
@@ -76,7 +77,7 @@ namespace castor3d
 		*\~french
 		*\brief		Nettoie le sous-maillage
 		*/
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief		Updates the buffers.
@@ -355,11 +356,11 @@ namespace castor3d
 		inline InterleavedVertexArray const & getPoints()const;
 		inline InterleavedVertexArray & getPoints();
 		inline bool hasVertexBuffer()const;
-		inline ashes::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
-		inline ashes::VertexBuffer< InterleavedVertex > & getVertexBuffer();
+		inline GpuBufferOffsetT< InterleavedVertex > const & getVertexBuffer()const;
+		inline GpuBufferOffsetT< InterleavedVertex > & getVertexBuffer();
 		inline bool hasIndexBuffer()const;
-		inline ashes::Buffer< uint32_t > const & getIndexBuffer()const;
-		inline ashes::Buffer< uint32_t > & getIndexBuffer();
+		inline GpuBufferOffsetT< uint32_t > const & getIndexBuffer()const;
+		inline GpuBufferOffsetT< uint32_t > & getIndexBuffer();
 		inline bool isInitialised()const;
 		inline Mesh const & getParent()const;
 		inline Mesh & getParent();
@@ -402,8 +403,8 @@ namespace castor3d
 		bool m_initialised{ false };
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
-		ashes::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
-		ashes::BufferPtr< uint32_t > m_indexBuffer;
+		GpuBufferOffsetT< InterleavedVertex > m_vertexBuffer;
+		GpuBufferOffsetT< uint32_t > m_indexBuffer;
 		mutable std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };

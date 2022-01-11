@@ -147,6 +147,7 @@ namespace castor3d
 	{
 		VkDeviceSize offset;
 		VkDeviceSize size;
+		VkDeviceSize askedSize;
 	};
 
 	inline bool operator<( MemChunk const & lhs

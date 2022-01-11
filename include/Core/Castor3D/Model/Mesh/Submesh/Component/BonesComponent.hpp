@@ -110,9 +110,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		ashes::VertexBuffer< VertexBoneData > const & getBonesBuffer()const
+		GpuBufferOffsetT< VertexBoneData > const & getBonesBuffer()const
 		{
-			return *m_bonesBuffer;
+			return m_bonesBuffer;
 		}
 		/**
 		 *\~english
@@ -120,9 +120,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		ashes::VertexBuffer< VertexBoneData > & getBonesBuffer()
+		GpuBufferOffsetT< VertexBoneData > & getBonesBuffer()
 		{
-			return *m_bonesBuffer;
+			return m_bonesBuffer;
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
@@ -136,7 +136,7 @@ namespace castor3d
 
 	private:
 		bool doInitialise( RenderDevice const & device )override;
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:
@@ -144,7 +144,7 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 3u;
 
 	private:
-		ashes::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
+		GpuBufferOffsetT< VertexBoneData > m_bonesBuffer;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 		VertexBoneDataArray m_bones;
 

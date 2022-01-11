@@ -53,14 +53,14 @@ namespace castor3d
 
 		C3D_API void addTexcoords( std::vector< castor::Point3f > const & uvs );
 
-		ashes::VertexBuffer< castor::Point3f > const & getAnimationBuffer()const
+		GpuBufferOffsetT< castor::Point3f > const & getAnimationBuffer()const
 		{
-			return *m_buffer;
+			return m_buffer;
 		}
 
-		ashes::VertexBuffer< castor::Point3f > & getAnimationBuffer()
+		GpuBufferOffsetT< castor::Point3f > & getAnimationBuffer()
 		{
-			return *m_buffer;
+			return m_buffer;
 		}
 
 		std::vector< castor::Point3f > & getData()
@@ -70,7 +70,7 @@ namespace castor3d
 
 	private:
 		bool doInitialise( RenderDevice const & device )override;
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:
@@ -78,7 +78,7 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 4u;
 
 	private:
-		ashes::VertexBufferPtr< castor::Point3f > m_buffer;
+		GpuBufferOffsetT< castor::Point3f > m_buffer;
 		std::vector< castor::Point3f > m_data;
 		std::unordered_map< uint32_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};

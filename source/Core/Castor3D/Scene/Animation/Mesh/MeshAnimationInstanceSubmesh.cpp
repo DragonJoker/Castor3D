@@ -55,21 +55,21 @@ namespace castor3d
 					auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
 					auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
 
-					if ( auto * buffer = vertexBuffer.lock( 0u, vertexBuffer.getCount(), 0u ) )
+					if ( auto * buffer = vertexBuffer.lock() )
 					{
 						std::copy( prv.m_buffer.begin()
 							, prv.m_buffer.end()
 							, buffer );
-						vertexBuffer.flush( 0u, vertexBuffer.getCount() );
+						vertexBuffer.flush();
 						vertexBuffer.unlock();
 					}
 
-					if ( auto * buffer = animBuffer.lock( 0u, animBuffer.getCount(), 0u ) )
+					if ( auto * buffer = animBuffer.lock() )
 					{
 						std::copy( prv.m_buffer.begin()
 							, prv.m_buffer.end()
 							, buffer );
-						animBuffer.flush( 0u, animBuffer.getCount() );
+						animBuffer.flush();
 						animBuffer.unlock();
 					}
 				} ) );

@@ -2,11 +2,13 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -24,27 +26,26 @@ namespace castor3d
 			return ashes::getAlignedSize( count, CountAlign );
 		}
 
-		ashes::VertexBufferPtr< InstantiationData > updateBuffer( RenderDevice const & device
+		GpuBufferOffsetT< InstantiationData > updateBuffer( RenderDevice const & device
 			, castor::String const & name
-			, uint32_t id
-			, uint32_t index
 			, uint32_t count
-			, ashes::VertexBufferPtr< InstantiationData > buffer )
+			, GpuBufferOffsetT< InstantiationData > buffer )
 		{
 			using namespace castor::string;
 			count = uint32_t( count ? getNextCount( count ) : 0u );
 
 			if ( count
-				&& ( !buffer || count > buffer->getCount() ) )
+				&& ( !buffer || count > buffer.getCount() ) )
 			{
-				buffer.reset();
-				buffer = makeVertexBuffer< InstantiationData >( device
+				if ( buffer )
+				{
+					device.bufferPool->putBuffer( buffer );
+					buffer = {};
+				}
+
+				buffer = device.bufferPool->getBuffer< InstantiationData >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 					, count
-					, index
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, ( name
-						+ "Submesh" + toString( id )
-						+ "InstantiationComponentBufferMult" + toString( index ) ) );
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 			}
 
 			return buffer;
@@ -111,7 +112,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0u; i < 6u; ++i )
 			{
-				data.emplace_back( 0u, nullptr );
+				data.emplace_back( 0u, GpuBufferOffsetT< InstantiationData >{} );
 			}
 
 			it = m_instances.emplace( material, std::move( data ) ).first;
@@ -126,14 +127,11 @@ namespace castor3d
 			data.data.resize( data.count );
 			auto & mulData = datas[5];
 			mulData.data.resize( data.count * 6u );
-			uint32_t index = 0u;
 
 			for ( auto & locData : datas )
 			{
 				locData.buffer = updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
 					, getOwner()->getParent().getName() + "_" + it->first->getName()
-					, getOwner()->getId()
-					, index++
 					, locData.count
 					, std::move( locData.buffer ) );
 			}
@@ -162,7 +160,11 @@ namespace castor3d
 			{
 				for ( auto & resdata : datas )
 				{
-					resdata.buffer.reset();
+					if ( resdata.buffer )
+					{
+						getOwner()->getOwner()->getEngine()->getRenderSystem()->getRenderDevice().bufferPool->putBuffer( resdata.buffer );
+						resdata.buffer = {};
+					}
 				}
 			}
 		}
@@ -236,8 +238,8 @@ namespace castor3d
 						, getMatrixLayout( shaderFlags, currentLocation ) ).first;
 				}
 
-				buffers.emplace_back( it->second[index].buffer->getBuffer() );
-				offsets.emplace_back( 0u );
+				buffers.emplace_back( it->second[index].buffer.getBuffer().getBuffer() );
+				offsets.emplace_back( it->second[index].buffer.getOffset() );
 				layouts.emplace_back( layoutIt->second );
 			}
 		}
@@ -299,14 +301,10 @@ namespace castor3d
 			{
 				if ( doCheckInstanced( datas.second[0].count ) )
 				{
-					uint32_t index = 0u;
-
 					for ( auto & data : datas.second )
 					{
 						data.buffer = updateBuffer( device
 							, getOwner()->getParent().getName() + "_" + datas.first->getName()
-							, getOwner()->getId()
-							, index++
 							, data.count
 							, std::move( data.buffer ) );
 					}
@@ -317,13 +315,17 @@ namespace castor3d
 		return result;
 	}
 
-	void InstantiationComponent::doCleanup()
+	void InstantiationComponent::doCleanup( RenderDevice const & device )
 	{
 		for ( auto & datas : m_instances )
 		{
 			for ( auto & data : datas.second )
 			{
-				data.buffer.reset();
+				if ( data.buffer )
+				{
+					device.bufferPool->putBuffer( data.buffer );
+					data.buffer = {};
+				}
 			}
 		}
 	}
@@ -336,13 +338,11 @@ namespace castor3d
 			{
 				if ( data.buffer && data.count )
 				{
-					if ( auto * buffer = data.buffer->lock( 0
-						, data.count
-						, 0u ) )
+					if ( auto * buffer = data.buffer.lock() )
 					{
 						std::copy( data.data.begin(), data.data.end(), buffer );
-						data.buffer->flush( 0u, data.count );
-						data.buffer->unlock();
+						data.buffer.flush();
+						data.buffer.unlock();
 					}
 				}
 			}
