@@ -41,7 +41,6 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -265,11 +264,12 @@ namespace castor3d
 		C3D_API castor::Matrix4x4f getInfinitePerspective( float radiansFovY
 			, float aspect
 			, float zNear )const;
-		/*
-		*name
+		/**
+		*\~english
+		*\name
 		*	Getters.
 		*\~french
-		*name
+		*\name
 		*	Accesseurs.
 		*/
 		/**@{*/
