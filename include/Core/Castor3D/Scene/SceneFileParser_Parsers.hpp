@@ -84,6 +84,14 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserVoxelConeTracing )
 	CU_DeclareAttributeParser( parserSceneEnd )
 
+	// Scene import parsers
+	CU_DeclareAttributeParser( parserSceneImportFile )
+	CU_DeclareAttributeParser( parserSceneImportRescale )
+	CU_DeclareAttributeParser( parserSceneImportPitch )
+	CU_DeclareAttributeParser( parserSceneImportYaw )
+	CU_DeclareAttributeParser( parserSceneImportRoll )
+	CU_DeclareAttributeParser( parserSceneImportEnd )
+
 	// ParticleSystem parsers
 	CU_DeclareAttributeParser( parserParticleSystemParent )
 	CU_DeclareAttributeParser( parserParticleSystemCount )

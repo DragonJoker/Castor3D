@@ -198,14 +198,115 @@ namespace castor3d
 	bool MeshImporter::import( Scene & scene
 		, castor::Path const & fileName
 		, Parameters const & parameters
+		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 		, bool initialise )
 	{
+		m_textureRemaps = textureRemaps;
 		m_fileName = fileName;
 		m_filePath = m_fileName.getPath();
 		m_parameters = parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		return doImportScene( scene );
+		bool result = doImportScene( scene );
+
+		if ( result && initialise )
+			{
+			float value = 1.0f;
+
+			if ( m_parameters.get( cuT( "rescale" ), value )
+				&& std::abs( value - 1.0f ) > 0.01f )
+			{
+				for ( auto & node : m_nodes )
+				{
+					node->setPosition( node->getPosition() * value );
+				}
+
+				for ( auto geomIt : m_geometries )
+				{
+					auto mesh = geomIt.second->getMesh().lock();
+
+					for ( auto submesh : *mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							vertex.pos *= value;
+						}
+					}
+				}
+			}
+
+			if ( m_parameters.get( cuT( "pitch" ), value )
+				&& std::abs( value ) > 0.01f )
+			{
+				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
+					, castor::Angle::fromDegrees( value ) );
+
+				for ( auto geomIt : m_geometries )
+				{
+					auto mesh = geomIt.second->getMesh().lock();
+
+					for ( auto submesh : *mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							rot.transform( vertex.pos, vertex.pos );
+						}
+					}
+				}
+			}
+
+			if ( m_parameters.get( cuT( "yaw" ), value )
+				&& std::abs( value ) > 0.01f )
+			{
+				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
+					, castor::Angle::fromDegrees( value ) );
+
+				for ( auto geomIt : m_geometries )
+				{
+					auto mesh = geomIt.second->getMesh().lock();
+
+					for ( auto submesh : *mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							rot.transform( vertex.pos, vertex.pos );
+						}
+					}
+				}
+			}
+
+			if ( m_parameters.get( cuT( "roll" ), value )
+				&& std::abs( value ) > 0.01f )
+			{
+				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
+					, castor::Angle::fromDegrees( value ) );
+
+				for ( auto geomIt : m_geometries )
+				{
+					auto mesh = geomIt.second->getMesh().lock();
+
+					for ( auto submesh : *mesh )
+					{
+						for ( auto & vertex : submesh->getPoints() )
+						{
+							rot.transform( vertex.pos, vertex.pos );
+						}
+					}
+				}
+			}
+
+			for ( auto geomIt : m_geometries )
+			{
+				auto mesh = geomIt.second->getMesh().lock();
+				mesh->computeContainers();
+				log::info << "Loaded mesh [" << mesh->getName() << "]"
+					<< " AABB (" << mesh->getBoundingBox() << ")"
+					<< ", " << mesh->getVertexCount() << " vertices"
+					<< ", " << mesh->getSubmeshCount() << " submeshes" << std::endl;
+			}
+		}
+
+		return result;
 	}
 
 	castor::ImageUPtr MeshImporter::loadImage( castor::Path const & path )const

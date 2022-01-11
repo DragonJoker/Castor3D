@@ -169,10 +169,14 @@ namespace toon
 		{
 			ePass = CU_MakeSectionName( 'T', 'N', 'P', 'H' ),
 			eTextureUnit = CU_MakeSectionName( 'T', 'P', 'T', 'U' ),
+			eTextureRemap = CU_MakeSectionName( 'T', 'P', 'T', 'R' ),
+			eTextureRemapChannel = CU_MakeSectionName( 'T', 'P', 'T', 'C' ),
 		};
 
 		static castor::String const PassSectionName{ cuT( "toon_pass" ) };
 		static castor::String const TextureSectionName{ cuT( "toon_texture_unit" ) };
+		static castor::String const RemapSectionName{ cuT( "toon_texture_remap" ) };
+		static castor::String const RemapChannelSectionName{ cuT( "toon_texture_remap_channel" ) };
 	}
 
 	//*********************************************************************************************
@@ -184,10 +188,14 @@ namespace toon
 		{
 			ePass = CU_MakeSectionName( 'T', 'N', 'B', 'P' ),
 			eTextureUnit = CU_MakeSectionName( 'T', 'B', 'T', 'U' ),
+			eTextureRemap = CU_MakeSectionName( 'T', 'B', 'T', 'R' ),
+			eTextureRemapChannel = CU_MakeSectionName( 'T', 'B', 'T', 'C' ),
 		};
 
 		static castor::String const PassSectionName{ cuT( "toon_blinn_phong_pass" ) };
 		static castor::String const TextureSectionName{ cuT( "toon_blinn_phong_texture_unit" ) };
+		static castor::String const RemapSectionName{ cuT( "toon_blinn_phong_texture_remap" ) };
+		static castor::String const RemapChannelSectionName{ cuT( "toon_blinn_phong_texture_remap_channel" ) };
 	}
 
 	//*********************************************************************************************
@@ -199,10 +207,14 @@ namespace toon
 		{
 			ePass = CU_MakeSectionName( 'T', 'N', 'M', 'R' ),
 			eTextureUnit = CU_MakeSectionName( 'T', 'M', 'T', 'U' ),
+			eTextureRemap = CU_MakeSectionName( 'T', 'M', 'T', 'R' ),
+			eTextureRemapChannel = CU_MakeSectionName( 'T', 'M', 'T', 'C' ),
 		};
 
 		static castor::String const PassSectionName{ cuT( "toon_metallic_roughness_pass" ) };
 		static castor::String const TextureSectionName{ cuT( "toon_metallic_roughness_texture_unit" ) };
+		static castor::String const RemapSectionName{ cuT( "toon_metallic_roughness_texture_remap" ) };
+		static castor::String const RemapChannelSectionName{ cuT( "toon_metallic_roughness_texture_remap_channel" ) };
 	}
 
 	//*********************************************************************************************
@@ -214,10 +226,14 @@ namespace toon
 		{
 			ePass = CU_MakeSectionName( 'T', 'N', 'S', 'G' ),
 			eTextureUnit = CU_MakeSectionName( 'T', 'S', 'T', 'U' ),
+			eTextureRemap = CU_MakeSectionName( 'T', 'S', 'T', 'U' ),
+			eTextureRemapChannel = CU_MakeSectionName( 'T', 'S', 'T', 'C' ),
 		};
 
 		static castor::String const PassSectionName{ cuT( "toon_specular_glossiness_pass" ) };
 		static castor::String const TextureSectionName{ cuT( "toon_specular_glossiness_texture_unit" ) };
+		static castor::String const RemapSectionName{ cuT( "toon_specular_glossiness_texture_remap" ) };
+		static castor::String const RemapChannelSectionName{ cuT( "toon_specular_glossiness_texture_remap_channel" ) };
 	}
 
 	//*********************************************************************************************
@@ -245,7 +261,10 @@ namespace toon
 	castor::AttributeParsers ToonPhongPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( phong::Section::ePass )
-			, uint32_t( phong::Section::eTextureUnit ) );
+			, uint32_t( phong::Section::eTextureUnit )
+			, uint32_t( phong::Section::eTextureRemap )
+			, cuT( "toon_phong_texture_remap_config" )
+			, uint32_t( phong::Section::eTextureRemapChannel ) );
 	}
 
 	castor::StrUInt32Map ToonPhongPass::createSections()
@@ -254,6 +273,8 @@ namespace toon
 		{
 			{ uint32_t( phong::Section::ePass ), phong::PassSectionName },
 			{ uint32_t( phong::Section::eTextureUnit ), phong::TextureSectionName },
+			{ uint32_t( phong::Section::eTextureRemap ), phong::RemapSectionName },
+			{ uint32_t( phong::Section::eTextureRemapChannel ), phong::RemapChannelSectionName },
 		};
 	}
 
@@ -317,7 +338,10 @@ namespace toon
 	castor::AttributeParsers ToonBlinnPhongPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( blinn_phong::Section::ePass )
-			, uint32_t( blinn_phong::Section::eTextureUnit ) );
+			, uint32_t( blinn_phong::Section::eTextureUnit )
+			, uint32_t( blinn_phong::Section::eTextureRemap )
+			, cuT( "toon_blinn_phong_texture_remap_config" )
+			, uint32_t( blinn_phong::Section::eTextureRemapChannel ) );
 	}
 
 	castor::StrUInt32Map ToonBlinnPhongPass::createSections()
@@ -326,6 +350,8 @@ namespace toon
 		{
 			{ uint32_t( blinn_phong::Section::ePass ), blinn_phong::PassSectionName },
 			{ uint32_t( blinn_phong::Section::eTextureUnit ), blinn_phong::TextureSectionName },
+			{ uint32_t( blinn_phong::Section::eTextureRemap ), blinn_phong::RemapSectionName },
+			{ uint32_t( blinn_phong::Section::eTextureRemapChannel ), blinn_phong::RemapChannelSectionName },
 		};
 	}
 
@@ -389,7 +415,10 @@ namespace toon
 	castor::AttributeParsers ToonMetallicRoughnessPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( pbrmr::Section::ePass )
-			, uint32_t( pbrmr::Section::eTextureUnit ) );
+			, uint32_t( pbrmr::Section::eTextureUnit )
+			, uint32_t( pbrmr::Section::eTextureRemap )
+			, cuT( "toon_pbrmr_texture_remap_config" )
+			, uint32_t( pbrmr::Section::eTextureRemapChannel ) );
 	}
 
 	castor::StrUInt32Map ToonMetallicRoughnessPass::createSections()
@@ -398,6 +427,8 @@ namespace toon
 		{
 			{ uint32_t( pbrmr::Section::ePass ), pbrmr::PassSectionName },
 			{ uint32_t( pbrmr::Section::eTextureUnit ), pbrmr::TextureSectionName },
+			{ uint32_t( pbrmr::Section::eTextureRemap ), pbrmr::RemapSectionName },
+			{ uint32_t( pbrmr::Section::eTextureRemapChannel ), pbrmr::RemapChannelSectionName },
 		};
 	}
 
@@ -462,7 +493,10 @@ namespace toon
 	castor::AttributeParsers ToonSpecularGlossinessPass::createParsers()
 	{
 		return ToonPass::createParsers( uint32_t( pbrsg::Section::ePass )
-			, uint32_t( pbrsg::Section::eTextureUnit ) );
+			, uint32_t( pbrsg::Section::eTextureUnit )
+			, uint32_t( pbrsg::Section::eTextureRemap )
+			, cuT( "toon_pbrsg_texture_remap_config" )
+			, uint32_t( pbrsg::Section::eTextureRemapChannel ) );
 	}
 
 	castor::StrUInt32Map ToonSpecularGlossinessPass::createSections()
@@ -471,6 +505,8 @@ namespace toon
 		{
 			{ uint32_t( pbrsg::Section::ePass ), pbrsg::PassSectionName },
 			{ uint32_t( pbrsg::Section::eTextureUnit ), pbrsg::TextureSectionName },
+			{ uint32_t( pbrsg::Section::eTextureRemap ), pbrsg::RemapSectionName },
+			{ uint32_t( pbrsg::Section::eTextureRemapChannel ), pbrsg::RemapChannelSectionName },
 		};
 	}
 

@@ -45,7 +45,10 @@ namespace castor3d
 		C3D_API static PassSPtr create( Material & parent );
 		C3D_API static castor::AttributeParsers createParsers();
 		C3D_API static castor::AttributeParsers createParsers( uint32_t mtlSectionID
-			, uint32_t texSectionID );
+			, uint32_t texSectionID
+			, uint32_t remapSectionID
+			, castor::String const & texRemapSectionName
+			, uint32_t remapChannelSectionID );
 		C3D_API static castor::StrUInt32Map createSections();
 		/**
 		 *\copydoc		castor3d::Pass::getPassSectionID

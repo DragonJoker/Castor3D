@@ -814,6 +814,115 @@ namespace castor3d
 			}
 		}
 		CU_EndAttributePop()
+
+		CU_ImplementAttributeParser( parserTexRemapNormalMask )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.normalMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserTexRemapOpacityMask )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.opacityMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserTexRemapEmissiveMask )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.emissiveMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserTexRemapHeightMask )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.heightMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserTexRemapOcclusionMask )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.occlusionMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserTexRemapTransmittanceMask )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.transmittanceMask[0] );
+			}
+		}
+		CU_EndAttribute()
+
+		CU_ImplementAttributeParser( parserTexRemapNormalDirectX )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				bool isDirectX;
+				params[0]->get( isDirectX );
+				parsingContext.sceneImportConfig.textureRemapIt->second.normalGMultiplier = isDirectX
+					? -1.0f
+					: 1.0f;
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
@@ -846,6 +955,7 @@ namespace castor3d
 
 	void Pass::addCommonParsers( uint32_t mtlSectionID
 		, uint32_t texSectionID
+		, uint32_t remapChannelSectionID
 		, castor::AttributeParsers & result )
 	{
 		using namespace castor;
@@ -897,5 +1007,13 @@ namespace castor3d
 		Pass::addParser( result, texSectionID, cuT( "tiles" ), parserUnitTiles, { makeParameter< ParameterType::eUInt32 >() } );
 		Pass::addParser( result, texSectionID, cuT( "animation" ), parserUnitAnimation );
 		Pass::addParser( result, texSectionID, cuT( "}" ), parserUnitEnd );
+
+		Pass::addParser( result, remapChannelSectionID, cuT( "normal_mask" ), parserTexRemapNormalMask, { makeParameter< ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "normal_directx" ), parserTexRemapNormalDirectX, { makeParameter< ParameterType::eBool >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "opacity_mask" ), parserTexRemapOpacityMask, { makeParameter< ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "emissive_mask" ), parserTexRemapEmissiveMask, { makeParameter< ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "height_mask" ), parserTexRemapHeightMask, { makeParameter< ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "occlusion_mask" ), parserTexRemapOcclusionMask, { makeParameter< ParameterType::eUInt32 >() } );
+		Pass::addParser( result, remapChannelSectionID, cuT( "transmittance_mask" ), parserTexRemapTransmittanceMask, { makeParameter< ParameterType::eUInt32 >() } );
 	}
 }
