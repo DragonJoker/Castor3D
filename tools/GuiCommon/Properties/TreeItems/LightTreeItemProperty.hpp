@@ -11,6 +11,14 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
+	enum class GIType
+	{
+		eNone,
+		eLPV,
+		eLPVG,
+		eLLPV,
+		eLLPVG,
+	};
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		24/08/2015
@@ -59,7 +67,7 @@ namespace GuiCommon
 		void doCreatePointLightProperties( wxPropertyGrid * grid, castor3d::PointLight & light );
 		void doCreateSpotLightProperties( wxPropertyGrid * grid, castor3d::SpotLight & light );
 		void doCreateShadowProperties( wxPropertyGrid * grid );
-		void doUpdateGIProperties( castor3d::GlobalIlluminationType type );
+		void doUpdateGIProperties( GIType type );
 
 	private:
 		castor3d::Light & m_light;

@@ -65,7 +65,8 @@ namespace castor3d
 
 			SDW_DeclStructInstance( , SurfaceT );
 
-			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+				, bool isFragment = false )
 			{
 				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
 					, ( FlagT == sdw::var::Flag::eShaderOutput
@@ -76,14 +77,19 @@ namespace castor3d
 				if ( result->empty() )
 				{
 					uint32_t index = 0u;
-					result->declMember( "volumeCellIndex"
-						, sdw::type::Kind::eVec3I
-						, sdw::type::NotArray
-						, index++ );
-					result->declMember( "rsmPosition"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, index++ );
+
+					if ( !isFragment )
+					{
+						result->declMember( "volumeCellIndex"
+							, sdw::type::Kind::eVec3I
+							, sdw::type::NotArray
+							, index++ );
+						result->declMember( "rsmPosition"
+							, sdw::type::Kind::eVec3F
+							, sdw::type::NotArray
+							, index++ );
+					}
+
 					result->declMember( "rsmNormal"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
@@ -111,7 +117,6 @@ namespace castor3d
 
 			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
 			{
-				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 #if C3D_UseTiledDirectionalShadowMap
 				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, RsmNormalsIdx
@@ -183,7 +188,6 @@ namespace castor3d
 			}
 			else
 			{
-				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, LightInjectionPass::RsmNormalsIdx
 					, 0u );
@@ -242,7 +246,6 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormalLinear )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -298,7 +301,6 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
 			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormalLinear )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -369,16 +371,16 @@ namespace castor3d
 			using namespace sdw;
 			GeometryWriter writer;
 
-			writer.implementMainT< 1u, PointListT< SurfaceT >, PointStreamT< SurfaceT > >( [&]( GeometryIn in
-				, PointListT< SurfaceT > list
-				, PointStreamT< SurfaceT > out )
+			writer.implementMainT< PointListT< SurfaceT >, PointStreamT< SurfaceT > >( PointListT< SurfaceT >{ writer, false }
+				, PointStreamT< SurfaceT >{ writer, 1u, true }
+				, [&]( GeometryIn in
+					, PointListT< SurfaceT > list
+					, PointStreamT< SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
 					out.layer = list[0].volumeCellIndex.z();
 					out.vtx.pointSize = 1.0f;
 
-					out.volumeCellIndex = list[0].volumeCellIndex;
-					out.rsmPosition = list[0].rsmPosition;
 					out.rsmNormal = list[0].rsmNormal;
 					out.rsmFlux = list[0].rsmFlux;
 
@@ -423,8 +425,10 @@ namespace castor3d
 				}
 				, InVec3{ writer, "dir" } );
 
-			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
-				, FragmentOut out )
+			writer.implementMainT< SurfaceT, VoidT >( FragmentInT< SurfaceT >{ writer, true }
+				, FragmentOut{ writer }
+				, [&]( FragmentInT< SurfaceT > in
+					, FragmentOut out )
 				{
 					auto lobeDir = writer.declLocale( "lobeDir"
 						, evalCosineLobeToDir( in.rsmNormal ) );

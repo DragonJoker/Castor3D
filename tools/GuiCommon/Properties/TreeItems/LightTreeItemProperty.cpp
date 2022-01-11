@@ -16,6 +16,43 @@ using namespace castor;
 
 namespace GuiCommon
 {
+	namespace
+	{
+		GIType convert( castor3d::GlobalIlluminationType value )
+		{
+			switch ( value )
+			{
+			case castor3d::GlobalIlluminationType::eLpv:
+				return GIType::eLPV;
+			case castor3d::GlobalIlluminationType::eLpvG:
+				return GIType::eLPVG;
+			case castor3d::GlobalIlluminationType::eLayeredLpv:
+				return GIType::eLLPV;
+			case castor3d::GlobalIlluminationType::eLayeredLpvG:
+				return GIType::eLLPVG;
+			default:
+				return GIType::eNone;
+			}
+		}
+
+		castor3d::GlobalIlluminationType convert( GIType value )
+		{
+			switch ( value )
+			{
+			case GIType::eLPV:
+				return castor3d::GlobalIlluminationType::eLpv;
+			case GIType::eLPVG:
+				return castor3d::GlobalIlluminationType::eLpvG;
+			case GIType::eLLPV:
+				return castor3d::GlobalIlluminationType::eLayeredLpv;
+			case GIType::eLLPVG:
+				return castor3d::GlobalIlluminationType::eLayeredLpvG;
+			default:
+				return castor3d::GlobalIlluminationType::eNone;
+			}
+		}
+	}
+
 	LightTreeItemProperty::LightTreeItemProperty( bool editable, Light & light )
 		: TreeItemProperty( light.getScene()->getEngine(), editable )
 		, m_light( light )
@@ -153,11 +190,11 @@ namespace GuiCommon
 		addPropertyT( vsm, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &LightCategory::setVsmVarianceBias );
 
 		auto globalIllum = addProperty( shadows, PROPERTY_CATEGORY_GLOBAL_ILLUM );
-		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, GlobalIlluminationType( uint32_t( m_light.getGlobalIlluminationType() ) - 2u )
-			, [this]( GlobalIlluminationType type )
+		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, convert( m_light.getGlobalIlluminationType() )
+			, [this]( GIType type )
 			{
 				// +2 to account for RSM and VCT.
-				m_light.setGlobalIlluminationType( GlobalIlluminationType( uint32_t( type ) + 2u ) );
+				m_light.setGlobalIlluminationType( convert( type ) );
 				doUpdateGIProperties( type );
 			} );
 
@@ -168,37 +205,17 @@ namespace GuiCommon
 			addPropertyT( m_lpvProperties, PROPERTY_SHADOW_LPV_SURFEL_AREA, &lpvConfig.texelAreaModifier );
 		}
 
-		doUpdateGIProperties( m_light.getGlobalIlluminationType() );
+		doUpdateGIProperties( convert( m_light.getGlobalIlluminationType() ) );
 	}
 
-	void LightTreeItemProperty::doUpdateGIProperties( castor3d::GlobalIlluminationType type )
+	void LightTreeItemProperty::doUpdateGIProperties( GIType type )
 	{
 		switch ( type )
 		{
-		case GlobalIlluminationType::eNone:
-			if ( m_rsmProperties )
-			{
-				m_rsmProperties->Enable( false );
-			}
-			if ( m_lpvProperties )
-			{
-				m_lpvProperties->Enable( false );
-			}
-			break;
-		case GlobalIlluminationType::eRsm:
-			if ( m_rsmProperties )
-			{
-				m_rsmProperties->Enable( true );
-			}
-			if ( m_lpvProperties )
-			{
-				m_lpvProperties->Enable( false );
-			}
-			break;
-		case GlobalIlluminationType::eLpv:
-		case GlobalIlluminationType::eLpvG:
-		case GlobalIlluminationType::eLayeredLpv:
-		case GlobalIlluminationType::eLayeredLpvG:
+		case GIType::eLPV:
+		case GIType::eLPVG:
+		case GIType::eLLPV:
+		case GIType::eLLPVG:
 			if ( m_rsmProperties )
 			{
 				m_rsmProperties->Enable( false );
@@ -209,7 +226,14 @@ namespace GuiCommon
 			}
 			break;
 		default:
-			CU_Failure( "Unsupported GlobalIlluminationType" );
+			if ( m_rsmProperties )
+			{
+				m_rsmProperties->Enable( false );
+			}
+			if ( m_lpvProperties )
+			{
+				m_lpvProperties->Enable( false );
+			}
 			break;
 		}
 	}
