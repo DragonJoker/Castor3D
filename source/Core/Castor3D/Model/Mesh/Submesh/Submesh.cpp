@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
@@ -152,11 +153,9 @@ namespace castor3d
 
 			if ( m_indexMapping )
 			{
-				m_indexBuffer = makeBuffer< uint32_t >( device
+				m_indexBuffer = device.bufferPool->getBuffer< uint32_t >( VK_BUFFER_USAGE_INDEX_BUFFER_BIT | m_indexMapping->getUsageFlags()
 					, VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount()
-					, ( VK_BUFFER_USAGE_INDEX_BUFFER_BIT | m_indexMapping->getUsageFlags() )
-					, m_indexMapping->getMemoryFlags()
-					, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );
+					, m_indexMapping->getMemoryFlags() );
 			}
 
 			for ( auto & component : m_components )
@@ -187,17 +186,27 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::cleanup()
+	void Submesh::cleanup( RenderDevice const & device )
 	{
 		m_initialised = false;
 
 		for ( auto & component : m_components )
 		{
-			component.second->cleanup();
+			component.second->cleanup( device );
 		}
 
-		m_vertexBuffer.reset();
-		m_indexBuffer.reset();
+		if ( m_vertexBuffer )
+		{
+			device.bufferPool->putBuffer( m_vertexBuffer );
+			m_vertexBuffer = {};
+		}
+
+		if ( m_indexBuffer )
+		{
+			device.bufferPool->putBuffer( m_indexBuffer );
+			m_indexBuffer = {};
+		}
+
 		m_vertexLayouts.clear();
 		m_points.clear();
 	}
@@ -206,15 +215,11 @@ namespace castor3d
 	{
 		if ( m_dirty && m_vertexBuffer )
 		{
-			auto size = uint32_t( m_points.size() );
-
-			if ( auto buffer = m_vertexBuffer->lock( 0u
-				, size
-				, 0u ) )
+			if ( auto buffer = m_vertexBuffer.lock() )
 			{
 				std::copy( m_points.begin(), m_points.end(), buffer );
-				m_vertexBuffer->flush( 0u, size );
-				m_vertexBuffer->unlock();
+				m_vertexBuffer.flush();
+				m_vertexBuffer.unlock();
 			}
 
 			m_dirty = false;
@@ -306,7 +311,7 @@ namespace castor3d
 	uint32_t Submesh::getPointsCount()const
 	{
 		return std::max< uint32_t >( uint32_t( m_points.size() )
-			, ( m_vertexBuffer ? uint32_t( m_vertexBuffer->getCount() ) : 0u ) );
+			, ( m_vertexBuffer ? uint32_t( m_vertexBuffer.getCount() ) : 0u ) );
 	}
 
 	int Submesh::isInMyPoints( castor::Point3f const & vertex
@@ -430,8 +435,8 @@ namespace castor3d
 			ashes::BufferCRefArray buffers;
 			ashes::UInt64Array offsets;
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
-			buffers.emplace_back( m_vertexBuffer->getBuffer() );
-			offsets.emplace_back( 0u );
+			buffers.emplace_back( m_vertexBuffer.getBuffer().getBuffer() );
+			offsets.emplace_back( m_vertexBuffer.getOffset() );
 			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
 			hash = castor::hashCombine( hash, hasTextures );
 
@@ -467,13 +472,13 @@ namespace castor3d
 			result.vbo = buffers;
 			result.vboOffsets = offsets;
 			result.layouts = layouts;
-			result.vtxCount = uint32_t( m_vertexBuffer->getCount() );
+			result.vtxCount = uint32_t( m_vertexBuffer.getCount() );
 
 			if ( m_indexBuffer )
 			{
-				result.ibo = &m_indexBuffer->getBuffer();
-				result.iboOffset = 0u;
-				result.idxCount = uint32_t( m_indexBuffer->getCount() );
+				result.ibo = &m_indexBuffer.getBuffer().getBuffer();
+				result.iboOffset = m_indexBuffer.getOffset();
+				result.idxCount = uint32_t( m_indexBuffer.getCount() );
 			}
 
 			it = m_geometryBuffers.emplace( key, std::move( result ) ).first;
@@ -499,24 +504,20 @@ namespace castor3d
 		if ( size )
 		{
 			if ( !m_vertexBuffer
-				|| size != m_vertexBuffer->getCount() )
+				|| size != m_vertexBuffer.getCount() )
 			{
-				m_vertexBuffer = makeVertexBuffer< InterleavedVertex >( device
+				m_vertexBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VkBufferUsageFlags( m_bufferUsageFlags | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT )
 					, size
-					, m_bufferUsageFlags
-					, m_bufferMemoryFlags
-					, getParent().getName() + "Submesh" + castor::string::toString( m_id ) + "VertexBuffer" );
+					, m_bufferMemoryFlags );
 			}
 
 			if ( !castor::checkFlag( m_bufferMemoryFlags, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
 			{
-				if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
-					, ~( 0ull )
-					, 0u ) )
+				if ( auto buffer = m_vertexBuffer.lock() )
 				{
 					std::memcpy( buffer, m_points.data(), m_points.size() * sizeof( InterleavedVertex ) );
-					m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
-					m_vertexBuffer->getBuffer().unlock();
+					m_vertexBuffer.flush();
+					m_vertexBuffer.unlock();
 				}
 			}
 

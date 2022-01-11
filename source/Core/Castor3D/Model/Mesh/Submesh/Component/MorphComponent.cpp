@@ -1,6 +1,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -86,8 +87,8 @@ namespace castor3d
 					, doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
 			}
 
-			buffers.emplace_back( m_animBuffer->getBuffer() );
-			offsets.emplace_back( 0u );
+			buffers.emplace_back( m_animBuffer.getBuffer().getBuffer() );
+			offsets.emplace_back( m_animBuffer.getOffset() );
 			layouts.emplace_back( layoutIt->second );
 		}
 	}
@@ -104,21 +105,23 @@ namespace castor3d
 		auto & vertexBuffer = getOwner()->getVertexBuffer();
 		auto count = vertexBuffer.getCount();
 
-		if ( !m_animBuffer || m_animBuffer->getCount() != count )
+		if ( !m_animBuffer || m_animBuffer.getCount() != count )
 		{
-			m_animBuffer = makeVertexBuffer< InterleavedVertex >( device
+			m_animBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, count
-				, 0u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "MorphComponentBuffer" );
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 		}
 
-		return m_animBuffer != nullptr;
+		return bool( m_animBuffer );
 	}
 
-	void MorphComponent::doCleanup()
+	void MorphComponent::doCleanup( RenderDevice const & device )
 	{
-		m_animBuffer.reset();
+		if ( m_animBuffer )
+		{
+			device.bufferPool->putBuffer( m_animBuffer );
+			m_animBuffer = {};
+		}
 		m_animLayouts.clear();
 	}
 
@@ -131,11 +134,11 @@ namespace castor3d
 
 			if ( count )
 			{
-				if ( auto * buffer = m_animBuffer->lock( 0, count, 0u ) )
+				if ( auto * buffer = m_animBuffer.lock() )
 				{
 					std::copy( m_data.begin(), m_data.end(), buffer );
-					m_animBuffer->flush( 0u, count );
-					m_animBuffer->unlock();
+					m_animBuffer.flush();
+					m_animBuffer.unlock();
 				}
 			}
 		}

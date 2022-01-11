@@ -160,9 +160,7 @@ namespace castor3d
 						FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
-						if ( InterleavedVertex * vertex = vertices.lock( 0
-							, vertices.getCount()
-							, 0u ) )
+						if ( InterleavedVertex * vertex = vertices.lock() )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
@@ -201,7 +199,7 @@ namespace castor3d
 		}
 	}
 
-	void TriFaceMapping::doCleanup()
+	void TriFaceMapping::doCleanup( RenderDevice const & device )
 	{
 		m_faces.clear();
 	}
@@ -216,7 +214,7 @@ namespace castor3d
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( auto * buffer = indexBuffer.lock( 0, count, 0u ) )
+			if ( auto * buffer = indexBuffer.lock() )
 			{
 				for ( auto const & face : m_faces )
 				{
@@ -228,7 +226,7 @@ namespace castor3d
 					++buffer;
 				}
 
-				indexBuffer.flush( 0u, count );
+				indexBuffer.flush();
 				indexBuffer.unlock();
 			}
 

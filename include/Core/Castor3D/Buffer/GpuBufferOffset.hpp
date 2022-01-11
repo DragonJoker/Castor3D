@@ -12,12 +12,14 @@ namespace castor3d
 	struct GpuBufferOffsetT
 	{
 	private:
-		GpuBuffer * buffer;
+		friend class GpuBufferPool;
+
+		GpuBuffer * buffer{};
 
 	public:
-		VkBufferUsageFlagBits target;
-		VkMemoryPropertyFlags memory;
-		MemChunk chunk;
+		VkBufferUsageFlags target{};
+		VkMemoryPropertyFlags memory{};
+		MemChunk chunk{};
 
 		void setPool( GpuBuffer & pool )
 		{
@@ -48,6 +50,36 @@ namespace castor3d
 		ashes::Buffer< uint8_t > & getBuffer()
 		{
 			return buffer->getBuffer();
+		}
+
+		VkDeviceSize getCount()const
+		{
+			return chunk.askedSize / sizeof( DataT );
+		}
+
+		VkDeviceSize getSize()const
+		{
+			return chunk.size;
+		}
+
+		VkDeviceSize getOffset()const
+		{
+			return chunk.offset;
+		}
+
+		DataT * lock()const
+		{
+			return reinterpret_cast< DataT * >( buffer->getBuffer().lock( chunk.offset, chunk.size, 0u ) );
+		}
+
+		void flush()const
+		{
+			return buffer->getBuffer().flush( chunk.offset, chunk.size );
+		}
+
+		void unlock()const
+		{
+			return buffer->getBuffer().unlock();
 		}
 	};
 }

@@ -1,9 +1,11 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -83,8 +85,8 @@ namespace castor3d
 					, doCreateVertexLayout( shaderFlags, !mask.empty(), currentLocation ) ).first;
 			}
 
-			buffers.emplace_back( m_bonesBuffer->getBuffer() );
-			offsets.emplace_back( 0u );
+			buffers.emplace_back( m_bonesBuffer.getBuffer().getBuffer() );
+			offsets.emplace_back( m_bonesBuffer.getOffset() );
 			layouts.emplace_back( layoutIt->second );
 		}
 	}
@@ -103,21 +105,23 @@ namespace castor3d
 
 	bool BonesComponent::doInitialise( RenderDevice const & device )
 	{
-		if ( !m_bonesBuffer || m_bonesBuffer->getCount() != m_bones.size() )
+		if ( !m_bonesBuffer || m_bonesBuffer.getCount() != m_bones.size() )
 		{
-			m_bonesBuffer = makeVertexBuffer< VertexBoneData >( device
+			m_bonesBuffer = device.bufferPool->getBuffer< VertexBoneData >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, uint32_t( m_bones.size() )
-				, 0u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "BonesComponentBuffer" );
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 		}
 
-		return m_bonesBuffer != nullptr;
+		return bool( m_bonesBuffer );
 	}
 
-	void BonesComponent::doCleanup()
+	void BonesComponent::doCleanup( RenderDevice const & device )
 	{
-		m_bonesBuffer.reset();
+		if ( m_bonesBuffer )
+		{
+			device.bufferPool->putBuffer( m_bonesBuffer );
+			m_bonesBuffer = {};
+		}
 	}
 
 	void BonesComponent::doUpload()
@@ -126,11 +130,11 @@ namespace castor3d
 
 		if ( count && m_bonesBuffer )
 		{
-			if ( auto * buffer = m_bonesBuffer->lock( 0, count, 0u ) )
+			if ( auto * buffer = m_bonesBuffer.lock() )
 			{
 				std::copy( m_bones.begin(), m_bones.end(), buffer );
-				m_bonesBuffer->flush( 0u, count );
-				m_bonesBuffer->unlock();
+				m_bonesBuffer.flush();
+				m_bonesBuffer.unlock();
 			}
 
 			//m_bones.clear();

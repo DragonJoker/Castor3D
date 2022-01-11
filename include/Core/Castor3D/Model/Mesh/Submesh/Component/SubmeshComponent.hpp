@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
+
 namespace castor3d
 {
 	class SubmeshComponent
@@ -48,7 +50,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Nettoie le sous-maillage
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Uploads data on VRAM.
@@ -130,7 +132,7 @@ namespace castor3d
 
 	private:
 		C3D_API virtual bool doInitialise( RenderDevice const & device ) = 0;
-		C3D_API virtual void doCleanup() = 0;
+		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
 		C3D_API virtual void doUpload() = 0;
 
 	private:
