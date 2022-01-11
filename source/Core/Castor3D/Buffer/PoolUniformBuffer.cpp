@@ -63,9 +63,9 @@ namespace castor3d
 		auto offset = m_allocated.empty()
 			? 0u
 			: m_allocated.rbegin()->offset + m_allocated.rbegin()->size;
-		size = getAlignedSize( uint32_t( size ) );
-		m_allocated.insert( { offset, size } );
-		return { offset / elemSize, size / elemSize };
+		auto realSize = getAlignedSize( uint32_t( size ) );
+		m_allocated.insert( { offset, realSize } );
+		return { offset / elemSize, realSize / elemSize, size };
 	}
 
 	void PoolUniformBuffer::deallocate( VkDeviceSize offset )

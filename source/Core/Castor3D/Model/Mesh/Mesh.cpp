@@ -41,7 +41,7 @@ namespace castor3d
 
 		for ( auto submesh : m_submeshes )
 		{
-			submesh->cleanup();
+			submesh->cleanup( getEngine()->getRenderSystem()->getRenderDevice() );
 		}
 
 		m_submeshes.clear();

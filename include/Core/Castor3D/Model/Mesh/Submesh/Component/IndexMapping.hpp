@@ -96,7 +96,7 @@ namespace castor3d
 			return true;
 		}
 
-		void doCleanup()override
+		void doCleanup( RenderDevice const & device )override
 		{
 		}
 

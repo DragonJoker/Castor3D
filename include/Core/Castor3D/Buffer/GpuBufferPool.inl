@@ -6,14 +6,14 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	template< typename DataT >
-	GpuBufferOffsetT< DataT > GpuBufferPool::getBuffer( VkBufferUsageFlagBits target
+	GpuBufferOffsetT< DataT > GpuBufferPool::getBuffer( VkBufferUsageFlags target
 		, VkDeviceSize count
 		, VkMemoryPropertyFlags flags )
 	{
 		GpuBufferOffsetT< DataT > result;
 		result.target = target;
 		result.memory = flags;
-		result.setPool( &doGetBuffer( count * sizeof( DataT )
+		result.setPool( doGetBuffer( count * sizeof( DataT )
 			, result.target
 			, result.memory
 			, result.chunk ) );

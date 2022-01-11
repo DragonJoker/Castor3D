@@ -105,16 +105,12 @@ namespace castor3d
 					m_cameraPosition = cameraPosition;
 					auto indexSize = uint32_t( indices.getCount() );
 
-					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.getBuffer().lock( 0
-						, uint32_t( indexSize * sizeof( uint32_t ) )
-						, 0u ) ) )
+					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.lock() ) )
 					{
 						LineDistArray arraySorted;
 						arraySorted.reserve( indexSize / 2 );
 
-						if ( InterleavedVertex * vertex = vertices.lock( 0
-							, vertices.getCount()
-							, 0u ) )
+						if ( InterleavedVertex * vertex = vertices.lock() )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 2 )
 							{
@@ -134,12 +130,12 @@ namespace castor3d
 								*index++ = line.m_index[1];
 							}
 
-							vertices.flush( 0u, vertices.getCount() );
+							vertices.flush();
 							vertices.unlock();
 						}
 
-						indices.getBuffer().flush( 0u, uint32_t( indexSize * sizeof( uint32_t ) ) );
-						indices.getBuffer().unlock();
+						indices.flush();
+						indices.unlock();
 					}
 				}
 			}
@@ -150,7 +146,7 @@ namespace castor3d
 		}
 	}
 
-	void LinesMapping::doCleanup()
+	void LinesMapping::doCleanup( RenderDevice const & device )
 	{
 		m_lines.clear();
 	}
@@ -165,7 +161,7 @@ namespace castor3d
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( uint32_t * buffer = indexBuffer.lock( 0, count, 0u ) )
+			if ( uint32_t * buffer = indexBuffer.lock() )
 			{
 				for ( auto const & line : m_lines )
 				{
@@ -175,7 +171,7 @@ namespace castor3d
 					++buffer;
 				}
 
-				indexBuffer.flush( 0u, count );
+				indexBuffer.flush();
 				indexBuffer.unlock();
 			}
 

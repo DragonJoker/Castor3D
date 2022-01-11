@@ -53,11 +53,12 @@ namespace castor3d
 
 	MemChunk GpuBuffer::allocate( VkDeviceSize size )
 	{
-		size = ashes::getAlignedSize( size, m_align );
+		auto realSize = ashes::getAlignedSize( size, m_align );
 		return
 		{
+			m_allocator.allocate( realSize ),
+			realSize,
 			size,
-			m_allocator.allocate( size ),
 		};
 	}
 
