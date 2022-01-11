@@ -82,6 +82,7 @@ namespace castor3d
 		eTextureAnimation = CU_MakeSectionName( 'T', 'X', 'A', 'N' ),
 		eVoxelConeTracing = CU_MakeSectionName( 'V', 'C', 'T', 'C' ),
 		eTextureTransform = CU_MakeSectionName( 'T', 'X', 'T', 'R' ),
+		eSceneImport = CU_MakeSectionName( 'I', 'M', 'P', 'T' ),
 	};
 
 	class SceneFileContext
@@ -106,6 +107,17 @@ namespace castor3d
 		C3D_API void initialise();
 
 	public:
+		struct SceneImportConfig
+		{
+			castor::Path file;
+			std::map< TextureFlag, TextureConfiguration > textureRemaps;
+			float rescale{ 1.0f };
+			float pitch{ 0.0f };
+			float yaw{ 0.0f };
+			float roll{ 0.0f };
+			std::map< TextureFlag, TextureConfiguration >::iterator textureRemapIt;
+		};
+
 		castor::LoggerInstance * logger{};
 		SceneSPtr scene{};
 		RenderWindowDesc window{};
@@ -180,6 +192,7 @@ namespace castor3d
 		std::shared_ptr< SkyboxBackground > skybox{};
 		TextureConfiguration textureConfiguration{};
 		TextureTransform textureTransform{};
+		SceneImportConfig sceneImportConfig;
 	};
 
 	class SceneFileParser

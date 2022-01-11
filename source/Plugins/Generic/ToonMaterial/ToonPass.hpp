@@ -34,7 +34,10 @@ namespace toon
 			, castor3d::PassFlags initialFlags = castor3d::PassFlag::eNone );
 
 		static castor::AttributeParsers createParsers( uint32_t mtlSectionID
-			, uint32_t texSectionID );
+			, uint32_t texSectionID
+			, uint32_t remapSectionID
+			, castor::String const & remapSectionName
+			, uint32_t remapChannelSectionID );
 
 		void fillData( castor3d::PassBuffer::PassDataPtr & data )const;
 
