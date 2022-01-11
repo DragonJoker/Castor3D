@@ -459,24 +459,6 @@ namespace castor3d
 
 	//*************************************************************************
 
-	void Extensions::addExtension( std::string const & extName )
-	{
-		m_extensionsNames.push_back( extName );
-	}
-
-	void Extensions::addExtension( std::string const & extName
-		, VkStructure * featureStruct )
-	{
-		addExtension( extName );
-
-		if ( featureStruct )
-		{
-			m_extensions.push_back( { extName, featureStruct } );
-		}
-	}
-
-	//*************************************************************************
-
 	Renderer::Renderer( Engine & engine
 		, AshPluginDescription pdesc
 		, Extensions pinstanceExtensions

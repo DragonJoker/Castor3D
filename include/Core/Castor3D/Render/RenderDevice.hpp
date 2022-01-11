@@ -35,6 +35,7 @@ namespace castor3d
 		std::string extName;
 		VkStructure * featureStruct;
 	};
+
 	using FeatureArray = std::vector< Feature >;
 
 	struct Extensions
@@ -275,6 +276,8 @@ namespace castor3d
 		VkPhysicalDeviceVulkan11Features features11;
 		VkPhysicalDeviceShaderDrawParametersFeatures drawParamsFeatures;
 		VkPhysicalDeviceFeatures2 features2;
+		VkPhysicalDeviceAccelerationStructureFeaturesKHR accelFeature;
+		VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeature;
 		VkPhysicalDeviceProperties properties{};
 		QueueFamilies queueFamilies;
 		ashes::DevicePtr device;

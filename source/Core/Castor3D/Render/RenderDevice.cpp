@@ -109,6 +109,24 @@ namespace castor3d
 		}
 	}
 
+	//*************************************************************************
+
+	void Extensions::addExtension( std::string const & extName )
+	{
+		m_extensionsNames.push_back( extName );
+	}
+
+	void Extensions::addExtension( std::string const & extName
+		, VkStructure * featureStruct )
+	{
+		addExtension( extName );
+
+		if ( featureStruct )
+		{
+			m_extensions.push_back( { extName, featureStruct } );
+		}
+	}
+
 	//*********************************************************************************************
 
 	QueuesData::QueuesData( QueuesData && rhs )
@@ -255,8 +273,14 @@ namespace castor3d
 			, {} }
 		, drawParamsFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
 			, nullptr
-		, {} }
+			, {} }
 		, features2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
+			, nullptr
+			, {} }
+		, accelFeature{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR
+			, nullptr
+			, {} }
+		, rtPipelineFeature{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR
 			, nullptr
 			, {} }
 		, properties{ gpu.getProperties() }
@@ -281,6 +305,30 @@ namespace castor3d
 		{
 			m_deviceExtensions.addExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME );
 		}
+#endif
+#if VK_KHR_acceleration_structure
+		if ( isExtensionSupported( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &accelFeature ) );
+		}
+#endif
+#if VK_KHR_deferred_host_operations
+		if ( isExtensionSupported( VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME );
+		}
+
+#	if VK_KHR_ray_tracing_pipeline
+		if ( isExtensionSupported( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &rtPipelineFeature ) );
+		}
+#	endif
 #endif
 
 		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
