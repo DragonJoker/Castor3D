@@ -464,6 +464,11 @@ namespace castor3d
 		{
 			return m_renderPassInfo;
 		}
+
+		uint32_t getIndex()const
+		{
+			return m_index;
+		}
 		/**@}*/
 		/**
 		*\~english

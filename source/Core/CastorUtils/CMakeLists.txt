@@ -809,6 +809,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	endif ()
 
 	if ( VCPKG_TOOLCHAIN )
+		find_package( LibRaw QUIET )
 		find_package( freeimage CONFIG QUIET )
 	else ()
 		find_package( FreeImage QUIET )
