@@ -207,8 +207,6 @@ namespace C3dAssimp
 			{
 				PassFiller vis{ material, sampler, importer, textureRemaps, pass };
 				pass.accept( vis );
-				castor3d::TextureConfiguration config;
-				pass.fillConfig( config, vis );
 				vis.finish();
 				pass.prepareTextures();
 			}
@@ -249,48 +247,68 @@ namespace C3dAssimp
 
 			void finish()
 			{
-				if ( !m_texInfos.colTex.name.empty()
-					&& m_texInfos.colTex.name.find( "_Cine_" ) != castor::String::npos
-					&& m_texInfos.colTex.name.find( "/MI_CH_" ) != castor::String::npos )
+				auto colInfo = getTextureInfo( castor3d::TextureFlag::eColour );
+				auto emiInfo = getTextureInfo( castor3d::TextureFlag::eEmissive );
+				auto occInfo = getTextureInfo( castor3d::TextureFlag::eOcclusion );
+				auto hgtInfo = getTextureInfo( castor3d::TextureFlag::eHeight );
+				TextureInfo nmlInfo{};
+				TextureInfo opaInfo{};
+				TextureInfo spcInfo{};
+
+				if ( !colInfo.name.empty()
+					&& colInfo.name.find( "_Cine_" ) != castor::String::npos
+					&& colInfo.name.find( "/MI_CH_" ) != castor::String::npos )
 				{
 					// Workaround for Collada textures.
-					castor::String strGlob = m_texInfos.colTex.name + cuT( ".tga" );
+					castor::String strGlob = colInfo.name + cuT( ".tga" );
 					castor::string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
 					castor::String strDiff = strGlob;
 					castor::String strNorm = strGlob;
 					castor::String strSpec = strGlob;
 					castor::String strOpac = strGlob;
-					m_texInfos.colTex.name = castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) );
-					m_texInfos.nmlTex.name = castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) );
-					m_texInfos.spcTex.name = castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) );
-					m_texInfos.opaTex.name = castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) );
-					m_texInfos.nmlTex.transform = m_texInfos.colTex.transform;
-					m_texInfos.spcTex.transform = m_texInfos.colTex.transform;
-					m_texInfos.opaTex.transform = m_texInfos.colTex.transform;
+					colInfo.name = castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) );
+					nmlInfo.name = castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) );
+					spcInfo.name = castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) );
+					opaInfo.name = castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) );
+					nmlInfo.transform = colInfo.transform;
+					spcInfo.transform = colInfo.transform;
+					opaInfo.transform = colInfo.transform;
+				}
+				else
+				{
+					nmlInfo = getTextureInfo( castor3d::TextureFlag::eNormal );
+					opaInfo = getTextureInfo( castor3d::TextureFlag::eOpacity );
+					spcInfo = getTextureInfo( castor3d::TextureFlag::eSpecular );
 				}
 
-				loadTexture( m_texInfos.colTex, getRemap( TextureFlag::eDiffuse, TextureConfiguration::DiffuseTexture ) );
-				loadTexture( m_texInfos.emiTex, getRemap( TextureFlag::eEmissive, TextureConfiguration::EmissiveTexture ) );
-				loadTexture( m_texInfos.occTex, getRemap( TextureFlag::eOcclusion, TextureConfiguration::OcclusionTexture ) );
+				loadTexture( colInfo, getRemap( TextureFlag::eDiffuse, TextureConfiguration::DiffuseTexture ) );
+				loadTexture( emiInfo, getRemap( TextureFlag::eEmissive, TextureConfiguration::EmissiveTexture ) );
+				loadTexture( occInfo, getRemap( TextureFlag::eOcclusion, TextureConfiguration::OcclusionTexture ) );
+				loadTexture( spcInfo, getRemap( TextureFlag::eSpecular, TextureConfiguration::SpecularTexture ) );
 
 				// force non 0.0 opacity when an opacity map is set
-				if ( !m_texInfos.opaTex.name.empty()
+				if ( !opaInfo.name.empty()
 					&& m_result.getOpacity() == 0.0f )
 				{
-					loadTexture( m_texInfos.opaTex, getRemap( TextureFlag::eOpacity, TextureConfiguration::OpacityTexture ) );
+					loadTexture( opaInfo, getRemap( TextureFlag::eOpacity, TextureConfiguration::OpacityTexture ) );
 					m_result.setOpacity( 1.0f );
 				}
 
-				if ( !m_texInfos.nmlTex.name.empty() )
+				if ( !nmlInfo.name.empty() )
 				{
-					loadTexture( m_texInfos.nmlTex, getRemap( TextureFlag::eNormal, TextureConfiguration::NormalTexture ) );
-					loadTexture( m_texInfos.hgtTex, getRemap( TextureFlag::eHeight, TextureConfiguration::HeightTexture ) );
+					loadTexture( nmlInfo, getRemap( TextureFlag::eNormal, TextureConfiguration::NormalTexture ) );
+					loadTexture( hgtInfo, getRemap( TextureFlag::eHeight, TextureConfiguration::HeightTexture ) );
 				}
 				else
 				{
 					auto texConfig = TextureConfiguration::NormalTexture;
-					convertToNormalMap( m_texInfos.hgtTex, texConfig );
-					loadTexture( m_texInfos.hgtTex, getRemap( TextureFlag::eNormal, texConfig ) );
+					convertToNormalMap( hgtInfo, texConfig );
+					loadTexture( hgtInfo, getRemap( TextureFlag::eNormal, texConfig ) );
+				}
+
+				if ( !emiInfo.name.empty() )
+				{
+					m_result.setEmissive( 1.0f );
 				}
 
 				if ( m_mtlInfos.ambient.IsBlack()
@@ -491,59 +509,47 @@ namespace C3dAssimp
 				, uint32_t componentsCount
 				, bool * control )override
 			{
-				castor3d::TextureConfiguration lconfig;
-				textureFlag = getRemapFlag( textureFlag, lconfig );
-				auto info = getTextureInfo( textureFlag
-					, lconfig );
-				loadTexture( info, getRemap( textureFlag, lconfig ) );
 			}
 
 		private:
-			castor3d::TextureFlag getRemapFlag( castor3d::TextureFlag flag
-				, castor3d::TextureConfiguration pconfig )
-			{
-				auto it = std::find_if( m_textureRemaps.begin()
-					, m_textureRemaps.end()
-					, [flag]( auto & lookupIt )
-					{
-						return castor::checkFlag( getFlags( lookupIt.second ), flag );
-					} );
-
-				if ( it == m_textureRemaps.end() )
-				{
-					return flag;
-				}
-
-				return it->first;
-			}
-
 			castor3d::TextureConfiguration getRemap( castor3d::TextureFlag flag
-				, castor3d::TextureConfiguration pconfig )
+				, castor3d::TextureConfiguration texConfig )
 			{
 				auto it = m_textureRemaps.find( flag );
 
 				if ( it == m_textureRemaps.end() )
 				{
-					return pconfig;
+					return texConfig;
 				}
 
 				auto result = it->second;
-				m_textureRemaps.erase( it );
 				return result;
 			}
 
 			void loadTexture( TextureInfo const & info
-				, castor3d::TextureConfiguration pconfig )
+				, castor3d::TextureConfiguration texConfig )
 			{
 				if ( !info.name.empty() )
 				{
-					pconfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+					auto & loader = m_result.getOwner()->getEngine()->getImageLoader();
+					auto path = castor::Path{ info.name };
+					auto sourceInfo = m_importer.loadTexture( m_sampler, path, texConfig );
+					auto layout = loader.load( path.getFileName(), sourceInfo.folder() / sourceInfo.relative(), { false, false, false } ).getLayout();
+					texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
 						, castor::Angle::fromRadians( info.transform.mRotation )
 						, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
+					auto create = ashes::ImageCreateInfo{ 0u
+						, VkImageType( layout.type )
+						, VkFormat( layout.format )
+						, { layout.extent->x, layout.extent->y, layout.extent->z }
+						, layout.levels
+						, layout.layers
+						, VK_SAMPLE_COUNT_1_BIT
+						, VK_IMAGE_TILING_OPTIMAL
+						, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
 					m_importer.loadTexture( m_sampler
 						, castor::Path{ info.name }
-						, { { {} }
-							, pconfig }
+						, { create, texConfig }
 						, m_result );
 				}
 			}
@@ -563,70 +569,62 @@ namespace C3dAssimp
 				return result;
 			}
 
-			TextureInfo getTextureInfo( castor3d::TextureFlag flag
-				, castor3d::TextureConfiguration & pconfig )
+			TextureInfo getTextureInfo( castor3d::TextureFlag flag )
 			{
 				TextureInfo result{};
 
 				switch ( flag )
 				{
 				case castor3d::TextureFlag::eHeight:
-					m_texInfos.hgtTex = getTextureInfo( aiTextureType_HEIGHT );
+					result = getTextureInfo( aiTextureType_HEIGHT );
 					break;
 				case castor3d::TextureFlag::eOpacity:
-					m_texInfos.opaTex = getTextureInfo( aiTextureType_OPACITY );
-					pconfig = castor3d::TextureConfiguration::OpacityTexture;
+					result = getTextureInfo( aiTextureType_OPACITY );
 					break;
 				case castor3d::TextureFlag::eNormal:
-					m_texInfos.nmlTex = getTextureInfo( aiTextureType_NORMALS );
+					result = getTextureInfo( aiTextureType_NORMALS );
 					break;
 				case castor3d::TextureFlag::eEmissive:
-					m_texInfos.emiTex = getTextureInfo( aiTextureType_EMISSIVE );
+					result = getTextureInfo( aiTextureType_EMISSIVE );
 					break;
 				case castor3d::TextureFlag::eOcclusion:
 					if ( aiGetVersionMajor() >= 4u )
 					{
 						static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
-						m_texInfos.occTex = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
+						result = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
 					}
 					break;
 				case castor3d::TextureFlag::eTransmittance:
 					break;
 				case castor3d::TextureFlag::eColour:
-					m_texInfos.colTex = getTextureInfo( aiTextureType_DIFFUSE );
+					result = getTextureInfo( aiTextureType_DIFFUSE );
 					break;
 				case castor3d::TextureFlag::eSpecular:
 					result = getTextureInfo( aiTextureType_SPECULAR );
-					pconfig = TextureConfiguration::SpecularTexture;
 					break;
 				case castor3d::TextureFlag::eMetalness:
 					if ( aiGetVersionMajor() >= 4u )
 					{
 						static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
 						result = getTextureInfo( TextureType_METALNESS );
-						pconfig = TextureConfiguration::MetalnessTexture;
 					}
 					else
 					{
 						result = getTextureInfo( aiTextureType_SPECULAR );
-						pconfig = TextureConfiguration::SpecularTexture;
 					}
 					break;
 				case castor3d::TextureFlag::eGlossiness:
 					result = getTextureInfo( aiTextureType_SHININESS );
-					pconfig = TextureConfiguration::ShininessTexture;
 					break;
 				case castor3d::TextureFlag::eRoughness:
 					if ( aiGetVersionMajor() >= 4u )
 					{
 						static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
 						result = getTextureInfo( TextureType_DIFFUSE_ROUGHNESS );
-						pconfig = TextureConfiguration::RoughnessTexture;
 					}
 					else
 					{
 						result = getTextureInfo( aiTextureType_SHININESS );
-						pconfig = TextureConfiguration::RoughnessTexture;
 					}
 					break;
 				default:
@@ -653,7 +651,6 @@ namespace C3dAssimp
 			castor3d::MeshImporter const & m_importer;
 			std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
 			castor3d::Pass & m_result;
-			CommonTextureInfos m_texInfos{};
 			CommonMaterialInfos m_mtlInfos{};
 		};
 
@@ -857,6 +854,74 @@ namespace C3dAssimp
 				}
 			}
 		}
+
+		bool operator==( castor::Point3f const & lhs
+			, castor::Point3f const & rhs )
+		{
+			return castor::point::distance( lhs, rhs ) < 0.0001;
+		}
+
+		bool operator==( castor3d::InterleavedVertex const & lhs
+			, castor3d::InterleavedVertex const & rhs )
+		{
+			return lhs.pos == rhs.pos
+				&& lhs.nml == rhs.nml
+				&& lhs.tan == rhs.tan
+				&& lhs.tex == rhs.tex;
+		}
+
+		bool operator==( castor3d::Submesh const & lhs
+			, castor3d::Submesh const & rhs )
+		{
+			if ( lhs.getPointsCount() != rhs.getPointsCount()
+				|| lhs.getIndexMapping()->getComponentsCount() != rhs.getIndexMapping()->getComponentsCount()
+				|| lhs.getIndexMapping()->getCount() != rhs.getIndexMapping()->getCount() )
+			{
+				return false;
+			}
+
+			auto lhsIt = lhs.getPoints().begin();
+			auto rhsIt = rhs.getPoints().begin();
+			bool result = true;
+
+			while ( result && lhsIt != lhs.getPoints().end() )
+			{
+				result = *lhsIt == *rhsIt;
+				++lhsIt;
+				++rhsIt;
+			}
+
+			return result;
+		}
+
+		bool operator==( castor3d::Mesh const & lhs
+			, castor3d::Mesh const & rhs )
+		{
+			if ( lhs.getName() == rhs.getName() )
+			{
+				return true;
+			}
+
+			if ( lhs.getSubmeshCount() != rhs.getSubmeshCount() )
+			{
+				return false;
+			}
+
+			auto lhsIt = lhs.begin();
+			auto rhsIt = rhs.begin();
+			bool result = true;
+
+			while ( result && lhsIt != lhs.end() )
+			{
+				auto & lhsSubmesh = **lhsIt;
+				auto & rhsSubmesh = **rhsIt;
+				result = lhsSubmesh == rhsSubmesh;
+				++lhsIt;
+				++rhsIt;
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -920,6 +985,19 @@ namespace C3dAssimp
 				, scene
 				, scene.getObjectRootNode()
 				, transform );
+			std::vector< aiMesh * > aiMeshes;
+
+			for ( auto aiMesh : castor::makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
+			{
+				aiMeshes.push_back( aiMesh );
+			}
+
+			auto meshes = doProcessMeshesAndAnims( *aiScene, scene, aiMeshes );
+			auto merged = doMergeMeshes( scene, meshes );
+			doProcessNodes( *aiScene
+				, *aiScene->mRootNode
+				, scene
+				, merged );
 			result = true;
 		}
 		else
@@ -1001,18 +1079,133 @@ namespace C3dAssimp
 		, SceneNodeSPtr parent
 		, castor::Matrix4x4f accTransform )
 	{
+		castor::String name = aiNode.mName.C_Str();
+		auto node = std::make_shared< SceneNode >( name
+			, scene );
+		node->attachTo( *parent );
+		aiVector3D scale, position;
+		aiQuaternion orientation;
+		aiNode.mTransformation.Decompose( scale, orientation, position );
+		node->setScale( { scale.x, scale.y, scale.z } );
+		node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
+		node = scene.getSceneNodeCache().add( node->getName(), node ).lock();
+		m_nodes.push_back( node );
+
+		parent = node;
+		accTransform = makeMatrix4x4f( aiNode.mTransformation ) * accTransform;
+
+		// continue for all child nodes
+		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		{
+			doProcessSceneNodes( aiScene, *aiChild, scene, parent, accTransform );
+		}
+	}
+
+	void AssimpImporter::doProcessNodes( aiScene const & aiScene
+		, aiNode const & aiNode
+		, Scene & scene
+		, std::map< uint32_t, MeshData * > const & meshes )
+	{
 		if ( aiNode.mNumMeshes > 0 )
 		{
 			castor::String name = aiNode.mName.C_Str();
-			auto node = std::make_shared< SceneNode >( name
-				, scene );
-			node->attachTo( *parent );
-			aiVector3D scale, position;
-			aiQuaternion orientation;
-			aiNode.mTransformation.Decompose( scale, orientation, position );
-			node->setScale( { scale.x, scale.y, scale.z } );
-			node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
-			node = scene.getSceneNodeCache().add( node->getName(), node ).lock();
+			auto node = *std::find_if( m_nodes.begin()
+				, m_nodes.end()
+				, [&name]( SceneNodeSPtr lookup )
+				{
+					return lookup->getName() == name;
+				} );
+			std::vector< aiMesh * > aiMeshes;
+
+			for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
+			{
+				auto meshIt = meshes.find( aiMeshIndex );
+				CU_Assert( meshIt != meshes.end(), "Couldn't find mesh index in imported meshes." );
+				auto * meshRepl = meshIt->second;
+				auto geom = std::make_shared< Geometry >( name + castor::string::toString( aiMeshIndex )
+					, scene
+					, *node
+					, meshRepl->lmesh );
+				geom->setCulled( false );
+				auto matIt = meshRepl->materials.find( aiMeshIndex );
+				CU_Assert( matIt != meshRepl->materials.end(), "Couldn't find material in imported materials." );
+				geom->setMaterial( *meshRepl->mesh->getSubmesh( 0u )
+					, matIt->second );
+				m_geometries.emplace( geom->getName(), geom );
+				node->attachObject( *geom );
+				scene.getGeometryCache().add( std::move( geom ) );
+			}
+		}
+
+		// continue for all child nodes
+		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		{
+			doProcessNodes( aiScene, *aiChild, scene, meshes );
+		}
+	}
+
+	std::map< uint32_t, MeshData * > AssimpImporter::doMergeMeshes( castor3d::Scene & scene
+			, std::vector< MeshData > & source )
+	{
+		std::map< uint32_t, MeshData * > result;
+		std::vector< MeshData * > meshes;
+
+		for ( auto & mesh : source )
+		{
+			auto it = std::find_if( meshes.begin()
+				, meshes.end()
+				, [&mesh]( MeshData const * lookup )
+				{
+					return *lookup->mesh == *mesh.mesh;
+				} );
+
+			if ( it == meshes.end() )
+			{
+				meshes.push_back( &mesh );
+				result.emplace( mesh.aiMeshIndex, &mesh );
+			}
+			else
+			{
+				auto & meshRes = **mesh.mesh;
+				meshRes.cleanup();
+				mesh.mesh.reset();
+				result.emplace( mesh.aiMeshIndex, *it );
+
+				for ( auto matIt : mesh.materials )
+				{
+					( *it )->materials.emplace( matIt );
+				}
+			}
+
+		}
+
+		for ( auto & mesh : meshes )
+		{
+			for ( auto submesh : *mesh->mesh )
+			{
+				scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
+			}
+
+			mesh->lmesh = scene.getMeshCache().add( mesh->mesh->getName()
+				, mesh->mesh
+				, true );
+			mesh->mesh = mesh->lmesh.lock();
+			m_meshes.emplace( mesh->mesh->getName(), mesh->mesh );
+		}
+
+		return result;
+	}
+
+	std::vector< MeshData > AssimpImporter::doProcessMeshesAndAnims( aiScene const & aiScene
+		, Scene & scene
+		, std::vector< aiMesh * > aiMeshes )
+	{
+		std::vector< MeshData > result;
+		uint32_t index = 0u;
+
+		for ( auto & aiMesh : aiMeshes )
+		{
+			castor::String name = aiMesh->mName.C_Str();
 			MeshRes mesh;
 			auto lmesh = scene.getMeshCache().tryFind( name );
 
@@ -1025,50 +1218,15 @@ namespace C3dAssimp
 				mesh = lmesh.lock();
 			}
 
-			std::vector< aiMesh * > aiMeshes;
-
-			for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
+			if ( doProcessMeshAndAnims( aiScene, { aiMesh }, *mesh ) )
 			{
-				aiMeshes.push_back( aiScene.mMeshes[aiMeshIndex] );
+				result.push_back( { mesh, lmesh, index, { { index, mesh->getSubmesh( 0 )->getDefaultMaterial() } } } );
 			}
 
-			if ( doProcessMeshAndAnims( aiScene
-				, aiMeshes
-				, *mesh ) )
-			{
-				for ( auto submesh : *mesh )
-				{
-					scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
-				}
-
-				lmesh = scene.getMeshCache().add( mesh->getName()
-					, mesh
-					, true );
-				auto geom = std::make_shared< Geometry >( name
-					, scene
-					, *node
-					, lmesh );
-				geom->setCulled( false );
-				m_geometries.emplace( name, geom );
-				m_nodes.push_back( node );
-				node->attachObject( *geom );
-				scene.getGeometryCache().add( std::move( geom ) );
-			}
-
-			parent = node;
-			accTransform.setIdentity();
-		}
-		else
-		{
-			// if no meshes, skip the node, but keep its transformation
-			accTransform = makeMatrix4x4f( aiNode.mTransformation ) * accTransform;
+			++index;
 		}
 
-		// continue for all child nodes
-		for ( auto aiChild : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
-		{
-			doProcessSceneNodes( aiScene, *aiChild, scene, parent, accTransform );
-		}
+		return result;
 	}
 
 	bool AssimpImporter::doProcessMeshAndAnims( aiScene const & aiScene
@@ -1076,7 +1234,8 @@ namespace C3dAssimp
 		, castor3d::Mesh & mesh )
 	{
 		SkeletonSPtr skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
-		skeleton->setGlobalInverseTransform( makeMatrix4x4f( aiScene.mRootNode->mTransformation.Transpose().Inverse() ) );
+		auto transform = aiScene.mRootNode->mTransformation;
+		skeleton->setGlobalInverseTransform( makeMatrix4x4f( transform.Transpose().Inverse() ) );
 
 		bool create = true;
 		uint32_t aiMeshIndex = 0u;
@@ -1321,7 +1480,7 @@ namespace C3dAssimp
 		auto & cache = scene.getMaterialView();
 		aiString mtlname;
 		aiMaterial.Get( AI_MATKEY_NAME, mtlname );
-		castor::String name = castor::string::stringCast< xchar >( mtlname.C_Str() );
+		castor::String name = "Imp." + castor::string::stringCast< xchar >( mtlname.C_Str() );
 
 		if ( name.empty() )
 		{

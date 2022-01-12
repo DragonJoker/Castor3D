@@ -163,6 +163,8 @@ namespace castor3d
 		SceneNodePtrArray m_nodes;
 		//!\~english The loaded geometries	\~french Les géométries chargées
 		GeometryPtrStrMap m_geometries;
+		//!\~english The loaded meshes	\~french Les maillages chargés
+		MeshPtrStrMap m_meshes;
 		//!\~english Import configuration parameters	\~french Paramètres de configuration de l'import
 		Parameters m_parameters;
 		//!\~english Import texture remapping parameters	\~french Paramètres de reaffectation des textures importées
