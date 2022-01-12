@@ -656,7 +656,7 @@ namespace castor3d
 		void onSssChanged( SubsurfaceScattering const & sss );
 		void doJoinNmlHgt( TextureUnitPtrArray & result );
 		void doJoinEmsOcc( TextureUnitPtrArray & result );
-		void doAddUnit( TextureConfiguration const & config
+		bool doAddUnit( TextureConfiguration const & config
 			, AnimationUPtr animation
 			, TextureUnitSPtr unit
 			, TextureUnitPtrArray & result );
@@ -691,6 +691,7 @@ namespace castor3d
 
 	private:
 		PassTypeID m_typeID;
+		uint32_t m_index;
 		PassFlags m_flags;
 		TextureUnitPtrArray m_textureUnits;
 		using TextureSourceSet = std::unordered_set< TextureSourceInfo, TextureSourceInfoHasher >;
