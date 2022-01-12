@@ -30,9 +30,11 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		size_t result = std::hash< Geometry const * >{}( &geometry );
-		castor::hashCombinePtr( result, submesh );
-		castor::hashCombinePtr( result, pass );
+		size_t result = std::hash< castor::String >{}( geometry.getName() );
+		castor::hashCombine( result, submesh.getOwner()->getName() );
+		castor::hashCombine( result, submesh.getId() );
+		castor::hashCombine( result, pass.getOwner()->getName() );
+		castor::hashCombine( result, pass.getIndex() );
 		return result;
 	}
 
@@ -41,10 +43,8 @@ namespace castor3d
 		, Pass const & pass
 		, uint32_t instanceMult )
 	{
-		size_t result = std::hash< uint32_t >{}( instanceMult );
-		castor::hashCombinePtr( result, geometry );
-		castor::hashCombinePtr( result, submesh );
-		castor::hashCombinePtr( result, pass );
+		auto result = hash( geometry, submesh, pass );
+		castor::hashCombine( result, instanceMult );
 		return result;
 	}
 
