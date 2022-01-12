@@ -14,6 +14,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 #include <Castor3D/Text/TextMaterial.hpp>
 #include <Castor3D/Text/TextScene.hpp>
 
@@ -244,54 +245,99 @@ int main( int argc, char * argv[] )
 #endif
 
 		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-		castor3d::Engine engine
 		{
-			cuT( "CastorMeshConverter" ),
-			castor3d::Version{ CastorMeshConverter_VERSION_MAJOR, CastorMeshConverter_VERSION_MINOR, CastorMeshConverter_VERSION_BUILD },
-			false
-		};
-
-		if ( doInitialiseEngine( engine ) )
-		{
-			castor3d::Scene scene{ cuT( "DummyScene" ), engine };
-			auto name = path.getFileName();
-			auto extension = castor::string::lowerCase( path.getExtension() );
-			castor3d::MeshRPtr mesh{};
-
-			if ( !engine.getImporterFactory().isTypeRegistered( extension ) )
+			castor3d::Engine engine
 			{
-				std::cerr << "Importer for [" << extension << "] files is not registered, make sure you've got the matching plug-in installed." << std::endl;
-			}
-			else
-			{
-				scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
-				mesh = scene.getMeshCache().add( name
-					, scene ).lock().get();
-				auto importer = engine.getImporterFactory().create( extension, engine );
+				cuT( "CastorMeshConverter" ),
+				castor3d::Version{ CastorMeshConverter_VERSION_MAJOR, CastorMeshConverter_VERSION_MINOR, CastorMeshConverter_VERSION_BUILD },
+				false
+			};
 
-				if ( !importer->import( *mesh, path, castor3d::Parameters{}, true ) )
+			if ( doInitialiseEngine( engine ) )
+			{
+				auto name = path.getFileName();
+				auto extension = castor::string::lowerCase( path.getExtension() );
+
+				if ( extension == "cscn" )
 				{
-					std::cerr << "Mesh Import failed" << std::endl;
-					scene.getMeshCache().remove( name );
-					mesh = nullptr;
+					try
+					{
+						castor3d::SceneFileParser parser{ engine };
+						auto preprocessed = parser.processFile( path );
+
+						if ( preprocessed.parse() )
+						{
+							auto begin = parser.scenesBegin();
+
+							if ( begin != parser.scenesEnd() )
+							{
+								auto scene = parser.scenesBegin()->second;
+								auto rootFolder = path.getPath() / name;
+
+								if ( !castor::File::directoryExists( rootFolder ) )
+								{
+									castor::File::directoryCreate( rootFolder );
+								}
+
+								castor3d::exporter::CscnSceneExporter exporter{ options.options };
+								exporter.exportScene( *scene, rootFolder / ( scene->getName() + ".cscn" ) );
+								scene->cleanup();
+							}
+							else
+							{
+								castor::Logger::logError( castor::makeStringStream() << cuT( "No scene was imported" ) );
+							}
+						}
+						else
+						{
+							castor::Logger::logError( castor::makeStringStream() << cuT( "Can't read scene file" ) );
+						}
+					}
+					catch ( std::exception & exc )
+					{
+						castor::Logger::logError( castor::makeStringStream() << "Failed to parse the scene file, with following error:\n" << exc.what() );
+					}
 				}
-			}
-
-			if ( mesh )
-			{
-				auto rootFolder = path.getPath() / name;
-
-				if ( !castor::File::directoryExists( rootFolder ) )
+				else
 				{
-					castor::File::directoryCreate( rootFolder );
+					castor3d::Scene scene{ cuT( "DummyScene" ), engine };
+					castor3d::MeshRPtr mesh{};
+
+					if ( !engine.getImporterFactory().isTypeRegistered( extension ) )
+					{
+						castor::Logger::logError( castor::makeStringStream() << "Importer for [" << extension << "] files is not registered, make sure you've got the matching plug-in installed." );
+					}
+					else
+					{
+						scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
+						mesh = scene.getMeshCache().add( name, scene ).lock().get();
+						auto importer = engine.getImporterFactory().create( extension, engine );
+
+						if ( !importer->import( *mesh, path, castor3d::Parameters{}, true ) )
+						{
+							castor::Logger::logError( castor::makeStringStream() << "Mesh Import failed" );
+							scene.getMeshCache().remove( name );
+							mesh = nullptr;
+						}
+
+						if ( mesh )
+						{
+							auto rootFolder = path.getPath() / name;
+
+							if ( !castor::File::directoryExists( rootFolder ) )
+							{
+								castor::File::directoryCreate( rootFolder );
+							}
+
+							castor3d::exporter::CscnSceneExporter exporter{ options.options };
+							exporter.exportMesh( scene, *mesh, rootFolder, options.output );
+							mesh->cleanup();
+						}
+					}
 				}
 
-				castor3d::exporter::CscnSceneExporter exporter{ options.options };
-				exporter.exportMesh( scene, *mesh, rootFolder, options.output );
-				mesh->cleanup();
+				engine.cleanup();
 			}
-
-			engine.cleanup();
 		}
 
 		castor::Logger::cleanup();
