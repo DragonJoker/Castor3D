@@ -47,7 +47,7 @@ namespace castor
 			{
 				hasTexture = true;
 				createImageFile = true;
-				image = Path{ Path{ texture->getName() }.getFileName() + cuT( ".ktx" ) };
+				image = Path{ Path{ texture->getName() }.getFileName() + cuT( ".dds" ) };
 			}
 
 			if ( hasTexture )
@@ -59,7 +59,11 @@ namespace castor
 						result = writeName( file, cuT( "sampler" ), unit.getSampler().lock()->getName() );
 					}
 
-					if ( result && unit.getTexture()->getMipmapCount() > 1 )
+					auto dimensions = unit.getTexture()->getDimensions();
+
+					if ( result
+						&& unit.getTexture()->getMipmapCount() > 1
+						&& unit.getTexture()->getMipmapCount() != ashes::getMaxMipCount( dimensions ) )
 					{
 						result = write( file, cuT( "levels_count" ), unit.getTexture()->getMipmapCount() );
 					}
