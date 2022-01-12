@@ -10,6 +10,7 @@
 #include <ashes/common/Format.hpp>
 
 #if C3D_UseFreeImage
+#	pragma warning( disable: 4828 )
 #	include <FreeImage.h>
 #endif
 

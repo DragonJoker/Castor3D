@@ -42,7 +42,6 @@
 		<DisplayString>{m_name} {m_submeshes}</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
-			<Item Name="initialised">m_initialised</Item>
 			<Item Name="scene">m_scene</Item>
 			<Item Name="modified">m_modified</Item>
 			<Item Name="box">m_box</Item>
@@ -169,6 +168,10 @@
 
 	<Type Name="castor3d::SceneRenderPass">
 		<DisplayString>{m_name}({m_pass})</DisplayString>
+	</Type>
+
+	<Type Name="castor3d::Geometry">
+		<DisplayString>{m_name}({m_meshName})</DisplayString>
 	</Type>
 
 </AutoVisualizer>
