@@ -105,6 +105,7 @@ namespace castor3d
 		m_parameters = parameters;
 		m_nodes.clear();
 		m_geometries.clear();
+		m_meshes.clear();
 		bool result = true;
 
 		if ( !mesh.getSubmeshCount() )
@@ -207,10 +208,11 @@ namespace castor3d
 		m_parameters = parameters;
 		m_nodes.clear();
 		m_geometries.clear();
+		m_meshes.clear();
 		bool result = doImportScene( scene );
 
 		if ( result && initialise )
-			{
+		{
 			float value = 1.0f;
 
 			if ( m_parameters.get( cuT( "rescale" ), value )
@@ -221,11 +223,9 @@ namespace castor3d
 					node->setPosition( node->getPosition() * value );
 				}
 
-				for ( auto geomIt : m_geometries )
+				for ( auto meshIt : m_meshes )
 				{
-					auto mesh = geomIt.second->getMesh().lock();
-
-					for ( auto submesh : *mesh )
+					for ( auto submesh : *meshIt.second.lock() )
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
@@ -241,11 +241,9 @@ namespace castor3d
 				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
 					, castor::Angle::fromDegrees( value ) );
 
-				for ( auto geomIt : m_geometries )
+				for ( auto meshIt : m_meshes )
 				{
-					auto mesh = geomIt.second->getMesh().lock();
-
-					for ( auto submesh : *mesh )
+					for ( auto submesh : *meshIt.second.lock() )
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
@@ -261,11 +259,9 @@ namespace castor3d
 				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
 					, castor::Angle::fromDegrees( value ) );
 
-				for ( auto geomIt : m_geometries )
+				for ( auto meshIt : m_meshes )
 				{
-					auto mesh = geomIt.second->getMesh().lock();
-
-					for ( auto submesh : *mesh )
+					for ( auto submesh : *meshIt.second.lock() )
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
@@ -281,11 +277,9 @@ namespace castor3d
 				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
 					, castor::Angle::fromDegrees( value ) );
 
-				for ( auto geomIt : m_geometries )
+				for ( auto meshIt : m_meshes )
 				{
-					auto mesh = geomIt.second->getMesh().lock();
-
-					for ( auto submesh : *mesh )
+					for ( auto submesh : *meshIt.second.lock() )
 					{
 						for ( auto & vertex : submesh->getPoints() )
 						{
@@ -295,9 +289,9 @@ namespace castor3d
 				}
 			}
 
-			for ( auto geomIt : m_geometries )
+			for ( auto meshIt : m_meshes )
 			{
-				auto mesh = geomIt.second->getMesh().lock();
+				auto mesh = meshIt.second.lock();
 				mesh->computeContainers();
 				log::info << "Loaded mesh [" << mesh->getName() << "]"
 					<< " AABB (" << mesh->getBoundingBox() << ")"
