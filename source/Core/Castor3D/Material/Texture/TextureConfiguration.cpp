@@ -117,6 +117,21 @@ namespace castor3d
 		return result;
 	}();
 
+	bool shallowEqual( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
+	{
+		return lhs.colourMask[0] == rhs.colourMask[0]
+			&& lhs.specularMask[0] == rhs.specularMask[0]
+			&& lhs.metalnessMask[0] == rhs.metalnessMask[0]
+			&& lhs.glossinessMask[0] == rhs.glossinessMask[0]
+			&& lhs.roughnessMask[0] == rhs.roughnessMask[0]
+			&& lhs.opacityMask[0] == rhs.opacityMask[0]
+			&& lhs.emissiveMask[0] == rhs.emissiveMask[0]
+			&& lhs.normalMask[0] == rhs.normalMask[0]
+			&& lhs.heightMask[0] == rhs.heightMask[0]
+			&& lhs.occlusionMask[0] == rhs.occlusionMask[0]
+			&& lhs.transmittanceMask[0] == rhs.transmittanceMask[0];
+	}
+
 	bool operator==( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
 	{
 		return lhs.colourMask == rhs.colourMask

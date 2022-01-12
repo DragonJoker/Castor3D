@@ -525,15 +525,20 @@ namespace castor3d
 			if ( lhsIt.first == rhsIt.first )
 			{
 				auto unit = textureCache.getTexture( lhsIt.first, lhsIt.second );
-				m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
-				doAddUnit( lhsIt.second.config
+
+				if ( doAddUnit( lhsIt.second.config
 					, std::move( lhsAnim )
 					, std::move( unit )
-					, result );
+					, result ) )
+				{
+					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
+				}
 			}
 			else
 			{
-				if ( isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
+				if ( getFlags( lhsIt.second.config ).size() == 1u
+					&& getFlags( rhsIt.second.config ).size() == 1u
+					&& isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
 					&& isMergeable( rhsIt.first, rhsIt.second, rhsAnim ) )
 				{
 					log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
@@ -558,27 +563,37 @@ namespace castor3d
 						, getOwner()->getName() + name
 						, resultSourceInfo
 						, resultConfig );
-					m_unitsSources.emplace( img.get(), TextureSourceSet {} ).first->second.insert( lhsIt.first );
-					m_unitsSources.emplace( img.get(), TextureSourceSet {} ).first->second.insert( rhsIt.first );
-					doAddUnit( resultConfig
+
+					if ( doAddUnit( resultConfig
 						, nullptr
 						, std::move( img )
-						, result );
+						, result ) )
+					{
+						m_unitsSources.emplace( img.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
+						m_unitsSources.emplace( img.get(), TextureSourceSet{} ).first->second.insert( rhsIt.first );
+					}
 				}
 				else
 				{
 					auto unit = textureCache.getTexture( lhsIt.first, lhsIt.second );
-					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
-					doAddUnit( lhsIt.second.config
+
+					if ( doAddUnit( lhsIt.second.config
 						, std::move( lhsAnim )
 						, std::move( unit )
-						, result );
+						, result ) )
+					{
+						m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
+					}
+
 					unit = textureCache.getTexture( rhsIt.first, rhsIt.second );
-					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( rhsIt.first );
-					doAddUnit( rhsIt.second.config
+
+					if ( doAddUnit( rhsIt.second.config
 						, std::move( rhsAnim )
 						, std::move( unit )
-						, result );
+						, result ) )
+					{
+						m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( rhsIt.first );
+					}
 				}
 			}
 		}
@@ -592,11 +607,14 @@ namespace castor3d
 					? std::move( animIt->second )
 					: nullptr );
 				auto unit = textureCache.getTexture( it.first, it.second );
-				m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
-				doAddUnit( it.second.config
+
+				if ( doAddUnit( it.second.config
 					, std::move( anim )
 					, std::move( unit )
-					, result );
+					, result ) )
+				{
+					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
+				}
 			}
 			else if ( !sourcesRhs.empty() )
 			{
@@ -606,13 +624,33 @@ namespace castor3d
 					? std::move( animIt->second )
 					: nullptr );
 				auto unit = textureCache.getTexture( it.first, it.second );
-				m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
-				doAddUnit( it.second.config
+
+				if ( doAddUnit( it.second.config
 					, std::move( anim )
 					, std::move( unit )
-					, result );
+					, result ) )
+				{
+					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
+				}
 			}
 		}
+
+#ifndef NDEBUG
+		auto it = result.begin();
+
+		while ( it != result.end() )
+		{
+			auto nit = std::find_if( std::next( it )
+				, result.end()
+				, [it]( TextureUnitSPtr lookup )
+				{
+					return shallowEqual( ( *it )->getConfiguration(), lookup->getConfiguration() );
+				} );
+			bool ok = ( nit == result.end() );
+			CU_Ensure( ok );
+			++it;
+		}
+#endif
 	}
 
 	void Pass::doJoinDifOpa( TextureUnitPtrArray & result
@@ -657,7 +695,7 @@ namespace castor3d
 			, result );
 	}
 
-	void Pass::doAddUnit( TextureConfiguration const & config
+	bool Pass::doAddUnit( TextureConfiguration const & config
 		, AnimationUPtr animation
 		, TextureUnitSPtr unit
 		, TextureUnitPtrArray & result )
@@ -675,7 +713,20 @@ namespace castor3d
 			static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
 		}
 
-		result.push_back( unit );
+		auto it = std::find_if( result.begin()
+			, result.end()
+			, [&config]( TextureUnitSPtr unit )
+			{
+				return shallowEqual( config, unit->getConfiguration() );
+			} );
+
+		if ( it == result.end() )
+		{
+			result.push_back( unit );
+			return true;
+		}
+
+		return false;
 	}
 
 	void Pass::doUpdateAlphaFlags()

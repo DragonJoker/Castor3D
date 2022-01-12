@@ -140,6 +140,7 @@ namespace castor3d
 	*	Opérateurs de comparaison.
 	*/
 	/**@{*/
+	C3D_API bool shallowEqual( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
 	C3D_API bool operator==( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
 	C3D_API bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
 	/**@}*/
