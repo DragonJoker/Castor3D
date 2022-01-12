@@ -124,6 +124,7 @@ namespace castor3d
 		, PassFlags initialFlags )
 		: OwnedBy< Material >{ parent }
 		, m_typeID{ typeID }
+		, m_index{ parent.getPassCount() }
 		, m_flags{ PassFlag::ePickable
 			| PassFlag::eLighting
 			| initialFlags }

@@ -292,9 +292,9 @@ namespace castor
 
 			if ( !content.empty() )
 			{
-				m_logger.logInfo( cuT( "FileParser : Parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+				m_logger.logInfo( cuT( "FileParser : Preprocessing file [" ) + path.getFileName( true ) + cuT( "]." ) );
 				processFile( path, content, preprocessed );
-				m_logger.logInfo( cuT( "FileParser : Finished parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+				m_logger.logInfo( cuT( "FileParser : Finished preprocessing file [" ) + path.getFileName( true ) + cuT( "]." ) );
 			}
 		}
 		else
