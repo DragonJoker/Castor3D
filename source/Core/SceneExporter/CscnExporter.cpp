@@ -672,7 +672,7 @@ namespace castor3d::exporter
 						return true;
 					} );
 			}
-			if ( result )
+			if ( result && !stream.str().empty() )
 			{
 				options.lightsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Lights.cscn" ) );
 				castor::TextFile file{ folder / options.lightsFile
