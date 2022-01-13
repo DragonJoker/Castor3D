@@ -42,12 +42,17 @@ namespace C3dAssimp
 	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
 	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
 
+	struct SubmeshData
+	{
+		std::vector< castor3d::MaterialRPtr > materials;
+	};
+	
 	struct MeshData
 	{
 		castor3d::MeshRes mesh;
 		castor3d::MeshResPtr lmesh;
-		uint32_t aiMeshIndex;
-		std::map< uint32_t, castor3d::MaterialRPtr > materials;
+		std::set< uint32_t > aiMeshIndices;
+		std::map< uint32_t, SubmeshData > submeshes;
 	};
 
 	class AssimpImporter
@@ -79,7 +84,8 @@ namespace C3dAssimp
 		aiScene const * doLoadScene();
 		std::vector< MeshData > doProcessMeshesAndAnims( aiScene const & aiScene
 			, castor3d::Scene & scene
-			, std::vector< aiMesh * > aiMeshes );
+			, std::vector< aiMesh * > const & aiMeshes
+			, castor3d::MeshPtrStrMap & registeredMeshes );
 		std::map< uint32_t, MeshData * > doMergeMeshes( castor3d::Scene & scene
 			, std::vector< MeshData > & source );
 		bool doProcessMeshAndAnims( aiScene const & aiScene
