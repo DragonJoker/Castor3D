@@ -12,7 +12,6 @@
 #include <GuiCommon/Properties/TreeItems/TreeHolder.hpp>
 #include <GuiCommon/Properties/TreeItems/ExportOptionsTreeItemProperty.hpp>
 #include <GuiCommon/System/ImagesLoader.hpp>
-#include <GuiCommon/System/MaterialsList.hpp>
 #include <GuiCommon/System/RendererSelector.hpp>
 #include <GuiCommon/System/SplashScreen.hpp>
 #include <GuiCommon/System/TreeListContainer.hpp>
@@ -330,10 +329,6 @@ namespace CastorViewer
 		m_sceneObjects = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_sceneTabsContainer->AddPage( m_sceneObjects, _( "Scene" ), true );
 
-		m_materials = new GuiCommon::TreeListContainerT< GuiCommon::MaterialsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_sceneTabsContainer->AddPage( m_materials, _( "Materials" ), true );
-		m_sceneTabsContainer->ChangeSelection( 0u );
-
 		m_auiManager.Update();
 	}
 
@@ -503,7 +498,6 @@ namespace CastorViewer
 		{
 			auto engine = wxGetApp().getCastor();
 
-			m_materials->getList()->unloadMaterials();
 			m_sceneObjects->getList()->unloadScene();
 			m_mainCamera.reset();
 			m_sceneNode.reset();
@@ -710,7 +704,6 @@ namespace CastorViewer
 		if ( scene )
 		{
 			m_sceneObjects->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), scene );
-			m_materials->getList()->loadMaterials( engine, *scene );
 		}
 
 #if CV_MainFrameToolbar
