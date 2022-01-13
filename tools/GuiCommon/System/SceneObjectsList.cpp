@@ -195,15 +195,6 @@ namespace GuiCommon
 				} );
 
 			catId = AppendItem( sceneId
-				, _( "Geometries" )
-				, eBMP_GEOMETRY
-				, eBMP_GEOMETRY_SEL );
-			scene->getGeometryCache().forEach( [this, catId]( Geometry & elem )
-				{
-					doAddGeometry( catId, elem );
-				} );
-
-			catId = AppendItem( sceneId
 				, _( "Light Sources" )
 				, eBMP_DIRECTIONAL_LIGHT
 				, eBMP_DIRECTIONAL_LIGHT_SEL );
