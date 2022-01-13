@@ -105,9 +105,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String Scene::RootNode = cuT( "RootNode" );
-	castor::String Scene::CameraRootNode = cuT( "CameraRootNode" );
-	castor::String Scene::ObjectRootNode = cuT( "ObjectRootNode" );
+	castor::String Scene::RootNode = cuT( "C3D.RootNode" );
+	castor::String Scene::CameraRootNode = cuT( "C3D.CameraRootNode" );
+	castor::String Scene::ObjectRootNode = cuT( "C3D.ObjectRootNode" );
 
 	Scene::Scene( castor::String const & name, Engine & engine )
 		: castor::OwnedBy< Engine >{ engine }
@@ -219,11 +219,11 @@ namespace castor3d
 			} );
 
 		auto node = m_rootNode;
-		m_sceneNodeCache->add( cuT( "RootNode" ), node );
+		m_sceneNodeCache->add( RootNode, node );
 		node = m_rootCameraNode;
-		m_sceneNodeCache->add( cuT( "ObjectRootNode" ), node );
+		m_sceneNodeCache->add( ObjectRootNode, node );
 		node = m_rootCameraNode;
-		m_sceneNodeCache->add( cuT( "CameraRootNode" ), node );
+		m_sceneNodeCache->add( CameraRootNode, node );
 		auto setThisChanged = [this]()
 		{
 			setChanged();
