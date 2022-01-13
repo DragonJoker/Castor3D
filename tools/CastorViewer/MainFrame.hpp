@@ -117,7 +117,6 @@ namespace CastorViewer
 		LogContainer m_debugLog;
 #endif
 		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_sceneObjects{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::MaterialsList > * m_materials{ nullptr };
 		castor3d::SceneWPtr m_mainScene;
 		castor3d::CameraWPtr m_mainCamera;
 		castor3d::SceneNodeWPtr m_sceneNode;
