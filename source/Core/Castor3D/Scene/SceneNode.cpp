@@ -14,7 +14,7 @@ namespace castor3d
 		: castor::OwnedBy< Scene >{ scene }
 		, castor::Named{ name }
 		, m_id{ CurrentId++ }
-		, m_displayable{ name == cuT( "RootNode" ) }
+		, m_displayable{ name == Scene::RootNode }
 	{
 		if ( m_name.empty() )
 		{

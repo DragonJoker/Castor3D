@@ -1,6 +1,7 @@
 #include "Castor3D/Text/TextSceneNode.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextQuaternion.hpp>
@@ -13,9 +14,9 @@ namespace castor
 	{
 		bool isIgnored( castor::String const & name )
 		{
-			return name == cuT( "RootNode" )
-				|| name == cuT( "ObjectRootNode" )
-				|| name == cuT( "CameraRootNode" )
+			return name == Scene::RootNode
+				|| name == Scene::ObjectRootNode
+				|| name == Scene::CameraRootNode
 				|| name.find( cuT( "_REye" ) ) != castor::String::npos
 				|| name.find( cuT( "_LEye" ) ) != castor::String::npos;
 		}
