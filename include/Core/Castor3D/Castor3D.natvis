@@ -172,6 +172,35 @@
 
 	<Type Name="castor3d::Geometry">
 		<DisplayString>{m_name}({m_meshName})</DisplayString>
+		<Expand>
+			<Item Name="mesh">m_mesh</Item>
+			<Item Name="meshName">m_meshName</Item>
+			<Item Name="listCreated">m_listCreated</Item>
+			<Item Name="submeshesMaterials">m_submeshesMaterials</Item>
+			<Item Name="submeshesBoxes">m_submeshesBoxes</Item>
+			<Item Name="submeshesSpheres">m_submeshesSpheres</Item>
+			<Item Name="box">m_box</Item>
+			<Item Name="sphere">m_sphere</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SceneNode">
+		<DisplayString>[{m_id}]{m_name}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="displayable">m_displayable</Item>
+			<Item Name="visible">m_visible</Item>
+			<Item Name="orientation">m_orientation</Item>
+			<Item Name="position">m_position</Item>
+			<Item Name="scale">m_scale</Item>
+			<Item Name="transform">m_transform</Item>
+			<Item Name="mtxChanged">m_mtxChanged</Item>
+			<Item Name="derivedTransform">m_derivedTransform</Item>
+			<Item Name="derivedMtxChanged">m_derivedMtxChanged</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+			<Item Name="objects">m_objects</Item>
+		</Expand>
 	</Type>
 
 </AutoVisualizer>

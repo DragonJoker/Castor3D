@@ -528,7 +528,7 @@ namespace castor3d
 
 				if ( doAddUnit( lhsIt.second.config
 					, std::move( lhsAnim )
-					, std::move( unit )
+					, unit
 					, result ) )
 				{
 					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
@@ -536,8 +536,11 @@ namespace castor3d
 			}
 			else
 			{
-				if ( getFlags( lhsIt.second.config ).size() == 1u
-					&& getFlags( rhsIt.second.config ).size() == 1u
+				auto lhsFlags = getFlags( lhsIt.second.config );
+				auto rhsFlags = getFlags( rhsIt.second.config );
+
+				if ( lhsFlags.size() == 1u
+					&& rhsFlags.size() == 1u
 					&& isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
 					&& isMergeable( rhsIt.first, rhsIt.second, rhsAnim ) )
 				{
@@ -566,7 +569,7 @@ namespace castor3d
 
 					if ( doAddUnit( resultConfig
 						, nullptr
-						, std::move( img )
+						, img
 						, result ) )
 					{
 						m_unitsSources.emplace( img.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
@@ -579,7 +582,7 @@ namespace castor3d
 
 					if ( doAddUnit( lhsIt.second.config
 						, std::move( lhsAnim )
-						, std::move( unit )
+						, unit
 						, result ) )
 					{
 						m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
@@ -589,7 +592,7 @@ namespace castor3d
 
 					if ( doAddUnit( rhsIt.second.config
 						, std::move( rhsAnim )
-						, std::move( unit )
+						, unit
 						, result ) )
 					{
 						m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( rhsIt.first );
@@ -610,7 +613,7 @@ namespace castor3d
 
 				if ( doAddUnit( it.second.config
 					, std::move( anim )
-					, std::move( unit )
+					, unit
 					, result ) )
 				{
 					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
@@ -627,7 +630,7 @@ namespace castor3d
 
 				if ( doAddUnit( it.second.config
 					, std::move( anim )
-					, std::move( unit )
+					, unit
 					, result ) )
 				{
 					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );

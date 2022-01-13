@@ -78,13 +78,7 @@ namespace castor3d
 		if ( auto mesh = getMesh().lock() )
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
-			CU_Require( mesh->end() != std::find_if( mesh->begin()
-				, mesh->end()
-				, [&submesh]( SubmeshSPtr lookup )
-				{
-					return lookup.get() == &submesh;
-				} ) );
-
+			CU_Require( submesh.getId() < mesh->getSubmeshCount() );
 			bool changed = false;
 			MaterialRPtr oldMaterial{};
 			auto itSubMat = m_submeshesMaterials.find( &submesh );

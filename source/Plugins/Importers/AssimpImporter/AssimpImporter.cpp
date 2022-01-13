@@ -311,15 +311,7 @@ namespace C3dAssimp
 					m_result.setEmissive( 1.0f );
 				}
 
-				if ( m_mtlInfos.ambient.IsBlack()
-					&& m_mtlInfos.colour.IsBlack()
-					&& m_mtlInfos.specular.IsBlack()
-					&& m_mtlInfos.emissive.IsBlack() )
-				{
-					m_mtlInfos.colour.r = 1.0;
-					m_mtlInfos.colour.g = 1.0;
-					m_mtlInfos.colour.b = 1.0;
-				}
+				m_result.setTwoSided( true );
 			}
 
 			void visit( castor::String const & name
@@ -533,24 +525,35 @@ namespace C3dAssimp
 				{
 					auto & loader = m_result.getOwner()->getEngine()->getImageLoader();
 					auto path = castor::Path{ info.name };
-					auto sourceInfo = m_importer.loadTexture( m_sampler, path, texConfig );
-					auto layout = loader.load( path.getFileName(), sourceInfo.folder() / sourceInfo.relative(), { false, false, false } ).getLayout();
-					texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
-						, castor::Angle::fromRadians( info.transform.mRotation )
-						, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
-					auto create = ashes::ImageCreateInfo{ 0u
-						, VkImageType( layout.type )
-						, VkFormat( layout.format )
-						, { layout.extent->x, layout.extent->y, layout.extent->z }
-						, layout.levels
-						, layout.layers
-						, VK_SAMPLE_COUNT_1_BIT
-						, VK_IMAGE_TILING_OPTIMAL
-						, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
-					m_importer.loadTexture( m_sampler
-						, castor::Path{ info.name }
-						, { create, texConfig }
+
+					try
+					{
+						auto sourceInfo = m_importer.loadTexture( m_sampler, path, texConfig );
+						auto layout = loader.load( path.getFileName(), sourceInfo.folder() / sourceInfo.relative(), { false, false, false } ).getLayout();
+						texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+							, castor::Angle::fromRadians( info.transform.mRotation )
+							, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
+						auto create = ashes::ImageCreateInfo{ 0u
+							, VkImageType( layout.type )
+							, VkFormat( layout.format )
+							, { layout.extent->x, layout.extent->y, layout.extent->z }
+							, layout.levels
+							, layout.layers
+							, VK_SAMPLE_COUNT_1_BIT
+							, VK_IMAGE_TILING_OPTIMAL
+							, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
+						m_importer.loadTexture( m_sampler
+							, castor::Path{ info.name }
+							, { create, texConfig }
+							, m_result );
+					}
+					catch ( std::exception & )
+					{
+						m_importer.loadTexture( m_sampler
+							, castor::Path{ info.name }
+							, { { {} }, texConfig }
 						, m_result );
+					}
 				}
 			}
 
@@ -992,7 +995,11 @@ namespace C3dAssimp
 				aiMeshes.push_back( aiMesh );
 			}
 
-			auto meshes = doProcessMeshesAndAnims( *aiScene, scene, aiMeshes );
+			castor3d::MeshPtrStrMap registeredMeshes;
+			auto meshes = doProcessMeshesAndAnims( *aiScene
+				, scene
+				, aiMeshes
+				, registeredMeshes );
 			auto merged = doMergeMeshes( scene, meshes );
 			doProcessNodes( *aiScene
 				, *aiScene->mRootNode
@@ -1080,18 +1087,22 @@ namespace C3dAssimp
 		, castor::Matrix4x4f accTransform )
 	{
 		castor::String name = aiNode.mName.C_Str();
-		auto node = std::make_shared< SceneNode >( name
-			, scene );
-		node->attachTo( *parent );
-		aiVector3D scale, position;
-		aiQuaternion orientation;
-		aiNode.mTransformation.Decompose( scale, orientation, position );
-		node->setScale( { scale.x, scale.y, scale.z } );
-		node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
-		node = scene.getSceneNodeCache().add( node->getName(), node ).lock();
-		m_nodes.push_back( node );
+		auto lnode = scene.getSceneNodeCache().tryFind( name );
 
-		parent = node;
+		if ( !lnode.lock() )
+		{
+			auto node = scene.getSceneNodeCache().create( name, scene );
+			node->attachTo( *parent );
+			aiVector3D scale, position;
+			aiQuaternion orientation;
+			aiNode.mTransformation.Decompose( scale, orientation, position );
+			node->setScale( { scale.x, scale.y, scale.z } );
+			node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
+			m_nodes.push_back( node );
+			lnode = scene.getSceneNodeCache().add( node->getName(), node );
+		}
+
+		parent = lnode.lock();
 		accTransform = makeMatrix4x4f( aiNode.mTransformation ) * accTransform;
 
 		// continue for all child nodes
@@ -1115,25 +1126,38 @@ namespace C3dAssimp
 				{
 					return lookup->getName() == name;
 				} );
-			std::vector< aiMesh * > aiMeshes;
 
 			for ( auto aiMeshIndex : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
 				auto meshIt = meshes.find( aiMeshIndex );
-				CU_Assert( meshIt != meshes.end(), "Couldn't find mesh index in imported meshes." );
-				auto * meshRepl = meshIt->second;
-				auto geom = std::make_shared< Geometry >( name + castor::string::toString( aiMeshIndex )
-					, scene
-					, *node
-					, meshRepl->lmesh );
-				geom->setCulled( false );
-				auto matIt = meshRepl->materials.find( aiMeshIndex );
-				CU_Assert( matIt != meshRepl->materials.end(), "Couldn't find material in imported materials." );
-				geom->setMaterial( *meshRepl->mesh->getSubmesh( 0u )
-					, matIt->second );
-				m_geometries.emplace( geom->getName(), geom );
-				node->attachObject( *geom );
-				scene.getGeometryCache().add( std::move( geom ) );
+
+				if ( meshIt != meshes.end() )
+				{
+					auto * meshRepl = meshIt->second;
+					auto lgeom = scene.getGeometryCache().tryFind( name + castor::string::toString( aiMeshIndex ) );
+
+					if ( !lgeom.lock() )
+					{
+						auto geom = scene.getGeometryCache().create( name + castor::string::toString( aiMeshIndex )
+							, scene
+							, *node
+							, meshRepl->lmesh );
+						geom->setCulled( false );
+						uint32_t index = 0u;
+						auto matIt = meshRepl->submeshes.find( aiMeshIndex );
+						CU_Assert( matIt != meshRepl->submeshes.end(), "Couldn't find material in imported materials." );
+
+						for ( auto material : matIt->second.materials )
+						{
+							geom->setMaterial( *meshRepl->mesh->getSubmesh( index ), material );
+							++index;
+						}
+
+						m_geometries.emplace( geom->getName(), geom );
+						node->attachObject( *geom );
+						scene.getGeometryCache().add( std::move( geom ) );
+					}
+				}
 			}
 		}
 
@@ -1162,21 +1186,20 @@ namespace C3dAssimp
 			if ( it == meshes.end() )
 			{
 				meshes.push_back( &mesh );
-				result.emplace( mesh.aiMeshIndex, &mesh );
+				result.emplace( *mesh.aiMeshIndices.begin(), &mesh );
 			}
 			else
 			{
 				auto & meshRes = **mesh.mesh;
 				meshRes.cleanup();
 				mesh.mesh.reset();
-				result.emplace( mesh.aiMeshIndex, *it );
+				result.emplace( *mesh.aiMeshIndices.begin(), *it );
 
-				for ( auto matIt : mesh.materials )
+				for ( auto matIt : mesh.submeshes )
 				{
-					( *it )->materials.emplace( matIt );
+					( *it )->submeshes.emplace( matIt );
 				}
 			}
-
 		}
 
 		for ( auto & mesh : meshes )
@@ -1189,7 +1212,12 @@ namespace C3dAssimp
 			mesh->lmesh = scene.getMeshCache().add( mesh->mesh->getName()
 				, mesh->mesh
 				, true );
-			mesh->mesh = mesh->lmesh.lock();
+
+			if ( !mesh->mesh )
+			{
+				mesh->mesh = mesh->lmesh.lock();
+			}
+
 			m_meshes.emplace( mesh->mesh->getName(), mesh->mesh );
 		}
 
@@ -1198,7 +1226,8 @@ namespace C3dAssimp
 
 	std::vector< MeshData > AssimpImporter::doProcessMeshesAndAnims( aiScene const & aiScene
 		, Scene & scene
-		, std::vector< aiMesh * > aiMeshes )
+		, std::vector< aiMesh * > const & aiMeshes
+		, castor3d::MeshPtrStrMap & registeredMeshes )
 	{
 		std::vector< MeshData > result;
 		uint32_t index = 0u;
@@ -1206,21 +1235,46 @@ namespace C3dAssimp
 		for ( auto & aiMesh : aiMeshes )
 		{
 			castor::String name = aiMesh->mName.C_Str();
+			auto regIt = registeredMeshes.find( name );
 			MeshRes mesh;
-			auto lmesh = scene.getMeshCache().tryFind( name );
+			MeshResPtr lmesh;
 
-			if ( !lmesh.lock() )
+			if ( regIt != registeredMeshes.end() )
 			{
-				mesh = scene.getMeshCache().create( name, scene );
+				lmesh = regIt->second;
+				mesh = lmesh.lock();
 			}
 			else
 			{
-				mesh = lmesh.lock();
+				mesh = scene.getMeshCache().create( name, scene );
+				lmesh = mesh;
+				registeredMeshes.emplace( name, lmesh );
 			}
 
 			if ( doProcessMeshAndAnims( aiScene, { aiMesh }, *mesh ) )
 			{
-				result.push_back( { mesh, lmesh, index, { { index, mesh->getSubmesh( 0 )->getDefaultMaterial() } } } );
+				if ( regIt == registeredMeshes.end() )
+				{
+					// new mesh
+					SubmeshData submesh{ { mesh->getSubmesh( mesh->getSubmeshCount() - 1u )->getDefaultMaterial() } };
+					result.push_back( { mesh
+						, lmesh
+						, { index }
+						, { { index, submesh } } } );
+				}
+				else
+				{
+					// additional submesh
+					auto it = std::find_if( result.begin()
+						, result.end()
+						, [&mesh]( MeshData const & lookup )
+						{
+							return lookup.mesh == mesh;
+						} );
+					CU_Require( it != result.end() );
+					it->aiMeshIndices.insert( index );
+					it->submeshes.begin()->second.materials.push_back( mesh->getSubmesh( mesh->getSubmeshCount() - 1u )->getDefaultMaterial() );
+				}
 			}
 
 			++index;
