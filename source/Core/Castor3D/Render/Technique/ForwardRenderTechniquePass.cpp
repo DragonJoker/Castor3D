@@ -307,8 +307,7 @@ namespace castor3d
 				{
 					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils )
 						, pxl_fragColor
-						, length( in.viewPosition )
-						, in.viewPosition.y()
+						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
 

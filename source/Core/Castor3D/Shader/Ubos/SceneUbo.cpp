@@ -31,6 +31,7 @@ namespace castor3d
 			, m_clipInfo{ getMember< sdw::Vec4 >( "clipInfo" ) }
 			, m_fogInfo{ getMember< sdw::Vec4 >( "fogInfo" ) }
 			, fogType{ writer.cast< sdw::UInt >( m_fogInfo.x() ) }
+			, fogDensity{ m_fogInfo.y() }
 			, ambientLight{ m_ambientLight.xyz() }
 			, cameraPosition{ m_cameraPosition.xyz() }
 			, renderSize{ m_clipInfo.xy() }

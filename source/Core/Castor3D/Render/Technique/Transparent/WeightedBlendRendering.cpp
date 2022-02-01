@@ -116,13 +116,12 @@ namespace castor3d
 						auto texCoord = writer.declLocale( "texCoord"
 							, in.fragCoord.xy() );
 						auto position = writer.declLocale( "position"
-							, c3d_gpInfoData.projToView( utils
+							, c3d_gpInfoData.projToWorld( utils
 								, texCoord
 								, c3d_mapDepth.sample( texCoord ).r() ) );
 						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, pxl_fragColor
-							, length( position )
-							, position.z()
+							, position
 							, c3d_sceneData );
 					}
 					FI;
