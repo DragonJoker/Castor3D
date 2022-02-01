@@ -58,7 +58,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_overlayData = overlay.declStructMember< castor3d::shader::OverlayData >( castor3d::OverlayUbo::OverlayData );\
+	auto c3d_overlayData = overlay.declMember< castor3d::shader::OverlayData >( castor3d::OverlayUbo::OverlayData );\
 	overlay.end()
 
 #endif

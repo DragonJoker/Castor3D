@@ -102,7 +102,7 @@ namespace light_streaks
 
 #define UBO_KAWASE( writer, binding, set )\
 	sdw::Ubo kawase{ writer, KawaseUbo::Buffer, binding, set };\
-	auto c3d_kawaseData = kawase.declStructMember< KawaseData >( KawaseUbo::Data );\
+	auto c3d_kawaseData = kawase.declMember< KawaseData >( KawaseUbo::Data );\
 	kawase.end()
 
 #endif

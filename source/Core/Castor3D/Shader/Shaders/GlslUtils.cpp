@@ -1352,12 +1352,12 @@ namespace castor3d::shader
 			switch ( alphaFunc )
 			{
 			case VK_COMPARE_OP_NEVER:
-				m_writer.discard();
+				m_writer.demote();
 				break;
 			case VK_COMPARE_OP_LESS:
 				IF( m_writer, alpha >= alphaRef )
 				{
-					m_writer.discard();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1368,7 +1368,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_EQUAL:
 				IF( m_writer, alpha != alphaRef )
 				{
-					m_writer.discard();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1379,7 +1379,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_LESS_OR_EQUAL:
 				IF( m_writer, alpha > alphaRef )
 				{
-					m_writer.discard();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1390,7 +1390,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_GREATER:
 				IF( m_writer, alpha <= alphaRef )
 				{
-					m_writer.discard();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1401,7 +1401,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_NOT_EQUAL:
 				IF( m_writer, alpha == alphaRef )
 				{
-					m_writer.discard();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1412,7 +1412,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_GREATER_OR_EQUAL:
 				IF( m_writer, alpha < alphaRef )
 				{
-					m_writer.discard();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1542,7 +1542,7 @@ namespace castor3d::shader
 					|| texCoords.x() < 0.0_f
 					|| texCoords.y() < 0.0_f )
 				{
-					m_writer.discard();
+					m_writer.demote();
 				}
 				FI;
 			}

@@ -109,7 +109,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_modelData = model.declStructMember< castor3d::shader::ModelData >( castor3d::ModelUbo::ModelData );\
+	auto c3d_modelData = model.declMember< castor3d::shader::ModelData >( castor3d::ModelUbo::ModelData );\
 	model.end()
 
 #endif

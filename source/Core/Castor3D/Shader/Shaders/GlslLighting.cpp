@@ -522,9 +522,9 @@ namespace castor3d::shader
 	{
 		sdw::Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
 #if C3D_UseTiledDirectionalShadowMap
-		lightUbo.declStructMember< TiledDirectionalLight >( "c3d_light" );
+		lightUbo.declMember< TiledDirectionalLight >( "c3d_light" );
 #else
-		lightUbo.declStructMember< DirectionalLight >( "c3d_light" );
+		lightUbo.declMember< DirectionalLight >( "c3d_light" );
 #endif
 		lightUbo.end();
 	}
@@ -533,7 +533,7 @@ namespace castor3d::shader
 		, uint32_t set )
 	{
 		sdw::Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
-		lightUbo.declStructMember< PointLight >( "c3d_light" );
+		lightUbo.declMember< PointLight >( "c3d_light" );
 		lightUbo.end();
 	}
 
@@ -541,7 +541,7 @@ namespace castor3d::shader
 		, uint32_t set )
 	{
 		sdw::Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
-		lightUbo.declStructMember< SpotLight >( "c3d_light" );
+		lightUbo.declMember< SpotLight >( "c3d_light" );
 		lightUbo.end();
 	}
 

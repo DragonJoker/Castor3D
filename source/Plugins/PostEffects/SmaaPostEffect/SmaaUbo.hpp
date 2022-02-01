@@ -134,7 +134,7 @@ namespace smaa
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_smaaData = smaaBuffer.declStructMember< smaa::SmaaData >( smaa::SmaaUbo::Data );\
+	auto c3d_smaaData = smaaBuffer.declMember< smaa::SmaaData >( smaa::SmaaUbo::Data );\
 	smaaBuffer.end()
 
 #endif

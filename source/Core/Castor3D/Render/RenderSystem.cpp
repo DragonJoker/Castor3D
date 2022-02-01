@@ -149,6 +149,81 @@ namespace castor3d
 		}
 
 #endif
+#if !defined( NDEBUG )
+#	if C3D_HasGLSL
+
+		glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
+		{
+			glsl::GlslExtensionSet result;
+
+			if ( glslVersion >= glsl::v4_6 )
+			{
+				result.insert( glsl::EXT_shader_atomic_float );
+				result.insert( glsl::EXT_ray_tracing );
+				result.insert( glsl::EXT_ray_query );
+				result.insert( glsl::EXT_scalar_block_layout );
+			}
+
+			if ( glslVersion >= glsl::v4_5 )
+			{
+				result.insert( glsl::ARB_shader_ballot );
+				result.insert( glsl::ARB_shader_viewport_layer_array );
+				result.insert( glsl::NV_stereo_view_rendering );
+				result.insert( glsl::NVX_multiview_per_view_attributes );
+				result.insert( glsl::EXT_nonuniform_qualifier );
+				result.insert( glsl::NV_mesh_shader );
+				result.insert( glsl::EXT_buffer_reference2 );
+			}
+
+			if ( glslVersion >= glsl::v4_3 )
+			{
+				result.insert( glsl::NV_viewport_array2 );
+				result.insert( glsl::NV_shader_atomic_fp16_vector );
+			}
+
+			if ( glslVersion >= glsl::v4_2 )
+			{
+				result.insert( glsl::ARB_compute_shader );
+				result.insert( glsl::ARB_explicit_uniform_location );
+				result.insert( glsl::ARB_shading_language_420pack );
+				result.insert( glsl::NV_shader_atomic_float );
+			}
+
+			if ( glslVersion >= glsl::v4_1 )
+			{
+				result.insert( glsl::ARB_shading_language_packing );
+			}
+
+			if ( glslVersion >= glsl::v4_0 )
+			{
+				result.insert( glsl::ARB_separate_shader_objects );
+				result.insert( glsl::ARB_texture_cube_map_array );
+				result.insert( glsl::ARB_texture_gather );
+			}
+
+			if ( glslVersion >= glsl::v3_3 )
+			{
+				result.insert( glsl::ARB_shader_stencil_export );
+				result.insert( glsl::KHR_vulkan_glsl );
+				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int64 );
+				result.insert( glsl::EXT_multiview );
+				result.insert( glsl::ARB_explicit_attrib_location );
+				result.insert( glsl::ARB_shader_image_load_store );
+				result.insert( glsl::EXT_gpu_shader4 );
+				result.insert( glsl::ARB_gpu_shader5 );
+				result.insert( glsl::EXT_gpu_shader4_1 );
+				result.insert( glsl::ARB_texture_query_lod );
+				result.insert( glsl::ARB_texture_query_levels );
+				result.insert( glsl::ARB_shader_draw_parameters );
+				result.insert( glsl::ARB_fragment_layer_viewport );
+				result.insert( glsl::ARB_tessellation_shader );
+			}
+
+			return result;
+		}
+
+#	endif
+#endif
 
 		//*************************************************************************
 
@@ -455,6 +530,65 @@ namespace castor3d
 
 			return result;
 		}
+
+		spirv::SpirVExtensionSet listSpirVExtensions( RenderDevice const & device )
+		{
+			spirv::SpirVExtensionSet result;
+
+			if ( device.hasExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME ) )
+			{
+				result.insert( spirv::KHR_shader_draw_parameters );
+			}
+
+			if ( device.hasExtension( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME ) )
+			{
+				result.insert( spirv::EXT_shader_viewport_index_layer );
+			}
+
+			if ( device.hasExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME ) )
+			{
+				result.insert( spirv::EXT_descriptor_indexing );
+			}
+
+			if ( device.hasExtension( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME )
+				&& device.hasTerminateInvocation() )
+			{
+				result.insert( spirv::KHR_terminate_invocation );
+			}
+
+			if ( device.hasExtension( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME )
+				&& device.hasDemoteToHelperInvocation() )
+			{
+				result.insert( spirv::EXT_demote_to_helper_invocation );
+			}
+
+			if ( device.hasExtension( VK_NV_MESH_SHADER_EXTENSION_NAME )
+				&& device.hasMeshAndTaskShaders() )
+			{
+				result.insert( spirv::NV_mesh_shader );
+			}
+
+			if ( device.hasExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME )
+				&& device.hasAtomicFloatAdd() )
+			{
+				result.insert( spirv::EXT_shader_atomic_float_add );
+			}
+
+			if ( device.hasExtension( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME )
+				&& device.hasBufferDeviceAddress() )
+			{
+				result.insert( spirv::EXT_physical_storage_buffer );
+			}
+
+			if ( device.hasExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME )
+				&& device.hasExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME )
+				&& device.hasRayTracing() )
+			{
+				result.insert( spirv::KHR_ray_tracing );
+			}
+
+			return result;
+		}
 	}
 
 	//*************************************************************************
@@ -615,6 +749,9 @@ namespace castor3d
 		ashes::StringArray layerNames;
 		completeLayerNames( engine, layers, layerNames );
 		instanceExtensions.addExtension( VK_KHR_SURFACE_EXTENSION_NAME );
+#if defined( VK_KHR_get_physical_device_properties2 )
+		instanceExtensions.addExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+#endif
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
 		instanceExtensions.addExtension( VK_KHR_ANDROID_SURFACE_EXTENSION_NAME );
 #endif
@@ -728,7 +865,9 @@ namespace castor3d
 		, ast::Shader const & shader )const
 	{
 		SpirVShader result;
-		spirv::SpirVConfig spirvConfig{ getSpirVVersion( m_properties.apiVersion ) };
+		auto availableExtensions = listSpirVExtensions( *m_device );
+		spirv::SpirVConfig spirvConfig{ getSpirVVersion( m_properties.apiVersion )
+			, &availableExtensions };
 		result.spirv = spirv::serialiseSpirv( shader, spirvConfig );
 
 #if !defined( NDEBUG )
@@ -738,7 +877,8 @@ namespace castor3d
 			, glsl::GlslConfig
 			{
 				shader.getType(),
-				460,
+				glsl::v4_6,
+				getGLSLExtensions( glsl::v4_6 ),
 				true,
 				false,
 				true,
@@ -751,6 +891,7 @@ namespace castor3d
 #	endif
 
 		result.text = glsl + "\n" + spirv::writeSpirv( shader, spirvConfig );
+		//log::trace << result.text << std::endl;
 
 #	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
 		std::string name = name + "_" + ashes::getName( stage );

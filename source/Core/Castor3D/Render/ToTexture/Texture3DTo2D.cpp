@@ -439,7 +439,7 @@ namespace castor3d
 					}
 					ELSE
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 				} );

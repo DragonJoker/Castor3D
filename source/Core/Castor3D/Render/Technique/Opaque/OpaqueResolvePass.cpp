@@ -184,7 +184,7 @@ namespace castor3d
 
 					IF( writer, materialId == 0_u )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 
