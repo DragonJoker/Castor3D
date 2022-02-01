@@ -105,7 +105,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_shadowMapData = shadowMapCfg.declStructMember< castor3d::shader::ShadowMapData >( castor3d::ShadowMapUbo::ShadowMapData );\
+	auto c3d_shadowMapData = shadowMapCfg.declMember< castor3d::shader::ShadowMapData >( castor3d::ShadowMapUbo::ShadowMapData );\
 	shadowMapCfg.end()
 
 #endif

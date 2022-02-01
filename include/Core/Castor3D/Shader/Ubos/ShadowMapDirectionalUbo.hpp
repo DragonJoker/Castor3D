@@ -107,7 +107,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_shadowMapDirectionalData = shadowMapDirectionalCfg.declStructMember< castor3d::shader::ShadowMapDirectionalData >( castor3d::ShadowMapDirectionalUbo::ShadowMapDirectionalData );\
+	auto c3d_shadowMapDirectionalData = shadowMapDirectionalCfg.declMember< castor3d::shader::ShadowMapDirectionalData >( castor3d::ShadowMapDirectionalUbo::ShadowMapDirectionalData );\
 	shadowMapDirectionalCfg.end()
 
 #endif

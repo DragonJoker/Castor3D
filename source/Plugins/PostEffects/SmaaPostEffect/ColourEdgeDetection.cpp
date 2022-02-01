@@ -120,7 +120,7 @@ namespace smaa
 					// Then discard if there is no edge:
 					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 
@@ -223,7 +223,7 @@ namespace smaa
 					// Then discard if there is no edge:
 					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 

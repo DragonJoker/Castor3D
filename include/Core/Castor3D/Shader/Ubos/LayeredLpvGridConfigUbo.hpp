@@ -98,7 +98,7 @@ namespace castor3d
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_llpvGridData = layeredLpvConfig.declStructMember< castor3d::shader::LayeredLpvGridData >( castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridData, enabled );\
+	auto c3d_llpvGridData = layeredLpvConfig.declMember< castor3d::shader::LayeredLpvGridData >( castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridData, enabled );\
 	layeredLpvConfig.end()
 
 #endif

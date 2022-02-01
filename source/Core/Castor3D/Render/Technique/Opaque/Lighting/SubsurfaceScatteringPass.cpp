@@ -129,7 +129,7 @@ namespace castor3d
 
 					IF( writer, material.subsurfaceScatteringEnabled == 0_i )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 

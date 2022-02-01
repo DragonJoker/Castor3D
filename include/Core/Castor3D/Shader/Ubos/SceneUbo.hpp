@@ -167,7 +167,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_sceneData = scene.declStructMember< castor3d::shader::SceneData >( castor3d::SceneUbo::SceneData );\
+	auto c3d_sceneData = scene.declMember< castor3d::shader::SceneData >( castor3d::SceneUbo::SceneData );\
 	scene.end()
 
 #endif

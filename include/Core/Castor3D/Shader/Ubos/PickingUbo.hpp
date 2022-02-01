@@ -93,7 +93,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_pickingData = picking.declStructMember< castor3d::shader::PickingData >( castor3d::PickingUbo::PickingData );\
+	auto c3d_pickingData = picking.declMember< castor3d::shader::PickingData >( castor3d::PickingUbo::PickingData );\
 	picking.end()
 
 #endif
