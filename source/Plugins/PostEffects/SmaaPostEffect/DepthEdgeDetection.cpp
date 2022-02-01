@@ -79,7 +79,7 @@ namespace smaa
 
 					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 

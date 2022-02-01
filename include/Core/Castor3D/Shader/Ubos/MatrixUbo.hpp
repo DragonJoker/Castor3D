@@ -160,7 +160,7 @@ namespace castor3d
 		, set\
 		, sdw::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_matrixData = matrices.declStructMember< castor3d::shader::MatrixData >( castor3d::MatrixUbo::MatrixData );\
+	auto c3d_matrixData = matrices.declMember< castor3d::shader::MatrixData >( castor3d::MatrixUbo::MatrixData );\
 	matrices.end()
 
 #endif

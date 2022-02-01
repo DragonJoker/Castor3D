@@ -94,7 +94,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) };\
-	auto c3d_morphingData = morphing.declStructMember< castor3d::shader::MorphingData >( castor3d::MorphingUbo::MorphingData, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
+	auto c3d_morphingData = morphing.declMember< castor3d::shader::MorphingData >( castor3d::MorphingUbo::MorphingData, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
 	morphing.end()
 
 #endif

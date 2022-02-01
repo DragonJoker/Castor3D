@@ -107,7 +107,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_hdrConfigData = hdrConfig.declStructMember< castor3d::shader::HdrConfigData >( castor3d::HdrConfigUbo::HdrConfigData );\
+	auto c3d_hdrConfigData = hdrConfig.declMember< castor3d::shader::HdrConfigData >( castor3d::HdrConfigUbo::HdrConfigData );\
 	hdrConfig.end()
 
 #endif
