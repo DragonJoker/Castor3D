@@ -1615,8 +1615,7 @@ namespace ocean
 				{
 					pxl_colour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
 						, pxl_colour
-						, length( in.viewPosition )
-						, in.viewPosition.y()
+						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
 			} );
