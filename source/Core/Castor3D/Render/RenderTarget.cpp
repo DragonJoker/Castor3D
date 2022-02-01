@@ -646,7 +646,7 @@ namespace castor3d
 		if ( m_toneMapping )
 		{
 			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, parameters]( RenderDevice const & device
+				, [this]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
 					if ( m_initialised )

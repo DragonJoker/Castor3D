@@ -18,6 +18,8 @@
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4458 )
 #pragma warning( disable: 4464 )
+#pragma warning( disable: 5054 )
+#pragma warning( disable: 5214 )
 #pragma warning( disable: 5219 )
 #include <gli/gli.hpp>
 #pragma warning( pop )

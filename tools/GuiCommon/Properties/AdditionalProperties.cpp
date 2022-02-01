@@ -7,6 +7,7 @@
 
 #pragma warning( push )
 #pragma warning( disable: 4365 )
+#pragma warning( disable: 5054 )
 #include <wx/propgrid/advprops.h>
 #include <iostream>
 #pragma warning( pop )

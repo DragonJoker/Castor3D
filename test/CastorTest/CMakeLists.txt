@@ -45,7 +45,7 @@ target_include_directories( ${PROJECT_NAME}
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		VERSION ${PROJECT_VERSION}
-		CXX_STANDARD 17
+		CXX_STANDARD 20
 		CXX_EXTENSIONS OFF
 		FOLDER "Tests/Castor"
 )

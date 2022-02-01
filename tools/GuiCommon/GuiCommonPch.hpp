@@ -26,6 +26,7 @@ See LICENSE file in root folder
 #	pragma warning( push )
 #	pragma warning( disable: 4365 )
 #	pragma warning( disable: 4371 )
+#	pragma warning( disable: 5054 )
 #	include <wx/app.h>
 #	include <wx/button.h>
 #	include <wx/bmpbuttn.h>

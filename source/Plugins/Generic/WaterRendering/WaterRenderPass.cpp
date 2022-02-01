@@ -234,7 +234,7 @@ namespace water
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
 		auto & blitColourPass = graph.createPass( "CopyColour"
-			, [name, extent, &device, isEnabled]( crg::FramePass const & framePass
+			, [extent, &device, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -264,7 +264,7 @@ namespace water
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
 		auto & blitDepthPass = graph.createPass( "CopyDepth"
-			, [name, extent, &device, isEnabled]( crg::FramePass const & framePass
+			, [extent, &device, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
