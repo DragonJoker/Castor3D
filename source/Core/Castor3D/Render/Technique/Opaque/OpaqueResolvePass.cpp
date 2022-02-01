@@ -312,8 +312,7 @@ namespace castor3d
 							, depth );
 						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, pxl_fragColor
-							, length( surface.viewPosition )
-							, surface.viewPosition.z()
+							, surface.worldPosition
 							, c3d_sceneData );
 					}
 					FI;

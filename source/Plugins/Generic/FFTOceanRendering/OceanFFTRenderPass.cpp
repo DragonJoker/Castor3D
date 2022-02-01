@@ -1647,8 +1647,7 @@ namespace ocean_fft
 				{
 					pxl_colour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
 						, pxl_colour
-						, length( in.viewPosition.xyz() )
-						, in.viewPosition.y()
+						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
 			} );
