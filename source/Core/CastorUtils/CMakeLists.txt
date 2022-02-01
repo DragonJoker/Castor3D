@@ -64,7 +64,7 @@ if( EXISTS ${EXTERNAL_SOURCE_DIR}/cvtt/ConvectionKernels.h )
 	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES
-			CXX_STANDARD 17
+			CXX_STANDARD 20
 			CXX_EXTENSIONS OFF
 			FOLDER "Core"
 	)
@@ -889,7 +889,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES
-			CXX_STANDARD 17
+			CXX_STANDARD 20
 			CXX_EXTENSIONS OFF
 			FOLDER "Core/${MAIN_PROJECT_NAME}"
 	)

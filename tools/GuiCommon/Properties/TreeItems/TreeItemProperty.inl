@@ -306,7 +306,7 @@ namespace GuiCommon
 		wxPGProperty * prop = createProperty( parent
 			, name
 			, choices
-			, [choices, func]( wxVariant const & var )
+			, [func]( wxVariant const & var )
 			{
 				func( EnumT( variantCast< uint32_t >( var ) ) );
 			}
