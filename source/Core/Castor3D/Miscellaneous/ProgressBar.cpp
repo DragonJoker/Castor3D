@@ -34,7 +34,7 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( *this ) );
 		m_title = value;
 		m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, value]()
+			, [this]()
 			{
 				if ( m_progressLabel )
 				{

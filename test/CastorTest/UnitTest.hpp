@@ -219,7 +219,7 @@ namespace Testing
 		static std::string get( std::wstring const & value )
 		{
 			std::stringstream stream;
-			stream << value.c_str();
+			stream << reinterpret_cast< char const * >( value.c_str() );
 			return stream.str();
 		}
 	};

@@ -296,7 +296,7 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurX";
 				auto & passX = graph.createPass( name
-					, [this, category, &input]( crg::FramePass const & framePass
+					, [this, &input]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
@@ -320,7 +320,7 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurY";
 				auto & passY = graph.createPass( name
-					, [this, category, &input]( crg::FramePass const & framePass
+					, [this, &input]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{

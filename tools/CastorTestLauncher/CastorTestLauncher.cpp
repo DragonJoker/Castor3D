@@ -11,6 +11,7 @@
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4371 )
+#pragma warning( disable: 5054 )
 #include <wx/cmdline.h>
 #include <wx/image.h>
 #pragma warning( pop )
