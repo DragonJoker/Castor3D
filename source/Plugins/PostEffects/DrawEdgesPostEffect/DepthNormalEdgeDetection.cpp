@@ -153,7 +153,7 @@ namespace draw_edges
 
 					IF( writer, X.w() == 0.0_f )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 
@@ -162,7 +162,7 @@ namespace draw_edges
 
 					IF( writer, material.edgeColour.w() == 0.0_f )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 

@@ -265,24 +265,6 @@ namespace castor3d
 		, desc{ desc }
 		, memoryProperties{ gpu.getMemoryProperties() }
 		, features{ gpu.getFeatures() }
-		, features12{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES
-			, nullptr
-			, {} }
-		, features11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
-			, nullptr
-			, {} }
-		, drawParamsFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
-			, nullptr
-			, {} }
-		, features2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
-			, nullptr
-			, {} }
-		, accelFeature{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR
-			, nullptr
-			, {} }
-		, rtPipelineFeature{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR
-			, nullptr
-			, {} }
 		, properties{ gpu.getProperties() }
 		, queueFamilies{ initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
 		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
@@ -290,12 +272,15 @@ namespace castor3d
 		auto apiVersion = gpu.getProperties().apiVersion;
 		auto deviceExtensions = gpu.enumerateExtensionProperties( std::string{} );
 
+#if VK_VERSION_1_2
 		if ( apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 		{
-			m_deviceExtensions.addFeature( &features11 );
-			m_deviceExtensions.addFeature( &features12 );
+			m_deviceExtensions.addFeature( &m_features12 );
+			m_deviceExtensions.addFeature( &m_features11 );
 		}
-		else if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
+		else
+#endif
+		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 		{
 			m_deviceExtensions.addFeature( &drawParamsFeatures );
 		}
@@ -311,7 +296,7 @@ namespace castor3d
 			, deviceExtensions ) )
 		{
 			m_deviceExtensions.addExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &accelFeature ) );
+				, reinterpret_cast< VkStructure * >( &m_accelFeatures ) );
 		}
 #endif
 #if VK_KHR_deferred_host_operations
@@ -326,15 +311,70 @@ namespace castor3d
 			, deviceExtensions ) )
 		{
 			m_deviceExtensions.addExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &rtPipelineFeature ) );
+				, reinterpret_cast< VkStructure * >( &m_rtPipelineFeatures ) );
 		}
 #	endif
 #endif
-
+#if VK_EXT_descriptor_indexing
+		if ( isExtensionSupported( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &m_descriptorIndexingFeatures ) );
+		}
+#endif
+#if VK_KHR_shader_terminate_invocation
+		if ( isExtensionSupported( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &m_terminateInvocationFeatures ) );
+		}
+#endif
+#if VK_EXT_shader_demote_to_helper_invocation
+		if ( isExtensionSupported( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &m_demoteToHelperInvocationFeatures ) );
+		}
+#endif
+#if VK_NV_mesh_shader
+		if ( isExtensionSupported( VK_NV_MESH_SHADER_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_NV_MESH_SHADER_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &m_meshShaderFeatures ) );
+		}
+#endif
+#if VK_EXT_shader_atomic_float
+		if ( isExtensionSupported( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &m_atomicFloatAddFeatures ) );
+		}
+#endif
+#if VK_KHR_buffer_device_address
+		if ( isExtensionSupported( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME
+				, reinterpret_cast< VkStructure * >( &m_bufferDeviceAddressFeatures ) );
+		}
+#endif
+#if VK_KHR_synchronization2
+		if ( isExtensionSupported( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME
+			, deviceExtensions ) )
+		{
+			m_deviceExtensions.addExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
+		}
+#endif
+#if VK_VERSION_1_1
 		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 		{
 			// use the features2 chain to append extensions
-			VkStructure * current = reinterpret_cast< VkStructure * >( &features2 );
+			VkStructure * current = reinterpret_cast< VkStructure * >( &m_features2 );
 
 			// build up chain of all used extension features
 			for ( size_t i = 0; i < m_deviceExtensions.getSize(); i++ )
@@ -347,23 +387,8 @@ namespace castor3d
 				}
 			}
 
-			gpu.getFeatures( features2 );
-			features = features2.features;
-
-#if VK_EXT_shader_atomic_float
-			if ( isExtensionSupported( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME
-				, deviceExtensions ) )
-			{
-				m_deviceExtensions.addExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME );
-			}
-#endif
-		}
-
-#if VK_KHR_synchronization2
-		if ( isExtensionSupported( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
+			gpu.getFeatures( m_features2 );
+			features = m_features2.features;
 		}
 #endif
 
@@ -373,7 +398,7 @@ namespace castor3d
 				, gpu
 				, getQueueCreateInfos( queueFamilies )
 				, m_deviceExtensions.getExtensionsNames()
-				, features2 ) );
+				, m_features2 ) );
 		device->setCallstackCallback( []()
 			{
 				std::stringstream callback;
@@ -509,6 +534,73 @@ namespace castor3d
 		}
 
 		return *it->second;
+	}
 
+	bool RenderDevice::hasExtension( std::string_view const & name )const
+	{
+		auto it = std::find_if( m_deviceExtensions.getExtensionsNames().begin()
+			, m_deviceExtensions.getExtensionsNames().end()
+			, [&name]( castor::String const & lookup )
+			{
+				return lookup == name;
+			} );
+		return it != m_deviceExtensions.getExtensionsNames().end();
+	}
+
+	bool RenderDevice::hasTerminateInvocation()const
+	{
+#if VK_KHR_shader_terminate_invocation
+		return m_terminateInvocationFeatures.shaderTerminateInvocation == VK_TRUE;
+#else
+		return false;
+#endif
+	}
+
+	bool RenderDevice::hasDemoteToHelperInvocation()const
+	{
+#if VK_EXT_shader_demote_to_helper_invocation
+		return m_demoteToHelperInvocationFeatures.shaderDemoteToHelperInvocation == VK_TRUE;
+#else
+		return false;
+#endif
+	}
+
+	bool RenderDevice::hasMeshAndTaskShaders()const
+	{
+#if VK_NV_mesh_shader
+		return m_meshShaderFeatures.meshShader == VK_TRUE
+			&& m_meshShaderFeatures.taskShader == VK_TRUE;
+#else
+		return false;
+#endif
+	}
+
+	bool RenderDevice::hasAtomicFloatAdd()const
+	{
+#if VK_EXT_shader_atomic_float
+		return m_atomicFloatAddFeatures.shaderBufferFloat32AtomicAdd == VK_TRUE
+			&& m_atomicFloatAddFeatures.shaderBufferFloat64AtomicAdd == VK_TRUE;
+#else
+		return false;
+#endif
+	}
+
+	bool RenderDevice::hasBufferDeviceAddress()const
+	{
+#if VK_EXT_buffer_device_address
+		return m_bufferDeviceAddressFeatures.bufferDeviceAddress == VK_TRUE;
+#else
+		return false;
+#endif
+	}
+
+	bool RenderDevice::hasRayTracing()const
+	{
+#if VK_KHR_acceleration_structure && VK_KHR_ray_tracing_pipeline
+		return m_accelFeatures.accelerationStructure == VK_TRUE
+			&& m_rtPipelineFeatures.rayTracingPipeline == VK_TRUE;
+#else
+		return false;
+#endif
 	}
 }

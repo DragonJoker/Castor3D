@@ -102,7 +102,7 @@ namespace castor3d
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lpvLightData = lpvLightConfig.declStructMember< castor3d::shader::LpvLightData >( castor3d::LpvLightConfigUbo::LpvLightData );\
+	auto c3d_lpvLightData = lpvLightConfig.declMember< castor3d::shader::LpvLightData >( castor3d::LpvLightConfigUbo::LpvLightData );\
 	lpvLightConfig.end()
 
 #endif

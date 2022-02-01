@@ -217,7 +217,7 @@ namespace ocean
 
 #define UBO_OCEAN( writer, binding, set )\
 	auto oceanBuffer = writer.declUniformBuffer( ocean::OceanUbo::Buffer, binding, set );\
-	auto c3d_oceanData = oceanBuffer.declStructMember< ocean::OceanData >( ocean::OceanUbo::Data );\
+	auto c3d_oceanData = oceanBuffer.declMember< ocean::OceanData >( ocean::OceanUbo::Data );\
 	oceanBuffer.end()
 
 #endif

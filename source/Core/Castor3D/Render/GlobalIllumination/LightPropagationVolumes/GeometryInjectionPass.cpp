@@ -475,7 +475,7 @@ namespace castor3d
 					//Discard pixels with really small normal
 					IF( writer, length( in.rsmNormal ) < 0.01_f )
 					{
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 

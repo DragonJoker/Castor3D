@@ -78,7 +78,6 @@ namespace castor3d
 			}
 		}
 
-
 		ashes::StringArray const & getExtensionsNames()const
 		{
 			return m_extensionsNames;
@@ -228,6 +227,13 @@ namespace castor3d
 		C3D_API QueueDataWrapper graphicsData()const;
 		C3D_API QueueData const * reserveGraphicsData()const;
 		C3D_API crg::GraphContext & makeContext()const;
+		C3D_API bool hasExtension( std::string_view const & name )const;
+		C3D_API bool hasTerminateInvocation()const;
+		C3D_API bool hasDemoteToHelperInvocation()const;
+		C3D_API bool hasMeshAndTaskShaders()const;
+		C3D_API bool hasAtomicFloatAdd()const;
+		C3D_API bool hasBufferDeviceAddress()const;
+		C3D_API bool hasRayTracing()const;
 
 		ashes::Device const * operator->()const
 		{
@@ -272,12 +278,6 @@ namespace castor3d
 		AshPluginDescription const & desc;
 		VkPhysicalDeviceMemoryProperties memoryProperties{};
 		VkPhysicalDeviceFeatures features{};
-		VkPhysicalDeviceVulkan12Features features12;
-		VkPhysicalDeviceVulkan11Features features11;
-		VkPhysicalDeviceShaderDrawParametersFeatures drawParamsFeatures;
-		VkPhysicalDeviceFeatures2 features2;
-		VkPhysicalDeviceAccelerationStructureFeaturesKHR accelFeature;
-		VkPhysicalDeviceRayTracingPipelineFeaturesKHR rtPipelineFeature;
 		VkPhysicalDeviceProperties properties{};
 		QueueFamilies queueFamilies;
 		ashes::DevicePtr device;
@@ -289,6 +289,62 @@ namespace castor3d
 		UniformBufferPoolsSPtr uboPools;
 
 	private:
+#if VK_VERSION_1_2
+		VkPhysicalDeviceVulkan12Features m_features12{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES
+			, nullptr
+			, {} };
+		VkPhysicalDeviceVulkan11Features m_features11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
+			, nullptr
+			, {} };
+#endif
+		VkPhysicalDeviceShaderDrawParametersFeatures drawParamsFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
+			, nullptr
+			, {} };
+#if VK_VERSION_1_1
+		VkPhysicalDeviceFeatures2 m_features2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
+			, nullptr
+			, {} };
+#endif
+#if VK_KHR_acceleration_structure
+		VkPhysicalDeviceAccelerationStructureFeaturesKHR m_accelFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR
+			, nullptr
+			, {} };
+#endif
+#if VK_KHR_ray_tracing_pipeline
+		VkPhysicalDeviceRayTracingPipelineFeaturesKHR m_rtPipelineFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR
+			, nullptr
+			, {} };
+#endif
+#if VK_EXT_descriptor_indexing
+		VkPhysicalDeviceDescriptorIndexingFeaturesEXT m_descriptorIndexingFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES
+			, nullptr
+			, {} };
+#endif
+#if VK_KHR_shader_terminate_invocation
+		VkPhysicalDeviceShaderTerminateInvocationFeaturesKHR m_terminateInvocationFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_TERMINATE_INVOCATION_FEATURES_KHR
+			, nullptr
+			, {} };
+#endif
+#if VK_EXT_shader_demote_to_helper_invocation
+		VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT m_demoteToHelperInvocationFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DEMOTE_TO_HELPER_INVOCATION_FEATURES_EXT
+			, nullptr
+			, {} };
+#endif
+#if VK_NV_mesh_shader
+		VkPhysicalDeviceMeshShaderFeaturesNV m_meshShaderFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV
+			, nullptr
+			, {} };
+#endif
+#if VK_EXT_shader_atomic_float
+		VkPhysicalDeviceShaderAtomicFloatFeaturesEXT m_atomicFloatAddFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_FEATURES_EXT
+			, nullptr
+			, {} };
+#endif
+#if VK_KHR_buffer_device_address
+		VkPhysicalDeviceBufferDeviceAddressFeaturesKHR m_bufferDeviceAddressFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES
+			, nullptr
+			, {} };
+#endif
 		Extensions m_deviceExtensions;
 		QueuesData * m_preferredGraphicsQueue{};
 		QueuesData * m_preferredComputeQueue{};

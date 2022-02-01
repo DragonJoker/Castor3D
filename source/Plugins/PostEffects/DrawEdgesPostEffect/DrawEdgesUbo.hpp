@@ -85,7 +85,7 @@ namespace draw_edges
 
 #define UBO_DRAW_EDGES( writer, binding, set )\
 	sdw::Ubo drawEdges{ writer, draw_edges::DrawEdgesUbo::Buffer, binding, set };\
-	auto c3d_drawEdgesData = drawEdges.declStructMember< draw_edges::DrawEdgesData >( draw_edges::DrawEdgesUbo::Data );\
+	auto c3d_drawEdgesData = drawEdges.declMember< draw_edges::DrawEdgesData >( draw_edges::DrawEdgesUbo::Data );\
 	drawEdges.end()
 
 #endif

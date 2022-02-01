@@ -145,7 +145,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, enable };\
-	auto c3d_voxelData = voxelizer.declStructMember< shader::VoxelData >( castor3d::VoxelizerUbo::VoxelData );\
+	auto c3d_voxelData = voxelizer.declMember< shader::VoxelData >( castor3d::VoxelizerUbo::VoxelData );\
 	voxelizer.end()
 
 #endif

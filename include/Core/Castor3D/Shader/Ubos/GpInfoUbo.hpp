@@ -109,7 +109,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_gpInfoData = gpInfo.declStructMember< shader::GpInfoData >( castor3d::GpInfoUbo::GPInfoData );\
+	auto c3d_gpInfoData = gpInfo.declMember< shader::GpInfoData >( castor3d::GpInfoUbo::GPInfoData );\
 	gpInfo.end()
 
 #endif

@@ -91,7 +91,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_rsmConfigData = rsmConfig.declStructMember< castor3d::shader::RsmConfigData >( castor3d::RsmConfigUbo::RsmConfigData );\
+	auto c3d_rsmConfigData = rsmConfig.declMember< castor3d::shader::RsmConfigData >( castor3d::RsmConfigUbo::RsmConfigData );\
 	rsmConfig.end()
 
 #endif
