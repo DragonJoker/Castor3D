@@ -49,7 +49,7 @@ namespace castor3d
 		if ( &cur != m_cur )
 		{
 			getOwner()->getAnimatedMesh().getMesh().getScene()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, cur, prv]( RenderDevice const & device
+				, [this, prv]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
 					auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();

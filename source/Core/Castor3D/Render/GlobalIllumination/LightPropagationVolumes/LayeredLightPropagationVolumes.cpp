@@ -204,7 +204,7 @@ namespace castor3d
 	{
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
 		auto & result = graph.createPass( name + "LightInjection" + std::to_string( cascade )
-			, [this, &device, name, lightType, rsmSize]( crg::FramePass const & framePass
+			, [this, &device, lightType, rsmSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -256,7 +256,7 @@ namespace castor3d
 	{
 		auto rsmSize = smResult[SmTexture::eDepth].getExtent().width;
 		auto & result = graph.createPass( name + "GeomInjection" + std::to_string( cascade )
-			, [this, &device, name, lightType, rsmSize]( crg::FramePass const & framePass
+			, [this, &device, lightType, rsmSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{

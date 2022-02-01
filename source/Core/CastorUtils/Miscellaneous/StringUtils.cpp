@@ -352,6 +352,12 @@ namespace castor
 			return text;
 		}
 
+		String toString( char32_t value )
+		{
+			char32_t arr[]{ value, 0 };
+			return toString( reinterpret_cast< char const * >( arr ) );
+		}
+
 		String toString( uint8_t value, int base, std::locale const & locale )
 		{
 			StringStream result;

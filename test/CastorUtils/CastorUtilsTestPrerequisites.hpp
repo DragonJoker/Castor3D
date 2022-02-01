@@ -17,6 +17,8 @@
 #	pragma warning( push )
 #	pragma warning( disable:4201 )
 #	pragma warning( disable:4464 )
+#	pragma warning( disable:5054 )
+#	pragma warning( disable:5214 )
 #	include <glm/glm.hpp>
 #	include <glm/gtc/quaternion.hpp>
 #	include <glm/gtc/matrix_transform.hpp>

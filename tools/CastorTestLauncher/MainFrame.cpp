@@ -19,6 +19,7 @@
 #pragma warning( disable: 4127 )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4371 )
+#pragma warning( disable: 5054 )
 #include <wx/display.h>
 #include <wx/mstream.h>
 #include <wx/renderer.h>

@@ -195,7 +195,7 @@ namespace ocean_fft
 		{
 			auto extent = getExtent( input );
 			auto & result = graph.createPass( name + "Copy"
-				, [name, extent, isEnabled, &device]( crg::FramePass const & framePass
+				, [extent, isEnabled, &device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
