@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #pragma warning( push )
 #pragma warning( disable: 4365 )
+#pragma warning( disable: 5054 )
 #include <wx/aui/aui.h>
 #include <wx/aui/dockart.h>
 #pragma warning( pop )
