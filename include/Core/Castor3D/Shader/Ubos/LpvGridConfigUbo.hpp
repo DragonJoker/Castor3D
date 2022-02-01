@@ -143,7 +143,7 @@ namespace castor3d
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lpvGridData = lpvGridConfig.declStructMember< castor3d::shader::LpvGridData >( castor3d::LpvGridConfigUbo::LpvGridData, enabled );\
+	auto c3d_lpvGridData = lpvGridConfig.declMember< castor3d::shader::LpvGridData >( castor3d::LpvGridConfigUbo::LpvGridData, enabled );\
 	lpvGridConfig.end()
 
 #endif

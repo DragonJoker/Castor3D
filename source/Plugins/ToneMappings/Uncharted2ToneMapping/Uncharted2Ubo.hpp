@@ -97,7 +97,7 @@ namespace Uncharted2
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_uncharted2Data = uncharted2.declStructMember< Uncharted2::Uncharted2Data >( Uncharted2::Uncharted2Ubo::Data );\
+	auto c3d_uncharted2Data = uncharted2.declMember< Uncharted2::Uncharted2Data >( Uncharted2::Uncharted2Ubo::Data );\
 	uncharted2.end()
 
 #endif

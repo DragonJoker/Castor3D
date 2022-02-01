@@ -183,7 +183,7 @@ namespace castor3d
 		, Set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_ssaoConfigData = ssaoConfig.declStructMember< castor3d::shader::SsaoConfigData >( castor3d::SsaoConfigUbo::SsaoConfigData );\
+	auto c3d_ssaoConfigData = ssaoConfig.declMember< castor3d::shader::SsaoConfigData >( castor3d::SsaoConfigUbo::SsaoConfigData );\
 	ssaoConfig.end()
 
 #endif

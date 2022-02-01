@@ -29,6 +29,81 @@ using namespace castor;
 
 namespace GuiCommon
 {
+	namespace
+	{
+#if C3D_HasGLSL
+		glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
+		{
+			glsl::GlslExtensionSet result;
+
+			if ( glslVersion >= glsl::v4_6 )
+			{
+				result.insert( glsl::EXT_shader_atomic_float );
+				result.insert( glsl::EXT_ray_tracing );
+				result.insert( glsl::EXT_ray_query );
+				result.insert( glsl::EXT_scalar_block_layout );
+			}
+
+			if ( glslVersion >= glsl::v4_5 )
+			{
+				result.insert( glsl::ARB_shader_ballot );
+				result.insert( glsl::ARB_shader_viewport_layer_array );
+				result.insert( glsl::NV_stereo_view_rendering );
+				result.insert( glsl::NVX_multiview_per_view_attributes );
+				result.insert( glsl::EXT_nonuniform_qualifier );
+				result.insert( glsl::NV_mesh_shader );
+				result.insert( glsl::EXT_buffer_reference2 );
+			}
+
+			if ( glslVersion >= glsl::v4_3 )
+			{
+				result.insert( glsl::NV_viewport_array2 );
+				result.insert( glsl::NV_shader_atomic_fp16_vector );
+			}
+
+			if ( glslVersion >= glsl::v4_2 )
+			{
+				result.insert( glsl::ARB_compute_shader );
+				result.insert( glsl::ARB_explicit_uniform_location );
+				result.insert( glsl::ARB_shading_language_420pack );
+				result.insert( glsl::NV_shader_atomic_float );
+			}
+
+			if ( glslVersion >= glsl::v4_1 )
+			{
+				result.insert( glsl::ARB_shading_language_packing );
+			}
+
+			if ( glslVersion >= glsl::v4_0 )
+			{
+				result.insert( glsl::ARB_separate_shader_objects );
+				result.insert( glsl::ARB_texture_cube_map_array );
+				result.insert( glsl::ARB_texture_gather );
+			}
+
+			if ( glslVersion >= glsl::v3_3 )
+			{
+				result.insert( glsl::ARB_shader_stencil_export );
+				result.insert( glsl::KHR_vulkan_glsl );
+				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int64 );
+				result.insert( glsl::EXT_multiview );
+				result.insert( glsl::ARB_explicit_attrib_location );
+				result.insert( glsl::ARB_shader_image_load_store );
+				result.insert( glsl::EXT_gpu_shader4 );
+				result.insert( glsl::ARB_gpu_shader5 );
+				result.insert( glsl::EXT_gpu_shader4_1 );
+				result.insert( glsl::ARB_texture_query_lod );
+				result.insert( glsl::ARB_texture_query_levels );
+				result.insert( glsl::ARB_shader_draw_parameters );
+				result.insert( glsl::ARB_fragment_layer_viewport );
+				result.insert( glsl::ARB_tessellation_shader );
+			}
+
+			return result;
+		}
+#endif
+	}
+
 	ShaderEditor::ShaderEditor( Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
@@ -151,17 +226,15 @@ namespace GuiCommon
 			extension = wxT( ".glsl" );
 			source = make_wxString( glsl::compileGlsl( *m_module.shader
 				, {}
-				, {
-					m_module.shader->getType(),
-					460,
-					true,
-					false,
-					false,
-					true,
-					true,
-					true,
-					true,
-				} ) );
+				, { m_module.shader->getType()
+					, glsl::v4_6
+					, getGLSLExtensions( glsl::v4_6 )
+					, false
+					, false
+					, true
+					, true
+					, true
+					, true } ) );
 			break;
 #endif
 #if GC_HasHLSL
@@ -169,10 +242,9 @@ namespace GuiCommon
 			extension = wxT( ".hlsl" );
 			source = make_wxString( hlsl::compileHlsl( *m_module.shader
 				, {}
-				, {
-					m_module.shader->getType(),
-					false,
-				} ) );
+				, { hlsl::v6_6
+					, m_module.shader->getType()
+					, false } ) );
 			break;
 #endif
 		}

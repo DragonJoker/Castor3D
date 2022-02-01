@@ -92,7 +92,7 @@ namespace castor3d
 					IF( writer, revealage == 1.0_f )
 					{
 						// Save the blending and color texture fetch cost
-						writer.discard();
+						writer.demote();
 					}
 					FI;
 

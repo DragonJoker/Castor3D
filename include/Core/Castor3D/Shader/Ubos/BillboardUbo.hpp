@@ -60,7 +60,7 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_billboardData = billboard.declStructMember< castor3d::shader::BillboardData >( castor3d::BillboardUbo::BillboardData );\
+	auto c3d_billboardData = billboard.declMember< castor3d::shader::BillboardData >( castor3d::BillboardUbo::BillboardData );\
 	billboard.end()
 
 #endif
