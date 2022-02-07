@@ -430,32 +430,36 @@ namespace castor3d
 				auto material = materials->getMaterial( in.material );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
+				auto textureFlags = merge( flags.textures );
 
-				for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
+				if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
 				{
-					auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-					auto id = writer.declLocale( "id" + name
-						, c3d_modelData.getTexture( index ) );
-
-					IF( writer, id > 0_u )
+					for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
 					{
-						auto config = writer.declLocale( "config" + name
-							, textureConfigs.getTextureConfiguration( id ) );
+						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
+						auto id = writer.declLocale( "id" + name
+							, c3d_modelData.getTexture( index ) );
 
-						IF( writer, config.isOpacity() )
+						IF( writer, id > 0_u )
 						{
-							auto anim = writer.declLocale( "anim" + name
-								, textureAnims.getTextureAnimation( id ) );
-							auto texCoord = writer.declLocale( "texCoord" + name
-								, in.texture0.xy() );
-							anim.animUV( config, texCoord );
-							auto sampledOpacity = writer.declLocale< sdw::Vec4 >( "sampled" + name
-								, c3d_maps[nonuniform( id - 1_u )].sample( texCoord ) );
-							opacity = config.getOpacity( sampledOpacity, opacity );
+							auto config = writer.declLocale( "config" + name
+								, textureConfigs.getTextureConfiguration( id ) );
+
+							IF( writer, config.isOpacity() )
+							{
+								auto anim = writer.declLocale( "anim" + name
+									, textureAnims.getTextureAnimation( id ) );
+								auto texCoord = writer.declLocale( "texCoord" + name
+									, in.texture0.xy() );
+								config.transformUV( anim, texCoord );
+								auto sampledOpacity = writer.declLocale< sdw::Vec4 >( "sampled" + name
+									, c3d_maps[nonuniform( id - 1_u )].sample( texCoord ) );
+								opacity = config.getOpacity( sampledOpacity, opacity );
+							}
+							FI;
 						}
 						FI;
 					}
-					FI;
 				}
 
 				utils.applyAlphaFunc( flags.alphaFunc
