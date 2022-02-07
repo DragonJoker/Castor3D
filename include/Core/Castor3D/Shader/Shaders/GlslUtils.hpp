@@ -62,7 +62,7 @@ namespace castor3d::shader
 		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & colour
 			, sdw::Float & opacity );
@@ -89,7 +89,7 @@ namespace castor3d::shader
 			, std::string const & name
 			, shader::TextureConfigData const & config
 			, shader::TextureAnimData const & anim
-			, sdw::SampledImage2DRgba32 const & map
+			, sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
@@ -102,7 +102,7 @@ namespace castor3d::shader
 			, std::string const & name
 			, shader::TextureConfigData const & config
 			, shader::TextureAnimData const & anim
-			, sdw::SampledImage2DRgba32 const & map
+			, sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
@@ -363,13 +363,13 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2
 			, sdw::InVec3
-			, sdw::InSampledImage2DRgba32
+			, sdw::InCombinedImage2DRgba32
 			, InTextureConfigData > m_parallaxMapping;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec2
 			, sdw::InFloat
-			, sdw::InSampledImage2DRgba32
+			, sdw::InCombinedImage2DRgba32
 			, InTextureConfigData > m_parallaxShadow;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3 > m_isSaturated3D;

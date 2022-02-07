@@ -172,7 +172,7 @@ namespace castor3d
 		m_commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( m_renderPassAtInit
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( m_renderPassAtInit
 				, 0u
 				, VkFramebuffer( nullptr )
 				, VK_FALSE

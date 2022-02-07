@@ -99,12 +99,12 @@ namespace castor3d
 			ComputeWriter writer;
 
 			// Inputs
-			auto voxels( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
 				, eVoxels
 				, 0u ) );
 
 			// Outputs
-			auto output( writer.declImage< RWFImg3DRgba32 >( "output"
+			auto output( writer.declStorageImg< RWFImg3DRgba32 >( "output"
 				, eResult
 				, 0u ) );
 

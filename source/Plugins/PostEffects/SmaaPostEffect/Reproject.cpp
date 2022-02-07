@@ -67,17 +67,17 @@ namespace smaa
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			UBO_SMAA( writer, SmaaUboIdx, 0u );
-			auto c3d_currentColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_currentColourTex", CurColTexIdx, 0u );
-			auto c3d_previousColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_previousColourTex", PrvColTexIdx, 0u );
-			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
+			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", CurColTexIdx, 0u );
+			auto c3d_previousColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_previousColourTex", PrvColTexIdx, 0u );
+			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
 			auto SMAAResolvePS = writer.implementFunction< Vec4 >( "SMAAResolvePS"
 				, [&]( Vec2 const & texcoord
-					, SampledImage2DRgba32 const & currentColorTex
-					, SampledImage2DRgba32 const & previousColorTex )
+					, CombinedImage2DRgba32 const & currentColorTex
+					, CombinedImage2DRgba32 const & previousColorTex )
 				{
 					IF( writer, c3d_smaaData.enableReprojection != 0 )
 					{
@@ -115,8 +115,8 @@ namespace smaa
 					FI;
 				}
 				, InVec2{ writer, "texcoord" }
-				, InSampledImage2DRgba32{ writer, "currentColorTex" }
-				, InSampledImage2DRgba32{ writer, "previousColorTex" } );
+				, InCombinedImage2DRgba32{ writer, "currentColorTex" }
+				, InCombinedImage2DRgba32{ writer, "previousColorTex" } );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )

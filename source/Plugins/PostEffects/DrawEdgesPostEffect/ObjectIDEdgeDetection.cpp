@@ -66,7 +66,7 @@ namespace draw_edges
 
 			castor3d::shader::Materials materials{ writer };
 			materials.declare( true, eMaterials, 0u );
-			auto c3d_data0 = writer.declSampledImage< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
+			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
 
 			// Shader outputs
 			auto fragColour = writer.declOutput< Float >( "pxl_fragColour", 0u );

@@ -96,11 +96,11 @@ namespace ocean_fft
 
 			UBO_OCEAN( writer, GenerateNormalPass::eConfig, 0u );
 
-			auto distr = writer.declShaderStorageBuffer( "Distribution", GenerateNormalPass::eInput, 0u );
+			auto distr = writer.declStorageBuffer( "Distribution", GenerateNormalPass::eInput, 0u );
 			auto distribution = distr.declMemberArray< sdw::Vec2 >( "distribution" );
 			distr.end();
 
-			auto fft = writer.declShaderStorageBuffer( "NormalFFT", GenerateNormalPass::eOutput, 0u );
+			auto fft = writer.declStorageBuffer( "NormalFFT", GenerateNormalPass::eOutput, 0u );
 			auto normals = fft.declMemberArray< sdw::Vec2 >( "normals" );
 			fft.end();
 

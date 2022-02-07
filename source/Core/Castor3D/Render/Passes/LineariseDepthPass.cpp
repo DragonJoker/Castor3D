@@ -87,7 +87,7 @@ namespace castor3d
 			Ubo clipInfo{ writer, "ClipInfo", ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
 			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( "c3d_clipInfo" );
 			clipInfo.end();
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );
@@ -119,7 +119,7 @@ namespace castor3d
 			Ubo previousLevel{ writer, "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
 			auto c3d_textureSize = previousLevel.declMember< IVec2 >( "c3d_textureSize" );
 			previousLevel.end();
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );

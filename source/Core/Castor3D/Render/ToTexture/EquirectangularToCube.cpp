@@ -63,7 +63,7 @@ namespace castor3d
 				FragmentWriter writer;
 
 				// Inputs
-				auto mapColour = writer.declSampledImage< FImg2DRgba32 >( "mapColour", 1u, 0u );
+				auto mapColour = writer.declCombinedImg< FImg2DRgba32 >( "mapColour", 1u, 0u );
 				auto vtx_position = writer.declInput< Vec3 >( "vtx_position", 0u );
 
 				// Outputs

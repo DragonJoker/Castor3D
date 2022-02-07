@@ -96,11 +96,11 @@ namespace ocean_fft
 
 			UBO_OCEAN( writer, GenerateHeightmapPass::eConfig, 0u );
 
-			auto distr = writer.declShaderStorageBuffer( "Distribution", GenerateHeightmapPass::eInput, 0u );
+			auto distr = writer.declStorageBuffer( "Distribution", GenerateHeightmapPass::eInput, 0u );
 			auto distribution = distr.declMemberArray< sdw::Vec2 >( "distribution" );
 			distr.end();
 
-			auto fft = writer.declShaderStorageBuffer( "HeightmapFFT", GenerateHeightmapPass::eOutput, 0u );
+			auto fft = writer.declStorageBuffer( "HeightmapFFT", GenerateHeightmapPass::eOutput, 0u );
 			auto heights = fft.declMemberArray< sdw::Vec2 >( "heights" );
 			fft.end();
 

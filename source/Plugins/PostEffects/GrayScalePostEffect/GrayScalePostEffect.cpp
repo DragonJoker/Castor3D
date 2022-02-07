@@ -74,7 +74,7 @@ namespace grayscale
 			auto configUbo = Ubo{ writer, "Configuration", GrayCfgUboIdx, 0u };
 			auto c3d_factors = configUbo.declMember< Vec3 >( "c3d_factors" );
 			configUbo.end();
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
+			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs

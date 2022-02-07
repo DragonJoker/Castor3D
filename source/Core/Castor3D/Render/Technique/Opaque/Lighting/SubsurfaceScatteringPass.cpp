@@ -103,9 +103,9 @@ namespace castor3d
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			config.end();
-			auto c3d_mapData0 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), BlurData0ImgId, 0u );
-			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), BlurData4ImgId, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
+			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), BlurData0ImgId, 0u );
+			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), BlurData4ImgId, 0u );
+			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
@@ -210,12 +210,12 @@ namespace castor3d
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), CombMaterialsUboId, 0u );
 
-			auto c3d_mapData0 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), CombData0ImgId, 0u );
-			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
-			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur1", CombBlur1ImgId, 0u );
-			auto c3d_mapBlur2 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur2", CombBlur2ImgId, 0u );
-			auto c3d_mapBlur3 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", CombLgtDiffImgId, 0u );
+			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), CombData0ImgId, 0u );
+			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
+			auto c3d_mapBlur1 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur1", CombBlur1ImgId, 0u );
+			auto c3d_mapBlur2 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur2", CombBlur2ImgId, 0u );
+			auto c3d_mapBlur3 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
+			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", CombLgtDiffImgId, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 

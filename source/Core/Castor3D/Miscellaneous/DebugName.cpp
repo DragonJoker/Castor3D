@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
@@ -22,7 +23,7 @@ namespace castor3d
 		uint32_t deduced = device.deduceMemoryType( requirements.memoryTypeBits
 			, flags );
 		auto memory = device.allocateMemory( name + "Mem"
-			, VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
+			, makeVkStruct< VkMemoryAllocateInfo >( requirements.size, deduced ) );
 		return memory;
 	}
 
