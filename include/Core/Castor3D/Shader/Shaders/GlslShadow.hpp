@@ -101,12 +101,12 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InCombinedImage2DArrayRgba32
 				, sdw::InInt
 				, sdw::InFloat > m_textureProj;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InCombinedImage2DArrayRgba32
 				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InFloat > m_filterPCF;
@@ -118,34 +118,34 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DRgba32
+				, sdw::InCombinedImage2DRgba32
 				, sdw::InFloat > m_textureProjNoCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DRgba32
+				, sdw::InCombinedImage2DRgba32
 				, sdw::InVec2
 				, sdw::InFloat > m_filterPCFNoCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InCombinedImage2DArrayRgba32
 				, sdw::InUInt
 				, sdw::InFloat > m_textureProjCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InCombinedImage2DArrayRgba32
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat > m_filterPCFCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DRgba32
+				, sdw::InCombinedImage2DRgba32
 				, sdw::InUInt
 				, sdw::InFloat > m_textureProjTile;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DRgba32
+				, sdw::InCombinedImage2DRgba32
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat > m_filterPCFTile;

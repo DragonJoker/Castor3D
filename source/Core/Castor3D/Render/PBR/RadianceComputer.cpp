@@ -110,7 +110,7 @@ namespace castor3d
 
 				// Inputs
 				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
-				auto c3d_mapEnvironment = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 
 				// Outputs
 				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
@@ -248,15 +248,13 @@ namespace castor3d
 			facePass.dstView = handler.createImageView( device.makeContext()
 				, dstTexture.subViewsId[face] );
 			// Initialise the frame buffer.
-			VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
-				, nullptr
-				, 0u
+			auto createInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 				, *m_renderPass
 				, 1u
 				, &facePass.dstView
 				, size.getWidth()
 				, size.getHeight()
-				, 1u };
+				, 1u );
 			facePass.frameBuffer = m_renderPass->createFrameBuffer( name
 				, std::move( createInfo ) );
 		}

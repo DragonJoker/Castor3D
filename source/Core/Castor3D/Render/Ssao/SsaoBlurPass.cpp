@@ -76,9 +76,9 @@ namespace castor3d
 			auto c3d_dummy = configuration.declMember< IVec2 >( "c3d_dummy" );
 			auto c3d_gaussian = configuration.declMember< Vec4 >( "c3d_gaussian", 2u );
 			configuration.end();
-			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", NmlImgIdx, 0u, useNormalsBuffer );
-			auto c3d_mapInput = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapInput", InpImgIdx, 0u );
-			auto c3d_mapBentInput = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBentInput", BntImgIdx, 0u );
+			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", NmlImgIdx, 0u, useNormalsBuffer );
+			auto c3d_mapInput = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapInput", InpImgIdx, 0u );
+			auto c3d_mapBentInput = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBentInput", BntImgIdx, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );

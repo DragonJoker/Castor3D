@@ -17,10 +17,9 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/Bool.hpp>
 #include <ShaderWriter/BaseTypes/Double.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
-#include <ShaderWriter/BaseTypes/Image.hpp>
 #include <ShaderWriter/BaseTypes/Int.hpp>
-#include <ShaderWriter/BaseTypes/SampledImage.hpp>
-#include <ShaderWriter/BaseTypes/Sampler.hpp>
+#include <ShaderWriter/BaseTypes/CombinedImage.hpp>
+#include <ShaderWriter/BaseTypes/StorageImage.hpp>
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/CompositeTypes/Function.hpp>
 

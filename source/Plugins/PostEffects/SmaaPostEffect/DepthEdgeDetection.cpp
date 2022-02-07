@@ -43,7 +43,7 @@ namespace smaa
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
 			UBO_SMAA( writer, SmaaUboIdx, 0u );
-			auto c3d_depthTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_depthTex", DepthTexIdx, 0u );
+			auto c3d_depthTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthTex", DepthTexIdx, 0u );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
@@ -54,13 +54,13 @@ namespace smaa
 			auto SMAAGatherNeighbours = writer.implementFunction< Vec3 >( "SMAAGatherNeighbours"
 				, [&]( Vec2 const & texcoord
 					, Array< Vec4 > const & offset
-					, SampledImage2DRgba32 const & tex )
+					, CombinedImage2DRgba32 const & tex )
 				{
 					writer.returnStmt( tex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
-				, InSampledImage2DRgba32{ writer, "tex" } );
+				, InCombinedImage2DRgba32{ writer, "tex" } );
 
 			/**
 			 * Depth Edge Detection
@@ -68,7 +68,7 @@ namespace smaa
 			auto SMAADepthEdgeDetectionPS = writer.implementFunction< Vec2 >( "SMAADepthEdgeDetectionPS"
 				, [&]( Vec2 const & texcoord
 					, Array< Vec4 > const & offset
-					, SampledImage2DRgba32 const & depthTex )
+					, CombinedImage2DRgba32 const & depthTex )
 				{
 					auto neighbours = writer.declLocale( "neighbours"
 						, SMAAGatherNeighbours( texcoord, offset, depthTex ) );
@@ -87,7 +87,7 @@ namespace smaa
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
-				, InSampledImage2DRgba32{ writer, "depthTex" } );
+				, InCombinedImage2DRgba32{ writer, "depthTex" } );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )

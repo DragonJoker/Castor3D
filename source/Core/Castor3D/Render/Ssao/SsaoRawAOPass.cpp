@@ -85,10 +85,10 @@ namespace castor3d
 			UBO_SSAO_CONFIG( writer, SsaoCfgUboIdx, 0u );
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			// Negative, "linear" values in world-space units
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", NormalMapIdx, 0u, useNormalsBuffer );
+			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", NormalMapIdx, 0u, useNormalsBuffer );
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 

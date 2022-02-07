@@ -133,7 +133,6 @@ namespace castor
 				pass->update();
 			}
 		}
-
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( GpuUpdater & updater )

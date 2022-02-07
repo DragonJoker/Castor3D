@@ -23,7 +23,7 @@ namespace aces
 
 		// Shader inputs
 		UBO_HDR_CONFIG( writer, 0u, 0u );
-		auto c3d_mapHdr = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
+		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
 		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs

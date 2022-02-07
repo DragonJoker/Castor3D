@@ -268,17 +268,12 @@ namespace castor3d
 		m_commandBuffer = m_device.graphicsData()->commandPool->createCommandBuffer( "RenderCube"
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, VkCommandBufferInheritanceInfo
-			{
-				VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
-				nullptr,
-				renderPass,
-				subpassIndex,
-				VK_NULL_HANDLE,
-				VK_FALSE,
-				0u,
-				0u
-			} );
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
+				, subpassIndex
+				, VK_NULL_HANDLE
+				, VK_FALSE
+				, 0u
+				, 0u ) );
 		registerFrame( *m_commandBuffer, face );
 		m_commandBuffer->end();
 	}

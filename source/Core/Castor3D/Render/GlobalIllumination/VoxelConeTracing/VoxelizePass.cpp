@@ -595,7 +595,7 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
@@ -610,7 +610,7 @@ namespace castor3d
 			, addIndex++
 			, RenderPipeline::eAdditional
 			, true );
-		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+		auto output( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
 			, addIndex++
 			, RenderPipeline::eAdditional ) );
 		auto lightingModel = shader::LightingModel::createDiffuseModel( utils

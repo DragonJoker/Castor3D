@@ -56,17 +56,17 @@ namespace castor3d::shader
 			, sdw::Vec3 const & wsCamera )const;
 		sdw::Vec3 computeRefl( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, PhongLightMaterial const & material );
 		sdw::Vec3 computeRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, PhongLightMaterial & material );
 		void computeRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, PhongLightMaterial & material
@@ -74,7 +74,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & refraction );
 		void computeReflRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, PhongLightMaterial & material
@@ -82,19 +82,19 @@ namespace castor3d::shader
 			, sdw::Vec3 & refraction );
 		sdw::Vec3 computeRefls( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, PhongLightMaterial const & material );
 		sdw::Vec3 computeRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, PhongLightMaterial & material );
 		void computeRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
@@ -103,7 +103,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & refraction );
 		void computeReflRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
@@ -123,19 +123,19 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, InPhongLightMaterial > m_computeRefl;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InOutPhongLightMaterial > m_computeRefr;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InOutPhongLightMaterial
@@ -144,7 +144,7 @@ namespace castor3d::shader
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InOutPhongLightMaterial
@@ -153,13 +153,13 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, InPhongLightMaterial > m_computeRefls;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3
@@ -167,7 +167,7 @@ namespace castor3d::shader
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3
@@ -177,7 +177,7 @@ namespace castor3d::shader
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3

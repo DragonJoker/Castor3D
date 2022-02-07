@@ -431,7 +431,7 @@ namespace castor3d
 			}
 
 			result = it->second;
-			return ires.second;
+			return !ires.second;
 		}
 
 		bool hasElems( castor::CheckedMutex & loadMtx
@@ -514,7 +514,7 @@ namespace castor3d
 	{
 		TextureUnitSPtr result{};
 
-		if ( findUnit( *getEngine(), m_loadMtx, m_loaded, sourceInfo, config, result ) )
+		if ( !findUnit( *getEngine(), m_loadMtx, m_loaded, sourceInfo, config, result ) )
 		{
 			doLoadSource( sourceInfo, config, *result );
 		}
@@ -541,7 +541,7 @@ namespace castor3d
 		PassTextureConfig passConfig{ { {} }, resultConfig };
 		TextureUnitSPtr result{};
 
-		if ( findUnit( *getEngine(), m_loadMtx, m_loaded, resultSourceInfo, passConfig, result ) )
+		if ( !findUnit( *getEngine(), m_loadMtx, m_loaded, resultSourceInfo, passConfig, result ) )
 		{
 			doMergeSources( lhsSourceInfo
 				, lhsConfig

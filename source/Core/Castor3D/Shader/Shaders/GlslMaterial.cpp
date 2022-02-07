@@ -40,7 +40,7 @@ namespace castor3d::shader
 	{
 	}
 
-	void Material::create( sdw::SampledImageT< FImgBufferRgba32 > & materials
+	void Material::create( sdw::CombinedImageT< FImgBufferRgba32 > & materials
 		, sdw::Int & offset )
 	{
 		colourDiv = materials.fetch( sdw::Int{ offset++ } );
@@ -114,7 +114,7 @@ namespace castor3d::shader
 		}
 		else
 		{
-			auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials"
+			auto c3d_materials = m_writer.declCombinedImg< FImgBufferRgba32 >( "c3d_materials"
 				, binding
 				, set );
 			m_getMaterial = m_writer.implementFunction< Material >( "c3d_getMaterial"
