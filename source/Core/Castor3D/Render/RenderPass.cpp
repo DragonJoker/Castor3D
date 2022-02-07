@@ -11,6 +11,7 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -578,11 +579,11 @@ namespace castor3d
 	}
 
 	uint32_t SceneRenderPass::doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer )const
+		, std::vector< InstantiationData > & instanceBuffer )const
 	{
-		auto const count = std::min( uint32_t( matrixBuffer.size() / m_instanceMult )
+		auto const count = std::min( uint32_t( instanceBuffer.size() / m_instanceMult )
 			, uint32_t( renderNodes.size() ) );
-		auto buffer = matrixBuffer.data();
+		auto buffer = instanceBuffer.data();
 		auto it = renderNodes.begin();
 		auto i = 0u;
 
@@ -594,6 +595,37 @@ namespace castor3d
 			{
 				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
 				buffer->m_material = int32_t( node->passNode.pass.getId() );
+				uint32_t index = 0u;
+
+				for ( auto & unit : node->passNode.pass )
+				{
+					if ( index < 4 )
+					{
+						buffer->m_textures0[index] = unit->getId();
+					}
+					else if ( index < 8 )
+					{
+						buffer->m_textures1[index - 4] = unit->getId();
+					}
+
+					++index;
+				}
+
+				while ( index < 8u )
+				{
+					if ( index < 4 )
+					{
+						buffer->m_textures0[index] = 0u;
+					}
+					else
+					{
+						buffer->m_textures1[index - 4] = 0u;
+					}
+
+					++index;
+				}
+
+				buffer->m_textures = int32_t( std::min( 8u, node->passNode.pass.getTextureUnitsCount() ) );
 				++buffer;
 			}
 
@@ -605,10 +637,10 @@ namespace castor3d
 	}
 
 	uint32_t SceneRenderPass::doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
-		, std::vector< InstantiationData > & matrixBuffer
+		, std::vector< InstantiationData > & instanceBuffer
 		, RenderInfo & info )const
 	{
-		auto count = this->doCopyNodesMatrices( renderNodes, matrixBuffer );
+		auto count = this->doCopyNodesMatrices( renderNodes, instanceBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}

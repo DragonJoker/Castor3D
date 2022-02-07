@@ -79,10 +79,11 @@ namespace toon::shader
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )const override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
-			, castor3d::FilteredTextureFlags const & textures
+			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, castor3d::shader::ModelData const & model
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
@@ -121,10 +122,11 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows )const override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-			, castor3d::FilteredTextureFlags const & textures
+			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, castor3d::shader::ModelData const & model
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
@@ -305,10 +307,11 @@ namespace toon::shader
 			, sdw::Int const & receivesShadows
 			, c3d::OutputComponents & output )const override;
 		void computeMapContributions( castor3d::PassFlags const & passFlags
-			, castor3d::FilteredTextureFlags const & textures
+			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, castor3d::shader::ModelData const & model
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
@@ -347,10 +350,11 @@ namespace toon::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows )const override;
 		void computeMapDiffuseContributions( castor3d::PassFlags const & passFlags
-			, castor3d::FilteredTextureFlags const & textures
+			, castor3d::TextureFlagsArray const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, castor3d::shader::ModelData const & model
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity

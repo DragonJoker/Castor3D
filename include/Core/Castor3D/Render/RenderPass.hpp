@@ -626,7 +626,7 @@ namespace castor3d
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer )const;
+			, std::vector< InstantiationData > & instanceBuffer )const;
 		/**
 		 *\~english
 		 *\brief			Copies the instantiated nodes model matrices into given matrix buffer.
@@ -642,7 +642,7 @@ namespace castor3d
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
 		C3D_API uint32_t doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer
+			, std::vector< InstantiationData > & instanceBuffer
 			, RenderInfo & info )const;
 		/**
 		 *\~english

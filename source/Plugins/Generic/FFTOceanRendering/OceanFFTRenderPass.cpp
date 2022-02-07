@@ -1355,7 +1355,6 @@ namespace ocean_fft
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
 		UBO_MATRIX( writer
