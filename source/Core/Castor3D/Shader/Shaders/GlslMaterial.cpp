@@ -97,50 +97,21 @@ namespace castor3d::shader
 	{
 	}
 
-	void Materials::declare( bool hasSsbo
-		, uint32_t binding
+	void Materials::declare( uint32_t binding
 		, uint32_t set )
 	{
-		m_type = Material::declare( m_writer );
-
-		if ( hasSsbo )
-		{
-			m_ssbo = std::make_unique< sdw::ArraySsboT< Material > >( m_writer
-				, PassBufferName
-				, m_type->getType()
-				, binding
-				, set
-				, true );
-		}
-		else
-		{
-			auto c3d_materials = m_writer.declCombinedImg< FImgBufferRgba32 >( "c3d_materials"
-				, binding
-				, set );
-			m_getMaterial = m_writer.implementFunction< Material >( "c3d_getMaterial"
-				, [this, &c3d_materials]( sdw::UInt const & index )
-				{
-					auto result = m_writer.declLocale< Material >( "result"
-						, *m_type );
-					auto offset = m_writer.declLocale( "offset"
-						, m_writer.cast< sdw::Int >( index ) * sdw::Int( MaxMaterialComponentsCount ) );
-					result.create( c3d_materials, offset );
-					m_writer.returnStmt( result );
-				}
-			, sdw::InUInt{ m_writer, "index" } );
-		}
+		auto type = Material::declare( m_writer );
+		m_ssbo = std::make_unique< sdw::ArraySsboT< Material > >( m_writer
+			, PassBufferName
+			, type->getType()
+			, binding
+			, set
+			, true );
 	}
 
 	Material Materials::getMaterial( sdw::UInt const & index )const
 	{
-		if ( m_ssbo )
-		{
-			return ( *m_ssbo )[index - 1_u];
-		}
-		else
-		{
-			return m_getMaterial( index - 1_u );
-		}
+		return ( *m_ssbo )[index - 1_u];
 	}
 
 	//*********************************************************************************************

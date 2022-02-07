@@ -227,56 +227,18 @@ namespace castor3d
 		{
 		}
 
-		void TextureConfigurations::declare( bool hasSsbo
-			, uint32_t binding
-			, uint32_t set )
+		void TextureConfigurations::declare( uint32_t binding, uint32_t set )
 		{
-
-			if ( hasSsbo )
-			{
-				m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer
-					, TextureConfigurationBufferName
-					, binding
-					, set
-					, true );
-			}
-			else
-			{
-				auto c3d_textureConfigurations = m_writer.declCombinedImg< FImgBufferRgba32 >( "c3d_textureConfigurations"
-					, binding
-					, set );
-				m_getTextureConfiguration = m_writer.implementFunction< TextureConfigData >( "getTextureConfiguration"
-					, [this, &c3d_textureConfigurations]( sdw::UInt const & index )
-					{
-						auto result = m_writer.declLocale< TextureConfigData >( "result" );
-						auto offset = m_writer.declLocale( cuT( "offset" )
-							, m_writer.cast< sdw::Int >( index ) * sdw::Int( shader::MaxTextureConfigurationComponentsCount ) );
-						result.colOpa = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.spcShn = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.metRgh = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.emsOcc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.trsDum = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.nmlFcr = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.hgtFcr = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.mscVls = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.texTrn = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.texRot = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.texScl = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.tleSet = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						m_writer.returnStmt( result );
-					}
-					, sdw::InUInt{ m_writer, cuT( "index" ) } );
-			}
+			m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer
+				, TextureConfigurationBufferName
+				, binding
+				, set
+				, true );
 		}
 
 		TextureConfigData TextureConfigurations::getTextureConfiguration( sdw::UInt const & index )const
 		{
-			if ( m_ssbo )
-			{
-				return ( *m_ssbo )[index - 1_u];
-			}
-
-			return m_getTextureConfiguration( index - 1_u );
+			return ( *m_ssbo )[index - 1_u];
 		}
 
 		//*********************************************************************************************

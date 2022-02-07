@@ -57,6 +57,7 @@ namespace castor3d
 
 		public:
 			sdw::UInt fogType;
+			sdw::Float fogDensity;
 			sdw::Vec3 ambientLight;
 			sdw::Vec3 cameraPosition;
 			sdw::Vec2 renderSize;

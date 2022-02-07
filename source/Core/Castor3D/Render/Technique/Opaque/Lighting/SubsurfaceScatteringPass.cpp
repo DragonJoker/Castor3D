@@ -97,7 +97,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
-			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), BlurMaterialsUboId, 0u );
+			materials->declare( BlurMaterialsUboId, 0u );
 			UBO_GPINFO( writer, BlurGpInfoUboId, 0u );
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
@@ -208,7 +208,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
-			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers(), CombMaterialsUboId, 0u );
+			materials->declare( CombMaterialsUboId, 0u );
 
 			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), CombData0ImgId, 0u );
 			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );

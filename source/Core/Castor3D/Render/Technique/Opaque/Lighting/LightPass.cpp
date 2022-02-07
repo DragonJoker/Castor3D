@@ -119,8 +119,7 @@ namespace castor3d
 
 		// Shader inputs
 		shader::Materials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( LightPassIdx::eMaterials )
+		materials.declare( uint32_t( LightPassIdx::eMaterials )
 			, 0u );
 		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
