@@ -66,10 +66,14 @@ namespace castor
 				, shader::MaxMaterialsCount );
 			m_texConfigBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
 				, device
-				, shader::MaxTextureConfigurationCount );
+				, ( device.hasBindless()
+					? device.getMaxBindlessSampled()
+					: shader::MaxTextureConfigurationCount ) );
 			m_texAnimBuffer = std::make_shared< TextureAnimationBuffer >( m_engine
 				, device
-				, shader::MaxTextureAnimationCount );
+				, ( device.hasBindless()
+					? device.getMaxBindlessSampled()
+					: shader::MaxTextureAnimationCount ) );
 
 			for ( auto & it : *this )
 			{

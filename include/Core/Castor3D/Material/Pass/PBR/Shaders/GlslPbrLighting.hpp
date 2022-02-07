@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_GlslPbrLightingModel_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -70,10 +69,11 @@ namespace castor3d::shader
 			, sdw::Int const & receivesShadows
 			, OutputComponents & output )const override;
 		C3D_API void computeMapContributions( PassFlags const & passFlags
-			, FilteredTextureFlags const & textures
+			, TextureFlagsArray const & textures
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, ModelData const & model
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
@@ -112,10 +112,11 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::Int const & receivesShadows )const override;
 		C3D_API void computeMapDiffuseContributions( PassFlags const & passFlags
-			, FilteredTextureFlags const & textures
+			, TextureFlagsArray const & textures
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, ModelData const & model
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity

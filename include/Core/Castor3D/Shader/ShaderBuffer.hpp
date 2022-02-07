@@ -137,6 +137,11 @@ namespace castor3d
 			return m_type;
 		}
 
+		RenderDevice const & getDevice()const
+		{
+			return m_device;
+		}
+
 	private:
 		void doUpload( ashes::CommandBuffer const & commandBuffer
 			, VkDeviceSize offset

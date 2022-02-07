@@ -51,7 +51,7 @@ namespace castor3d
 			return buffer;
 		}
 
-		ashes::PipelineVertexInputStateCreateInfo getMatrixLayout( ShaderFlags shaderFlags
+		ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( ShaderFlags shaderFlags
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { InstantiationComponent::BindingPoint
@@ -74,6 +74,14 @@ namespace castor3d
 				, InstantiationComponent::BindingPoint
 				, VK_FORMAT_R32G32B32A32_SFLOAT
 				, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( castor::Point4f ) } );
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_UINT
+				, offsetof( InstantiationData, m_textures0 ) } );
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_UINT
+				, offsetof( InstantiationData, m_textures1 ) } );
 			attributes.push_back( { currentLocation++
 				, InstantiationComponent::BindingPoint
 				, VK_FORMAT_R32_SINT
@@ -235,7 +243,7 @@ namespace castor3d
 				if ( layoutIt == m_mtxLayouts.end() )
 				{
 					layoutIt = m_mtxLayouts.emplace( hash
-						, getMatrixLayout( shaderFlags, currentLocation ) ).first;
+						, getInstantiationLayout( shaderFlags, currentLocation ) ).first;
 				}
 
 				buffers.emplace_back( it->second[index].buffer.getBuffer().getBuffer() );

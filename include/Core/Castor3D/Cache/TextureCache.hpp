@@ -48,6 +48,11 @@ namespace castor3d
 		C3D_API explicit TextureUnitCache( Engine & engine );
 		C3D_API ~TextureUnitCache();
 
+		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void cleanup();
+
+		C3D_API void update( GpuUpdater & updater );
+
 		C3D_API void notifyPassChange( Pass & pass );
 		C3D_API void preparePass( Pass & pass );
 
@@ -66,6 +71,26 @@ namespace castor3d
 			, castor::String const & name
 			, TextureSourceInfo resultSourceInfo
 			, TextureConfiguration resultConfig );
+
+		bool hasBindless()const
+		{
+			return m_texLayout && m_texSet;
+		}
+
+		ashes::DescriptorSetLayout * getDescriptorLayout()const
+		{
+			return m_texLayout.get();
+		}
+
+		ashes::DescriptorPool * getDescriptorPool()const
+		{
+			return m_texPool.get();
+		}
+
+		ashes::DescriptorSet * getDescriptorSet()const
+		{
+			return m_texSet.get();
+		}
 
 	private:
 		void doCreateLayout( ThreadData & data
@@ -86,6 +111,7 @@ namespace castor3d
 			, castor::String const & name
 			, TextureUnit & unit );
 		void doUpload( ThreadData & data );
+		void doUpdateWrite( TextureUnit & unit );
 		ThreadData & doCreateThreadData( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config
 			, TextureUnit & unit );
@@ -97,6 +123,11 @@ namespace castor3d
 		castor::CheckedMutex m_loadMtx;
 		std::vector< std::unique_ptr< ThreadData > > m_loading;
 		std::unordered_map< size_t, TextureUnitSPtr > m_loaded;
+		ashes::DescriptorSetLayoutPtr m_texLayout;
+		ashes::DescriptorPoolPtr m_texPool;
+		ashes::DescriptorSetPtr m_texSet;
+		std::mutex m_ditryWritesMtx;
+		std::vector< ashes::WriteDescriptorSet > m_dirtyWrites;
 	};
 }
 
