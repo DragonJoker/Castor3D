@@ -49,17 +49,13 @@ namespace castor3d
 		{
 		public:
 			C3D_API explicit TextureAnimations( sdw::ShaderWriter & writer );
-			C3D_API void declare( bool hasSsbo
-				, uint32_t binding
+			C3D_API void declare( uint32_t binding
 				, uint32_t set );
 			C3D_API TextureAnimData getTextureAnimation( sdw::UInt const & index )const;
 
 		private:
 			sdw::ShaderWriter & m_writer;
-			std::unique_ptr< sdw::Struct > m_type;
 			std::unique_ptr< sdw::ArraySsboT< TextureAnimData > > m_ssbo;
-			sdw::Function< TextureAnimData
-				, sdw::InUInt > m_getTextureAnimation;
 		};
 	}
 }

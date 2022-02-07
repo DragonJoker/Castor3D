@@ -95,47 +95,19 @@ namespace castor3d
 		{
 		}
 
-		void TextureAnimations::declare( bool hasSsbo
-			, uint32_t binding
+		void TextureAnimations::declare( uint32_t binding
 			, uint32_t set )
 		{
-
-			if ( hasSsbo )
-			{
-				m_ssbo = std::make_unique< sdw::ArraySsboT< TextureAnimData > >( m_writer
-					, TextureAnimationBufferName
-					, binding
-					, set
-					, true );
-			}
-			else
-			{
-				auto c3d_textureAnimations = m_writer.declCombinedImg< FImgBufferRgba32 >( "c3d_textureAnimations"
-					, binding
-					, set );
-				m_getTextureAnimation = m_writer.implementFunction< TextureAnimData >( "c3d_getTextureAnimation"
-					, [this, &c3d_textureAnimations]( sdw::UInt const & index )
-					{
-						auto result = m_writer.declLocale< TextureAnimData >( "result" );
-						auto offset = m_writer.declLocale( cuT( "offset" )
-							, m_writer.cast< sdw::Int >( index ) * sdw::Int( shader::MaxTextureAnimationComponentsCount ) );
-						result.texTrn = c3d_textureAnimations.fetch( sdw::Int{ offset++ } );
-						result.texRot = c3d_textureAnimations.fetch( sdw::Int{ offset++ } );
-						result.texScl = c3d_textureAnimations.fetch( sdw::Int{ offset++ } );
-						m_writer.returnStmt( result );
-					}
-					, sdw::InUInt{ m_writer, cuT( "index" ) } );
-			}
+			m_ssbo = std::make_unique< sdw::ArraySsboT< TextureAnimData > >( m_writer
+				, TextureAnimationBufferName
+				, binding
+				, set
+				, true );
 		}
 
 		TextureAnimData TextureAnimations::getTextureAnimation( sdw::UInt const & index )const
 		{
-			if ( m_ssbo )
-			{
-				return ( *m_ssbo )[index - 1_u];
-			}
-
-			return m_getTextureAnimation( index - 1_u );
+			return ( *m_ssbo )[index - 1_u];
 		}
 
 		//*********************************************************************************************
