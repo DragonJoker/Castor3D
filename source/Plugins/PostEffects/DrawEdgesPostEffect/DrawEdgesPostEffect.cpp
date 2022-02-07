@@ -59,7 +59,7 @@ namespace draw_edges
 
 			// Shader inputs
 			castor3d::shader::Materials materials{ writer };
-			materials.declare( true, eMaterials, 0u );
+			materials.declare( eMaterials, 0u );
 			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
 			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );

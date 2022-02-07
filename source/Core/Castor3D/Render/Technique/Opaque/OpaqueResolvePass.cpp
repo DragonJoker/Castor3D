@@ -139,8 +139,7 @@ namespace castor3d
 
 			// Shader inputs
 			shader::Materials materials{ writer };
-			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( ResolveBind::eMaterials )
+			materials.declare( uint32_t( ResolveBind::eMaterials )
 				, 0u );
 			UBO_SCENE( writer, uint32_t( ResolveBind::eScene ), 0u );
 			UBO_GPINFO( writer, uint32_t( ResolveBind::eGpInfo ), 0u );

@@ -53,7 +53,7 @@ namespace draw_edges
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			castor3d::shader::Materials materials{ writer };
-			materials.declare( true, DepthNormalEdgeDetection::eMaterials, 0u );
+			materials.declare( DepthNormalEdgeDetection::eMaterials, 0u );
 			auto data0( writer.declCombinedImg< FImg2DRgba32 >( "data0", DepthNormalEdgeDetection::eData0, 0u ) );
 			auto data1( writer.declCombinedImg< FImg2DRgba32 >( "data1", DepthNormalEdgeDetection::eData1, 0u ) );
 			auto depthRangeBuffer( writer.declStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
