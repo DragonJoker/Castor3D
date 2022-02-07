@@ -1318,19 +1318,16 @@ namespace ocean
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
 		shader::Materials materials{ writer };
-		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-			, uint32_t( NodeUboIdx::eMaterials )
+		materials.declare( uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
 		shader::TextureConfigurations textureConfigs{ writer };
 		shader::TextureAnimations textureAnims{ writer };
 
 		if ( hasTextures )
 		{
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexConfigs )
+			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
 				, RenderPipeline::eBuffers );
-			textureAnims.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( NodeUboIdx::eTexAnims )
+			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
 				, RenderPipeline::eBuffers );
 		}
 
