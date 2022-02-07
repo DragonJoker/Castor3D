@@ -1138,13 +1138,13 @@ namespace castor3d::shader
 					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
 				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
 					, texCoords.xy() );
-				anim.animUV( config, texCoord );
+				config.transformUV( anim, texCoord );
 				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
 					, maps[i].sample( texCoord ) );
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
 				{
-					colour = config.getDiffuse( sampled, colour );
+					colour = config.getColour( sampled, colour );
 				}
 
 				if ( checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
@@ -1155,186 +1155,16 @@ namespace castor3d::shader
 		}
 	}
 
-	void Utils::computeGeometryMapContribution( PassFlags const & passFlags
-		, std::string const & name
-		, shader::TextureConfigData const & config
-		, shader::TextureAnimData const & anim
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 & texCoords
-		, sdw::Float & opacity
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
+	sdw::Vec2 Utils::parallaxMapping( sdw::Vec2 const & texCoords
+		, sdw::Vec3 const & viewDir
+		, sdw::CombinedImage2DRgba32 const & heightMap
+		, TextureConfigData const & textureConfig )
 	{
-		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
-			, texCoords.xy() );
-		anim.animUV( config, texCoord );
-
-		if ( ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-			|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-		{
-			IF( m_writer, config.isHeight() )
-			{
-				texCoord = doParallaxMapping( texCoord
-					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-					, map
-					, config );
-				texCoords.xy() = texCoord;
-
-				if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
-				{
-					IF( m_writer, texCoords.x() > 1.0_f
-						|| texCoords.y() > 1.0_f
-						|| texCoords.x() < 0.0_f
-						|| texCoords.y() < 0.0_f )
-					{
-						m_writer.demote();
-					}
-					FI;
-				}
-			}
-			FI;
-		}
-
-		auto sampled = m_writer.declLocale( "c3d_sampled" + name
-			, map.sample( texCoord ) );
-
-		IF( m_writer, config.isNormal() )
-		{
-			auto tbn = m_writer.declLocale( "c3d_tbn"
-				, shader::Utils::getTBN( normal, tangent, bitangent ) );
-			normal = config.getNormal( sampled, tbn );
-		}
-		FI;
-
-		IF( m_writer, config.isOpacity() )
-		{
-			opacity = config.getOpacity( sampled, opacity );
-		}
-		FI;
-	}
-
-	sdw::Vec4 Utils::computeCommonMapContribution( PassFlags const & passFlags
-		, std::string const & name
-		, shader::TextureConfigData const & config
-		, shader::TextureAnimData const & anim
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 const & texCoords
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
-			, texCoords.xy() );
-
-		if ( ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-			|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-		{
-			IF( m_writer, config.isHeight() )
-			{
-				texCoord = doParallaxMapping( texCoord
-					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-					, map
-					, config );
-				texCoords.xy() = texCoord;
-
-				if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
-				{
-					IF( m_writer, texCoords.x() > 1.0_f
-						|| texCoords.y() > 1.0_f
-						|| texCoords.x() < 0.0_f
-						|| texCoords.y() < 0.0_f )
-					{
-						m_writer.demote();
-					}
-					FI;
-				}
-			}
-			FI;
-		}
-
-		anim.animUV( config, texCoord );
-		auto result = m_writer.declLocale( "c3d_result" + name
-			, map.sample( texCoord ) );
-
-		IF( m_writer, config.isNormal() )
-		{
-			auto tbn = m_writer.declLocale( "c3d_tbn"
-				, shader::Utils::getTBN( normal, tangent, bitangent ) );
-			normal = config.getNormal( result, tbn );
-		}
-		FI;
-
-		IF( m_writer, config.isOpacity() )
-		{
-			opacity = config.getOpacity( result, opacity );
-		}
-		FI;
-
-		IF( m_writer, config.isEmissive() )
-		{
-			emissive = config.getEmissive( result, emissive );
-		}
-		FI;
-
-		IF( m_writer, config.isOcclusion() )
-		{
-			occlusion = config.getOcclusion( result, occlusion );
-		}
-		FI;
-
-		IF( m_writer, config.isTransmittance() )
-		{
-			transmittance = config.getTransmittance( result, transmittance );
-		}
-		FI;
-
-		return result;
-	}
-
-	sdw::Vec4 Utils::computeCommonMapVoxelContribution( PassFlags const & passFlags
-		, std::string const & name
-		, shader::TextureConfigData const & config
-		, shader::TextureAnimData const & anim
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 const & texCoords
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion )
-	{
-		auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
-			, texCoords.xy() );
-		anim.animUV( config, texCoord );
-		auto result = m_writer.declLocale< sdw::Vec4 >( "c3d_result" + name
-			, map.sample( texCoord ) );
-
-		IF( m_writer, config.isOpacity() )
-		{
-			opacity = config.getOpacity( result, opacity );
-		}
-		FI;
-
-		IF( m_writer, config.isEmissive() )
-		{
-			emissive = config.getEmissive( result, emissive );
-		}
-		FI;
-
-		IF( m_writer, config.isOcclusion() )
-		{
-			occlusion = config.getOcclusion( result, occlusion );
-		}
-		FI;
-
-		return result;
+		declareParallaxMappingFunc();
+		return m_parallaxMapping( texCoords.xy()
+			, viewDir
+			, heightMap
+			, textureConfig );
 	}
 
 	sdw::Vec4 Utils::clipToScreen( sdw::Vec4 const & in )
@@ -1395,12 +1225,12 @@ namespace castor3d::shader
 			switch ( alphaFunc )
 			{
 			case VK_COMPARE_OP_NEVER:
-				m_writer.demote();
+				m_writer.terminate();
 				break;
 			case VK_COMPARE_OP_LESS:
 				IF( m_writer, alpha >= alphaRef )
 				{
-					m_writer.demote();
+					m_writer.terminate();
 				}
 				FI;
 				if ( opaque )
@@ -1411,7 +1241,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_EQUAL:
 				IF( m_writer, alpha != alphaRef )
 				{
-					m_writer.demote();
+					m_writer.terminate();
 				}
 				FI;
 				if ( opaque )
@@ -1422,7 +1252,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_LESS_OR_EQUAL:
 				IF( m_writer, alpha > alphaRef )
 				{
-					m_writer.demote();
+					m_writer.terminate();
 				}
 				FI;
 				if ( opaque )
@@ -1433,7 +1263,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_GREATER:
 				IF( m_writer, alpha <= alphaRef )
 				{
-					m_writer.demote();
+					m_writer.terminate();
 				}
 				FI;
 				if ( opaque )
@@ -1444,7 +1274,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_NOT_EQUAL:
 				IF( m_writer, alpha == alphaRef )
 				{
-					m_writer.demote();
+					m_writer.terminate();
 				}
 				FI;
 				if ( opaque )
@@ -1455,7 +1285,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_GREATER_OR_EQUAL:
 				IF( m_writer, alpha < alphaRef )
 				{
-					m_writer.demote();
+					m_writer.terminate();
 				}
 				FI;
 				if ( opaque )
@@ -1547,17 +1377,5 @@ namespace castor3d::shader
 			|| flags == TextureFlag::eNormal
 			|| flags == TextureFlag::eHeight
 			|| flags == ( TextureFlag::eNormal | TextureFlag::eHeight );
-	}
-
-	sdw::Vec2 Utils::doParallaxMapping( sdw::Vec2 const & texCoords
-		, sdw::Vec3 const & viewDir
-		, sdw::CombinedImage2DRgba32 const & heightMap
-		, TextureConfigData const & textureConfig )
-	{
-		declareParallaxMappingFunc();
-		return m_parallaxMapping( texCoords.xy()
-			, viewDir
-			, heightMap
-			, textureConfig );
 	}
 }

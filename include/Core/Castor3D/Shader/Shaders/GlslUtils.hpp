@@ -67,42 +67,10 @@ namespace castor3d::shader
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & colour
 			, sdw::Float & opacity );
-		C3D_API void computeGeometryMapContribution( PassFlags const & passFlags
-			, std::string const & name
-			, shader::TextureConfigData const & config
-			, shader::TextureAnimData const & anim
-			, sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec3 & texCoords
-			, sdw::Float & opacity
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API sdw::Vec4 computeCommonMapContribution( PassFlags const & passFlags
-			, std::string const & name
-			, shader::TextureConfigData const & config
-			, shader::TextureAnimData const & anim
-			, sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec3 const & texCoords
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittance
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API sdw::Vec4 computeCommonMapVoxelContribution( PassFlags const & passFlags
-			, std::string const & name
-			, shader::TextureConfigData const & config
-			, shader::TextureAnimData const & anim
-			, sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec3 const & texCoords
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion );
+		C3D_API sdw::Vec2 parallaxMapping( sdw::Vec2 const & texCoords
+			, sdw::Vec3 const & viewDir
+			, sdw::CombinedImage2DRgba32 const & heightMap
+			, TextureConfigData const & textureConfig );
 		C3D_API sdw::Vec4 clipToScreen( sdw::Vec4 const & in );
 		/**
 		 *\~english
@@ -257,12 +225,6 @@ namespace castor3d::shader
 		void declareUnflatten();
 		void declareIsSaturatedImg();
 		void declareClipToScreen();
-
-	private:
-		sdw::Vec2 doParallaxMapping( sdw::Vec2 const & texCoords
-			, sdw::Vec3 const & viewDir
-			, sdw::CombinedImage2DRgba32 const & heightMap
-			, TextureConfigData const & textureConfig );
 
 	private:
 		sdw::ShaderWriter & m_writer;
