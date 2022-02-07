@@ -17,6 +17,9 @@ namespace castor3d
 			, m_prvMtxModel{ getMember< sdw::Mat4 >( "prvMtxModel" ) }
 			, m_curMtxModel{ getMember< sdw::Mat4 >( "curMtxModel" ) }
 			, m_mtxNormal{ getMember< sdw::Mat4 >( "mtxNormal" ) }
+			, m_textures0{ getMember< sdw::UVec4 >( "textures0" ) }
+			, m_textures1{ getMember< sdw::UVec4 >( "textures1" ) }
+			, m_textures{ getMember< sdw::Int >( "textures" ) }
 			, m_shadowReceiver{ getMember< sdw::Int >( "shadowReceiver" ) }
 			, m_materialIndex{ getMember< sdw::Int >( "materialIndex" ) }
 			, m_nodeId{ getMember< sdw::Int >( "nodeId" ) }
@@ -34,6 +37,9 @@ namespace castor3d
 				result->declMember( "prvMtxModel", ast::type::Kind::eMat4x4F );
 				result->declMember( "curMtxModel", ast::type::Kind::eMat4x4F );
 				result->declMember( "mtxNormal", ast::type::Kind::eMat4x4F );
+				result->declMember( "textures0", ast::type::Kind::eVec4U );
+				result->declMember( "textures1", ast::type::Kind::eVec4U );
+				result->declMember( "textures", ast::type::Kind::eInt );
 				result->declMember( "shadowReceiver", ast::type::Kind::eInt );
 				result->declMember( "materialIndex", ast::type::Kind::eInt );
 				result->declMember( "nodeId", ast::type::Kind::eInt );
@@ -152,6 +158,15 @@ namespace castor3d
 			}
 
 			return m_curMtxModel;
+		}
+
+		sdw::UInt ModelData::getTexture( uint32_t index )const
+		{
+			return ( index < 4u
+				? m_textures0[index]
+				: ( index < 8u
+					? m_textures1[index - 4u]
+					: 0_u ) );
 		}
 	}
 

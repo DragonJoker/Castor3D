@@ -184,6 +184,37 @@ namespace castor3d
 				modelData.nodeId = entry.id;
 				modelData.shadowReceiver = entry.geometry.isShadowReceiver();
 				modelData.materialIndex = int( entry.pass.getId() );
+				uint32_t index = 0u;
+
+				for ( auto & unit : entry.pass )
+				{
+					if ( index < 4 )
+					{
+						modelData.textures0[index] = unit->getId();
+					}
+					else if ( index < 8 )
+					{
+						modelData.textures1[index - 4] = unit->getId();
+					}
+
+					++index;
+				}
+
+				while ( index < 8u )
+				{
+					if ( index < 4 )
+					{
+						modelData.textures0[index] = 0u;
+					}
+					else
+					{
+						modelData.textures1[index - 4] = 0u;
+					}
+
+					++index;
+				}
+
+				modelData.textures = int32_t( std::min( 8u, entry.pass.getTextureUnitsCount() ) );
 
 				if ( entry.pass.hasEnvironmentMapping() )
 				{

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "SdwModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/Function.hpp>
 
@@ -66,17 +67,11 @@ namespace castor3d::shader
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & colour
 			, sdw::Float & opacity );
-		C3D_API void computeOpacityMapContribution( FilteredTextureFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 const & texCoords
-			, sdw::Float & opacity );
-		C3D_API void computeGeometryMapsContributions( FilteredTextureFlags const & flags
-			, PassFlags const & passFlags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+		C3D_API void computeGeometryMapContribution( PassFlags const & passFlags
+			, std::string const & name
+			, shader::TextureConfigData const & config
+			, shader::TextureAnimData const & anim
+			, sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec3 & texCoords
 			, sdw::Float & opacity
 			, sdw::Vec3 & normal
@@ -84,8 +79,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API sdw::Vec4 computeCommonMapContribution( TextureFlags const & textureFlags
-			, PassFlags const & passFlags
+		C3D_API sdw::Vec4 computeCommonMapContribution( PassFlags const & passFlags
 			, std::string const & name
 			, shader::TextureConfigData const & config
 			, shader::TextureAnimData const & anim
@@ -95,10 +89,12 @@ namespace castor3d::shader
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
 			, sdw::Float & transmittance
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API sdw::Vec4 computeCommonMapVoxelContribution( TextureFlags const & textureFlags
-			, PassFlags const & passFlags
+		C3D_API sdw::Vec4 computeCommonMapVoxelContribution( PassFlags const & passFlags
 			, std::string const & name
 			, shader::TextureConfigData const & config
 			, shader::TextureAnimData const & anim
@@ -263,22 +259,9 @@ namespace castor3d::shader
 		void declareClipToScreen();
 
 	private:
-		void doComputeGeometryMapContribution( TextureFlags const & textureFlags
-			, PassFlags const & passFlags
-			, std::string const & name
-			, shader::TextureConfigData const & config
-			, shader::TextureAnimData const & anim
-			, sdw::SampledImage2DRgba32 const & map
-			, sdw::Vec3 & texCoords
-			, sdw::Float & opacity
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition );
 		sdw::Vec2 doParallaxMapping( sdw::Vec2 const & texCoords
 			, sdw::Vec3 const & viewDir
-			, sdw::SampledImage2DRgba32 const & heightMap
+			, sdw::CombinedImage2DRgba32 const & heightMap
 			, TextureConfigData const & textureConfig );
 
 	private:

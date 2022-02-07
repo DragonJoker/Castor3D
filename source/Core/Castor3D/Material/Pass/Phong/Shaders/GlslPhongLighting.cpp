@@ -11,6 +11,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -24,42 +25,49 @@ namespace castor3d::shader
 		void modifyMaterial( sdw::ShaderWriter & writer
 			, castor::String const & configName
 			, PassFlags const & passFlags
-			, TextureFlags const & flags
 			, sdw::Vec4 const & sampled
 			, TextureConfigData const & config
-			, bool & hasEmissive
+			, sdw::Boolean & hasEmissive
 			, PhongLightMaterial & phongLightMat )
 		{
-			if ( checkFlag( flags, TextureFlag::eDiffuse ) )
+			IF( writer, config.isAlbedo() )
 			{
 				phongLightMat.albedo = config.getDiffuse( sampled, phongLightMat.albedo );
 			}
+			FI;
 
-			if ( checkFlag( flags, TextureFlag::eSpecular ) )
+			IF( writer, config.isSpecular() )
 			{
 				phongLightMat.specular = config.getSpecular( sampled, phongLightMat.specular );
 			}
+			FI;
 
-			if ( checkFlag( flags, TextureFlag::eShininess ) )
+			IF( writer, config.isShininess() )
 			{
 				phongLightMat.shininess = config.getShininess( sampled, phongLightMat.shininess );
 			}
+			FI;
 
-			if ( checkFlag( flags, TextureFlag::eEmissive ) )
+			IF( writer, config.isEmissive() )
 			{
-				hasEmissive = true;
+				hasEmissive = sdw::Boolean{ true };
 			}
+			FI;
 		}
 
-		void updateMaterial( PassFlags const & passFlags
-			, bool hasEmissive
+		void updateMaterial( sdw::ShaderWriter & writer
+			, PassFlags const & passFlags
+			, sdw::Boolean const & hasEmissive
 			, PhongLightMaterial & phongLightMat
 			, sdw::Vec3 & emissive )
 		{
-			if ( checkFlag( passFlags, PassFlag::eLighting )
-				&& !hasEmissive )
+			if ( checkFlag( passFlags, PassFlag::eLighting ) )
 			{
-				emissive *= phongLightMat.albedo;
+				IF( writer, !hasEmissive )
+				{
+					emissive *= phongLightMat.albedo;
+				}
+				FI;
 			}
 		}
 	}
@@ -207,10 +215,11 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::computeMapContributions( PassFlags const & passFlags
-		, FilteredTextureFlags const & textures
+		, TextureFlagsArray const & textures
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, ModelData const & model
 		, sdw::Vec3 & texCoords
 		, sdw::Vec3 & normal
 		, sdw::Vec3 & tangent
@@ -224,56 +233,50 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-		bool hasEmissive = false;
-		m_utils.computeGeometryMapsContributions( textures
-			, passFlags
-			, textureConfigs
-			, textureAnims
-			, maps
-			, texCoords
-			, opacity
-			, normal
-			, tangent
-			, bitangent
-			, tangentSpaceViewPosition
-			, tangentSpaceFragPosition );
+		sdw::Boolean hasEmissive = m_writer.declLocale( "c3d_hasEmissive"
+			, sdw::Boolean{ false } );
 
-		for ( auto & textureIt : textures )
+		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
-			if ( !Utils::isGeometryOnlyMap( textureIt.second.flags, passFlags ) )
+			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
+			auto id = m_writer.declLocale( "c3d_id" + name
+				, model.getTexture( index ) );
+
+			IF( m_writer, id > 0_u )
 			{
-				auto i = textureIt.first;
-				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
 				auto config = m_writer.declLocale( "config" + name
-					, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+					, textureConfigs.getTextureConfiguration( id ) );
 				auto anim = m_writer.declLocale( "anim" + name
-					, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
+					, textureAnims.getTextureAnimation( id ) );
 				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapContribution( textureIt.second.flags
-						, passFlags
+					, m_utils.computeCommonMapContribution( passFlags
 						, name
 						, config
 						, anim
-						, maps[i]
+						, maps[nonuniform( id - 1_u )]
 						, texCoords
 						, emissive
 						, opacity
 						, occlusion
 						, transmittance
+						, normal
+						, tangent
+						, bitangent
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition ) );
 				modifyMaterial( m_writer
 					, name
 					, passFlags
-					, textureIt.second.flags
 					, sampled
 					, config
 					, hasEmissive
 					, phongLightMat );
 			}
+			FI;
 		}
 
-		updateMaterial( passFlags
+		updateMaterial( m_writer
+			, passFlags
 			, hasEmissive
 			, phongLightMat
 			, emissive );
@@ -332,10 +335,11 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
-		, FilteredTextureFlags const & textures
+		, TextureFlagsArray const & textures
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, ModelData const & model
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
 		, sdw::Float & opacity
@@ -343,38 +347,44 @@ namespace castor3d::shader
 		, LightMaterial & lightMat )
 	{
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-		bool hasEmissive = false;
+		sdw::Boolean hasEmissive = m_writer.declLocale( "c3d_hasEmissive"
+			, sdw::Boolean{ false } );
 
-		for ( auto & textureIt : textures )
+		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
-			auto i = textureIt.first;
-			auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
-			auto config = m_writer.declLocale( "config" + name
-				, textureConfigs.getTextureConfiguration( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
-			auto anim = m_writer.declLocale( "anim" + name
-				, textureAnims.getTextureAnimation( m_writer.cast< sdw::UInt >( textureIt.second.id ) ) );
-			auto sampled = m_writer.declLocale( "sampled" + name
-				, m_utils.computeCommonMapVoxelContribution( textureIt.second.flags
-					, passFlags
+			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
+			auto id = m_writer.declLocale( "c3d_id" + name
+				, model.getTexture( index ) );
+
+			IF( m_writer, id > 0_u )
+			{
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( id ) );
+				auto anim = m_writer.declLocale( "anim" + name
+					, textureAnims.getTextureAnimation( id ) );
+				auto sampled = m_writer.declLocale( "sampled" + name
+					, m_utils.computeCommonMapVoxelContribution( passFlags
+						, name
+						, config
+						, anim
+						, maps[nonuniform( id - 1_u )]
+						, texCoords
+						, emissive
+						, opacity
+						, occlusion ) );
+				modifyMaterial( m_writer
 					, name
+					, passFlags
+					, sampled
 					, config
-					, anim
-					, maps[i]
-					, texCoords
-					, emissive
-					, opacity
-					, occlusion ) );
-			modifyMaterial( m_writer
-				, name
-				, passFlags
-				, textureIt.second.flags
-				, sampled
-				, config
-				, hasEmissive
-				, phongLightMat );
+					, hasEmissive
+					, phongLightMat );
+			}
+			FI;
 		}
 
-		updateMaterial( passFlags
+		updateMaterial( m_writer
+			, passFlags
 			, hasEmissive
 			, phongLightMat
 			, emissive );

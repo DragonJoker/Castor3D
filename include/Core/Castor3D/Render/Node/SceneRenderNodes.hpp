@@ -28,6 +28,7 @@ namespace castor3d
 		C3D_API explicit SceneRenderNodes( Scene const & scene );
 
 		C3D_API void initialiseNodes( RenderDevice const & device );
+		C3D_API void clear();
 		C3D_API SubmeshRenderNode & createNode( PassRenderNode passNode
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
@@ -62,15 +63,13 @@ namespace castor3d
 		struct DescriptorCounts
 		{
 			DescriptorCounts() = default;
-			DescriptorCounts( bool hasSSBO
-				, size_t textureCount
+			DescriptorCounts( size_t textureCount
 				, BillboardBase const * billboard
 				, Submesh const * submesh
 				, AnimatedMesh const * mesh
 				, AnimatedSkeleton const * skeleton );
 
-			void update( bool hasSSBO
-				, size_t textureCount
+			void update( size_t textureCount
 				, BillboardBase const * billboard
 				, Submesh const * submesh
 				, AnimatedMesh const * mesh
@@ -78,8 +77,7 @@ namespace castor3d
 
 			uint32_t uniformBuffers{};
 			uint32_t storageBuffers{};
-			uint32_t samplers{};
-			uint32_t texelBuffers{};
+			uint32_t combinedImages{};
 		};
 
 		struct DescriptorSetLayouts
@@ -90,19 +88,23 @@ namespace castor3d
 				, BillboardBase const * billboard
 				, Submesh const * submesh
 				, AnimatedMesh const * mesh
-				, AnimatedSkeleton const * skeleton );
+				, AnimatedSkeleton const * skeleton
+				, ashes::DescriptorSetLayout * texLayout );
 
 			ashes::DescriptorSetLayoutPtr buf;
-			ashes::DescriptorSetLayoutPtr tex;
+			ashes::DescriptorSetLayout * tex;
+			ashes::DescriptorSetLayoutPtr ownTex;
 		};
 
 		struct DescriptorSetPools
 		{
 			DescriptorSetPools( RenderDevice const & device
-				, DescriptorCounts const & counts );
+				, DescriptorCounts const & counts
+				, ashes::DescriptorPool * texPool );
 
 			ashes::DescriptorPoolPtr buf;
-			ashes::DescriptorPoolPtr tex;
+			ashes::DescriptorPool * tex;
+			ashes::DescriptorPoolPtr ownTex;
 		};
 
 		struct DescriptorPools
@@ -113,7 +115,10 @@ namespace castor3d
 			DescriptorPools & operator=( DescriptorPools && ) = delete;
 			DescriptorPools( Engine & engine
 				, DescriptorSetLayouts * layouts
-				, DescriptorCounts * counts );
+				, DescriptorCounts * counts
+				, ashes::DescriptorSetLayout * texLayout
+				, ashes::DescriptorPool * texPool
+				, ashes::DescriptorSet * texSet );
 
 			void allocate( SubmeshRenderNode & node );
 			void allocate( BillboardRenderNode & node );
@@ -130,10 +135,11 @@ namespace castor3d
 				NodeSet & operator=( NodeSet && ) = default;
 				NodeSet() = default;
 
-				ashes::DescriptorPool * bufPool;
-				ashes::DescriptorSetPtr bufSet;
-				ashes::DescriptorPool * texPool;
-				ashes::DescriptorSetPtr texSet;
+				ashes::DescriptorPool * bufPool{};
+				ashes::DescriptorSetPtr bufSet{};
+				ashes::DescriptorPool * texPool{};
+				ashes::DescriptorSet * texSet{};
+				ashes::DescriptorSetPtr ownTexSet;
 			};
 
 		private:
@@ -152,8 +158,11 @@ namespace castor3d
 
 		private:
 			Engine & m_engine;
-			DescriptorSetLayouts * m_layouts;
-			DescriptorCounts * m_counts;
+			DescriptorSetLayouts * m_layouts{};
+			DescriptorCounts * m_counts{};
+			ashes::DescriptorSetLayout * m_texLayout{};
+			ashes::DescriptorPool * m_texPool{};
+			ashes::DescriptorSet * m_texSet{};
 			std::vector< DescriptorSetPools > m_pools;
 			std::map< intptr_t, NodeSet > m_allocated;
 			uint32_t m_available{};
@@ -164,6 +173,9 @@ namespace castor3d
 		{
 			DescriptorNodesT( Engine & engine
 				, size_t texturesCount
+				, ashes::DescriptorSetLayout * texLayout
+				, ashes::DescriptorPool * texPool
+				, ashes::DescriptorSet * texSet
 				, bool instanced
 				, BillboardBase const * billboard
 				, Submesh const * submesh

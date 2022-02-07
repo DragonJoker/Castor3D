@@ -144,22 +144,32 @@ namespace castor3d
 		if ( unit.getId() == 0u )
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
+			auto & device = getDevice();
 
-			auto & config = unit.getConfiguration();
-			auto it = unit.hasAnimation()
-				? m_configurations.end()
-				: std::find( m_configurations.begin()
-					, m_configurations.end()
-					, config );
-
-			if ( it == m_configurations.end() )
+			if ( device.hasBindless() )
 			{
-				m_configurations.push_back( config );
-				it = std::next( m_configurations.begin()
-					, ptrdiff_t( m_configurations.size() - 1u ) );
+				m_configurations.push_back( unit.getConfiguration() );
+				unit.setId( uint32_t( m_configurations.size() ) );
+			}
+			else
+			{
+				auto & config = unit.getConfiguration();
+				auto it = unit.hasAnimation()
+					? m_configurations.end()
+					: std::find( m_configurations.begin()
+						, m_configurations.end()
+						, config );
+
+				if ( it == m_configurations.end() )
+				{
+					m_configurations.push_back( config );
+					it = std::next( m_configurations.begin()
+						, ptrdiff_t( m_configurations.size() - 1u ) );
+				}
+
+				unit.setId( uint32_t( std::distance( m_configurations.begin(), it ) ) + 1u );
 			}
 
-			unit.setId( uint32_t( std::distance( m_configurations.begin(), it ) ) + 1u );
 			m_connections.emplace_back( unit.onChanged.connect( [this]( TextureUnit const & punit )
 				{
 					m_dirty.emplace_back( &punit );
@@ -247,5 +257,10 @@ namespace castor3d
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
 		m_buffer.createBinding( descriptorSet, binding );
+	}
+
+	RenderDevice const & TextureConfigurationBuffer::getDevice()const
+	{
+		return m_buffer.getDevice();
 	}
 }

@@ -111,7 +111,6 @@ namespace castor3d
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
@@ -172,18 +171,39 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, in.texture0 );
-					utils.computeGeometryMapsContributions( textureFlags
-						, flags.passFlags
-						, textureConfigs
-						, textureAnims
-						, c3d_maps
-						, texCoord
-						, opacity
-						, normal
-						, tangent
-						, bitangent
-						, in.tangentSpaceViewPosition
-						, in.tangentSpaceFragPosition );
+
+					for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
+					{
+						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
+						auto id = writer.declLocale( "c3d_id" + name
+							, c3d_modelData.getTexture( index ) );
+
+						IF( writer, id > 0_u )
+						{
+							auto config = writer.declLocale( "config" + name
+								, textureConfigs.getTextureConfiguration( id ) );
+							auto anim = writer.declLocale( "anim" + name
+								, textureAnims.getTextureAnimation( id ) );
+
+							IF( writer, config.isGeometry() )
+							{
+								utils.computeGeometryMapContribution( flags.passFlags
+									, name
+									, config
+									, anim
+									, c3d_maps[nonuniform( id - 1_u )]
+									, texCoord
+									, opacity
+									, normal
+									, tangent
+									, bitangent
+									, in.tangentSpaceViewPosition
+									, in.tangentSpaceFragPosition );
+							}
+							FI;
+						}
+						FI;
+					}
 				}
 
 				utils.applyAlphaFunc( flags.alphaFunc

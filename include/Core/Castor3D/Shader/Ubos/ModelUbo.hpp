@@ -46,6 +46,7 @@ namespace castor3d
 				, sdw::Vec4 const & boneWeights0
 				, sdw::Vec4 const & boneWeights1
 				, sdw::Mat4 const & transform )const;
+			C3D_API sdw::UInt getTexture( uint32_t index )const;
 
 			sdw::Int const & isShadowReceiver()const
 			{
@@ -84,6 +85,9 @@ namespace castor3d
 			sdw::Mat4 m_prvMtxModel;
 			sdw::Mat4 m_curMtxModel;
 			sdw::Mat4 m_mtxNormal;
+			sdw::UVec4 m_textures0;
+			sdw::UVec4 m_textures1;
+			sdw::Int m_textures;
 			sdw::Int m_shadowReceiver;
 			sdw::Int m_materialIndex;
 			sdw::Int m_nodeId;
