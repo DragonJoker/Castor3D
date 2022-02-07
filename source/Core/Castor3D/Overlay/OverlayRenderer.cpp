@@ -986,19 +986,16 @@ namespace castor3d
 			FragmentWriter writer;
 
 			auto materials = std::make_unique< shader::Materials >( writer );
-			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-				, uint32_t( OverlayBindingId::eMaterials )
+			materials->declare( uint32_t( OverlayBindingId::eMaterials )
 				, 0u );
 			shader::TextureConfigurations textureConfigs{ writer };
 			shader::TextureAnimations textureAnims{ writer };
 
 			if ( hasTexture )
 			{
-				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-					, uint32_t( OverlayBindingId::eTexConfigs )
+				textureConfigs.declare( uint32_t( OverlayBindingId::eTexConfigs )
 					, 0u );
-				textureAnims.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers()
-					, uint32_t( OverlayBindingId::eTexAnims )
+				textureAnims.declare( uint32_t( OverlayBindingId::eTexAnims )
 					, 0u );
 			}
 

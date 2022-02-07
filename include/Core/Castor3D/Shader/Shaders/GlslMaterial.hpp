@@ -75,16 +75,13 @@ namespace castor3d::shader
 	public:
 		C3D_API explicit Materials( sdw::ShaderWriter & writer );
 		virtual ~Materials() = default;
-		C3D_API void declare( bool hasSsbo
-			, uint32_t binding
+		C3D_API void declare( uint32_t binding
 			, uint32_t set );
 		C3D_API Material getMaterial( sdw::UInt const & index )const;
 
 	protected:
 		sdw::ShaderWriter & m_writer;
-		std::unique_ptr< sdw::Struct > m_type;
 		std::unique_ptr< sdw::ArraySsboT< Material > > m_ssbo;
-		sdw::Function< Material, sdw::InUInt > m_getMaterial;
 	};
 }
 
