@@ -407,7 +407,7 @@ namespace castor3d
 			, uint32_t( PassUboIdx::eCount )
 			, RenderPipeline::eAdditional );
 
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )

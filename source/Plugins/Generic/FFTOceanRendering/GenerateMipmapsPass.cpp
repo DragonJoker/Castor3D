@@ -113,8 +113,8 @@ namespace ocean_fft
 			auto invSize = pcb.declMember< sdw::Vec2 >( "invSize" );
 			pcb.end();
 
-			auto inImg = writer.declSampledImage< sdw::SampledImage2DRgba16 >( "inImg", GenerateMipmapsPass::eInput, 0u );
-			auto outImg = writer.declImage< sdw::WImage2DRgba16 >( "outImg", GenerateMipmapsPass::eOutput, 0u );
+			auto inImg = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "inImg", GenerateMipmapsPass::eInput, 0u );
+			auto outImg = writer.declStorageImg< sdw::WImage2DRgba16 >( "outImg", GenerateMipmapsPass::eOutput, 0u );
 
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
 				, [&]( sdw::ComputeIn in )

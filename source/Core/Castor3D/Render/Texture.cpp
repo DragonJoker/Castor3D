@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -457,9 +458,7 @@ namespace castor3d
 		, uint32_t dstQueueFamily
 		, bool target )const
 	{
-		return { VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
-			, nullptr
-			, srcAccessFlags
+		return makeVkStruct< VkImageMemoryBarrier >( srcAccessFlags
 			, dstAccessMask
 			, srcLayout
 			, dstLayout
@@ -468,7 +467,7 @@ namespace castor3d
 			, image
 			, ( target
 				? targetViewId.data->info.subresourceRange
-				: sampledViewId.data->info.subresourceRange ) };
+				: sampledViewId.data->info.subresourceRange ) );
 	}
 
 	//*********************************************************************************************

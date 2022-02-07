@@ -60,10 +60,10 @@ namespace draw_edges
 			// Shader inputs
 			castor3d::shader::Materials materials{ writer };
 			materials.declare( true, eMaterials, 0u );
-			auto c3d_data0 = writer.declSampledImage< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
-			auto c3d_source = writer.declSampledImage< FImg2DRgba32 >( "c3d_source", eSource, 0u );
-			auto c3d_edgeDN = writer.declSampledImage< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
-			auto c3d_edgeO = writer.declSampledImage< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
+			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
+			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
+			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
+			auto c3d_edgeO = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
 			UBO_DRAW_EDGES( writer, eDrawEdges, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -72,7 +72,7 @@ namespace draw_edges
 			auto fragColor = writer.declOutput< Vec4 >( "fragColor", 0 );
 
 			auto getEdge = writer.implementFunction< sdw::Float >( "getEdge"
-				, [&]( sdw::SampledImage2DR32 const & tex
+				, [&]( sdw::CombinedImage2DR32 const & tex
 					, sdw::IVec2 const & texCoord
 					, sdw::Int const & width )
 				{
@@ -102,7 +102,7 @@ namespace draw_edges
 
 					writer.returnStmt( clamp( result, 0.0_f, 1.0_f ) );
 				}
-				, sdw::InSampledImage2DR32{ writer, "tex" }
+				, sdw::InCombinedImage2DR32{ writer, "tex" }
 				, sdw::InIVec2{ writer, "texCoord" }
 				, sdw::InInt{ writer, "width" } );
 

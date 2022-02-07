@@ -10,6 +10,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
@@ -118,23 +119,23 @@ namespace castor3d
 			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
 			{
 #if C3D_UseTiledDirectionalShadowMap
-				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
+				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, RsmNormalsIdx
 					, 0u );
-				auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
+				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, RsmPositionIdx
 					, 0u );
-				auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
+				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 					, RsmFluxIdx
 					, 0u );
 #else
-				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
+				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, LightInjectionPass::RsmNormalsIdx
 					, 0u );
-				auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
+				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, LightInjectionPass::RsmPositionIdx
 					, 0u );
-				auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
+				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 					, LightInjectionPass::RsmFluxIdx
 					, 0u );
 #endif
@@ -188,13 +189,13 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
+				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, LightInjectionPass::RsmNormalsIdx
 					, 0u );
-				auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
+				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, LightInjectionPass::RsmPositionIdx
 					, 0u );
-				auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
+				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 					, LightInjectionPass::RsmFluxIdx
 					, 0u );
 				UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
@@ -246,13 +247,13 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormalLinear )
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormalLinear )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
-			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::ePosition )
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::ePosition )
 				, LightInjectionPass::RsmPositionIdx
 				, 0u );
-			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eFlux )
+			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eFlux )
 				, LightInjectionPass::RsmFluxIdx
 				, 0u );
 			UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
@@ -301,13 +302,13 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormalLinear )
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormalLinear )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
-			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
 				, LightInjectionPass::RsmPositionIdx
 				, 0u );
-			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
+			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
 				, LightInjectionPass::RsmFluxIdx
 				, 0u );
 			UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
@@ -520,53 +521,43 @@ namespace castor3d
 			, 1u
 			, ashes::VkScissorArray{ scissor } };
 		auto blendState = SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 3u );
-		VkPipelineInputAssemblyStateCreateInfo iaState{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+		auto iaState = makeVkStruct< VkPipelineInputAssemblyStateCreateInfo >( 0u
 			, VK_PRIMITIVE_TOPOLOGY_POINT_LIST
-			, VK_FALSE };
-		VkPipelineMultisampleStateCreateInfo msState{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, VK_FALSE );
+		auto msState = makeVkStruct< VkPipelineMultisampleStateCreateInfo >( 0u
 			, VK_SAMPLE_COUNT_1_BIT
 			, VK_FALSE
 			, 0.0f
 			, nullptr
 			, VK_FALSE
-			, VK_FALSE };
-		VkPipelineRasterizationStateCreateInfo rsState{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, VK_FALSE );
+		auto rsState = makeVkStruct< VkPipelineRasterizationStateCreateInfo >( 0u
 			, VK_FALSE
 			, VK_FALSE
 			, VK_POLYGON_MODE_FILL
-			, VK_CULL_MODE_NONE
+			, VkCullModeFlags( VK_CULL_MODE_NONE )
 			, VK_FRONT_FACE_COUNTER_CLOCKWISE
 			, VK_FALSE
 			, 0.0f
 			, 0.0f
 			, 0.0f
-			, 0.0f };
-		VkPipelineDepthStencilStateCreateInfo dsState{ VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, 0.0f );
+		auto dsState = makeVkStruct< VkPipelineDepthStencilStateCreateInfo >( 0u
 			, VK_FALSE
 			, VK_FALSE
-			, {}
-			, {}
-			, {}
-			, {}
-			, {}
-			, {}
-			, {} };
+			, VkCompareOp{}
+			, VK_FALSE
+			, VK_FALSE
+			, VkStencilOpState{}
+			, VkStencilOpState{}
+			, float{}
+			, float{} );
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
 		auto & program = m_holder.getProgram( index );
 		auto & pipeline = m_holder.getPipeline( index );
-		VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-			, nullptr
-			, 0u
+		auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
 			, uint32_t( program.size() )
 			, program.data()
 			, &viState
@@ -582,7 +573,7 @@ namespace castor3d
 			, m_renderPass
 			, 0u
 			, VK_NULL_HANDLE
-			, 0u };
+			, 0 );
 		auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
 			, m_holder.getContext().cache
 			, 1u

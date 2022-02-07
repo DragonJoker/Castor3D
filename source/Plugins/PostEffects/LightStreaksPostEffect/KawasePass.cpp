@@ -52,7 +52,7 @@ namespace light_streaks
 
 			// Shader inputs
 			UBO_KAWASE( writer, KawaseUboIdx, 0u );
-			auto c3d_mapHiPass = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapHiPass", DifImgIdx, 0u );
+			auto c3d_mapHiPass = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHiPass", DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs

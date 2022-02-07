@@ -128,16 +128,16 @@ namespace ocean_fft
 
 			UBO_OCEAN( writer, BakeHeightGradientPass::eConfig, 0u );
 
-			auto hgt = writer.declShaderStorageBuffer( "Height", BakeHeightGradientPass::eHeight, 0u );
+			auto hgt = writer.declStorageBuffer( "Height", BakeHeightGradientPass::eHeight, 0u );
 			auto heights = hgt.declMemberArray< sdw::Vec2 >( "heights" );
 			hgt.end();
 
-			auto disp = writer.declShaderStorageBuffer( "Displacement", BakeHeightGradientPass::eDisplacement, 0u );
+			auto disp = writer.declStorageBuffer( "Displacement", BakeHeightGradientPass::eDisplacement, 0u );
 			auto displacements = disp.declMemberArray< sdw::Vec2 >( "displacements" );
 			disp.end();
 
-			auto heightDisplacement = writer.declImage< sdw::WImage2DRgba16 >( "heightDisplacement", BakeHeightGradientPass::eHeightDisplacement, 0u );
-			auto gradJacobian = writer.declImage< sdw::WImage2DRgba16 >( "gradJacobian", BakeHeightGradientPass::eGradientJacobian, 0u );
+			auto heightDisplacement = writer.declStorageImg< sdw::WImage2DRgba16 >( "heightDisplacement", BakeHeightGradientPass::eHeightDisplacement, 0u );
+			auto gradJacobian = writer.declStorageImg< sdw::WImage2DRgba16 >( "gradJacobian", BakeHeightGradientPass::eGradientJacobian, 0u );
 
 			auto normalizeCoord = writer.implementFunction< sdw::Int >( "normalizeCoord"
 				, [&]( sdw::Int c, sdw::Int s )

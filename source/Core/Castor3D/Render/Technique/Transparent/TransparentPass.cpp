@@ -174,7 +174,7 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
@@ -188,7 +188,7 @@ namespace castor3d
 			, RenderPipeline::eAdditional );
 		auto index = uint32_t( PassUboIdx::eCount );
 		auto lightsIndex = index++;
-		auto c3d_mapOcclusion = writer.declSampledImage< FImg2DR32 >( "c3d_mapOcclusion"
+		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( m_ssao ? index++ : 0u )
 			, RenderPipeline::eAdditional
 			, m_ssao != nullptr );

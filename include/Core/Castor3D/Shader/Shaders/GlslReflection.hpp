@@ -54,9 +54,9 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldNormal
 			, sdw::Vec2 const & texcoord
 			, sdw::Vec4 const & ssrSettings
-			, sdw::SampledImage2DR32 const & depthMap
-			, sdw::SampledImage2DRgba32 const & normalMap
-			, sdw::SampledImage2DRgba32 const & colourMap );
+			, sdw::CombinedImage2DR32 const & depthMap
+			, sdw::CombinedImage2DRgba32 const & normalMap
+			, sdw::CombinedImage2DRgba32 const & colourMap );
 		/**
 		*\param csOrigin
 		*	Camera-space ray origin, which must be within the view volume and must have z < -0.01 and project within the valid screen rectangle.
@@ -95,7 +95,7 @@ namespace castor3d::shader
 		sdw::Boolean traceScreenSpace( sdw::Vec3 csOrigin
 			, sdw::Vec3 csDirection
 			, sdw::Mat4 projectToPixelMatrix
-			, sdw::SampledImage2DR32 csZBuffer
+			, sdw::CombinedImage2DR32 csZBuffer
 			, sdw::Vec2 csZBufferSize
 			, sdw::Float csZThickness
 			, sdw::Boolean csZBufferIsHyperbolic
@@ -121,7 +121,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InMat4
-			, sdw::InSampledImage2DR32
+			, sdw::InCombinedImage2DR32
 			, sdw::InVec2
 			, sdw::InFloat
 			, sdw::InBoolean
@@ -138,9 +138,9 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec2
 			, sdw::InVec4
-			, sdw::InSampledImage2DR32
-			, sdw::InSampledImage2DRgba32
-			, sdw::InSampledImage2DRgba32 > m_computeScreenSpace;
+			, sdw::InCombinedImage2DR32
+			, sdw::InCombinedImage2DRgba32
+			, sdw::InCombinedImage2DRgba32 > m_computeScreenSpace;
 		sdw::Function< sdw::Float
 			, InSurface
 			, sdw::InFloat

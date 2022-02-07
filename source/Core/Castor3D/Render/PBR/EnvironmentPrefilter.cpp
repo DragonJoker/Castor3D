@@ -110,7 +110,7 @@ namespace castor3d
 
 				// Inputs
 				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
-				auto c3d_mapEnvironment = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 				auto c3d_roughness = writer.declConstant< Float >( "c3d_roughness"
 					, writer.cast< Float >( float( mipLevel ) / float( EnvironmentPrefilter::MaxIblReflectionLod ) ) );
 
@@ -369,15 +369,13 @@ namespace castor3d
 			auto viewId = handler.createViewId( data );
 			facePass.dstView = handler.createImageView( device.makeContext(), viewId );
 			// Initialise the frame buffer.
-			VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
-				, nullptr
-				, 0u
+			auto createInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 				, renderPass
 				, 1u
 				, &facePass.dstView
 				, size.width
 				, size.height
-				, 1u };
+				, 1u );
 			facePass.frameBuffer = renderPass.createFrameBuffer( name
 				, std::move( createInfo ) );
 		}

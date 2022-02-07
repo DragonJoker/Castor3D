@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -161,15 +162,13 @@ namespace castor3d
 			fbAttaches.emplace_back( colour.targetView );
 			fbAttaches.emplace_back( depth.targetView );
 			return renderPass.createFrameBuffer( name
-				, { VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
-					, nullptr
-					, 0u
+				, makeVkStruct< VkFramebufferCreateInfo >( 0u
 					, renderPass
 					, 2u
 					, fbAttaches.data()
 					, colour.getExtent().width
 					, colour.getExtent().height
-					, 1u} );
+					, 1u ) );
 		}
 
 		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
@@ -344,7 +343,7 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
-			auto inSource( writer.declImage< RWFImg3DRgba32 >( "inSource"
+			auto inSource( writer.declStorageImg< RWFImg3DRgba32 >( "inSource"
 				, eSource
 				, 0u ) );
 

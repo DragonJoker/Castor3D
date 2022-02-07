@@ -90,8 +90,8 @@ namespace film_grain
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_noiseTex = writer.declSampledImage< FImg3DR32 >( NoiseTex, NoiseTexIdx, 0u );
-			auto c3d_srcTex = writer.declSampledImage< FImg2DRgba32 >( SrcTex, SourceTexIdx, 0u );
+			auto c3d_noiseTex = writer.declCombinedImg< FImg3DR32 >( NoiseTex, NoiseTexIdx, 0u );
+			auto c3d_srcTex = writer.declCombinedImg< FImg2DRgba32 >( SrcTex, SourceTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs

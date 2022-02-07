@@ -10,6 +10,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -131,23 +132,17 @@ namespace castor3d
 		crg::VkVertexInputAttributeDescriptionArray vertexAttribs;
 		crg::VkVertexInputBindingDescriptionArray vertexBindings;
 		ashes::PipelineDepthStencilStateCreateInfo depthStencil{ 0u, false, false };
-		VkPipelineInputAssemblyStateCreateInfo iaState{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+		auto iaState = makeVkStruct< VkPipelineInputAssemblyStateCreateInfo >( 0u
 			, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
-			, VK_FALSE };
-		VkPipelineMultisampleStateCreateInfo msState{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, VK_FALSE );
+		auto msState = makeVkStruct< VkPipelineMultisampleStateCreateInfo >( 0u
 			, VK_SAMPLE_COUNT_1_BIT
 			, VK_FALSE
 			, 0.0f
 			, nullptr
 			, VK_FALSE
-			, VK_FALSE };
-		VkPipelineRasterizationStateCreateInfo rsState{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, VK_FALSE );
+		auto rsState = makeVkStruct< VkPipelineRasterizationStateCreateInfo >( 0u
 			, VK_FALSE
 			, VK_FALSE
 			, VK_POLYGON_MODE_FILL
@@ -157,7 +152,7 @@ namespace castor3d
 			, 0.0f
 			, 0.0f
 			, 0.0f
-			, 0.0f };
+			, 0.0f );
 		VkPipelineVertexInputStateCreateInfo const & vsState = vertexLayout;
 		VkPipelineDepthStencilStateCreateInfo const & dsState = depthStencil;
 
@@ -169,9 +164,7 @@ namespace castor3d
 			auto & pipeline = m_holder.getPipeline( index );
 			VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
 			VkPipelineViewportStateCreateInfo const & vpState = viewportState;
-			VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-				, nullptr
-				, 0u
+			auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
 				, uint32_t( program.size() )
 				, program.data()
 				, &vsState
@@ -187,7 +180,7 @@ namespace castor3d
 				, *m_renderPasses[index].renderPass
 				, 0u
 				, VK_NULL_HANDLE
-				, 0u };
+				, 0 );
 			auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
 				, m_holder.getContext().cache
 				, 1u
@@ -379,13 +372,11 @@ namespace castor3d
 			VkDescriptorSet baseDS{};
 			auto & renderPass = m_renderPasses[index];
 			{
-				VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-					, nullptr
-					, *renderPass.renderPass
+				auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPass.renderPass
 					, *renderPass.framebuffer
-					, { {}, renderPass.framebuffer->getDimensions() }
+					, VkRect2D{ {}, renderPass.framebuffer->getDimensions() }
 					, uint32_t( renderPass.clearValues.size() )
-					, renderPass.clearValues.data() };
+					, renderPass.clearValues.data() );
 				m_context.vkCmdBeginRenderPass( commandBuffer
 					, &beginRenderPass
 					, VK_SUBPASS_CONTENTS_INLINE );
@@ -438,13 +429,11 @@ namespace castor3d
 			{
 				auto & renderPasses = m_renderPasses[index];
 
-				VkRenderPassBeginInfo beginRenderPass{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-					, nullptr
-					, *renderPasses.renderPass
+				auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPasses.renderPass
 					, *renderPasses.framebuffer
-					, { {}, renderPasses.framebuffer->getDimensions() }
+					, VkRect2D{ {}, renderPasses.framebuffer->getDimensions() }
 					, uint32_t( renderPasses.clearValues.size() )
-					, renderPasses.clearValues.data() };
+					, renderPasses.clearValues.data() );
 
 				for ( size_t i = 1u; i < m_enabledLights.size(); ++i )
 				{
@@ -829,7 +818,13 @@ namespace castor3d
 		std::vector< VkImageView > viewAttaches{ lpResult[LpTexture::eDepth].targetView
 			, lpResult[LpTexture::eDiffuse].targetView
 			, lpResult[LpTexture::eSpecular].targetView };
-		VkFramebufferCreateInfo fbCreateInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO, nullptr, 0u, {}, {}, {}, {}, {}, {} };
+		auto fbCreateInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
+			, VkRenderPass{}
+			, uint32_t{}
+			, nullptr
+			, uint32_t{}
+			, uint32_t{}
+			, uint32_t{} );
 		fbCreateInfo.renderPass = *result.renderPass;
 		fbCreateInfo.attachmentCount = uint32_t( viewAttaches.size() );
 		fbCreateInfo.pAttachments = viewAttaches.data();

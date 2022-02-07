@@ -98,11 +98,11 @@ namespace ocean_fft
 
 			UBO_OCEAN( writer, DownsampleDistributionPass::eConfig, 0u );
 
-			auto distributions = writer.declShaderStorageBuffer( "Distribution", DownsampleDistributionPass::eInput, 0u );
+			auto distributions = writer.declStorageBuffer( "Distribution", DownsampleDistributionPass::eInput, 0u );
 			auto distribution = distributions.declMemberArray< sdw::Vec2 >( "distribution" );
 			distributions.end();
 
-			auto downs = writer.declShaderStorageBuffer( "Downsampled", DownsampleDistributionPass::eOutput, 0u );
+			auto downs = writer.declStorageBuffer( "Downsampled", DownsampleDistributionPass::eOutput, 0u );
 			auto downsampled = downs.declMemberArray< sdw::Vec2 >( "downsampled" );
 			downs.end();
 

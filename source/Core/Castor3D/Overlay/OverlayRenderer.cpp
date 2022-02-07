@@ -10,6 +10,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
@@ -596,14 +597,12 @@ namespace castor3d
 		, VkFramebuffer framebuffer )
 	{
 		m_commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
-			, VkCommandBufferInheritanceInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO
-				, nullptr
-				, renderPass
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
 				, 0u
 				, framebuffer
 				, VK_FALSE
 				, 0u
-				, 0u } );
+				, 0u ) );
 	}
 
 	void OverlayRenderer::endPrepare()
@@ -1007,11 +1006,11 @@ namespace castor3d
 				, uint32_t( OverlayBindingId::eOverlay )
 				, 0u );
 
-			auto c3d_mapText = writer.declSampledImage< FImg2DR32 >( "c3d_mapText"
+			auto c3d_mapText = writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"
 				, uint32_t( OverlayBindingId::eTextMap )
 				, 0u
 				, textOverlay );
-			auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 				, uint32_t( OverlayBindingId::eMaps )
 				, 0u
 				, std::max( 1u, texturesCount )

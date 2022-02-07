@@ -22,7 +22,7 @@ namespace castor3d::shader
 			, bool enabled );
 		SDW_DeclStructInstance( C3D_API, Material );
 
-		C3D_API void create( sdw::SampledImageT< FImgBufferRgba32 > & materials
+		C3D_API void create( sdw::CombinedImageT< FImgBufferRgba32 > & materials
 			, sdw::Int & offset );
 
 		C3D_API sdw::Vec3 colour()const;

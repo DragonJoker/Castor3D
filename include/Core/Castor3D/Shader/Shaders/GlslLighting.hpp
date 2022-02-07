@@ -275,7 +275,7 @@ namespace castor3d::shader
 			, FilteredTextureFlags const & textures
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
@@ -317,7 +317,7 @@ namespace castor3d::shader
 			, FilteredTextureFlags const & textures
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity

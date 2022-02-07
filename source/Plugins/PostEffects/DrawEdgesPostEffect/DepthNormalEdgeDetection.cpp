@@ -54,9 +54,9 @@ namespace draw_edges
 
 			castor3d::shader::Materials materials{ writer };
 			materials.declare( true, DepthNormalEdgeDetection::eMaterials, 0u );
-			auto data0( writer.declSampledImage< FImg2DRgba32 >( "data0", DepthNormalEdgeDetection::eData0, 0u ) );
-			auto data1( writer.declSampledImage< FImg2DRgba32 >( "data1", DepthNormalEdgeDetection::eData1, 0u ) );
-			auto depthRangeBuffer( writer.declShaderStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
+			auto data0( writer.declCombinedImg< FImg2DRgba32 >( "data0", DepthNormalEdgeDetection::eData0, 0u ) );
+			auto data1( writer.declCombinedImg< FImg2DRgba32 >( "data1", DepthNormalEdgeDetection::eData1, 0u ) );
+			auto depthRangeBuffer( writer.declStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
 			auto minmax = depthRangeBuffer.declMember< sdw::Int >( "minmax", 2u );
 			depthRangeBuffer.end();
 
