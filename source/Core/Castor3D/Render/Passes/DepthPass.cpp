@@ -168,38 +168,43 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, in.texture0 );
+					auto textureFlags = merge( flags.textures );
 
-					for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
+					if ( ( textureFlags & TextureFlag::eGeometry ) != 0 )
 					{
-						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-						auto id = writer.declLocale( "c3d_id" + name
-							, c3d_modelData.getTexture( index ) );
-
-						IF( writer, id > 0_u )
+						for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
 						{
-							auto config = writer.declLocale( "config" + name
-								, textureConfigs.getTextureConfiguration( id ) );
-							auto anim = writer.declLocale( "anim" + name
-								, textureAnims.getTextureAnimation( id ) );
+							auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
+							auto id = writer.declLocale( "c3d_id" + name
+								, c3d_modelData.getTexture( index ) );
 
-							IF( writer, config.isGeometry() )
+							IF( writer, id > 0_u )
 							{
-								utils.computeGeometryMapContribution( flags.passFlags
-									, name
-									, config
-									, anim
-									, c3d_maps[nonuniform( id - 1_u )]
-									, texCoord
-									, opacity
-									, normal
-									, tangent
-									, bitangent
-									, in.tangentSpaceViewPosition
-									, in.tangentSpaceFragPosition );
+								auto config = writer.declLocale( "config" + name
+									, textureConfigs.getTextureConfiguration( id ) );
+								auto anim = writer.declLocale( "anim" + name
+									, textureAnims.getTextureAnimation( id ) );
+
+								IF( writer, config.isGeometry() )
+								{
+									config.computeGeometryMapContribution( utils
+										, flags.passFlags
+										, textureFlags
+										, name
+										, anim
+										, c3d_maps[nonuniform( id - 1_u )]
+										, texCoord
+										, opacity
+										, normal
+										, tangent
+										, bitangent
+										, in.tangentSpaceViewPosition
+										, in.tangentSpaceFragPosition );
+								}
+								FI;
 							}
 							FI;
 						}
-						FI;
 					}
 				}
 

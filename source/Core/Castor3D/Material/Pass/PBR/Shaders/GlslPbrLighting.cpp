@@ -20,95 +20,60 @@ namespace castor3d::shader
 {
 	namespace
 	{
-		struct MaterialTextureMods
-		{
-			sdw::Boolean hasAlbedo;
-			sdw::Boolean hasMetalness;
-			sdw::Boolean hasSpecular;
-			sdw::Boolean hasEmissive;
-		};
-
 		void modifyMaterial( sdw::ShaderWriter & writer
 			, castor::String const & configName
 			, PassFlags const & passFlags
+			, TextureFlags const & textureFlags
 			, sdw::Vec4 const & sampled
 			, TextureConfigData const & config
-			, MaterialTextureMods & mods
 			, PbrLightMaterial & pbrLightMat )
 		{
-			IF( writer, config.isAlbedo() )
-			{
-				pbrLightMat.albedo = config.getAlbedo( sampled, pbrLightMat.albedo );
-				mods.hasAlbedo = sdw::Boolean{ true };
-			}
-			FI;
+			config.applyAlbedo( textureFlags, sampled, pbrLightMat.albedo );
+			config.applySpecular( textureFlags, sampled, pbrLightMat.specular );
 
-			IF( writer, config.isSpecular() )
+			if ( checkFlag( textureFlags, TextureFlag::eGlossiness ) )
 			{
-				pbrLightMat.specular = config.getSpecular( sampled, pbrLightMat.specular );
-				mods.hasSpecular = sdw::Boolean{ true };
+				IF( writer, config.isGlossiness() )
+				{
+					auto gloss = writer.declLocale( "gloss" + configName
+						, LightMaterial::computeRoughness( pbrLightMat.roughness ) );
+					gloss = config.getGlossiness( sampled, gloss );
+					pbrLightMat.roughness = LightMaterial::computeRoughness( gloss );
+				}
+				FI;
 			}
-			FI;
 
-			IF( writer, config.isGlossiness() )
-			{
-				auto gloss = writer.declLocale( "gloss" + configName
-					, LightMaterial::computeRoughness( pbrLightMat.roughness ) );
-				gloss = config.getGlossiness( sampled, gloss );
-				pbrLightMat.roughness = LightMaterial::computeRoughness( gloss );
-			}
-			FI;
-
-			IF( writer, config.isMetalness() )
-			{
-				pbrLightMat.metalness = config.getMetalness( sampled, pbrLightMat.metalness );
-				mods.hasMetalness = sdw::Boolean{ true };
-			}
-			FI;
-
-			IF( writer, config.isRoughness() )
-			{
-				pbrLightMat.roughness = config.getRoughness( sampled, pbrLightMat.roughness );
-			}
-			FI;
-
-			IF( writer, config.isEmissive() )
-			{
-				mods.hasEmissive = sdw::Boolean{ true };
-			}
-			FI;
+			config.applyMetalness( textureFlags, sampled, pbrLightMat.metalness );
+			config.applyRoughness( textureFlags, sampled, pbrLightMat.roughness );
 		}
 
 		void updateMaterial( sdw::ShaderWriter & writer
 			, PassFlags const & passFlags
-			, MaterialTextureMods const & mods
+			, TextureFlags const & textureFlags
 			, PbrLightMaterial & pbrLightMat
 			, sdw::Vec3 & emissive )
 		{
 			if ( pbrLightMat.isSpecularGlossiness() )
 			{
-				IF( writer, !mods.hasMetalness && ( mods.hasSpecular || mods.hasAlbedo ) )
+				if ( !checkFlag( textureFlags, TextureFlag::eMetalness )
+					&& ( checkFlag( textureFlags, TextureFlag::eSpecular ) || checkFlag( textureFlags, TextureFlag::eAlbedo ) ) )
 				{
 					pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 				}
-				FI;
 			}
 			else
 			{
-				IF( writer, !mods.hasSpecular && ( mods.hasMetalness || mods.hasAlbedo ) )
+				if ( !checkFlag( textureFlags, TextureFlag::eSpecular  )
+					&& ( checkFlag( textureFlags, TextureFlag::eMetalness ) || checkFlag( textureFlags, TextureFlag::eAlbedo ) ) )
 				{
 					pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 				}
-				FI;
 			}
 
-			if ( checkFlag( passFlags, PassFlag::eLighting ) )
+			if ( checkFlag( passFlags, PassFlag::eLighting )
+				&& !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
 			{
-				IF( writer, !mods.hasEmissive )
-				{
-					emissive *= pbrLightMat.albedo;
-				}
-				FI;
+				emissive *= pbrLightMat.albedo;
 			}
 		}
 	}
@@ -248,10 +213,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
-		MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
+		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -265,28 +227,28 @@ namespace castor3d::shader
 					, textureConfigs.getTextureConfiguration( id ) );
 				auto anim = m_writer.declLocale( "anim" + name
 					, textureAnims.getTextureAnimation( id ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapContribution( passFlags
-						, name
-						, config
-						, anim
-						, maps[nonuniform( id - 1_u )]
-						, texCoords
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, normal
-						, tangent
-						, bitangent
-						, tangentSpaceViewPosition
-						, tangentSpaceFragPosition ) );
+				auto sampled = config.computeCommonMapContribution( m_utils
+					, passFlags
+					, textureFlags
+					, name
+					, anim
+					, maps[nonuniform( id - 1_u )]
+					, texCoords
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, normal
+					, tangent
+					, bitangent
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
 				modifyMaterial( m_writer
 					, name
 					, passFlags
+					, textureFlags
 					, sampled
 					, config
-					, mods
 					, pbrLightMat );
 			}
 			FI;
@@ -294,7 +256,7 @@ namespace castor3d::shader
 
 		updateMaterial( m_writer
 			, passFlags
-			, mods
+			, textureFlags
 			, pbrLightMat
 			, emissive );
 	}
@@ -364,10 +326,7 @@ namespace castor3d::shader
 		, LightMaterial & lightMat )
 	{
 		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
-		MaterialTextureMods mods{ m_writer.declLocale( "hasAlbedo", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
-			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
+		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -381,22 +340,21 @@ namespace castor3d::shader
 					, textureConfigs.getTextureConfiguration( id ) );
 				auto anim = m_writer.declLocale( "anim" + name
 					, textureAnims.getTextureAnimation( id ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapVoxelContribution( passFlags
-						, name
-						, config
-						, anim
-						, maps[nonuniform( id - 1_u )]
-						, texCoords
-						, emissive
-						, opacity
-						, occlusion ) );
+				auto sampled = config.computeCommonMapVoxelContribution( passFlags
+					, textureFlags
+					, name
+					, anim
+					, maps[nonuniform( id - 1_u )]
+					, texCoords
+					, emissive
+					, opacity
+					, occlusion );
 				modifyMaterial( m_writer
 					, name
 					, passFlags
+					, textureFlags
 					, sampled
 					, config
-					, mods
 					, pbrLightMat );
 			}
 			FI;
@@ -404,7 +362,7 @@ namespace castor3d::shader
 
 		updateMaterial( m_writer
 			, passFlags
-			, mods
+			, textureFlags
 			, pbrLightMat
 			, emissive );
 	}

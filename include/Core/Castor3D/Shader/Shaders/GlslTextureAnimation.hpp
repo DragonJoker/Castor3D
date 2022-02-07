@@ -29,11 +29,6 @@ namespace castor3d
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
-			C3D_API void animUV( TextureConfigData const & config
-				, sdw::Vec2 & uv )const;
-			C3D_API void animUVW( TextureConfigData const & config
-				, sdw::Vec3 & uvw )const;
-
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;
