@@ -80,6 +80,8 @@ namespace castor3d
 		 */
 		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & binding )const;
+
+		C3D_API RenderDevice const & getDevice()const;
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.

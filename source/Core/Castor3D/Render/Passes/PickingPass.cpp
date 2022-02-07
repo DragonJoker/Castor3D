@@ -403,6 +403,10 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 		}
 
+		UBO_MODEL( writer
+			, uint32_t( NodeUboIdx::eModel )
+			, RenderPipeline::eBuffers );
+
 		UBO_PICKING( writer
 			, uint32_t( PassUboIdx::eCount )
 			, RenderPipeline::eAdditional );
@@ -410,7 +414,6 @@ namespace castor3d
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
 		// Fragment Outputs
@@ -430,12 +433,34 @@ namespace castor3d
 				auto material = materials->getMaterial( in.material );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
-				utils.computeOpacityMapContribution( textureFlags
-					, textureConfigs
-					, textureAnims
-					, c3d_maps
-					, in.texture0
-					, opacity );
+
+				for ( uint32_t index = 0u; index < flags.textures.size(); ++index )
+				{
+					auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
+					auto id = writer.declLocale( "id" + name
+						, c3d_modelData.getTexture( index ) );
+
+					IF( writer, id > 0_u )
+					{
+						auto config = writer.declLocale( "config" + name
+							, textureConfigs.getTextureConfiguration( id ) );
+
+						IF( writer, config.isOpacity() )
+						{
+							auto anim = writer.declLocale( "anim" + name
+								, textureAnims.getTextureAnimation( id ) );
+							auto texCoord = writer.declLocale( "texCoord" + name
+								, in.texture0.xy() );
+							anim.animUV( config, texCoord );
+							auto sampledOpacity = writer.declLocale< sdw::Vec4 >( "sampled" + name
+								, c3d_maps[nonuniform( id - 1_u )].sample( texCoord ) );
+							opacity = config.getOpacity( sampledOpacity, opacity );
+						}
+						FI;
+					}
+					FI;
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, material.alphaRef );

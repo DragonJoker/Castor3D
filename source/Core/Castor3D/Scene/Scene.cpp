@@ -317,6 +317,8 @@ namespace castor3d
 		m_overlayCacheView->clear();
 		m_fontCacheView->clear();
 
+		m_renderNodes->clear();
+
 		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->cleanup();
 

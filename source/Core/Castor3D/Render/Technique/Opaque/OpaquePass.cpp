@@ -165,7 +165,6 @@ namespace castor3d
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
 		UBO_SCENE( writer
@@ -217,10 +216,11 @@ namespace castor3d
 					, 0.0_f );
 
 				lightingModel->computeMapContributions( flags.passFlags
-					, filterTexturesFlags( flags.textures )
+					, flags.textures
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
+					, c3d_modelData
 					, texCoord
 					, normal
 					, tangent

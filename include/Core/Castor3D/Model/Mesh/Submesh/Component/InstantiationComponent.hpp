@@ -15,6 +15,9 @@ namespace castor3d
 	struct InstantiationData
 	{
 		castor::Matrix4x4f m_matrix;
+		castor::Point4ui m_textures0;
+		castor::Point4ui m_textures1;
+		int m_textures;
 		int m_material;
 		int m_nodeId;
 	};

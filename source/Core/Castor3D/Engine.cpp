@@ -223,6 +223,8 @@ namespace castor3d
 			CU_Exception( C3D_NO_RENDERSYSTEM );
 		}
 
+		m_textureCache->initialise( m_renderSystem->getRenderDevice() );
+
 		if ( m_lightsSampler.lock() )
 		{
 			postEvent( makeGpuInitialiseEvent( **m_lightsSampler.lock() ) );
@@ -268,6 +270,7 @@ namespace castor3d
 			m_samplerCache->cleanup();
 			m_overlayCache->cleanup();
 			m_materialCache->cleanup();
+			m_textureCache->cleanup();
 
 			postEvent( makeGpuCleanupEvent( * m_targetCache) );
 
