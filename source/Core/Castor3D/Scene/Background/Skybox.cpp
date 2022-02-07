@@ -24,9 +24,6 @@
 
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
 	//************************************************************************************************
@@ -34,26 +31,23 @@ namespace castor3d
 	namespace
 	{
 		ashes::ImageCreateInfo doGetImageCreate( VkFormat format
-			, Size const & dimensions
+			, castor::Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
-			return ashes::ImageCreateInfo
-			{
-				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
-				VK_IMAGE_TYPE_2D,
-				format,
-				{ dimensions.getWidth(), dimensions.getHeight(), 1u },
-				mipLevel,
-				6u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_SAMPLED_BIT
+			return ashes::ImageCreateInfo{ VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
+				, VK_IMAGE_TYPE_2D
+				, format
+				, { dimensions.getWidth(), dimensions.getHeight(), 1u }
+				, mipLevel
+				, 6u
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_IMAGE_TILING_OPTIMAL
+				, ( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VkImageUsageFlags( attachment
 						? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-						: VkImageUsageFlagBits( 0u ) ) ),
-			};
+						: VkImageUsageFlagBits( 0u ) ) ) };
 		}
 	}
 
@@ -148,19 +142,16 @@ namespace castor3d
 		, castor::Path const & relative
 		, uint32_t size )
 	{
-		ashes::ImageCreateInfo image
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			{ size, size, 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
-		};
+		ashes::ImageCreateInfo image{ 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_UNDEFINED
+			, { size, size, 1u }
+			, 1u
+			, 1u
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_IMAGE_TILING_OPTIMAL
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
 		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -187,20 +178,17 @@ namespace castor3d
 	void SkyboxBackground::loadCrossTexture( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		ashes::ImageCreateInfo image
-		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			{ 1u, 1u, 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			( VK_IMAGE_USAGE_SAMPLED_BIT
+		ashes::ImageCreateInfo image{ 0u
+			, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_UNDEFINED
+			, { 1u, 1u, 1u }
+			, 1u
+			, 1u
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_IMAGE_TILING_OPTIMAL
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
-		};
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
 		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
