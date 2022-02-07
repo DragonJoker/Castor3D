@@ -154,7 +154,8 @@ namespace castor
 		}
 		else
 		{
-			sourceFmt = PixelFormat::eR8G8B8A8_UNORM;
+			sourceFmt = PixelFormat::eR8G8B8A8_SRGB;
+			
 			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
 			FreeImage_Unload( fiImage );
 			fiImage = dib;
