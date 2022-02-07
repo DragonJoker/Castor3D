@@ -1,6 +1,7 @@
 #include "Castor3D/Miscellaneous/DebugCallbacks.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -202,16 +203,11 @@ namespace castor3d
 				| VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
 				| VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
 				| VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-			VkDebugUtilsMessengerCreateInfoEXT createInfo
-			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
-				nullptr,
-				0u,
-				severityFlags,
-				typeFlags,
-				debugMessageCallback,
-				userData
-			};
+			auto createInfo = makeVkStruct< VkDebugUtilsMessengerCreateInfoEXT >( 0u
+				, severityFlags
+				, typeFlags
+				, debugMessageCallback
+				, userData );
 			return instance.createDebugUtilsMessenger( createInfo );
 		}
 
@@ -313,14 +309,9 @@ namespace castor3d
 				| VK_DEBUG_REPORT_WARNING_BIT_EXT
 				| VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT
 				| VK_DEBUG_REPORT_ERROR_BIT_EXT;
-			VkDebugReportCallbackCreateInfoEXT createInfo
-			{
-				VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
-				nullptr,
-				debugReportFlags,
-				debugReportCallback,
-				userData
-			};
+			auto createInfo = makeVkStruct< VkDebugReportCallbackCreateInfoEXT >( debugReportFlags
+				, debugReportCallback
+				, userData );
 			return instance.createDebugReportCallback( createInfo );
 		}
 

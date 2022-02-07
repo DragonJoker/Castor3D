@@ -81,7 +81,7 @@ namespace castor3d
 				, sdw::Float roughness
 				, sdw::Float indirectOcclusion
 				, sdw::Float indirectBlend );
-			sdw::Vec4 traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
+			sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 				, Surface surface
 				, VoxelData const & voxelData )const;
 
@@ -89,12 +89,12 @@ namespace castor3d
 			void declareTraceCone();
 			void declareTraceConeReflection();
 			void declareTraceConeOcclusion();
-			sdw::Vec4 traceConeReflection( sdw::SampledImage3DRgba32 const & voxels
+			sdw::Vec4 traceConeReflection( sdw::CombinedImage3DRgba32 const & voxels
 				, Surface surface
 				, sdw::Vec3 const & wsViewVector
 				, sdw::Float const & roughness
 				, VoxelData const & voxelData )const;
-			sdw::Float traceConeOcclusion( sdw::SampledImage3DRgba32 const & voxels
+			sdw::Float traceConeOcclusion( sdw::CombinedImage3DRgba32 const & voxels
 				, Surface surface
 				, sdw::Vec3 const & wsConeDirection
 				, VoxelData const & voxelData )const;
@@ -112,23 +112,23 @@ namespace castor3d
 				, InSurface
 				, InLayeredLpvGridData > m_computeLLPVRadiance;
 			sdw::Function< sdw::Vec4
-				, sdw::InSampledImage3DRgba32
+				, sdw::InCombinedImage3DRgba32
 				, InSurface
 				, sdw::InVec3
 				, sdw::InFloat
 				, InVoxelData > m_traceCone;
 			sdw::Function< sdw::Vec4
-				, sdw::InSampledImage3DRgba32
+				, sdw::InCombinedImage3DRgba32
 				, InSurface
 				, InVoxelData > m_traceConeRadiance;
 			sdw::Function< sdw::Vec4
-				, sdw::InSampledImage3DRgba32
+				, sdw::InCombinedImage3DRgba32
 				, InSurface
 				, sdw::InVec3
 				, sdw::InFloat
 				, InVoxelData > m_traceConeReflection;
 			sdw::Function< sdw::Float
-				, sdw::InSampledImage3DRgba32
+				, sdw::InCombinedImage3DRgba32
 				, InSurface
 				, sdw::InVec3
 				, InVoxelData > m_traceConeOcclusion;

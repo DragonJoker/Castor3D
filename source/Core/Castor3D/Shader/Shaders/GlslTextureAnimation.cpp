@@ -110,7 +110,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_textureAnimations = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_textureAnimations"
+				auto c3d_textureAnimations = m_writer.declCombinedImg< FImgBufferRgba32 >( "c3d_textureAnimations"
 					, binding
 					, set );
 				m_getTextureAnimation = m_writer.implementFunction< TextureAnimData >( "c3d_getTextureAnimation"

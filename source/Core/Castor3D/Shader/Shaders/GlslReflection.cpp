@@ -40,9 +40,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & worldNormal
 		, sdw::Vec2 const & texcoord
 		, sdw::Vec4 const & ssrSettings
-		, sdw::SampledImage2DR32 const & depthMap
-		, sdw::SampledImage2DRgba32 const & normalMap
-		, sdw::SampledImage2DRgba32 const & colourMap )
+		, sdw::CombinedImage2DR32 const & depthMap
+		, sdw::CombinedImage2DRgba32 const & normalMap
+		, sdw::CombinedImage2DRgba32 const & colourMap )
 	{
 		declareComputeScreenSpace( matrixData );
 		return m_computeScreenSpace( viewPosition
@@ -57,7 +57,7 @@ namespace castor3d::shader
 	sdw::Boolean ReflectionModel::traceScreenSpace( sdw::Vec3 csOrigin
 		, sdw::Vec3 csDirection
 		, sdw::Mat4 projectToPixelMatrix
-		, sdw::SampledImage2DR32 csZBuffer
+		, sdw::CombinedImage2DR32 csZBuffer
 		, sdw::Vec2 csZBufferSize
 		, sdw::Float csZThickness
 		, sdw::Boolean csZBufferIsHyperbolic
@@ -108,7 +108,7 @@ namespace castor3d::shader
 			, [&]( sdw::Vec3 const & csOrigin
 				, sdw::Vec3 const & csDirection
 				, sdw::Mat4 const & projectToPixelMatrix
-				, sdw::SampledImage2DR32 const & csZBuffer
+				, sdw::CombinedImage2DR32 const & csZBuffer
 				, sdw::Vec2 const & csZBufferSize
 				, sdw::Float const & csZThickness
 				, sdw::Boolean const & csZBufferIsHyperbolic
@@ -288,7 +288,7 @@ namespace castor3d::shader
 		, sdw::InVec3{ m_writer, "csOrigin" }
 		, sdw::InVec3{ m_writer, "csDirection" }
 		, sdw::InMat4{ m_writer, "projectToPixelMatrix" }
-		, sdw::InSampledImage2DR32{ m_writer, "csZBuffer" }
+		, sdw::InCombinedImage2DR32{ m_writer, "csZBuffer" }
 		, sdw::InVec2{ m_writer, "csZBufferSize" }
 		, sdw::InFloat{ m_writer, "csZThickness" }
 		, sdw::InBoolean{ m_writer, "csZBufferIsHyperbolic" }
@@ -314,9 +314,9 @@ namespace castor3d::shader
 				, sdw::Vec3 const & worldNormal
 				, sdw::Vec2 const & texcoord
 				, sdw::Vec4 const & ssrSettings
-				, sdw::SampledImage2DR32 const & depthMap
-				, sdw::SampledImage2DRgba32 const & normalMap
-				, sdw::SampledImage2DRgba32 const & colourMap )
+				, sdw::CombinedImage2DR32 const & depthMap
+				, sdw::CombinedImage2DRgba32 const & normalMap
+				, sdw::CombinedImage2DRgba32 const & colourMap )
 			{
 				auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
 				auto ssrStepSize = ssrSettings.x();
@@ -408,9 +408,9 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "worldNormal" }
 			, sdw::InVec2{ m_writer, "texcoord" }
 			, sdw::InVec4{ m_writer, "ssrSettings" }
-			, sdw::InSampledImage2DR32{ m_writer, "depthMap" }
-			, sdw::InSampledImage2DRgba32{ m_writer, "normalMap" }
-			, sdw::InSampledImage2DRgba32{ m_writer, "colourMap" } );
+			, sdw::InCombinedImage2DR32{ m_writer, "depthMap" }
+			, sdw::InCombinedImage2DRgba32{ m_writer, "normalMap" }
+			, sdw::InCombinedImage2DRgba32{ m_writer, "colourMap" } );
 	}
 
 	void ReflectionModel::declareComputeFresnel()

@@ -468,7 +468,7 @@ namespace castor3d
 		ashes::CommandBuffer const & cb = queue.getCommandBuffer();
 		auto & rp = *queue.getOwner();
 		cb.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( rp.getRenderPass()
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( rp.getRenderPass()
 				, 0u
 				, VkFramebuffer( nullptr )
 				, VK_FALSE

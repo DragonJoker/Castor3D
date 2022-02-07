@@ -223,10 +223,9 @@ namespace GuiCommon
 			break;
 #if C3D_HasGLSL
 		case GuiCommon::ShaderLanguage::GLSL:
-			extension = wxT( ".glsl" );
-			source = make_wxString( glsl::compileGlsl( *m_module.shader
-				, {}
-				, { m_module.shader->getType()
+			{
+				extension = wxT( ".glsl" );
+				glsl::GlslConfig config{ m_module.shader->getType()
 					, glsl::v4_6
 					, getGLSLExtensions( glsl::v4_6 )
 					, false
@@ -234,17 +233,24 @@ namespace GuiCommon
 					, true
 					, true
 					, true
-					, true } ) );
+					, true };
+				source = make_wxString( glsl::compileGlsl( *m_module.shader
+					, {}
+					, config ) );
+			}
 			break;
 #endif
 #if GC_HasHLSL
 		case GuiCommon::ShaderLanguage::HLSL:
-			extension = wxT( ".hlsl" );
-			source = make_wxString( hlsl::compileHlsl( *m_module.shader
-				, {}
-				, { hlsl::v6_6
+			{
+				extension = wxT( ".hlsl" );
+				hlsl::HlslConfig config{ hlsl::v6_6
 					, m_module.shader->getType()
-					, false } ) );
+					, false };
+				source = make_wxString( hlsl::compileHlsl( *m_module.shader
+					, {}
+					, config ) );
+			}
 			break;
 #endif
 		}

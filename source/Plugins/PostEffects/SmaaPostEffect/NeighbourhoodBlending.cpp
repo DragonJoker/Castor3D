@@ -81,9 +81,9 @@ namespace smaa
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInput< Vec4 >( "vtx_offset", 1u );
 			UBO_SMAA( writer, SmaaUboIdx, 0u );
-			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
-			auto c3d_blendTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_blendTex", BlendTexIdx, 0u );
-			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
+			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
+			auto c3d_blendTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_blendTex", BlendTexIdx, 0u );
+			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
 			/**
 			 * Conditional move:
@@ -124,8 +124,8 @@ namespace smaa
 			auto SMAANeighborhoodBlendingPS = writer.implementFunction< Vec4 >( "SMAANeighborhoodBlendingPS"
 				, [&]( Vec2 const & texcoord
 					, Vec4 const & offset
-					, SampledImage2DRgba32 const & colorTex
-					, SampledImage2DRgba32 const & blendTex )
+					, CombinedImage2DRgba32 const & colorTex
+					, CombinedImage2DRgba32 const & blendTex )
 				{
 					// Fetch the blending weights for current pixel:
 					auto a = writer.declLocale< Vec4 >( "a" );
@@ -193,8 +193,8 @@ namespace smaa
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4{ writer, "offset" }
-				, InSampledImage2DRgba32{ writer, "colourTex" }
-				, InSampledImage2DRgba32{ writer, "blendTex" } );
+				, InCombinedImage2DRgba32{ writer, "colourTex" }
+				, InCombinedImage2DRgba32{ writer, "blendTex" } );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );

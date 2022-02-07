@@ -91,8 +91,7 @@ namespace castor3d
 			auto result = ashes::DeviceCreateInfo{ 0u
 				, std::move( queueCreateInfos )
 				, instance.getEnabledLayerNames()
-				, enabledExtensions
-				, gpu.getFeatures() };
+				, enabledExtensions };
 			result->pNext = &features2;
 			return result;
 		}
@@ -107,6 +106,29 @@ namespace castor3d
 					return lookup.extensionName == name;
 				} ) );
 		}
+
+		bool tryAddExtension( std::string name
+			, ashes::VkExtensionPropertiesArray const & available
+			, Extensions & enabled
+			, void * pFeature = nullptr )
+		{
+			bool result = isExtensionSupported( name, available );
+
+			if ( result )
+			{
+				if ( pFeature )
+				{
+					enabled.addExtension( std::move( name )
+						, reinterpret_cast< VkStructure * >( pFeature ) );
+				}
+				else
+				{
+					enabled.addExtension( std::move( name ) );
+				}
+			}
+
+			return result;
+		}
 	}
 
 	//*************************************************************************
@@ -117,14 +139,12 @@ namespace castor3d
 	}
 
 	void Extensions::addExtension( std::string const & extName
-		, VkStructure * featureStruct )
+		, VkStructure * featureStruct
+		, VkStructure * propertyStruct )
 	{
 		addExtension( extName );
-
-		if ( featureStruct )
-		{
-			m_extensions.push_back( { extName, featureStruct } );
-		}
+		addFeature( extName, featureStruct );
+		addProperty( extName, propertyStruct );
 	}
 
 	//*********************************************************************************************
@@ -268,131 +288,124 @@ namespace castor3d
 		, properties{ gpu.getProperties() }
 		, queueFamilies{ initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
 		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
+		, m_availableExtensions{ gpu.enumerateExtensionProperties( std::string{} ) }
 	{
 		auto apiVersion = gpu.getProperties().apiVersion;
-		auto deviceExtensions = gpu.enumerateExtensionProperties( std::string{} );
+		bool hasFeatures2 = false;
+		bool hasVulkan1_1 = false;
+		bool hasFloatControls = false;
+		bool hasSpirv1_4 = false;
 
 #if VK_VERSION_1_2
 		if ( apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 		{
-			m_deviceExtensions.addFeature( &m_features12 );
+			hasFeatures2 = true;
+			hasVulkan1_1 = true;
+			hasFloatControls = true;
+			hasSpirv1_4 = true;
 			m_deviceExtensions.addFeature( &m_features11 );
+			m_deviceExtensions.addProperty( &m_properties11 );
 		}
 		else
 #endif
 		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 		{
-			m_deviceExtensions.addFeature( &drawParamsFeatures );
+			hasFeatures2 = true;
+			hasVulkan1_1 = true;
+			m_deviceExtensions.addFeature( &m_drawParamsFeatures );
 		}
 #if VK_KHR_shader_draw_parameters
-		else if ( isExtensionSupported( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME
-			, deviceExtensions ) )
+		else
 		{
-			m_deviceExtensions.addExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME );
+			doTryAddExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME );
 		}
 #endif
-#if VK_KHR_acceleration_structure
-		if ( isExtensionSupported( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME
-			, deviceExtensions ) )
+#if VK_KHR_get_physical_device_properties2
+		if ( !hasFeatures2 )
 		{
-			m_deviceExtensions.addExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_accelFeatures ) );
+			hasFeatures2 = doTryAddExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
 		}
 #endif
-#if VK_KHR_deferred_host_operations
-		if ( isExtensionSupported( VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME
-			, deviceExtensions ) )
+		if ( hasFeatures2 )
 		{
-			m_deviceExtensions.addExtension( VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME );
-		}
-
-#	if VK_KHR_ray_tracing_pipeline
-		if ( isExtensionSupported( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_rtPipelineFeatures ) );
-		}
-#	endif
+#if VK_KHR_shader_float_controls
+			if ( !hasFloatControls )
+			{
+				hasFloatControls = doTryAddExtension( VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME );
+			}
 #endif
-#if VK_EXT_descriptor_indexing
-		if ( isExtensionSupported( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_descriptorIndexingFeatures ) );
-		}
-#endif
-#if VK_KHR_shader_terminate_invocation
-		if ( isExtensionSupported( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_terminateInvocationFeatures ) );
-		}
-#endif
-#if VK_EXT_shader_demote_to_helper_invocation
-		if ( isExtensionSupported( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_demoteToHelperInvocationFeatures ) );
-		}
-#endif
-#if VK_NV_mesh_shader
-		if ( isExtensionSupported( VK_NV_MESH_SHADER_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_NV_MESH_SHADER_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_meshShaderFeatures ) );
-		}
+#if VK_KHR_spirv_1_4
+			if ( !hasSpirv1_4 && hasVulkan1_1 && hasFloatControls )
+			{
+				hasSpirv1_4 = doTryAddExtension( VK_KHR_SPIRV_1_4_EXTENSION_NAME );
+			}
 #endif
 #if VK_EXT_shader_atomic_float
-		if ( isExtensionSupported( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_atomicFloatAddFeatures ) );
-		}
+			doTryAddExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME, &m_atomicFloatAddFeatures );
 #endif
-#if VK_KHR_buffer_device_address
-		if ( isExtensionSupported( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME
-				, reinterpret_cast< VkStructure * >( &m_bufferDeviceAddressFeatures ) );
-		}
+#if VK_NV_mesh_shader
+			doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeatures, &m_meshShaderProperties );
+#endif
+#if VK_KHR_shader_terminate_invocation
+			doTryAddExtension( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME, &m_terminateInvocationFeatures );
+#endif
+#if VK_EXT_shader_demote_to_helper_invocation
+			doTryAddExtension( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME, &m_demoteToHelperInvocationFeatures );
+#endif
+#if VK_EXT_descriptor_indexing
+			if ( doTryAddExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME, &m_descriptorIndexingFeatures, &m_descriptorIndexingProperties ) )
+			{
+#	if VK_KHR_buffer_device_address
+				if ( doTryAddExtension( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME, &m_bufferDeviceAddressFeatures ) )
+				{
+#		if VK_KHR_acceleration_structure
+					if ( doTryAddExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, &m_accelFeatures, &m_accelProperties )
+						&& hasSpirv1_4 )
+					{
+#			if VK_KHR_ray_tracing_pipeline
+						doTryAddExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, &m_rtPipelineFeatures, &m_rtPipelineProperties );
+#			endif
+					}
+#		endif
+				}
+#	endif
+			}
 #endif
 #if VK_KHR_synchronization2
-		if ( isExtensionSupported( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME
-			, deviceExtensions ) )
-		{
-			m_deviceExtensions.addExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
-		}
+			doTryAddExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
 #endif
-#if VK_VERSION_1_1
-		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
-		{
 			// use the features2 chain to append extensions
-			VkStructure * current = reinterpret_cast< VkStructure * >( &m_features2 );
+			VkStructure * currentFeat = reinterpret_cast< VkStructure * >( &m_features2 );
 
 			// build up chain of all used extension features
-			for ( size_t i = 0; i < m_deviceExtensions.getSize(); i++ )
+			for ( size_t i = 0; i < m_deviceExtensions.getFeatures().size(); i++ )
 			{
-				current->pNext = m_deviceExtensions[i].featureStruct;
+				currentFeat->pNext = m_deviceExtensions.getFeatures()[i].extStruct;
+				currentFeat = currentFeat->pNext;
+			}
 
-				while ( current->pNext )
-				{
-					current = current->pNext;
-				}
+			VkStructure * currentProp = reinterpret_cast< VkStructure * >( &m_properties2 );
+
+			// build up chain of all used extension properties
+			for ( size_t i = 0; i < m_deviceExtensions.getProperties().size(); i++ )
+			{
+				currentProp->pNext = m_deviceExtensions.getProperties()[i].extStruct;
+				currentProp = currentProp->pNext;
 			}
 
 			gpu.getFeatures( m_features2 );
+			gpu.getProperties( m_properties2 );
 			features = m_features2.features;
 		}
+#if VK_KHR_deferred_host_operations
+		doTryAddExtension( VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME );
 #endif
 
-		m_deviceExtensions.addExtension( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
+		if ( !doTryAddExtension( VK_KHR_SWAPCHAIN_EXTENSION_NAME ) )
+		{
+			CU_Exception( "Swapchain extension not supported." );
+		}
+
 		device = renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
 				, gpu
@@ -405,6 +418,7 @@ namespace castor3d
 				callback << castor::Debug::Backtrace{ 20, 6 };
 				return callback.str();
 			} );
+
 		for ( auto & queuesData : queueFamilies )
 		{
 			queuesData.initialise( *device );
@@ -602,5 +616,40 @@ namespace castor3d
 #else
 		return false;
 #endif
+	}
+
+	uint32_t RenderDevice::getMaxBindlessSampled()const
+	{
+#if VK_EXT_descriptor_indexing
+		static constexpr uint32_t MaxBindlessResources = 16536u;
+		return std::min( MaxBindlessResources, m_descriptorIndexingProperties.maxDescriptorSetUpdateAfterBindSampledImages );
+#else
+		return 0u;
+#endif
+	}
+
+	bool RenderDevice::hasBindless()const
+	{
+#if VK_EXT_descriptor_indexing
+		return m_descriptorIndexingFeatures.descriptorBindingPartiallyBound == VK_TRUE
+			&& m_descriptorIndexingFeatures.descriptorBindingSampledImageUpdateAfterBind == VK_TRUE
+			&& m_descriptorIndexingFeatures.runtimeDescriptorArray == VK_TRUE;
+#else
+		return false;
+#endif
+	}
+
+	bool RenderDevice::doTryAddExtension( std::string name
+		, void * pFeature
+		, void * pProperty )
+	{
+		bool result = tryAddExtension( name, m_availableExtensions, m_deviceExtensions, pFeature );
+
+		if ( result  && pProperty )
+		{
+			m_deviceExtensions.addProperty( name, pProperty );
+		}
+
+		return result;
 	}
 }

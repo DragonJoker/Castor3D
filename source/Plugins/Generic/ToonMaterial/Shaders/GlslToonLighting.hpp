@@ -82,7 +82,7 @@ namespace toon::shader
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
@@ -124,7 +124,7 @@ namespace toon::shader
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity
@@ -308,7 +308,7 @@ namespace toon::shader
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords
 			, sdw::Vec3 & normal
 			, sdw::Vec3 & tangent
@@ -350,7 +350,7 @@ namespace toon::shader
 			, castor3d::FilteredTextureFlags const & textures
 			, c3d::TextureConfigurations const & textureConfigs
 			, c3d::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & emissive
 			, sdw::Float & opacity

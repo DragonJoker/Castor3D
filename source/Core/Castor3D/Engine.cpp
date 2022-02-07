@@ -408,6 +408,7 @@ namespace castor3d
 	{
 		getMaterialCache().update( updater );
 		getRenderTargetCache().update( updater );
+		m_textureCache->update( updater );
 
 		for ( auto & window : m_renderWindows )
 		{

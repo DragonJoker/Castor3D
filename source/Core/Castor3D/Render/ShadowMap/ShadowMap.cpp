@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -52,16 +53,14 @@ namespace castor3d
 		{
 			auto & texture = *ptexture;
 			texture.image = handler.createImage( context, texture.imageId );
-			VkImageMemoryBarrier transferBarrier{ VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
-				, nullptr
-				, 0u
-				, VK_ACCESS_TRANSFER_WRITE_BIT
+			auto transferBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
+				, VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
 				, VK_IMAGE_LAYOUT_UNDEFINED
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
 				, texture.image
-				, texture.wholeViewId.data->info.subresourceRange };
+				, texture.wholeViewId.data->info.subresourceRange );
 			device->vkCmdPipelineBarrier( *commandBuffer
 				, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -92,16 +91,14 @@ namespace castor3d
 					, &texture.wholeViewId.data->info.subresourceRange );
 			}
 
-			VkImageMemoryBarrier shaderBarrier{ VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
-				, nullptr
-				, 0u
-				, VK_ACCESS_SHADER_READ_BIT
+			auto shaderBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
+				, VkAccessFlags( VK_ACCESS_SHADER_READ_BIT )
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
 				, texture.image
-				, texture.wholeViewId.data->info.subresourceRange };
+				, texture.wholeViewId.data->info.subresourceRange );
 			device->vkCmdPipelineBarrier( *commandBuffer
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT

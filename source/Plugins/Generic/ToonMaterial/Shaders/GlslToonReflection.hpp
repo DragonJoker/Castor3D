@@ -60,17 +60,17 @@ namespace toon::shader
 			, sdw::Vec3 const & wsCamera )const;
 		sdw::Vec3 computeRefl( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, ToonPhongLightMaterial const & material );
 		sdw::Vec3 computeRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial & material );
 		void computeRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial & material
@@ -78,7 +78,7 @@ namespace toon::shader
 			, sdw::Vec3 & refraction );
 		void computeReflRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial & material
@@ -86,19 +86,19 @@ namespace toon::shader
 			, sdw::Vec3 & refraction );
 		sdw::Vec3 computeRefls( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, ToonPhongLightMaterial const & material );
 		sdw::Vec3 computeRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPhongLightMaterial & material );
 		void computeRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
@@ -107,7 +107,7 @@ namespace toon::shader
 			, sdw::Vec3 & refraction );
 		void computeReflRefrs( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
@@ -127,19 +127,19 @@ namespace toon::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, InToonPhongLightMaterial > m_computeRefl;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InOutToonPhongLightMaterial > m_computeRefr;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InOutToonPhongLightMaterial
@@ -148,7 +148,7 @@ namespace toon::shader
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InOutToonPhongLightMaterial
@@ -157,13 +157,13 @@ namespace toon::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, InToonPhongLightMaterial > m_computeRefls;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3
@@ -171,7 +171,7 @@ namespace toon::shader
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3
@@ -181,7 +181,7 @@ namespace toon::shader
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3
@@ -235,24 +235,24 @@ namespace toon::shader
 		sdw::Vec3 computeIBL( c3d::Surface surface
 			, ToonPbrLightMaterial const & material
 			, sdw::Vec3 const & worldEye
-			, sdw::SampledImageCubeRgba32 const & irradiance
-			, sdw::SampledImageCubeRgba32 const & prefiltered
-			, sdw::SampledImage2DRgba32 const & brdf );
+			, sdw::CombinedImageCubeRgba32 const & irradiance
+			, sdw::CombinedImageCubeRgba32 const & prefiltered
+			, sdw::CombinedImage2DRgba32 const & brdf );
 		sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
 		sdw::Vec3 computeReflEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, ToonPbrLightMaterial const & material );
 		sdw::Vec3 computeRefrEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material );
 		sdw::Void computeRefrEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material
@@ -260,19 +260,19 @@ namespace toon::shader
 			, sdw::Vec3 & refraction );
 		sdw::Vec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, ToonPbrLightMaterial const & material );
 		sdw::Vec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material );
 		sdw::Void computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
@@ -281,13 +281,13 @@ namespace toon::shader
 			, sdw::Vec3 & refraction );
 		sdw::Vec3 computeRefrSkybox( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material );
 		sdw::Void computeRefrSkybox( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::CombinedImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
 			, ToonPbrLightMaterial const & material
@@ -308,25 +308,25 @@ namespace toon::shader
 			, c3d::InSurface
 			, InToonPbrLightMaterial
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
-			, sdw::InSampledImageCubeRgba32
-			, sdw::InSampledImage2DRgba32 > m_computeIBL;
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InCombinedImage2DRgba32 > m_computeIBL;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, InToonPbrLightMaterial > m_computeReflEnvMap;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InToonPbrLightMaterial > m_computeRefrEnvMap;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InToonPbrLightMaterial
@@ -335,14 +335,14 @@ namespace toon::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InToonPbrLightMaterial > m_computeRefrSkybox;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
 			, InToonPbrLightMaterial
@@ -351,13 +351,13 @@ namespace toon::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, InToonPbrLightMaterial > m_computeReflEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3
@@ -365,7 +365,7 @@ namespace toon::shader
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InSampledImageCubeArrayRgba32
+			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InInt
 			, sdw::InFloat
 			, sdw::InVec3

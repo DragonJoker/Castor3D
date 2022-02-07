@@ -97,9 +97,9 @@ namespace smaa
 
 			// Shader inputs
 			UBO_SMAA( writer, SmaaUboIdx, 0u );
-			auto c3d_areaTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_areaTex", AreaTexIdx, 0u );
-			auto c3d_searchTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_searchTex", SearchTexIdx, 0u );
-			auto c3d_edgesTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_edgesTex", EdgesTexIdx, 0u );
+			auto c3d_areaTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_areaTex", AreaTexIdx, 0u );
+			auto c3d_searchTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_searchTex", SearchTexIdx, 0u );
+			auto c3d_edgesTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_edgesTex", EdgesTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_pixcoord = writer.declInput< Vec2 >( "vtx_pixcoord", 1u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 2u, 3u );
@@ -167,7 +167,7 @@ namespace smaa
 			 * These functions allows to perform diagonal pattern searches.
 			 */
 			auto SMAASearchDiag1 = writer.implementFunction< Vec2 >( "SMAASearchDiag1"
-				, [&]( SampledImage2DRgba32 const & edgesTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
 					, Vec2 const & texcoord
 					, Vec2 const & dir
 					, Vec2 e )
@@ -188,13 +188,13 @@ namespace smaa
 
 					writer.returnStmt( coord.zw() );
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, InVec2{ writer, "texcoord" }
 				, InVec2{ writer, "dir" }
 				, OutVec2{ writer, "e" } );
 
 			auto SMAASearchDiag2 = writer.implementFunction< Vec2 >( "SMAASearchDiag2"
-				, [&]( SampledImage2DRgba32 const & edgesTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
 					, Vec2 const & texcoord
 					, Vec2 const & dir
 					, Vec2 e )
@@ -225,7 +225,7 @@ namespace smaa
 
 					writer.returnStmt( coord.zw() );
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, InVec2{ writer, "texcoord" }
 				, InVec2{ writer, "dir" }
 				, OutVec2{ writer, "e" } );
@@ -235,7 +235,7 @@ namespace smaa
 			 * diagonal distance and crossing edges 'e'.
 			 */
 			auto SMAAAreaDiag = writer.implementFunction< Vec2 >( "SMAAAreaDiag"
-				, [&]( SampledImage2DRgba32 const & areaTex
+				, [&]( CombinedImage2DRgba32 const & areaTex
 					, Vec2 const & dist
 					, Vec2 const & e
 					, Float const & offset )
@@ -255,7 +255,7 @@ namespace smaa
 					// Do it!
 					writer.returnStmt( areaTex.lod( texcoord, 0.0_f ).rg() );
 				}
-				, InSampledImage2DRgba32{ writer, "areaTex" }
+				, InCombinedImage2DRgba32{ writer, "areaTex" }
 				, InVec2{ writer, "dist" }
 				, InVec2{ writer, "e" }
 				, InFloat{ writer, "offset" } );
@@ -264,8 +264,8 @@ namespace smaa
 			 * This searches for diagonal patterns and returns the corresponding weights.
 			 */
 			auto SMAACalculateDiagWeights = writer.implementFunction< Vec2 >( "SMAACalculateDiagWeights"
-				, [&]( SampledImage2DRgba32 const & edgesTex
-					, SampledImage2DRgba32 const & areaTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
+					, CombinedImage2DRgba32 const & areaTex
 					, Vec2 const & texcoord
 					, Vec2 const & e
 					, Vec4 const & subsampleIndices )
@@ -364,8 +364,8 @@ namespace smaa
 
 					writer.returnStmt( weights );
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
-				, InSampledImage2DRgba32{ writer, "areaTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "areaTex" }
 				, InVec2{ writer, "texcoord" }
 				, InVec2{ writer, "e" }
 				, InVec4{ writer, "subsampleIndices" } );
@@ -380,7 +380,7 @@ namespace smaa
 			 * crossing edges are active.
 			 */
 			auto SMAASearchLength = writer.implementFunction< Float >( "SMAASearchLength"
-				, [&]( SampledImage2DRgba32 const & searchTex
+				, [&]( CombinedImage2DRgba32 const & searchTex
 					, Vec2 const & e
 					, Float const & offset )
 				{
@@ -403,7 +403,7 @@ namespace smaa
 					// Lookup the search texture:
 					writer.returnStmt( searchTex.lod( fma( scale, e, bias ), 0.0_f ).r() );
 				}
-				, InSampledImage2DRgba32{ writer, "searchTex" }
+				, InCombinedImage2DRgba32{ writer, "searchTex" }
 				, InVec2{ writer, "e" }
 				, InFloat{ writer, "offset" } );
 
@@ -411,8 +411,8 @@ namespace smaa
 			 * Horizontal/vertical search functions for the 2nd pass.
 			 */
 			auto SMAASearchXLeft = writer.implementFunction< Float >( "SMAASearchXLeft"
-				, [&]( SampledImage2DRgba32 const & edgesTex
-					, SampledImage2DRgba32 const & searchTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
+					, CombinedImage2DRgba32 const & searchTex
 					, Vec2 texcoord
 					, Float end )
 				{
@@ -451,14 +451,14 @@ namespace smaa
 					// texcoord.x -= SMAA_RT_METRICS.x * (255.0 / 127.0) * SMAASearchLength(searchTex, e, 0.0);
 					// return fma(SMAA_RT_METRICS.x, offset, texcoord.x);
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
-				, InSampledImage2DRgba32{ writer, "searchTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "searchTex" }
 				, PVec2{ writer, "texcoord" }
 				, PFloat{ writer, "end" } );
 
 			auto SMAASearchXRight = writer.implementFunction< Float >( "SMAASearchXRight"
-				, [&]( SampledImage2DRgba32 const & edgesTex
-					, SampledImage2DRgba32 const & searchTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
+					, CombinedImage2DRgba32 const & searchTex
 					, Vec2 texcoord
 					, Float end )
 				 {
@@ -477,14 +477,14 @@ namespace smaa
 						 , fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.5_f ), 3.25_f ) );
 					 writer.returnStmt( fma( -c3d_smaaData.rtMetrics.x(), offset, texcoord.x() ) );
 				 }
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
-				, InSampledImage2DRgba32{ writer, "searchTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "searchTex" }
 				, PVec2{ writer, "texcoord" }
 				, PFloat{ writer, "end" } );
 
 			auto SMAASearchYUp = writer.implementFunction< Float >( "SMAASearchYUp"
-				, [&]( SampledImage2DRgba32 const & edgesTex
-					, SampledImage2DRgba32 const & searchTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
+					, CombinedImage2DRgba32 const & searchTex
 					, Vec2 texcoord
 					, Float end )
 				{
@@ -503,14 +503,14 @@ namespace smaa
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.0_f ), 3.25_f ) );
 					writer.returnStmt( fma( c3d_smaaData.rtMetrics.y(), offset, texcoord.y() ) );
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
-				, InSampledImage2DRgba32{ writer, "searchTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "searchTex" }
 				, PVec2{ writer, "texcoord" }
 				, PFloat{ writer, "end" } );
 
 			auto SMAASearchYDown = writer.implementFunction< Float >( "SMAASearchYDown"
-				, [&]( SampledImage2DRgba32 const & edgesTex
-					, SampledImage2DRgba32 const & searchTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
+					, CombinedImage2DRgba32 const & searchTex
 					, Vec2 texcoord
 					, Float end )
 				{
@@ -529,8 +529,8 @@ namespace smaa
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.5_f ), 3.25_f ) );
 					writer.returnStmt( fma( -c3d_smaaData.rtMetrics.y(), offset, texcoord.y() ) );
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
-				, InSampledImage2DRgba32{ writer, "searchTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "searchTex" }
 				, PVec2{ writer, "texcoord" }
 				, PFloat{ writer, "end" } );
 
@@ -539,7 +539,7 @@ namespace smaa
 			  * at each side of current edge?
 			  */
 			auto SMAAArea = writer.implementFunction< Vec2 >( "SMAAArea"
-				, [&]( SampledImage2DRgba32 const & areaTex
+				, [&]( CombinedImage2DRgba32 const & areaTex
 					, Vec2 const & dist
 					, Float const & e1
 					, Float const & e2
@@ -558,7 +558,7 @@ namespace smaa
 					// Do it!
 					writer.returnStmt( areaTex.lod( texcoord, 0.0_f ).rg() );
 				}
-				, InSampledImage2DRgba32{ writer, "areaTex" }
+				, InCombinedImage2DRgba32{ writer, "areaTex" }
 				, InVec2{ writer, "dist" }
 				, InFloat{ writer, "e1" }
 				, InFloat{ writer, "e2" }
@@ -568,7 +568,7 @@ namespace smaa
 			// Corner Detection Functions
 
 			auto SMAADetectHorizontalCornerPattern = writer.implementFunction< Void >( "SMAADetectHorizontalCornerPattern"
-				, [&]( SampledImage2DRgba32 const & edgesTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
 					, Vec2 weights
 					, Vec4 const & texcoord
 					, Vec2 const & d )
@@ -593,13 +593,13 @@ namespace smaa
 					}
 					FI;
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, InOutVec2{ writer, "weights" }
 				, InVec4{ writer, "texcoord" }
 				, InVec2{ writer, "d" } );
 
 			auto SMAADetectVerticalCornerPattern = writer.implementFunction< Void >( "SMAADetectVerticalCornerPattern"
-				, [&]( SampledImage2DRgba32 const & edgesTex
+				, [&]( CombinedImage2DRgba32 const & edgesTex
 					, Vec2 weights
 					, Vec4 const & texcoord
 					, Vec2 const & d )
@@ -624,7 +624,7 @@ namespace smaa
 					}
 					FI;
 				}
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
 				, InOutVec2{ writer, "weights" }
 				, InVec4{ writer, "texcoord" }
 				, InVec2{ writer, "d" } );
@@ -633,9 +633,9 @@ namespace smaa
 				, [&]( Vec2 const & texcoord
 					, Vec2 const & pixcoord
 					, Array< Vec4 > const & offset
-					, SampledImage2DRgba32 const & edgesTex
-					, SampledImage2DRgba32 const & areaTex
-					, SampledImage2DRgba32 const & searchTex
+					, CombinedImage2DRgba32 const & edgesTex
+					, CombinedImage2DRgba32 const & areaTex
+					, CombinedImage2DRgba32 const & searchTex
 					, Vec4 const & subsampleIndices )
 				{ // Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 					auto weights = writer.declLocale( "weights"
@@ -789,9 +789,9 @@ namespace smaa
 				, InVec2{ writer, "texcoord" }
 				, InVec2{ writer, "pixcoord" }
 				, InVec4Array{ writer, "offset", 3u }
-				, InSampledImage2DRgba32{ writer, "edgesTex" }
-				, InSampledImage2DRgba32{ writer, "areaTex" }
-				, InSampledImage2DRgba32{ writer, "searchTex" }
+				, InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, InCombinedImage2DRgba32{ writer, "areaTex" }
+				, InCombinedImage2DRgba32{ writer, "searchTex" }
 				, InVec4{ writer, "subsampleIndices" } );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in

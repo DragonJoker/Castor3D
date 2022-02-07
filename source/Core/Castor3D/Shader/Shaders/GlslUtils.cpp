@@ -224,7 +224,7 @@ namespace castor3d::shader
 				, sdw::Vec3 const & normal
 				, sdw::Vec3 const & position )
 			{
-				auto c3d_mapNormal( m_writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapNormal" ) );
+				auto c3d_mapNormal( m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapNormal" ) );
 
 				auto mapNormal = m_writer.declLocale( "mapNormal"
 					, c3d_mapNormal.sample( uv.xy() ).xyz() );
@@ -560,7 +560,7 @@ namespace castor3d::shader
 		m_parallaxMapping = m_writer.implementFunction< sdw::Vec2 >( "c3d_parallaxMapping",
 			[&]( sdw::Vec2 const & texCoords
 				, sdw::Vec3 const & viewDir
-				, sdw::SampledImage2DRgba32 const & heightMap
+				, sdw::CombinedImage2DRgba32 const & heightMap
 				, TextureConfigData const & textureConfig )
 			{
 				IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
@@ -638,7 +638,7 @@ namespace castor3d::shader
 			}
 			, sdw::InVec2{ m_writer, "texCoords" }
 			, sdw::InVec3{ m_writer, "viewDir" }
-			, sdw::InSampledImage2DRgba32{ m_writer, "heightMap" }
+			, sdw::InCombinedImage2DRgba32{ m_writer, "heightMap" }
 			, InTextureConfigData{ m_writer, "textureConfig" } );
 	}
 
@@ -653,7 +653,7 @@ namespace castor3d::shader
 			, [&]( sdw::Vec3 const & lightDir
 				, sdw::Vec2 const initialTexCoord
 				, sdw::Float initialHeight
-				, sdw::SampledImage2DRgba32 const & heightMap
+				, sdw::CombinedImage2DRgba32 const & heightMap
 				, TextureConfigData const & textureConfig )
 			{
 				IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
@@ -741,7 +741,7 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "lightDir" }
 			, sdw::InVec2{ m_writer, "initialTexCoord" }
 			, sdw::InFloat{ m_writer, "initialHeight" }
-			, sdw::InSampledImage2DRgba32{ m_writer, "heightMap" }
+			, sdw::InCombinedImage2DRgba32{ m_writer, "heightMap" }
 			, InTextureConfigData{ m_writer, "textureConfig" } );
 	}
 
@@ -1118,7 +1118,7 @@ namespace castor3d::shader
 	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & colour
 		, sdw::Float & opacity )
@@ -1226,7 +1226,7 @@ namespace castor3d::shader
 		, std::string const & name
 		, shader::TextureConfigData const & config
 		, shader::TextureAnimData const & anim
-		, sdw::SampledImage2DRgba32 const & map
+		, sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
 		, sdw::Float & opacity
@@ -1264,7 +1264,7 @@ namespace castor3d::shader
 		, std::string const & name
 		, shader::TextureConfigData const & config
 		, shader::TextureAnimData const & anim
-		, sdw::SampledImage2DRgba32 const & map
+		, sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
 		, sdw::Float & opacity
@@ -1566,7 +1566,7 @@ namespace castor3d::shader
 
 	sdw::Vec2 Utils::doParallaxMapping( sdw::Vec2 const & texCoords
 		, sdw::Vec3 const & viewDir
-		, sdw::SampledImage2DRgba32 const & heightMap
+		, sdw::CombinedImage2DRgba32 const & heightMap
 		, TextureConfigData const & textureConfig )
 	{
 		declareParallaxMappingFunc();

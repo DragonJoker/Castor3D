@@ -242,7 +242,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_textureConfigurations = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_textureConfigurations"
+				auto c3d_textureConfigurations = m_writer.declCombinedImg< FImgBufferRgba32 >( "c3d_textureConfigurations"
 					, binding
 					, set );
 				m_getTextureConfiguration = m_writer.implementFunction< TextureConfigData >( "getTextureConfiguration"
