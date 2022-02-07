@@ -27,49 +27,26 @@ namespace toon::shader
 			void modifyMaterial( sdw::ShaderWriter & writer
 				, castor::String const & configName
 				, castor3d::PassFlags const & passFlags
+				, castor3d::TextureFlags const & textureFlags
 				, sdw::Vec4 const & sampled
 				, c3d::TextureConfigData const & config
-				, sdw::Boolean & hasEmissive
 				, ToonPhongLightMaterial & phongLightMat )
 			{
-				IF( writer, config.isAlbedo() )
-				{
-					phongLightMat.albedo = config.getDiffuse( sampled, phongLightMat.albedo );
-				}
-				FI;
-
-				IF( writer, config.isSpecular() )
-				{
-					phongLightMat.specular = config.getSpecular( sampled, phongLightMat.specular );
-				}
-				FI;
-
-				IF( writer, config.isShininess() )
-				{
-					phongLightMat.shininess = config.getShininess( sampled, phongLightMat.shininess );
-				}
-				FI;
-
-				IF( writer, config.isEmissive() )
-				{
-					hasEmissive = sdw::Boolean{ true };
-				}
-				FI;
+				config.applyAlbedo( textureFlags, sampled, phongLightMat.albedo );
+				config.applySpecular( textureFlags, sampled, phongLightMat.specular );
+				config.applyShininess( textureFlags, sampled, phongLightMat.shininess );
 			}
 
 			void updateMaterial( sdw::ShaderWriter & writer
 				, castor3d::PassFlags const & passFlags
-				, sdw::Boolean const & hasEmissive
+				, castor3d::TextureFlags const & textureFlags
 				, ToonPhongLightMaterial & phongLightMat
 				, sdw::Vec3 & emissive )
 			{
-				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting ) )
+				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
+					&& !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
 				{
-					IF( writer, !hasEmissive )
-					{
-						emissive *= phongLightMat.albedo;
-					}
-					FI;
+					emissive *= phongLightMat.albedo;
 				}
 			}
 		}
@@ -236,8 +213,7 @@ namespace toon::shader
 		, sdw::Vec3 & tangentSpaceFragPosition )
 	{
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
-		sdw::Boolean hasEmissive = m_writer.declLocale( "c3d_hasEmissive"
-			, sdw::Boolean{ false } );
+		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -251,28 +227,28 @@ namespace toon::shader
 					, textureConfigs.getTextureConfiguration( id ) );
 				auto anim = m_writer.declLocale( "anim" + name
 					, textureAnims.getTextureAnimation( id ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapContribution( passFlags
-						, name
-						, config
-						, anim
-						, maps[nonuniform( id - 1_u )]
-						, texCoords
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, normal
-						, tangent
-						, bitangent
-						, tangentSpaceViewPosition
-						, tangentSpaceFragPosition ) );
+				auto sampled = config.computeCommonMapContribution( m_utils
+					, passFlags
+					, textureFlags
+					, name
+					, anim
+					, maps[nonuniform( id - 1_u )]
+					, texCoords
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, normal
+					, tangent
+					, bitangent
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
 				phong::modifyMaterial( m_writer
 					, name
 					, passFlags
+					, textureFlags
 					, sampled
 					, config
-					, hasEmissive
 					, phongLightMat );
 			}
 			FI;
@@ -280,7 +256,7 @@ namespace toon::shader
 
 		phong::updateMaterial( m_writer
 			, passFlags
-			, hasEmissive
+			, textureFlags
 			, phongLightMat
 			, emissive );
 	}
@@ -350,8 +326,7 @@ namespace toon::shader
 		, c3d::LightMaterial & lightMat )
 	{
 		auto & phongLightMat = static_cast< ToonPhongLightMaterial & >( lightMat );
-		sdw::Boolean hasEmissive = m_writer.declLocale( "c3d_hasEmissive"
-			, sdw::Boolean{ false } );
+		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -365,22 +340,21 @@ namespace toon::shader
 					, textureConfigs.getTextureConfiguration( id ) );
 				auto anim = m_writer.declLocale( "anim" + name
 					, textureAnims.getTextureAnimation( id ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapVoxelContribution( passFlags
-						, name
-						, config
-						, anim
-						, maps[nonuniform( id - 1_u )]
-						, texCoords
-						, emissive
-						, opacity
-						, occlusion ) );
+				auto sampled = config.computeCommonMapVoxelContribution( passFlags
+					, textureFlags
+					, name
+					, anim
+					, maps[nonuniform( id - 1_u )]
+					, texCoords
+					, emissive
+					, opacity
+					, occlusion );
 				phong::modifyMaterial( m_writer
 					, name
 					, passFlags
+					, textureFlags
 					, sampled
 					, config
-					, hasEmissive
 					, phongLightMat );
 			}
 			FI;
@@ -388,7 +362,7 @@ namespace toon::shader
 
 		phong::updateMaterial( m_writer
 			, passFlags
-			, hasEmissive
+			, textureFlags
 			, phongLightMat
 			, emissive );
 	}
@@ -1321,82 +1295,57 @@ namespace toon::shader
 			void modifyMaterial( sdw::ShaderWriter & writer
 				, castor::String const & configName
 				, castor3d::PassFlags const & passFlags
+				, castor3d::TextureFlags const & textureFlags
 				, sdw::Vec4 const & sampled
 				, c3d::TextureConfigData const & config
-				, MaterialTextureMods & mods
 				, ToonPbrLightMaterial & pbrLightMat )
 			{
-				IF( writer, config.isAlbedo() )
-				{
-					pbrLightMat.albedo = config.getDiffuse( sampled, pbrLightMat.albedo );
-					mods.hasAlbedo = sdw::Boolean{ true };
-				}
-				FI;
+				config.applyAlbedo( textureFlags, sampled, pbrLightMat.albedo );
+				config.applySpecular( textureFlags, sampled, pbrLightMat.specular );
 
-				IF( writer, config.isSpecular() )
+				if ( checkFlag( textureFlags, castor3d::TextureFlag::eGlossiness ) )
 				{
-					pbrLightMat.specular = config.getSpecular( sampled, pbrLightMat.specular );
-					mods.hasSpecular = sdw::Boolean{ true };
+					IF( writer, config.isGlossiness() )
+					{
+						auto gloss = writer.declLocale( "gloss" + configName
+							, castor3d::shader::LightMaterial::computeRoughness( pbrLightMat.roughness ) );
+						gloss = config.getGlossiness( sampled, gloss );
+						pbrLightMat.roughness = castor3d::shader::LightMaterial::computeRoughness( gloss );
+					}
+					FI;
 				}
-				FI;
 
-				IF( writer, config.isRoughness() )
-				{
-					pbrLightMat.roughness = config.getRoughness( sampled, pbrLightMat.roughness );
-				}
-				ELSEIF( config.shnMask != 0.0_f )
-				{
-					auto gloss = writer.declLocale( "gloss" + configName
-						, castor3d::shader::LightMaterial::computeRoughness( pbrLightMat.roughness ) );
-					gloss = config.getGlossiness( sampled, gloss );
-					pbrLightMat.roughness = castor3d::shader::LightMaterial::computeRoughness( gloss );
-				}
-				FI;
-
-				IF( writer, config.isMetalness() )
-				{
-					pbrLightMat.metalness = config.getMetalness( sampled, pbrLightMat.metalness );
-					mods.hasMetalness = sdw::Boolean{ true };
-				}
-				FI;
-
-				IF( writer, config.isEmissive() )
-				{
-					mods.hasEmissive = sdw::Boolean{ true };
-				}
-				FI;
+				config.applyMetalness( textureFlags, sampled, pbrLightMat.metalness );
+				config.applyRoughness( textureFlags, sampled, pbrLightMat.roughness );
 			}
 
 			void updateMaterial( sdw::ShaderWriter & writer
 				, castor3d::PassFlags const & passFlags
-				, MaterialTextureMods const & mods
+				, castor3d::TextureFlags const & textureFlags
 				, ToonPbrLightMaterial & pbrLightMat
 				, sdw::Vec3 & emissive )
 			{
 				if ( pbrLightMat.isSpecularGlossiness() )
 				{
-					IF( writer, !mods.hasMetalness && ( mods.hasSpecular || mods.hasAlbedo ) )
+					if ( !checkFlag( textureFlags, castor3d::TextureFlag::eMetalness )
+						&& ( checkFlag( textureFlags, castor3d::TextureFlag::eSpecular ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
 					{
-						pbrLightMat.metalness = c3d::LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
+						pbrLightMat.metalness = castor3d::shader::LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 					}
-					FI;
 				}
 				else
 				{
-					IF( writer, !mods.hasSpecular && ( mods.hasMetalness || mods.hasAlbedo ) )
+					if ( !checkFlag( textureFlags, castor3d::TextureFlag::eSpecular )
+						&& ( checkFlag( textureFlags, castor3d::TextureFlag::eMetalness ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
 					{
-						pbrLightMat.specular = c3d::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
+						pbrLightMat.specular = castor3d::shader::LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 					}
-					FI;
 				}
 
-				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting ) )
+				if ( checkFlag( passFlags, castor3d::PassFlag::eLighting )
+					&& !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
 				{
-					IF( writer, !mods.hasEmissive )
-					{
-						emissive *= pbrLightMat.albedo;
-					}
-					FI;
+					emissive *= pbrLightMat.albedo;
 				}
 			}
 		}
@@ -1541,6 +1490,7 @@ namespace toon::shader
 			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
+		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -1554,28 +1504,28 @@ namespace toon::shader
 					, textureConfigs.getTextureConfiguration( id ) );
 				auto anim = m_writer.declLocale( "anim" + name
 					, textureAnims.getTextureAnimation( id ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapContribution( passFlags
-						, name
-						, config
-						, anim
-						, maps[nonuniform( id - 1_u )]
-						, texCoords
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, normal
-						, tangent
-						, bitangent
-						, tangentSpaceViewPosition
-						, tangentSpaceFragPosition ) );
+				auto sampled = config.computeCommonMapContribution( m_utils
+					, passFlags
+					, textureFlags
+					, name
+					, anim
+					, maps[nonuniform( id - 1_u )]
+					, texCoords
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, normal
+					, tangent
+					, bitangent
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
 				pbr::modifyMaterial( m_writer
 					, name
 					, passFlags
+					, textureFlags
 					, sampled
 					, config
-					, mods
 					, pbrLightMat );
 			}
 			FI;
@@ -1583,7 +1533,7 @@ namespace toon::shader
 
 		pbr::updateMaterial( m_writer
 			, passFlags
-			, mods
+			, textureFlags
 			, pbrLightMat
 			, emissive );
 	}
@@ -1657,6 +1607,7 @@ namespace toon::shader
 			, m_writer.declLocale( "hasMetalness", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasSpecular", sdw::Boolean{ false } )
 			, m_writer.declLocale( "hasEmissive", sdw::Boolean{ false } ) };
+		auto textureFlags = merge( textures );
 
 		for ( uint32_t index = 0u; index < textures.size(); ++index )
 		{
@@ -1670,22 +1621,21 @@ namespace toon::shader
 					, textureConfigs.getTextureConfiguration( id ) );
 				auto anim = m_writer.declLocale( "anim" + name
 					, textureAnims.getTextureAnimation( id ) );
-				auto sampled = m_writer.declLocale( "sampled" + name
-					, m_utils.computeCommonMapVoxelContribution( passFlags
-						, name
-						, config
-						, anim
-						, maps[nonuniform( id - 1_u )]
-						, texCoords
-						, emissive
-						, opacity
-						, occlusion ) );
+				auto sampled = config.computeCommonMapVoxelContribution( passFlags
+					, textureFlags
+					, name
+					, anim
+					, maps[nonuniform( id - 1_u )]
+					, texCoords
+					, emissive
+					, opacity
+					, occlusion );
 				pbr::modifyMaterial( m_writer
 					, name
 					, passFlags
+					, textureFlags
 					, sampled
 					, config
-					, mods
 					, pbrLightMat );
 			}
 			FI;
@@ -1693,7 +1643,7 @@ namespace toon::shader
 
 		pbr::updateMaterial( m_writer
 			, passFlags
-			, mods
+			, textureFlags
 			, pbrLightMat
 			, emissive );
 	}

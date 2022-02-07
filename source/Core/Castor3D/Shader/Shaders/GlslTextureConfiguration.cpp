@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -89,43 +90,179 @@ namespace castor3d
 			return result;
 		}
 
-		sdw::Vec3 TextureConfigData::getDiffuse( sdw::Vec4 const & sampled
-			, sdw::Vec3 const & diffuse )const
+		void TextureConfigData::computeGeometryMapContribution( Utils & utils
+			, PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, std::string const & name
+			, shader::TextureAnimData const & anim
+			, sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 & texCoords
+			, sdw::Float & opacity
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
-			return diffuse * getVec3( sampled, colMask );
+			auto & writer = findWriterMandat( *this );
+			auto texCoord = writer.declLocale( "c3d_texCoord" + name
+				, texCoords.xy() );
+			transformUV( anim, texCoord );
+
+			if ( checkFlag( textureFlags, TextureFlag::eHeight )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+			{
+				IF( writer, isHeight() )
+				{
+					texCoord = utils.parallaxMapping( texCoord
+						, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+						, map
+						, *this );
+					texCoords.xy() = texCoord;
+
+					if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
+					{
+						IF( writer, texCoords.x() > 1.0_f
+							|| texCoords.y() > 1.0_f
+							|| texCoords.x() < 0.0_f
+							|| texCoords.y() < 0.0_f )
+						{
+							writer.demote();
+						}
+						FI;
+					}
+				}
+				FI;
+			}
+
+			auto sampled = writer.declLocale( "c3d_sampled" + name
+				, map.sample( texCoord ) );
+			applyNormal( textureFlags, sampled, normal, tangent, bitangent, normal );
+			applyOpacity( textureFlags, sampled, opacity );
 		}
 
-		sdw::Vec3 TextureConfigData::getAlbedo( sdw::Vec4 const & sampled
-			, sdw::Vec3 const & albedo )const
+		sdw::Vec4 TextureConfigData::computeCommonMapContribution( Utils & utils
+			, PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, std::string const & name
+			, shader::TextureAnimData const & anim
+			, sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
+			, sdw::Float & occlusion
+			, sdw::Float & transmittance
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
-			return albedo * getVec3( sampled, colMask );
+			auto & writer = findWriterMandat( *this );
+			auto texCoord = writer.declLocale( "c3d_texCoord" + name
+				, texCoords.xy() );
+
+			if ( checkFlag( textureFlags, TextureFlag::eHeight )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
+			{
+				IF( writer, isHeight() )
+				{
+					texCoord = utils.parallaxMapping( texCoord
+						, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+						, map
+						, *this );
+					texCoords.xy() = texCoord;
+
+					if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
+					{
+						IF( writer, texCoords.x() > 1.0_f
+							|| texCoords.y() > 1.0_f
+							|| texCoords.x() < 0.0_f
+							|| texCoords.y() < 0.0_f )
+						{
+							writer.demote();
+						}
+						FI;
+					}
+				}
+				FI;
+			}
+
+			transformUV( anim, texCoord );
+			auto result = writer.declLocale( "c3d_result" + name
+				, map.sample( texCoord ) );
+			applyNormal( textureFlags, result, normal, tangent, bitangent, normal );
+			applyOpacity( textureFlags, result, opacity );
+			applyEmissive( textureFlags, result, emissive );
+			applyOcclusion( textureFlags, result, occlusion );
+			applyTransmittance( textureFlags, result, transmittance );
+			return result;
 		}
 
-		sdw::Vec3 TextureConfigData::getEmissive( sdw::Vec4 const & sampled
-			, sdw::Vec3 const & emissive )const
+		sdw::Vec4 TextureConfigData::computeCommonMapVoxelContribution( PassFlags const & passFlags
+			, TextureFlags const & textureFlags
+			, std::string const & name
+			, shader::TextureAnimData const & anim
+			, sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
+			, sdw::Float & occlusion )
 		{
-			return emissive * getVec3( sampled, emsMask );
+			auto & writer = findWriterMandat( *this );
+			auto texCoord = writer.declLocale( "c3d_texCoord" + name
+				, texCoords.xy() );
+			transformUV( anim, texCoord );
+			auto result = writer.declLocale< sdw::Vec4 >( "c3d_result" + name
+				, map.sample( texCoord ) );
+			applyOpacity( textureFlags, result, opacity );
+			applyEmissive( textureFlags, result, emissive );
+			applyOcclusion( textureFlags, result, occlusion );
+			return result;
 		}
 
-		sdw::Vec3 TextureConfigData::getSpecular( sdw::Vec4 const & sampled
-			, sdw::Vec3 const & specular )const
+		void TextureConfigData::transformUV( TextureAnimData const & config
+			, sdw::Vec2 & uv )const
 		{
-			return specular * getVec3( sampled, spcMask );
+			convertUV( uv );
+
+			IF( *m_writer, isTrnfAnim )
+			{
+				uv = vec2( uv.x()
+					, mix( uv.y(), 1.0_f - uv.y(), fneedYI ) );
+				uv = scaleUV( config.texScl.xy(), uv );
+				uv = rotateUV( config.texRot.xy(), uv );
+				uv = translateUV( config.texTrn.xy(), uv );
+			}
+			FI;
+
+			convertToTile( uv );
+
+			IF( *m_writer, isTileAnim )
+			{
+				uv.x() += config.tleSet.x() / config.tleSet.z();
+				uv.y() += config.tleSet.y() / config.tleSet.w();
+			}
+			FI;
 		}
 
-		sdw::Float TextureConfigData::getMetalness( sdw::Vec4 const & sampled
-			, sdw::Float const & metalness )const
+		void TextureConfigData::transformUVW( TextureAnimData const & config
+			, sdw::Vec3 & uvw )const
 		{
-			return metalness * getFloat( sampled, metMask );
-		}
+			convertUVW( uvw );
 
-		sdw::Float TextureConfigData::getShininess( sdw::Vec4 const & sampled
-			, sdw::Float const & shininess )const
-		{
-			return shininess
-				* clamp( getFloat( sampled, shnMask )
-					, 0.00390625_f // 1 / 256
-					, 1.0_f );
+			IF( *m_writer, isTrnfAnim )
+			{
+				uvw = vec3( uvw.x()
+					, mix( uvw.y(), 1.0_f - uvw.y(), fneedYI )
+					, uvw.z() );
+				uvw = scaleUV( config.texScl.xyz(), uvw );
+				uvw = rotateUV( config.texRot.xyz(), uvw );
+				uvw = translateUV( config.texTrn.xyz(), uvw );
+			}
+			FI;
 		}
 
 		sdw::Float TextureConfigData::getGlossiness( sdw::Vec4 const & sampled
@@ -134,10 +271,10 @@ namespace castor3d
 			return glossiness * getFloat( sampled, shnMask );
 		}
 
-		sdw::Float TextureConfigData::getRoughness( sdw::Vec4 const & sampled
-			, sdw::Float const & roughness )const
+		sdw::Vec3 TextureConfigData::getColour( sdw::Vec4 const & sampled
+			, sdw::Vec3 const & colour )const
 		{
-			return roughness * getFloat( sampled, rghMask );
+			return colour * getFloat( sampled, colMask );
 		}
 
 		sdw::Float TextureConfigData::getOpacity( sdw::Vec4 const & sampled
@@ -146,39 +283,199 @@ namespace castor3d
 			return opacity * getFloat( sampled, opaMask );
 		}
 
-		sdw::Vec3 TextureConfigData::getNormal( sdw::Vec4 const & sampled
-			, sdw::Mat3 const & tbn )const
+		void TextureConfigData::applyDiffuse( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Vec3 & diffuse )const
 		{
-			return normalize( tbn
-				* fma( getVec3( sampled, nmlMask )
-					, vec3( 2.0_f )
-					, -vec3( 1.0_f ) ) );
+			if ( checkFlag( textureFlags, TextureFlag::eDiffuse ) )
+			{
+				IF( *getWriter(), isDiffuse() )
+				{
+					diffuse = diffuse * getVec3( sampled, colMask );
+				}
+				FI;
+			}
 		}
 
-		sdw::Vec3 TextureConfigData::getNormal( sdw::Vec4 const & sampled
+		void TextureConfigData::applyAlbedo( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Vec3 & albedo )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eAlbedo ) )
+			{
+				IF( *getWriter(), isAlbedo() )
+				{
+					albedo = albedo * getVec3( sampled, colMask );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyEmissive( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Vec3 & emissive )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
+			{
+				IF( *getWriter(), isEmissive() )
+				{
+					emissive = emissive * getVec3( sampled, emsMask );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applySpecular( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Vec3 & specular )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eSpecular ) )
+			{
+				IF( *getWriter(), isSpecular() )
+				{
+					specular = specular * getVec3( sampled, spcMask );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyMetalness( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & metalness )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eMetalness ) )
+			{
+				IF( *getWriter(), isMetalness() )
+				{
+					metalness = metalness * getFloat( sampled, metMask );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyShininess( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & shininess )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eShininess ) )
+			{
+				IF( *getWriter(), isShininess() )
+				{
+					shininess = shininess
+						* clamp( getFloat( sampled, shnMask )
+							, 0.00390625_f // 1 / 256
+							, 1.0_f );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyRoughness( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & roughness )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eRoughness ) )
+			{
+				IF( *getWriter(), isRoughness() )
+				{
+					roughness = roughness * getFloat( sampled, rghMask );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyOpacity( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & opacity )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			{
+				IF( *getWriter(), isOpacity() )
+				{
+					opacity = opacity * getFloat( sampled, opaMask );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyNormal( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Mat3 const & tbn
+			, sdw::Vec3 & normal )const
+		{
+			if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
+			{
+				IF( *getWriter(), isNormal() )
+				{
+					normal = normalize( tbn
+						* fma( getVec3( sampled, nmlMask )
+							, vec3( 2.0_f )
+							, -vec3( 1.0_f ) ) );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyNormal( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
 			, sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
-			, sdw::Vec3 const & bitangent )const
+			, sdw::Vec3 const & bitangent
+			, sdw::Vec3 & result )const
 		{
-			return getNormal( sampled
-				, shader::Utils::getTBN( normal, tangent, bitangent ) );
+			if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
+			{
+				IF( *getWriter(), isNormal() )
+				{
+					result = normalize( shader::Utils::getTBN( normal, tangent, bitangent )
+						* fma( getVec3( sampled, nmlMask )
+							, vec3( 2.0_f )
+							, -vec3( 1.0_f ) ) );
+				}
+				FI;
+			}
 		}
 
-		sdw::Float TextureConfigData::getHeight( sdw::Vec4 const & sampled )const
+		void TextureConfigData::applyHeight( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & height )const
 		{
-			return hgtFact * getFloat( sampled, hgtMask );
+			if ( checkFlag( textureFlags, TextureFlag::eHeight ) )
+			{
+				IF( *getWriter(), isHeight() )
+				{
+					height = hgtFact * getFloat( sampled, hgtMask );
+				}
+				FI;
+			}
 		}
 
-		sdw::Float TextureConfigData::getOcclusion( sdw::Vec4 const & sampled
-			, sdw::Float const & occlusion )const
+		void TextureConfigData::applyOcclusion( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & occlusion )const
 		{
-			return getFloat( sampled, occMask );
+			if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )
+			{
+				IF( *getWriter(), isOcclusion() )
+				{
+					occlusion = getFloat( sampled, occMask );
+				}
+				FI;
+			}
 		}
 
-		sdw::Float TextureConfigData::getTransmittance( sdw::Vec4 const & sampled
-			, sdw::Float const & transmittance )const
+		void TextureConfigData::applyTransmittance( TextureFlags const & textureFlags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & transmittance )const
 		{
-			return getFloat( sampled, trsMask );
+			if ( checkFlag( textureFlags, TextureFlag::eTransmittance ) )
+			{
+				IF( *getWriter(), isTransmittance() )
+				{
+					transmittance = getFloat( sampled, trsMask );
+				}
+				FI;
+			}
 		}
 
 		sdw::Float TextureConfigData::getFloat( sdw::Vec4 const & sampled

@@ -47,7 +47,6 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			friend class TextureConfigurations;
-			friend struct TextureAnimData;
 
 		public:
 			C3D_API TextureConfigData( sdw::ShaderWriter & writer
@@ -57,36 +56,100 @@ namespace castor3d
 
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API void computeGeometryMapContribution( Utils &  utils
+				, PassFlags const & passFlags
+				, TextureFlags const & textureFlags
+				, std::string const & name
+				, shader::TextureAnimData const & anim
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 & texCoords
+				, sdw::Float & opacity
+				, sdw::Vec3 & normal
+				, sdw::Vec3 & tangent
+				, sdw::Vec3 & bitangent
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API sdw::Vec4 computeCommonMapContribution( Utils & utils
+				, PassFlags const & passFlags
+				, TextureFlags const & textureFlags
+				, std::string const & name
+				, shader::TextureAnimData const & anim
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion
+				, sdw::Float & transmittance
+				, sdw::Vec3 & normal
+				, sdw::Vec3 & tangent
+				, sdw::Vec3 & bitangent
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API sdw::Vec4 computeCommonMapVoxelContribution( PassFlags const & passFlags
+				, TextureFlags const & textureFlags
+				, std::string const & name
+				, shader::TextureAnimData const & anim
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion );
 
-			C3D_API sdw::Vec3 getDiffuse( sdw::Vec4 const & sampled
-				, sdw::Vec3 const & diffuse )const;
-			C3D_API sdw::Vec3 getAlbedo( sdw::Vec4 const & sampled
-				, sdw::Vec3 const & diffuse )const;
-			C3D_API sdw::Vec3 getEmissive( sdw::Vec4 const & sampled
-				, sdw::Vec3 const & emissive )const;
-			C3D_API sdw::Vec3 getSpecular( sdw::Vec4 const & sampled
-				, sdw::Vec3 const & specular )const;
-			C3D_API sdw::Float getMetalness( sdw::Vec4 const & sampled
-				, sdw::Float const & metalness )const;
-			C3D_API sdw::Float getShininess( sdw::Vec4 const & sampled
-				, sdw::Float const & shininess )const;
+			C3D_API void transformUV( TextureAnimData const & config
+				, sdw::Vec2 & uv )const;
+			C3D_API void transformUVW( TextureAnimData const & config
+				, sdw::Vec3 & uvw )const;
+
 			C3D_API sdw::Float getGlossiness( sdw::Vec4 const & sampled
 				, sdw::Float const & glossiness )const;
-			C3D_API sdw::Float getRoughness( sdw::Vec4 const & sampled
-				, sdw::Float const & roughness )const;
+			C3D_API sdw::Vec3 getColour( sdw::Vec4 const & sampled
+				, sdw::Vec3 const & colour )const;
 			C3D_API sdw::Float getOpacity( sdw::Vec4 const & sampled
 				, sdw::Float const & opacity )const;
-			C3D_API sdw::Vec3 getNormal( sdw::Vec4 const & sampled
-				, sdw::Mat3 const & tbn )const;
-			C3D_API sdw::Vec3 getNormal( sdw::Vec4 const & sampled
+
+			C3D_API void applyDiffuse( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Vec3 & diffuse )const;
+			C3D_API void applyAlbedo( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Vec3 & diffuse )const;
+			C3D_API void applyEmissive( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Vec3 & emissive )const;
+			C3D_API void applySpecular( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Vec3 & specular )const;
+			C3D_API void applyMetalness( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & metalness )const;
+			C3D_API void applyShininess( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & shininess )const;
+			C3D_API void applyRoughness( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & roughness )const;
+			C3D_API void applyOpacity( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & opacity )const;
+			C3D_API void applyNormal( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Mat3 const & tbn
+				, sdw::Vec3 & normal )const;
+			C3D_API void applyNormal( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
 				, sdw::Vec3 const & normal
 				, sdw::Vec3 const & tangent
-				, sdw::Vec3 const & bitangent )const;
-			C3D_API sdw::Float getHeight( sdw::Vec4 const & sampled )const;
-			C3D_API sdw::Float getOcclusion( sdw::Vec4 const & sampled
-				, sdw::Float const & occlusion )const;
-			C3D_API sdw::Float getTransmittance( sdw::Vec4 const & sampled
-				, sdw::Float const & transmittance )const;
+				, sdw::Vec3 const & bitangent
+				, sdw::Vec3 & result )const;
+			C3D_API void applyHeight( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & height )const;
+			C3D_API void applyOcclusion( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & occlusion )const;
+			C3D_API void applyTransmittance( TextureFlags const & textureFlags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & transmittance )const;
 
 			sdw::Boolean isDiffuse()const
 			{

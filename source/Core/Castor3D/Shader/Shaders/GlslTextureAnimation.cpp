@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -44,48 +42,6 @@ namespace castor3d
 			}
 
 			return result;
-		}
-
-		void TextureAnimData::animUV( TextureConfigData const & config
-			, sdw::Vec2 & uv )const
-		{
-			config.convertUV( uv );
-
-			IF( *m_writer, config.isTrnfAnim )
-			{
-				uv = vec2( uv.x()
-					, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
-				uv = scaleUV( texScl.xy(), uv );
-				uv = rotateUV( texRot.xy(), uv );
-				uv = translateUV( texTrn.xy(), uv );
-			}
-			FI;
-
-			config.convertToTile( uv );
-
-			IF( *m_writer, config.isTileAnim )
-			{
-				uv.x() += tleSet.x() / tleSet.z();
-				uv.y() += tleSet.y() / tleSet.w();
-			}
-			FI;
-		}
-
-		void TextureAnimData::animUVW( TextureConfigData const & config
-			, sdw::Vec3 & uvw )const
-		{
-			config.convertUVW( uvw );
-
-			IF( *m_writer, config.isTrnfAnim )
-			{
-				uvw = vec3( uvw.x()
-					, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
-					, uvw.z() );
-				uvw = scaleUV( texScl.xyz(), uvw );
-				uvw = rotateUV( texRot.xyz(), uvw );
-				uvw = translateUV( texTrn.xyz(), uvw );
-			}
-			FI;
 		}
 
 		//*********************************************************************************************
