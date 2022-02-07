@@ -70,7 +70,7 @@ namespace fxaa
 
 			// Shader inputs
 			UBO_FXAA( writer, FxaaCfgUboIdx, 0u );
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
+			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 

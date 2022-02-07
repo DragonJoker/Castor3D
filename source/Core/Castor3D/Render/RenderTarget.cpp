@@ -917,8 +917,8 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapLhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLhs", CombineLhsIdx, 0u );
-			auto c3d_mapRhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapRhs", CombineRhsIdx, 0u );
+			auto c3d_mapLhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLhs", CombineLhsIdx, 0u );
+			auto c3d_mapRhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapRhs", CombineRhsIdx, 0u );
 
 			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", CombineLhsIdx );
 			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", CombineRhsIdx );

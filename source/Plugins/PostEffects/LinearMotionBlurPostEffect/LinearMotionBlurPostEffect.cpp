@@ -80,8 +80,8 @@ namespace motion_blur
 			auto c3d_vectorDivider = configuration.declMember< Float >( "c3d_vectorDivider" );
 			auto c3d_blurScale = configuration.declMember< Float >( "c3d_blurScale" );
 			configuration.end();
-			auto c3d_mapVelocity = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapVelocity", VelocityTexIdx, 0u );
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
+			auto c3d_mapVelocity = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapVelocity", VelocityTexIdx, 0u );
+			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs

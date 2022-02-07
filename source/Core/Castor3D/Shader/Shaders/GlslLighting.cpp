@@ -511,7 +511,7 @@ namespace castor3d::shader
 		}
 		else
 		{
-			m_tbo = std::make_unique< sdw::RImageBufferRgba32 >( m_writer.declImage< RFImgBufferRgba32 >( "c3d_lights"
+			m_tbo = std::make_unique< sdw::RImageBufferRgba32 >( m_writer.declStorageImg< RFImgBufferRgba32 >( "c3d_lights"
 				, binding
 				, set ) );
 		}

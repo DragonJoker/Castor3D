@@ -7,6 +7,7 @@
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -140,7 +141,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_source = writer.declSampledImage< FImg2DRgba32 >( "c3d_source", 0u, 0u );
+			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", 0u, 0u );
 
 			// Shader outputs
 			auto fragColor = writer.declOutput< Vec4 >( "fragColor", 0 );
@@ -235,13 +236,11 @@ namespace castor3d
 	{
 		if ( m_renderPass && m_framebuffer )
 		{
-			VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-				, nullptr
-				, m_renderPass
+			auto beginInfo = makeVkStruct< VkRenderPassBeginInfo >( m_renderPass
 				, m_framebuffer
 				, VkRect2D{ {}, m_renderSize }
 				, uint32_t( m_clearValues.size() )
-				, m_clearValues.data() };
+				, m_clearValues.data() );
 			m_context.vkCmdBeginRenderPass( commandBuffer
 				, &beginInfo
 				, VK_SUBPASS_CONTENTS_INLINE );

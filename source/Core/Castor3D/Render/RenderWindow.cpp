@@ -940,7 +940,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto c3d_mapResult = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapResult", 0u, 0u );
+			auto c3d_mapResult = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapResult", 0u, 0u );
 			auto c3d_config = writer.declUniformBuffer( "c3d_config", 1u, 0u );
 			auto c3d_multiply = c3d_config.declMember< sdw::Vec4 >( "c3d_multiply" );
 			auto c3d_add = c3d_config.declMember< sdw::Vec4 >( "c3d_add" );
@@ -1029,7 +1029,7 @@ namespace castor3d
 
 			for ( size_t i = 0u; i < m_renderPass->getAttachments().size(); ++i )
 			{
-				m_swapchainViews.push_back( m_swapChainImages[backBuffer].createView( makeVkType< VkImageViewCreateInfo >( 0u
+				m_swapchainViews.push_back( m_swapChainImages[backBuffer].createView( makeVkStruct< VkImageViewCreateInfo >( 0u
 					, m_swapChainImages[backBuffer]
 					, VK_IMAGE_VIEW_TYPE_2D
 					, m_swapChain->getFormat()
@@ -1307,12 +1307,7 @@ namespace castor3d
 		auto deduced = getDevice()->deduceMemoryType( requirements.memoryTypeBits
 			, VkMemoryPropertyFlagBits::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 		m_stagingBuffer->bindMemory( getDevice()->allocateMemory( "Snapshot"
-			, {
-				VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-				nullptr,
-				requirements.size,
-				deduced
-			} ) );
+			, makeVkStruct< VkMemoryAllocateInfo >( requirements.size, deduced ) ) );
 		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
 			, bufferSize );
 		m_transferCommands.resize( m_intermediates.size() );

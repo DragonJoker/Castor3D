@@ -58,7 +58,7 @@ namespace Bloom
 			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4u );
 			config.end();
-			auto c3d_mapSource = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
+			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs

@@ -665,8 +665,13 @@ namespace castor3d
 		m_gpuInformations.setVendor( vendors[properties.vendorID] );
 		m_gpuInformations.setRenderer( properties.deviceName );
 		m_gpuInformations.setVersion( stream.str() );
-		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_renderer.desc.features.hasStorageBuffers != 0 );
 		m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, limits.maxViewports > 1u );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_renderer.desc.features.hasStorageBuffers != 0 );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eBindless, m_device->hasBindless() );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eGeometry, features.geometryShader != 0 );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eTessellation, features.tessellationShader != 0 );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eRayTracing, m_device->hasRayTracing() );
+		m_gpuInformations.updateFeature( castor3d::GpuFeature::eMesh, m_device->hasMeshAndTaskShaders() );
 
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_COMPUTE_BIT, device.device->getInstance().getFeatures().hasComputeShaders != 0 );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, features.tessellationShader != 0 );
@@ -674,6 +679,14 @@ namespace castor3d
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_GEOMETRY_BIT, features.geometryShader != 0 );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_FRAGMENT_BIT, true );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_VERTEX_BIT, true );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_MESH_BIT_NV, m_device->hasMeshAndTaskShaders() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TASK_BIT_NV, m_device->hasMeshAndTaskShaders() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_RAYGEN_BIT_KHR, m_device->hasRayTracing() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_ANY_HIT_BIT_KHR, m_device->hasRayTracing() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR, m_device->hasRayTracing() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_MISS_BIT_KHR, m_device->hasRayTracing() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_INTERSECTION_BIT_KHR, m_device->hasRayTracing() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_CALLABLE_BIT_KHR, m_device->hasRayTracing() );
 
 		m_gpuInformations.setValue( GpuMin::eBufferMapSize, uint32_t( limits.nonCoherentAtomSize ) );
 		m_gpuInformations.setValue( GpuMin::eUniformBufferOffsetAlignment, uint32_t( limits.minUniformBufferOffsetAlignment ) );
@@ -872,20 +885,18 @@ namespace castor3d
 
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
+		glsl::GlslConfig config{ shader.getType()
+			, glsl::v4_6
+			, getGLSLExtensions( glsl::v4_6 )
+			, true
+			, false
+			, true
+			, true
+			, true
+			, true };
 		std::string glsl = glsl::compileGlsl( shader
 			, ast::SpecialisationInfo{}
-			, glsl::GlslConfig
-			{
-				shader.getType(),
-				glsl::v4_6,
-				getGLSLExtensions( glsl::v4_6 ),
-				true,
-				false,
-				true,
-				true,
-				true,
-				true,
-			} );
+			, config );
 #	else
 		std::string glsl;
 #	endif

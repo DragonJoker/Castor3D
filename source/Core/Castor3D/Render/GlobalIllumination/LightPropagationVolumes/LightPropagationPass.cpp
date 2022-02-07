@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
@@ -169,10 +170,10 @@ namespace castor3d
 				} );
 
 			UBO_LPVGRIDCONFIG( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
-			auto c3d_lpvGridR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), LightPropagationPass::RLpvGridIdx, 0u );
-			auto c3d_lpvGridG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), LightPropagationPass::GLpvGridIdx, 0u );
-			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), LightPropagationPass::BLpvGridIdx, 0u );
-			auto c3d_geometryVolume = writer.declSampledImage< FImg3DRgba16 >( "c3d_geometryVolume", LightPropagationPass::GpGridIdx, 0u, occlusion );
+			auto c3d_lpvGridR = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), LightPropagationPass::RLpvGridIdx, 0u );
+			auto c3d_lpvGridG = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), LightPropagationPass::GLpvGridIdx, 0u );
+			auto c3d_lpvGridB = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), LightPropagationPass::BLpvGridIdx, 0u );
+			auto c3d_geometryVolume = writer.declCombinedImg< FImg3DRgba16 >( "c3d_geometryVolume", LightPropagationPass::GpGridIdx, 0u, occlusion );
 
 			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", LightPropagationPass::RLpvAccumulatorIdx );
 			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", LightPropagationPass::GLpvAccumulatorIdx );
@@ -426,53 +427,43 @@ namespace castor3d
 			, 1u
 			, ashes::VkScissorArray{ scissor } };
 		auto blendState = SceneRenderPass::createBlendState( m_blendMode, m_blendMode, 6u );
-		VkPipelineInputAssemblyStateCreateInfo iaState{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+		auto iaState = makeVkStruct< VkPipelineInputAssemblyStateCreateInfo >( 0u
 			, VK_PRIMITIVE_TOPOLOGY_POINT_LIST
-			, VK_FALSE };
-		VkPipelineMultisampleStateCreateInfo msState{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, VK_FALSE );
+		auto msState = makeVkStruct< VkPipelineMultisampleStateCreateInfo >( 0u
 			, VK_SAMPLE_COUNT_1_BIT
 			, VK_FALSE
 			, 0.0f
 			, nullptr
 			, VK_FALSE
-			, VK_FALSE };
-		VkPipelineRasterizationStateCreateInfo rsState{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, VK_FALSE );
+		auto rsState = makeVkStruct< VkPipelineRasterizationStateCreateInfo >( 0u
 			, VK_FALSE
 			, VK_FALSE
 			, VK_POLYGON_MODE_FILL
-			, VK_CULL_MODE_NONE
+			, VkCullModeFlags( VK_CULL_MODE_NONE )
 			, VK_FRONT_FACE_COUNTER_CLOCKWISE
 			, VK_FALSE
 			, 0.0f
 			, 0.0f
 			, 0.0f
-			, 0.0f };
-		VkPipelineDepthStencilStateCreateInfo dsState{ VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
-			, nullptr
-			, 0u
+			, 0.0f );
+		auto dsState = makeVkStruct< VkPipelineDepthStencilStateCreateInfo >( 0u
 			, VK_FALSE
 			, VK_FALSE
-			, {}
-			, {}
-			, {}
-			, {}
-			, {}
-			, {}
-			, {} };
+			, VkCompareOp{}
+			, VK_FALSE
+			, VK_FALSE
+			, VkStencilOpState{}
+			, VkStencilOpState{}
+			, float{}
+			, float{} );
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
 		auto & program = m_holder.getProgram( index );
 		auto & pipeline = m_holder.getPipeline( index );
-		VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-			, nullptr
-			, 0u
+		auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
 			, uint32_t( program.size() )
 			, program.data()
 			, &viState
@@ -488,7 +479,7 @@ namespace castor3d
 			, m_renderPass
 			, 0u
 			, VK_NULL_HANDLE
-			, 0u };
+			, 0 );
 		auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
 			, m_holder.getContext().cache
 			, 1u

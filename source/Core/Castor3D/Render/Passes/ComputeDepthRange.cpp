@@ -89,12 +89,12 @@ namespace castor3d
 			ComputeWriter writer;
 
 			// Inputs
-			auto input( writer.declImage< RFImg2DRgba32 >( "input"
+			auto input( writer.declStorageImg< RFImg2DRgba32 >( "input"
 				, ComputeDepthRange::eInput
 				, 0u ) );
 
 			// Outputs
-			auto output( writer.declShaderStorageBuffer( "c3d_output"
+			auto output( writer.declStorageBuffer( "c3d_output"
 				, ComputeDepthRange::eOutput
 				, 0u ) );
 			auto minmax = output.declMember< sdw::Int >( "minmax", 2u );

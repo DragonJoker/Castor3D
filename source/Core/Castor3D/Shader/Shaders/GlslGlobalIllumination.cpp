@@ -101,7 +101,7 @@ namespace castor3d
 				, vec3( 0.182696_f, -0.388844, 0.903007 ) } );
 
 			m_traceConeRadiance = m_writer.implementFunction< sdw::Vec4 >( "traceConeRadiance"
-				, [&]( sdw::SampledImage3DRgba32 const & voxels
+				, [&]( sdw::CombinedImage3DRgba32 const & voxels
 					, Surface surface
 					, shader::VoxelData const & voxelData )
 				{
@@ -131,7 +131,7 @@ namespace castor3d
 
 					m_writer.returnStmt( max( vec4( 0.0_f ), radiance ) );
 				}
-				, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
+				, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
 				, InSurface{ m_writer, "surface" }
 				, InVoxelData{ m_writer, "voxelData" } );
 		}
@@ -142,8 +142,8 @@ namespace castor3d
 			, uint32_t texSetIndex )
 		{
 			UBO_VOXELIZER( m_writer, uboBindingIndex++, uboSetIndex, true );
-			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
-			m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
+			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
+			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
 			declareTraceConeRadiance();
 			declareTraceConeReflection();
 			declareTraceConeOcclusion();
@@ -160,9 +160,9 @@ namespace castor3d
 				UBO_LPVGRIDCONFIG( m_writer, uboBindingIndex++, uboSetIndex, true );
 			}
 
-			auto c3d_lpvAccumulatorR = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulatorG = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulatorB = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorR = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorG = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorB = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), texBindingIndex++, texSetIndex );
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"
@@ -188,9 +188,9 @@ namespace castor3d
 				, [this]( Surface surface
 					, LpvGridData lpvGridData )
 				{
-					auto c3d_lpvAccumulatorR = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
-					auto c3d_lpvAccumulatorG = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) );
-					auto c3d_lpvAccumulatorB = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
+					auto c3d_lpvAccumulatorR = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
+					auto c3d_lpvAccumulatorG = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) );
+					auto c3d_lpvAccumulatorB = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
 						, m_evalSH( -surface.worldNormal ) );
@@ -219,15 +219,15 @@ namespace castor3d
 				UBO_LAYERED_LPVGRIDCONFIG( m_writer, uboBindingIndex++, uboSetIndex, true );
 			}
 
-			auto c3d_lpvAccumulator1R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator1G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator1B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ), texBindingIndex++, texSetIndex );
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = m_writer.declConstant( "SH_C0"
@@ -256,15 +256,15 @@ namespace castor3d
 				, [this]( Surface surface
 					, LayeredLpvGridData llpvGridData )
 				{
-					auto c3d_lpvAccumulator1R = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ) );
-					auto c3d_lpvAccumulator1G = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ) );
-					auto c3d_lpvAccumulator1B = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ) );
-					auto c3d_lpvAccumulator2R = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ) );
-					auto c3d_lpvAccumulator2G = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ) );
-					auto c3d_lpvAccumulator2B = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ) );
-					auto c3d_lpvAccumulator3R = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ) );
-					auto c3d_lpvAccumulator3G = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ) );
-					auto c3d_lpvAccumulator3B = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ) );
+					auto c3d_lpvAccumulator1R = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ) );
+					auto c3d_lpvAccumulator1G = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ) );
+					auto c3d_lpvAccumulator1B = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ) );
+					auto c3d_lpvAccumulator2R = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ) );
+					auto c3d_lpvAccumulator2G = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ) );
+					auto c3d_lpvAccumulator2B = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ) );
+					auto c3d_lpvAccumulator3R = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ) );
+					auto c3d_lpvAccumulator3G = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ) );
+					auto c3d_lpvAccumulator3B = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
 						, m_evalSH( -surface.worldNormal ) );
@@ -320,8 +320,8 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-				auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+				auto mapVoxelsFirstBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+				auto mapVoxelsSecondaryBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 
 				IF( m_writer, voxelData.enableOcclusion )
 				{
@@ -409,8 +409,8 @@ namespace castor3d
 			, VoxelData const & voxelData
 			, sdw::Float const & indirectOcclusion )const
 		{
-			auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-			auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+			auto mapVoxelsFirstBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 
 			auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
 
@@ -446,8 +446,8 @@ namespace castor3d
 			, sdw::Float const & indirectBlend
 			, VoxelData const & voxelData )const
 		{
-			auto mapVoxelsFirstBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-			auto mapVoxelsSecondaryBounce = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+			auto mapVoxelsFirstBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
 			auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
 
 			IF( m_writer, voxelData.enableSecondaryBounce )
@@ -559,7 +559,7 @@ namespace castor3d
 			return indirectSpecular;
 		}
 
-		sdw::Vec4 GlobalIllumination::traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
+		sdw::Vec4 GlobalIllumination::traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 			, Surface surface
 			, VoxelData const & voxelData )const
 		{
@@ -576,7 +576,7 @@ namespace castor3d
 			}
 
 			m_traceCone = m_writer.implementFunction< sdw::Vec4 >( "traceCone"
-				, [&]( sdw::SampledImage3DRgba32 const & voxels
+				, [&]( sdw::CombinedImage3DRgba32 const & voxels
 					, Surface surface
 					, sdw::Vec3 const & wsConeDirection
 					, sdw::Float const & coneAperture
@@ -628,7 +628,7 @@ namespace castor3d
 
 					m_writer.returnStmt( vec4( color, occlusion ) );
 				}
-				, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
+				, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3{ m_writer, "wsConeDirection" }
 				, sdw::InFloat{ m_writer, "coneAperture" }
@@ -638,7 +638,7 @@ namespace castor3d
 		void GlobalIllumination::declareTraceConeReflection()
 		{
 			m_traceConeReflection = m_writer.implementFunction< sdw::Vec4 >( "traceConeReflection"
-				, [&]( sdw::SampledImage3DRgba32 const & voxels
+				, [&]( sdw::CombinedImage3DRgba32 const & voxels
 					, Surface surface
 					, sdw::Vec3 const & wsViewVector
 					, sdw::Float const & roughness
@@ -659,7 +659,7 @@ namespace castor3d
 					m_writer.returnStmt( vec4( max( vec3( 0.0_f ), reflection.rgb() )
 						, clamp( reflection.a() * ( 1.0_f - roughness ), 0.0_f, 1.0_f ) ) );
 				}
-				, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
+				, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3{ m_writer, "wsViewVector" }
 				, sdw::InFloat{ m_writer, "roughness" }
@@ -669,7 +669,7 @@ namespace castor3d
 		void GlobalIllumination::declareTraceConeOcclusion()
 		{
 			m_traceConeOcclusion = m_writer.implementFunction< sdw::Float >( "traceConeOcclusion"
-				, [&]( sdw::SampledImage3DRgba32 const & voxels
+				, [&]( sdw::CombinedImage3DRgba32 const & voxels
 					, Surface surface
 					, sdw::Vec3 const & wsConeDirection
 					, shader::VoxelData const & voxelData )
@@ -718,13 +718,13 @@ namespace castor3d
 
 					m_writer.returnStmt( occlusion );
 				}
-				, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
+				, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3{ m_writer, "wsConeDirection" }
 				, InVoxelData{ m_writer, "voxelData" } );
 		}
 
-		sdw::Vec4 GlobalIllumination::traceConeReflection( sdw::SampledImage3DRgba32 const & voxels
+		sdw::Vec4 GlobalIllumination::traceConeReflection( sdw::CombinedImage3DRgba32 const & voxels
 			, Surface surface
 			, sdw::Vec3 const & wsViewVector
 			, sdw::Float const & roughness
@@ -737,7 +737,7 @@ namespace castor3d
 				, voxelData );
 		}
 
-		sdw::Float GlobalIllumination::traceConeOcclusion( sdw::SampledImage3DRgba32 const & voxels
+		sdw::Float GlobalIllumination::traceConeOcclusion( sdw::CombinedImage3DRgba32 const & voxels
 			, Surface surface
 			, sdw::Vec3 const & wsConeDirection
 			, VoxelData const & voxelData )const

@@ -99,11 +99,11 @@ namespace ocean_fft
 
 			UBO_OCEAN( writer, GenerateDistributionPass::eConfig, 0u );
 
-			auto seeds = writer.declShaderStorageBuffer( "Seed", GenerateDistributionPass::eInput, 0u );
+			auto seeds = writer.declStorageBuffer( "Seed", GenerateDistributionPass::eInput, 0u );
 			auto seed = seeds.declMemberArray< sdw::Vec2 >( "seed" );
 			seeds.end();
 
-			auto distribs = writer.declShaderStorageBuffer( "Distribution", GenerateDistributionPass::eOutput, 0u );
+			auto distribs = writer.declStorageBuffer( "Distribution", GenerateDistributionPass::eOutput, 0u );
 			auto distribution = distribs.declMemberArray< sdw::Vec2 >( "distribution" );
 			distribs.end();
 

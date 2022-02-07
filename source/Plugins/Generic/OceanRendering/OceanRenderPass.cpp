@@ -1338,7 +1338,7 @@ namespace ocean
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
@@ -1355,25 +1355,25 @@ namespace ocean
 		UBO_OCEAN( writer
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_waveFoam = writer.declSampledImage< FImg2DRgba32 >( "c3d_waveFoam"
+		auto c3d_waveFoam = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveFoam"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_waveNormals1 = writer.declSampledImage< FImg2DRgba32 >( "c3d_waveNormals1"
+		auto c3d_waveNormals1 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals1"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_waveNormals2 = writer.declSampledImage< FImg2DRgba32 >( "c3d_waveNormals2"
+		auto c3d_waveNormals2 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals2"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_waveNoise = writer.declSampledImage< FImg2DR32 >( "c3d_waveNoise"
+		auto c3d_waveNoise = writer.declCombinedImg< FImg2DR32 >( "c3d_waveNoise"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_normals = writer.declSampledImage< FImg2DRgba32 >( "c3d_normals"
+		auto c3d_normals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_normals"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_depth = writer.declSampledImage< FImg2DR32 >( "c3d_depth"
+		auto c3d_depth = writer.declCombinedImg< FImg2DR32 >( "c3d_depth"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_colour = writer.declSampledImage< FImg2DRgba32 >( "c3d_colour"
+		auto c3d_colour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colour"
 			, index++
 			, RenderPipeline::eAdditional );
 		auto lightingModel = shader::LightingModel::createModel( utils

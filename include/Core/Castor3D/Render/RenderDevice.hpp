@@ -30,13 +30,14 @@ namespace castor3d
 		VkStructure * pNext;
 	};
 
-	struct Feature
+	struct ExtensionStruct
 	{
 		std::string extName;
-		VkStructure * featureStruct;
+		VkStructure * extStruct;
 	};
 
-	using FeatureArray = std::vector< Feature >;
+	using FeatureArray = std::vector< ExtensionStruct >;
+	using PropertyArray = std::vector< ExtensionStruct >;
 
 	struct Extensions
 	{
@@ -59,7 +60,26 @@ namespace castor3d
 		*	Ajoute une extension, et sa feature structure optionnelle, qui sera remplie via le physical device.
 		*/
 		C3D_API void addExtension( std::string const & extName
-			, VkStructure * featureStruct );
+			, VkStructure * featureStruct
+			, VkStructure * propertyStruct = nullptr );
+		/**
+		*\~english
+		*\brief
+		*	Adds a feature structure, that will be queried on physical device.
+		*\~french
+		*\brief
+		*	Ajoute une feature structure, qui sera remplie via le physical device.
+		*/
+		template< typename StructT >
+		void addFeature( std::string const & extName
+			, StructT * featureStruct )
+		{
+			if ( featureStruct )
+			{
+				m_features.push_back( { extName
+					, reinterpret_cast< VkStructure * >( featureStruct ) } );
+			}
+		}
 		/**
 		*\~english
 		*\brief
@@ -71,11 +91,38 @@ namespace castor3d
 		template< typename StructT >
 		void addFeature( StructT * featureStruct )
 		{
-			if ( featureStruct )
+			addFeature( std::string{}, featureStruct );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Adds a feature structure, that will be queried on physical device.
+		*\~french
+		*\brief
+		*	Ajoute une feature structure, qui sera remplie via le physical device.
+		*/
+		template< typename StructT >
+		void addProperty( std::string const & extName
+			, StructT * propStruct )
+		{
+			if ( propStruct )
 			{
-				m_extensions.push_back( { ""
-					, reinterpret_cast< VkStructure * >( featureStruct ) } );
+				m_properties.push_back( { extName
+					, reinterpret_cast< VkStructure * >( propStruct ) } );
 			}
+		}
+		/**
+		*\~english
+		*\brief
+		*	Adds a feature structure, that will be queried on physical device.
+		*\~french
+		*\brief
+		*	Ajoute une feature structure, qui sera remplie via le physical device.
+		*/
+		template< typename StructT >
+		void addProperty( StructT * propStruct )
+		{
+			addProperty( std::string{}, propStruct );
 		}
 
 		ashes::StringArray const & getExtensionsNames()const
@@ -83,24 +130,30 @@ namespace castor3d
 			return m_extensionsNames;
 		}
 
-		bool isEmpty()const
+		FeatureArray & getFeatures()
 		{
-			return m_extensions.empty();
+			return m_features;
 		}
 
-		size_t getSize()const
+		FeatureArray const & getFeatures()const
 		{
-			return m_extensions.size();
+			return m_features;
 		}
 
-		Feature const & operator[]( size_t index )const
+		PropertyArray & getProperties()
 		{
-			return m_extensions[index];
+			return m_properties;
+		}
+
+		PropertyArray const & getProperties()const
+		{
+			return m_properties;
 		}
 
 	private:
 		ashes::StringArray m_extensionsNames;
-		FeatureArray m_extensions;
+		FeatureArray m_features;
+		PropertyArray m_properties;
 	};
 
 	enum class QueueFamilyFlag
@@ -234,6 +287,8 @@ namespace castor3d
 		C3D_API bool hasAtomicFloatAdd()const;
 		C3D_API bool hasBufferDeviceAddress()const;
 		C3D_API bool hasRayTracing()const;
+		C3D_API bool hasBindless()const;
+		C3D_API uint32_t getMaxBindlessSampled()const;
 
 		ashes::Device const * operator->()const
 		{
@@ -289,19 +344,26 @@ namespace castor3d
 		UniformBufferPoolsSPtr uboPools;
 
 	private:
+		bool doTryAddExtension( std::string name
+			, void * pFeature = nullptr
+			, void * pProperty = nullptr );
+
 #if VK_VERSION_1_2
-		VkPhysicalDeviceVulkan12Features m_features12{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES
-			, nullptr
-			, {} };
 		VkPhysicalDeviceVulkan11Features m_features11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
 			, nullptr
 			, {} };
+		VkPhysicalDeviceVulkan11Properties m_properties11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES
+			, nullptr
+			, {} };
 #endif
-		VkPhysicalDeviceShaderDrawParametersFeatures drawParamsFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
+		VkPhysicalDeviceShaderDrawParametersFeatures m_drawParamsFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
 			, nullptr
 			, {} };
 #if VK_VERSION_1_1
 		VkPhysicalDeviceFeatures2 m_features2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
+			, nullptr
+			, {} };
+		VkPhysicalDeviceProperties2 m_properties2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2
 			, nullptr
 			, {} };
 #endif
@@ -309,14 +371,23 @@ namespace castor3d
 		VkPhysicalDeviceAccelerationStructureFeaturesKHR m_accelFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR
 			, nullptr
 			, {} };
+		VkPhysicalDeviceAccelerationStructurePropertiesKHR m_accelProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_PROPERTIES_KHR
+			, nullptr
+			, {} };
 #endif
 #if VK_KHR_ray_tracing_pipeline
 		VkPhysicalDeviceRayTracingPipelineFeaturesKHR m_rtPipelineFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR
 			, nullptr
 			, {} };
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR m_rtPipelineProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR
+			, nullptr
+			, {} };
 #endif
 #if VK_EXT_descriptor_indexing
-		VkPhysicalDeviceDescriptorIndexingFeaturesEXT m_descriptorIndexingFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES
+		VkPhysicalDeviceDescriptorIndexingFeaturesEXT m_descriptorIndexingFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT
+			, nullptr
+			, {} };
+		VkPhysicalDeviceDescriptorIndexingPropertiesEXT m_descriptorIndexingProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT
 			, nullptr
 			, {} };
 #endif
@@ -334,6 +405,9 @@ namespace castor3d
 		VkPhysicalDeviceMeshShaderFeaturesNV m_meshShaderFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV
 			, nullptr
 			, {} };
+		VkPhysicalDeviceMeshShaderPropertiesNV m_meshShaderProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV
+			, nullptr
+			, {} };
 #endif
 #if VK_EXT_shader_atomic_float
 		VkPhysicalDeviceShaderAtomicFloatFeaturesEXT m_atomicFloatAddFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_FEATURES_EXT
@@ -346,6 +420,7 @@ namespace castor3d
 			, {} };
 #endif
 		Extensions m_deviceExtensions;
+		ashes::VkExtensionPropertiesArray m_availableExtensions;
 		QueuesData * m_preferredGraphicsQueue{};
 		QueuesData * m_preferredComputeQueue{};
 		QueuesData * m_preferredTransferQueue{};

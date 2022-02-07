@@ -96,11 +96,11 @@ namespace ocean_fft
 
 			UBO_OCEAN( writer, GenerateDisplacementPass::eConfig, 0u );
 
-			auto distr = writer.declShaderStorageBuffer( "Distribution", GenerateDisplacementPass::eInput, 0u );
+			auto distr = writer.declStorageBuffer( "Distribution", GenerateDisplacementPass::eInput, 0u );
 			auto distribution = distr.declMemberArray< sdw::Vec2 >( "distribution" );
 			distr.end();
 
-			auto fft = writer.declShaderStorageBuffer( "DisplacementFFT", GenerateDisplacementPass::eOutput, 0u );
+			auto fft = writer.declStorageBuffer( "DisplacementFFT", GenerateDisplacementPass::eOutput, 0u );
 			auto grads = fft.declMemberArray< sdw::Vec2 >( "grads" );
 			fft.end();
 

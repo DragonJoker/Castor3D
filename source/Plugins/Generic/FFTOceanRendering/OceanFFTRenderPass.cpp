@@ -1202,7 +1202,7 @@ namespace ocean_fft
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eAdditional );
 
-		auto c3d_heightDisplacementMap = writer.declSampledImage< sdw::SampledImage2DRgba32 >( "c3d_heightDisplacementMap"
+		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_heightDisplacementMap"
 			, OceanFFTIdx::eHeightDisplacement
 			, RenderPipeline::eAdditional );
 
@@ -1352,7 +1352,7 @@ namespace ocean_fft
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
 
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
@@ -1369,28 +1369,28 @@ namespace ocean_fft
 		UBO_OCEAN( writer
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_heightDisplacementMap = writer.declSampledImage< sdw::SampledImage2DRgba16 >( "c3d_heightDisplacementMap"
+		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "c3d_heightDisplacementMap"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_gradientJacobianMap = writer.declSampledImage< sdw::SampledImage2DRgba16 >( "c3d_gradientJacobianMap"
+		auto c3d_gradientJacobianMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "c3d_gradientJacobianMap"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_normalsMap = writer.declSampledImage< sdw::SampledImage2DRg32 >( "c3d_normalsMap"
+		auto c3d_normalsMap = writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "c3d_normalsMap"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_sceneNormals = writer.declSampledImage< FImg2DRgba32 >( "c3d_sceneNormals"
+		auto c3d_sceneNormals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneNormals"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_sceneDepth = writer.declSampledImage< FImg2DR32 >( "c3d_sceneDepth"
+		auto c3d_sceneDepth = writer.declCombinedImg< FImg2DR32 >( "c3d_sceneDepth"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_sceneColour = writer.declSampledImage< FImg2DRgba32 >( "c3d_sceneColour"
+		auto c3d_sceneColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneColour"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_sceneBaseColour = writer.declSampledImage< FImg2DRgba32 >( "c3d_sceneBaseColour"
+		auto c3d_sceneBaseColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneBaseColour"
 			, index++
 			, RenderPipeline::eAdditional );
-		auto c3d_sceneDiffuseLighting = writer.declSampledImage< FImg2DRgba32 >( "c3d_sceneDiffuseLighting"
+		auto c3d_sceneDiffuseLighting = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneDiffuseLighting"
 			, index++
 			, RenderPipeline::eAdditional );
 		auto lightingModel = shader::LightingModel::createModel( utils

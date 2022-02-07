@@ -54,8 +54,8 @@ namespace light_streaks
 			using namespace sdw;
 			FragmentWriter writer;
 			// Shader inputs
-			auto c3d_mapScene = writer.declSampledImage< FImg2DRgba32 >( CombinePass::CombineMapScene, SceneMapIdx, 0u );
-			auto c3d_mapKawase = writer.declSampledImage< FImg2DArrayRgba32 >( CombinePass::CombineMapKawase, KawaseMapIdx, 0u );
+			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapScene, SceneMapIdx, 0u );
+			auto c3d_mapKawase = writer.declCombinedImg< FImg2DArrayRgba32 >( CombinePass::CombineMapKawase, KawaseMapIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );

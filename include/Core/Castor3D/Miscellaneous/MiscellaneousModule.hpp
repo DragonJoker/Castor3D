@@ -28,6 +28,21 @@ namespace castor3d
 		//!\~english	Tells whether or not the selected render API supports shader stoarage buffers.
 		//!\~french		Dit si l'API de rendu choisie supporte les tampons de stockage shader.
 		eShaderStorageBuffers = 0x00000002,
+		//!\~english	Tells whether or not the selected render API supports bindless render.
+		//!\~french		Dit si l'API de rendu choisie supporte le rendu en bindless.
+		eBindless = 0x00000004,
+		//!\~english	Tells whether or not the selected render API supports geometry shaders.
+		//!\~french		Dit si l'API de rendu choisie supporte les geometry shaders.
+		eGeometry = 0x00000008,
+		//!\~english	Tells whether or not the selected render API supports tessellation shaders.
+		//!\~french		Dit si l'API de rendu choisie supporte les tessellation shaders.
+		eTessellation = 0x00000010,
+		//!\~english	Tells whether or not the selected render API supports ray tracing shaders.
+		//!\~french		Dit si l'API de rendu choisie supporte les ray tracing shaders.
+		eRayTracing = 0x00000020,
+		//!\~english	Tells whether or not the selected render API supports mesh shaders.
+		//!\~french		Dit si l'API de rendu choisie supporte les mesh shaders.
+		eMesh = 0x00000040,
 	};
 	CU_ImplementFlags( GpuFeature )
 	/**

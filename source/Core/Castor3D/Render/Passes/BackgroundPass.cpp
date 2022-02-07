@@ -216,7 +216,7 @@ namespace castor3d
 			UBO_SCENE( writer, SceneBackground::SceneUboIdx, 0u );
 			UBO_HDR_CONFIG( writer, SceneBackground::HdrCfgUboIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
-			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::SkyBoxImgIdx, 0u );
+			auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::SkyBoxImgIdx, 0u );
 			shader::Utils utils{ writer, *m_device.renderSystem.getEngine() };
 
 			// Outputs
