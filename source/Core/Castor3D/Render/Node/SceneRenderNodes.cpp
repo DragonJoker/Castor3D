@@ -332,6 +332,9 @@ namespace castor3d
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton
 			, Engine & engine
+			, ashes::DescriptorSetLayout * texLayout
+			, ashes::DescriptorPool * texPool
+			, ashes::DescriptorSet * texSet
 			, SceneRenderNodes::DescriptorNodesPoolsT< NodeT > & nodesPools )
 		{
 			auto iresPool = nodesPools.emplace( makeLayoutHash( texturesCount
@@ -345,6 +348,9 @@ namespace castor3d
 			{
 				itPool->second = std::make_unique< SceneRenderNodes::DescriptorNodesT< NodeT > >( engine
 					, texturesCount
+					, texLayout
+					, texPool
+					, texSet
 					, instanced
 					, billboard
 					, submesh
@@ -361,10 +367,10 @@ namespace castor3d
 	static constexpr uint32_t MaxPoolSize = 50u;
 
 	SceneRenderNodes::DescriptorSetPools::DescriptorSetPools( RenderDevice const & device
-		, SceneRenderNodes::DescriptorCounts const & counts )
+		, SceneRenderNodes::DescriptorCounts const & counts
+		, ashes::DescriptorPool * texPool )
 	{
 		ashes::VkDescriptorPoolSizeArray bufSizes;
-		ashes::VkDescriptorPoolSizeArray texSizes;
 
 		if ( counts.uniformBuffers )
 		{
@@ -376,16 +382,6 @@ namespace castor3d
 			bufSizes.push_back( { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, counts.storageBuffers } );
 		}
 
-		if ( counts.texelBuffers )
-		{
-			bufSizes.push_back( { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, counts.texelBuffers } );
-		}
-
-		if ( counts.samplers )
-		{
-			texSizes.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, counts.samplers } );
-		}
-
 		if ( !bufSizes.empty() )
 		{
 			buf = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
@@ -393,41 +389,51 @@ namespace castor3d
 				, std::move( bufSizes ) );
 		}
 
-		if ( !texSizes.empty() )
+		if ( texPool )
 		{
-			tex = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
-				, MaxPoolSize
-				, std::move( texSizes ) );
+			tex = texPool;
+		}
+		else
+		{
+			ashes::VkDescriptorPoolSizeArray texSizes;
+
+			if ( counts.combinedImages )
+			{
+				texSizes.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, counts.combinedImages } );
+			}
+
+			if ( !texSizes.empty() )
+			{
+				ownTex = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
+					, MaxPoolSize
+					, std::move( texSizes ) );
+				tex = ownTex.get();
+			}
 		}
 	}
 
 	//*********************************************************************************************
 
-	SceneRenderNodes::DescriptorCounts::DescriptorCounts( bool hasSSBO
-		, size_t textureCount
+	SceneRenderNodes::DescriptorCounts::DescriptorCounts( size_t textureCount
 		, BillboardBase const * billboard
 		, Submesh const * submesh
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
-		update( hasSSBO
-			, textureCount
+		update( textureCount
 			, billboard
 			, submesh
 			, mesh
 			, skeleton );
 	}
 
-	void SceneRenderNodes::DescriptorCounts::update( bool hasSSBO
-		, size_t textureCount
+	void SceneRenderNodes::DescriptorCounts::update( size_t textureCount
 		, BillboardBase const * billboard
 		, Submesh const * submesh
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
-		texelBuffers++; // Materials TBO
 		storageBuffers++; // Materials SSBO
-		texelBuffers++; // Textures Configs TBO
 		storageBuffers++; // Textures Configs SSBO
 		uniformBuffers++; // Model UBO
 		uniformBuffers++; // ModelInstances UBO
@@ -447,14 +453,7 @@ namespace castor3d
 			{
 				if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
 				{
-					if ( hasSSBO )
-					{
-						storageBuffers++; // Instantiated Skinning SSBO
-					}
-					else
-					{
-						texelBuffers++; // Instantiated Skinning TBO
-					}
+					storageBuffers++; // Instantiated Skinning SSBO
 				}
 				else
 				{
@@ -463,17 +462,23 @@ namespace castor3d
 			}
 		}
 
-		samplers += uint32_t( textureCount );
+		combinedImages += uint32_t( textureCount );
 	}
 	
 	//*********************************************************************************************
 
 	SceneRenderNodes::DescriptorPools::DescriptorPools( Engine & engine
 		, DescriptorSetLayouts * layouts
-		, DescriptorCounts * counts )
+		, DescriptorCounts * counts
+		, ashes::DescriptorSetLayout * texLayout
+		, ashes::DescriptorPool * texPool
+		, ashes::DescriptorSet * texSet )
 		: m_engine{ engine }
 		, m_layouts{ layouts }
 		, m_counts{ counts }
+		, m_texLayout{ texLayout }
+		, m_texPool{ texPool }
+		, m_texSet{ texSet }
 	{
 	}
 
@@ -490,7 +495,8 @@ namespace castor3d
 		if ( !m_available )
 		{
 			m_pools.emplace_back( m_engine.getRenderSystem()->getRenderDevice()
-				, *m_counts );
+				, *m_counts
+				, m_texPool );
 			m_available += MaxPoolSize;
 		}
 
@@ -512,7 +518,8 @@ namespace castor3d
 		if ( !m_available )
 		{
 			m_pools.emplace_back( m_engine.getRenderSystem()->getRenderDevice()
-				, *m_counts );
+				, *m_counts
+				, m_texPool );
 		}
 
 		--m_available;
@@ -584,13 +591,19 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, NodeSet & allocated )
 	{
-		if ( !m_layouts->tex->getBindings().empty() )
+		if ( m_texSet )
+		{
+			allocated.texSet = m_texSet;
+			node.texDescriptorSet = allocated.texSet;
+		}
+		else if ( !m_layouts->tex->getBindings().empty() )
 		{
 			allocated.texPool = &( *pools.tex );
-			allocated.texSet = pools.tex->createDescriptorSet( getName( node ) + "Tex"
+			allocated.ownTexSet = pools.tex->createDescriptorSet( getName( node ) + "Tex"
 				, *m_layouts->tex
 				, RenderPipeline::eTextures );
-			node.texDescriptorSet = allocated.texSet.get();
+			allocated.texSet = allocated.ownTexSet.get();
+			node.texDescriptorSet = allocated.texSet;
 			doInitialiseTextureDescriptor( *m_layouts->tex
 				, *pools.tex
 				, node );
@@ -601,13 +614,19 @@ namespace castor3d
 		, BillboardRenderNode & node
 		, NodeSet & allocated )
 	{
-		if ( !m_layouts->tex->getBindings().empty() )
+		if ( m_texSet )
+		{
+			allocated.texSet = m_texSet;
+			node.texDescriptorSet = allocated.texSet;
+		}
+		else if ( !m_layouts->tex->getBindings().empty() )
 		{
 			allocated.texPool = &( *pools.tex );
-			allocated.texSet = pools.tex->createDescriptorSet( getName( node ) + "Tex"
+			allocated.ownTexSet = pools.tex->createDescriptorSet( getName( node ) + "Tex"
 				, *m_layouts->tex
 				, RenderPipeline::eTextures );
-			node.texDescriptorSet = allocated.texSet.get();
+			allocated.texSet = allocated.ownTexSet.get();
+			node.texDescriptorSet = allocated.texSet;
 			doInitialiseTextureDescriptor( *m_layouts->tex
 				, *pools.tex
 				, node );
@@ -622,7 +641,9 @@ namespace castor3d
 		, BillboardBase const * billboard
 		, Submesh const * submesh
 		, AnimatedMesh const * mesh
-		, AnimatedSkeleton const * skeleton )
+		, AnimatedSkeleton const * skeleton
+		, ashes::DescriptorSetLayout * texLayout )
+		: tex{ texLayout }
 	{
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		buf = device->createDescriptorSetLayout( doCreateUboBindings( engine
@@ -632,7 +653,12 @@ namespace castor3d
 			, instanced
 			, mesh
 			, skeleton ) );
-		tex = device->createDescriptorSetLayout( doCreateTextureBindings( texturesCount ) );
+
+		if ( !tex )
+		{
+			ownTex = device->createDescriptorSetLayout( doCreateTextureBindings( texturesCount ) );
+			tex = ownTex.get();
+		}
 	}
 
 	//*********************************************************************************************
@@ -640,13 +666,15 @@ namespace castor3d
 	template<>
 	SceneRenderNodes::DescriptorNodesT< SubmeshRenderNode  >::DescriptorNodesT( Engine & engine
 		, size_t texturesCount
+		, ashes::DescriptorSetLayout * texLayout
+		, ashes::DescriptorPool * texPool
+		, ashes::DescriptorSet * texSet
 		, bool instanced
 		, BillboardBase const * billboard
 		, Submesh const * submesh
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
-		: counts{ engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
-			, texturesCount
+		: counts{ texturesCount
 			, billboard
 			, submesh
 			, mesh
@@ -657,21 +685,24 @@ namespace castor3d
 			, billboard
 			, submesh
 			, mesh
-			, skeleton }
-		, pools{ engine, &layouts, &counts }
+			, skeleton
+			, texLayout }
+		, pools{ engine, &layouts, &counts, texLayout, texPool, texSet }
 	{
 	}
 	
 	template<>
 	SceneRenderNodes::DescriptorNodesT< BillboardRenderNode  >::DescriptorNodesT( Engine & engine
 		, size_t texturesCount
+		, ashes::DescriptorSetLayout * texLayout
+		, ashes::DescriptorPool * texPool
+		, ashes::DescriptorSet * texSet
 		, bool instanced
 		, BillboardBase const * billboard
 		, Submesh const * submesh
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
-		: counts{ engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
-			, texturesCount
+		: counts{ texturesCount
 			, billboard
 			, submesh
 			, mesh
@@ -682,8 +713,9 @@ namespace castor3d
 			, billboard
 			, submesh
 			, mesh
-			, skeleton }
-		, pools{ engine, &layouts, &counts }
+			, skeleton
+			, texLayout }
+		, pools{ engine, &layouts, &counts, texLayout, texPool, texSet }
 	{
 	}
 
@@ -713,6 +745,13 @@ namespace castor3d
 		}
 	}
 
+	void SceneRenderNodes::clear()
+	{
+		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		m_submeshNodes.clear();
+		m_billboardNodes.clear();
+	}
+
 	SubmeshRenderNode & SceneRenderNodes::createNode( PassRenderNode passNode
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
@@ -725,13 +764,17 @@ namespace castor3d
 	{
 		auto & pass = passNode.pass;
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		auto & engine = *getOwner()->getEngine();
 		auto & pool = getNodesPool( pass.getTexturesMask().size()
 			, data.getInstantiation().isInstanced( pass.getOwner() )
 			, nullptr
 			, &data
 			, mesh
 			, skeleton
-			, *pass.getOwner()->getEngine()
+			, engine
+			, engine.getTextureUnitCache().getDescriptorLayout()
+			, engine.getTextureUnitCache().getDescriptorPool()
+			, engine.getTextureUnitCache().getDescriptorSet()
 			, m_submeshNodes );
 		auto it = pool.nodes.emplace( makeNodeHash( sceneNode, data, instance ), nullptr );
 
@@ -762,13 +805,17 @@ namespace castor3d
 	{
 		auto & pass = passNode.pass;
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		auto & engine = *getOwner()->getEngine();
 		auto & pool = getNodesPool( pass.getTexturesMask().size()
 			, false
 			, &instance
 			, nullptr
 			, nullptr
 			, nullptr
-			, *pass.getOwner()->getEngine()
+			, engine
+			, engine.getTextureUnitCache().getDescriptorLayout()
+			, engine.getTextureUnitCache().getDescriptorPool()
+			, engine.getTextureUnitCache().getDescriptorSet()
 			, m_billboardNodes );
 		auto it = pool.nodes.emplace( makeNodeHash( sceneNode, instance ), nullptr );
 
@@ -827,6 +874,7 @@ namespace castor3d
 		, AnimatedSkeleton const * skeleton )
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
+		auto & engine = *getOwner()->getEngine();
 		DescriptorSetLayouts * layouts;
 
 		if ( billboard )
@@ -837,7 +885,10 @@ namespace castor3d
 				, submesh
 				, mesh
 				, skeleton
-				, *pass.getOwner()->getEngine()
+				, engine
+				, engine.getTextureUnitCache().getDescriptorLayout()
+				, engine.getTextureUnitCache().getDescriptorPool()
+				, engine.getTextureUnitCache().getDescriptorSet()
 				, m_billboardNodes );
 			layouts = &pool.layouts;
 		}
@@ -849,7 +900,10 @@ namespace castor3d
 				, submesh
 				, mesh
 				, skeleton
-				, *pass.getOwner()->getEngine()
+				, engine
+				, engine.getTextureUnitCache().getDescriptorLayout()
+				, engine.getTextureUnitCache().getDescriptorPool()
+				, engine.getTextureUnitCache().getDescriptorSet()
 				, m_submeshNodes );
 			layouts = &pool.layouts;
 		}
@@ -866,8 +920,7 @@ namespace castor3d
 		, AnimatedMesh * mesh
 		, AnimatedSkeleton * skeleton )
 	{
-		m_allDescriptorCounts.update( getOwner()->getEngine()->getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
-			, pass.getTexturesMask().size()
+		m_allDescriptorCounts.update( pass.getTexturesMask().size()
 			, billboard
 			, submesh
 			, mesh

@@ -198,7 +198,7 @@ namespace castor3d
 			return m_renderTarget.lock();
 		}
 
-		VkWriteDescriptorSet getDescriptor()const
+		ashes::WriteDescriptorSet getDescriptor()const
 		{
 			return m_descriptor;
 		}

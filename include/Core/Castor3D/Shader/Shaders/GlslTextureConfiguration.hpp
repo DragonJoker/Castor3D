@@ -88,6 +88,90 @@ namespace castor3d
 			C3D_API sdw::Float getTransmittance( sdw::Vec4 const & sampled
 				, sdw::Float const & transmittance )const;
 
+			sdw::Boolean isDiffuse()const
+			{
+				return colEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isAlbedo()const
+			{
+				return colEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isEmissive()const
+			{
+				return emsEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isSpecular()const
+			{
+				return spcEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isMetalness()const
+			{
+				return metEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isShininess()const
+			{
+				return shnEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isGlossiness()const
+			{
+				return shnEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isRoughness()const
+			{
+				return rghEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isOcclusion()const
+			{
+				return occEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isTransmittance()const
+			{
+				return trsEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isOpacity()const
+			{
+				return opaEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isNormal()const
+			{
+				return nmlEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isHeight()const
+			{
+				return hgtEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isGeometry()const
+			{
+				return opaEnbl != 0.0_f
+					|| nmlEnbl != 0.0_f
+					|| hgtEnbl != 0.0_f;
+			}
+
+			sdw::Boolean isGeometryOnly()const
+			{
+				return colEnbl == 0.0_f
+					&& emsEnbl == 0.0_f
+					&& metEnbl == 0.0_f
+					&& occEnbl == 0.0_f
+					&& rghEnbl == 0.0_f
+					&& spcEnbl == 0.0_f
+					&& shnEnbl == 0.0_f
+					&& trsEnbl == 0.0_f;
+			}
+
 		private:
 			C3D_API void convertUV( sdw::Vec2 & uv )const;
 			C3D_API void convertUVW( sdw::Vec3 & uvw )const;
