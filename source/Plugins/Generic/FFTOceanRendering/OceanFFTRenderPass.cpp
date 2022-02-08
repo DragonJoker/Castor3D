@@ -1323,7 +1323,6 @@ namespace ocean_fft
 
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = !flags.textures.empty();
 		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
 			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
@@ -1334,25 +1333,9 @@ namespace ocean_fft
 		shader::Materials materials{ writer };
 		materials.declare( uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-		shader::TextureAnimations textureAnims{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
-				, RenderPipeline::eBuffers );
-			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
-				, RenderPipeline::eBuffers );
-		}
-
 		UBO_MODEL( writer
 			, uint32_t( NodeUboIdx::eModel )
 			, RenderPipeline::eBuffers );
-
-		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
-			, 0u
-			, RenderPipeline::eTextures
-			, hasTextures ) );
 
 		UBO_MATRIX( writer
 			, uint32_t( PassUboIdx::eMatrix )
