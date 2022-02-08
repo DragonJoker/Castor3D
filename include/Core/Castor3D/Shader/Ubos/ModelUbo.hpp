@@ -29,11 +29,20 @@ namespace castor3d
 				, sdw::Mat4 const & curModelMatrix )const;
 			C3D_API sdw::Mat3 getNormalMtx( ProgramFlags programFlags
 				, sdw::Mat4 const & curModelMatrix )const;
+			C3D_API sdw::UVec4 getTextures0( ProgramFlags programFlags
+				, sdw::UVec4 const & instanceData )const;
+			C3D_API sdw::UVec4 getTextures0()const;
+			C3D_API sdw::UVec4 getTextures1( ProgramFlags programFlags
+				, sdw::UVec4 const & instanceData )const;
+			C3D_API sdw::UVec4 getTextures1()const;
+			C3D_API sdw::Int getTextures( ProgramFlags programFlags
+				, sdw::Int const & instanceData )const;
+			C3D_API sdw::Int getTextures()const;
 			C3D_API sdw::UInt getMaterialIndex( ProgramFlags programFlags
-				, sdw::Int const & instanceMaterial )const;
+				, sdw::Int const & instanceData )const;
 			C3D_API sdw::UInt getMaterialIndex()const;
 			C3D_API sdw::Int getNodeId( ProgramFlags programFlags
-				, sdw::Int const & instanceNodeId )const;
+				, sdw::Int const & instanceData )const;
 			C3D_API sdw::Int getNodeId()const;
 			C3D_API sdw::Vec4 worldToModel( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 modelToWorld( sdw::Vec4 const & pos )const;
@@ -46,7 +55,9 @@ namespace castor3d
 				, sdw::Vec4 const & boneWeights0
 				, sdw::Vec4 const & boneWeights1
 				, sdw::Mat4 const & transform )const;
-			C3D_API sdw::UInt getTexture( uint32_t index )const;
+			C3D_API static sdw::UInt getTexture( sdw::UVec4 const & textures0
+				, sdw::UVec4 const & textures1
+				, uint32_t index );
 
 			sdw::Int const & isShadowReceiver()const
 			{
