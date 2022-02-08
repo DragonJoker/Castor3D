@@ -594,7 +594,7 @@ namespace castor3d
 		if ( m_texSet )
 		{
 			allocated.texSet = m_texSet;
-			node.texDescriptorSet = allocated.texSet;
+			node.texDescriptorSet = nullptr;
 		}
 		else if ( !m_layouts->tex->getBindings().empty() )
 		{
@@ -617,7 +617,7 @@ namespace castor3d
 		if ( m_texSet )
 		{
 			allocated.texSet = m_texSet;
-			node.texDescriptorSet = allocated.texSet;
+			node.texDescriptorSet = nullptr;
 		}
 		else if ( !m_layouts->tex->getBindings().empty() )
 		{
