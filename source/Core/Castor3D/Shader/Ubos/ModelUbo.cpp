@@ -79,6 +79,54 @@ namespace castor3d
 			return mat3( m_mtxNormal );
 		}
 
+		sdw::UVec4 ModelData::getTextures0( ProgramFlags programFlags
+			, sdw::UVec4 const & instanceData )const
+		{
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				return instanceData;
+			}
+
+			return getTextures0();
+		}
+
+		sdw::UVec4 ModelData::getTextures0()const
+		{
+			return m_textures0;
+		}
+
+		sdw::UVec4 ModelData::getTextures1( ProgramFlags programFlags
+			, sdw::UVec4 const & instanceData )const
+		{
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				return instanceData;
+			}
+
+			return getTextures1();
+		}
+
+		sdw::UVec4 ModelData::getTextures1()const
+		{
+			return m_textures1;
+		}
+
+		sdw::Int ModelData::getTextures( ProgramFlags programFlags
+			, sdw::Int const & instanceData )const
+		{
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				return instanceData;
+			}
+
+			return getTextures();
+		}
+
+		sdw::Int ModelData::getTextures()const
+		{
+			return m_textures;
+		}
+
 		sdw::UInt ModelData::getMaterialIndex( ProgramFlags programFlags
 			, sdw::Int const & instanceMaterial )const
 		{
@@ -160,12 +208,14 @@ namespace castor3d
 			return m_curMtxModel;
 		}
 
-		sdw::UInt ModelData::getTexture( uint32_t index )const
+		sdw::UInt ModelData::getTexture( sdw::UVec4 const & textures0
+			, sdw::UVec4 const & textures1
+			, uint32_t index )
 		{
 			return ( index < 4u
-				? m_textures0[index]
+				? textures0[index]
 				: ( index < 8u
-					? m_textures1[index - 4u]
+					? textures1[index - 4u]
 					: 0_u ) );
 		}
 	}

@@ -946,13 +946,11 @@ namespace castor3d
 			if ( it == pipelines.end() )
 			{
 				auto & renderSystem = *getEngine()->getRenderSystem();
-				auto dsState = doCreateDepthStencilState( flags );
-				auto bdState = doCreateBlendState( flags );
 				auto pipeline = castor::makeUnique< RenderPipeline >( *this
 					, renderSystem
-					, std::move( dsState )
+					, doCreateDepthStencilState( flags )
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, cullMode }
-					, std::move( bdState )
+					, doCreateBlendState( flags )
 					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
 					, flags );
@@ -965,9 +963,8 @@ namespace castor3d
 				}
 
 				auto & device = renderSystem.getRenderDevice();
-				auto addBindings = doCreateAdditionalBindings( flags );
 				pipeline->setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
-					, std::move( addBindings ) ) );
+					, doCreateAdditionalBindings( flags ) ) );
 				pipeline->initialise( device
 					, getRenderPass()
 					, std::move( descriptorLayouts ) );
@@ -1090,6 +1087,12 @@ namespace castor3d
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
+				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
+					, in.textures0 );
+				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
+					, in.textures1 );
+				out.textures = c3d_modelData.getTextures( flags.programFlags
+					, in.textures );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 				out.nodeId = c3d_modelData.getNodeId( flags.programFlags
@@ -1191,6 +1194,9 @@ namespace castor3d
 					out.texture0 = vec3( uv, 0.0_f );
 				}
 
+				out.textures0 = c3d_modelData.getTextures0();
+				out.textures1 = c3d_modelData.getTextures1();
+				out.textures = c3d_modelData.getTextures();
 				out.material = c3d_modelData.getMaterialIndex();
 				out.nodeId = c3d_modelData.getNodeId();
 				out.instance = writer.cast< UInt >( in.instanceIndex );
