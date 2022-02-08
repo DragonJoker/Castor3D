@@ -61,6 +61,9 @@ namespace castor3d
 				, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
 				, normal{ getMember< sdw::Vec3 >( "normal" ) }
 				, texture{ getMember< sdw::Vec3 >( "texcoord" ) }
+				, textures0{ getMember< sdw::UVec4 >( "textures0" ) }
+				, textures1{ getMember< sdw::UVec4 >( "textures1" ) }
+				, textures{ getMember< sdw::Int >( "textures" ) }
 				, material{ getMember< sdw::UInt >( "material" ) }
 			{
 			}
@@ -94,6 +97,18 @@ namespace castor3d
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
 						, index++ );
+					result->declMember( "textures0"
+						, sdw::type::Kind::eVec4U
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "textures1"
+						, sdw::type::Kind::eVec4U
+						, sdw::type::NotArray
+						, index++ );
+					result->declMember( "textures"
+						, sdw::type::Kind::eInt
+						, sdw::type::NotArray
+						, index++ );
 					result->declMember( "material"
 						, sdw::type::Kind::eUInt
 						, sdw::type::NotArray
@@ -107,6 +122,9 @@ namespace castor3d
 			sdw::Vec3 viewPosition;
 			sdw::Vec3 normal;
 			sdw::Vec3 texture;
+			sdw::UVec4 textures0;
+			sdw::UVec4 textures1;
+			sdw::Int textures;
 			sdw::UInt material;
 		};
 	}
@@ -397,6 +415,12 @@ namespace castor3d
 
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
+				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
+					, in.textures0 );
+				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
+					, in.textures1 );
+				out.textures = c3d_modelData.getTextures( flags.programFlags
+					, in.textures );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 
@@ -467,6 +491,9 @@ namespace castor3d
 				out.viewPosition = viewPosition.xyz();
 				out.worldPosition = out.viewPosition;
 				out.normal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
+				out.textures0 = c3d_modelData.getTextures0();
+				out.textures1 = c3d_modelData.getTextures1();
+				out.textures = c3d_modelData.getTextures();
 				out.material = c3d_modelData.getMaterialIndex();
 			} );
 
@@ -546,6 +573,9 @@ namespace castor3d
 					out.worldPosition = list[i].vtx.position.xyz();
 					out.viewPosition = list[i].viewPosition;
 					out.normal = list[i].normal;
+					out.textures0 = list[i].textures0;
+					out.textures1 = list[i].textures1;
+					out.textures = list[i].textures;
 					out.material = list[i].material;
 					out.vtx.position = vec4( positions[i], 1.0f );
 
@@ -651,7 +681,8 @@ namespace castor3d
 							, textureConfigs
 							, textureAnims
 							, c3d_maps
-							, c3d_modelData
+							, in.textures0
+							, in.textures1
 							, texCoord
 							, emissive
 							, alpha

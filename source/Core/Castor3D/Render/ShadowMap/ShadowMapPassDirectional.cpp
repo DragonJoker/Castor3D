@@ -288,6 +288,12 @@ namespace castor3d
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
+				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
+					, in.textures0 );
+				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
+					, in.textures1 );
+				out.textures = c3d_modelData.getTextures( flags.programFlags
+					, in.textures );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 				out.instance = writer.cast< UInt >( in.instanceIndex );
@@ -435,7 +441,8 @@ namespace castor3d
 						, textureConfigs
 						, textureAnims
 						, c3d_maps
-						, c3d_modelData
+						, in.textures0
+						, in.textures1
 						, texCoord
 						, normal
 						, tangent

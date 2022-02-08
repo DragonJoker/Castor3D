@@ -217,7 +217,8 @@ namespace castor3d
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
-					, c3d_modelData
+					, in.textures0
+					, in.textures1
 					, texCoord
 					, normal
 					, tangent
