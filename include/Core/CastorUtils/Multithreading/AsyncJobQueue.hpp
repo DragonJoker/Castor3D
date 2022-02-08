@@ -54,6 +54,13 @@ namespace castor
 		 *\brief		Attend que tous les jobs soient terminés.
 		 */
 		CU_API void waitAll();
+		/**
+		 *\~english
+		 *\brief		Waits for all the jobs to be run, prevents any new job push, just discards them.
+		 *\~french
+		 *\brief		Attend que tous les jobs soient terminés, prévient tout nouveau job, iles juste jeté.
+		 */
+		CU_API void finish();
 
 	private:
 		void doRun();
