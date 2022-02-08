@@ -259,7 +259,7 @@ namespace castor3d
 			&& lhs.patchVertices == rhs.patchVertices
 			&& lhs.alphaFunc == rhs.alphaFunc
 			&& lhs.blendAlphaFunc == rhs.blendAlphaFunc
-			&& lhs.textures == rhs.textures
+			&& lhs.textures.size() == rhs.textures.size()
 			&& lhs.texturesFlags == rhs.texturesFlags;
 	}
 
