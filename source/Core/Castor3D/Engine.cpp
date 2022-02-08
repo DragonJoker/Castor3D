@@ -252,6 +252,8 @@ namespace castor3d
 		if ( !isCleaned() )
 		{
 			setCleaned();
+			m_cpuJobs.finish();
+			m_gpuJobs.finish();
 
 			if ( m_threaded
 				&& !static_cast< RenderLoopAsync const & >( *m_renderLoop ).isPaused() )
@@ -272,7 +274,7 @@ namespace castor3d
 			m_materialCache->cleanup();
 			m_textureCache->cleanup();
 
-			postEvent( makeGpuCleanupEvent( * m_targetCache) );
+			postEvent( makeGpuCleanupEvent( *m_targetCache ) );
 
 			if ( m_lightsSampler.lock() )
 			{
