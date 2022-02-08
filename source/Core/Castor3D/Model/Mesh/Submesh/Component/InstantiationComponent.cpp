@@ -85,6 +85,10 @@ namespace castor3d
 			attributes.push_back( { currentLocation++
 				, InstantiationComponent::BindingPoint
 				, VK_FORMAT_R32_SINT
+				, offsetof( InstantiationData, m_textures ) } );
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32_SINT
 				, offsetof( InstantiationData, m_material ) } );
 
 			if ( checkFlag( shaderFlags, ShaderFlag::eNodeId ) )
