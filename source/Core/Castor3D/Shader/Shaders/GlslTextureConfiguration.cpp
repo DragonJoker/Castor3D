@@ -274,7 +274,7 @@ namespace castor3d
 		sdw::Vec3 TextureConfigData::getColour( sdw::Vec4 const & sampled
 			, sdw::Vec3 const & colour )const
 		{
-			return colour * getFloat( sampled, colMask );
+			return colour * getVec3( sampled, colMask );
 		}
 
 		sdw::Float TextureConfigData::getOpacity( sdw::Vec4 const & sampled
