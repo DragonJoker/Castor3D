@@ -808,35 +808,39 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		)
 	endif ()
 
-	if ( VCPKG_TOOLCHAIN )
-		find_package( LibRaw QUIET )
-		find_package( freeimage CONFIG QUIET )
-	else ()
-		find_package( FreeImage QUIET )
-		if ( FreeImage_FOUND )
-			set( freeimage_FOUND FreeImage_FOUND )
-		endif ()
-	endif ()
+	option( CASTOR_USE_FREEIMAGE "Look for FreeImage to use it to decode images" OFF )
 
-	if ( freeimage_FOUND )
-		if ( VCPKG_TOOLCHAIN AND APPLE )
-			find_package( OpenJPEG CONFIG QUIET )
-			find_package( TIFF CONFIG QUIET )
-			find_package( JPEG CONFIG QUIET )
-			find_package( WebP CONFIG QUIET )
+	if ( CASTOR_USE_FREEIMAGE )
+		if ( VCPKG_TOOLCHAIN )
+			find_package( LibRaw QUIET )
+			find_package( freeimage CONFIG QUIET )
+		else ()
+			find_package( FreeImage QUIET )
+			if ( FreeImage_FOUND )
+				set( freeimage_FOUND FreeImage_FOUND )
+			endif ()
+		endif ()
+
+		if ( freeimage_FOUND )
+			if ( VCPKG_TOOLCHAIN AND APPLE )
+				find_package( OpenJPEG CONFIG QUIET )
+				find_package( TIFF CONFIG QUIET )
+				find_package( JPEG CONFIG QUIET )
+				find_package( WebP CONFIG QUIET )
+				target_link_libraries( ${PROJECT_NAME}
+					PRIVATE
+						WebP::libwebpmux
+				)
+			endif ()
+			target_compile_definitions( ${PROJECT_NAME}
+				PRIVATE
+					C3D_UseFreeImage
+			)
 			target_link_libraries( ${PROJECT_NAME}
 				PRIVATE
-					WebP::libwebpmux
+					freeimage::FreeImage
 			)
 		endif ()
-		target_compile_definitions( ${PROJECT_NAME}
-			PRIVATE
-				C3D_UseFreeImage
-		)
-		target_link_libraries( ${PROJECT_NAME}
-			PRIVATE
-				freeimage::FreeImage
-		)
 	endif ()
 
 	install(
