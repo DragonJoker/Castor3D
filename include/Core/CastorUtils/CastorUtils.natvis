@@ -64,6 +64,36 @@
     </Expand>
   </Type>
 
+  <Type Name="castor::FlagCombination&lt;*&gt;">
+    <DisplayString>{m_value,X}</DisplayString>
+    <Expand>
+      <Item Name="value">m_value,X</Item>
+      <CustomListItems MaxItemsPerView="32" ExcludeView="Test">
+        <Variable Name="iter" InitialValue="0" />
+        <Variable Name="value" InitialValue="0ull" />
+        <Loop>
+          <If Condition="iter == 64">
+            <Break/>
+          </If>
+          <Exec>value = m_value &amp; (0x01ull &lt;&lt; iter)</Exec>
+          <If Condition="0 != value">
+            <Item>($T1)value,X</Item>
+          </If>
+          <Exec>++iter</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::FlagIterator&lt;*&gt;">
+    <DisplayString>{m_value}</DisplayString>
+    <Expand>
+      <Item Name="value">m_value</Item>
+      <Item Name="full">m_initialValue</Item>
+      <Item Name="index">m_index</Item>
+    </Expand>
+  </Type>
+
   <Type Name="castor::Matrix&lt;*, 2, *&gt;">
     <Expand>
       <Item Name="col 0">m_columns[0]</Item>
@@ -88,21 +118,21 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::OwnedBy&lt;*&gt;">
+  <Type Name="castor::OwnedBy&lt;*&gt;" Inheritable="false">
     <DisplayString>{{owner={m_owner}}}</DisplayString>
     <Expand>
       <Item Name="owner">m_owner</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::NamedBase$&lt;*&gt;">
+  <Type Name="castor::NamedBase$&lt;*&gt;" Inheritable="false">
     <DisplayString>{{name={m_name}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>
     </Expand>
   </Type>
 
-  <Type Name="castor::Resource">
+  <Type Name="castor::Resource" Inheritable="false">
     <DisplayString>{{name={m_name}}}</DisplayString>
     <Expand>
       <Item Name="name">m_name</Item>

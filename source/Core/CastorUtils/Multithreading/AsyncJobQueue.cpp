@@ -21,7 +21,10 @@ namespace castor
 	void AsyncJobQueue::pushJob( Job job )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
-		m_pending.push_back( job );
+		if ( !m_ended )
+		{
+			m_pending.push_back( job );
+		}
 	}
 
 	void AsyncJobQueue::waitAll()
@@ -31,6 +34,12 @@ namespace castor
 			std::this_thread::sleep_for( 5_ms );
 		}
 
+		m_pool.waitAll( Milliseconds{ Milliseconds::max() } );
+	}
+
+	void AsyncJobQueue::finish()
+	{
+		m_ended = true;
 		m_pool.waitAll( Milliseconds{ Milliseconds::max() } );
 	}
 
