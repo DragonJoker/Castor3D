@@ -659,6 +659,7 @@ namespace castor3d
 					config.tileSet->w = 1u;
 					data.unit->setConfiguration( std::move( config ) );
 					data.unit->initialise( device, queueData );
+					doUpdateWrite( *data.unit );
 					doDestroyThreadData( data );
 				} );
 		}
