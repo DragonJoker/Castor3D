@@ -350,6 +350,12 @@ namespace castor3d
 				in.morph( c3d_morphingData
 					, curPosition
 					, out.texture0 );
+				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
+					, in.textures0 );
+				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
+					, in.textures1 );
+				out.textures = c3d_modelData.getTextures( flags.programFlags
+					, in.textures );
 				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
 					, in.material );
 				out.instance = writer.cast< UInt >( in.instanceIndex );
@@ -438,7 +444,7 @@ namespace castor3d
 					{
 						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 						auto id = writer.declLocale( "id" + name
-							, c3d_modelData.getTexture( index ) );
+							, shader::ModelData::getTexture( in.textures0, in.textures1, index ) );
 
 						IF( writer, id > 0_u )
 						{

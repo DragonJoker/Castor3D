@@ -103,6 +103,9 @@ namespace castor3d::shader
 		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
 		, boneWeights1{ this->getMember< sdw::Vec4 >( "boneWeights1", true ) }
 		, transform{ this->getMember< sdw::Mat4 >( "transform", true ) }
+		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
+		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
+		, textures{ this->getMember< sdw::Int >( "textures", true ) }
 		, material{ this->getMember< sdw::Int >( "material", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
 		, position2{ this->getMember< sdw::Vec4 >( "position2", true ) }
@@ -182,6 +185,18 @@ namespace castor3d::shader
 			index = checkFlag( programFlags, ProgramFlag::eInstantiation )
 				? index + 4u
 				: index;
+			result->declMember( "textures0", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+			result->declMember( "textures1", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+			result->declMember( "textures", ast::type::Kind::eInt
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 			result->declMember( "material", ast::type::Kind::eInt
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
@@ -278,6 +293,9 @@ namespace castor3d::shader
 		, texture0{ this->getMember< sdw::Vec3 >( "texcoord0", true ) }
 		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
 		, instance{ this->getMember< sdw::UInt >( "instance", true ) }
+		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
+		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
+		, textures{ this->getMember< sdw::Int >( "textures", true ) }
 		, material{ this->getMember< sdw::UInt >( "material", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
 	{
@@ -356,6 +374,15 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::ePicking ) ? index++ : 0 )
 				, checkFlag( programFlags, ProgramFlag::ePicking ) );
+			result->declMember( "textures0", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, index++ );
+			result->declMember( "textures1", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, index++ );
+			result->declMember( "textures", ast::type::Kind::eInt
+				, ast::type::NotArray
+				, index++ );
 			result->declMember( "material", ast::type::Kind::eUInt
 				, ast::type::NotArray
 				, index++ );

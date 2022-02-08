@@ -199,7 +199,8 @@ namespace castor3d::shader
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, ModelData const & model
+		, sdw::UVec4 const & textures0
+		, sdw::UVec4 const & textures1
 		, sdw::Vec3 & texCoords
 		, sdw::Vec3 & normal
 		, sdw::Vec3 & tangent
@@ -219,7 +220,7 @@ namespace castor3d::shader
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
-				, model.getTexture( index ) );
+				, ModelData::getTexture( textures0, textures1, index ) );
 
 			IF( m_writer, id > 0_u )
 			{
@@ -318,7 +319,8 @@ namespace castor3d::shader
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, ModelData const & model
+		, sdw::UVec4 const & textures0
+		, sdw::UVec4 const & textures1
 		, sdw::Vec3 const & texCoords
 		, sdw::Vec3 & emissive
 		, sdw::Float & opacity
@@ -332,7 +334,7 @@ namespace castor3d::shader
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
-				, model.getTexture( index ) );
+				, ModelData::getTexture( textures0, textures1, index ) );
 
 			IF( m_writer, id > 0_u )
 			{

@@ -339,6 +339,26 @@ namespace castor3d
 			return *m_renderer.gpu;
 		}
 
+		bool hasFeature( GpuFeature feature )const
+		{
+			return m_gpuInformations.hasFeature( feature );
+		}
+
+		bool hasStereoRendering()const
+		{
+			return m_gpuInformations.hasStereoRendering();
+		}
+
+		bool hasShaderStorageBuffers()const
+		{
+			return m_gpuInformations.hasShaderStorageBuffers();
+		}
+
+		bool hasShaderType( VkShaderStageFlagBits type )const
+		{
+			return m_gpuInformations.hasShaderType( type );
+		}
+
 		uint32_t getValue( GpuMin index )const
 		{
 			return m_gpuInformations.getValue( index );
