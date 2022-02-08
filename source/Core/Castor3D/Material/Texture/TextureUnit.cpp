@@ -318,6 +318,10 @@ namespace castor3d
 		RenderTargetSPtr target = m_renderTarget.lock();
 		bool result = false;
 
+		auto sampler = getSampler().lock();
+		CU_Require( sampler );
+		sampler->initialise( device );
+
 		if ( target )
 		{
 			target->initialise( device, queueData );
@@ -330,9 +334,6 @@ namespace castor3d
 		else if ( m_texture )
 		{
 			result = m_texture->initialise( device, queueData );
-			auto sampler = getSampler().lock();
-			CU_Require( sampler );
-			sampler->initialise( device );
 
 			if ( result
 				&& m_texture->getMipmapCount() > 1u
@@ -341,13 +342,17 @@ namespace castor3d
 				m_texture->generateMipmaps( device );
 			}
 
+			m_name = m_texture->getImage().getName();
+		}
+
+		if ( result )
+		{
 			m_descriptor = { 0u
 				, 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, { { sampler->getSampler()
 					, m_texture->getDefaultView().getSampledView()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } };
-			m_name = m_texture->getImage().getName();
 		}
 
 		if ( m_texture )
