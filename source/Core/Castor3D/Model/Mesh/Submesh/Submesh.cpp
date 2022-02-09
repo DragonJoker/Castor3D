@@ -506,7 +506,7 @@ namespace castor3d
 			if ( !m_vertexBuffer
 				|| size != m_vertexBuffer.getCount() )
 			{
-				m_vertexBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VkBufferUsageFlags( m_bufferUsageFlags | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT )
+				m_vertexBuffer = device.bufferPool->getBuffer< InterleavedVertex >( m_bufferUsageFlags | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 					, size
 					, m_bufferMemoryFlags );
 			}
@@ -515,7 +515,7 @@ namespace castor3d
 			{
 				if ( auto buffer = m_vertexBuffer.lock() )
 				{
-					std::memcpy( buffer, m_points.data(), m_points.size() * sizeof( InterleavedVertex ) );
+					std::copy( m_points.begin(), m_points.end(), buffer );
 					m_vertexBuffer.flush();
 					m_vertexBuffer.unlock();
 				}

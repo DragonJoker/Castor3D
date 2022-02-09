@@ -22,7 +22,7 @@ See LICENSE file in root folder
 
 namespace test_launcher
 {
-	using Clock = std::chrono::high_resolution_clock;;
+	using Clock = std::chrono::high_resolution_clock;
 
 	struct FrameTimes
 	{
