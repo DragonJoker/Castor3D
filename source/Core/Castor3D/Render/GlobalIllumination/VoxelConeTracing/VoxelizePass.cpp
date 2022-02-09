@@ -23,6 +23,7 @@
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -31,7 +32,7 @@
 #include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
@@ -65,6 +66,7 @@ namespace castor3d
 				, textures1{ getMember< sdw::UVec4 >( "textures1" ) }
 				, textures{ getMember< sdw::Int >( "textures" ) }
 				, material{ getMember< sdw::UInt >( "material" ) }
+				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
 			{
 			}
 
@@ -113,6 +115,10 @@ namespace castor3d
 						, sdw::type::Kind::eUInt
 						, sdw::type::NotArray
 						, index++ );
+					result->declMember( "nodeId"
+						, sdw::type::Kind::eInt
+						, sdw::type::NotArray
+						, index++ );
 				}
 
 				return result;
@@ -126,6 +132,7 @@ namespace castor3d
 			sdw::UVec4 textures1;
 			sdw::Int textures;
 			sdw::UInt material;
+			sdw::Int nodeId;
 		};
 	}
 
@@ -371,9 +378,12 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		// Inputs
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
@@ -396,12 +406,22 @@ namespace castor3d
 				, hasTextures }
 			, sdw::VertexOutT< SurfaceT >{ writer }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
-			, VertexOutT< SurfaceT > out )
+				, VertexOutT< SurfaceT > out )
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
 					, vec4( in.normal, 0.0_f ) );
+				out.textures0 = c3d_modelIndex.getTextures0( flags.programFlags
+					, in.textures0 );
+				out.textures1 = c3d_modelIndex.getTextures1( flags.programFlags
+					, in.textures1 );
+				out.textures = c3d_modelIndex.getTextures( flags.programFlags
+					, in.textures );
+				out.material = c3d_modelIndex.getMaterialId( flags.programFlags
+					, in.material );
+				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
+					, in.nodeId );
 
 				if ( hasTextures )
 				{
@@ -413,16 +433,10 @@ namespace castor3d
 					, v4Normal
 					, out.texture );
 
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
-				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
-					, in.textures0 );
-				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
-					, in.textures1 );
-				out.textures = c3d_modelData.getTextures( flags.programFlags
-					, in.textures );
-				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
-					, in.material );
+					, modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 
 				out.vtx.position = ( modelMtx * curPosition );
 				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
@@ -444,9 +458,12 @@ namespace castor3d
 		auto inTexcoord = writer.declInput< Vec2 >( "inTexcoord", 1u, hasTextures );
 		auto inCenter = writer.declInput< Vec3 >( "inCenter", 2u );
 
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		UBO_BILLBOARD( writer
 			, uint32_t( NodeUboIdx::eBillboard )
 			, RenderPipeline::eBuffers );
@@ -461,8 +478,16 @@ namespace castor3d
 		writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 			, VertexOutT< SurfaceT > out )
 			{
+				out.textures0 = c3d_modelIndex.getTextures0();
+				out.textures1 = c3d_modelIndex.getTextures1();
+				out.textures = c3d_modelIndex.getTextures();
+				out.material = c3d_modelIndex.getMaterialId();
+				out.nodeId = c3d_modelIndex.getNodeId();
+
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, c3d_modelData.modelToCurWorld( vec4( inCenter, 1.0_f ) ).xyz() );
+					, modelData.modelToCurWorld( vec4( inCenter, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_sceneData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
@@ -491,10 +516,6 @@ namespace castor3d
 				out.viewPosition = viewPosition.xyz();
 				out.worldPosition = out.viewPosition;
 				out.normal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
-				out.textures0 = c3d_modelData.getTextures0();
-				out.textures1 = c3d_modelData.getTextures1();
-				out.textures = c3d_modelData.getTextures();
-				out.material = c3d_modelData.getMaterialIndex();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -575,6 +596,7 @@ namespace castor3d
 					out.normal = list[i].normal;
 					out.textures0 = list[i].textures0;
 					out.textures1 = list[i].textures1;
+					out.nodeId = list[i].nodeId;
 					out.textures = list[i].textures;
 					out.material = list[i].material;
 					out.vtx.position = vec4( positions[i], 1.0f );
@@ -604,22 +626,23 @@ namespace castor3d
 		shader::Utils utils{ writer, *getEngine() };
 
 		// Shader inputs
-		shader::Materials materials{ writer };
-		materials.declare( uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-		shader::TextureAnimations textureAnims{ writer };
+		shader::Materials materials{ writer
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers };
+		shader::TextureConfigurations textureConfigs{ writer
+			, uint32_t( NodeUboIdx::eTexConfigs )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::TextureAnimations textureAnims{ writer
+			, uint32_t( NodeUboIdx::eTexAnims )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 
-		if ( hasTextures )
-		{
-			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
-				, RenderPipeline::eBuffers );
-			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
-				, RenderPipeline::eBuffers );
-		}
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
@@ -695,6 +718,8 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
+						auto modelData = writer.declLocale( "modelData"
+							, c3d_modelData[writer.cast< sdw::UInt >( in.nodeId )] );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.cameraPosition );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
@@ -705,7 +730,7 @@ namespace castor3d
 								, c3d_sceneData
 								, surface
 								, worldEye
-								, c3d_modelData.isShadowReceiver() );
+								, modelData.isShadowReceiver() );
 					}
 
 					auto encodedColor = writer.declLocale( "encodedColor"

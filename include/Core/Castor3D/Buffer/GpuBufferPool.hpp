@@ -16,7 +16,7 @@ namespace castor3d
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
-		using BufferArray = std::vector< std::unique_ptr< GpuBuffer > >;
+		using BufferArray = std::vector< std::unique_ptr< GpuBuddyBuffer > >;
 
 	public:
 		/**
@@ -75,11 +75,11 @@ namespace castor3d
 			, BufferArray & array );
 		C3D_API uint32_t doMakeKey( VkBufferUsageFlags target
 			, VkMemoryPropertyFlags flags );
-		C3D_API GpuBuffer & doGetBuffer( VkDeviceSize size
+		C3D_API GpuBufferBase & doGetBuffer( VkDeviceSize size
 			, VkBufferUsageFlags target
 			, VkMemoryPropertyFlags memory
 			, MemChunk & chunk );
-		C3D_API void doPutBuffer( GpuBuffer const & buffer
+		C3D_API void doPutBuffer( GpuBufferBase const & buffer
 			, VkBufferUsageFlags target
 			, VkMemoryPropertyFlags memory
 			, MemChunk const & chunk );

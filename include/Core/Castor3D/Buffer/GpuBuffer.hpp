@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class GpuBuffer
+	class GpuBufferBase
 	{
 		friend class GpuBufferPool;
 
@@ -42,13 +42,12 @@ namespace castor3d
 		 *\param[in]	numLevels		La taille maximale de l'arbre de l'allocateur.
 		 *\param[in]	minBlockSize	La taille minimale d'un bloc.
 		 */
-		C3D_API GpuBuffer( RenderSystem const & renderSystem
+		C3D_API GpuBufferBase( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
 			, castor::String debugName
 			, ashes::QueueShare sharingMode
-			, uint32_t numLevels
-			, uint32_t minBlockSize );
+			, VkDeviceSize allocatedSize );
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer storage.
@@ -67,35 +66,6 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\param[in]	size	The requested memory size.
-		 *\return		\p true if there is enough remaining memory for given size.
-		 *\~french
-		 *\param[in]	size	La taille requise pour la mémoire.
-		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
-		 */
-		C3D_API bool hasAvailable( VkDeviceSize size )const;
-		/**
-		 *\~english
-		 *\brief		Allocates a memory chunk for a CPU buffer.
-		 *\param[in]	size	The requested memory size.
-		 *\return		The memory chunk offset.
-		 *\~french
-		 *\brief		Alloue une zone mémoire pour un CPU buffer.
-		 *\param[in]	size	La taille requise pour la mémoire.
-		 *\return		L'offset de la zone mémoire.
-		 */
-		C3D_API MemChunk allocate( VkDeviceSize size );
-		/**
-		 *\~english
-		 *\brief		Deallocates memory.
-		 *\param[in]	mem	The memory chunk.
-		 *\~french
-		 *\brief		Désalloue de la mémoire.
-		 *\param[in]	mem	La zone mémoire.
-		 */
-		C3D_API void deallocate( MemChunk const & mem );
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
@@ -155,7 +125,7 @@ namespace castor3d
 		 *\param[in]	dstOffset		L'offset de départ dans ce tampon.
 		 */
 		C3D_API void copy( ashes::CommandBuffer const & commandBuffer
-			, GpuBuffer const & src
+			, GpuBufferBase const & src
 			, MemChunk const & srcChunk
 			, VkDeviceSize dstOffset )const;
 		/**
@@ -274,11 +244,82 @@ namespace castor3d
 		VkBufferUsageFlags m_usage;
 		VkMemoryPropertyFlags m_memoryFlags;
 		ashes::QueueShare m_sharingMode;
-		std::set< MemChunk > m_allocated;
-		GpuBufferBuddyAllocator m_allocator;
+		VkDeviceSize m_allocatedSize;
 		ashes::BufferPtr< uint8_t > m_buffer;
 		castor::String m_debugName;
-		VkDeviceSize m_align{ 0u };
+	};
+
+	template< typename AllocatorT >
+	class GpuBufferT
+		: public GpuBufferBase
+	{
+		friend class GpuBufferPool;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	renderSystem	The device on which the storage is allocated.
+		 *\param[in]	usage			The buffer targets.
+		 *\param[in]	memoryFlags		The buffer memory properties.
+		 *\param[in]	debugName		The debug name.
+		 *\param[in]	sharingMode		The sharing mode.
+		 *\param[in]	allocator		The allocator.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	renderSystem	Le device sur lequel le stockage est alloué.
+		 *\param[in]	usage			Les cibles du tampon.
+		 *\param[in]	memoryFlags		Les propriétés mémoire du tampon.
+		 *\param[in]	debugName		Le nom debug.
+		 *\param[in]	sharingMode		Le mode de partage.
+		 *\param[in]	allocator		L'allocateur.
+		 */
+		GpuBufferT( RenderSystem const & renderSystem
+			, VkBufferUsageFlags usage
+			, VkMemoryPropertyFlags memoryFlags
+			, castor::String debugName
+			, ashes::QueueShare sharingMode
+			, AllocatorT allocator );
+		/**
+		 *\~english
+		 *\param[in]	size	The requested memory size.
+		 *\return		\p true if there is enough remaining memory for given size.
+		 *\~french
+		 *\param[in]	size	La taille requise pour la mémoire.
+		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
+		 */
+		bool hasAvailable( VkDeviceSize size )const;
+		/**
+		 *\~english
+		 *\brief		Allocates a memory chunk for a CPU buffer.
+		 *\param[in]	size	The requested memory size.
+		 *\return		The memory chunk offset.
+		 *\~french
+		 *\brief		Alloue une zone mémoire pour un CPU buffer.
+		 *\param[in]	size	La taille requise pour la mémoire.
+		 *\return		L'offset de la zone mémoire.
+		 */
+		MemChunk allocate( VkDeviceSize size );
+		/**
+		 *\~english
+		 *\brief		Deallocates memory.
+		 *\param[in]	mem	The memory chunk.
+		 *\~french
+		 *\brief		Désalloue de la mémoire.
+		 *\param[in]	mem	La zone mémoire.
+		 */
+		void deallocate( MemChunk const & mem );
+		/**
+		 *\~english
+		 *\return		The element aligned size.
+		 *\~french
+		 *\return		La taille  alignée d'un élément.
+		 */
+		size_t getMinAlignment()const;
+
+	private:
+		std::set< MemChunk > m_allocated;
+		AllocatorT m_allocator;
 	};
 
 	template< typename T >
@@ -349,5 +390,7 @@ namespace castor3d
 		return result;
 	}
 }
+
+#include "GpuBuffer.inl"
 
 #endif

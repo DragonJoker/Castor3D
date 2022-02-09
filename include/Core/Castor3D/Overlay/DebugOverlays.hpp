@@ -116,6 +116,13 @@ namespace castor3d
 			, FramePassTimer & timer );
 		/**
 		 *\~english
+		 *\return		Fills the parameters with all passes times, in nanoseconds.
+		 *\~french
+		 *\return		Remplit les paramètres avec les temps de toutes les passes, en nanosecondes.
+		 */
+		void dumpFrameTimes( Parameters & params );
+		/**
+		 *\~english
 		 *\return		The debug overlays shown status.
 		 *\~french
 		 *\return		Le statut d'affichage des incrustations de débogage.
@@ -132,6 +139,7 @@ namespace castor3d
 
 	private:
 		void doCreateDebugPanel( OverlayCache & cache );
+		void doCompute();
 
 	private:
 		template< typename T >
@@ -238,21 +246,22 @@ namespace castor3d
 				, bool const & detailed );
 			~PassOverlays();
 			void retrieveGpuTime();
+			void compute();
 			void update();
 			void addTimer( FramePassTimer & timer );
 			bool removeTimer( FramePassTimer & timer );
 
-			castor::Nanoseconds getGpuTime()
+			castor::Nanoseconds getGpuTime()const
 			{
 				return m_gpu.time;
 			}
 
-			castor::Nanoseconds getCpuTime()
+			castor::Nanoseconds getCpuTime()const
 			{
 				return m_cpu.time;
 			}
 
-			castor::String const & getName()
+			castor::String const & getName()const
 			{
 				return m_name;
 			}
@@ -294,6 +303,7 @@ namespace castor3d
 			void addTimer( FramePassTimer & timer );
 			bool removeTimer( FramePassTimer & timer );
 			void retrieveGpuTime();
+			void compute();
 			void update();
 			void setVisible( bool visible );
 
@@ -302,12 +312,12 @@ namespace castor3d
 				return uint32_t( 1u + m_passes.size() );
 			}
 
-			castor::Nanoseconds getGpuTime()
+			castor::Nanoseconds getGpuTime()const
 			{
 				return m_gpu.time;
 			}
 
-			castor::Nanoseconds getCpuTime()
+			castor::Nanoseconds getCpuTime()const
 			{
 				return m_cpu.time;
 			}

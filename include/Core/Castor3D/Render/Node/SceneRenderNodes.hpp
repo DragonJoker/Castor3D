@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
@@ -30,7 +31,8 @@ namespace castor3d
 		C3D_API void initialiseNodes( RenderDevice const & device );
 		C3D_API void clear();
 		C3D_API SubmeshRenderNode & createNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+			, GpuDataBufferOffset * modelDataBuffer
 			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
@@ -39,7 +41,8 @@ namespace castor3d
 			, AnimatedMesh * mesh
 			, AnimatedSkeleton * skeleton );
 		C3D_API BillboardRenderNode & createNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+			, GpuDataBufferOffset * modelDataBuffer
 			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode

@@ -33,7 +33,8 @@ namespace castor3d
 	*	Un tampon GPU, utilisant un buddy allocator pour allouer des sous-tampons.
 	*\remark
 	*/
-	class GpuBuffer;
+	template< typename AllocatorT >
+	class GpuBufferT;
 	/**
 	*\~english
 	*\brief
@@ -43,6 +44,15 @@ namespace castor3d
 	*	Traits d'allocation de buffer GPU, pour le buddy allocator.
 	*/
 	struct GpuBufferBuddyAllocatorTraits;
+	/**
+	*\~english
+	*\brief
+	*	GPU buffer allocation traits for buddy allocator.
+	*\~french
+	*\brief
+	*	Traits d'allocation de buffer GPU, pour le buddy allocator.
+	*/
+	struct GpuLinearAllocator;
 	/**
 	*\~english
 	*\brief
@@ -126,6 +136,9 @@ namespace castor3d
 	*/
 	class UniformBufferPools;
 
+	template< typename DataT >
+	class GpuLinearAllocatorT;
+
 	CU_DeclareSmartPtr( GpuBufferPool );
 	CU_DeclareSmartPtr( UniformBufferBase );
 	CU_DeclareSmartPtr( UniformBufferPools );
@@ -135,6 +148,8 @@ namespace castor3d
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
 	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;
+	using GpuBuddyBuffer = GpuBufferT< GpuBufferBuddyAllocator >;
+	using GpuLinearBuffer = GpuBufferT< GpuLinearAllocator >;
 	/**
 	*\~english
 	*\brief

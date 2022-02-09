@@ -5,14 +5,16 @@ CU_ImplementCUSmartPtr( castor3d, BillboardRenderNode )
 namespace castor3d
 {
 	BillboardRenderNode::BillboardRenderNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+		, GpuDataBufferOffset * modelDataBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, BillboardBase & data
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
 		: passNode{ std::move( passNode ) }
-		, modelUbo{ std::move( modelBuffer ) }
+		, modelIndexUbo{ std::move( modelIndexBuffer ) }
+		, modelDataUbo{ std::move( modelDataBuffer ) }
 		, modelInstancesUbo{ std::move( modelInstancesBuffer ) }
 		, buffers{ buffers }
 		, sceneNode{ sceneNode }

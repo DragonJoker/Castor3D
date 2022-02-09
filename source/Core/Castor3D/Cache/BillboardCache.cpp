@@ -11,6 +11,7 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ModelDataBuffer.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -63,6 +64,11 @@ namespace castor3d
 			, MovableMergerT< BillboardListCache >{ scene.getName() }
 			, MovableAttacherT< BillboardListCache >{}
 			, MovableDetacherT< BillboardListCache >{} }
+		, m_modelDataBuffer{ std::make_shared< ModelDataBuffer >( *scene.getEngine()
+			, scene.getEngine()->getRenderSystem()->getRenderDevice()
+			, ( scene.getEngine()->getRenderSystem()->getRenderDevice().hasBindless()
+				? scene.getEngine()->getRenderSystem()->getRenderDevice().getMaxBindlessSampled()
+				: shader::MaxModelDataCount ) ) }
 	{
 	}
 
@@ -208,9 +214,12 @@ namespace castor3d
 
 		for ( auto & entry : m_entries )
 		{
-			uboPools.putBuffer( entry.second.modelUbo );
+			uboPools.putBuffer( entry.second.modelIndexUbo );
+			m_modelDataBuffer->putBuffer( *entry.second.modelDataUbo );
 			uboPools.putBuffer( entry.second.billboardUbo );
 		}
+
+		m_modelDataBuffer.reset();
 	}
 
 	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::update( CpuUpdater & updater )
@@ -220,25 +229,27 @@ namespace castor3d
 		for ( auto & pair : m_baseEntries )
 		{
 			auto & entry = pair.second;
-			auto & modelData = entry.modelUbo.getData();
-			modelData.nodeId = entry.id;
-			modelData.shadowReceiver = entry.billboard.isShadowReceiver();
-			modelData.materialIndex = int( entry.pass.getId() );
+			auto & modelData = entry.modelDataUbo->getData();
+			modelData.shadowEnvMapIndex->x = entry.billboard.isShadowReceiver();
 			modelData.prvModel = modelData.curModel;
 			modelData.curModel = entry.billboard.getNode()->getDerivedTransformationMatrix();
 			auto normal = castor::Matrix3x3f{ modelData.curModel };
 			modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
+
+			auto & modelIndexData = entry.modelIndexUbo.getData();
+			modelIndexData.nodeId = entry.id;
+			modelIndexData.materialId = int( entry.pass.getId() );
 			uint32_t index = 0u;
 
 			for ( auto & unit : entry.pass )
 			{
 				if ( index < 4 )
 				{
-					modelData.textures0[index] = unit->getId();
+					modelIndexData.textures0[index] = unit->getId();
 				}
 				else if ( index < 8 )
 				{
-					modelData.textures1[index - 4] = unit->getId();
+					modelIndexData.textures1[index - 4] = unit->getId();
 				}
 
 				++index;
@@ -248,17 +259,17 @@ namespace castor3d
 			{
 				if ( index < 4 )
 				{
-					modelData.textures0[index] = 0u;
+					modelIndexData.textures0[index] = 0u;
 				}
 				else
 				{
-					modelData.textures1[index - 4] = 0u;
+					modelIndexData.textures1[index - 4] = 0u;
 				}
 
 				++index;
 			}
 
-			modelData.textures = int32_t( std::min( 8u, entry.pass.getTextureUnitsCount() ) );
+			modelIndexData.textures = int32_t( std::min( 8u, entry.pass.getTextureUnitsCount() ) );
 			auto & billboardData = entry.billboardUbo.getData();
 			billboardData.dimensions = entry.billboard.getDimensions();
 		}
@@ -290,8 +301,9 @@ namespace castor3d
 			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
 			baseEntry.id = int32_t( m_baseEntries.size() );
-			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.modelIndexUbo = uboPools.getBuffer< ModelIndexUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.billboardUbo = uboPools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.modelDataUbo = &m_modelDataBuffer->getBuffer();
 
 			for ( auto instanceMult : m_instances )
 			{
@@ -337,7 +349,8 @@ namespace castor3d
 		{
 			auto entry = it->second;
 			m_baseEntries.erase( it );
-			uboPools.putBuffer( entry.modelUbo );
+			uboPools.putBuffer( entry.modelIndexUbo );
+			m_modelDataBuffer->putBuffer( *entry.modelDataUbo );
 			uboPools.putBuffer( entry.billboardUbo );
 		}
 	}
