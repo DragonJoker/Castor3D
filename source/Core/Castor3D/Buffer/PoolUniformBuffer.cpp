@@ -64,14 +64,14 @@ namespace castor3d
 			? 0u
 			: m_allocated.rbegin()->offset + m_allocated.rbegin()->size;
 		auto realSize = getAlignedSize( uint32_t( size ) );
-		m_allocated.insert( { offset, realSize } );
+		m_allocated.insert( { offset, realSize, size } );
 		return { offset / elemSize, realSize / elemSize, size };
 	}
 
 	void PoolUniformBuffer::deallocate( VkDeviceSize offset )
 	{
 		auto elemSize = m_renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
-		auto it = m_allocated.find( { offset * elemSize, 0u } );
+		auto it = m_allocated.find( { offset * elemSize, 0u, 0u } );
 
 		if ( it != m_allocated.end() )
 		{

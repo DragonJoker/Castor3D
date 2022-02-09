@@ -81,9 +81,9 @@ namespace CastorGui
 			, 0
 			, false );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
-			, [this]( int selected )
+			, [this]( int sel )
 			{
-				onSelected( selected );
+				onSelected( sel );
 			} );
 
 		auto text = getEngine().getOverlayCache().add( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )

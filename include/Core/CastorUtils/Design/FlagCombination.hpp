@@ -11,12 +11,12 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< typename FlagType, typename IteratorTraitsT >
+	template< typename FlagTypeT, typename IteratorTraitsT >
 	struct FlagIterator
 	{
 	public:
 		//! The basic integer type.
-		using BaseType = typename std::underlying_type< FlagType >::type;
+		using BaseType = typename std::underlying_type< FlagTypeT >::type;
 
 	public:
 		inline explicit constexpr FlagIterator( FlagIterator const & value )
@@ -37,7 +37,7 @@ namespace castor
 		* End ctor.
 		*/
 		inline constexpr FlagIterator( BaseType contValue
-			, FlagType iterValue )
+			, FlagTypeT iterValue )
 			: m_initialValue{ contValue }
 			, m_index{ sizeof( BaseType ) * 8 }
 			, m_value{ iterValue }
@@ -57,21 +57,9 @@ namespace castor
 			return result;
 		}
 
-		inline constexpr FlagType operator*()const
+		inline constexpr FlagTypeT operator*()const
 		{
 			return m_value;
-		}
-
-		inline constexpr bool operator==( FlagIterator< FlagType > const & rhs )
-		{
-			return m_index == rhs.m_index
-				&& m_initialValue == rhs.m_initialValue;
-		}
-
-		inline constexpr bool operator!=( FlagIterator< FlagType > const & rhs )
-		{
-			return m_index != rhs.m_index
-				|| m_initialValue != rhs.m_initialValue;
 		}
 
 	private:
@@ -81,17 +69,36 @@ namespace castor
 
 			do
 			{
-				m_value = FlagType( m_initialValue & ( v << m_index ) );
+				m_value = FlagTypeT( m_initialValue & ( v << m_index ) );
 				++m_index;
 			}
-			while ( m_value == FlagType( 0 ) && m_index < sizeof( BaseType ) * 8 );
+			while ( m_value == FlagTypeT( 0 ) && m_index < sizeof( BaseType ) * 8 );
 		}
 
 	private:
 		BaseType m_initialValue;
 		size_t m_index{ 0u };
-		FlagType m_value;
+		FlagTypeT m_value;
+
+		template< typename FlagType, typename IteratorTraits >
+		friend constexpr bool operator==( FlagIterator< FlagType, IteratorTraits > const & lhs
+			, FlagIterator< FlagType, IteratorTraits > const & rhs );
 	};
+
+	template< typename FlagTypeT, typename IteratorTraitsT >
+	inline constexpr bool operator==( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
+		, FlagIterator< FlagTypeT, IteratorTraitsT > const & rhs )
+	{
+		return lhs.m_index == rhs.m_index
+			&& lhs.m_initialValue == rhs.m_initialValue;
+	}
+
+	template< typename FlagTypeT, typename IteratorTraitsT >
+	inline constexpr bool operator!=( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
+		, FlagIterator< FlagTypeT, IteratorTraitsT > const & rhs )
+	{
+		return !( lhs == rhs );
+	}
 
 	template< typename FlagType >
 	class FlagCombination
