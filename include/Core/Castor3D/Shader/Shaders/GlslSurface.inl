@@ -102,7 +102,6 @@ namespace castor3d::shader
 		, boneIds1{ this->getMember< sdw::IVec4 >( "boneIds1", true ) }
 		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
 		, boneWeights1{ this->getMember< sdw::Vec4 >( "boneWeights1", true ) }
-		, transform{ this->getMember< sdw::Mat4 >( "transform", true ) }
 		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
 		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
 		, textures{ this->getMember< sdw::Int >( "textures", true ) }
@@ -178,13 +177,6 @@ namespace castor3d::shader
 			*	Instantiation
 			*/
 			//@{
-			result->declMember( "transform", ast::type::Kind::eMat4x4F
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-			index = checkFlag( programFlags, ProgramFlag::eInstantiation )
-				? index + 4u
-				: index;
 			result->declMember( "textures0", ast::type::Kind::eVec4U
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
@@ -203,8 +195,8 @@ namespace castor3d::shader
 				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 			result->declMember( "nodeId", ast::type::Kind::eInt
 				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) && checkFlag( shaderFlags, ShaderFlag::eNodeId ) ) ? index++ : 0 )
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) && checkFlag( shaderFlags, ShaderFlag::eNodeId ) ) );
+				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
 			//@}
 			/**
 			*	Skinning
@@ -386,11 +378,9 @@ namespace castor3d::shader
 			result->declMember( "material", ast::type::Kind::eUInt
 				, ast::type::NotArray
 				, index++ );
-			result->declMember( "nodeId"
-				, ast::type::Kind::eInt
+			result->declMember( "nodeId", ast::type::Kind::eInt
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eNodeId ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eNodeId ) );
+				, index++ );
 		}
 
 		return result;

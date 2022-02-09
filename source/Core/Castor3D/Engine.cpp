@@ -22,6 +22,7 @@
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ModelDataBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -427,6 +428,8 @@ namespace castor3d
 		getSceneCache().forEach( [&commandBuffer]( Scene & scene )
 			{
 				scene.getLightCache().upload( commandBuffer );
+				scene.getBillboardListCache().getModelDataBuffer().update( commandBuffer );
+				scene.getGeometryCache().getModelDataBuffer().update( commandBuffer );
 			} );
 	}
 

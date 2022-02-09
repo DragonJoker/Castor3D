@@ -11,17 +11,13 @@ namespace castor3d
 	template< typename DataT >
 	struct GpuBufferOffsetT
 	{
-	private:
-		friend class GpuBufferPool;
-
-		GpuBuffer * buffer{};
-
 	public:
+		GpuBufferBase * buffer{};
 		VkBufferUsageFlags target{};
 		VkMemoryPropertyFlags memory{};
 		MemChunk chunk{};
 
-		void setPool( GpuBuffer & pool )
+		void setPool( GpuBufferBase & pool )
 		{
 			buffer = &pool;
 		}
@@ -32,12 +28,12 @@ namespace castor3d
 				&& buffer->hasBuffer();
 		}
 
-		GpuBuffer const & getPool()const
+		GpuBufferBase const & getPool()const
 		{
 			return *buffer;
 		}
 
-		GpuBuffer & getPool()
+		GpuBufferBase & getPool()
 		{
 			return *buffer;
 		}

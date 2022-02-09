@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CTL_MainFrame_HPP___
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
@@ -21,10 +22,12 @@ See LICENSE file in root folder
 
 namespace test_launcher
 {
+	using Clock = std::chrono::high_resolution_clock;;
+
 	struct FrameTimes
 	{
-		castor::Microseconds avg{};
-		castor::Microseconds last{};
+		Clock::time_point start{};
+		castor3d::Parameters params{};
 	};
 
 	class MainFrame
@@ -36,8 +39,10 @@ namespace test_launcher
 
 		bool initialise();
 		bool loadScene( wxString const & fileName );
-		FrameTimes saveFrame( castor::String const & suffix );
-		void cleanup();
+		void saveFrame( castor::String const & suffix
+			, FrameTimes & times );
+		void cleanup( castor::String const & suffix
+			, FrameTimes const & times );
 
 	private:
 		castor3d::Engine & m_engine;

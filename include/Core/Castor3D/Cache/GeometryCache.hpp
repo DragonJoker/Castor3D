@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -41,7 +42,8 @@ namespace castor3d
 			Geometry const & geometry;
 			Submesh const & submesh;
 			Pass const & pass;
-			UniformBufferOffsetT< ModelUboConfiguration > modelUbo{};
+			UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexUbo{};
+			GpuDataBufferOffset * modelDataUbo{};
 			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo{};
 		};
 		using ElementT = Geometry;
@@ -145,6 +147,17 @@ namespace castor3d
 		 *\param[in]	element	L'objet.
 		 */
 		C3D_API void add( ElementPtrT element );
+		/**
+		 *\~english
+		 *\return		The models data buffer.
+		 *\~french
+		 *\return		Le tampon dde données de modèles.
+		 */
+		ModelDataBuffer & getModelDataBuffer()const
+		{
+			CU_Require( m_modelDataBuffer );
+			return *m_modelDataBuffer;
+		}
 
 	public:
 		using ElementObjectCacheT::add;
@@ -169,6 +182,7 @@ namespace castor3d
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< SceneRenderPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
+		castor3d::ModelDataBufferSPtr m_modelDataBuffer;
 	};
 }
 

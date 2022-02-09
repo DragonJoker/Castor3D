@@ -31,11 +31,12 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -369,7 +370,8 @@ namespace castor3d
 		m_isDirty = true;
 
 		return &m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
-			, billboardEntry.modelUbo
+			, billboardEntry.modelIndexUbo
+			, billboardEntry.modelDataUbo
 			, billboardEntry.modelInstancesUbo
 			, buffers
 			, *billboard.getNode()
@@ -578,7 +580,7 @@ namespace castor3d
 			, &secondary );
 	}
 
-	uint32_t SceneRenderPass::doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & instanceBuffer )const
 	{
 		auto const count = std::min( uint32_t( instanceBuffer.size() / m_instanceMult )
@@ -593,8 +595,8 @@ namespace castor3d
 
 			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
 			{
-				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
 				buffer->m_material = int32_t( node->passNode.pass.getId() );
+				buffer->m_nodeId = node->modelIndexUbo.getData().nodeId;
 				uint32_t index = 0u;
 
 				for ( auto & unit : node->passNode.pass )
@@ -636,11 +638,11 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t SceneRenderPass::doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & instanceBuffer
 		, RenderInfo & info )const
 	{
-		auto count = this->doCopyNodesMatrices( renderNodes, instanceBuffer );
+		auto count = doCopyNodesIds( renderNodes, instanceBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
@@ -698,7 +700,7 @@ namespace castor3d
 					&& it != instantiation.end()
 					&& it->second[index].buffer )
 				{
-					doCopyNodesMatrices( renderNodes
+					doCopyNodesIds( renderNodes
 						, it->second[index].data );
 
 					if ( renderNodes.front()->skeleton )
@@ -731,7 +733,7 @@ namespace castor3d
 					&& it != instantiation.end()
 					&& it->second[index].buffer )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes
+					uint32_t count1 = doCopyNodesIds( renderNodes
 						, it->second[index].data );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
@@ -1003,7 +1005,8 @@ namespace castor3d
 		m_isDirty = true;
 
 		auto & result = m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
-			, geometryEntry.modelUbo
+			, geometryEntry.modelIndexUbo
+			, geometryEntry.modelDataUbo
 			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
@@ -1040,9 +1043,12 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
@@ -1087,22 +1093,24 @@ namespace castor3d
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
-				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
+				out.textures0 = c3d_modelIndex.getTextures0( flags.programFlags
 					, in.textures0 );
-				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
+				out.textures1 = c3d_modelIndex.getTextures1( flags.programFlags
 					, in.textures1 );
-				out.textures = c3d_modelData.getTextures( flags.programFlags
+				out.textures = c3d_modelIndex.getTextures( flags.programFlags
 					, in.textures );
-				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
+				out.material = c3d_modelIndex.getMaterialId( flags.programFlags
 					, in.material );
-				out.nodeId = c3d_modelData.getNodeId( flags.programFlags
+				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
 					, in.nodeId );
 				out.instance = writer.cast< UInt >( in.instanceIndex );
 
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
+					, modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
-					, c3d_modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+					, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_matrixData.worldToPrvProj( prvMtxModel * curPosition ) );
 				auto worldPos = writer.declLocale( "worldPos"
@@ -1116,7 +1124,7 @@ namespace castor3d
 				out.vtx.position = curPosition;
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+					, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
 				out.computeTangentSpace( flags.programFlags
 					, c3d_sceneData.cameraPosition
 					, worldPos.xyz()
@@ -1140,9 +1148,12 @@ namespace castor3d
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		UBO_BILLBOARD( writer
 			, uint32_t( NodeUboIdx::eBillboard )
 			, RenderPipeline::eBuffers );
@@ -1164,10 +1175,19 @@ namespace castor3d
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
+				out.textures0 = c3d_modelIndex.getTextures0();
+				out.textures1 = c3d_modelIndex.getTextures1();
+				out.textures = c3d_modelIndex.getTextures();
+				out.material = c3d_modelIndex.getMaterialId();
+				out.nodeId = c3d_modelIndex.getNodeId();
+				out.instance = writer.cast< UInt >( in.instanceIndex );
+
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
-					, c3d_modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_sceneData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
@@ -1193,13 +1213,6 @@ namespace castor3d
 				{
 					out.texture0 = vec3( uv, 0.0_f );
 				}
-
-				out.textures0 = c3d_modelData.getTextures0();
-				out.textures1 = c3d_modelData.getTextures1();
-				out.textures = c3d_modelData.getTextures();
-				out.material = c3d_modelData.getMaterialIndex();
-				out.nodeId = c3d_modelData.getNodeId();
-				out.instance = writer.cast< UInt >( in.instanceIndex );
 
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_matrixData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
