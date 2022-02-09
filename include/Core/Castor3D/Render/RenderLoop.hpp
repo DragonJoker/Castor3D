@@ -128,6 +128,13 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps moyen pour une frame, en nanosecondes.
 		 */
+		C3D_API void dumpFrameTimes( Parameters & params )const;
+		/**
+		 *\~english
+		 *\return		The average frame time, in nanoseconds.
+		 *\~french
+		 *\return		Le temps moyen pour une frame, en nanosecondes.
+		 */
 		C3D_API castor::Nanoseconds getAvgFrameTime()const;
 		/**
 		 *\~english

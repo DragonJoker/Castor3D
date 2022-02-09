@@ -206,7 +206,7 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::PassOverlays::update()
+	void DebugOverlays::PassOverlays::compute()
 	{
 		m_cpu.time = 0_ns;
 		m_gpu.time = 0_ns;
@@ -217,7 +217,10 @@ namespace castor3d
 			m_gpu.time += timer.first->getGpuTime();
 			timer.first->reset();
 		}
+	}
 
+	void DebugOverlays::PassOverlays::update()
+	{
 		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
 		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
 
@@ -358,18 +361,6 @@ namespace castor3d
 		m_gpu.value->setVisible( true );
 	}
 
-	void DebugOverlays::CategoryOverlays::initialise( uint32_t offset )
-	{
-		if ( !m_container )
-		{
-			return;
-		}
-
-		m_container->setPixelPosition( castor::Position{ 330, int32_t( 20 * offset ) } );
-		m_container->setPixelSize( castor::Size{ uint32_t( m_posX )
-			, ( m_detailed ? getPanelCount() : 1u ) * 20u } );
-	}
-
 	DebugOverlays::CategoryOverlays::~CategoryOverlays()
 	{
 		m_passes.clear();
@@ -384,6 +375,18 @@ namespace castor3d
 			m_cache->remove( m_firstLinePanel->getOverlayName() );
 			m_cache->remove( m_container->getOverlayName() );
 		}
+	}
+
+	void DebugOverlays::CategoryOverlays::initialise( uint32_t offset )
+	{
+		if ( !m_container )
+		{
+			return;
+		}
+
+		m_container->setPixelPosition( castor::Position{ 330, int32_t( 20 * offset ) } );
+		m_container->setPixelSize( castor::Size{ uint32_t( m_posX )
+			, ( m_detailed ? getPanelCount() : 1u ) * 20u } );
 	}
 
 	void DebugOverlays::CategoryOverlays::addTimer( FramePassTimer & timer )
@@ -428,7 +431,7 @@ namespace castor3d
 		return m_passes.empty();
 	}
 
-	void DebugOverlays::CategoryOverlays::update()
+	void DebugOverlays::CategoryOverlays::compute()
 	{
 		m_cpu.time = 0_ns;
 		m_gpu.time = 0_ns;
@@ -437,14 +440,25 @@ namespace castor3d
 		{
 			if ( pass )
 			{
-				pass->update();
+				pass->compute();
 				m_cpu.time += pass->getCpuTime();
 				m_gpu.time += pass->getGpuTime();
 			}
 		}
+	}
 
+	void DebugOverlays::CategoryOverlays::update()
+	{
 		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
 		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
+
+		for ( auto & pass : m_passes )
+		{
+			if ( pass )
+			{
+				pass->update();
+			}
+		}
 	}
 
 	void DebugOverlays::CategoryOverlays::retrieveGpuTime()
@@ -552,6 +566,17 @@ namespace castor3d
 		}
 	}
 
+	void DebugOverlays::dumpFrameTimes( Parameters & params )
+	{
+		params.add( "Average", m_averageTime );
+
+		for ( auto & pass : m_renderPasses )
+		{
+			params.add( pass.first + " GPU", pass.second.getGpuTime() );
+			params.add( pass.first + " CPU", pass.second.getCpuTime() );
+		}
+	}
+
 	castor::Microseconds DebugOverlays::endFrame( bool first )
 	{
 		m_totalTime = m_frameTimer.getElapsed() + m_externalTime;
@@ -561,27 +586,24 @@ namespace castor3d
 			 // Prevent initialisation frame from being counted in average time.
 			++m_frameCount;
 			m_framesTimes[m_frameIndex] = m_totalTime;
+			auto count = std::min( m_frameCount, uint64_t( m_framesTimes.size() ) );
 			m_averageTime = std::accumulate( m_framesTimes.begin()
-				, m_framesTimes.begin() + ptrdiff_t( std::min( m_frameCount, uint64_t( m_framesTimes.size() ) ) )
-				, 0_ns ) / m_framesTimes.size();
+				, std::next( m_framesTimes.begin(), ptrdiff_t( count ) )
+				, 0_ns ) / count;
 			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() );
 			auto v = ( ++m_frameIndex ) % FRAME_SAMPLES_COUNT;
 			m_frameIndex = v;
 		}
 
-		auto total = std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
-		m_fps = 1000000.0f / float( total.count() );
+		auto result = std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
+		m_fps = 1000000.0f / float( result.count() );
+		doCompute();
 
 		if ( m_visible )
 		{
-			m_gpuTotalTime = 0_ns;
-			m_gpuClientTime = 0_ns;
-
 			for ( auto & pass : m_renderPasses )
 			{
 				pass.second.update();
-				m_gpuTotalTime += pass.second.getGpuTime();
-				m_gpuClientTime += pass.second.getCpuTime();
 			}
 
 			m_debugPanel->update();
@@ -590,11 +612,11 @@ namespace castor3d
 
 		fprintf( stdout
 			, "\r%0.2f ms, %0.2f fps                           "
-			, float( total.count() ) / 1000.0f
+			, float( result.count() ) / 1000.0f
 			, m_fps );
 		m_frameTimer.getElapsed();
 
-		return total;
+		return result;
 	}
 
 	void DebugOverlays::endGpuTask()
@@ -682,6 +704,19 @@ namespace castor3d
 			, m_renderInfo.m_drawCalls );
 		m_debugPanel->updatePosition();
 		m_debugPanel->setVisible( m_visible );
+	}
+
+	void DebugOverlays::doCompute()
+	{
+		m_gpuTotalTime = 0_ns;
+		m_gpuClientTime = 0_ns;
+
+		for ( auto & pass : m_renderPasses )
+		{
+			pass.second.compute();
+			m_gpuTotalTime += pass.second.getGpuTime();
+			m_gpuClientTime += pass.second.getCpuTime();
+		}
 	}
 
 	//*********************************************************************************************

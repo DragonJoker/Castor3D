@@ -142,6 +142,12 @@ namespace castor3d
 		return m_debugOverlays->isShown();
 	}
 
+	void RenderLoop::dumpFrameTimes( Parameters & params )const
+	{
+		params.add( "Last", std::chrono::duration_cast< castor::Nanoseconds >( getLastFrameTime() ) );
+		m_debugOverlays->dumpFrameTimes( params );
+	}
+
 	castor::Nanoseconds RenderLoop::getAvgFrameTime()const
 	{
 		return m_debugOverlays->getAvgFrameTime();

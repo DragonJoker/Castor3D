@@ -255,6 +255,37 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Model index data.
+	*\~french
+	*\brief
+	*	Données indices de modèle.
+	*/
+	struct ModelIndexUboConfiguration
+	{
+		castor::Point4ui textures0;
+		castor::Point4ui textures1;
+		int32_t textures;
+		int32_t materialId;
+		int32_t nodeId;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Model data.
+	*\~french
+	*\brief
+	*	Données modèle.
+	*/
+	struct ModelDataUboConfiguration
+	{
+		castor::Matrix4x4f prvModel;
+		castor::Matrix4x4f curModel;
+		castor::Matrix4x4f normal;
+		castor::Point4i shadowEnvMapIndex;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Model data.
 	*\~french
 	*\brief

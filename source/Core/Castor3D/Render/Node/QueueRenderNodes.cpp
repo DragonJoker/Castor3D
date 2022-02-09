@@ -557,7 +557,8 @@ namespace castor3d
 	}
 
 	SubmeshRenderNode & QueueRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+		, GpuDataBufferOffset * modelDataBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
@@ -567,7 +568,8 @@ namespace castor3d
 		, AnimatedSkeleton * skeleton )
 	{
 		return getOwner()->getCuller().getScene().getRenderNodes().createNode( std::move( passNode )
-			, std::move( modelBuffer )
+			, std::move( modelIndexBuffer )
+			, std::move( modelDataBuffer )
 			, std::move( modelInstancesBuffer )
 			, buffers
 			, sceneNode
@@ -578,7 +580,8 @@ namespace castor3d
 	}
 
 	BillboardRenderNode & QueueRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+		, GpuDataBufferOffset * modelDataBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
@@ -586,7 +589,8 @@ namespace castor3d
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
 	{
 		return getOwner()->getCuller().getScene().getRenderNodes().createNode( std::move( passNode )
-			, std::move( modelBuffer )
+			, std::move( modelIndexBuffer )
+			, std::move( modelDataBuffer )
 			, std::move( modelInstancesBuffer )
 			, buffers
 			, sceneNode

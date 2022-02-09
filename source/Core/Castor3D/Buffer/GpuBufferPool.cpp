@@ -26,7 +26,7 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	GpuBuffer & GpuBufferPool::doGetBuffer( VkDeviceSize size
+	GpuBufferBase & GpuBufferPool::doGetBuffer( VkDeviceSize size
 		, VkBufferUsageFlags target
 		, VkMemoryPropertyFlags memory
 		, MemChunk & chunk )
@@ -55,13 +55,12 @@ namespace castor3d
 			CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
 			CU_Require( maxSize >= size );
 
-			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >( *getRenderSystem() 
+			auto buffer = std::make_unique< GpuBuddyBuffer >( *getRenderSystem()
 				, target
 				, memory
 				, m_debugName
 				, ashes::QueueShare{}
-				, uint32_t( level )
-				, m_minBlockSize );
+				, GpuBufferBuddyAllocator{ uint32_t( level ), m_minBlockSize } );
 			buffer->initialise( m_device );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = std::next( it->second.begin()
@@ -72,7 +71,7 @@ namespace castor3d
 		return *( *itB ).get();
 	}
 
-	void GpuBufferPool::doPutBuffer( GpuBuffer const & buffer
+	void GpuBufferPool::doPutBuffer( GpuBufferBase const & buffer
 		, VkBufferUsageFlags target
 		, VkMemoryPropertyFlags memory
 		, MemChunk const & chunk )
@@ -82,7 +81,7 @@ namespace castor3d
 		CU_Require( it != m_buffers.end() );
 		auto itB = std::find_if( it->second.begin()
 			, it->second.end()
-			, [&buffer]( std::unique_ptr< GpuBuffer > const & lookup )
+			, [&buffer]( std::unique_ptr< GpuBuddyBuffer > const & lookup )
 			{
 				return &lookup->getBuffer().getBuffer() == &buffer.getBuffer().getBuffer();
 			} );

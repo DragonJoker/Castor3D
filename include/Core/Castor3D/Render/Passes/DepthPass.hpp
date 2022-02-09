@@ -46,8 +46,7 @@ namespace castor3d
 		{
 			return ShaderFlag::eWorldSpace
 				| ShaderFlag::eTangentSpace
-				| ShaderFlag::eVelocity
-				| ShaderFlag::eNodeId;
+				| ShaderFlag::eVelocity;
 		}
 
 	private:

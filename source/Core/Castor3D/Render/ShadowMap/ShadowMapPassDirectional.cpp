@@ -25,13 +25,14 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapDirectionalUbo.hpp"
@@ -233,9 +234,12 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
@@ -288,18 +292,22 @@ namespace castor3d
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
-				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
+				out.textures0 = c3d_modelIndex.getTextures0( flags.programFlags
 					, in.textures0 );
-				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
+				out.textures1 = c3d_modelIndex.getTextures1( flags.programFlags
 					, in.textures1 );
-				out.textures = c3d_modelData.getTextures( flags.programFlags
+				out.textures = c3d_modelIndex.getTextures( flags.programFlags
 					, in.textures );
-				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
+				out.material = c3d_modelIndex.getMaterialId( flags.programFlags
 					, in.material );
+				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
+					, in.nodeId );
 				out.instance = writer.cast< UInt >( in.instanceIndex );
 
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
+					, modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				auto worldPos = writer.declLocale( "worldPos"
 					, mtxModel * curPosition );
 				out.worldPosition = worldPos;
@@ -326,7 +334,7 @@ namespace castor3d
 #endif
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-					, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
+					, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
 				out.computeTangentSpace( flags.programFlags
 					, vec3( 0.0_f )
 					, worldPos.xyz()
@@ -347,23 +355,17 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
-		shader::Materials materials{ writer };
-		materials.declare( uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-		shader::TextureAnimations textureAnims{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
-				, RenderPipeline::eBuffers );
-			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
-				, RenderPipeline::eBuffers );
-		}
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers };
+		shader::TextureConfigurations textureConfigs{ writer
+			, uint32_t( NodeUboIdx::eTexConfigs )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::TextureAnimations textureAnims{ writer
+			, uint32_t( NodeUboIdx::eTexAnims )
+			, RenderPipeline::eBuffers
+			, hasTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u

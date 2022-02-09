@@ -524,6 +524,18 @@ namespace castor3d
 		{
 		}
 
+		TextureConfigurations::TextureConfigurations( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, bool enable )
+			: TextureConfigurations{ writer }
+		{
+			if ( enable )
+			{
+				declare( binding, set );
+			}
+		}
+
 		void TextureConfigurations::declare( uint32_t binding, uint32_t set )
 		{
 			m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer

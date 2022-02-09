@@ -110,7 +110,7 @@ namespace castor
 		 *\param[in]	numLevels		La taille maximale de l'arbre de l'allocateur.
 		 *\param[in]	minBlockSize	La taille minimale d'un bloc.
 		 */
-		inline BuddyAllocatorT( uint32_t numLevels
+		BuddyAllocatorT( uint32_t numLevels
 			, uint32_t minBlockSize );
 		/**
 		 *\~english
@@ -118,7 +118,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~BuddyAllocatorT();
+		~BuddyAllocatorT();
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -127,7 +127,7 @@ namespace castor
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
 		 */
-		inline bool hasAvailable( size_t size )const;
+		bool hasAvailable( size_t size )const;
 		/**
 		 *\~english
 		 *\brief		Allocates memory.
@@ -138,7 +138,7 @@ namespace castor
 		 *\param[in]	size	La taille requiese pour la mémoire.
 		 *\return		La zone mémoire.
 		 */
-		inline PointerType allocate( size_t size );
+		PointerType allocate( size_t size );
 		/**
 		 *\~english
 		 *\brief		Deallocates memory.
@@ -147,7 +147,28 @@ namespace castor
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	pointer	La zone mémoire.
 		 */
-		inline void deallocate( PointerType pointer );
+		void deallocate( PointerType pointer );
+		/**
+		 *\~english
+		 *\brief		Deallocates memory.
+		 *\param[in]	pointer	The memory chunk.
+		 *\~french
+		 *\brief		Désalloue de la mémoire.
+		 *\param[in]	pointer	La zone mémoire.
+		 */
+		size_t getTotalSize()const;
+		/**
+		 *\~english
+		 *\brief		Deallocates memory.
+		 *\param[in]	pointer	The memory chunk.
+		 *\~french
+		 *\brief		Désalloue de la mémoire.
+		 *\param[in]	pointer	La zone mémoire.
+		 */
+		size_t getAlignSize()const
+		{
+			return m_minBlockSize;
+		}
 
 	private:
 		inline uint32_t doGetLevel( size_t size )const;

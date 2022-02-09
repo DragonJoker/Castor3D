@@ -21,6 +21,7 @@
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
 #include <Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include <Castor3D/Shader/Shaders/GlslModelData.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
@@ -29,7 +30,7 @@
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/BillboardUbo.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
-#include <Castor3D/Shader/Ubos/ModelUbo.hpp>
+#include <Castor3D/Shader/Ubos/ModelIndexUbo.hpp>
 #include <Castor3D/Shader/Ubos/MorphingUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
@@ -905,9 +906,12 @@ namespace ocean
 			&& "Can't have both instantiation and morphing yet." );
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 
 		UBO_MATRIX( writer
 			, uint32_t( PassUboIdx::eMatrix )
@@ -934,8 +938,10 @@ namespace ocean
 			out.vtx.position = in.position;
 			out.texture0 = in.texture0;
 			out.texture1 = in.texture1;
-			out.material = c3d_modelData.getMaterialIndex( flags.programFlags
+			out.material = c3d_modelIndex.getMaterialId( flags.programFlags
 				, in.material );
+			out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
+				, in.nodeId );
 
 #if Ocean_DebugPixelShader
 			auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
@@ -974,9 +980,12 @@ namespace ocean
 		auto uv = writer.declInput< Vec2 >( "uv", 1u );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		UBO_BILLBOARD( writer
 			, uint32_t( NodeUboIdx::eBillboard )
 			, RenderPipeline::eBuffers );
@@ -998,10 +1007,15 @@ namespace ocean
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
+				out.nodeId = c3d_modelIndex.getNodeId();
+				out.material = c3d_modelIndex.getMaterialId();
+
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, c3d_modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
-					, c3d_modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_sceneData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
@@ -1023,8 +1037,7 @@ namespace ocean
 					, ( curBbcenter + scaledRight + scaledUp ) );
 				out.texture0 = vec3( uv, 1.0_f );
 				out.texture1 = vec3( uv * 50.0_f, 1.0_f );
-				out.material = c3d_modelData.getMaterialIndex();
-				out.vtx.position = c3d_modelData.worldToModel( vec4( worldPos, 1.0_f ) );
+				out.vtx.position = modelData.worldToModel( vec4( worldPos, 1.0_f ) );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1088,6 +1101,7 @@ namespace ocean
 			{
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
 				listOut.material = listIn[in.invocationID].material;
+				listOut.nodeId = listIn[in.invocationID].nodeId;
 				listOut.texture0 = listIn[in.invocationID].texture0;
 				listOut.texture1 = listIn[in.invocationID].texture1;
 			} );
@@ -1107,9 +1121,9 @@ namespace ocean
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		castor3d::shader::Utils utils{ writer, *getEngine() };
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
@@ -1215,6 +1229,7 @@ namespace ocean
 					+ patchIn.tessCoord.y() * listIn[1].texture1
 					+ patchIn.tessCoord.z() * listIn[2].texture1;
 				out.material = listIn[0].material;
+				out.nodeId = listIn[0].nodeId;
 				auto texcoord = writer.declLocale( "texcoord"
 					, patchIn.tessCoord.x() * listIn[0].texture0
 					+ patchIn.tessCoord.y() * listIn[1].texture0
@@ -1264,12 +1279,14 @@ namespace ocean
 				}
 				FI;
 
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto height = writer.declLocale( "height"
 					, finalWaveResult.position.y() - out.vtx.position.y() );
 				auto mtxModel = writer.declLocale( "mtxModel"
-					, c3d_modelData.getModelMtx() );
+					, modelData.getModelMtx() );
 				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
+					, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
 
 				out.normal = normalize( mtxNormal * finalWaveResult.normal );
 				out.tangent = normalize( mtxNormal * finalWaveResult.tangent );
@@ -1316,12 +1333,12 @@ namespace ocean
 		shader::Utils utils{ writer, *getEngine() };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
-		shader::Materials materials{ writer };
-		materials.declare( uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers };
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 
 		UBO_MATRIX( writer
 			, uint32_t( PassUboIdx::eMatrix )
@@ -1429,6 +1446,8 @@ namespace ocean
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelData[writer.cast< sdw::UInt >( in.nodeId )] );
 					// Direct Lighting
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
@@ -1441,7 +1460,7 @@ namespace ocean
 						, c3d_sceneData
 						, surface
 						, worldEye
-						, c3d_modelData.isShadowReceiver()
+						, modelData.isShadowReceiver()
 						, output );
 					lightMat->adjustDirectSpecular( lightSpecular );
 					displayDebugData( eLightDiffuse, lightDiffuse, 1.0_f );
