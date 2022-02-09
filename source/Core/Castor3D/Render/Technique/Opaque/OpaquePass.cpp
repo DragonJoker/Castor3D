@@ -23,7 +23,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
@@ -139,25 +138,18 @@ namespace castor3d
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
-		shader::Materials materials{ writer };
-		materials.declare( uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers };
 		bool hasTextures = !flags.textures.empty();
-		shader::TextureConfigurations textureConfigs{ writer };
-		shader::TextureAnimations textureAnims{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
-				, RenderPipeline::eBuffers );
-			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
-				, RenderPipeline::eBuffers );
-		}
-
-		// UBOs
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
+		shader::TextureConfigurations textureConfigs{ writer
+			, uint32_t( NodeUboIdx::eTexConfigs )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::TextureAnimations textureAnims{ writer
+			, uint32_t( NodeUboIdx::eTexAnims )
+			, RenderPipeline::eBuffers
+			, hasTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u

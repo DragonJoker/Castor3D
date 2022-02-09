@@ -330,10 +330,9 @@ namespace test_launcher
 		return m_renderWindow != nullptr;
 	}
 
-	FrameTimes MainFrame::saveFrame( castor::String const & suffix )
+	void MainFrame::saveFrame( castor::String const & suffix
+		, FrameTimes & times )
 	{
-		FrameTimes result;
-
 		if ( m_renderWindow )
 		{
 			wxBitmap bitmap;
@@ -343,8 +342,7 @@ namespace test_launcher
 				m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			}
 
-			result.avg = std::chrono::duration_cast< castor::Microseconds >( m_engine.getRenderLoop().getAvgFrameTime() );
-			result.last = m_engine.getRenderLoop().getLastFrameTime();
+			m_engine.getRenderLoop().dumpFrameTimes( times.params );
 			m_renderWindow->enableSaveFrame();
 			m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			auto buffer = m_renderWindow->getSavedFrame();
@@ -360,13 +358,13 @@ namespace test_launcher
 			}
 
 			Path outputPath = folder / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".png" ) );
+
 			image.SaveFile( wxString( outputPath ) );
 		}
-
-		return result;
 	}
 
-	void MainFrame::cleanup()
+	void MainFrame::cleanup( castor::String const & suffix
+		, FrameTimes const & times )
 	{
 		try
 		{
@@ -377,6 +375,24 @@ namespace test_launcher
 		}
 
 		m_renderWindow.reset();
+		auto stop = Clock::now();
+		auto totalTime = std::chrono::duration_cast< castor::Microseconds >( stop - times.start );
+		castor::Nanoseconds avg{};
+		castor::Nanoseconds last{};
+
+		if ( times.params.get( "Average", avg )
+			&& times.params.get( "Last", last ) )
+		{
+			std::ofstream stream{ m_filePath.getPath() / cuT( "Compare" ) / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".times" ) ) };
+
+			if ( stream.is_open() )
+			{
+				stream << totalTime.count()
+					<< " " << std::chrono::duration_cast< castor::Microseconds >( avg ).count()
+					<< " " << std::chrono::duration_cast< castor::Microseconds >( last ).count();
+			}
+		}
+
 		m_engine.cleanup();
 	}
 }

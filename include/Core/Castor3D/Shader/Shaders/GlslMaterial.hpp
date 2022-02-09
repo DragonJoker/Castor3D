@@ -74,6 +74,10 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API explicit Materials( sdw::ShaderWriter & writer );
+		C3D_API explicit Materials( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, bool enable = true );
 		virtual ~Materials() = default;
 		C3D_API void declare( uint32_t binding
 			, uint32_t set );

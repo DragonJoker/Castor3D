@@ -60,22 +60,6 @@ namespace castor3d
 			ashes::VkVertexInputAttributeDescriptionArray attributes;
 			attributes.push_back( { currentLocation++
 				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32G32B32A32_SFLOAT
-				, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( castor::Point4f ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32G32B32A32_SFLOAT
-				, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( castor::Point4f ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32G32B32A32_SFLOAT
-				, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( castor::Point4f ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32G32B32A32_SFLOAT
-				, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( castor::Point4f ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
 				, VK_FORMAT_R32G32B32A32_UINT
 				, offsetof( InstantiationData, m_textures0 ) } );
 			attributes.push_back( { currentLocation++
@@ -90,14 +74,10 @@ namespace castor3d
 				, InstantiationComponent::BindingPoint
 				, VK_FORMAT_R32_SINT
 				, offsetof( InstantiationData, m_material ) } );
-
-			if ( checkFlag( shaderFlags, ShaderFlag::eNodeId ) )
-			{
-				attributes.push_back( { currentLocation++
-					, InstantiationComponent::BindingPoint
-					, VK_FORMAT_R32_SINT
-					, offsetof( InstantiationData, m_nodeId ) } );
-			}
+			attributes.push_back( { currentLocation++
+				, InstantiationComponent::BindingPoint
+				, VK_FORMAT_R32_SINT
+				, offsetof( InstantiationData, m_nodeId ) } );
 
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}

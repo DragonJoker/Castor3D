@@ -118,9 +118,9 @@ namespace castor3d
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
 
 		// Shader inputs
-		shader::Materials materials{ writer };
-		materials.declare( uint32_t( LightPassIdx::eMaterials )
-			, 0u );
+		shader::Materials materials{ writer
+			, uint32_t( LightPassIdx::eMaterials )
+			, 0u };
 		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
 		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;

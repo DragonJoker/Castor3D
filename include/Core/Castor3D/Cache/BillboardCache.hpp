@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/ObjectCacheBase.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -35,7 +36,8 @@ namespace castor3d
 			size_t hash;
 			BillboardBase const & billboard;
 			Pass const & pass;
-			UniformBufferOffsetT< ModelUboConfiguration > modelUbo{};
+			UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexUbo{};
+			GpuDataBufferOffset * modelDataUbo{};
 			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo{};
 			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo{};
 		};
@@ -129,6 +131,17 @@ namespace castor3d
 		C3D_API PoolsEntry getUbos( BillboardBase const & billboard
 			, Pass const & pass
 			, uint32_t instanceMult )const;
+		/**
+		 *\~english
+		 *\return		The models data buffer.
+		 *\~french
+		 *\return		Le tampon dde données de modèles.
+		 */
+		ModelDataBuffer & getModelDataBuffer()const
+		{
+			CU_Require( m_modelDataBuffer );
+			return *m_modelDataBuffer;
+		}
 
 	private:
 		void doCreateEntry( RenderDevice const & device
@@ -144,6 +157,7 @@ namespace castor3d
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< SceneRenderPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
+		castor3d::ModelDataBufferSPtr m_modelDataBuffer;
 	};
 }
 

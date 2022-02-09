@@ -64,8 +64,7 @@ namespace draw_edges
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			castor3d::shader::Materials materials{ writer };
-			materials.declare( eMaterials, 0u );
+			castor3d::shader::Materials materials{ writer, eMaterials, 0u };
 			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
 
 			// Shader outputs

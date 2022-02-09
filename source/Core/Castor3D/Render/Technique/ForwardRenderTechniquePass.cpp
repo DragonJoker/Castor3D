@@ -23,6 +23,7 @@
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -32,7 +33,6 @@
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
@@ -97,23 +97,20 @@ namespace castor3d
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
-		shader::Materials materials{ writer };
-		materials.declare( uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-		shader::TextureAnimations textureAnims{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
-				, RenderPipeline::eBuffers );
-			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
-				, RenderPipeline::eBuffers );
-		}
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, uint32_t( NodeUboIdx::eMaterials )
+			, RenderPipeline::eBuffers };
+		shader::TextureConfigurations textureConfigs{ writer
+			, uint32_t( NodeUboIdx::eTexConfigs )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::TextureAnimations textureAnims{ writer
+			, uint32_t( NodeUboIdx::eTexAnims )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -226,6 +223,8 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelData[writer.cast< sdw::UInt >( in.nodeId )] );
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.cameraPosition );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -239,7 +238,7 @@ namespace castor3d
 						, c3d_sceneData
 						, surface
 						, worldEye
-						, c3d_modelData.isShadowReceiver()
+						, modelData.isShadowReceiver()
 						, output );
 
 					auto ambient = writer.declLocale( "ambient"

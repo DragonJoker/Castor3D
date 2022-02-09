@@ -87,7 +87,6 @@ namespace castor3d::shader
 		sdw::IVec4 boneIds1;
 		sdw::Vec4 boneWeights0;
 		sdw::Vec4 boneWeights1;
-		sdw::Mat4 transform;
 		sdw::UVec4 textures0;
 		sdw::UVec4 textures1;
 		sdw::Int textures;
