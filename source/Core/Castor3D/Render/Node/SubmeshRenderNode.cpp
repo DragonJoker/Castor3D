@@ -5,14 +5,16 @@ CU_ImplementCUSmartPtr( castor3d, SubmeshRenderNode )
 namespace castor3d
 {
 	SubmeshRenderNode::SubmeshRenderNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+		, GpuDataBufferOffset * modelDataBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data
 		, Geometry & instance )
 		: passNode{ std::move( passNode ) }
-		, modelUbo{ std::move( modelBuffer ) }
+		, modelIndexUbo{ std::move( modelIndexBuffer ) }
+		, modelDataUbo{ std::move( modelDataBuffer ) }
 		, modelInstancesUbo{ std::move( modelInstancesBuffer ) }
 		, buffers{ buffers }
 		, sceneNode{ sceneNode }

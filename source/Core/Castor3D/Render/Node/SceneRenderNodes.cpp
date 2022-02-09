@@ -19,6 +19,7 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ModelDataBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
@@ -125,8 +126,15 @@ namespace castor3d
 			uboBindings.emplace_back( engine.getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
 			uboBindings.emplace_back( engine.getMaterialCache().getTexConfigBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
 			uboBindings.emplace_back( engine.getMaterialCache().getTexAnimBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModel )
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelIndex )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, ( VK_SHADER_STAGE_FRAGMENT_BIT
+					| VK_SHADER_STAGE_GEOMETRY_BIT
+					| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+					| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+					| VK_SHADER_STAGE_VERTEX_BIT ) ) );
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelData )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, ( VK_SHADER_STAGE_FRAGMENT_BIT
 					| VK_SHADER_STAGE_GEOMETRY_BIT
 					| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
@@ -235,12 +243,14 @@ namespace castor3d
 					, layout.getBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
 				engine.getMaterialCache().getTexAnimBuffer().createBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
-				CU_Require( node.modelUbo );
-				node.modelUbo.createSizedBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eModel ) ) );
+				CU_Require( node.modelIndexUbo );
+				node.modelIndexUbo.createSizedBinding( descriptorSet
+					, layout.getBinding( uint32_t( NodeUboIdx::eModelIndex ) ) );
 
 				if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
 				{
+					node.sceneNode.getScene()->getGeometryCache().getModelDataBuffer().createBinding( descriptorSet
+						, layout.getBinding( uint32_t( NodeUboIdx::eModelData ) ) );
 					SubmeshRenderNode & submeshNode = node;
 
 					if ( submeshNode.mesh )
@@ -263,6 +273,8 @@ namespace castor3d
 				}
 				else
 				{
+					node.sceneNode.getScene()->getBillboardListCache().getModelDataBuffer().createBinding( descriptorSet
+						, layout.getBinding( uint32_t( NodeUboIdx::eModelData ) ) );
 					node.billboardUbo.createSizedBinding( descriptorSet
 						, layout.getBinding( uint32_t( NodeUboIdx::eBillboard ) ) );
 				}
@@ -753,7 +765,8 @@ namespace castor3d
 	}
 
 	SubmeshRenderNode & SceneRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+		, GpuDataBufferOffset * modelDataBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
@@ -782,7 +795,8 @@ namespace castor3d
 		{
 			doUpdateDescriptorsCounts( passNode.pass, nullptr, &data, mesh, skeleton );
 			it.first->second = castor::makeUnique< SubmeshRenderNode >( std::move( passNode )
-				, std::move( modelBuffer )
+				, std::move( modelIndexBuffer )
+				, modelDataBuffer
 				, std::move( modelInstancesBuffer )
 				, buffers
 				, sceneNode
@@ -796,7 +810,8 @@ namespace castor3d
 	}
 
 	BillboardRenderNode & SceneRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+		, GpuDataBufferOffset * modelDataBuffer
 		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
@@ -823,7 +838,8 @@ namespace castor3d
 		{
 			doUpdateDescriptorsCounts( passNode.pass, &instance, nullptr, nullptr, nullptr );
 			it.first->second = castor::makeUnique< BillboardRenderNode >( std::move( passNode )
-				, std::move( modelBuffer )
+				, std::move( modelIndexBuffer )
+				, modelDataBuffer
 				, std::move( modelInstancesBuffer )
 				, buffers
 				, sceneNode

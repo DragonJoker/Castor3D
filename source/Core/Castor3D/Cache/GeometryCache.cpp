@@ -15,6 +15,7 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ModelDataBuffer.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -75,6 +76,11 @@ namespace castor3d
 			, MovableMergerT< GeometryCache >{ scene.getName() }
 			, MovableAttacherT< GeometryCache >{}
 			, MovableDetacherT< GeometryCache >{} }
+		, m_modelDataBuffer{ std::make_shared< ModelDataBuffer >( *scene.getEngine()
+			, scene.getEngine()->getRenderSystem()->getRenderDevice()
+			, ( scene.getEngine()->getRenderSystem()->getRenderDevice().hasBindless()
+				? scene.getEngine()->getRenderSystem()->getRenderDevice().getMaxBindlessSampled()
+				: shader::MaxModelDataCount ) ) }
 	{
 	}
 
@@ -178,23 +184,22 @@ namespace castor3d
 			auto & entry = pair.second;
 
 			if ( entry.geometry.getParent()
-				&& bool( entry.modelUbo ) )
+				&& bool( entry.modelIndexUbo ) )
 			{
-				auto & modelData = entry.modelUbo.getData();
-				modelData.nodeId = entry.id;
-				modelData.shadowReceiver = entry.geometry.isShadowReceiver();
-				modelData.materialIndex = int( entry.pass.getId() );
+				auto & modelIndex = entry.modelIndexUbo.getData();
+				modelIndex.nodeId = entry.id;
+				modelIndex.materialId = int( entry.pass.getId() );
 				uint32_t index = 0u;
 
 				for ( auto & unit : entry.pass )
 				{
 					if ( index < 4 )
 					{
-						modelData.textures0[index] = unit->getId();
+						modelIndex.textures0[index] = unit->getId();
 					}
 					else if ( index < 8 )
 					{
-						modelData.textures1[index - 4] = unit->getId();
+						modelIndex.textures1[index - 4] = unit->getId();
 					}
 
 					++index;
@@ -204,21 +209,24 @@ namespace castor3d
 				{
 					if ( index < 4 )
 					{
-						modelData.textures0[index] = 0u;
+						modelIndex.textures0[index] = 0u;
 					}
 					else
 					{
-						modelData.textures1[index - 4] = 0u;
+						modelIndex.textures1[index - 4] = 0u;
 					}
 
 					++index;
 				}
 
-				modelData.textures = int32_t( std::min( 8u, entry.pass.getTextureUnitsCount() ) );
+				modelIndex.textures = int32_t( std::min( 8u, entry.pass.getTextureUnitsCount() ) );
+
+				auto & modelData = entry.modelDataUbo->getData();
+				modelData.shadowEnvMapIndex->x = entry.geometry.isShadowReceiver();
 
 				if ( entry.pass.hasEnvironmentMapping() )
 				{
-					modelData.environmentIndex = int( getScene()->getEnvironmentMapIndex( *entry.geometry.getParent() ) + 1u );
+					modelData.shadowEnvMapIndex->y = int( getScene()->getEnvironmentMapIndex( *entry.geometry.getParent() ) + 1u );
 				}
 
 				modelData.prvModel = modelData.curModel;
@@ -254,12 +262,14 @@ namespace castor3d
 
 		for ( auto & entry : m_baseEntries )
 		{
-			uboPools.putBuffer( entry.second.modelUbo );
+			uboPools.putBuffer( entry.second.modelIndexUbo );
 		}
 
 		m_entries.clear();
 		m_baseEntries.clear();
 		m_instances.clear();
+
+		m_modelDataBuffer.reset();
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::add( ElementPtrT element )
@@ -286,7 +296,9 @@ namespace castor3d
 			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
 			baseEntry.id = int32_t( m_baseEntries.size( ));
-			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.modelIndexUbo = uboPools.getBuffer< ModelIndexUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.modelDataUbo = &m_modelDataBuffer->getBuffer();
+			CU_Ensure( baseEntry.id - 1u == baseEntry.modelDataUbo->getOffset() / m_modelDataBuffer->getElemAlign() );
 
 			for ( auto instanceMult : m_instances )
 			{
@@ -333,7 +345,8 @@ namespace castor3d
 		{
 			auto entry = it->second;
 			m_baseEntries.erase( it );
-			uboPools.putBuffer( entry.modelUbo );
+			m_modelDataBuffer->putBuffer( *entry.modelDataUbo );
+			uboPools.putBuffer( entry.modelIndexUbo );
 		}
 	}
 

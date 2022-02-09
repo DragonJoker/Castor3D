@@ -224,9 +224,7 @@ namespace test_launcher
 
 			castor::Logger::setFileName( m_config.fileName.getPath() / cuT( "Compare" ) / ( m_config.fileName.getFileName() + cuT( "_" ) + m_config.renderer + cuT( ".log" ) ) );
 			castor::Logger::logInfo( cuT( "Start" ) );
-			using clock = std::chrono::high_resolution_clock;
-			auto start = clock::now();
-			FrameTimes frameTimes;
+			FrameTimes frameTimes{ Clock::now() };
 
 			try
 			{
@@ -241,9 +239,9 @@ namespace test_launcher
 							castor::Logger::logInfo( cuT( "Load scene" ) );
 							mainFrame->loadScene( m_config.fileName );
 							castor::Logger::logInfo( cuT( "Save frame" ) );
-							frameTimes = mainFrame->saveFrame( m_outputFileSuffix );
+							mainFrame->saveFrame( m_outputFileSuffix, frameTimes );
 							castor::Logger::logInfo( cuT( "Cleanup frame" ) );
-							mainFrame->cleanup();
+							mainFrame->cleanup( m_outputFileSuffix, frameTimes );
 						}
 
 						castor::Logger::logInfo( cuT( "Close window" ) );
@@ -270,14 +268,6 @@ namespace test_launcher
 
 			castor::Logger::logInfo( cuT( "Stop" ) );
 			castor::Logger::cleanup();
-			auto stop = clock::now();
-			auto totalTime = std::chrono::duration_cast< castor::Microseconds >( stop - start );
-			std::ofstream stream{ m_config.fileName.getPath() / cuT( "Compare" ) / ( m_config.fileName.getFileName() + cuT( "_" ) + m_config.renderer + cuT( ".times" ) ) };
-
-			if ( stream.is_open() )
-			{
-				stream << totalTime.count() << " " << frameTimes.avg.count() << " " << frameTimes.last.count();
-			}
 		}
 
 		wxImage::CleanUpHandlers();

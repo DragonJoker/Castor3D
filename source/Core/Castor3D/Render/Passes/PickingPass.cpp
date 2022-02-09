@@ -26,13 +26,14 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
@@ -247,7 +248,7 @@ namespace castor3d
 				if ( it != component.end()
 					&& it->second[0].buffer )
 				{
-					doCopyNodesMatrices( renderNodes
+					doCopyNodesIds( renderNodes
 						, it->second[0].data );
 
 					if ( renderNodes.front()->skeleton )
@@ -312,9 +313,12 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
+		UBO_MODEL_INDEX( writer
+			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
@@ -350,18 +354,22 @@ namespace castor3d
 				in.morph( c3d_morphingData
 					, curPosition
 					, out.texture0 );
-				out.textures0 = c3d_modelData.getTextures0( flags.programFlags
+				out.textures0 = c3d_modelIndex.getTextures0( flags.programFlags
 					, in.textures0 );
-				out.textures1 = c3d_modelData.getTextures1( flags.programFlags
+				out.textures1 = c3d_modelIndex.getTextures1( flags.programFlags
 					, in.textures1 );
-				out.textures = c3d_modelData.getTextures( flags.programFlags
+				out.textures = c3d_modelIndex.getTextures( flags.programFlags
 					, in.textures );
-				out.material = c3d_modelData.getMaterialIndex( flags.programFlags
+				out.material = c3d_modelIndex.getMaterialId( flags.programFlags
 					, in.material );
+				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
+					, in.nodeId );
 				out.instance = writer.cast< UInt >( in.instanceIndex );
 
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
+					, modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
 				curPosition = mtxModel * curPosition;
 				out.vtx.position = c3d_matrixData.worldToCurProj( curPosition );
 			} );
@@ -394,21 +402,15 @@ namespace castor3d
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-		shader::TextureAnimations textureAnims{ writer };
 		bool hasTextures = !flags.textures.empty();
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
-				, RenderPipeline::eBuffers );
-			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
-				, RenderPipeline::eBuffers );
-		}
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
+		shader::TextureConfigurations textureConfigs{ writer
+			, uint32_t( NodeUboIdx::eTexConfigs )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::TextureAnimations textureAnims{ writer
+			, uint32_t( NodeUboIdx::eTexAnims )
+			, RenderPipeline::eBuffers
+			, hasTextures };
 
 		UBO_PICKING( writer
 			, uint32_t( PassUboIdx::eCount )
@@ -444,7 +446,7 @@ namespace castor3d
 					{
 						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 						auto id = writer.declLocale( "id" + name
-							, shader::ModelData::getTexture( in.textures0, in.textures1, index ) );
+							, shader::ModelIndex::getTexture( in.textures0, in.textures1, index ) );
 
 						IF( writer, id > 0_u )
 						{

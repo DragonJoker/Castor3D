@@ -97,13 +97,23 @@ namespace castor3d::shader
 	{
 	}
 
+	Materials::Materials( sdw::ShaderWriter & writer
+		, uint32_t binding
+		, uint32_t set
+		, bool enable )
+		: Materials{ writer }
+	{
+		if ( enable )
+		{
+			declare( binding, set );
+		}
+	}
+
 	void Materials::declare( uint32_t binding
 		, uint32_t set )
 	{
-		auto type = Material::declare( m_writer );
 		m_ssbo = std::make_unique< sdw::ArraySsboT< Material > >( m_writer
 			, PassBufferName
-			, type->getType()
 			, binding
 			, set
 			, true );

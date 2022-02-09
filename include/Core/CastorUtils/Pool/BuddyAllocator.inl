@@ -78,6 +78,12 @@ namespace castor
 	}
 
 	template< typename Traits >
+	size_t BuddyAllocatorT< Traits >::getTotalSize()const
+	{
+		return Traits::getSize();
+	}
+
+	template< typename Traits >
 	inline uint32_t BuddyAllocatorT< Traits >::doGetLevel( size_t size )const
 	{
 		auto levelSize = this->getSize();

@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -26,7 +27,8 @@ namespace castor3d
 		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode && ) = delete;
 
 		C3D_API SubmeshRenderNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
+			, GpuDataBufferOffset * modelDataBuffer
 			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
@@ -34,7 +36,8 @@ namespace castor3d
 			, InstanceType & instance );
 
 		PassRenderNode passNode;
-		UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
+		UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexUbo;
+		GpuDataBufferOffset * modelDataUbo;
 		UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		GeometryBuffers const & buffers;
 		SceneNode & sceneNode;

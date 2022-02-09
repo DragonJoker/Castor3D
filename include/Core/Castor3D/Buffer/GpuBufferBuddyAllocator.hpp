@@ -23,7 +23,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	size	La taille de l'allocateur.
 		 */
-		inline explicit GpuBufferBuddyAllocatorTraits( size_t size )
+		explicit GpuBufferBuddyAllocatorTraits( size_t size )
 			: m_allocatedSize{ size }
 		{
 		}
@@ -33,7 +33,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La taille de l'allocateur.
 		 */
-		inline size_t getSize()const
+		size_t getSize()const
 		{
 			return m_allocatedSize;
 		}
@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	offset	Le décalage en mémoire du bloc.
 		 *\return		Le block.
 		 */
-		inline PointerType getPointer( uint32_t offset )
+		PointerType getPointer( uint32_t offset )
 		{
 			return offset;
 		}
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\param[in]	pointer	Le bloc mémoire.
 		 *\return		Le décalage.
 		 */
-		inline size_t getOffset( PointerType pointer )const
+		size_t getOffset( PointerType pointer )const
 		{
 			return pointer;
 		}
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le block mémoire nul.
 		 */
-		inline Block getNull()const
+		Block getNull()const
 		{
 			static Block result{ ~0u };
 			return result;
@@ -82,7 +82,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le block mémoire nul.
 		 */
-		inline bool isNull( PointerType pointer )const
+		bool isNull( PointerType pointer )const
 		{
 			return pointer == getNull().data;
 		}

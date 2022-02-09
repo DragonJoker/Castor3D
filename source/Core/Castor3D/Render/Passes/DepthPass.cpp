@@ -15,10 +15,11 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
@@ -116,20 +117,17 @@ namespace castor3d
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers );
-		shader::TextureConfigurations textureConfigs{ writer };
-		shader::TextureAnimations textureAnims{ writer };
-
-		if ( hasTextures )
-		{
-			textureConfigs.declare( uint32_t( NodeUboIdx::eTexConfigs )
-				, RenderPipeline::eBuffers );
-			textureAnims.declare( uint32_t( NodeUboIdx::eTexAnims )
-				, RenderPipeline::eBuffers );
-		}
-
-		UBO_MODEL( writer
-			, uint32_t( NodeUboIdx::eModel )
-			, RenderPipeline::eBuffers );
+		shader::TextureConfigurations textureConfigs{ writer
+			, uint32_t( NodeUboIdx::eTexConfigs )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::TextureAnimations textureAnims{ writer
+			, uint32_t( NodeUboIdx::eTexAnims )
+			, RenderPipeline::eBuffers
+			, hasTextures };
+		shader::ModelDatas c3d_modelData{ writer
+			, uint32_t( NodeUboIdx::eModelData )
+			, RenderPipeline::eBuffers };
 
 		UBO_SCENE( writer
 			, uint32_t( PassUboIdx::eScene )
@@ -176,7 +174,7 @@ namespace castor3d
 						{
 							auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 							auto id = writer.declLocale( "c3d_id" + name
-								, shader::ModelData::getTexture( in.textures0, in.textures1, index ) );
+								, shader::ModelIndex::getTexture( in.textures0, in.textures1, index ) );
 
 							IF( writer, id > 0_u )
 							{
@@ -213,11 +211,13 @@ namespace castor3d
 					, alphaRef );
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
-				utils.encodeMaterial( c3d_modelData.isShadowReceiver()
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelData[writer.cast< sdw::UInt >( in.nodeId )] );
+				utils.encodeMaterial( modelData.isShadowReceiver()
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, c3d_modelData.getEnvMapIndex()
+					, modelData.getEnvMapIndex()
 					, matFlags );
 				data0 = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )

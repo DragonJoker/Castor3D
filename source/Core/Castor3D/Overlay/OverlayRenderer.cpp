@@ -985,19 +985,17 @@ namespace castor3d
 			auto & renderSystem = *getRenderSystem();
 			FragmentWriter writer;
 
-			auto materials = std::make_unique< shader::Materials >( writer );
-			materials->declare( uint32_t( OverlayBindingId::eMaterials )
+			auto materials = std::make_unique< shader::Materials >( writer
+				, uint32_t( OverlayBindingId::eMaterials )
 				, 0u );
-			shader::TextureConfigurations textureConfigs{ writer };
-			shader::TextureAnimations textureAnims{ writer };
-
-			if ( hasTexture )
-			{
-				textureConfigs.declare( uint32_t( OverlayBindingId::eTexConfigs )
-					, 0u );
-				textureAnims.declare( uint32_t( OverlayBindingId::eTexAnims )
-					, 0u );
-			}
+			shader::TextureConfigurations textureConfigs{ writer
+				, uint32_t( OverlayBindingId::eTexConfigs )
+				, 0u
+				, hasTexture };
+			shader::TextureAnimations textureAnims{ writer
+				, uint32_t( OverlayBindingId::eTexAnims )
+				, 0u
+				, hasTexture };
 
 			UBO_OVERLAY( writer
 				, uint32_t( OverlayBindingId::eOverlay )

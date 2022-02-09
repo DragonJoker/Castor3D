@@ -625,7 +625,7 @@ namespace castor3d
 		 *\param[in]	renderNodes		Les noeuds instanciés.
 		 *\param[in]	matrixBuffer	Le tampon de matrices.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
+		C3D_API uint32_t doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
 			, std::vector< InstantiationData > & instanceBuffer )const;
 		/**
 		 *\~english
@@ -641,7 +641,7 @@ namespace castor3d
 		 *\param[in]		matrixBuffer	Le tampon de matrices.
 		 *\param[in,out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API uint32_t doCopyNodesMatrices( SubmeshRenderNodePtrArray const & renderNodes
+		C3D_API uint32_t doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
 			, std::vector< InstantiationData > & instanceBuffer
 			, RenderInfo & info )const;
 		/**

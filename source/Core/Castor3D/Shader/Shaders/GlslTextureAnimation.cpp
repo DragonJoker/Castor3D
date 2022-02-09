@@ -51,6 +51,18 @@ namespace castor3d
 		{
 		}
 
+		TextureAnimations::TextureAnimations( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, bool enable )
+			: TextureAnimations{ writer }
+		{
+			if ( enable )
+			{
+				declare( binding, set );
+			}
+		}
+
 		void TextureAnimations::declare( uint32_t binding
 			, uint32_t set )
 		{
