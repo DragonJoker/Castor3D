@@ -119,7 +119,6 @@ namespace castor3d
 			DescriptorPools( Engine & engine
 				, DescriptorSetLayouts * layouts
 				, DescriptorCounts * counts
-				, ashes::DescriptorSetLayout * texLayout
 				, ashes::DescriptorPool * texPool
 				, ashes::DescriptorSet * texSet );
 
@@ -163,7 +162,6 @@ namespace castor3d
 			Engine & m_engine;
 			DescriptorSetLayouts * m_layouts{};
 			DescriptorCounts * m_counts{};
-			ashes::DescriptorSetLayout * m_texLayout{};
 			ashes::DescriptorPool * m_texPool{};
 			ashes::DescriptorSet * m_texSet{};
 			std::vector< DescriptorSetPools > m_pools;

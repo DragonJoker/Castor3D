@@ -105,7 +105,7 @@ namespace castor3d
 					m_cameraPosition = cameraPosition;
 					auto indexSize = uint32_t( indices.getCount() );
 
-					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.lock() ) )
+					if ( uint32_t * index = indices.lock() )
 					{
 						LineDistArray arraySorted;
 						arraySorted.reserve( indexSize / 2 );

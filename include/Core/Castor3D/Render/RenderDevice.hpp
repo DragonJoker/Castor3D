@@ -348,6 +348,8 @@ namespace castor3d
 			, void * pFeature = nullptr
 			, void * pProperty = nullptr );
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #if VK_VERSION_1_2
 		VkPhysicalDeviceVulkan11Features m_features11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
 			, nullptr
@@ -419,6 +421,8 @@ namespace castor3d
 			, nullptr
 			, {} };
 #endif
+#pragma GCC diagnostic pop
+
 		Extensions m_deviceExtensions;
 		ashes::VkExtensionPropertiesArray m_availableExtensions;
 		QueuesData * m_preferredGraphicsQueue{};

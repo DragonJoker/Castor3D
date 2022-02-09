@@ -105,7 +105,7 @@ namespace castor3d
 	uint32_t GpuBufferPool::doMakeKey( VkBufferUsageFlags target
 		, VkMemoryPropertyFlags flags )
 	{
-		return ( uint32_t( target ) << 0u )
+		return ( target << 0u )
 			| ( flags << 16u );
 	}
 }
