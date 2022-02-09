@@ -34,7 +34,6 @@ namespace CastorGui
 			, MouseCursor cursor = MouseCursor::eHand )
 			: castor::Named{ name }
 			, m_engine{ engine }
-			, m_type{ type }
 			, m_cursor{ cursor }
 			, m_backgroundMaterial{ getEngine().getMaterialCache().find( cuT( "Black" ) ).lock().get() }
 			, m_foregroundMaterial{ getEngine().getMaterialCache().find( cuT( "White" ) ).lock().get() }
@@ -96,7 +95,6 @@ namespace CastorGui
 
 	private:
 		castor3d::Engine & m_engine;
-		const ControlType m_type;
 		MouseCursor m_cursor;
 		castor3d::MaterialRPtr m_backgroundMaterial{};
 		castor3d::MaterialRPtr m_foregroundMaterial{};

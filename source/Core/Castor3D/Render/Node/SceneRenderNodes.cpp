@@ -482,13 +482,11 @@ namespace castor3d
 	SceneRenderNodes::DescriptorPools::DescriptorPools( Engine & engine
 		, DescriptorSetLayouts * layouts
 		, DescriptorCounts * counts
-		, ashes::DescriptorSetLayout * texLayout
 		, ashes::DescriptorPool * texPool
 		, ashes::DescriptorSet * texSet )
 		: m_engine{ engine }
 		, m_layouts{ layouts }
 		, m_counts{ counts }
-		, m_texLayout{ texLayout }
 		, m_texPool{ texPool }
 		, m_texSet{ texSet }
 	{
@@ -699,7 +697,7 @@ namespace castor3d
 			, mesh
 			, skeleton
 			, texLayout }
-		, pools{ engine, &layouts, &counts, texLayout, texPool, texSet }
+		, pools{ engine, &layouts, &counts, texPool, texSet }
 	{
 	}
 	
@@ -727,7 +725,7 @@ namespace castor3d
 			, mesh
 			, skeleton
 			, texLayout }
-		, pools{ engine, &layouts, &counts, texLayout, texPool, texSet }
+		, pools{ engine, &layouts, &counts, texPool, texSet }
 	{
 	}
 

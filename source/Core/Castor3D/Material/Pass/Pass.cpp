@@ -718,9 +718,9 @@ namespace castor3d
 
 		auto it = std::find_if( result.begin()
 			, result.end()
-			, [&config]( TextureUnitSPtr unit )
+			, [&config]( TextureUnitSPtr lookup )
 			{
-				return shallowEqual( config, unit->getConfiguration() );
+				return shallowEqual( config, lookup->getConfiguration() );
 			} );
 
 		if ( it == result.end() )
