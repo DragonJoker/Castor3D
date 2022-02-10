@@ -140,6 +140,13 @@ namespace castor3d
 		C3D_API void clear( RenderDevice const & device );
 		/**
 		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Adds an object.
 		 *\param[in]	element	The object.
 		 *\~french
@@ -183,6 +190,7 @@ namespace castor3d
 		using RenderPassSet = std::set< SceneRenderPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
 		castor3d::ModelDataBufferSPtr m_modelDataBuffer;
+		GpuBufferPoolSPtr m_vboBufferPool;
 	};
 }
 
