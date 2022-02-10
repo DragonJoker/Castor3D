@@ -134,6 +134,7 @@ namespace castor3d
 		}
 
 	private:
+		RenderDevice const & m_device;
 		VkDeviceSize m_alignedSize;
 		GpuLinearBuffer m_buffer;
 		std::mutex m_mutex;
