@@ -40,7 +40,6 @@ namespace castor3d
 				if ( buffer )
 				{
 					device.bufferPool->putBuffer( buffer );
-					buffer = {};
 				}
 
 				buffer = device.bufferPool->getBuffer< InstantiationData >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT

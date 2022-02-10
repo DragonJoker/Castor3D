@@ -222,6 +222,12 @@ namespace castor3d
 		m_modelDataBuffer.reset();
 	}
 
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::cleanup()
+	{
+		ObjectCacheBaseT< BillboardList, castor::String, BillboardCacheTraits >::cleanup();
+		m_modelDataBuffer.reset();
+	}
+
 	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
