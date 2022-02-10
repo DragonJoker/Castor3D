@@ -18,7 +18,8 @@ namespace castor3d
 	ModelDataBuffer::ModelDataBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_alignedSize{ sizeof( ModelDataUboConfiguration ) }
+		: m_device{ device }
+		, m_alignedSize{ sizeof( ModelDataUboConfiguration ) }
 		, m_buffer{ device.renderSystem
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -86,17 +87,15 @@ namespace castor3d
 			auto & dst = m_buffer.getBuffer().getBuffer();
 			auto size = dirty.back()->getOffset() + dirty.back()->getSize();
 			auto offset = dirty.front()->getOffset();
+			auto toFlush = ashes::getAlignedSize( size - offset
+				, m_device.properties.limits.nonCoherentAtomSize );
 
-			m_stagingBuffer->getBuffer().flush( offset
-				, size - offset );
+			m_stagingBuffer->getBuffer().flush( offset, toFlush );
 			auto dstSrcStage = dst.getCompatibleStageFlags();
 			commandBuffer.memoryBarrier( dstSrcStage
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, dst.makeTransferDestination() );
-			commandBuffer.copyBuffer( src
-				, dst
-				, size - offset
-				, offset );
+			commandBuffer.copyBuffer( src, dst, toFlush, offset );
 			dstSrcStage = dst.getCompatibleStageFlags();
 			commandBuffer.memoryBarrier( dstSrcStage
 				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
