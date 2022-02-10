@@ -107,6 +107,13 @@ namespace castor3d
 		C3D_API void clear( RenderDevice const & device );
 		/**
 		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french

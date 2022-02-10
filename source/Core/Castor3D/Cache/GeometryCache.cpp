@@ -268,7 +268,11 @@ namespace castor3d
 		m_entries.clear();
 		m_baseEntries.clear();
 		m_instances.clear();
+	}
 
+	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::cleanup()
+	{
+		ObjectCacheBaseT< Geometry, castor::String, GeometryCacheTraits >::cleanup();
 		m_modelDataBuffer.reset();
 	}
 
