@@ -85,46 +85,6 @@ namespace castor3d
 			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 		}
 		/**
-		 *\~english
-		 *\return		\p true if the submesh has bone data.
-		 *\~french
-		 *\return		\p true si le sous-maillage a des données d'os.
-		 */
-		bool hasBoneData()const
-		{
-			return !m_bones.empty();
-		}
-		/**
-		 *\~english
-		 *\return		The bone data.
-		 *\~french
-		 *\return		Les données d'os.
-		 */
-		VertexBoneDataArray const & getBonesData()const
-		{
-			return m_bones;
-		}
-		/**
-		 *\~english
-		 *\return		The bones VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer des bones.
-		 */
-		GpuBufferOffsetT< VertexBoneData > const & getBonesBuffer()const
-		{
-			return m_bonesBuffer;
-		}
-		/**
-		 *\~english
-		 *\return		The bones VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer des bones.
-		 */
-		GpuBufferOffsetT< VertexBoneData > & getBonesBuffer()
-		{
-			return m_bonesBuffer;
-		}
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
 		ProgramFlags getProgramFlags( MaterialRPtr material )const override
@@ -132,6 +92,41 @@ namespace castor3d
 			return hasBoneData()
 				? ProgramFlag::eSkinning
 				: ProgramFlag( 0 );
+		}
+
+		bool hasBoneData()const
+		{
+			return !m_bones.empty();
+		}
+
+		VertexBoneDataArray const & getBonesData()const
+		{
+			return m_bones;
+		}
+
+		GpuBufferOffsetT< VertexBoneData > const & getBonesBuffer()const
+		{
+			return m_bonesBuffer;
+		}
+
+		GpuBufferOffsetT< VertexBoneData > & getBonesBuffer()
+		{
+			return m_bonesBuffer;
+		}
+
+		bool hasTransformsBuffer()const
+		{
+			return bool( m_transformsBuffer );
+		}
+
+		ShaderBuffer const & getTransformsBuffer()const
+		{
+			return *m_transformsBuffer;
+		}
+
+		ShaderBuffer & getTransformsBuffer()
+		{
+			return *m_transformsBuffer;
 		}
 
 	private:
@@ -145,7 +140,7 @@ namespace castor3d
 
 	private:
 		GpuBufferOffsetT< VertexBoneData > m_bonesBuffer;
-		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
+		ShaderBufferUPtr m_transformsBuffer;
 		VertexBoneDataArray m_bones;
 
 		friend class BinaryWriter< BonesComponent >;

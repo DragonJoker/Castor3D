@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -33,7 +34,7 @@ namespace castor
 		{
 			castor3d::AnimatedObjectGroup const & group;
 			castor3d::AnimatedSkeleton const & skeleton;
-			castor3d::UniformBufferOffsetT< castor3d::SkinningUboConfiguration > skinningUbo;
+			castor3d::GpuBufferOffsetT< castor3d::SkinningUboConfiguration > skinningSsbo;
 		};
 		struct MeshPoolsEntry
 		{

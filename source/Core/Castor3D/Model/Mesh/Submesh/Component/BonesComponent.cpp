@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -7,7 +8,9 @@
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/ShaderBuffer.hpp"
 
 using namespace castor;
 
@@ -64,11 +67,32 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 		}
 
+		if ( !m_transformsBuffer )
+		{
+			auto & scene = *getOwner()->getOwner()->getScene();
+			auto & engine = *device.renderSystem.getEngine();
+			auto stride = uint32_t( sizeof( float ) * 16u * 400u );
+			auto size = stride * scene.getDirectionalShadowCascades();
+			m_transformsBuffer = castor::makeUnique< ShaderBuffer >( engine
+				, device
+				, size
+				, cuT( "SkinningTransformsBuffer" ) );
+			engine.registerBuffer( *m_transformsBuffer );
+		}
+
 		return bool( m_bonesBuffer );
 	}
 
 	void BonesComponent::doCleanup( RenderDevice const & device )
 	{
+		if ( m_transformsBuffer )
+		{
+			auto & scene = *getOwner()->getOwner()->getScene();
+			auto & engine = *scene.getEngine();
+			engine.unregisterBuffer( *m_transformsBuffer );
+			m_transformsBuffer.reset();
+		}
+
 		if ( m_bonesBuffer )
 		{
 			device.bufferPool->putBuffer( m_bonesBuffer );

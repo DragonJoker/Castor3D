@@ -391,7 +391,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModelData )
 			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers
@@ -445,7 +444,10 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
-					, modelData.getCurModelMtx( flags.programFlags, skinningData, in.vertexIndex - in.baseVertex ) );
+					, modelData.getCurModelMtx( flags.programFlags
+						, skinningData
+						, in.instanceIndex - in.baseInstance
+						, in.vertexIndex - in.baseVertex ) );
 
 				out.vtx.position = ( modelMtx * curPosition );
 				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();

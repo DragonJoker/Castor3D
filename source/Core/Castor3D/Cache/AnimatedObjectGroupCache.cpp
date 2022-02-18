@@ -1,6 +1,7 @@
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -41,8 +42,10 @@ namespace castor
 		for ( auto & pair : m_skeletonEntries )
 		{
 			auto & entry = pair.second;
-			auto & skinningData = entry.skinningUbo.getData();
-			entry.skeleton.fillShader( skinningData.bonesMatrix );
+			auto skinningData = entry.skinningSsbo.lock();
+			entry.skeleton.fillShader( skinningData );
+			entry.skinningSsbo.flush();
+			entry.skinningSsbo.unlock();
 		}
 
 		for ( auto & pair : m_meshEntries )
@@ -72,6 +75,7 @@ namespace castor
 		auto lock( castor::makeUniqueLock( *this ) );
 		doClearNoLock();
 		auto & uboPools = *device.uboPools;
+		auto & bufferPool = *device.bufferPool;
 
 		for ( auto & entry : m_meshEntries )
 		{
@@ -80,7 +84,7 @@ namespace castor
 
 		for ( auto & entry : m_skeletonEntries )
 		{
-			uboPools.putBuffer( entry.second.skinningUbo );
+			bufferPool.putBuffer( entry.second.skinningSsbo );
 		}
 
 		m_meshEntries.clear();
@@ -104,12 +108,14 @@ namespace castor
 		, AnimatedObjectGroup const & group
 		, AnimatedSkeleton const & skeleton )
 	{
-		auto & uboPools = *device.uboPools;
+		auto & bufferPool = *device.bufferPool;
 		return
 		{
 			group,
 			skeleton,
-			uboPools.getBuffer< SkinningUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			bufferPool.getBuffer< SkinningUboConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				, 400u
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 
@@ -125,10 +131,10 @@ namespace castor
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedSkeleton const & skeleton )
 	{
-		auto & uboPools = *device.uboPools;
+		auto & bufferPool = *device.bufferPool;
 		auto entry = getUbos( skeleton );
 		m_skeletonEntries.erase( &skeleton );
-		uboPools.putBuffer( entry.skinningUbo );
+		bufferPool.putBuffer( entry.skinningSsbo );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRegister( AnimatedObjectGroup & group )
