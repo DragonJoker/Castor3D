@@ -535,17 +535,14 @@ namespace castor3d
 		{
 			spirv::SpirVExtensionSet result;
 
-			if ( device.hasExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME ) )
+			if ( device.hasExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME )
+				|| device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 			{
 				result.insert( spirv::KHR_shader_draw_parameters );
 			}
 
-			if ( device.hasExtension( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME ) )
-			{
-				result.insert( spirv::EXT_shader_viewport_index_layer );
-			}
-
-			if ( device.hasExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME ) )
+			if ( device.hasExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME )
+				|| device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 			{
 				result.insert( spirv::EXT_descriptor_indexing );
 			}

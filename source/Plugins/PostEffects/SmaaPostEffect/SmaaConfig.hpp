@@ -147,6 +147,7 @@ namespace smaa
 				break;
 
 			case Mode::e4X:
+				parameters.get( cuT( "enableReprojection" ), data.enableReprojection );
 				/***
 				* Sample positions (bottom-to-top y axis):
 				*   ________

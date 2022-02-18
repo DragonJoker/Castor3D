@@ -284,42 +284,45 @@ namespace castor3d
 		auto mesh = geometry->getMesh().lock();
 		castor::Point3f center{ geometry->getParent()->getDerivedPosition() };
 		BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
-		castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
+		//castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
 		auto result = Intersection::eOut;
-		float faceDist = std::numeric_limits< float >::max();
 
 		if ( intersects( sphere, distance ) != Intersection::eOut )
 		{
 			for ( auto submesh : *mesh )
 			{
-				if ( auto indices = submesh->getIndexBuffer().lock() )
+				sphere.load( center, submesh->getBoundingSphere().getRadius() );
+
+				if ( intersects( sphere, distance ) != Intersection::eOut )
 				{
-					sphere.load( center, submesh->getBoundingSphere().getRadius() );
+					result = Intersection::eIn;
 
-					if ( intersects( sphere, distance ) != Intersection::eOut )
-					{
-						for ( uint32_t k = 0u; k < submesh->getFaceCount(); k++ )
-						{
-							Face face
-							{
-								indices[k * 3 + 0],
-								indices[k * 3 + 1],
-								indices[k * 3 + 2],
-							};
-							float curfaceDist = 0.0f;
+					//if ( auto indices = submesh->getIndexBuffer().lock() )
+					//{
+					//	float faceDist = std::numeric_limits< float >::max();
 
-							if ( intersects( face, transform, *submesh, curfaceDist ) != Intersection::eOut && curfaceDist < faceDist )
-							{
-								result = Intersection::eIn;
-								nearestFace = face;
-								nearestSubmesh = submesh;
-								distance = curfaceDist;
-								faceDist = curfaceDist;
-							}
-						}
-					}
+					//	for ( uint32_t k = 0u; k < submesh->getFaceCount(); k++ )
+					//	{
+					//		Face face
+					//		{
+					//			indices[k * 3 + 0],
+					//			indices[k * 3 + 1],
+					//			indices[k * 3 + 2],
+					//		};
+					//		float curfaceDist = 0.0f;
 
-					submesh->getIndexBuffer().unlock();
+					//		if ( intersects( face, transform, *submesh, curfaceDist ) != Intersection::eOut && curfaceDist < faceDist )
+					//		{
+					//			result = Intersection::eIn;
+					//			nearestFace = face;
+					//			nearestSubmesh = submesh;
+					//			distance = curfaceDist;
+					//			faceDist = curfaceDist;
+					//		}
+					//	}
+					//}
+
+					//submesh->getIndexBuffer().unlock();
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
@@ -448,7 +449,8 @@ namespace castor3d
 			}
 		}
 
-		bufferPool = std::make_shared< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
+		bufferPool = castor::makeUnique< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
+		geometryPools = castor::makeUnique< ObjectBufferPool >( *this, cuT( "ModelBuffersPool" ) );
 		uboPools = std::make_shared< UniformBufferPools >( renderSystem, *this );
 	}
 
@@ -456,6 +458,7 @@ namespace castor3d
 	{
 		renderSystem.getEngine()->getGraphResourceHandler().clear( makeContext() );
 		uboPools.reset();
+		geometryPools.reset();
 		bufferPool.reset();
 		queueFamilies.clear();
 		device.reset();

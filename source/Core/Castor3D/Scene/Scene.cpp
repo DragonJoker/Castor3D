@@ -292,6 +292,8 @@ namespace castor3d
 
 	void Scene::initialise()
 	{
+		m_billboardCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
+		m_geometryCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		m_lightCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		doUpdateLightsDependent();

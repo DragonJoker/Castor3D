@@ -102,14 +102,20 @@ namespace castor3d
 
 	bool MorphComponent::doInitialise( RenderDevice const & device )
 	{
-		auto & vertexBuffer = getOwner()->getVertexBuffer();
-		auto count = vertexBuffer.getCount();
+		auto count = getOwner()->getBufferOffsets().getVertexCount();
 
 		if ( !m_animBuffer || m_animBuffer.getCount() != count )
 		{
 			m_animBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, count
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+			auto name = getOwner()->getOwner()->getName() + "_" + castor::string::toString( getOwner()->getId() ) + "_MorphStaging";
+			m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
+				, name
+				, 0u
+				, count * sizeof( InterleavedVertex ) );
+			m_commandBuffer = device.graphicsData()->commandPool->createCommandBuffer( name );
+			m_fence = device->createFence( name );
 		}
 
 		return bool( m_animBuffer );
@@ -127,10 +133,9 @@ namespace castor3d
 
 	void MorphComponent::doUpload()
 	{
-		if ( getOwner()->hasVertexBuffer() )
+		if ( getOwner()->hasBufferOffsets() )
 		{
-			auto & vertexBuffer = getOwner()->getVertexBuffer();
-			auto count = uint32_t( vertexBuffer.getCount() );
+			auto count = getOwner()->getBufferOffsets().getVertexCount();
 
 			if ( count )
 			{

@@ -86,22 +86,16 @@ namespace castor3d::shader
 
 	sdw::Mat4 ModelBufferData::getCurModelMtx( ProgramFlags programFlags
 		, SkinningData const & skinning
-		, sdw::IVec4 const & boneIds0
-		, sdw::IVec4 const & boneIds1
-		, sdw::Vec4 const & boneWeights0
-		, sdw::Vec4 const & boneWeights1 )const
+		, sdw::Int const & vertexIndex )const
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 		{
 			return SkinningUbo::computeTransform( skinning
-				, boneIds0
-				, boneIds1
-				, boneWeights0
-				, boneWeights1
 				, m_curMtxModel
 				, *getWriter()
 				, programFlags
-				, m_curMtxModel );
+				, m_curMtxModel
+				, vertexIndex );
 		}
 
 		return m_curMtxModel;

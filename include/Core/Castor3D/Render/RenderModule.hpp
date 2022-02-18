@@ -144,6 +144,7 @@ namespace castor3d
 		eBillboard,
 		eSkinningUbo,
 		eSkinningSsbo,
+		eSkinningBones,
 		eMorphing,
 		eModelInstances,
 		eLpvGridConfig,

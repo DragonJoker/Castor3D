@@ -18,6 +18,7 @@ namespace castor
 	{
 		m_terminate = true;
 		m_thread->join();
+		m_currentJob = {};
 		m_thread.reset();
 	}
 

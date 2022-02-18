@@ -14,12 +14,37 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct SkinningBonesData
+		: public sdw::StructInstance
+	{
+		C3D_API SkinningBonesData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( C3D_API, SkinningBonesData );
+
+		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+
+	private:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
+
+	public:
+		C3D_API static castor::String const BufferName;
+
+	public:
+		sdw::IVec4 boneIds0;
+		sdw::IVec4 boneIds1;
+		sdw::Vec4 boneWeights0;
+		sdw::Vec4 boneWeights1;
+	};
+
 	namespace shader
 	{
 		struct SkinningData
 		{
 			std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > ssbo;
 			std::unique_ptr< sdw::Ubo > ubo;
+			std::unique_ptr< sdw::ArraySsboT< SkinningBonesData > > bones;
 		};
 	}
 
@@ -50,6 +75,7 @@ namespace castor3d
 		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer
 			, uint32_t uboBinding
 			, uint32_t sboBinding
+			, uint32_t bonesBinding
 			, uint32_t set
 			, ProgramFlags const & flags );
 		/**
@@ -67,14 +93,11 @@ namespace castor3d
 		 *\return		La matrice résultat.
 		 */
 		C3D_API static sdw::Mat4 computeTransform( shader::SkinningData const & data
-			, sdw::IVec4 boneIds0
-			, sdw::IVec4 boneIds1
-			, sdw::Vec4 boneWeights0
-			, sdw::Vec4 boneWeights1
 			, sdw::Mat4 transform
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
-			, sdw::Mat4 const & curMtxModel );
+			, sdw::Mat4 const & curMtxModel
+			, sdw::Int const & vertexIndex );
 		/**
 		 *\~english
 		 *\brief		Computes skinning transformation in vertex shader.
@@ -94,17 +117,15 @@ namespace castor3d
 			, shader::VertexSurfaceT< FlagT > const & surface
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
-			, sdw::Mat4 const & curMtxModel )
+			, sdw::Mat4 const & curMtxModel
+			, sdw::Int const & vertexIndex )
 		{
 			return computeTransform( data
-				, surface.boneIds0
-				, surface.boneIds1
-				, surface.boneWeights0
-				, surface.boneWeights1
 				, surface.transform
 				, writer
 				, flags
-				, curMtxModel );
+				, curMtxModel
+				, vertexIndex );
 		}
 		/**@}*/
 

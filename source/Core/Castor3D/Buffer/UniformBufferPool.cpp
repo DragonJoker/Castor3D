@@ -7,6 +7,8 @@
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, UniformBufferPool )
+
 namespace castor3d
 {
 	namespace  details
@@ -25,7 +27,8 @@ namespace castor3d
 			commandBuffer.copyBuffer( src
 				, dst
 				, size
-				, offset );
+				, offset
+				, 0u );
 			dstSrcStage = dst.getCompatibleStageFlags();
 			commandBuffer.memoryBarrier( dstSrcStage
 				, flags
