@@ -1207,7 +1207,6 @@ namespace ocean_fft
 			, uint32_t( NodeUboIdx::eModelData )
 			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers

@@ -19,6 +19,7 @@ namespace castor3d
 		int m_textures;
 		int m_material;
 		int m_nodeId;
+		int m_skinningId;
 	};
 
 	class InstantiationComponent

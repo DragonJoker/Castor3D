@@ -26,13 +26,6 @@ namespace castor3d
 	class BonesComponent;
 	/**
 	\~english
-	\brief		The submesh component used for instantiated submeshes with bones.
-	\~french
-	\brief		Le composant de sous-maillage utilisé pour les sous-maillages avec des bones et instanciés.
-	*/
-	class BonesInstantiationComponent;
-	/**
-	\~english
 	\brief		Face implementation
 	\remark		A face is constituted from 3 vertices
 	\~french
@@ -125,7 +118,6 @@ namespace castor3d
 	*/
 	class TriFaceMapping;
 
-	CU_DeclareSmartPtr( BonesInstantiationComponent );
 	CU_DeclareSmartPtr( Face );
 	CU_DeclareSmartPtr( IndexMapping );
 	CU_DeclareSmartPtr( InstantiationComponent );

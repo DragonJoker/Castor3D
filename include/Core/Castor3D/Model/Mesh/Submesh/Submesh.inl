@@ -1,6 +1,5 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
@@ -18,23 +17,6 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template<>
-	struct SubmeshComponentAdder< BonesInstantiationComponent >
-	{
-		static inline void add( std::shared_ptr< BonesInstantiationComponent > component
-			, Submesh & submesh )
-		{
-			submesh.m_components.emplace( component->getID(), component);
-
-			if ( submesh.m_instantiatedBones != component )
-			{
-				submesh.m_instantiatedBones = component;
-			}
-		}
-	};
-
-	//*********************************************************************************************
-
-	template<>
 	struct SubmeshComponentAdder< InstantiationComponent >
 	{
 		static inline void add( std::shared_ptr< InstantiationComponent > component
@@ -45,25 +27,6 @@ namespace castor3d
 			if ( submesh.m_instantiation != component )
 			{
 				submesh.m_instantiation = component;
-			}
-		}
-	};
-
-	//*********************************************************************************************
-
-	template<>
-	struct SubmeshComponentAdder< BonesComponent >
-	{
-		static inline void add( std::shared_ptr< BonesComponent > component
-			, Submesh & submesh )
-		{
-			submesh.m_components.emplace( component->getID(), component );
-
-			if ( !submesh.m_instantiatedBones )
-			{
-				submesh.addComponent( std::make_shared< BonesInstantiationComponent >( submesh
-					, submesh.getInstantiation()
-					, *component ) );
 			}
 		}
 	};
@@ -287,18 +250,6 @@ namespace castor3d
 	{
 		CU_Require( m_instantiation );
 		return *m_instantiation;
-	}
-
-	inline BonesInstantiationComponent & Submesh::getInstantiatedBones()
-	{
-		CU_Require( m_instantiatedBones );
-		return *m_instantiatedBones;
-	}
-
-	inline BonesInstantiationComponent const & Submesh::getInstantiatedBones()const
-	{
-		CU_Require( m_instantiatedBones );
-		return *m_instantiatedBones;
 	}
 
 	inline SubmeshComponentIDMap const & Submesh::getComponents()const

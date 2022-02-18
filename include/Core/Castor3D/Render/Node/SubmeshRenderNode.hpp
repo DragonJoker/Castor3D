@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "RenderNodeModule.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
@@ -50,7 +51,7 @@ namespace castor3d
 		UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo{};
 		// Skinning node
 		AnimatedSkeleton * skeleton{};
-		UniformBufferOffsetT< SkinningUboConfiguration > skinningUbo{};
+		GpuBufferOffsetT< SkinningUboConfiguration > skinningSsbo{};
 	};
 }
 

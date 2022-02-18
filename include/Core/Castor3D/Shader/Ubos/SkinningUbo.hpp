@@ -42,8 +42,7 @@ namespace castor3d
 	{
 		struct SkinningData
 		{
-			std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > ssbo;
-			std::unique_ptr< sdw::Ubo > ubo;
+			std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > transforms;
 			std::unique_ptr< sdw::ArraySsboT< SkinningBonesData > > bones;
 		};
 	}
@@ -73,7 +72,6 @@ namespace castor3d
 		 *\return		Les données de skinning.
 		 */
 		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer
-			, uint32_t uboBinding
 			, uint32_t sboBinding
 			, uint32_t bonesBinding
 			, uint32_t set
@@ -97,6 +95,7 @@ namespace castor3d
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
 			, sdw::Mat4 const & curMtxModel
+			, sdw::Int const & instanceIndex
 			, sdw::Int const & vertexIndex );
 		/**
 		 *\~english
@@ -118,6 +117,7 @@ namespace castor3d
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
 			, sdw::Mat4 const & curMtxModel
+			, sdw::Int const & instanceIndex
 			, sdw::Int const & vertexIndex )
 		{
 			return computeTransform( data
@@ -125,6 +125,7 @@ namespace castor3d
 				, writer
 				, flags
 				, curMtxModel
+				, instanceIndex
 				, vertexIndex );
 		}
 		/**@}*/
