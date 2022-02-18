@@ -8,6 +8,8 @@
 
 #include <algorithm>
 
+CU_ImplementCUSmartPtr( castor3d, UniformBufferPools )
+
 namespace castor3d
 {
 	UniformBufferPools::UniformBufferPools( RenderSystem & renderSystem

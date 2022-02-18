@@ -47,12 +47,21 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	GPU buffer allocation traits for buddy allocator.
+	*	GPU buffer linear allocator, for elements of same size.
 	*\~french
 	*\brief
-	*	Traits d'allocation de buffer GPU, pour le buddy allocator.
+	*	Allocateur linéaire de buffer GPU, pour des éléments de même taille.
 	*/
-	struct GpuLinearAllocator;
+	struct GpuBufferLinearAllocator;
+	/**
+	*\~english
+	*\brief
+	*	GPU buffer contiguous allocator, for elements of various size.
+	*\~french
+	*\brief
+	*	Allocateur contigü de buffer GPU, pour des éléments de tailles diverses.
+	*/
+	struct GpuBufferPackedAllocator;
 	/**
 	*\~english
 	*\brief
@@ -76,6 +85,40 @@ namespace castor3d
 	class GpuBufferPool;
 	/**
 	*\~english
+	*\brief
+	*	The ranges for model buffers (vertex, index and indirect).
+	*\~french
+	*\brief
+	*	Les intervalles des buffers de modèle (vertex, index et indirect).
+	*\remark
+	*/
+	struct ObjectBufferOffset;
+	/**
+	*\~english
+	*\brief
+	*	A GpuBuffer pool specific for VBO and IBO.
+	*\~french
+	*\brief
+	*	Un pool de GpuBuffer pour les VBO et IBO.
+	*\remark
+	*/
+	class ObjectBufferPool;
+	/**
+	*\~english
+	*\brief
+	*	A uniform typed buffer, than can contain multiple sub-buffers.
+	*\remarks
+	*	Allocated from a pool.
+	*\~french
+	*\brief
+	*	Un tampon typé d'uniformes, pouvant contenir de multiples sous-tampons.
+	*\remarks
+	*	Alloué depuis un pool.
+	*\remark
+	*/
+	class PoolUniformBuffer;
+	/**
+	*\~english
 	*\brief		A uniform buffer, than can contain multiple sub-buffers.
 	*\~french
 	*\brief		Un tampon d'uniformes, puovant contenir de multiples sous-tampons.
@@ -93,20 +136,6 @@ namespace castor3d
 	*/
 	template< typename DataT >
 	class UniformBufferT;
-	/**
-	*\~english
-	*\brief
-	*	A uniform typed buffer, than can contain multiple sub-buffers.
-	*\remarks
-	*	Allocated from a pool.
-	*\~french
-	*\brief
-	*	Un tampon typé d'uniformes, pouvant contenir de multiples sous-tampons.
-	*\remarks
-	*	Alloué depuis un pool.
-	*\remark
-	*/
-	class PoolUniformBuffer;
 	/**
 	*\~english
 	*\brief
@@ -139,17 +168,19 @@ namespace castor3d
 	template< typename DataT >
 	class GpuLinearAllocatorT;
 
-	CU_DeclareSmartPtr( GpuBufferPool );
-	CU_DeclareSmartPtr( UniformBufferBase );
-	CU_DeclareSmartPtr( UniformBufferPools );
-	CU_DeclareSmartPtr( PoolUniformBuffer );
-	CU_DeclareSmartPtr( UniformBufferPool );
+	CU_DeclareCUSmartPtr( castor3d, GpuBufferPool, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ObjectBufferPool, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PoolUniformBuffer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, UniformBufferBase, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, UniformBufferPool, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, UniformBufferPools, C3D_API );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
 	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;
 	using GpuBuddyBuffer = GpuBufferT< GpuBufferBuddyAllocator >;
-	using GpuLinearBuffer = GpuBufferT< GpuLinearAllocator >;
+	using GpuLinearBuffer = GpuBufferT< GpuBufferLinearAllocator >;
+	using GpuPackedBuffer = GpuBufferT< GpuBufferPackedAllocator >;
 	/**
 	*\~english
 	*\brief

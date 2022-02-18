@@ -7,7 +7,7 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, GpuBufferPool )
 
 namespace castor3d
 {

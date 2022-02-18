@@ -67,6 +67,7 @@ namespace castor3d
 				, textures{ getMember< sdw::Int >( "textures" ) }
 				, material{ getMember< sdw::UInt >( "material" ) }
 				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
+				, skinningId{ getMember< sdw::Int >( "skinningId" ) }
 			{
 			}
 
@@ -119,6 +120,10 @@ namespace castor3d
 						, sdw::type::Kind::eInt
 						, sdw::type::NotArray
 						, index++ );
+					result->declMember( "skinningId"
+						, sdw::type::Kind::eInt
+						, sdw::type::NotArray
+						, index++ );
 				}
 
 				return result;
@@ -133,6 +138,7 @@ namespace castor3d
 			sdw::Int textures;
 			sdw::UInt material;
 			sdw::Int nodeId;
+			sdw::Int skinningId;
 		};
 	}
 
@@ -387,6 +393,7 @@ namespace castor3d
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
+			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer
@@ -422,6 +429,8 @@ namespace castor3d
 					, in.material );
 				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
 					, in.nodeId );
+				out.skinningId = c3d_modelIndex.getSkinningId( flags.programFlags
+					, in.skinningId );
 
 				if ( hasTextures )
 				{
@@ -436,7 +445,7 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
-					, modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
+					, modelData.getCurModelMtx( flags.programFlags, skinningData, in.vertexIndex - in.baseVertex ) );
 
 				out.vtx.position = ( modelMtx * curPosition );
 				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();

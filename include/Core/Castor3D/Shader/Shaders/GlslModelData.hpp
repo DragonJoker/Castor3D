@@ -31,10 +31,7 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 			, SkinningData const & skinning
-			, sdw::IVec4 const & boneIds0
-			, sdw::IVec4 const & boneIds1
-			, sdw::Vec4 const & boneWeights0
-			, sdw::Vec4 const & boneWeights1 )const;
+			, sdw::Int const & vertexIndex )const;
 
 		sdw::Int const & isShadowReceiver()const
 		{
@@ -49,19 +46,6 @@ namespace castor3d::shader
 		sdw::Mat4 const & getModelMtx()const
 		{
 			return m_curMtxModel;
-		}
-
-		template< ast::var::Flag FlagT >
-		sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
-			, SkinningData const & skinning
-			, VertexSurfaceT< FlagT > const & surface )const
-		{
-			return getCurModelMtx( programFlags
-				, skinning
-				, surface.boneIds0
-				, surface.boneIds1
-				, surface.boneWeights0
-				, surface.boneWeights1 );
 		}
 
 	public:

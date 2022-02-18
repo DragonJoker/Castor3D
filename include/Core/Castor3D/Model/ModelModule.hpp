@@ -12,8 +12,6 @@ namespace castor3d
 	//@{
 
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		23/07/2012
 	\~english
 	\brief		Holds the all components of a vertex.
 	\~french
@@ -22,9 +20,6 @@ namespace castor3d
 	template< typename T >
 	struct InterleavedVertexT;
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.11.0
-	\date		17/01/2018
 	\~english
 	\brief		Representation of a vertex inside a submesh.
 	\~fench
