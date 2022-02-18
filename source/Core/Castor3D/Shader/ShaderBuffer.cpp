@@ -190,7 +190,8 @@ namespace castor3d
 		commandBuffer.copyBuffer( m_staging->getBuffer()
 			, *m_buffer
 			, size
-			, offset );
+			, offset
+			, 0u );
 
 		auto dstDstStage = m_buffer->getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstDstStage

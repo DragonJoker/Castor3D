@@ -92,6 +92,20 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ObjectCacheT() = default;
+		/**
+		 *\~english
+		 *\brief		Initialises the cache buffers.
+		 *\~french
+		 *\brief		Initialise les buffers du cache.
+		 */
+		C3D_API void initialise( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
+		 */
+		C3D_API void cleanup();
 
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass
@@ -105,13 +119,6 @@ namespace castor3d
 		 *\brief		Vide la collection.
 		 */
 		C3D_API void clear( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
-		 *\~french
-		 *\brief		Met tous les éléments à nettoyer.
-		 */
-		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -159,12 +166,13 @@ namespace castor3d
 			, Pass const & pass );
 
 	private:
+		RenderDevice const & m_device;
 		std::map< size_t, PoolsEntry > m_baseEntries;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< SceneRenderPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
-		castor3d::ModelDataBufferSPtr m_modelDataBuffer;
+		castor3d::ModelDataBufferUPtr m_modelDataBuffer;
 	};
 }
 

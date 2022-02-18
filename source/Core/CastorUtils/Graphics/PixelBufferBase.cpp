@@ -626,15 +626,14 @@ namespace castor
 		VkExtent2D srcSize{ m_size.getWidth(), m_size.getHeight() };
 		uint32_t tilesX = m_layers;
 		uint32_t tilesY = 1u;
-		uint32_t n = 1u;
 
 		while ( ( m_size.getWidth() * tilesX ) > maxSize )
 		{
-			++n;
-			tilesX = ( tilesX + ( m_layers % n ) ) / n;
-			tilesY++;
+			++tilesY;
+			tilesX = ( tilesX + ( m_layers % tilesY ) ) / tilesY;
 		}
 
+		tilesY = uint32_t( std::ceil( float( m_layers ) / float( tilesX ) ) );
 		VkExtent2D dstSize{ m_size.getWidth() * tilesX, m_size.getHeight() * tilesY };
 		PxArray result;
 		result.resize( ashes::getLevelsSize( dstSize

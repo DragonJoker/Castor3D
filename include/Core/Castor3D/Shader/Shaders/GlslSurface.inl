@@ -98,15 +98,12 @@ namespace castor3d::shader
 		, tangent{ this->getMember< sdw::Vec3 >( "tangent", true ) }
 		, texture0{ this->getMember< sdw::Vec3 >( "texcoord0", true ) }
 		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
-		, boneIds0{ this->getMember< sdw::IVec4 >( "boneIds0", true ) }
-		, boneIds1{ this->getMember< sdw::IVec4 >( "boneIds1", true ) }
-		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
-		, boneWeights1{ this->getMember< sdw::Vec4 >( "boneWeights1", true ) }
 		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
 		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
 		, textures{ this->getMember< sdw::Int >( "textures", true ) }
 		, material{ this->getMember< sdw::Int >( "material", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
+		, skinningId{ this->getMember< sdw::Int >( "skinningId", true ) }
 		, position2{ this->getMember< sdw::Vec4 >( "position2", true ) }
 		, normal2{ this->getMember< sdw::Vec3 >( "normal2", true ) }
 		, tangent2{ this->getMember< sdw::Vec3 >( "tangent2", true ) }
@@ -197,27 +194,10 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
 				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-			//@}
-			/**
-			*	Skinning
-			*/
-			//@{
-			result->declMember( "boneIds0", ast::type::Kind::eVec4I
+			result->declMember( "skinningId", ast::type::Kind::eInt
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-			result->declMember( "boneIds1", ast::type::Kind::eVec4I
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-			result->declMember( "boneWeights0", ast::type::Kind::eVec4F
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-			result->declMember( "boneWeights1", ast::type::Kind::eVec4F
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+				, ( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) && checkFlag( programFlags, ProgramFlag::eSkinning ) ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eInstantiation ) && checkFlag( programFlags, ProgramFlag::eSkinning ) );
 			//@}
 			/**
 			*	Secondary UV

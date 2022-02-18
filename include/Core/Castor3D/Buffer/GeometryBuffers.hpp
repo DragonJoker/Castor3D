@@ -5,18 +5,16 @@ See LICENSE file in root folder
 #define ___C3D_GeometryBuffers_H___
 
 #include "BufferModule.hpp"
+#include "ObjectBufferOffset.hpp"
 
 namespace castor3d
 {
 	struct GeometryBuffers
 	{
-		ashes::BufferCRefArray vbo;
-		ashes::UInt64Array vboOffsets;
-		uint32_t vtxCount;
+		ObjectBufferOffset bufferOffset;
+		ashes::BufferCRefArray other;
+		ashes::UInt64Array otherOffsets;
 		ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
-		ashes::BufferBase const * ibo{ nullptr };
-		uint64_t iboOffset;
-		uint32_t idxCount;
 	};
 }
 

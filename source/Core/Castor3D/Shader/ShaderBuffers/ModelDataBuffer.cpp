@@ -25,7 +25,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "ModelDataBuffer" )
 			, ashes::QueueShare{}
-			, GpuLinearAllocator{ size_t( count ), uint32_t( m_alignedSize ) } }
+			, GpuBufferLinearAllocator{ size_t( count ), uint32_t( m_alignedSize ) } }
 		, m_stagingBuffer{ std::make_unique< ashes::StagingBuffer >( *device
 			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, m_alignedSize * count
@@ -95,7 +95,7 @@ namespace castor3d
 			commandBuffer.memoryBarrier( dstSrcStage
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, dst.makeTransferDestination() );
-			commandBuffer.copyBuffer( src, dst, toFlush, offset );
+			commandBuffer.copyBuffer( src, dst, toFlush, offset, 0u );
 			dstSrcStage = dst.getCompatibleStageFlags();
 			commandBuffer.memoryBarrier( dstSrcStage
 				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT

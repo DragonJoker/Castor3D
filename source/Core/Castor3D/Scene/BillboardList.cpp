@@ -69,10 +69,13 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
-			m_geometryBuffers.vbo = buffers;
-			m_geometryBuffers.vboOffsets = offsets;
+			m_geometryBuffers.bufferOffset.vtxBuffer = &m_quadBuffer->getBuffer();
+			m_geometryBuffers.bufferOffset.vtxChunk.offset = 0u;
+			m_geometryBuffers.bufferOffset.vtxChunk.askedSize = 4u * sizeof( Vertex );
+			m_geometryBuffers.bufferOffset.vtxChunk.size = 4u * sizeof( Vertex );
+			m_geometryBuffers.other = buffers;
+			m_geometryBuffers.otherOffsets = offsets;
 			m_geometryBuffers.layouts = layouts;
-			m_geometryBuffers.vtxCount = 4u;
 			m_initialised = true;
 		}
 
@@ -84,13 +87,13 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
-			m_geometryBuffers.vbo.clear();
-			m_geometryBuffers.vboOffsets.clear();
+			m_geometryBuffers.bufferOffset.vtxBuffer = nullptr;
+			m_geometryBuffers.bufferOffset.vtxChunk.offset = 0u;
+			m_geometryBuffers.bufferOffset.vtxChunk.askedSize = 0u;
+			m_geometryBuffers.bufferOffset.vtxChunk.size = 0u;
+			m_geometryBuffers.other.clear();
+			m_geometryBuffers.otherOffsets.clear();
 			m_geometryBuffers.layouts.clear();
-			m_geometryBuffers.ibo = nullptr;
-			m_geometryBuffers.iboOffset = 0u;
-			m_geometryBuffers.idxCount = 0u;
-			m_geometryBuffers.vtxCount = 0u;
 			m_quadLayout.reset();
 			m_quadBuffer.reset();
 			m_vertexLayout.reset();
@@ -249,8 +252,6 @@ namespace castor3d
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
-		buffers.emplace_back( m_quadBuffer->getBuffer() );
-		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_quadLayout );
 		buffers.emplace_back( m_vertexBuffer->getBuffer() );
 		offsets.emplace_back( 0u );

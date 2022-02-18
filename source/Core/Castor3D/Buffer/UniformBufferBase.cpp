@@ -11,6 +11,8 @@
 
 #include <algorithm>
 
+CU_ImplementCUSmartPtr( castor3d, UniformBufferBase )
+
 namespace castor3d
 {
 	namespace
@@ -35,7 +37,8 @@ namespace castor3d
 			commandBuffer.copyBuffer( src
 				, dst
 				, elemAlignedSize * count
-				, elemAlignedSize * offset );
+				, elemAlignedSize * offset
+				, 0u );
 			srcSrcStage = src.getCompatibleStageFlags();
 			dstSrcStage = dst.getCompatibleStageFlags();
 

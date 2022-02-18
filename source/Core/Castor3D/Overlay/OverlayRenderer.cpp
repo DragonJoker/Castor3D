@@ -421,12 +421,12 @@ namespace castor3d
 		{
 			result.overlayUbo = uboPools.getBuffer< Configuration >( 0u );
 			result.index = *free.begin();
-			result.geometryBuffers.noTexture.vbo.emplace_back( buffer->getBuffer() );
+			result.geometryBuffers.noTexture.bufferOffset.vtxBuffer = &buffer->getBuffer();
 			result.geometryBuffers.noTexture.layouts.emplace_back( noTexDeclaration );
-			result.geometryBuffers.noTexture.vboOffsets.emplace_back( result.index );
-			result.geometryBuffers.textured.vbo.emplace_back( buffer->getBuffer() );
+			result.geometryBuffers.noTexture.bufferOffset.vtxChunk.offset = result.index;
+			result.geometryBuffers.textured.bufferOffset.vtxBuffer = &buffer->getBuffer();
 			result.geometryBuffers.textured.layouts.emplace_back( texDeclaration );
-			result.geometryBuffers.textured.vboOffsets.emplace_back( result.index );
+			result.geometryBuffers.textured.bufferOffset.vtxChunk.offset = result.index;
 			free.erase( free.begin() );
 		}
 
@@ -437,12 +437,10 @@ namespace castor3d
 	void OverlayRenderer::VertexBufferPool< VertexT, CountT >::deallocate( OverlayRenderer::VertexBufferIndex< VertexT, CountT > const & index )
 	{
 		CU_Require( &index.pool == this );
-		index.geometryBuffers.noTexture.vbo.clear();
+		index.geometryBuffers.noTexture.bufferOffset = {};
 		index.geometryBuffers.noTexture.layouts.clear();
-		index.geometryBuffers.noTexture.vboOffsets.clear();
-		index.geometryBuffers.textured.vbo.clear();
+		index.geometryBuffers.textured.bufferOffset = {};
 		index.geometryBuffers.textured.layouts.clear();
-		index.geometryBuffers.textured.vboOffsets.clear();
 		free.insert( index.index );
 		uboPools.putBuffer( index.overlayUbo );
 		uboPools.putBuffer( index.texturesUbo );

@@ -177,38 +177,15 @@ namespace castor3d
 		return m_points;
 	}
 
-	inline bool Submesh::hasVertexBuffer()const
+	inline bool Submesh::hasBufferOffsets()const
 	{
-		return bool( m_vertexBuffer );
+		return bool( m_bufferOffset );
 	}
 
-	inline GpuBufferOffsetT< InterleavedVertex > const & Submesh::getVertexBuffer()const
+	inline ObjectBufferOffset const & Submesh::getBufferOffsets()const
 	{
-		CU_Require( hasVertexBuffer() );
-		return m_vertexBuffer;
-	}
-
-	inline GpuBufferOffsetT< InterleavedVertex > & Submesh::getVertexBuffer()
-	{
-		CU_Require( hasVertexBuffer() );
-		return m_vertexBuffer;
-	}
-
-	inline bool Submesh::hasIndexBuffer()const
-	{
-		return bool( m_indexBuffer );
-	}
-
-	inline GpuBufferOffsetT< uint32_t > const & Submesh::getIndexBuffer()const
-	{
-		CU_Require( hasIndexBuffer() );
-		return m_indexBuffer;
-	}
-
-	inline GpuBufferOffsetT< uint32_t > & Submesh::getIndexBuffer()
-	{
-		CU_Require( hasIndexBuffer() );
-		return m_indexBuffer;
+		CU_Require( hasBufferOffsets() );
+		return m_bufferOffset;
 	}
 
 	inline bool Submesh::isInitialised()const

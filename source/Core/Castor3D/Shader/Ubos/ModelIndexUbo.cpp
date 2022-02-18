@@ -16,6 +16,7 @@ namespace castor3d::shader
 		, m_textures{ getMember< sdw::Int >( "textures" ) }
 		, m_materialId{ getMember< sdw::Int >( "materialId" ) }
 		, m_nodeId{ getMember< sdw::Int >( "nodeId" ) }
+		, m_skinningId{ getMember< sdw::Int >( "skinningId" ) }
 	{
 	}
 
@@ -31,6 +32,7 @@ namespace castor3d::shader
 			result->declMember( "textures", ast::type::Kind::eInt );
 			result->declMember( "materialId", ast::type::Kind::eInt );
 			result->declMember( "nodeId", ast::type::Kind::eInt );
+			result->declMember( "skinningId", ast::type::Kind::eInt );
 		}
 
 		return result;
@@ -114,6 +116,22 @@ namespace castor3d::shader
 	sdw::Int ModelIndex::getNodeId()const
 	{
 		return m_nodeId;
+	}
+
+	sdw::Int ModelIndex::getSkinningId( ProgramFlags programFlags
+		, sdw::Int const & instanceSkinningId )const
+	{
+		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+		{
+			return instanceSkinningId;
+		}
+
+		return getNodeId();
+	}
+
+	sdw::Int ModelIndex::getSkinningId()const
+	{
+		return m_skinningId;
 	}
 
 	sdw::UInt ModelIndex::getTexture( sdw::UVec4 const & textures0

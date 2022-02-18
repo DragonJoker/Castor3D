@@ -200,7 +200,9 @@ namespace castor3d
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
-				, m_particlesCount * m_inputs.stride() );
+				, m_particlesCount * m_inputs.stride()
+				, 0u
+				, 0u );
 			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT

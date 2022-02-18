@@ -48,6 +48,10 @@ namespace castor3d
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors );
 		C3D_API bool hasNodes()const;
+
+	private:
+		ashes::BufferPtr< VkDrawIndexedIndirectCommand > m_indirectIndexedCommands;
+		ashes::BufferPtr< VkDrawIndirectCommand > m_indirectCommands;
 	};
 }
 
