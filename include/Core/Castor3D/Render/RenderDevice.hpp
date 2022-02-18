@@ -340,7 +340,8 @@ namespace castor3d
 		ashes::CommandPool * transferCommandPool{};
 		ashes::Queue * computeQueue{};
 		ashes::Queue * transferQueue{};
-		GpuBufferPoolSPtr bufferPool;
+		GpuBufferPoolUPtr bufferPool;
+		ObjectBufferPoolUPtr geometryPools;
 		UniformBufferPoolsSPtr uboPools;
 
 	private:

@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
+#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 #include <unordered_map>
@@ -43,39 +44,32 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
-		/**
-		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
+
 		GpuBufferOffsetT< InterleavedVertex > const & getAnimationBuffer()const
 		{
 			return m_animBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		The VertexBuffer.
-		 *\~french
-		 *\return		Le VertexBuffer.
-		 */
+
 		GpuBufferOffsetT< InterleavedVertex > & getAnimationBuffer()
 		{
 			return m_animBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		The animated vertex buffer data.
-		 *\~french
-		 *\return		Les données du tampon de sommets animés.
-		 */
+
+		ashes::StagingBuffer & getStagingBuffer()const
+		{
+			return *m_stagingBuffer;
+		}
+
+		ashes::CommandBuffer & getCommandBuffer()const
+		{
+			return *m_commandBuffer;
+		}
+
 		InterleavedVertexArray & getData()
 		{
 			return m_data;
 		}
-		/**
-		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
-		 */
+
 		ProgramFlags getProgramFlags( MaterialRPtr material )const override
 		{
 			return ProgramFlag::eMorphing;
@@ -94,6 +88,9 @@ namespace castor3d
 		GpuBufferOffsetT< InterleavedVertex > m_animBuffer;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_animLayouts;
 		InterleavedVertexArray m_data;
+		ashes::StagingBufferPtr m_stagingBuffer;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::FencePtr m_fence;
 	};
 }
 

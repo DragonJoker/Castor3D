@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/GpuLinearAllocator.hpp"
+#include "Castor3D/Buffer/GpuBufferLinearAllocator.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 

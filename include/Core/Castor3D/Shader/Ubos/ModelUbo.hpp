@@ -50,11 +50,8 @@ namespace castor3d
 			C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 				, SkinningData const & skinning
-				, sdw::IVec4 const & boneIds0
-				, sdw::IVec4 const & boneIds1
-				, sdw::Vec4 const & boneWeights0
-				, sdw::Vec4 const & boneWeights1
-				, sdw::Mat4 const & transform )const;
+				, sdw::Mat4 const & transform
+				, sdw::Int const & vertexIndex )const;
 			C3D_API static sdw::UInt getTexture( sdw::UVec4 const & textures0
 				, sdw::UVec4 const & textures1
 				, uint32_t index );

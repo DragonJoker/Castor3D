@@ -1127,6 +1127,7 @@ namespace ocean
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
+			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 

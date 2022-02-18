@@ -1,7 +1,9 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -96,21 +98,26 @@ namespace castor3d
 			if ( m_cameraPosition != cameraPosition )
 			{
 				if ( getOwner()->isInitialised()
-					&& getOwner()->getVertexBuffer().getCount()
-					&& getOwner()->getIndexBuffer().getCount() )
+					&& getOwner()->getBufferOffsets().getVertexCount()
+					&& getOwner()->getBufferOffsets().getIndexCount() )
 				{
-					auto & indices = getOwner()->getIndexBuffer();
-					auto & vertices = getOwner()->getVertexBuffer();
+					auto offsets = getOwner()->getBufferOffsets();
+					auto & indices = offsets.getIndexBuffer();
+					auto & vertices = offsets.getVertexBuffer();
 
 					m_cameraPosition = cameraPosition;
-					auto indexSize = uint32_t( indices.getCount() );
+					auto indexSize = uint32_t( offsets.getIndexCount() );
 
-					if ( uint32_t * index = indices.lock() )
+					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( offsets.getIndexOffset()
+						, offsets.idxChunk.size
+						, 0u ) ) )
 					{
 						LineDistArray arraySorted;
 						arraySorted.reserve( indexSize / 2 );
 
-						if ( InterleavedVertex * vertex = vertices.lock() )
+						if ( auto * vertex = reinterpret_cast< InterleavedVertex const * >( vertices.lock( offsets.getVertexOffset()
+							, offsets.vtxChunk.size
+							, 0u ) ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 2 )
 							{
@@ -130,11 +137,11 @@ namespace castor3d
 								*index++ = line.m_index[1];
 							}
 
-							vertices.flush();
 							vertices.unlock();
 						}
 
-						indices.flush();
+						indices.flush( offsets.getIndexOffset()
+							, offsets.idxChunk.size );
 						indices.unlock();
 					}
 				}
@@ -156,26 +163,22 @@ namespace castor3d
 		auto count = uint32_t( m_lines.size() * 2 );
 
 		if ( count
-			&& getOwner()->hasIndexBuffer()
-			&& !castor::checkFlag( getMemoryFlags(), VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
+			&& getOwner()->getBufferOffsets().getIndexCount() )
 		{
-			auto & indexBuffer = getOwner()->getIndexBuffer();
-
-			if ( uint32_t * buffer = indexBuffer.lock() )
-			{
-				for ( auto const & line : m_lines )
-				{
-					*buffer = line[0];
-					++buffer;
-					*buffer = line[1];
-					++buffer;
-				}
-
-				indexBuffer.flush();
-				indexBuffer.unlock();
-			}
-
-			m_lines.clear();
+			auto & renderSystem = *getOwner()->getOwner()->getOwner()->getRenderSystem();
+			auto & device = renderSystem.getRenderDevice();
+			auto offsets = getOwner()->getBufferOffsets();
+			auto & indexBuffer = offsets.getIndexBuffer();
+			auto mappedSize = ashes::getAlignedSize( std::min( count, offsets.getIndexCount() ) * sizeof( uint32_t )
+				, renderSystem.getValue( GpuMin::eBufferMapSize ) );
+			ashes::StagingBuffer staging{ *device, 0u, mappedSize };
+			auto data = device.graphicsData();
+			staging.uploadBufferData( *data->queue
+				, *data->commandPool
+				, reinterpret_cast< uint8_t const * >( m_lines.data() )
+				, m_lines.size() * sizeof( LineIndices )
+				, offsets.getIndexOffset()
+				, indexBuffer );
 		}
 	}
 }

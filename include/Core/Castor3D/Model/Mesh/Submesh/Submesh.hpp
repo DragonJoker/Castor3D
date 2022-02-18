@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
-#include "Castor3D/Buffer/GpuBufferOffset.hpp"
+#include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
@@ -355,12 +355,8 @@ namespace castor3d
 		inline castor::BoundingSphere & getBoundingSphere();
 		inline InterleavedVertexArray const & getPoints()const;
 		inline InterleavedVertexArray & getPoints();
-		inline bool hasVertexBuffer()const;
-		inline GpuBufferOffsetT< InterleavedVertex > const & getVertexBuffer()const;
-		inline GpuBufferOffsetT< InterleavedVertex > & getVertexBuffer();
-		inline bool hasIndexBuffer()const;
-		inline GpuBufferOffsetT< uint32_t > const & getIndexBuffer()const;
-		inline GpuBufferOffsetT< uint32_t > & getIndexBuffer();
+		inline bool hasBufferOffsets()const;
+		inline ObjectBufferOffset const & getBufferOffsets()const;
 		inline bool isInitialised()const;
 		inline Mesh const & getParent()const;
 		inline Mesh & getParent();
@@ -377,7 +373,7 @@ namespace castor3d
 		inline VkPrimitiveTopology getTopology()const;
 
 	private:
-		void doGenerateVertexBuffer( RenderDevice const & device );
+		void doFillVertexBuffer();
 
 	public:
 		static uint32_t constexpr Position = 0u;
@@ -403,8 +399,7 @@ namespace castor3d
 		bool m_initialised{ false };
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
-		GpuBufferOffsetT< InterleavedVertex > m_vertexBuffer;
-		GpuBufferOffsetT< uint32_t > m_indexBuffer;
+		ObjectBufferOffset m_bufferOffset;
 		mutable std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };

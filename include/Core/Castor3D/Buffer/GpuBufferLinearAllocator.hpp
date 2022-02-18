@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GpuLinearAllocator_H___
-#define ___C3D_GpuLinearAllocator_H___
+#ifndef ___C3D_GpuBufferLinearAllocator_H___
+#define ___C3D_GpuBufferLinearAllocator_H___
 
 #include "BufferModule.hpp"
 
@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct GpuLinearAllocator
+	struct GpuBufferLinearAllocator
 	{
 		/**
 		 *\~english
@@ -22,7 +22,7 @@ namespace castor3d
 		 *\param[in]	count		Le nombre d'éléments de l'allocateur.
 		 *\param[in]	alignment	L'alignement de base d'un élément.
 		 */
-		C3D_API GpuLinearAllocator( size_t count
+		C3D_API GpuBufferLinearAllocator( size_t count
 			, uint32_t alignment );
 		/**
 		 *\~english

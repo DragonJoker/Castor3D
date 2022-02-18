@@ -1,9 +1,11 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Vertex.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -144,23 +146,26 @@ namespace castor3d
 			if ( m_cameraPosition != cameraPosition )
 			{
 				if ( getOwner()->isInitialised()
-					&& getOwner()->getVertexBuffer().getCount()
-					&& getOwner()->getIndexBuffer().getCount() )
+					&& getOwner()->getBufferOffsets().getVertexCount()
+					&& getOwner()->getBufferOffsets().getIndexCount() )
 				{
-					auto & indices = getOwner()->getIndexBuffer();
-					auto & vertices = getOwner()->getVertexBuffer();
+					auto offsets = getOwner()->getBufferOffsets();
+					auto & indices = offsets.getIndexBuffer();
+					auto & vertices = offsets.getVertexBuffer();
 
 					m_cameraPosition = cameraPosition;
-					auto indexSize = uint32_t( indices.getCount() );
+					auto indexSize = uint32_t( offsets.getIndexCount() );
 
-					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.getBuffer().lock( 0
-						, uint32_t( indexSize * sizeof( uint32_t ) )
+					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( offsets.getIndexOffset()
+						, offsets.idxChunk.size
 						, 0u ) ) )
 					{
 						FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
-						if ( InterleavedVertex * vertex = vertices.lock() )
+						if ( auto * vertex = reinterpret_cast< InterleavedVertex const * >( vertices.lock( offsets.getVertexOffset()
+							, offsets.vtxChunk.size
+							, 0u ) ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
@@ -183,12 +188,12 @@ namespace castor3d
 								*index++ = face.m_index[2];
 							}
 
-							indices.getBuffer().flush( 0u, vertices.getCount() );
-							indices.getBuffer().unlock();
+							vertices.unlock();
 						}
 
-						indices.getBuffer().flush( 0u, uint32_t( indexSize * sizeof( uint32_t ) ) );
-						indices.getBuffer().unlock();
+						indices.flush( offsets.getIndexOffset()
+							, offsets.idxChunk.size );
+						indices.unlock();
 					}
 				}
 			}
@@ -209,28 +214,22 @@ namespace castor3d
 		auto count = uint32_t( m_faces.size() * 3 );
 
 		if ( count
-			&& getOwner()->hasIndexBuffer()
-			&& !castor::checkFlag( getMemoryFlags(), VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) )
+			&& getOwner()->getBufferOffsets().getIndexCount() )
 		{
-			auto & indexBuffer = getOwner()->getIndexBuffer();
-
-			if ( auto * buffer = indexBuffer.lock() )
-			{
-				for ( auto const & face : m_faces )
-				{
-					*buffer = face[0];
-					++buffer;
-					*buffer = face[1];
-					++buffer;
-					*buffer = face[2];
-					++buffer;
-				}
-
-				indexBuffer.flush();
-				indexBuffer.unlock();
-			}
-
-			//m_faces.clear();
+			auto & renderSystem = *getOwner()->getOwner()->getOwner()->getRenderSystem();
+			auto & device = renderSystem.getRenderDevice();
+			auto offsets = getOwner()->getBufferOffsets();
+			auto & indexBuffer = offsets.getIndexBuffer();
+			auto mappedSize = ashes::getAlignedSize( std::min( count, offsets.getIndexCount() ) * sizeof( uint32_t )
+				, renderSystem.getValue( GpuMin::eBufferMapSize ) );
+			ashes::StagingBuffer staging{ *device, 0u, mappedSize };
+			auto data = device.graphicsData();
+			staging.uploadBufferData( *data->queue
+				, *data->commandPool
+				, reinterpret_cast< uint8_t const * >( m_faces.data() )
+				, m_faces.size() * sizeof( FaceIndices )
+				, offsets.getIndexOffset()
+				, indexBuffer );
 		}
 	}
 }

@@ -37,6 +37,9 @@ namespace castor3d::shader
 		C3D_API sdw::Int getNodeId( ProgramFlags programFlags
 			, sdw::Int const & instanceData )const;
 		C3D_API sdw::Int getNodeId()const;
+		C3D_API sdw::Int getSkinningId( ProgramFlags programFlags
+			, sdw::Int const & instanceData )const;
+		C3D_API sdw::Int getSkinningId()const;
 		C3D_API static sdw::UInt getTexture( sdw::UVec4 const & textures0
 			, sdw::UVec4 const & textures1
 			, uint32_t index );
@@ -55,6 +58,7 @@ namespace castor3d::shader
 		sdw::Int m_textures;
 		sdw::Int m_materialId;
 		sdw::Int m_nodeId;
+		sdw::Int m_skinningId;
 	};
 }
 
