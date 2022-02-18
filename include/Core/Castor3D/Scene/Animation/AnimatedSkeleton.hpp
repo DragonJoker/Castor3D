@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
@@ -53,7 +54,7 @@ namespace castor3d
 		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
 		 *\param[out]	variable	Reçoit les transformations.
 		 */
-		C3D_API void fillShader( castor::Matrix4x4f * variable )const;
+		C3D_API void fillShader( SkinningUboConfiguration * variable )const;
 		/**
 		 *\~english
 		 *\brief		Fills a buffer with this object's skeleton transforms.

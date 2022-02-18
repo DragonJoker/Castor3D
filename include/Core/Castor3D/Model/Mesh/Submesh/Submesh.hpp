@@ -367,8 +367,6 @@ namespace castor3d
 		inline std::shared_ptr< T > getComponent()const;
 		inline InstantiationComponent & getInstantiation();
 		inline InstantiationComponent const & getInstantiation()const;
-		inline BonesInstantiationComponent & getInstantiatedBones();
-		inline BonesInstantiationComponent const & getInstantiatedBones()const;
 		inline SubmeshComponentIDMap const & getComponents()const;
 		inline VkPrimitiveTopology getTopology()const;
 
@@ -392,7 +390,6 @@ namespace castor3d
 		InterleavedVertexArray m_points;
 		SubmeshComponentIDMap m_components;
 		InstantiationComponentSPtr m_instantiation;
-		BonesInstantiationComponentSPtr m_instantiatedBones;
 		IndexMappingSPtr m_indexMapping;
 		ProgramFlags m_programFlags{ 0u };
 		bool m_generated{ false };

@@ -142,7 +142,6 @@ namespace castor3d
 		eModelData,
 		eModelIndex,
 		eBillboard,
-		eSkinningUbo,
 		eSkinningSsbo,
 		eSkinningBones,
 		eMorphing,

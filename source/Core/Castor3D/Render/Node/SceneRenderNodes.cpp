@@ -47,8 +47,7 @@ namespace castor3d
 				BillboadUBO = 0x0001 << 0,
 				MorphingUBO = 0x0001 << 1,
 				SkinningUBO = 0x0001 << 2,
-				InstSkinSSBO = 0x0001 << 3,
-				InstSkinTBO = 0x0001 << 4,
+				SkinningSSBO = 0x0001 << 3,
 			};
 
 			uint16_t spec{};
@@ -68,23 +67,7 @@ namespace castor3d
 
 				if ( skeleton )
 				{
-					if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
-					{
-						auto engine = submesh->getOwner()->getEngine();
-
-						if ( engine->getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
-						{
-							spec |= InstSkinSSBO; // Instantiated Skinning SSBO
-						}
-						else
-						{
-							spec |= InstSkinTBO; // Instantiated Skinning TBO
-						}
-					}
-					else
-					{
-						spec |= SkinningUBO; // Skinning UBO
-					}
+					spec |= SkinningSSBO; // Skinning SSBO
 				}
 			}
 
@@ -154,30 +137,8 @@ namespace castor3d
 			{
 				if ( skeleton )
 				{
-					if ( instantiated )
-					{
-						if ( engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
-						{
-							uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
-								, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-								, ( VK_SHADER_STAGE_GEOMETRY_BIT
-									| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-									| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-									| VK_SHADER_STAGE_VERTEX_BIT ) ) );
-						}
-						else
-						{
-							uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
-								, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-								, ( VK_SHADER_STAGE_GEOMETRY_BIT
-									| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-									| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-									| VK_SHADER_STAGE_VERTEX_BIT ) ) );
-						}
-					}
-
-					uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningUbo )
-						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningSsbo )
+						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 						, ( VK_SHADER_STAGE_GEOMETRY_BIT
 							| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
 							| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
@@ -267,15 +228,11 @@ namespace castor3d
 
 					if ( submeshNode.skeleton )
 					{
-						if ( submeshNode.data.getInstantiation().isInstanced( submeshNode.passNode.pass.getOwner() ) )
-						{
-							submeshNode.data.getInstantiatedBones().getInstancedBonesBuffer().createBinding( descriptorSet
-								, layout.getBinding( uint32_t( NodeUboIdx::eSkinningSsbo ) ) );
-						}
-
-						submeshNode.skinningUbo.createSizedBinding( descriptorSet
-							, layout.getBinding( uint32_t( NodeUboIdx::eSkinningUbo ) ) );
-
+						auto & transformsBuffer = submeshNode.skinningSsbo.getBuffer();
+						descriptorSet.createBinding( layout.getBinding( uint32_t( NodeUboIdx::eSkinningSsbo ) )
+							, transformsBuffer.getBuffer()
+							, uint32_t( submeshNode.skinningSsbo.getOffset() )
+							, uint32_t( submeshNode.skinningSsbo.getSize() ) );
 						auto & bonesBuffer = submeshNode.data.getComponent< BonesComponent >()->getBonesBuffer();
 						descriptorSet.createBinding( layout.getBinding( uint32_t( NodeUboIdx::eSkinningBones ) )
 							, bonesBuffer.getBuffer()
@@ -475,14 +432,7 @@ namespace castor3d
 
 			if ( skeleton )
 			{
-				if ( submesh->getInstantiatedBones().hasInstancedBonesBuffer() )
-				{
-					storageBuffers++; // Instantiated Skinning SSBO
-				}
-				else
-				{
-					uniformBuffers++; // Skinning UBO
-				}
+				storageBuffers++; // Skinning SSBO
 			}
 		}
 

@@ -182,6 +182,7 @@ namespace castor3d
 		sdw::Mat4 ModelData::getCurModelMtx( ProgramFlags programFlags
 			, SkinningData const & skinning
 			, sdw::Mat4 const & transform
+			, sdw::Int const & instanceIndex
 			, sdw::Int const & vertexIndex )const
 		{
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -191,6 +192,7 @@ namespace castor3d
 					, *getWriter()
 					, programFlags
 					, m_curMtxModel
+					, instanceIndex
 					, vertexIndex );
 			}
 

@@ -86,6 +86,7 @@ namespace castor3d::shader
 
 	sdw::Mat4 ModelBufferData::getCurModelMtx( ProgramFlags programFlags
 		, SkinningData const & skinning
+		, sdw::Int const & instanceIndex
 		, sdw::Int const & vertexIndex )const
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -95,6 +96,7 @@ namespace castor3d::shader
 				, *getWriter()
 				, programFlags
 				, m_curMtxModel
+				, instanceIndex
 				, vertexIndex );
 		}
 

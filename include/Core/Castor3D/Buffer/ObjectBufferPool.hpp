@@ -84,6 +84,4 @@ namespace castor3d
 	};
 }
 
-#include "Castor3D/Buffer/ObjectBufferPool.inl"
-
 #endif
