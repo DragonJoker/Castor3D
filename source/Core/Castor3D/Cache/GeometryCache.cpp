@@ -76,12 +76,31 @@ namespace castor3d
 			, MovableMergerT< GeometryCache >{ scene.getName() }
 			, MovableAttacherT< GeometryCache >{}
 			, MovableDetacherT< GeometryCache >{} }
-		, m_modelDataBuffer{ std::make_shared< ModelDataBuffer >( *scene.getEngine()
-			, scene.getEngine()->getRenderSystem()->getRenderDevice()
-			, ( scene.getEngine()->getRenderSystem()->getRenderDevice().hasBindless()
-				? scene.getEngine()->getRenderSystem()->getRenderDevice().getMaxBindlessSampled()
+		, m_device{ scene.getEngine()->getRenderSystem()->getRenderDevice() }
+		, m_modelDataBuffer{ castor::makeUnique< ModelDataBuffer >( *m_device.renderSystem.getEngine()
+			, m_device
+			, ( m_device.hasBindless()
+				? m_device.getMaxBindlessSampled()
 				: shader::MaxModelDataCount ) ) }
 	{
+	}
+
+	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::initialise( RenderDevice const & device )
+	{
+		if ( !m_modelDataBuffer )
+		{
+			m_modelDataBuffer = castor::makeUnique< ModelDataBuffer >( *device.renderSystem.getEngine()
+				, device
+				, ( device.hasBindless()
+					? device.getMaxBindlessSampled()
+					: shader::MaxModelDataCount ) );
+		}
+	}
+
+	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::cleanup()
+	{
+		ObjectCacheBaseT< Geometry, castor::String, GeometryCacheTraits >::cleanup();
+		m_modelDataBuffer.reset();
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::registerPass( SceneRenderPass const & renderPass )
@@ -268,12 +287,6 @@ namespace castor3d
 		m_entries.clear();
 		m_baseEntries.clear();
 		m_instances.clear();
-	}
-
-	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::cleanup()
-	{
-		ObjectCacheBaseT< Geometry, castor::String, GeometryCacheTraits >::cleanup();
-		m_modelDataBuffer.reset();
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::add( ElementPtrT element )

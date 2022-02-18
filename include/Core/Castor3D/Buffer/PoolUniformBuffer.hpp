@@ -263,7 +263,7 @@ namespace castor3d
 		, std::string name
 		, ashes::QueueShare sharingMode = {} )
 	{
-		return std::make_unique< PoolUniformBuffer >( renderSystem
+		return castor::makeUnique< PoolUniformBuffer >( renderSystem
 			, data
 			, usage
 			, flags

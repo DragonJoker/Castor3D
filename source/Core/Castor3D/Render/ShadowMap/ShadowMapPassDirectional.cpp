@@ -243,6 +243,7 @@ namespace castor3d
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
+			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		UBO_MORPHING( writer
@@ -307,7 +308,7 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
-					, modelData.getCurModelMtx( flags.programFlags, skinningData, in ) );
+					, modelData.getCurModelMtx( flags.programFlags, skinningData, in.vertexIndex - in.baseVertex ) );
 				auto worldPos = writer.declLocale( "worldPos"
 					, mtxModel * curPosition );
 				out.worldPosition = worldPos;

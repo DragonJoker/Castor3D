@@ -96,6 +96,20 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ObjectCacheT() = default;
+		/**
+		 *\~english
+		 *\brief		Initialises the cache buffers.
+		 *\~french
+		 *\brief		Initialise les buffers du cache.
+		 */
+		C3D_API void initialise( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
+		 */
+		C3D_API void cleanup();
 
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass
@@ -140,13 +154,6 @@ namespace castor3d
 		C3D_API void clear( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
-		 *\~french
-		 *\brief		Met tous les éléments à nettoyer.
-		 */
-		C3D_API void cleanup();
-		/**
-		 *\~english
 		 *\brief		Adds an object.
 		 *\param[in]	element	The object.
 		 *\~french
@@ -182,6 +189,7 @@ namespace castor3d
 		void doUnregister( Geometry & geometry );
 
 	private:
+		RenderDevice const & m_device;
 		uint32_t m_faceCount{ 0 };
 		uint32_t m_vertexCount{ 0 };
 		std::map< size_t, PoolsEntry > m_baseEntries;
@@ -189,8 +197,7 @@ namespace castor3d
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< SceneRenderPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
-		castor3d::ModelDataBufferSPtr m_modelDataBuffer;
-		GpuBufferPoolSPtr m_vboBufferPool;
+		castor3d::ModelDataBufferUPtr m_modelDataBuffer;
 	};
 }
 
