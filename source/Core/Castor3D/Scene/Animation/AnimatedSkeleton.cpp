@@ -30,7 +30,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSkeleton::fillShader( castor::Matrix4x4f * variable )const
+	void AnimatedSkeleton::fillShader( SkinningUboConfiguration * variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
@@ -39,7 +39,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton )
 			{
-				variable[i++] = skeleton.getGlobalInverseTransform();
+				variable->bonesMatrix[i++] = skeleton.getGlobalInverseTransform();
 			}
 		}
 		else
@@ -58,7 +58,7 @@ namespace castor3d
 					}
 				}
 
-				variable[i++] = final;
+				variable->bonesMatrix[i++] = final;
 			}
 		}
 	}

@@ -51,6 +51,7 @@ namespace castor3d
 			C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 				, SkinningData const & skinning
 				, sdw::Mat4 const & transform
+				, sdw::Int const & instanceIndex
 				, sdw::Int const & vertexIndex )const;
 			C3D_API static sdw::UInt getTexture( sdw::UVec4 const & textures0
 				, sdw::UVec4 const & textures1
@@ -69,20 +70,6 @@ namespace castor3d
 			sdw::Mat4 const & getModelMtx()const
 			{
 				return m_curMtxModel;
-			}
-
-			template< ast::var::Flag FlagT >
-			sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
-				, SkinningData const & skinning
-				, VertexSurfaceT< FlagT > const & surface )const
-			{
-				return getCurModelMtx( programFlags
-					, skinning
-					, surface.boneIds0
-					, surface.boneIds1
-					, surface.boneWeights0
-					, surface.boneWeights1
-					, surface.transform );
 			}
 
 		private:

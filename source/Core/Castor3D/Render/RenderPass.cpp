@@ -597,6 +597,7 @@ namespace castor3d
 			{
 				buffer->m_material = int32_t( node->passNode.pass.getId() );
 				buffer->m_nodeId = node->modelIndexUbo.getData().nodeId;
+				buffer->m_skinningId = node->modelIndexUbo.getData().skinningId;
 				uint32_t index = 0u;
 
 				for ( auto & unit : node->passNode.pass )
@@ -702,16 +703,6 @@ namespace castor3d
 				{
 					doCopyNodesIds( renderNodes
 						, it->second[index].data );
-
-					if ( renderNodes.front()->skeleton )
-					{
-						auto & instantiatedBones = submesh.getInstantiatedBones();
-
-						if ( instantiatedBones.hasInstancedBonesBuffer() )
-						{
-							doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-						}
-					}
 				}
 			} );
 	}
@@ -738,21 +729,6 @@ namespace castor3d
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
-
-					if ( renderNodes.front()->skeleton )
-					{
-						auto & instantiatedBones = submesh.getInstantiatedBones();
-
-						if ( instantiatedBones.hasInstancedBonesBuffer() )
-						{
-#if !defined( NDEBUG )
-							uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-							CU_Require( count1 == count2 );
-#else
-							doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-#endif
-						}
-					}
 				}
 			} );
 	}
@@ -1026,7 +1002,7 @@ namespace castor3d
 		{
 			CU_Require( result.skeleton );
 			auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( *skeleton );
-			result.skinningUbo = animationEntry.skinningUbo;
+			result.skinningSsbo = animationEntry.skinningSsbo;
 		}
 
 		return &result;
@@ -1050,7 +1026,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModelData )
 			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinningUbo )
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers
@@ -1109,7 +1084,10 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-					, modelData.getCurModelMtx( flags.programFlags, skinningData, in.vertexIndex - in.baseVertex ) );
+					, modelData.getCurModelMtx( flags.programFlags
+						, skinningData
+						, in.instanceIndex - in.baseInstance
+						, in.vertexIndex - in.baseVertex ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
 					, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
 				auto prvPosition = writer.declLocale( "prvPosition"
