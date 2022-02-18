@@ -31,6 +31,7 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 			, SkinningData const & skinning
+			, sdw::Int const & instanceIndex
 			, sdw::Int const & vertexIndex )const;
 
 		sdw::Int const & isShadowReceiver()const

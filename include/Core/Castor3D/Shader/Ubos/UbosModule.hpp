@@ -267,6 +267,7 @@ namespace castor3d
 		int32_t textures;
 		int32_t materialId;
 		int32_t nodeId;
+		int32_t skinningId;
 	};
 	/**
 	*\~english
