@@ -21,7 +21,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class RenderPipeline
-		: public castor::OwnedBy< SceneRenderPass >
+		: public castor::OwnedBy< RenderNodesPass >
 	{
 	public:
 		enum Descriptor
@@ -73,7 +73,7 @@ namespace castor3d
 		*\param[in] flags
 		*	Les indicateurs de création.
 		*/
-		C3D_API explicit RenderPipeline( SceneRenderPass & owner
+		C3D_API explicit RenderPipeline( RenderNodesPass & owner
 			, RenderSystem & renderSystem
 			, ashes::PipelineDepthStencilStateCreateInfo dsState
 			, ashes::PipelineRasterizationStateCreateInfo rsState

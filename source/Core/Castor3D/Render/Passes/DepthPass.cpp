@@ -46,7 +46,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, SsaoConfig const & ssaoConfig
-		, SceneRenderPassDesc const & renderPassDesc )
+		, RenderNodesPassDesc const & renderPassDesc )
 		: RenderTechniquePass{ parent
 			, pass
 			, context
@@ -91,7 +91,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo DepthPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( BlendMode::eNoBlend
+		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
 			, 3u );
 	}

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "ShadowMapModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -19,7 +19,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class ShadowMapPass
-		: public SceneRenderPass
+		: public RenderNodesPass
 	{
 	public:
 		/**

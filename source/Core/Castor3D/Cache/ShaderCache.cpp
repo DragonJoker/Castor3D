@@ -1,7 +1,7 @@
 #include "Castor3D/Cache/ShaderCache.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -53,7 +53,7 @@ namespace castor3d
 		return nullptr;
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::getAutomaticProgram( SceneRenderPass const & renderPass
+	ShaderProgramSPtr ShaderProgramCache::getAutomaticProgram( RenderNodesPass const & renderPass
 		, PipelineFlags const & flags )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
@@ -70,7 +70,7 @@ namespace castor3d
 		return result;
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( SceneRenderPass const & renderPass
+	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderNodesPass const & renderPass
 		, PipelineFlags const & flags )const
 	{
 		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );
