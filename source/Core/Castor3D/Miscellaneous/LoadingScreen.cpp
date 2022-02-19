@@ -210,7 +210,7 @@ namespace castor3d
 		{
 			m_renderQuad.resetRenderPass( m_renderSize
 				, m_renderPass
-				, SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
+				, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
 			reRecordCurrent();
 		}
 	}
@@ -227,7 +227,7 @@ namespace castor3d
 		m_renderQuad.initialise( *this
 			, m_renderSize
 			, m_renderPass
-			, SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
+			, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
 	}
 
 	void LoadingScreen::WindowPass::doRecordInto( crg::RecordContext & context
@@ -411,7 +411,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, SceneName
 					, pass.getName()
-					, SceneRenderPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler }
+					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_opaquePass = result.get();
 				return result;
@@ -438,7 +438,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, SceneName
 					, pass.getName()
-					, SceneRenderPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler, false }
+					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, *m_culler, false }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_transparentPass = result.get();
 				return result;

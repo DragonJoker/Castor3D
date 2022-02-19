@@ -11,7 +11,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -520,7 +520,7 @@ namespace castor3d
 			, ashes::VkViewportArray{ viewport }
 			, 1u
 			, ashes::VkScissorArray{ scissor } };
-		auto blendState = SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 3u );
+		auto blendState = RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 3u );
 		auto iaState = makeVkStruct< VkPipelineInputAssemblyStateCreateInfo >( 0u
 			, VK_PRIMITIVE_TOPOLOGY_POINT_LIST
 			, VK_FALSE );

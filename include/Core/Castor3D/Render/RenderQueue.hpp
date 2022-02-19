@@ -24,7 +24,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class RenderQueue
-		: public castor::OwnedBy< SceneRenderPass >
+		: public castor::OwnedBy< RenderNodesPass >
 	{
 	public:
 		/**
@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	mode		Le mode de rendu de cette file de rendu.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderQueue( SceneRenderPass & renderPass
+		C3D_API RenderQueue( RenderNodesPass & renderPass
 			, RenderMode mode
 			, SceneNode const * ignored );
 		C3D_API ~RenderQueue();

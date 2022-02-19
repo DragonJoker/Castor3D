@@ -10,7 +10,7 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
-#include <Castor3D/Render/RenderPass.hpp>
+#include <Castor3D/Render/RenderNodesPass.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>

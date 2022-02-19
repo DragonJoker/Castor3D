@@ -50,7 +50,7 @@ namespace ocean_fft
 			, std::shared_ptr< OceanFFT > oceanFFT
 			, std::shared_ptr< castor3d::Texture > colourInput
 			, std::shared_ptr< castor3d::Texture > depthInput
-			, castor3d::SceneRenderPassDesc const & renderPassDesc
+			, castor3d::RenderNodesPassDesc const & renderPassDesc
 			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 		~OceanRenderPass()override;

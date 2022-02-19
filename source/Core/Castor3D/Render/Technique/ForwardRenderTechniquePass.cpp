@@ -56,7 +56,7 @@ namespace castor3d
 		, castor::String const & typeName
 		, castor::String const & category
 		, castor::String const & name
-		, SceneRenderPassDesc const & renderPassDesc
+		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniquePass{ parent
 			, pass

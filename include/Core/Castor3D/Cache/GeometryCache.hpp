@@ -111,8 +111,8 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 
-		C3D_API void registerPass( SceneRenderPass const & renderPass );
-		C3D_API void unregisterPass( SceneRenderPass const * renderPass
+		C3D_API void registerPass( RenderNodesPass const & renderPass );
+		C3D_API void unregisterPass( RenderNodesPass const * renderPass
 			, uint32_t instanceMult );
 
 		C3D_API void fillInfo( RenderInfo & info )const;
@@ -195,7 +195,7 @@ namespace castor3d
 		std::map< size_t, PoolsEntry > m_baseEntries;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
-		using RenderPassSet = std::set< SceneRenderPass const * >;
+		using RenderPassSet = std::set< RenderNodesPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
 		castor3d::ModelDataBufferUPtr m_modelDataBuffer;
 	};

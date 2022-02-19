@@ -33,7 +33,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & name
-			, SceneRenderPassDesc const & renderPassDesc
+			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept

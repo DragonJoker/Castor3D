@@ -7,13 +7,13 @@ See LICENSE file in root folder
 #include "VoxelizeModule.hpp"
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 namespace castor3d
 {
 	class VoxelizePass
-		: public SceneRenderPass
+		: public RenderNodesPass
 	{
 	public:
 		/**
@@ -82,7 +82,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		using SceneRenderPass::update;
+		using RenderNodesPass::update;
 
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
