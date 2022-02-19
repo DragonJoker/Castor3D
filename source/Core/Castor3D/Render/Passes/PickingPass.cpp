@@ -137,14 +137,14 @@ namespace castor3d
 		, castor::Size const & size
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
-		: SceneRenderPass{ pass
+		: RenderNodesPass{ pass
 			, context
 			, graph
 			, device
 			, Type
 			, cuT( "Picking" )
 			, cuT( "Picking" )
-			, SceneRenderPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false } }
+			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false } }
 	{
 	}
 
@@ -199,7 +199,7 @@ namespace castor3d
 			return false;
 		}
 
-		return SceneRenderPass::doAreValidPassFlags( pass.getPassFlags() );
+		return RenderNodesPass::doAreValidPassFlags( pass.getPassFlags() );
 	}
 
 	void PickingPass::doUpdateNodes( QueueCulledRenderNodes & nodes )
@@ -495,7 +495,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo PickingPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
+		return RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 
 	//*********************************************************************************************

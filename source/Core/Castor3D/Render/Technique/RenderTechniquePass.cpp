@@ -136,9 +136,9 @@ namespace castor3d
 		, castor::String const & typeName
 		, castor::String const & category
 		, castor::String const & name
-		, SceneRenderPassDesc const & renderPassDesc
+		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: SceneRenderPass{ pass, context, graph, device, typeName, category, name, renderPassDesc }
+		: RenderNodesPass{ pass, context, graph, device, typeName, category, name, renderPassDesc }
 		, m_parent{ parent }
 		, m_scene{ renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
@@ -174,19 +174,19 @@ namespace castor3d
 	{
 		if ( nodes.hasNodes() )
 		{
-			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.staticNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.morphingNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
-			SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, info );
-			SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
-			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
-			SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
-			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
+			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
+			RenderNodesPass::doUpdate( nodes.staticNodes.backCulled, info );
+			RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled, info );
+			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
+			RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled, info );
+			RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled, info );
 		}
 	}
 
@@ -557,6 +557,6 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
+		return RenderNodesPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 }

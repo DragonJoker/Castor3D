@@ -145,7 +145,7 @@ namespace castor3d
 		getCuller().compute();
 #endif
 		m_outOfDate = true;
-		SceneRenderPass::update( updater );
+		RenderNodesPass::update( updater );
 	}
 
 	void ShadowMapPassDirectional::update( GpuUpdater & updater )
@@ -158,7 +158,7 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
 	{
-		SceneRenderPass::doUpdateUbos( updater );
+		RenderNodesPass::doUpdateUbos( updater );
 #if C3D_UseTiledDirectionalShadowMap
 		m_shadowMapDirectionalUbo.update( *updater.light->getDirectionalLight() );
 #else
@@ -208,7 +208,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassDirectional::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( BlendMode::eNoBlend
+		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
 			, uint32_t( SmTexture::eCount ) - 1u );
 	}

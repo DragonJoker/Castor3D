@@ -7,7 +7,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -91,7 +91,7 @@ namespace castor3d
 		m_modelDataBuffer.reset();
 	}
 
-	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::registerPass( SceneRenderPass const & renderPass )
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::registerPass( RenderNodesPass const & renderPass )
 	{
 		auto instanceMult = renderPass.getInstanceMult();
 		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
@@ -119,7 +119,7 @@ namespace castor3d
 		iresult.first->second.insert( &renderPass );
 	}
 
-	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::unregisterPass( SceneRenderPass const * renderPass
+	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::unregisterPass( RenderNodesPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		auto instIt = m_instances.find( instanceMult );

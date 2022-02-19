@@ -203,7 +203,7 @@ namespace ocean
 		, castor::String const & category
 		, std::shared_ptr< castor3d::Texture > colourInput
 		, std::shared_ptr< castor3d::Texture > depthInput
-		, castor3d::SceneRenderPassDesc const & renderPassDesc
+		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
 		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		: castor3d::RenderTechniquePass{ parent
@@ -341,7 +341,7 @@ namespace ocean
 				, name
 				, std::move( colourInput )
 				, std::move( depthInput )
-				, castor3d::SceneRenderPassDesc{ extent
+				, castor3d::RenderNodesPassDesc{ extent
 					, technique.getMatrixUbo()
 					, technique.getRenderTarget().getCuller() }.safeBand( true )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }

@@ -577,12 +577,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	SceneRenderPass creation data.
+	*	RenderNodesPass creation data.
 	*\~french
 	*\brief
-	*	Données de création d'une SceneRenderPass.
+	*	Données de création d'une RenderNodesPass.
 	*/
-	struct SceneRenderPassDesc;
+	struct RenderNodesPassDesc;
 	/**
 	*\~english
 	*\brief
@@ -591,7 +591,7 @@ namespace castor3d
 	*\brief
 	*	Classe de base d'une passe de rendu.
 	*/
-	class SceneRenderPass;
+	class RenderNodesPass;
 	/**
 	*\~english
 	*\brief
@@ -621,7 +621,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, RenderWindow, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Viewport, C3D_API );
 
-	CU_DeclareSmartPtr( SceneRenderPass );
+	CU_DeclareSmartPtr( RenderNodesPass );
 
 	using RenderWindowPtr = std::unique_ptr< RenderWindow >;
 

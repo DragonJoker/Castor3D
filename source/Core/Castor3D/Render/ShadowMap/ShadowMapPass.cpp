@@ -46,14 +46,14 @@ namespace castor3d
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t instanceMult )
-		: SceneRenderPass{ pass
+		: RenderNodesPass{ pass
 			, context
 			, graph
 			, device
 			, typeName
 			, cuT( "ShadowMap" )
 			, std::move( name )
-			, SceneRenderPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId ), matrixUbo, culler, RenderMode::eBoth, true, false }
+			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId ), matrixUbo, culler, RenderMode::eBoth, true, false }
 				.instanceMult( instanceMult ) }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }
@@ -64,19 +64,19 @@ namespace castor3d
 	{
 		if ( nodes.hasNodes() )
 		{
-			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.staticNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.morphingNodes.frontCulled );
+			RenderNodesPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
-			SceneRenderPass::doUpdate( nodes.staticNodes.backCulled );
-			SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled );
-			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
-			SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled );
-			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
+			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled );
+			RenderNodesPass::doUpdate( nodes.staticNodes.backCulled );
+			RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled );
+			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
+			RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled );
+			RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled );
 		}
 	}
 

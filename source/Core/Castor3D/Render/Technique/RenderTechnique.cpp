@@ -1011,7 +1011,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, getSsaoConfig()
-					, SceneRenderPassDesc{ m_depth->getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
+					, RenderNodesPassDesc{ m_depth->getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
 						.safeBand( true )
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
@@ -1114,7 +1114,7 @@ namespace castor3d
 					, m_device
 					, cuT( "Opaque" )
 					, name
-					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
+					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller() }
 						.safeBand( true )
 #if C3D_UseDeferredRendering
 						.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
@@ -1191,7 +1191,7 @@ namespace castor3d
 					, m_device
 					, cuT( "Transparent" )
 					, name
-					, SceneRenderPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }
+					, RenderNodesPassDesc{ m_colour.getExtent(), m_matrixUbo, m_renderTarget.getCuller(), isOit }
 						.safeBand( true )
 #if C3D_UseWeightedBlendedRendering
 						.implicitAction( accumIt->view(), crg::RecordContext::clearAttachment( *accumIt ) )

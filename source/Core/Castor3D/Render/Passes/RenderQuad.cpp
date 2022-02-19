@@ -6,7 +6,7 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
@@ -55,7 +55,7 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass
 			, BlendMode blendMode )
 		{
-			return SceneRenderPass::createBlendState( blendMode
+			return RenderNodesPass::createBlendState( blendMode
 				, blendMode
 				, doGetColourAttachmentCount( pass ) );
 		}

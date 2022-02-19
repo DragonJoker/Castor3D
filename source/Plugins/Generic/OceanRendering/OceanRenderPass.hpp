@@ -19,7 +19,7 @@ namespace ocean
 {
 	struct IsRenderPassEnabled
 	{
-		IsRenderPassEnabled( castor3d::SceneRenderPass const & pass )
+		IsRenderPassEnabled( castor3d::RenderNodesPass const & pass )
 			: m_pass{ &pass }
 		{}
 
@@ -27,7 +27,7 @@ namespace ocean
 			: m_pass{}
 		{}
 
-		void setPass( castor3d::SceneRenderPass const & pass )
+		void setPass( castor3d::RenderNodesPass const & pass )
 		{
 			m_pass = &pass;
 		}
@@ -37,7 +37,7 @@ namespace ocean
 			return m_pass->isPassEnabled();
 		}
 
-		castor3d::SceneRenderPass const * m_pass;
+		castor3d::RenderNodesPass const * m_pass;
 	};
 
 	class OceanRenderPass
@@ -70,7 +70,7 @@ namespace ocean
 			, castor::String const & category
 			, std::shared_ptr< castor3d::Texture > colourInput
 			, std::shared_ptr< castor3d::Texture > depthInput
-			, castor3d::SceneRenderPassDesc const & renderPassDesc
+			, castor3d::RenderNodesPassDesc const & renderPassDesc
 			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled );
 		~OceanRenderPass()override;
