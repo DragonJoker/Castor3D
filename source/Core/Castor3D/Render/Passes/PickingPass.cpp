@@ -354,7 +354,11 @@ namespace castor3d
 					, in.material );
 				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
 					, in.nodeId );
-				out.instance = writer.cast< UInt >( in.instanceIndex );
+				out.skinningId = c3d_modelIndex.getNodeId( flags.programFlags
+					, in.skinningId );
+				out.drawId = c3d_modelIndex.getNodeId( flags.programFlags
+					, in.drawID );
+				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
@@ -466,8 +470,7 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, material.alphaRef );
-				pxl_fragColor = c3d_pickingData.getIndex( in.instance
-					, in.primitiveID );
+				pxl_fragColor = vec4( in.drawId, in.nodeId, in.instanceId, in.primitiveID );
 
 #if C3D_DebugPicking
 				pxl_fragColor /= 255.0_f;
