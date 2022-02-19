@@ -15,7 +15,7 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"

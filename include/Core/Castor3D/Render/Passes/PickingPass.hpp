@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PickingPass_H___
 #define ___C3D_PickingPass_H___
 
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -18,7 +18,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class PickingPass
-		: public SceneRenderPass
+		: public RenderNodesPass
 	{
 	public:
 		/**

@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -25,7 +25,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	RenderPipeline::RenderPipeline( SceneRenderPass & owner
+	RenderPipeline::RenderPipeline( RenderNodesPass & owner
 		, RenderSystem & renderSystem
 		, ashes::PipelineDepthStencilStateCreateInfo dsState
 		, ashes::PipelineRasterizationStateCreateInfo rsState
@@ -33,7 +33,7 @@ namespace castor3d
 		, ashes::PipelineMultisampleStateCreateInfo msState
 		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
-		: OwnedBy< SceneRenderPass >{ owner }
+		: OwnedBy< RenderNodesPass >{ owner }
 		, m_renderSystem{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
 		, m_rsState{ std::move( rsState ) }

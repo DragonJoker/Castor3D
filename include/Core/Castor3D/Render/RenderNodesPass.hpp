@@ -24,9 +24,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct SceneRenderPassDesc
+	struct RenderNodesPassDesc
 	{
-		SceneRenderPassDesc( VkExtent3D size
+		RenderNodesPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, RenderMode mode
@@ -52,10 +52,10 @@ namespace castor3d
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		SceneRenderPassDesc( VkExtent3D size
+		RenderNodesPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler )
-			: SceneRenderPassDesc{ std::move( size )
+			: RenderNodesPassDesc{ std::move( size )
 				, matrixUbo
 				, culler
 				, RenderMode::eOpaqueOnly
@@ -77,11 +77,11 @@ namespace castor3d
 		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		SceneRenderPassDesc( VkExtent3D size
+		RenderNodesPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit )
-			: SceneRenderPassDesc{ std::move( size )
+			: RenderNodesPassDesc{ std::move( size )
 				, matrixUbo
 				, culler
 				, RenderMode::eTransparentOnly
@@ -95,7 +95,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le multiplicateur d'instances d'objets.
 		 */
-		SceneRenderPassDesc & instanceMult( uint32_t value )
+		RenderNodesPassDesc & instanceMult( uint32_t value )
 		{
 			m_instanceMult = value;
 			return *this;
@@ -106,7 +106,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le scene node à ignorer pendant le rendu.
 		 */
-		SceneRenderPassDesc & ignored( SceneNode const & value )
+		RenderNodesPassDesc & ignored( SceneNode const & value )
 		{
 			m_ignored = &value;
 			return *this;
@@ -117,7 +117,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le scene node à ignorer pendant le rendu.
 		 */
-		SceneRenderPassDesc & safeBand( bool value )
+		RenderNodesPassDesc & safeBand( bool value )
 		{
 			m_safeBand = value;
 			return *this;
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le nombre maximum de variantes de la frame pass.
 		 */
-		SceneRenderPassDesc & passCount( uint32_t value )
+		RenderNodesPassDesc & passCount( uint32_t value )
 		{
 			m_ruConfig.maxPassCount = value;
 			return *this;
@@ -139,7 +139,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le statut resettable de la frame pass.
 		 */
-		SceneRenderPassDesc & resettable( bool value )
+		RenderNodesPassDesc & resettable( bool value )
 		{
 			m_ruConfig.resettable = value;
 			return *this;
@@ -150,7 +150,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le statu resettable de la frame pass.
 		 */
-		SceneRenderPassDesc & implicitAction( crg::ImageViewId view
+		RenderNodesPassDesc & implicitAction( crg::ImageViewId view
 			, crg::RecordContext::ImplicitAction action )
 		{
 			m_ruConfig.implicitAction( view, action );
@@ -170,7 +170,7 @@ namespace castor3d
 		crg::ru::Config m_ruConfig{ 1u, true };
 	};
 
-	class SceneRenderPass
+	class RenderNodesPass
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 		, public crg::RenderPass
@@ -190,14 +190,14 @@ namespace castor3d
 		 *\param[in]	name		Le nom de la passe.
 		 *\param[in]	desc		Les données de construction.
 		 */
-		C3D_API SceneRenderPass( crg::FramePass const & pass
+		C3D_API RenderNodesPass( crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
-			, SceneRenderPassDesc const & desc );
+			, RenderNodesPassDesc const & desc );
 
 	public:
 		/**
@@ -206,7 +206,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~SceneRenderPass()override;
+		C3D_API ~RenderNodesPass()override;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

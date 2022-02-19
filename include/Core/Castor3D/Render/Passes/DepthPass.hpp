@@ -38,7 +38,7 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, SsaoConfig const & ssaoConfig
-			, SceneRenderPassDesc const & renderPassDesc );
+			, RenderNodesPassDesc const & renderPassDesc );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 

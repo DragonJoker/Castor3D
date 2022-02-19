@@ -155,14 +155,14 @@ namespace castor3d
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
 		, VoxelSceneData const & voxelConfig )
-		: SceneRenderPass{ pass
+		: RenderNodesPass{ pass
 			, context
 			, graph
 			, device
 			, Type
 			, "Voxelize"
 			, "Voxelization"
-			, SceneRenderPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true } }
+			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, true } }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
 		, m_voxels{ voxels }
@@ -188,7 +188,7 @@ namespace castor3d
 		if ( m_voxelConfig.enabled )
 		{
 			getCuller().compute();
-			SceneRenderPass::update( updater );
+			RenderNodesPass::update( updater );
 		}
 	}
 
@@ -200,19 +200,19 @@ namespace castor3d
 
 			if ( nodes.hasNodes() )
 			{
-				SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-				SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
-				SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-				SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-				SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-				SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+				RenderNodesPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+				RenderNodesPass::doUpdate( nodes.staticNodes.frontCulled );
+				RenderNodesPass::doUpdate( nodes.skinnedNodes.frontCulled );
+				RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+				RenderNodesPass::doUpdate( nodes.morphingNodes.frontCulled );
+				RenderNodesPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-				SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
-				SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
-				SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
-				SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
-				SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
-				SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
+				RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
+				RenderNodesPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
+				RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
+				RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
+				RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
+				RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
 			}
 
 			static const castor::Matrix4x4f identity
@@ -308,7 +308,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo VoxelizePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
+		return RenderNodesPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
 	namespace

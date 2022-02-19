@@ -173,7 +173,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Opaque" )
-					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -202,7 +202,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, cuT( "EnvironmentMap" )
 					, getName() + cuT( "Transparent" )
-					, SceneRenderPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, *m_culler, false }
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );

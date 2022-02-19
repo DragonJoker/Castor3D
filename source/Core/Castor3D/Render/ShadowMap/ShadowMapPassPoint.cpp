@@ -89,7 +89,7 @@ namespace castor3d
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
-		SceneRenderPass::update( updater );
+		RenderNodesPass::update( updater );
 	}
 
 	void ShadowMapPassPoint::update( GpuUpdater & updater )
@@ -119,12 +119,12 @@ namespace castor3d
 
 	void ShadowMapPassPoint::doUpdateNodes( QueueCulledRenderNodes & nodes )
 	{
-		SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
-		SceneRenderPass::doUpdate( nodes.staticNodes.backCulled );
-		SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled );
-		SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
-		SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled );
-		SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
+		RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled );
+		RenderNodesPass::doUpdate( nodes.staticNodes.backCulled );
+		RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled );
+		RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
+		RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled );
+		RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -134,7 +134,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassPoint::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( BlendMode::eNoBlend
+		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
 			, uint32_t( SmTexture::eCount ) - 1u );
 	}

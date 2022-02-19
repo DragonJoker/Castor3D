@@ -10,7 +10,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -80,7 +80,7 @@ namespace castor3d
 			return result;
 		}
 
-		void doAddSkinningNode( SceneRenderPass & renderPass
+		void doAddSkinningNode( RenderNodesPass & renderPass
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
@@ -121,7 +121,7 @@ namespace castor3d
 			}
 		}
 
-		void doAddMorphingNode( SceneRenderPass & renderPass
+		void doAddMorphingNode( RenderNodesPass & renderPass
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
@@ -143,7 +143,7 @@ namespace castor3d
 					: animated.backCulled ) );
 		}
 
-		void doAddStaticNode( SceneRenderPass & renderPass
+		void doAddStaticNode( RenderNodesPass & renderPass
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
@@ -186,7 +186,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, Scene const & scene
 			, Pass const & pass
-			, SceneRenderPass const & renderPass
+			, RenderNodesPass const & renderPass
 			, castor::String const & name )
 		{
 			auto submeshFlags = programFlags;
@@ -234,7 +234,7 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		void doListRenderNodes( SceneRenderPass & renderPass
+		void doListRenderNodes( RenderNodesPass & renderPass
 			, RenderMode mode
 			, SceneNode const * ignored
 			, QueueRenderNodes & nodes )
@@ -268,7 +268,7 @@ namespace castor3d
 			}
 		}
 
-		void doSortRenderNodes( SceneRenderPass & renderPass
+		void doSortRenderNodes( RenderNodesPass & renderPass
 			, RenderMode mode
 			, SceneNode const * ignored
 			, QueueRenderNodes & nodes )
@@ -371,7 +371,7 @@ namespace castor3d
 		//*****************************************************************************************
 
 		template< typename NodeT >
-		void doInitialiseNodes( SceneRenderPass & renderPass
+		void doInitialiseNodes( RenderNodesPass & renderPass
 			, NodeByPipelineMapT< NodeT > & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
@@ -394,7 +394,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void doInitialiseInstancedNodes( SceneRenderPass & renderPass
+		void doInitialiseInstancedNodes( RenderNodesPass & renderPass
 			, ObjectNodesByPipelineMapT< NodeT > & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
@@ -490,7 +490,7 @@ namespace castor3d
 		, Geometry & instance
 		, Pass & pass
 		, Submesh & submesh
-		, SceneRenderPass & renderPass
+		, RenderNodesPass & renderPass
 		, bool front )
 	{
 		if ( instance.isShadowCaster()
@@ -540,7 +540,7 @@ namespace castor3d
 		, CulledBillboard const & culledNode
 		, Pass & pass
 		, BillboardBase & billboard
-		, SceneRenderPass & renderPass )
+		, RenderNodesPass & renderPass )
 	{
 		doAddRenderNode( pipeline
 			, renderPass.createBillboardNode( pass
