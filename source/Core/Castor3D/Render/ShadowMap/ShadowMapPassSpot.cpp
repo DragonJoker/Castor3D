@@ -82,7 +82,7 @@ namespace castor3d
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
-		SceneRenderPass::update( updater );
+		RenderNodesPass::update( updater );
 	}
 
 	void ShadowMapPassSpot::update( GpuUpdater & updater )
@@ -120,7 +120,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassSpot::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return SceneRenderPass::createBlendState( BlendMode::eNoBlend
+		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
 			, uint32_t( SmTexture::eCount ) - 1u );
 	}

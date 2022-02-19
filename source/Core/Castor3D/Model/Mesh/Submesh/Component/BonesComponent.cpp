@@ -7,7 +7,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"

@@ -6,7 +6,7 @@
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>

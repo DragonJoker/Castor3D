@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 
 #include <ashespp/Sync/Semaphore.hpp>
 
@@ -137,7 +137,7 @@ namespace castor3d
 	};
 
 	class RenderTechniquePass
-		: public SceneRenderPass
+		: public RenderNodesPass
 	{
 	protected:
 		/**
@@ -164,7 +164,7 @@ namespace castor3d
 			, castor::String const & typeName
 			, castor::String const & category
 			, castor::String const & name
-			, SceneRenderPassDesc const & renderPassDesc
+			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 
 	public:
@@ -216,7 +216,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using SceneRenderPass::update;
+		using RenderNodesPass::update;
 
 	protected:
 		C3D_API void doUpdateNodes( QueueCulledRenderNodes & nodes

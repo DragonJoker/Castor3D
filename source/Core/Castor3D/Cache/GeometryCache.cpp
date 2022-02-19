@@ -10,7 +10,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -103,7 +103,7 @@ namespace castor3d
 		m_modelDataBuffer.reset();
 	}
 
-	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::registerPass( SceneRenderPass const & renderPass )
+	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::registerPass( RenderNodesPass const & renderPass )
 	{
 		auto instanceMult = renderPass.getInstanceMult();
 		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
@@ -132,7 +132,7 @@ namespace castor3d
 		iresult.first->second.insert( &renderPass );
 	}
 
-	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::unregisterPass( SceneRenderPass const * renderPass
+	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::unregisterPass( RenderNodesPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		auto instIt = m_instances.find( instanceMult );

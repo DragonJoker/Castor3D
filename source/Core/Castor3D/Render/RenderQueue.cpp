@@ -9,7 +9,7 @@
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 
@@ -20,10 +20,10 @@ CU_ImplementCUSmartPtr( castor3d, RenderQueue )
 
 namespace castor3d
 {
-	RenderQueue::RenderQueue( SceneRenderPass & renderPass
+	RenderQueue::RenderQueue( RenderNodesPass & renderPass
 		, RenderMode mode
 		, SceneNode const * ignored )
-		: OwnedBy< SceneRenderPass >{ renderPass }
+		: OwnedBy< RenderNodesPass >{ renderPass }
 		, m_culler{ getOwner()->getCuller() }
 		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler )
 			{
