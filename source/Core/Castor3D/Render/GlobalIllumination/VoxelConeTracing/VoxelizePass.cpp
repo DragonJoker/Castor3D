@@ -494,6 +494,7 @@ namespace castor3d
 				out.textures = c3d_modelIndex.getTextures();
 				out.material = c3d_modelIndex.getMaterialId();
 				out.nodeId = c3d_modelIndex.getNodeId();
+				out.skinningId = c3d_modelIndex.getSkinningId();
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
@@ -608,6 +609,7 @@ namespace castor3d
 					out.textures0 = list[i].textures0;
 					out.textures1 = list[i].textures1;
 					out.nodeId = list[i].nodeId;
+					out.skinningId = list[i].skinningId;
 					out.textures = list[i].textures;
 					out.material = list[i].material;
 					out.vtx.position = vec4( positions[i], 1.0f );
