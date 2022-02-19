@@ -264,12 +264,14 @@ namespace castor3d::shader
 		, bitangent{ this->getMember< sdw::Vec3 >( "bitangent", true ) }
 		, texture0{ this->getMember< sdw::Vec3 >( "texcoord0", true ) }
 		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
-		, instance{ this->getMember< sdw::UInt >( "instance", true ) }
+		, instanceId{ this->getMember< sdw::UInt >( "instanceId", true ) }
 		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
 		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
 		, textures{ this->getMember< sdw::Int >( "textures", true ) }
 		, material{ this->getMember< sdw::UInt >( "material", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
+		, skinningId{ this->getMember< sdw::Int >( "skinningId", true ) }
+		, drawId{ this->getMember< sdw::Int >( "drawId", true ) }
 	{
 	}
 
@@ -341,7 +343,7 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( ( checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures ) ? index++ : 0 )
 				, checkFlag( programFlags, ProgramFlag::eSecondaryUV ) && hasTextures );
-			result->declMember( "instance"
+			result->declMember( "instanceId"
 				, ast::type::Kind::eUInt
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::ePicking ) ? index++ : 0 )
@@ -359,6 +361,12 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, index++ );
 			result->declMember( "nodeId", ast::type::Kind::eInt
+				, ast::type::NotArray
+				, index++ );
+			result->declMember( "skinningId", ast::type::Kind::eInt
+				, ast::type::NotArray
+				, index++ );
+			result->declMember( "drawId", ast::type::Kind::eInt
 				, ast::type::NotArray
 				, index++ );
 		}

@@ -1079,7 +1079,10 @@ namespace castor3d
 					, in.material );
 				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
 					, in.nodeId );
-				out.instance = writer.cast< UInt >( in.instanceIndex );
+				out.skinningId = c3d_modelIndex.getSkinningId( flags.programFlags
+					, in.skinningId );
+				out.drawId = in.drawID;
+				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
@@ -1159,7 +1162,9 @@ namespace castor3d
 				out.textures = c3d_modelIndex.getTextures();
 				out.material = c3d_modelIndex.getMaterialId();
 				out.nodeId = c3d_modelIndex.getNodeId();
-				out.instance = writer.cast< UInt >( in.instanceIndex );
+				out.skinningId = c3d_modelIndex.getSkinningId();
+				out.drawId = in.drawID;
+				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
