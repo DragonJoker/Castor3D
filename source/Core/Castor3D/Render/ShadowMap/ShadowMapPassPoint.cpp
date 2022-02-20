@@ -157,7 +157,11 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MODEL_INDEX( writer
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+
+		C3D_ModelIndices( writer
 			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 		shader::ModelDatas c3d_modelData{ writer
@@ -172,10 +176,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.programFlags
@@ -253,6 +253,23 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		shader::Utils utils{ writer, *getEngine() };
+
+		auto index = uint32_t( PassUboIdx::eCount );
+		auto lightsIndex = index++;
+		UBO_SHADOWMAP( writer
+			, index++
+			, RenderPipeline::ePass );
+		auto lightingModel = shader::LightingModel::createModel( utils
+			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, LightType::ePoint
+			, lightsIndex
+			, RenderPipeline::ePass
+			, false
+			, shader::ShadowOptions{ SceneFlag::eNone, false }
+			, index
+			, RenderPipeline::ePass
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+
 		shader::Materials materials{ writer
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -269,22 +286,6 @@ namespace castor3d
 			, 0u
 			, RenderPipeline::eTextures
 			, hasTextures ) );
-
-		auto index = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = index++;
-		UBO_SHADOWMAP( writer
-			, index++
-			, RenderPipeline::eAdditional );
-		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, LightType::ePoint
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, false
-			, shader::ShadowOptions{ SceneFlag::eNone, false }
-			, index
-			, RenderPipeline::eAdditional
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 		// Fragment Outputs
 		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );

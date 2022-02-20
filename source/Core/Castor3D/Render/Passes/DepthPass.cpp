@@ -72,10 +72,16 @@ namespace castor3d
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
-		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
-		remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
+		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+	}
+
+	SceneFlags DepthPass::doAdjustFlags( SceneFlags flags )const
+	{
+		remFlag( flags, SceneFlag::eLpvGI );
+		remFlag( flags, SceneFlag::eLayeredLpvGI );
+		remFlag( flags, SceneFlag::eVoxelConeTracing );
+		return flags;
 	}
 
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )
@@ -109,10 +115,9 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
-		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
-			, 0u
-			, RenderPipeline::eTextures
-			, hasTextures ) );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( uint32_t( NodeUboIdx::eMaterials )
@@ -129,9 +134,10 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModelData )
 			, RenderPipeline::eBuffers };
 
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
+		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
+			, 0u
+			, RenderPipeline::eTextures
+			, hasTextures ) );
 
 		// Outputs
 		auto data0 = writer.declOutput< Vec4 >( "data0", 0u );

@@ -17,12 +17,7 @@ namespace castor3d::shader
 	public:
 		C3D_API PbrReflectionModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, PassFlags const & passFlags
 			, uint32_t & envMapBinding
-			, uint32_t envMapSet );
-		C3D_API PbrReflectionModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, uint32_t envMapBinding
 			, uint32_t envMapSet );
 		C3D_API void computeDeferred( LightMaterial & material
 			, Surface const & surface

@@ -111,18 +111,7 @@ namespace castor3d::shader
 		return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name );
 	}
 
-	ReflectionModelPtr PhongLightingModel::getReflectionModel( PassFlags const & passFlags
-		, uint32_t & envMapBinding
-		, uint32_t envMapSet )const
-	{
-		return std::make_unique< PhongReflectionModel >( m_writer
-			, m_utils
-			, passFlags
-			, envMapBinding
-			, envMapSet );
-	}
-
-	ReflectionModelPtr PhongLightingModel::getReflectionModel( uint32_t envMapBinding
+	ReflectionModelPtr PhongLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
 		return std::make_unique< PhongReflectionModel >( m_writer

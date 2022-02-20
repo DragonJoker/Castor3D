@@ -246,11 +246,6 @@ namespace castor3d
 		addFlag( flags.programFlags, ProgramFlag::eHasGeometry );
 		addFlag( flags.programFlags, ProgramFlag::eLighting );
 
-		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
-		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
-		remFlag( flags.sceneFlags, SceneFlag::eFogLinear );
-		remFlag( flags.sceneFlags, SceneFlag::eFogExponential );
-		remFlag( flags.sceneFlags, SceneFlag::eFogSquaredExponential );
 
 		remFlag( flags.passFlags, PassFlag::eReflection );
 		remFlag( flags.passFlags, PassFlag::eRefraction );
@@ -261,6 +256,17 @@ namespace castor3d
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
 		remFlag( flags.passFlags, PassFlag::eAlphaTest );
 		remFlag( flags.passFlags, PassFlag::eBlendAlphaTest );
+		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+	}
+
+	SceneFlags VoxelizePass::doAdjustFlags( SceneFlags flags )const
+	{
+		remFlag( flags, SceneFlag::eLpvGI );
+		remFlag( flags, SceneFlag::eLayeredLpvGI );
+		remFlag( flags, SceneFlag::eFogLinear );
+		remFlag( flags, SceneFlag::eFogExponential );
+		remFlag( flags, SceneFlag::eFogSquaredExponential );
+		return flags;
 	}
 
 	void VoxelizePass::doUpdatePipeline( RenderPipeline & pipeline )
@@ -268,9 +274,9 @@ namespace castor3d
 		m_sceneUbo.cpuUpdate( m_scene, &m_camera );
 	}
 
-	void VoxelizePass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void VoxelizePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
 		auto index = uint32_t( PassUboIdx::eCount );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -282,7 +288,7 @@ namespace castor3d
 
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
-			if ( checkFlag( flags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
+			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
 			{
 				// Depth
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -326,54 +332,21 @@ namespace castor3d
 				, buffer.getSize() } );
 			return result;
 		}
-
-		void fillAdditionalDescriptor( crg::RunnableGraph & graph
-			, RenderPipeline const & pipeline
-			, Scene const & scene
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps
-			, VoxelizerUbo const & voxelizerUbo
-			, ashes::Buffer< Voxel > const & voxels )
-		{
-			auto index = uint32_t( PassUboIdx::eCount );
-			auto & flags = pipeline.getFlags();
-			descriptorWrites.push_back( scene.getLightCache().getBinding( index++ ) );
-			descriptorWrites.push_back( voxelizerUbo.getDescriptorWrite( index++ ) );
-			descriptorWrites.push_back( getDescriptorWrite( voxels, index++ ) );
-			bindShadowMaps( graph
-				, flags
-				, shadowMaps
-				, descriptorWrites
-				, index );
-		}
 	}
 
-	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardRenderNode & node
+	void VoxelizePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( m_graph
-			, pipeline
-			, m_scene
-			, descriptorWrites
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto index = uint32_t( PassUboIdx::eCount );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
+		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
+		descriptorWrites.push_back( getDescriptorWrite( m_voxels, index++ ) );
+		bindShadowMaps( m_graph
+			, sceneFlags
 			, shadowMaps
-			, m_voxelizerUbo
-			, m_voxels );
-	}
-
-	void VoxelizePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		fillAdditionalDescriptor( m_graph
-			, pipeline
-			, m_scene
 			, descriptorWrites
-			, shadowMaps
-			, m_voxelizerUbo
-			, m_voxels );
+			, index );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -383,8 +356,11 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		// Inputs
-		UBO_MODEL_INDEX( writer
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+
+		C3D_ModelIndices( writer
 			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 		shader::ModelDatas c3d_modelData{ writer
@@ -399,10 +375,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< shader::VertexSurfaceT, SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.programFlags
@@ -469,7 +441,14 @@ namespace castor3d
 		auto inTexcoord = writer.declInput< Vec2 >( "inTexcoord", 1u, hasTextures );
 		auto inCenter = writer.declInput< Vec3 >( "inCenter", 2u );
 
-		UBO_MODEL_INDEX( writer
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
+
+		C3D_ModelIndices( writer
 			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 		shader::ModelDatas c3d_modelData{ writer
@@ -478,13 +457,6 @@ namespace castor3d
 		UBO_BILLBOARD( writer
 			, uint32_t( NodeUboIdx::eBillboard )
 			, RenderPipeline::eBuffers );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 			, VertexOutT< SurfaceT > out )
@@ -552,7 +524,7 @@ namespace castor3d
 
 		UBO_VOXELIZER( writer
 			, uint32_t( PassUboIdx::eCount ) + 1u
-			, RenderPipeline::eAdditional
+			, RenderPipeline::ePass
 			, true );
 
 		writer.implementMainT< 3u, TriangleListT< SurfaceT >, TriangleStreamT< SurfaceT > >( [&]( GeometryIn in
@@ -638,7 +610,28 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 		shader::Utils utils{ writer, *getEngine() };
 
-		// Shader inputs
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
+		auto addIndex = uint32_t( PassUboIdx::eCount );
+		auto lightsIndex = addIndex++;
+		UBO_VOXELIZER( writer
+			, addIndex++
+			, RenderPipeline::ePass
+			, true );
+		auto output( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
+			, addIndex++
+			, RenderPipeline::ePass ) );
+		auto lightingModel = shader::LightingModel::createDiffuseModel( utils
+			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, lightsIndex
+			, RenderPipeline::ePass
+			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, addIndex
+			, RenderPipeline::ePass
+			, m_mode != RenderMode::eTransparentOnly
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+
 		shader::Materials materials{ writer
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -654,36 +647,10 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eModelData )
 			, RenderPipeline::eBuffers };
 
-		UBO_MODEL_INDEX( writer
-			, uint32_t( NodeUboIdx::eModelIndex )
-			, RenderPipeline::eBuffers );
-
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
 			, hasTextures ) );
-
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
-		auto addIndex = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = addIndex++;
-		UBO_VOXELIZER( writer
-			, addIndex++
-			, RenderPipeline::eAdditional
-			, true );
-		auto output( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
-			, addIndex++
-			, RenderPipeline::eAdditional ) );
-		auto lightingModel = shader::LightingModel::createDiffuseModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, addIndex
-			, RenderPipeline::eAdditional
-			, m_mode != RenderMode::eTransparentOnly
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 		writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
 			, FragmentOut out )

@@ -52,21 +52,6 @@ namespace castor3d
 {
 	namespace
 	{
-		void fillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, Scene const & scene
-			, ShadowMapDirectionalUbo const & shadowMapDirectionalUbo
-			, ShadowMapUbo const & shadowMapUbo )
-		{
-			auto index = uint32_t( PassUboIdx::eCount );
-			descriptorWrites.push_back( scene.getLightCache().getBinding( index++ ) );
-#if C3D_UseTiledDirectionalShadowMap
-			descriptorWrites.push_back( shadowMapDirectionalUbo.getDescriptorWrite( index++ ) );
-#else
-			descriptorWrites.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
-#endif
-		}
-
 		castor::String getPassName( uint32_t cascadeIndex )
 		{
 			return cuT( "DirectionalSMC" ) + string::toString( cascadeIndex );
@@ -166,8 +151,7 @@ namespace castor3d
 #endif
 	}
 
-	void ShadowMapPassDirectional::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void ShadowMapPassDirectional::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
 		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
@@ -177,28 +161,16 @@ namespace castor3d
 		m_initialised = true;
 	}
 
-	void ShadowMapPassDirectional::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardRenderNode & node
+	void ShadowMapPassDirectional::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, getCuller().getScene()
-			, m_shadowMapDirectionalUbo
-			, m_shadowMapUbo );
-	}
-
-	void ShadowMapPassDirectional::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		fillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, getCuller().getScene()
-			, m_shadowMapDirectionalUbo
-			, m_shadowMapUbo );
+		auto index = uint32_t( PassUboIdx::eCount );
+		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
+#if C3D_UseTiledDirectionalShadowMap
+		descriptorWrites.push_back( m_shadowMapDirectionalUbo.getDescriptorWrite( index++ ) );
+#else
+		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
+#endif
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassDirectional::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -234,7 +206,18 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MODEL_INDEX( writer
+		auto index = uint32_t( PassUboIdx::eCount ) + 1u;
+#if C3D_UseTiledDirectionalShadowMap
+		UBO_SHADOWMAP_DIRECTIONAL( writer
+			, index++
+			, RenderPipeline::ePass );
+#else
+		UBO_SHADOWMAP( writer
+			, index++
+			, RenderPipeline::ePass );
+#endif
+
+		C3D_ModelIndices( writer
 			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 		shader::ModelDatas c3d_modelData{ writer
@@ -253,16 +236,6 @@ namespace castor3d
 		UBO_MODEL_INSTANCES( writer
 			, uint32_t( NodeUboIdx::eModelInstances )
 			, RenderPipeline::eBuffers );
-
-		auto index = uint32_t( PassUboIdx::eCount ) + 1u;
-		UBO_SHADOWMAP_DIRECTIONAL( writer
-			, index++
-			, RenderPipeline::eAdditional );
-#else
-		auto index = uint32_t( PassUboIdx::eCount ) + 1u;
-		UBO_SHADOWMAP( writer
-			, index++
-			, RenderPipeline::eAdditional );
 #endif
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -361,6 +334,29 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
+
+		auto index = uint32_t( PassUboIdx::eCount );
+		auto lightsIndex = index++;
+#if C3D_UseTiledDirectionalShadowMap
+		UBO_SHADOWMAP_DIRECTIONAL( writer
+			, index++
+			, RenderPipeline::ePass );
+#else
+		UBO_SHADOWMAP( writer
+			, index++
+			, RenderPipeline::ePass );
+#endif
+		auto lightingModel = shader::LightingModel::createModel( utils
+			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, LightType::eDirectional
+			, lightsIndex
+			, RenderPipeline::ePass
+			, false
+			, shader::ShadowOptions{ SceneFlag::eNone, false }
+			, index
+			, RenderPipeline::ePass
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+
 		shader::Materials materials{ writer
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -377,28 +373,6 @@ namespace castor3d
 			, 0u
 			, RenderPipeline::eTextures
 			, hasTextures ) );
-
-		auto index = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = index++;
-#if C3D_UseTiledDirectionalShadowMap
-		UBO_SHADOWMAP_DIRECTIONAL( writer
-			, index++
-			, RenderPipeline::eAdditional );
-#else
-		UBO_SHADOWMAP( writer
-			, index++
-			, RenderPipeline::eAdditional );
-#endif
-		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, LightType::eDirectional
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, false
-			, shader::ShadowOptions{ SceneFlag::eNone, false }
-			, index
-			, RenderPipeline::eAdditional
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 		// Fragment Outputs
 		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );

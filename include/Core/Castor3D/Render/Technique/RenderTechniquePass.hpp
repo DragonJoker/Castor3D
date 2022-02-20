@@ -223,21 +223,30 @@ namespace castor3d
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
 		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
+		C3D_API SceneFlags doAdjustFlags( SceneFlags flags )const override;
+		C3D_API void doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
+		C3D_API void doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
+		C3D_API void doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
+		C3D_API void doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index )const;
+		C3D_API void doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index )const;
+		C3D_API void doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index )const;
 
 	private:
 		void doUpdateFlags( PipelineFlags & flags )const override;
 		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		void doFillAdditionalBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, SubmeshRenderNode & node
+		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
