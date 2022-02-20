@@ -380,15 +380,10 @@ namespace castor3d
 				RenderPipeline & pipeline = *pipelineNodes.first;
 				pipeline.createDescriptorPools( uint32_t( pipelineNodes.second.size() ) );
 
-				for ( auto & culledNode : pipelineNodes.second )
+				if ( pipeline.hasDescriptorSetLayout() )
 				{
-					if ( pipeline.hasDescriptorSetLayout() )
-					{
-						renderPass.initialiseAdditionalDescriptor( pipeline
-							, pipeline.getDescriptorPool()
-							, *culledNode.second
-							, shadowMaps );
-					}
+					renderPass.initialiseAdditionalDescriptor( pipeline
+						, shadowMaps );
 				}
 			}
 		}
@@ -410,11 +405,9 @@ namespace castor3d
 
 				pipeline.createDescriptorPools( size );
 
-				if ( pipeline.getDescriptorSetLayout() )
+				if ( pipeline.hasDescriptorSetLayout() )
 				{
 					renderPass.initialiseAdditionalDescriptor( pipeline
-						, pipeline.getDescriptorPool()
-						, pipelineNodes.second
 						, shadowMaps );
 				}
 			}

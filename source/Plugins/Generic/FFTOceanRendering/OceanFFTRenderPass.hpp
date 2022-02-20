@@ -92,17 +92,10 @@ namespace ocean_fft
 		void doUpdateUbos( castor3d::CpuUpdater & updater )override;
 		bool doIsValidPass( castor3d::Pass const & pass )const override;
 
-		void doFillAdditionalBindings( castor3d::PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( castor3d::PipelineFlags const & flags )const override;
-		void doFillAdditionalDescriptor( castor3d::RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::BillboardRenderNode & node
-			, castor3d::ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillAdditionalDescriptor( castor3d::RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::SubmeshRenderNode & node
+		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, castor3d::ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdateFlags( castor3d::PipelineFlags & flags )const override;
 		void doUpdatePipeline( castor3d::RenderPipeline & pipeline )override;

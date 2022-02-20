@@ -18,32 +18,14 @@ namespace castor3d::shader
 {
 	PbrReflectionModel::PbrReflectionModel( sdw::ShaderWriter & writer
 		, Utils & utils
-		, PassFlags const & passFlags
 		, uint32_t & envMapBinding
-		, uint32_t envMapSet )
-		: ReflectionModel{ writer, utils, passFlags }
-	{
-		if ( checkFlag( m_passFlags, PassFlag::eReflection )
-			|| checkFlag( m_passFlags, PassFlag::eRefraction ) )
-		{
-			m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		}
-
-		m_writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
-		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
-		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
-	}
-	
-	PbrReflectionModel::PbrReflectionModel( sdw::ShaderWriter & writer
-		, Utils & utils
-		, uint32_t envMapBinding
 		, uint32_t envMapSet )
 		: ReflectionModel{ writer, utils }
 	{
 		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		m_writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, 0u );
-		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, 0u );
-		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, 0u );
+		m_writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
+		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
+		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
 	}
 
 	void PbrReflectionModel::computeDeferred( LightMaterial & material

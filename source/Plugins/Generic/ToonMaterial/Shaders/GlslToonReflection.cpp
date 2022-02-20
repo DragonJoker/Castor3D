@@ -18,25 +18,11 @@ namespace toon::shader
 
 	ToonPhongReflectionModel::ToonPhongReflectionModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
-		, castor3d::PassFlags const & passFlags
 		, uint32_t & envMapBinding
-		, uint32_t envMapSet )
-		: c3d::ReflectionModel{ writer, utils, passFlags }
-	{
-		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection )
-			|| checkFlag( m_passFlags, castor3d::PassFlag::eRefraction ) )
-		{
-			m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		}
-	}
-
-	ToonPhongReflectionModel::ToonPhongReflectionModel( sdw::ShaderWriter & writer
-		, c3d::Utils & utils
-		, uint32_t envMapBinding
 		, uint32_t envMapSet )
 		: c3d::ReflectionModel{ writer, utils }
 	{
-		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet );
+		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
 	}
 
 	void ToonPhongReflectionModel::computeDeferred( c3d::LightMaterial & material
@@ -670,32 +656,14 @@ namespace toon::shader
 
 	ToonPbrReflectionModel::ToonPbrReflectionModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
-		, castor3d::PassFlags const & passFlags
 		, uint32_t & envMapBinding
-		, uint32_t envMapSet )
-		: ReflectionModel{ writer, utils, passFlags }
-	{
-		if ( checkFlag( m_passFlags, castor3d::PassFlag::eReflection )
-			|| checkFlag( m_passFlags, castor3d::PassFlag::eRefraction ) )
-		{
-			m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		}
-
-		writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
-		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
-		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
-	}
-
-	ToonPbrReflectionModel::ToonPbrReflectionModel( sdw::ShaderWriter & writer
-		, c3d::Utils & utils
-		, uint32_t envMapBinding
 		, uint32_t envMapSet )
 		: ReflectionModel{ writer, utils }
 	{
 		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, 0u );
-		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, 0u );
-		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, 0u );
+		writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", envMapBinding++, envMapSet );
+		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance", envMapBinding++, envMapSet );
+		writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered", envMapBinding++, envMapSet );
 	}
 
 	void ToonPbrReflectionModel::computeDeferred( c3d::LightMaterial & material

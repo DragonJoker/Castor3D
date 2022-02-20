@@ -114,18 +114,7 @@ namespace toon::shader
 		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPhongLightMaterial >( name );
 	}
 
-	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( castor3d::PassFlags const & passFlags
-		, uint32_t & envMapBinding
-		, uint32_t envMapSet )const
-	{
-		return std::make_unique< ToonPhongReflectionModel >( m_writer
-			, m_utils
-			, passFlags
-			, envMapBinding
-			, envMapSet );
-	}
-
-	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( uint32_t envMapBinding
+	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
 		return std::make_unique< ToonPhongReflectionModel >( m_writer
@@ -1389,18 +1378,7 @@ namespace toon::shader
 			+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
 	}
 
-	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( castor3d::PassFlags const & passFlags
-		, uint32_t & envMapBinding
-		, uint32_t envMapSet )const
-	{
-		return std::make_unique< ToonPbrReflectionModel >( m_writer
-			, m_utils
-			, passFlags
-			, envMapBinding
-			, envMapSet );
-	}
-
-	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( uint32_t envMapBinding
+	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
 		return std::make_unique< ToonPbrReflectionModel >( m_writer
