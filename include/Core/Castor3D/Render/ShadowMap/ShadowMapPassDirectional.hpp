@@ -57,15 +57,8 @@ namespace castor3d
 
 	private:
 		void doUpdateUbos( CpuUpdater & updater )override;
-		void doFillAdditionalBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, SubmeshRenderNode & node
+		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;

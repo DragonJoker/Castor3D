@@ -396,9 +396,9 @@ namespace water
 			&& doAreValidPassFlags( pass.getPassFlags() );
 	}
 
-	void WaterRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void WaterRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
 		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaterIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaterIdx::eWaterUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -426,98 +426,9 @@ namespace water
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		auto index = uint32_t( WaterIdx::eSceneResult ) + 1u;
-
-		for ( uint32_t j = 0u; j < uint32_t( castor3d::LightType::eCount ); ++j )
-		{
-			if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag( uint8_t( castor3d::SceneFlag::eShadowBegin ) << j ) ) )
-			{
-				bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// light type shadow depth
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// light type shadow variance
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-		}
-
-		if ( checkFlag( flags.passFlags, castor3d::PassFlag::eImageBasedLighting ) )
-		{
-			bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_mapBrdf
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_mapIrradiance
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_mapPrefiltered
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
-
-		if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eVoxelConeTracing ) )
-		{
-			CU_Require( m_vctConfigUbo );
-			CU_Require( m_vctFirstBounce );
-			CU_Require( m_vctSecondaryBounce );
-			bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// Voxel UBO
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_mapVoxelsFirstBounce
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_mapVoxelsSecondaryBounce
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
-		else
-		{
-			if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLpvGI ) )
-			{
-				CU_Require( m_lpvConfigUbo );
-				bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// LPV Grid UBO
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-
-			if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLayeredLpvGI ) )
-			{
-				CU_Require( m_llpvConfigUbo );
-				bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// LLPV Grid UBO
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-
-			if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLpvGI ) )
-			{
-				CU_Require( m_lpvResult );
-				bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_lpvAccumulationR
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_lpvAccumulationG
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_lpvAccumulationB
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-
-			if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLayeredLpvGI ) )
-			{
-				CU_Require( m_llpvResult );
-
-				for ( size_t i = 0u; i < m_llpvResult->size(); ++i )
-				{
-					bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_lpvAccumulationRn
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-					bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_lpvAccumulationGn
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-					bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++	// c3d_lpvAccumulationBn
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				}
-			}
-		}
+		doAddShadowBindings( bindings, index );
+		doAddEnvBindings( bindings, index );
+		doAddGIBindings( bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo WaterRenderPass::doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const
@@ -555,198 +466,22 @@ namespace water
 		};
 	}
 
-	namespace
-	{
-		void fillAdditionalDescriptor( crg::RunnableGraph & graph
-			, castor3d::RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::Scene const & scene
-			, castor3d::SceneNode const & sceneNode
-			, castor3d::ShadowMapLightTypeArray const & shadowMaps
-			, castor3d::LpvGridConfigUbo const * lpvConfigUbo
-			, castor3d::LayeredLpvGridConfigUbo const * llpvConfigUbo
-			, castor3d::VoxelizerUbo const * vctConfigUbo
-			, castor3d::LightVolumePassResult const * lpvResult
-			, castor3d::LightVolumePassResultArray const * llpvResult
-			, castor3d::Texture const * vctFirstBounce
-			, castor3d::Texture const * vctSecondaryBounce
-			, WaterUbo const & waveUbo
-			, VkSampler linearWrapSampler
-			, VkSampler pointClampSampler
-			, VkImageView const & normals1View
-			, VkImageView const & normals2View
-			, VkImageView const & noiseView
-			, VkImageView const & normals
-			, VkImageView const & depth
-			, VkImageView const & colour )
-		{
-			auto & flags = pipeline.getFlags();
-			descriptorWrites.push_back( scene.getLightCache().getBinding( WaterIdx::eLightBuffer ) );
-			descriptorWrites.push_back( waveUbo.getDescriptorWrite( WaterIdx::eWaterUbo ) );
-			auto index = uint32_t( WaterIdx::eWaterNormals1 );
-			bindTexture( normals1View, linearWrapSampler, descriptorWrites, index );
-			bindTexture( normals2View, linearWrapSampler, descriptorWrites, index );
-			bindTexture( noiseView, linearWrapSampler, descriptorWrites, index );
-			bindTexture( normals, pointClampSampler, descriptorWrites, index );
-			bindTexture( depth, pointClampSampler, descriptorWrites, index );
-			bindTexture( colour, pointClampSampler, descriptorWrites, index );
-
-			castor3d::bindShadowMaps( graph
-				, pipeline.getFlags()
-				, shadowMaps
-				, descriptorWrites
-				, index );
-
-			if ( checkFlag( flags.passFlags, castor3d::PassFlag::eImageBasedLighting ) )
-			{
-				auto & background = *scene.getBackground();
-
-				if ( background.hasIbl() )
-				{
-					auto & ibl = background.getIbl();
-					bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
-						, ibl.getPrefilteredBrdfSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( ibl.getIrradianceTexture().wholeView
-						, ibl.getIrradianceSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
-						, ibl.getPrefilteredEnvironmentSampler()
-						, descriptorWrites
-						, index );
-				}
-			}
-
-			if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eVoxelConeTracing ) )
-			{
-				CU_Require( vctConfigUbo );
-				CU_Require( vctFirstBounce );
-				CU_Require( vctSecondaryBounce );
-				descriptorWrites.push_back( vctConfigUbo->getDescriptorWrite( index++ ) );
-				bindTexture( vctFirstBounce->wholeView
-					, *vctFirstBounce->sampler
-					, descriptorWrites
-					, index );
-				bindTexture( vctSecondaryBounce->wholeView
-					, *vctSecondaryBounce->sampler
-					, descriptorWrites
-					, index );
-			}
-			else
-			{
-				if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLpvGI ) )
-				{
-					CU_Require( lpvConfigUbo );
-					descriptorWrites.push_back( lpvConfigUbo->getDescriptorWrite( index++ ) );
-				}
-
-				if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLayeredLpvGI ) )
-				{
-					CU_Require( llpvConfigUbo );
-					descriptorWrites.push_back( llpvConfigUbo->getDescriptorWrite( index++ ) );
-				}
-
-				if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLpvGI ) )
-				{
-					CU_Require( lpvResult );
-					auto & lpv = *lpvResult;
-					bindTexture( lpv[castor3d::LpvTexture::eR].wholeView
-						, *lpv[castor3d::LpvTexture::eR].sampler
-						, descriptorWrites
-						, index );
-					bindTexture( lpv[castor3d::LpvTexture::eG].wholeView
-						, *lpv[castor3d::LpvTexture::eG].sampler
-						, descriptorWrites
-						, index );
-					bindTexture( lpv[castor3d::LpvTexture::eB].wholeView
-						, *lpv[castor3d::LpvTexture::eB].sampler
-						, descriptorWrites
-						, index );
-				}
-
-				if ( checkFlag( flags.sceneFlags, castor3d::SceneFlag::eLayeredLpvGI ) )
-				{
-					CU_Require( llpvResult );
-
-					for ( auto & plpv : *llpvResult )
-					{
-						auto & lpv = *plpv;
-						bindTexture( lpv[castor3d::LpvTexture::eR].wholeView
-							, *lpv[castor3d::LpvTexture::eR].sampler
-							, descriptorWrites
-							, index );
-						bindTexture( lpv[castor3d::LpvTexture::eG].wholeView
-							, *lpv[castor3d::LpvTexture::eG].sampler
-							, descriptorWrites
-							, index );
-						bindTexture( lpv[castor3d::LpvTexture::eB].wholeView
-							, *lpv[castor3d::LpvTexture::eB].sampler
-							, descriptorWrites
-							, index );
-					}
-				}
-			}
-		}
-	}
-
-	void WaterRenderPass::doFillAdditionalDescriptor( castor3d::RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::BillboardRenderNode & node
+	void WaterRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( m_graph
-			, pipeline
-			, descriptorWrites
-			, m_scene
-			, node.sceneNode
-			, shadowMaps
-			, m_lpvConfigUbo
-			, m_llpvConfigUbo
-			, m_vctConfigUbo
-			, m_lpvResult
-			, m_llpvResult
-			, m_vctFirstBounce
-			, m_vctSecondaryBounce
-			, m_ubo
-			, *m_linearWrapSampler
-			, *m_pointClampSampler
-			, m_normals1
-			, m_normals2
-			, m_noise
-			, m_parent->getNormalTexture().sampledView
-			, m_parent->getDepthTexture().sampledView
-			, m_parent->getResultTexture().sampledView );
-	}
-
-	void WaterRenderPass::doFillAdditionalDescriptor( castor3d::RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::SubmeshRenderNode & node
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
-	{
-		fillAdditionalDescriptor( m_graph
-			, pipeline
-			, descriptorWrites
-			, m_scene
-			, node.sceneNode
-			, shadowMaps
-			, m_lpvConfigUbo
-			, m_llpvConfigUbo
-			, m_vctConfigUbo
-			, m_lpvResult
-			, m_llpvResult
-			, m_vctFirstBounce
-			, m_vctSecondaryBounce
-			, m_ubo
-			, *m_linearWrapSampler
-			, *m_pointClampSampler
-			, m_normals1
-			, m_normals2
-			, m_noise
-			, m_parent->getNormalTexture().sampledView
-			, m_depthInput->sampledView
-			, m_colourInput->sampledView );
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaterIdx::eLightBuffer ) );
+		descriptorWrites.push_back( m_ubo.getDescriptorWrite( WaterIdx::eWaterUbo ) );
+		auto index = uint32_t( WaterIdx::eWaterNormals1 );
+		bindTexture( m_normals1, *m_linearWrapSampler, descriptorWrites, index );
+		bindTexture( m_normals2, *m_linearWrapSampler, descriptorWrites, index );
+		bindTexture( m_noise, *m_linearWrapSampler, descriptorWrites, index );
+		bindTexture( m_parent->getNormalTexture().sampledView, *m_pointClampSampler, descriptorWrites, index );
+		bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
+		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
 	void WaterRenderPass::doUpdateFlags( castor3d::PipelineFlags & flags )const
@@ -816,6 +551,52 @@ namespace water
 
 		shader::Utils utils{ writer, *getEngine() };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		shader::Fog fog{ writer };
+
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
+		auto index = uint32_t( PassUboIdx::eCount );
+		auto lightsIndex = index++;
+		UBO_WATER( writer
+			, index++
+			, RenderPipeline::ePass );
+		auto c3d_waveNormals1 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals1"
+			, index++
+			, RenderPipeline::ePass );
+		auto c3d_waveNormals2 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals2"
+			, index++
+			, RenderPipeline::ePass );
+		auto c3d_waveNoise = writer.declCombinedImg< FImg2DR32 >( "c3d_waveNoise"
+			, index++
+			, RenderPipeline::ePass );
+		auto c3d_normals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_normals"
+			, index++
+			, RenderPipeline::ePass );
+		auto c3d_depth = writer.declCombinedImg< FImg2DR32 >( "c3d_depth"
+			, index++
+			, RenderPipeline::ePass );
+		auto c3d_colour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colour"
+			, index++
+			, RenderPipeline::ePass );
+		auto lightingModel = shader::LightingModel::createModel( utils
+			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, lightsIndex
+			, RenderPipeline::ePass
+			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, index
+			, RenderPipeline::ePass
+			, false
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto reflections = lightingModel->getReflectionModel( index
+			, uint32_t( RenderPipeline::ePass ) );
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( index
+			, RenderPipeline::ePass
+			, flags.sceneFlags );
 
 		shader::Materials materials{ writer
 			, uint32_t( NodeUboIdx::eMaterials )
@@ -836,53 +617,6 @@ namespace water
 			, 0u
 			, RenderPipeline::eTextures
 			, hasTextures ) );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
-		auto index = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = index++;
-		UBO_WATER( writer
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_waveNormals1 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals1"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_waveNormals2 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals2"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_waveNoise = writer.declCombinedImg< FImg2DR32 >( "c3d_waveNoise"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_normals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_normals"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_depth = writer.declCombinedImg< FImg2DR32 >( "c3d_depth"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto c3d_colour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colour"
-			, index++
-			, RenderPipeline::eAdditional );
-		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, index
-			, RenderPipeline::eAdditional
-			, false
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto reflections = lightingModel->getReflectionModel( flags.passFlags
-			, index
-			, uint32_t( RenderPipeline::eAdditional ) );
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( index
-			, RenderPipeline::eAdditional
-			, flags.sceneFlags );
-		shader::Fog fog{ writer };
 
 		// Fragment Outputs
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
@@ -1002,7 +736,6 @@ namespace water
 								, surface )
 							: vec3( 0.0_f ) ) );
 					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
-
 
 					// Reflection
 					auto backgroundReflection = writer.declLocale( "backgroundReflection"

@@ -452,36 +452,6 @@ namespace castor3d
 		 *\param[in]	node			Le noeud.
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, BillboardRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
-		/**
-		 *\~english
-		 *\brief		Initialises the additional descriptor set of a submesh node.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	node			The node.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour un noeud de submesh.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Le noeud.
-		 */
-		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps );
-		/**
-		 *\~english
-		 *\brief		Initialises the additional descriptor set of instantiated submesh nodes.
-		 *\param[in]	descriptorPool	The pool.
-		 *\param[in]	nodes			The nodes.
-		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs additionnels pour des noeuds de submesh instanciés.
-		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	nodes			Les noeuds.
-		 */
-		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
-			, ashes::DescriptorSetPool const & descriptorPool
-			, SubmeshRenderNodesByPassMap & nodes
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
 		 *\~english
@@ -766,10 +736,10 @@ namespace castor3d
 		 *\param[in]		flags		Les indicateurs de pipeline.
 		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
 		 */
-		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
+		C3D_API virtual void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 		C3D_API virtual bool doAreValidPassFlags( PassFlags const & passFlags )const;
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
+		C3D_API virtual SceneFlags doAdjustFlags( SceneFlags flags )const;
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 
@@ -821,27 +791,7 @@ namespace castor3d
 		 *\param[in]		node		Le noeud.
 		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
-		C3D_API virtual void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
-		/**
-		 *\~english
-		 *\brief			Initialises the additional descriptor set of a submesh node.
-		 *\param[in]		layout		The descriptors layout.
-		 *\param[in,out]	index		The texture index, updated to the next available.
-		 *\param[in]		node		The node.
-		 *\param[in]		shadowMaps	The shadow maps.
-		 *\~french
-		 *\brief			Initialise l'ensemble de descripteurs additionnels pour un noeud de submesh.
-		 *\param[in]		layout		Le layout des descripteurs.
-		 *\param[in, out]	index		L'indice de la texture, mis à jour au prochain disponible.
-		 *\param[in]		node		Le noeud.
-		 *\param[in]		shadowMaps	Les shadow maps.
-		 */
-		C3D_API virtual void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, SubmeshRenderNode & node
+		C3D_API virtual void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english
@@ -935,6 +885,9 @@ namespace castor3d
 		uint32_t m_index{ 0u };
 		uint32_t const m_instanceMult{ 1u };
 		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;
+		ashes::DescriptorSetPoolPtr m_additionalDescriptorPool;
+		ashes::DescriptorSetLayoutPtr m_additionalDescriptorLayout;
+		ashes::DescriptorSetPtr m_additionalDescriptorSet;
 
 	private:
 		std::vector< RenderPipelineUPtr > m_frontPipelines;

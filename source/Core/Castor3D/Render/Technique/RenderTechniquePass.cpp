@@ -97,7 +97,7 @@ namespace castor3d
 	}
 
 	void bindShadowMaps( crg::RunnableGraph & graph
-		, PipelineFlags const & pipelineFlags
+		, SceneFlags const & sceneFlags
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
@@ -105,7 +105,7 @@ namespace castor3d
 #if !C3D_DebugDisableShadowMaps
 		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
-			if ( checkFlag( pipelineFlags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
+			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
 			{
 				for ( auto & shadowMapRef : shadowMaps[i] )
 				{
@@ -205,20 +205,27 @@ namespace castor3d
 			addFlag( flags.programFlags, ProgramFlag::eEnvironmentMapping );
 		}
 
+		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+	}
+
+	SceneFlags RenderTechniquePass::doAdjustFlags( SceneFlags flags )const
+	{
 		if ( !m_vctConfigUbo || !m_vctFirstBounce || !m_vctSecondaryBounce )
 		{
-			remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
+			remFlag( flags, SceneFlag::eVoxelConeTracing );
 		}
 
 		if ( !m_lpvConfigUbo || !m_lpvResult )
 		{
-			remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
+			remFlag( flags, SceneFlag::eLpvGI );
 		}
 
 		if ( !m_llpvConfigUbo || !m_lpvResult )
 		{
-			remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+			remFlag( flags, SceneFlag::eLayeredLpvGI );
 		}
+
+		return flags;
 	}
 
 	ShaderPtr RenderTechniquePass::doGetHullShaderSource( PipelineFlags const & flags )const
@@ -241,19 +248,14 @@ namespace castor3d
 		m_sceneUbo.cpuUpdate( m_scene, m_camera );
 	}
 
-	void RenderTechniquePass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void RenderTechniquePass::doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
 	{
-		auto index = uint32_t( PassUboIdx::eCount );
-		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
 
-		// Shadow maps
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
-			if ( checkFlag( flags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
+			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
 			{
 				// Depth
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -265,16 +267,18 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 		}
+	}
 
-		if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-			|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
+	void RenderTechniquePass::doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		if ( checkFlag( flags.passFlags, PassFlag::eImageBasedLighting ) )
+		auto & background = *m_scene.getBackground();
+
+		if ( background.hasIbl() )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -286,12 +290,15 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
 		}
+	}
 
-		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
+	void RenderTechniquePass::doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
-			CU_Require( m_vctConfigUbo );
-			CU_Require( m_vctFirstBounce );
-			CU_Require( m_vctSecondaryBounce );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -304,25 +311,22 @@ namespace castor3d
 		}
 		else
 		{
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
-				CU_Require( m_lpvConfigUbo );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
-				CU_Require( m_llpvConfigUbo );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
-				CU_Require( m_lpvResult );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
@@ -334,7 +338,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
 			}
 
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( m_llpvResult );
 
@@ -354,107 +358,107 @@ namespace castor3d
 		}
 	}
 
-	namespace
+	void RenderTechniquePass::doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t & index )const
 	{
-		void fillAdditionalDescriptor( crg::RunnableGraph & graph
-			, RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, Scene const & scene
-			, SceneNode const & sceneNode
-			, ShadowMapLightTypeArray const & shadowMaps
-			, Texture const * ssao
-			, LpvGridConfigUbo const * lpvConfigUbo
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo
-			, VoxelizerUbo const * vctConfigUbo
-			, LightVolumePassResult const * lpvResult
-			, LightVolumePassResultArray const * llpvResult
-			, Texture const * vctFirstBounce
-			, Texture const * vctSecondaryBounce )
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		bindShadowMaps( m_graph
+			, sceneFlags
+			, shadowMaps
+			, descriptorWrites
+			, index );
+	}
+
+	void RenderTechniquePass::doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t & index )const
+	{
+		bindTexture( m_scene.getEnvironmentMap().getColourId().sampledView
+			, *m_scene.getEnvironmentMap().getColourId().sampler
+			, descriptorWrites
+			, index );
+
+		auto & background = *m_scene.getBackground();
+
+		if ( background.hasIbl() )
 		{
-			auto index = uint32_t( PassUboIdx::eCount );
-			auto & flags = pipeline.getFlags();
-			descriptorWrites.push_back( scene.getLightCache().getBinding( index++ ) );
-
-			if ( ssao )
-			{
-				bindTexture( ssao->wholeView
-					, *ssao->sampler
-					, descriptorWrites
-					, index );
-			}
-
-			bindShadowMaps( graph
-				, pipeline.getFlags()
-				, shadowMaps
+			auto & ibl = background.getIbl();
+			bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
+				, ibl.getPrefilteredBrdfSampler()
 				, descriptorWrites
 				, index );
+			bindTexture( ibl.getIrradianceTexture().wholeView
+				, ibl.getIrradianceSampler()
+				, descriptorWrites
+				, index );
+			bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
+				, ibl.getPrefilteredEnvironmentSampler()
+				, descriptorWrites
+				, index );
+		}
+	}
 
-			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+	void RenderTechniquePass::doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t & index )const
+	{
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
+		{
+			CU_Require( m_vctConfigUbo );
+			CU_Require( m_vctFirstBounce );
+			CU_Require( m_vctSecondaryBounce );
+			descriptorWrites.push_back( m_vctConfigUbo->getDescriptorWrite( index++ ) );
+			bindTexture( m_vctFirstBounce->wholeView
+				, *m_vctFirstBounce->sampler
+				, descriptorWrites
+				, index );
+			bindTexture( m_vctSecondaryBounce->wholeView
+				, *m_vctSecondaryBounce->sampler
+				, descriptorWrites
+				, index );
+		}
+		else
+		{
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
-				auto & envMap = scene.getEnvironmentMap();
-				auto envMapIndex = scene.getEnvironmentMapIndex( sceneNode );
-				bindTexture( envMap.getColourView( envMapIndex )
-					, *envMap.getColourId().sampler
+				CU_Require( m_lpvConfigUbo );
+				descriptorWrites.push_back( m_lpvConfigUbo->getDescriptorWrite( index++ ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( m_llpvConfigUbo );
+				descriptorWrites.push_back( m_llpvConfigUbo->getDescriptorWrite( index++ ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				CU_Require( m_lpvResult );
+				auto & lpv = *m_lpvResult;
+				bindTexture( lpv[LpvTexture::eR].wholeView
+					, *lpv[LpvTexture::eR].sampler
+					, descriptorWrites
+					, index );
+				bindTexture( lpv[LpvTexture::eG].wholeView
+					, *lpv[LpvTexture::eG].sampler
+					, descriptorWrites
+					, index );
+				bindTexture( lpv[LpvTexture::eB].wholeView
+					, *lpv[LpvTexture::eB].sampler
 					, descriptorWrites
 					, index );
 			}
 
-			if ( checkFlag( flags.passFlags, PassFlag::eImageBasedLighting ) )
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
-				auto & background = *scene.getBackground();
+				CU_Require( m_llpvResult );
 
-				if ( background.hasIbl() )
+				for ( auto & plpv : *m_llpvResult )
 				{
-					auto & ibl = background.getIbl();
-					bindTexture( ibl.getPrefilteredBrdfTexture().wholeView
-						, ibl.getPrefilteredBrdfSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( ibl.getIrradianceTexture().wholeView
-						, ibl.getIrradianceSampler()
-						, descriptorWrites
-						, index );
-					bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
-						, ibl.getPrefilteredEnvironmentSampler()
-						, descriptorWrites
-						, index );
-				}
-			}
-
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
-			{
-				CU_Require( vctConfigUbo );
-				CU_Require( vctFirstBounce );
-				CU_Require( vctSecondaryBounce );
-				descriptorWrites.push_back( vctConfigUbo->getDescriptorWrite( index++ ) );
-				bindTexture( vctFirstBounce->wholeView
-					, *vctFirstBounce->sampler
-					, descriptorWrites
-					, index );
-				bindTexture( vctSecondaryBounce->wholeView
-					, *vctSecondaryBounce->sampler
-					, descriptorWrites
-					, index );
-			}
-			else
-			{
-				if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
-				{
-					CU_Require( lpvConfigUbo );
-					descriptorWrites.push_back( lpvConfigUbo->getDescriptorWrite( index++ ) );
-				}
-
-				if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
-				{
-					CU_Require( llpvConfigUbo );
-					descriptorWrites.push_back( llpvConfigUbo->getDescriptorWrite( index++ ) );
-				}
-
-				if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
-				{
-					CU_Require( lpvResult );
-					auto & lpv = *lpvResult;
+					auto & lpv = *plpv;
 					bindTexture( lpv[LpvTexture::eR].wholeView
 						, *lpv[LpvTexture::eR].sampler
 						, descriptorWrites
@@ -468,72 +472,42 @@ namespace castor3d
 						, descriptorWrites
 						, index );
 				}
-
-				if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
-				{
-					CU_Require( llpvResult );
-
-					for ( auto & plpv : *llpvResult )
-					{
-						auto & lpv = *plpv;
-						bindTexture( lpv[LpvTexture::eR].wholeView
-							, *lpv[LpvTexture::eR].sampler
-							, descriptorWrites
-							, index );
-						bindTexture( lpv[LpvTexture::eG].wholeView
-							, *lpv[LpvTexture::eG].sampler
-							, descriptorWrites
-							, index );
-						bindTexture( lpv[LpvTexture::eB].wholeView
-							, *lpv[LpvTexture::eB].sampler
-							, descriptorWrites
-							, index );
-					}
-				}
 			}
 		}
 	}
 
-	void RenderTechniquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
+	void RenderTechniquePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		fillAdditionalDescriptor( m_graph
-			, pipeline
-			, descriptorWrites
-			, m_scene
-			, node.sceneNode
-			, shadowMaps
-			, m_ssao
-			, m_lpvConfigUbo
-			, m_llpvConfigUbo
-			, m_vctConfigUbo
-			, m_lpvResult
-			, m_llpvResult
-			, m_vctFirstBounce
-			, m_vctSecondaryBounce );
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto index = uint32_t( PassUboIdx::eCount );
+		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+
+		doAddShadowBindings( bindings, index );
+		doAddEnvBindings( bindings, index );
+		doAddGIBindings( bindings, index );
 	}
 
-	void RenderTechniquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, SubmeshRenderNode & node
+	void RenderTechniquePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( m_graph
-			, pipeline
-			, descriptorWrites
-			, m_scene
-			, node.sceneNode
-			, shadowMaps
-			, m_ssao
-			, m_lpvConfigUbo
-			, m_llpvConfigUbo
-			, m_vctConfigUbo
-			, m_lpvResult
-			, m_llpvResult
-			, m_vctFirstBounce
-			, m_vctSecondaryBounce );
+		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto index = uint32_t( PassUboIdx::eCount );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
+
+		if ( m_ssao )
+		{
+			bindTexture( m_ssao->wholeView
+				, *m_ssao->sampler
+				, descriptorWrites
+				, index );
+		}
+
+		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
+		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const

@@ -154,6 +154,34 @@ namespace castor3d
 		shader::Utils utils{ writer, *getEngine() };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
+		auto index = uint32_t( PassUboIdx::eCount );
+		auto lightsIndex = index++;
+		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
+			, ( m_ssao ? index++ : 0u )
+			, RenderPipeline::ePass
+			, m_ssao != nullptr );
+		auto lightingModel = shader::LightingModel::createModel( utils
+			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, lightsIndex
+			, RenderPipeline::ePass
+			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, index
+			, RenderPipeline::ePass
+			, false
+			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto reflections = lightingModel->getReflectionModel( index
+			, uint32_t( RenderPipeline::ePass ) );
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( index
+			, RenderPipeline::ePass
+			, flags.sceneFlags );
+
 		shader::Materials materials{ writer
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -173,35 +201,6 @@ namespace castor3d
 			, 0u
 			, RenderPipeline::eTextures
 			, hasTextures ) );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
-		auto index = uint32_t( PassUboIdx::eCount );
-		auto lightsIndex = index++;
-		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
-			, ( m_ssao ? index++ : 0u )
-			, RenderPipeline::eAdditional
-			, m_ssao != nullptr );
-		auto lightingModel = shader::LightingModel::createModel( utils
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, lightsIndex
-			, RenderPipeline::eAdditional
-			, shader::ShadowOptions{ flags.sceneFlags, false }
-			, index
-			, RenderPipeline::eAdditional
-			, false
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		auto reflections = lightingModel->getReflectionModel( flags.passFlags
-			, index
-			, uint32_t( RenderPipeline::eAdditional ) );
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( index
-			, RenderPipeline::eAdditional
-			, flags.sceneFlags );
 
 		// Fragment Outputs
 		auto pxl_accumulation( writer.declOutput< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
@@ -294,9 +293,12 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
-					reflections->computeForward( *lightMat
+					reflections->computeDeferred( *lightMat
 						, surface
 						, c3d_sceneData
+						, modelData.getEnvMapIndex()
+						, material.hasReflection
+						, material.hasRefraction
 						, material.refractionRatio
 						, material.transmission
 						, ambient
