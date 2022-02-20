@@ -23,19 +23,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		void fillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, Scene const & scene
-			, ShadowMapUbo const & shadowMapUbo )
-		{
-			auto index = uint32_t( PassUboIdx::eCount );
-			descriptorWrites.push_back( scene.getLightCache().getBinding( index++ ) );
-			descriptorWrites.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
-		}
-	}
-
 	ShadowMapPass::ShadowMapPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -80,8 +67,7 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapPass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void ShadowMapPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( PassUboIdx::eCount );
 		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
@@ -91,26 +77,12 @@ namespace castor3d
 		m_initialised = true;
 	}
 
-	void ShadowMapPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardRenderNode & node
+	void ShadowMapPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		fillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, getCuller().getScene()
-			, m_shadowMapUbo );
-	}
-
-	void ShadowMapPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		fillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, getCuller().getScene()
-			, m_shadowMapUbo );
+		auto index = uint32_t( PassUboIdx::eCount );
+		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
+		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
 	}
 
 	ShaderPtr ShadowMapPass::doGetHullShaderSource( PipelineFlags const & flags )const

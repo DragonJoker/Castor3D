@@ -15,25 +15,11 @@ namespace castor3d::shader
 {
 	PhongReflectionModel::PhongReflectionModel( sdw::ShaderWriter & writer
 		, Utils & utils
-		, PassFlags const & passFlags
 		, uint32_t & envMapBinding
-		, uint32_t envMapSet )
-		: ReflectionModel{ writer, utils, passFlags }
-	{
-		if ( checkFlag( m_passFlags, PassFlag::eReflection )
-			|| checkFlag( m_passFlags, PassFlag::eRefraction ) )
-		{
-			m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
-		}
-	}
-
-	PhongReflectionModel::PhongReflectionModel( sdw::ShaderWriter & writer
-		, Utils & utils
-		, uint32_t envMapBinding
 		, uint32_t envMapSet )
 		: ReflectionModel{ writer, utils }
 	{
-		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet );
+		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
 	}
 
 	void PhongReflectionModel::computeDeferred( LightMaterial & material

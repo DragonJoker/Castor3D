@@ -510,59 +510,23 @@ namespace castor3d
 		return hasNodes();
 	}
 
-	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, BillboardRenderNode & node
+	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardAdd"
-			, RenderPipeline::eAdditional );
-		ashes::WriteDescriptorSetArray descriptorWrites;
-		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
-		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
-		doFillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, node
-			, shadowMaps );
-		descriptorSet->setBindings( descriptorWrites );
-		descriptorSet->update();
-		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
-	}
-
-	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		auto descriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Add"
-			, RenderPipeline::eAdditional );
-		ashes::WriteDescriptorSetArray descriptorWrites;
-		descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
-		descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
-		doFillAdditionalDescriptor( pipeline
-			, descriptorWrites
-			, node
-			, shadowMaps );
-		descriptorSet->setBindings( descriptorWrites );
-		descriptorSet->update();
-		pipeline.setAdditionalDescriptorSet( node, std::move( descriptorSet ) );
-	}
-
-	void SceneRenderPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
-		, ashes::DescriptorSetPool const & descriptorPool
-		, SubmeshRenderNodesByPassMap & nodes
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		for ( auto & passNodes : nodes )
+		if ( !m_additionalDescriptorSet )
 		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				initialiseAdditionalDescriptor( pipeline
-					, descriptorPool
-					, *submeshNodes.second.begin()->second
-					, shadowMaps );
-			}
+			m_additionalDescriptorSet = m_additionalDescriptorPool->createDescriptorSet( getName() + "_Add"
+				, RenderPipeline::ePass );
+			ashes::WriteDescriptorSetArray descriptorWrites;
+			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
+			descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
+			doFillAdditionalDescriptor( descriptorWrites
+				, shadowMaps );
+			m_additionalDescriptorSet->setBindings( descriptorWrites );
+			m_additionalDescriptorSet->update();
 		}
+
+		pipeline.setAdditionalDescriptorSet( *m_additionalDescriptorSet );
 	}
 
 	void RenderNodesPass::doSubInitialise()
@@ -820,6 +784,11 @@ namespace castor3d
 			&& doAreValidPassFlags( pass.getPassFlags() );
 	}
 
+	SceneFlags RenderNodesPass::doAdjustFlags( SceneFlags flags )const
+	{
+		return flags;
+	}
+
 	bool RenderNodesPass::doAreValidPassFlags( PassFlags const & passFlags )const
 	{
 		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
@@ -894,6 +863,17 @@ namespace castor3d
 		, PipelineFlags flags
 		, VkCullModeFlags cullMode )
 	{
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = renderSystem.getRenderDevice();
+
+		if ( !m_additionalDescriptorLayout )
+		{
+			auto bindings = doCreateAdditionalBindings( flags );
+			m_additionalDescriptorLayout = device->createDescriptorSetLayout( getName() + "Add"
+				, std::move( bindings ) );
+			m_additionalDescriptorPool = m_additionalDescriptorLayout->createPool( 1u );
+		}
+
 		RenderPipeline * result{};
 
 		if ( m_mode != RenderMode::eTransparentOnly )
@@ -923,7 +903,6 @@ namespace castor3d
 
 			if ( it == pipelines.end() )
 			{
-				auto & renderSystem = *getEngine()->getRenderSystem();
 				auto pipeline = castor::makeUnique< RenderPipeline >( *this
 					, renderSystem
 					, doCreateDepthStencilState( flags )
@@ -940,9 +919,11 @@ namespace castor3d
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				auto & device = renderSystem.getRenderDevice();
-				pipeline->setDescriptorSetLayout( device->createDescriptorSetLayout( getName() + "Add"
-					, doCreateAdditionalBindings( flags ) ) );
+				if ( m_additionalDescriptorLayout )
+				{
+					pipeline->setDescriptorSetLayout( *m_additionalDescriptorLayout );
+				}
+
 				pipeline->initialise( device
 					, getRenderPass()
 					, std::move( descriptorLayouts ) );
@@ -1019,7 +1000,14 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MODEL_INDEX( writer
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
+
+		C3D_ModelIndices( writer
 			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 		shader::ModelDatas c3d_modelData{ writer
@@ -1034,13 +1022,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.programFlags
@@ -1130,7 +1111,14 @@ namespace castor3d
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
-		UBO_MODEL_INDEX( writer
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
+
+		C3D_ModelIndices( writer
 			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 		shader::ModelDatas c3d_modelData{ writer
@@ -1139,13 +1127,6 @@ namespace castor3d
 		UBO_BILLBOARD( writer
 			, uint32_t( NodeUboIdx::eBillboard )
 			, RenderPipeline::eBuffers );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer

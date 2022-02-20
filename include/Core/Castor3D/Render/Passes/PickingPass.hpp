@@ -42,13 +42,6 @@ namespace castor3d
 			, SceneCuller & culler );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~PickingPass()override;
-		/**
-		 *\~english
 		 *\brief		Adds a scene rendered through this technique.
 		 *\param[in]	scene	The scene.
 		 *\param[in]	camera	The camera through which the scene is viewed.
@@ -98,15 +91,8 @@ namespace castor3d
 		void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
 		void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes );
 		bool doIsValidPass( Pass const & pass )const override;
-		void doFillAdditionalBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, SubmeshRenderNode & node
+		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		void doUpdate( RenderQueueArray & queues )override;
 		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
@@ -129,8 +115,6 @@ namespace castor3d
 
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;
-		std::unordered_map< SubmeshRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_submeshBuffers;
-		std::unordered_map< BillboardRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > m_billboardBuffers;
 	};
 }
 
