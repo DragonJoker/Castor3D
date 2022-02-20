@@ -92,30 +92,26 @@ namespace castor3d
 	void OpaquePass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
-		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
-		remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
+		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+	}
+
+	SceneFlags OpaquePass::doAdjustFlags( SceneFlags flags )const
+	{
+		remFlag( flags, SceneFlag::eLpvGI );
+		remFlag( flags, SceneFlag::eLayeredLpvGI );
+		remFlag( flags, SceneFlag::eVoxelConeTracing );
+		return flags;
 	}
 
 	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
 	}
 
-	void OpaquePass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void OpaquePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 	}
 
-	void OpaquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-	}
-
-	void OpaquePass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, SubmeshRenderNode & node
+	void OpaquePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 	}
@@ -138,6 +134,10 @@ namespace castor3d
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
+		UBO_SCENE( writer
+			, uint32_t( PassUboIdx::eScene )
+			, RenderPipeline::ePass );
+
 		shader::Materials materials{ writer
 			, uint32_t( NodeUboIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -155,10 +155,6 @@ namespace castor3d
 			, 0u
 			, RenderPipeline::eTextures
 			, hasTextures ) );
-
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
-			, RenderPipeline::eAdditional );
 
 		// Fragment Outputs
 		auto index = 0u;

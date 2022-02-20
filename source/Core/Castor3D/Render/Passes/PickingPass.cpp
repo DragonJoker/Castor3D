@@ -35,7 +35,6 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
-#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -59,7 +58,6 @@ namespace castor3d
 	{
 		template< typename NodeT, typename FuncT >
 		inline void traverseNodes( PickingPass & pass
-			, std::unordered_map< SubmeshRenderNode const *, UniformBufferOffsetT< PickingUboConfiguration > > & ubos
 			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes
 			, PickNodeType type
 			, FuncT function )
@@ -69,8 +67,6 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				auto drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
-				uint32_t index{ 0u };
 
 				for ( auto itPass : itPipelines.second )
 				{
@@ -78,12 +74,6 @@ namespace castor3d
 					{
 						if ( !itSubmeshes.second.empty() )
 						{
-							auto renderNode = itSubmeshes.second.front();
-							auto it = ubos.find( renderNode );
-							CU_Require( it != ubos.end() );
-							PickingUbo::update( it->second.getData()
-								, drawIndex
-								, index++ );
 							function( *itPipelines.first
 								, *itPass.first
 								, *itSubmeshes.first
@@ -99,7 +89,6 @@ namespace castor3d
 
 		template< typename NodeT >
 		inline void updateNonInstanced( PickingPass & pass
-			, std::unordered_map< NodeT const *, UniformBufferOffsetT< PickingUboConfiguration > > & ubos
 			, PickNodeType type
 			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
@@ -108,18 +97,6 @@ namespace castor3d
 			for ( auto itPipelines : nodes )
 			{
 				pass.updatePipeline( *itPipelines.first );
-				auto drawIndex = uint8_t( type ) + ( ( count & 0x00FFFFFF ) << 8 );
-				uint32_t index{ 0u };
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					auto it = ubos.find( renderNode );
-					CU_Require( it != ubos.end() );
-					PickingUbo::update( it->second.getData()
-						, drawIndex
-						, index++ );
-				}
-
 				count++;
 			}
 		}
@@ -146,22 +123,6 @@ namespace castor3d
 			, cuT( "Picking" )
 			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, culler, RenderMode::eBoth, true, false } }
 	{
-	}
-
-	PickingPass::~PickingPass()
-	{
-		for ( auto & ubo : m_submeshBuffers )
-		{
-			m_device.uboPools->putBuffer( ubo.second );
-		}
-
-		for ( auto & ubo : m_billboardBuffers )
-		{
-			m_device.uboPools->putBuffer( ubo.second );
-		}
-
-		m_submeshBuffers.clear();
-		m_billboardBuffers.clear();
 	}
 
 	void PickingPass::addScene( Scene & scene, Camera & camera )
@@ -218,7 +179,6 @@ namespace castor3d
 	void PickingPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes )
 	{
 		updateNonInstanced( *this
-			, m_submeshBuffers
 			, PickNodeType::eStatic
 			, nodes );
 	}
@@ -226,7 +186,6 @@ namespace castor3d
 	void PickingPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
 	{
 		updateNonInstanced( *this
-			, m_billboardBuffers
 			, PickNodeType::eBillboard
 			, nodes );
 	}
@@ -234,7 +193,6 @@ namespace castor3d
 	void PickingPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( *this
-			, m_submeshBuffers
 			, nodes
 			, PickNodeType::eInstantiatedStatic
 			, [this]( RenderPipeline & pipeline
@@ -254,42 +212,13 @@ namespace castor3d
 			} );
 	}
 
-	void PickingPass::doFillAdditionalBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void PickingPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eCount )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, BillboardRenderNode & node
+	void PickingPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto ires = m_billboardBuffers.insert( { &node, {} } );
-
-		if ( ires.second )
-		{
-			ires.first->second = m_device.uboPools->getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		}
-
-		descriptorWrites.push_back( ires.first->second.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
-	}
-
-	void PickingPass::doFillAdditionalDescriptor( RenderPipeline const & pipeline
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		auto ires = m_submeshBuffers.insert( { &node, {} } );
-
-		if ( ires.second )
-		{
-			ires.first->second = m_device.uboPools->getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-		}
-
-		descriptorWrites.push_back( ires.first->second.getDescriptorWrite( uint32_t( PassUboIdx::eCount ) ) );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
@@ -303,7 +232,11 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MODEL_INDEX( writer
+		UBO_MATRIX( writer
+			, uint32_t( PassUboIdx::eMatrix )
+			, RenderPipeline::ePass );
+
+		C3D_ModelIndices( writer
 			, uint32_t( NodeUboIdx::eModelIndex )
 			, RenderPipeline::eBuffers );
 		shader::ModelDatas c3d_modelData{ writer
@@ -318,10 +251,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
-
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
-			, RenderPipeline::eAdditional );
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.programFlags
@@ -408,10 +337,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, hasTextures };
-
-		UBO_PICKING( writer
-			, uint32_t( PassUboIdx::eCount )
-			, RenderPipeline::eAdditional );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u

@@ -166,7 +166,8 @@ namespace castor3d
 				, {}
 				, true
 				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-			auto reflections = lightingModel->getReflectionModel( uint32_t( ResolveBind::eEnvironment )
+			uint32_t index = uint32_t( ResolveBind::eEnvironment );
+			auto reflections = lightingModel->getReflectionModel( index
 				, 0u );
 			shader::Fog fog{ writer };
 

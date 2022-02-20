@@ -65,9 +65,9 @@ namespace castor3d
 				, layout.vertexAttributeDescriptions.end() );
 		}
 
-		if ( m_descriptorLayout )
+		if ( m_addDescriptorLayout )
 		{
-			descriptorLayouts.emplace_back( *m_descriptorLayout );
+			descriptorLayouts.emplace_back( *m_addDescriptorLayout );
 		}
 
 		ashes::VkDynamicStateArray dynamicStates;
@@ -138,8 +138,7 @@ namespace castor3d
 
 	void RenderPipeline::createDescriptorPools( uint32_t maxSets )
 	{
-		m_billboardAddDescriptors.clear();
-		m_submeshAddDescriptors.clear();
+		m_addDescriptorSet = nullptr;
 		m_descriptorPool.reset();
 
 		if ( hasDescriptorSetLayout() )
@@ -156,37 +155,5 @@ namespace castor3d
 		{
 			m_vertexLayouts.emplace_back( layout.get() );
 		}
-	}
-
-	void RenderPipeline::setDescriptorSetLayout( ashes::DescriptorSetLayoutPtr layouts )
-	{
-		CU_Require( !m_pipeline );
-		m_descriptorLayout = std::move( layouts );
-	}
-
-	void RenderPipeline::setAdditionalDescriptorSet( SubmeshRenderNode const & node
-		, ashes::DescriptorSetPtr descriptorSet )
-	{
-		m_submeshAddDescriptors.emplace( &node, std::move( descriptorSet ) );
-	}
-
-	void RenderPipeline::setAdditionalDescriptorSet( BillboardRenderNode const & node
-		, ashes::DescriptorSetPtr descriptorSet )
-	{
-		m_billboardAddDescriptors.emplace( &node, std::move( descriptorSet ) );
-	}
-
-	ashes::DescriptorSet const & RenderPipeline::getAdditionalDescriptorSet( SubmeshRenderNode const & node )const
-	{
-		auto it = m_submeshAddDescriptors.find( &node );
-		CU_Require( it != m_submeshAddDescriptors.end() );
-		return *it->second;
-	}
-
-	ashes::DescriptorSet const & RenderPipeline::getAdditionalDescriptorSet( BillboardRenderNode const & node )const
-	{
-		auto it = m_billboardAddDescriptors.find( &node );
-		CU_Require( it != m_billboardAddDescriptors.end() );
-		return *it->second;
 	}
 }

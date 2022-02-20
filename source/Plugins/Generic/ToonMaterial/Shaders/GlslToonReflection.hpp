@@ -20,12 +20,7 @@ namespace toon::shader
 	public:
 		ToonPhongReflectionModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
-			, castor3d::PassFlags const & passFlags
 			, uint32_t & envMapBinding
-			, uint32_t envMapSet );
-		ToonPhongReflectionModel( sdw::ShaderWriter & writer
-			, c3d::Utils & utils
-			, uint32_t envMapBinding
 			, uint32_t envMapSet );
 		void computeDeferred( c3d::LightMaterial & material
 			, c3d::Surface const & surface
@@ -196,12 +191,7 @@ namespace toon::shader
 	public:
 		ToonPbrReflectionModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
-			, castor3d::PassFlags const & passFlags
 			, uint32_t & envMapBinding
-			, uint32_t envMapSet );
-		ToonPbrReflectionModel( sdw::ShaderWriter & writer
-			, c3d::Utils & utils
-			, uint32_t envMapBinding
 			, uint32_t envMapSet );
 		void computeDeferred( c3d::LightMaterial & material
 			, c3d::Surface const & surface

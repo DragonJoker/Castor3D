@@ -114,18 +114,7 @@ namespace castor3d::shader
 			+ ( reflected * ambient * indirectAmbient * ambientOcclusion );
 	}
 
-	ReflectionModelPtr PbrLightingModel::getReflectionModel( PassFlags const & passFlags
-		, uint32_t & envMapBinding
-		, uint32_t envMapSet )const
-	{
-		return std::make_unique< PbrReflectionModel >( m_writer
-			, m_utils
-			, passFlags
-			, envMapBinding
-			, envMapSet );
-	}
-
-	ReflectionModelPtr PbrLightingModel::getReflectionModel( uint32_t envMapBinding
+	ReflectionModelPtr PbrLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
 		return std::make_unique< PbrReflectionModel >( m_writer

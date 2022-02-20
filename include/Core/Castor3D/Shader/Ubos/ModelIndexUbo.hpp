@@ -62,8 +62,8 @@ namespace castor3d::shader
 	};
 }
 
-#define UBO_MODEL_INDEX( writer, binding, set )\
 	sdw::Ubo modelBufferIndex{ writer\
+#define C3D_ModelIndices( writer, binding, set )\
 		, castor3d::shader::ModelIndex::BufferName\
 		, binding\
 		, set\

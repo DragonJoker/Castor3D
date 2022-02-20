@@ -84,15 +84,8 @@ namespace castor3d
 		void doUpdateNodes( QueueCulledRenderNodes & nodes );
 
 	private:
-		void doFillAdditionalBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, BillboardRenderNode & node
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doFillAdditionalDescriptor( RenderPipeline const & pipeline
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, SubmeshRenderNode & node
+		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;

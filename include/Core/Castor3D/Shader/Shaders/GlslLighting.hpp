@@ -97,10 +97,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & refracted
 			, sdw::Vec3 const & materialAlbedo ) = 0;
 		C3D_API virtual std::unique_ptr< LightMaterial > declMaterial( std::string const & name ) = 0;
-		C3D_API virtual ReflectionModelPtr getReflectionModel( PassFlags const & passFlags
-			, uint32_t & envMapBinding
-			, uint32_t envMapSet )const = 0;
-		C3D_API virtual ReflectionModelPtr getReflectionModel( uint32_t envMapBinding
+		C3D_API virtual ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const = 0;
 		/**
 		*\name
