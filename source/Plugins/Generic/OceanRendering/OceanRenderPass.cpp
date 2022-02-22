@@ -49,7 +49,7 @@ namespace ocean
 	{
 		enum WaveIdx : uint32_t
 		{
-			eLightBuffer = uint32_t( castor3d::PassUboIdx::eCount ),
+			eLightBuffer = uint32_t( castor3d::GlobalBuffersIdx::eCount ),
 			eWavesUbo,
 			eWaveFoam,
 			eWaveNormals1,
@@ -618,16 +618,16 @@ namespace ocean
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -699,19 +699,19 @@ namespace ocean
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_Billboard( writer
-			, PassUboIdx::eBillboardsData
+			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -779,7 +779,7 @@ namespace ocean
 		TessellationControlWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
 
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
 		UBO_OCEAN( writer
 			, index
@@ -849,15 +849,15 @@ namespace ocean
 		castor3d::shader::Utils utils{ writer, *getEngine() };
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
 		UBO_OCEAN( writer
 			, index
@@ -1062,18 +1062,18 @@ namespace ocean
 		shader::Fog fog{ writer };
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		shader::Materials materials{ writer
-			, uint32_t( PassUboIdx::eMaterials )
+			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::ePass };
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		UBO_OCEAN( writer
 			, index++

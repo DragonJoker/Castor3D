@@ -152,7 +152,7 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -163,7 +163,7 @@ namespace castor3d
 	void ShadowMapPassDirectional::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
 #if C3D_UseTiledDirectionalShadowMap
 		descriptorWrites.push_back( m_shadowMapDirectionalUbo.getDescriptorWrite( index++ ) );
@@ -205,7 +205,7 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		auto index = uint32_t( PassUboIdx::eCount ) + 1u;
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + 1u;
 #if C3D_UseTiledDirectionalShadowMap
 		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
@@ -216,10 +216,10 @@ namespace castor3d
 			, RenderPipeline::ePass );
 #endif
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		auto skinningData = SkinningUbo::declare( writer
@@ -338,17 +338,17 @@ namespace castor3d
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 
 		shader::Materials materials{ writer
-			, uint32_t( PassUboIdx::eMaterials )
+			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::ePass };
 		shader::TextureConfigurations textureConfigs{ writer
-			, uint32_t( PassUboIdx::eTexConfigs )
+			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::ePass
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
-			, uint32_t( PassUboIdx::eTexAnims )
+			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::ePass
 			, hasTextures };
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 #if C3D_UseTiledDirectionalShadowMap
 		UBO_SHADOWMAP_DIRECTIONAL( writer
