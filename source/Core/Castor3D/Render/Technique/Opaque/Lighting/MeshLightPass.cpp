@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/MeshLightPass.hpp"
 
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -15,8 +15,8 @@ namespace castor3d
 		VertexWriter writer;
 
 		// Shader inputs
-		UBO_MATRIX( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
-		UBO_MODEL( writer, uint32_t( LightPassLgtIdx::eModelMatrix ), 1u );
+		C3D_Matrix( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
+		C3D_ModelData( writer, uint32_t( LightPassLgtIdx::eModelMatrix ), 1u );
 		auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
 		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in

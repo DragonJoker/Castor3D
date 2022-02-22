@@ -481,46 +481,46 @@ namespace castor3d
 			return;
 		}
 
-		// Bindless initialisation
+		// Bindless textures initialisation
 		// Descriptor layout first.
-		VkDescriptorBindingFlags bindlessFlags = VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
-			| VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
-			| VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
-		auto extendedInfo = makeVkStruct< VkDescriptorSetLayoutBindingFlagsCreateInfo >( 1u
-			, &bindlessFlags );
+		std::array< VkDescriptorBindingFlags, 1u > bindlessFlags{ ( VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+				| VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
+				| VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT ) };
+		auto extendedInfo = makeVkStruct< VkDescriptorSetLayoutBindingFlagsCreateInfo >( uint32_t( bindlessFlags.size() )
+			, bindlessFlags.data() );
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_ALL
 			, device.getMaxBindlessSampled() ) );
-		m_texLayout = device->createDescriptorSetLayout( "SceneRenderNodesTextures"
+		m_bindlessTexLayout = device->createDescriptorSetLayout( "SceneRenderNodesBindless"
 			, makeVkStructPNext< VkDescriptorSetLayoutCreateInfo >( &extendedInfo
 				, VkDescriptorSetLayoutCreateFlags( VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT )
 				, uint32_t( layoutBindings.size() )
 				, layoutBindings.data() ) );
 
-		// Then The descriptor pool.
-		ashes::VkDescriptorPoolSizeArray texSizes;
-		texSizes.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, device.getMaxBindlessSampled() } );
-		m_texPool = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT
+		// Then the descriptor pool.
+		ashes::VkDescriptorPoolSizeArray poolSizes;
+		poolSizes.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, device.getMaxBindlessSampled() } );
+		m_bindlessTexPool = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT
 			, device.getMaxBindlessSampled()
-			, texSizes );
+			, poolSizes );
 
 		// And the descriptor set.
-		auto maxBinding = device.getMaxBindlessSampled() - 1u;
-		auto countInfo = makeVkStruct< VkDescriptorSetVariableDescriptorCountAllocateInfo >( 1u
-			, &maxBinding );
-		m_texSet = m_texPool->createDescriptorSet( "SceneRenderNodesTextures"
-			, *m_texLayout
+		std::array< uint32_t, 1u > maxBindings{ device.getMaxBindlessSampled() - 1u };
+		auto countInfo = makeVkStruct< VkDescriptorSetVariableDescriptorCountAllocateInfo >( uint32_t( maxBindings.size() )
+			, maxBindings.data() );
+		m_bindlessTexSet = m_bindlessTexPool->createDescriptorSet( "SceneRenderNodesTextures"
+			, *m_bindlessTexLayout
 			, RenderPipeline::eTextures
 			, &countInfo );
 	}
 
 	void TextureUnitCache::cleanup()
 	{
-		m_texSet.reset();
-		m_texPool.reset();
-		m_texLayout.reset();
+		m_bindlessTexSet.reset();
+		m_bindlessTexPool.reset();
+		m_bindlessTexLayout.reset();
 	}
 
 	void TextureUnitCache::update( GpuUpdater & updater )
@@ -532,13 +532,13 @@ namespace castor3d
 
 		std::vector< ashes::WriteDescriptorSet > tmp;
 		{
-			auto lock( castor::makeUniqueLock( m_ditryWritesMtx ) );
+			auto lock( castor::makeUniqueLock( m_dirtyWritesMtx ) );
 			std::swap( m_dirtyWrites, tmp );
 		}
 
 		if ( !tmp.empty() )
 		{
-			m_texSet->updateBindings( tmp );
+			m_bindlessTexSet->updateBindings( tmp );
 		}
 	}
 
@@ -773,17 +773,17 @@ namespace castor3d
 
 	void TextureUnitCache::doUpdateWrite( TextureUnit & unit )
 	{
-		if ( !hasBindless() )
+		if ( !hasBindless() || unit.getId() == 0u )
 		{
 			return;
 		}
 
 		auto write = unit.getDescriptor();
 		write->dstArrayElement = unit.getId() - 1u;
-		write->dstSet = *m_texSet;
+		write->dstSet = *m_bindlessTexSet;
 		write->dstBinding = 0u;
 		{
-			auto lock( castor::makeUniqueLock( m_ditryWritesMtx ) );
+			auto lock( castor::makeUniqueLock( m_dirtyWritesMtx ) );
 			m_dirtyWrites.emplace_back( write );
 		}
 	}

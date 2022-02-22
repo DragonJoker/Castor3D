@@ -103,8 +103,8 @@ namespace castor3d
 #define UBO_SHADOWMAP_DIRECTIONAL( writer, binding, set )\
 	sdw::Ubo shadowMapDirectionalCfg{ writer\
 		, castor3d::ShadowMapDirectionalUbo::BufferShadowMapDirectional\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_shadowMapDirectionalData = shadowMapDirectionalCfg.declMember< castor3d::shader::ShadowMapDirectionalData >( castor3d::ShadowMapDirectionalUbo::ShadowMapDirectionalData );\

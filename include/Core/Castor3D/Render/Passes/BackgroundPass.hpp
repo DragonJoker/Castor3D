@@ -351,7 +351,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		MatrixUbo m_matrixUbo;
-		UniformBufferOffsetT< ModelUboConfiguration > m_modelUbo;
+		UniformBufferOffsetT< ModelBufferConfiguration > m_modelUbo;
 		crg::FramePass const * m_backgroundPassDesc{};
 		BackgroundPass * m_backgroundPass{};
 	};

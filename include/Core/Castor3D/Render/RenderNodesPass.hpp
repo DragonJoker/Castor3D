@@ -884,10 +884,13 @@ namespace castor3d
 		SceneUbo m_sceneUbo;
 		uint32_t m_index{ 0u };
 		uint32_t const m_instanceMult{ 1u };
-		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;
-		ashes::DescriptorSetPoolPtr m_additionalDescriptorPool;
-		ashes::DescriptorSetLayoutPtr m_additionalDescriptorLayout;
-		ashes::DescriptorSetPtr m_additionalDescriptorSet;
+		struct PassDescriptors
+		{
+			ashes::DescriptorSetPoolPtr pool;
+			ashes::DescriptorSetLayoutPtr layout;
+			ashes::DescriptorSetPtr set;
+		};
+		std::array< PassDescriptors, size_t( RenderNodeType::eCount ) > m_additionalDescriptors;
 
 	private:
 		std::vector< RenderPipelineUPtr > m_frontPipelines;

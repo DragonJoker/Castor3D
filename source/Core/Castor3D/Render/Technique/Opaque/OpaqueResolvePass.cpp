@@ -141,7 +141,7 @@ namespace castor3d
 			shader::Materials materials{ writer
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u };
-			UBO_SCENE( writer, uint32_t( ResolveBind::eScene ), 0u );
+			C3D_Scene( writer, uint32_t( ResolveBind::eScene ), 0u );
 			UBO_GPINFO( writer, uint32_t( ResolveBind::eGpInfo ), 0u );
 			UBO_HDR_CONFIG( writer, uint32_t( ResolveBind::eHdrConfig ), 0u );
 

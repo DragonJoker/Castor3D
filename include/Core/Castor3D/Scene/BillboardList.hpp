@@ -100,67 +100,77 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline MaterialRPtr getMaterial()const
+		C3D_API ProgramFlags getProgramFlags()const;
+
+		MaterialRPtr getMaterial()const
 		{
 			return m_material;
 		}
 
-		inline castor::Point2f const & getDimensions()const
+		castor::Point2f const & getDimensions()const
 		{
 			return m_dimensions;
 		}
 
-		inline uint32_t getCount()const
+		uint32_t getCount()const
 		{
 			return m_count;
 		}
 
-		inline bool isInitialised()const
+		bool isInitialised()const
 		{
 			return m_initialised;
 		}
 
-		inline ashes::VertexBufferBase const & getVertexBuffer()const
+		ashes::VertexBufferBase const & getVertexBuffer()const
 		{
 			return *m_vertexBuffer;
 		}
 
-		inline ashes::VertexBufferBase & getVertexBuffer()
+		ashes::VertexBufferBase & getVertexBuffer()
 		{
 			return *m_vertexBuffer;
 		}
 
-		inline GeometryBuffers const & getGeometryBuffers()const
+		GeometryBuffers const & getGeometryBuffers()const
 		{
 			return m_geometryBuffers;
 		}
 
-		inline Scene const & getParentScene()const
+		Scene const & getParentScene()const
 		{
 			return m_scene;
 		}
 
-		inline Scene & getParentScene()
+		Scene & getParentScene()
 		{
 			return m_scene;
 		}
 
-		inline SceneNode * getNode()const
+		SceneNode * getNode()const
 		{
 			return m_node;
 		}
 
-		inline BillboardType getBillboardType()const
+		BillboardType getBillboardType()const
 		{
 			return m_billboardType;
 		}
 
-		inline BillboardSize getBillboardSize()const
+		BillboardSize getBillboardSize()const
 		{
 			return m_billboardSize;
 		}
 
-		C3D_API ProgramFlags getProgramFlags()const;
+		uint32_t getId()const
+		{
+			return m_id;
+		}
+
+		void setId( uint32_t id )
+		{
+			m_id = id;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -171,27 +181,27 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setDimensions( castor::Point2f const & value )
+		void setDimensions( castor::Point2f const & value )
 		{
 			m_dimensions = value;
 		}
 
-		inline void setCenterOffset( uint32_t value )
+		void setCenterOffset( uint32_t value )
 		{
 			m_centerOffset = value;
 		}
 
-		inline void setNode( SceneNode & value )
+		void setNode( SceneNode & value )
 		{
 			m_node = &value;
 		}
 
-		inline void setBillboardType( BillboardType value )
+		void setBillboardType( BillboardType value )
 		{
 			m_billboardType = value;
 		}
 
-		inline void setBillboardSize( BillboardSize value )
+		void setBillboardSize( BillboardSize value )
 		{
 			m_billboardSize = value;
 		}
@@ -208,12 +218,7 @@ namespace castor3d
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts );
 
 	public:
-		struct Vertex
-		{
-			castor::Point3f position;
-			castor::Point2f uv;
-		};
-		using Quad = std::array< Vertex, 4u >;
+		using Quad = std::array< BillboardVertex, 4u >;
 
 	protected:
 		Scene & m_scene;
@@ -233,6 +238,7 @@ namespace castor3d
 		uint32_t m_centerOffset{ 0u };
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
+		uint32_t m_id{};
 	};
 
 	class BillboardList

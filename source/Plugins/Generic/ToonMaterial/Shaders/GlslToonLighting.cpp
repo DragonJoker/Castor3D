@@ -11,7 +11,7 @@
 #include <Castor3D/Shader/Shaders/GlslTextureAnimation.hpp>
 #include <Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
-#include <Castor3D/Shader/Ubos/ModelUbo.hpp>
+#include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -209,7 +209,7 @@ namespace toon::shader
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
-				, castor3d::shader::ModelData::getTexture( textures0, textures1, index ) );
+				, castor3d::shader::ModelIndices::getTexture( textures0, textures1, index ) );
 
 			IF( m_writer, id > 0_u )
 			{
@@ -323,7 +323,7 @@ namespace toon::shader
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
-				, castor3d::shader::ModelData::getTexture( textures0, textures1, index ) );
+				, castor3d::shader::ModelIndices::getTexture( textures0, textures1, index ) );
 
 			IF( m_writer, id > 0_u )
 			{
@@ -1477,7 +1477,7 @@ namespace toon::shader
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
-				, castor3d::shader::ModelData::getTexture( textures0, textures1, index ) );
+				, castor3d::shader::ModelIndices::getTexture( textures0, textures1, index ) );
 
 			IF( m_writer, id > 0_u )
 			{
@@ -1595,7 +1595,7 @@ namespace toon::shader
 		{
 			auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 			auto id = m_writer.declLocale( "c3d_id" + name
-				, castor3d::shader::ModelData::getTexture( textures0, textures1, index ) );
+				, castor3d::shader::ModelIndices::getTexture( textures0, textures1, index ) );
 
 			IF( m_writer, id > 0_u )
 			{

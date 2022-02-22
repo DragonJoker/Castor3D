@@ -36,10 +36,6 @@ namespace castor3d
 			size_t hash;
 			BillboardBase const & billboard;
 			Pass const & pass;
-			UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexUbo{};
-			GpuDataBufferOffset * modelDataUbo{};
-			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo{};
-			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo{};
 		};
 		using ElementT = BillboardList;
 		using ElementKeyT = castor::String;
@@ -145,24 +141,23 @@ namespace castor3d
 		C3D_API PoolsEntry getUbos( BillboardBase const & billboard
 			, Pass const & pass
 			, uint32_t instanceMult )const;
-		/**
-		 *\~english
-		 *\return		The models data buffer.
-		 *\~french
-		 *\return		Le tampon dde données de modèles.
-		 */
-		ModelDataBuffer & getModelDataBuffer()const
+
+		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
 		{
-			CU_Require( m_modelDataBuffer );
-			return *m_modelDataBuffer;
+			return *m_nodesData;
+		}
+
+		ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const
+		{
+			return *m_billboardsData;
 		}
 
 	private:
 		void doCreateEntry( RenderDevice const & device
-			, BillboardBase const & billboard
+			, BillboardBase & billboard
 			, Pass const & pass );
 		void doRemoveEntry( RenderDevice const & device
-			, BillboardBase const & billboard
+			, BillboardBase & billboard
 			, Pass const & pass );
 
 	private:
@@ -172,7 +167,8 @@ namespace castor3d
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< RenderNodesPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
-		castor3d::ModelDataBufferUPtr m_modelDataBuffer;
+		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
+		ashes::BufferPtr< BillboardUboConfiguration >m_billboardsData;
 	};
 }
 

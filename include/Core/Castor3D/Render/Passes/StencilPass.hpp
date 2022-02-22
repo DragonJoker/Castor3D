@@ -44,7 +44,7 @@ namespace castor3d
 			, castor::String const & prefix
 			, crg::ImageViewId depthView
 			, MatrixUbo & matrixUbo
-			, UniformBufferT< ModelUboConfiguration > const & modelUbo );
+			, UniformBufferT< ModelBufferConfiguration > const & modelUbo );
 		/**
 		 *\~english
 		 *\brief		Initialises the program and its pipeline.
@@ -100,7 +100,7 @@ namespace castor3d
 		castor::String m_prefix;
 		crg::ImageViewId m_depthView;
 		MatrixUbo & m_matrixUbo;
-		UniformBufferT< ModelUboConfiguration > const & m_modelUbo;
+		UniformBufferT< ModelBufferConfiguration > const & m_modelUbo;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		ashes::DescriptorSetPtr m_descriptorSet;

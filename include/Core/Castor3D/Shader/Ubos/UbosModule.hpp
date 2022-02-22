@@ -79,6 +79,7 @@ namespace castor3d
 	struct BillboardUboConfiguration
 	{
 		castor::Point2f dimensions;
+		castor::Point2f dummy;
 	};
 	/**
 	*\~english
@@ -260,50 +261,14 @@ namespace castor3d
 	*\brief
 	*	Données indices de modèle.
 	*/
-	struct ModelIndexUboConfiguration
-	{
-		castor::Point4ui textures0;
-		castor::Point4ui textures1;
-		int32_t textures;
-		int32_t materialId;
-		int32_t nodeId;
-		int32_t skinningId;
-	};
-	/**
-	*\~english
-	*\brief
-	*	Model data.
-	*\~french
-	*\brief
-	*	Données modèle.
-	*/
-	struct ModelDataUboConfiguration
-	{
-		castor::Matrix4x4f prvModel;
-		castor::Matrix4x4f curModel;
-		castor::Matrix4x4f normal;
-		castor::Point4i shadowEnvMapIndex;
-	};
-	/**
-	*\~english
-	*\brief
-	*	Model data.
-	*\~french
-	*\brief
-	*	Données modèle.
-	*/
-	struct ModelUboConfiguration
+	struct ModelBufferConfiguration
 	{
 		castor::Matrix4x4f prvModel;
 		castor::Matrix4x4f curModel;
 		castor::Matrix4x4f normal;
 		castor::Point4ui textures0;
 		castor::Point4ui textures1;
-		int32_t textures;
-		int32_t shadowReceiver;
-		int32_t materialIndex;
-		int32_t nodeId;
-		int32_t environmentIndex;
+		castor::Point4i countsIDs;
 	};
 	/**
 	*\~english

@@ -12,6 +12,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	using PipelineNodes = std::array< castor::Point4ui, 10'000u >;
+
 	struct QueueCulledRenderNodes
 		: public castor::OwnedBy< RenderQueue const >
 	{
@@ -44,14 +46,22 @@ namespace castor3d
 		C3D_API explicit QueueCulledRenderNodes( RenderQueue const & queue );
 
 		C3D_API void parse();
+		C3D_API void fillIndirect();
 		C3D_API void prepareCommandBuffers( RenderQueue const & queue
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors );
 		C3D_API bool hasNodes()const;
 
+		ashes::Buffer< PipelineNodes > const & getNodesIds()const
+		{
+			return *m_nodesIds;
+		}
+
 	private:
 		ashes::BufferPtr< VkDrawIndexedIndirectCommand > m_indirectIndexedCommands;
 		ashes::BufferPtr< VkDrawIndirectCommand > m_indirectCommands;
+		std::vector< RenderPipeline const * > m_pipelinesNodes;
+		ashes::BufferPtr< PipelineNodes > m_nodesIds;
 	};
 }
 
