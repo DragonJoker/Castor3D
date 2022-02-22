@@ -79,7 +79,7 @@ namespace castor3d
 
 	bool SecondaryUVComponent::doInitialise( RenderDevice const & device )
 	{
-		auto count = getOwner()->getBufferOffsets().getVertexCount();
+		auto count = getOwner()->getBufferOffsets().getVertexCount< InterleavedVertex >();
 
 		if ( !m_buffer || m_buffer.getCount() != count )
 		{
@@ -104,9 +104,7 @@ namespace castor3d
 	{
 		if ( getOwner()->hasBufferOffsets() )
 		{
-			auto count = getOwner()->getBufferOffsets().getVertexCount();
-
-			if ( count )
+			if ( getOwner()->getBufferOffsets().hasVertices() )
 			{
 				if ( auto * buffer = m_buffer.lock() )
 				{

@@ -4,9 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderNodeModule_H___
 #define ___C3D_RenderNodeModule_H___
 
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
-#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 
 namespace castor3d
 {
@@ -15,6 +16,23 @@ namespace castor3d
 	/**@name Node */
 	//@{
 
+	enum class RenderNodeType
+	{
+		eFrontStatic,
+		eFrontSkinned,
+		eFrontInstancedStatic,
+		eFrontInstancedSkinned,
+		eFrontMorphing,
+		eFrontBillboard,
+		eBackStatic,
+		eBackSkinned,
+		eBackInstancedStatic,
+		eBackInstancedSkinned,
+		eBackMorphing,
+		eBackBillboard,
+		CU_ScopedEnumBounds( eFrontStatic )
+	};
+	RenderNodeType getRenderNodeType( ProgramFlags const & flags );
 	/**
 	*\~english
 	*\brief

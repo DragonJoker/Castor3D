@@ -103,8 +103,8 @@ namespace castor3d
 #define UBO_HDR_CONFIG( writer, binding, set )\
 	sdw::Ubo hdrConfig{ writer\
 		, castor3d::HdrConfigUbo::BufferHdrConfig\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_hdrConfigData = hdrConfig.declMember< castor3d::shader::HdrConfigData >( castor3d::HdrConfigUbo::HdrConfigData );\

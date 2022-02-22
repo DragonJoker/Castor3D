@@ -87,8 +87,6 @@ namespace castor3d::shader
 		sdw::UVec4 textures1;
 		sdw::Int textures;
 		sdw::Int material;
-		sdw::Int nodeId;
-		sdw::Int skinningId;
 		sdw::Vec4 position2;
 		sdw::Vec3 normal2;
 		sdw::Vec3 tangent2;
@@ -152,8 +150,6 @@ namespace castor3d::shader
 		sdw::Int textures;
 		sdw::UInt material;
 		sdw::Int nodeId;
-		sdw::Int skinningId;
-		sdw::Int drawId;
 	};
 
 	using OutVertexSurface = FragmentSurfaceT< ast::var::Flag::eShaderOutput >;

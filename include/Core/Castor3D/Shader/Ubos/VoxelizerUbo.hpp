@@ -141,8 +141,8 @@ namespace castor3d
 #define UBO_VOXELIZER( writer, binding, set, enable )\
 	sdw::Ubo voxelizer{ writer\
 		, castor3d::VoxelizerUbo::BufferVoxelizer\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, enable };\
 	auto c3d_voxelData = voxelizer.declMember< shader::VoxelData >( castor3d::VoxelizerUbo::VoxelData );\

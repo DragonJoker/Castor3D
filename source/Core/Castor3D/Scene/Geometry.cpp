@@ -195,6 +195,17 @@ namespace castor3d
 		doUpdateContainers();
 	}
 
+	uint32_t Geometry::getId( Submesh const & submesh )const
+	{
+		auto it = m_id.find( submesh.getId() );
+		return it == m_id.end() ? 0u : it->second;
+	}
+
+	void Geometry::setId( Submesh const & submesh, uint32_t id )
+	{
+		m_id[submesh.getId()] = id;
+	}
+
 	void Geometry::doUpdateMesh()
 	{
 		m_submeshesMaterials.clear();

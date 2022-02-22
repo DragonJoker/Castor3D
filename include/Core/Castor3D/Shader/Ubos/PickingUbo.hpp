@@ -89,8 +89,8 @@ namespace castor3d
 #define UBO_PICKING( writer, binding, set )\
 	sdw::Ubo picking{ writer\
 		, castor3d::PickingUbo::BufferPicking\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_pickingData = picking.declMember< castor3d::shader::PickingData >( castor3d::PickingUbo::PickingData );\

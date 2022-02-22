@@ -122,7 +122,7 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eMaterials )
 			, 0u };
 		UBO_GPINFO( writer, uint32_t( LightPassIdx::eGpInfo ), 0u );
-		UBO_SCENE( writer, uint32_t( LightPassIdx::eScene ), 0u );
+		C3D_Scene( writer, uint32_t( LightPassIdx::eScene ), 0u );
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
 
 		auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( LightPassIdx::eData0 ), 0u );

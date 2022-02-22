@@ -66,7 +66,7 @@ namespace castor3d
 
 		Light const & light;
 		MatrixUbo matrixUbo;
-		UniformBufferOffsetT< ModelUboConfiguration > modelMatrixUbo;
+		UniformBufferOffsetT< ModelBufferConfiguration > modelMatrixUbo;
 		ashes::DescriptorSetPtr descriptorSet;
 	};
 

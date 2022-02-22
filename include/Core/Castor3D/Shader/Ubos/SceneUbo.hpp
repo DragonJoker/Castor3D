@@ -161,11 +161,11 @@ namespace castor3d
 	};
 }
 
-#define UBO_SCENE( writer, binding, set )\
+#define C3D_Scene( writer, binding, set )\
 	sdw::Ubo scene{ writer\
 		, castor3d::SceneUbo::BufferScene\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_sceneData = scene.declMember< castor3d::shader::SceneData >( castor3d::SceneUbo::SceneData );\

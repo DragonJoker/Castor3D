@@ -149,6 +149,14 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, ShaderProgramCache, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureUnitCache, C3D_API );
 
+	class Pass;
+	class SceneNode;
+	class RenderedObject;
+	struct ModelBufferConfiguration;
+	C3D_API void fillEntry( Pass const & pass
+		, SceneNode const & sceneNode
+		, RenderedObject const & rendered
+		, ModelBufferConfiguration & modelData );
 	//@}
 }
 

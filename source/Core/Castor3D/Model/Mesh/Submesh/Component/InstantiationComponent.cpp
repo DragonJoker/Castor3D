@@ -73,10 +73,6 @@ namespace castor3d
 				, InstantiationComponent::BindingPoint
 				, VK_FORMAT_R32_SINT
 				, offsetof( InstantiationData, m_material ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32_SINT
-				, offsetof( InstantiationData, m_nodeId ) } );
 
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
@@ -276,10 +272,11 @@ namespace castor3d
 
 	ProgramFlags InstantiationComponent::getProgramFlags( MaterialRPtr material )const
 	{
-		auto it = find( material );
-		return ( it != end() && it->second[0].buffer )
-			? ProgramFlag::eInstantiation
-			: ProgramFlag( 0 );
+		return ProgramFlag( 0 );
+		//auto it = find( material );
+		//return ( it != end() && it->second[0].buffer )
+		//	? ProgramFlag::eInstantiation
+		//	: ProgramFlag( 0 );
 	}
 
 	bool InstantiationComponent::doInitialise( RenderDevice const & device )

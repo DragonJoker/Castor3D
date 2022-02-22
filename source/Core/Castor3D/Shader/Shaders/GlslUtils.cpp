@@ -5,7 +5,6 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
@@ -1225,12 +1224,12 @@ namespace castor3d::shader
 			switch ( alphaFunc )
 			{
 			case VK_COMPARE_OP_NEVER:
-				m_writer.terminate();
+				m_writer.demote();
 				break;
 			case VK_COMPARE_OP_LESS:
 				IF( m_writer, alpha >= alphaRef )
 				{
-					m_writer.terminate();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1241,7 +1240,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_EQUAL:
 				IF( m_writer, alpha != alphaRef )
 				{
-					m_writer.terminate();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1252,7 +1251,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_LESS_OR_EQUAL:
 				IF( m_writer, alpha > alphaRef )
 				{
-					m_writer.terminate();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1263,7 +1262,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_GREATER:
 				IF( m_writer, alpha <= alphaRef )
 				{
-					m_writer.terminate();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1274,7 +1273,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_NOT_EQUAL:
 				IF( m_writer, alpha == alphaRef )
 				{
-					m_writer.terminate();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )
@@ -1285,7 +1284,7 @@ namespace castor3d::shader
 			case VK_COMPARE_OP_GREATER_OR_EQUAL:
 				IF( m_writer, alpha < alphaRef )
 				{
-					m_writer.terminate();
+					m_writer.demote();
 				}
 				FI;
 				if ( opaque )

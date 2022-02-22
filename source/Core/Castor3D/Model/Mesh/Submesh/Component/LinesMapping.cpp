@@ -98,8 +98,8 @@ namespace castor3d
 			if ( m_cameraPosition != cameraPosition )
 			{
 				if ( getOwner()->isInitialised()
-					&& getOwner()->getBufferOffsets().getVertexCount()
-					&& getOwner()->getBufferOffsets().getIndexCount() )
+					&& getOwner()->getBufferOffsets().hasVertices()
+					&& getOwner()->getBufferOffsets().hasIndices() )
 				{
 					auto offsets = getOwner()->getBufferOffsets();
 					auto & indices = offsets.getIndexBuffer();

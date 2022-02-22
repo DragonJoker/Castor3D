@@ -12,7 +12,7 @@ namespace castor3d
 		VertexWriter writer;
 
 		// Shader inputs
-		UBO_MATRIX( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
+		C3D_Matrix( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
 		auto position = writer.declInput< Vec2 >( "position", 0u );
 
 		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in

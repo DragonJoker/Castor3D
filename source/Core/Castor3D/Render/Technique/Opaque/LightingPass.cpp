@@ -31,7 +31,6 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Math/TransformationMatrix.hpp>
@@ -531,7 +530,7 @@ namespace castor3d
 
 			if ( m_config.lightType != LightType::eDirectional )
 			{
-				result.modelMatrixUbo = m_device.uboPools->getBuffer< ModelUboConfiguration >( 0u );
+				result.modelMatrixUbo = m_device.uboPools->getBuffer< ModelBufferConfiguration >( 0u );
 				writes.emplace_back( result.modelMatrixUbo.getDescriptorWrite( uint32_t( LightPassLgtIdx::eModelMatrix ) ) );
 			}
 

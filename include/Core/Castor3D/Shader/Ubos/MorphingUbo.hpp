@@ -87,11 +87,11 @@ namespace castor3d
 	};
 }
 
-#define UBO_MORPHING( writer, binding, set, flags )\
+#define C3D_Morphing( writer, binding, set, flags )\
 	sdw::Ubo morphing{ writer\
 		, castor3d::MorphingUbo::BufferMorphing\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) };\
 	auto c3d_morphingData = morphing.declMember< castor3d::shader::MorphingData >( castor3d::MorphingUbo::MorphingData, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\

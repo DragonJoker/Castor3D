@@ -9,7 +9,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -40,8 +40,8 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			UBO_MATRIX( writer, 0u, 0u );
-			UBO_MODEL( writer, 1u, 0u );
+			C3D_Matrix( writer, 0u, 0u );
+			C3D_ModelData( writer, 1u, 0u );
 			auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
@@ -60,7 +60,7 @@ namespace castor3d
 		, String const & prefix
 		, crg::ImageViewId depthView
 		, MatrixUbo & matrixUbo
-		, UniformBufferT< ModelUboConfiguration > const & modelUbo )
+		, UniformBufferT< ModelBufferConfiguration > const & modelUbo )
 		: m_engine{ engine }
 		, m_prefix{ prefix }
 		, m_depthView{ depthView }

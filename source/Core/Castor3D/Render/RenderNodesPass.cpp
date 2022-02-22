@@ -20,6 +20,7 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -31,12 +32,11 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -364,19 +364,12 @@ namespace castor3d
 		auto billboardEntry = scene.getBillboardListCache().getUbos( billboard
 			, pass
 			, getInstanceMult() );
-		auto it = m_modelsInstances.emplace( billboardEntry.hash
-			, billboardEntry.modelInstancesUbo ).first;
-		it->second = billboardEntry.modelInstancesUbo;
 		m_isDirty = true;
 
 		return &m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
-			, billboardEntry.modelIndexUbo
-			, billboardEntry.modelDataUbo
-			, billboardEntry.modelInstancesUbo
 			, buffers
 			, *billboard.getNode()
-			, billboard
-			, billboardEntry.billboardUbo );
+			, billboard );
 	}
 
 	void RenderNodesPass::updatePipeline( RenderPipeline & pipeline )
@@ -513,20 +506,62 @@ namespace castor3d
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		if ( !m_additionalDescriptorSet )
+		auto flags = pipeline.getFlags();
+		doUpdateFlags( flags );
+		auto nodeType = getRenderNodeType( flags.programFlags );
+		auto & descriptors = m_additionalDescriptors[size_t( nodeType )];
+
+		if ( !descriptors.set )
 		{
-			m_additionalDescriptorSet = m_additionalDescriptorPool->createDescriptorSet( getName() + "_Add"
+			auto & scene = getCuller().getScene();
+			descriptors.set = descriptors.pool->createDescriptorSet( getName() + "_Add"
 				, RenderPipeline::ePass );
 			ashes::WriteDescriptorSetArray descriptorWrites;
 			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
 			descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
+
+			auto & nodesIds = m_renderQueue->getCulledRenderNodes().getNodesIds();
+			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( PassUboIdx::eObjectsNodeID )
+				, 0u
+				, 1u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+			nodesIdsWrite.bufferInfo.push_back( { nodesIds.getBuffer()
+				, 0u
+				, nodesIds.getBuffer().getSize() } );
+			descriptorWrites.push_back( nodesIdsWrite );
+
+			auto & modelBuffer = checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+				? scene.getBillboardListCache().getModelBuffer()
+				: scene.getGeometryCache().getModelBuffer();
+			auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( PassUboIdx::eModelsData )
+				, 0u
+				, 1u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+			modelDataWrite.bufferInfo.push_back( { modelBuffer.getBuffer()
+				, 0u
+				, modelBuffer.getBuffer().getSize() } );
+			descriptorWrites.push_back( modelDataWrite );
+
+			if ( checkFlag( flags.programFlags,  ProgramFlag::eBillboards ) )
+			{
+				auto & billboardDatas = scene.getBillboardListCache().getBillboardsBuffer();
+				auto write = ashes::WriteDescriptorSet{ uint32_t( PassUboIdx::eBillboardsData )
+					, 0u
+					, 1u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+				write.bufferInfo.push_back( { billboardDatas.getBuffer()
+					, 0u
+					, billboardDatas.getBuffer().getSize() } );
+				descriptorWrites.push_back( write );
+			}
+
 			doFillAdditionalDescriptor( descriptorWrites
 				, shadowMaps );
-			m_additionalDescriptorSet->setBindings( descriptorWrites );
-			m_additionalDescriptorSet->update();
+			descriptors.set->setBindings( descriptorWrites );
+			descriptors.set->update();
 		}
 
-		pipeline.setAdditionalDescriptorSet( *m_additionalDescriptorSet );
+		pipeline.setAdditionalDescriptorSet( *descriptors.set );
 	}
 
 	void RenderNodesPass::doSubInitialise()
@@ -560,8 +595,6 @@ namespace castor3d
 			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
 			{
 				buffer->m_material = int32_t( node->passNode.pass.getId() );
-				buffer->m_nodeId = node->modelIndexUbo.getData().nodeId;
-				buffer->m_skinningId = node->modelIndexUbo.getData().skinningId;
 				uint32_t index = 0u;
 
 				for ( auto & unit : node->passNode.pass )
@@ -766,16 +799,6 @@ namespace castor3d
 			, camera.getProjection( m_safeBand != 0u )
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
-
-		if ( getInstanceMult() > 1
-			&& !m_modelsInstances.empty() )
-		{
-			for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
-			{
-				updateInstancesUbos( m_modelsInstances, getCuller().getCulledSubmeshes( RenderMode( i ) ), getInstanceMult() );
-				updateInstancesUbos( m_modelsInstances, getCuller().getCulledBillboards( RenderMode( i ) ), getInstanceMult() );
-			}
-		}
 	}
 
 	bool RenderNodesPass::doIsValidPass( Pass const & pass )const
@@ -834,6 +857,20 @@ namespace castor3d
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eScene )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, stageFlags ) );
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eObjectsNodeID )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, stageFlags ) );
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eModelsData )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, stageFlags ) );
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eBillboardsData )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, stageFlags ) );
+		}
+
 		doFillAdditionalBindings( addBindings );
 		return addBindings;
 	}
@@ -865,15 +902,6 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
-
-		if ( !m_additionalDescriptorLayout )
-		{
-			auto bindings = doCreateAdditionalBindings( flags );
-			m_additionalDescriptorLayout = device->createDescriptorSetLayout( getName() + "Add"
-				, std::move( bindings ) );
-			m_additionalDescriptorPool = m_additionalDescriptorLayout->createPool( 1u );
-		}
-
 		RenderPipeline * result{};
 
 		if ( m_mode != RenderMode::eTransparentOnly )
@@ -888,6 +916,16 @@ namespace castor3d
 		else
 		{
 			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		}
+
+		auto & descriptors = m_additionalDescriptors[size_t( getRenderNodeType( flags.programFlags ) )];
+
+		if ( !descriptors.layout )
+		{
+			auto bindings = doCreateAdditionalBindings( flags );
+			descriptors.layout = device->createDescriptorSetLayout( getName() + "Add"
+				, std::move( bindings ) );
+			descriptors.pool = descriptors.layout->createPool( 1u );
 		}
 
 		auto program = doGetProgram( flags, cullMode );
@@ -919,11 +957,8 @@ namespace castor3d
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				if ( m_additionalDescriptorLayout )
-				{
-					pipeline->setDescriptorSetLayout( *m_additionalDescriptorLayout );
-				}
-
+				pipeline->setDescriptorSetLayout( *descriptors.layout );
+				pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT, 0u, 8u } } );
 				pipeline->initialise( device
 					, getRenderPass()
 					, std::move( descriptorLayouts ) );
@@ -956,15 +991,9 @@ namespace castor3d
 			, submesh
 			, pass
 			, getInstanceMult() );
-		auto it = m_modelsInstances.emplace( geometryEntry.hash
-			, geometryEntry.modelInstancesUbo ).first;
-		it->second = geometryEntry.modelInstancesUbo;
 		m_isDirty = true;
 
 		auto & result = m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
-			, geometryEntry.modelIndexUbo
-			, geometryEntry.modelDataUbo
-			, geometryEntry.modelInstancesUbo
 			, buffers
 			, *primitive.getParent()
 			, submesh
@@ -1000,28 +1029,33 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
+		C3D_Matrix( writer
+			, PassUboIdx::eMatrix
 			, RenderPipeline::ePass );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
+		C3D_Scene( writer
+			, PassUboIdx::eScene
+			, RenderPipeline::ePass );
+		C3D_ModelsData( writer
+			, PassUboIdx::eModelsData
+			, RenderPipeline::ePass );
+		C3D_ObjectIdsData( writer
+			, PassUboIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
-		C3D_ModelIndices( writer
-			, uint32_t( NodeUboIdx::eModelIndex )
-			, RenderPipeline::eBuffers );
-		shader::ModelDatas c3d_modelData{ writer
-			, uint32_t( NodeUboIdx::eModelData )
-			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
-		UBO_MORPHING( writer
-			, uint32_t( NodeUboIdx::eMorphing )
+		C3D_Morphing( writer
+			, NodeUboIdx::eMorphing
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
+
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
+		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.programFlags
@@ -1050,23 +1084,21 @@ namespace castor3d
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
-				out.textures0 = c3d_modelIndex.getTextures0( flags.programFlags
+				auto nodeId = writer.declLocale( "nodeId"
+					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[nodeId] );
+				out.textures0 = modelData.getTextures0( flags.programFlags
 					, in.textures0 );
-				out.textures1 = c3d_modelIndex.getTextures1( flags.programFlags
+				out.textures1 = modelData.getTextures1( flags.programFlags
 					, in.textures1 );
-				out.textures = c3d_modelIndex.getTextures( flags.programFlags
+				out.textures = modelData.getTextures( flags.programFlags
 					, in.textures );
-				out.material = c3d_modelIndex.getMaterialId( flags.programFlags
+				out.material = modelData.getMaterialId( flags.programFlags
 					, in.material );
-				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
-					, in.nodeId );
-				out.skinningId = c3d_modelIndex.getSkinningId( flags.programFlags
-					, in.skinningId );
-				out.drawId = in.drawID;
+				out.nodeId = writer.cast< Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData
@@ -1111,22 +1143,26 @@ namespace castor3d
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
+		C3D_Matrix( writer
+			, PassUboIdx::eMatrix
 			, RenderPipeline::ePass );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
+		C3D_Scene( writer
+			, PassUboIdx::eScene
+			, RenderPipeline::ePass );
+		C3D_ModelsData( writer
+			, PassUboIdx::eModelsData
+			, RenderPipeline::ePass );
+		C3D_Billboard( writer
+			, PassUboIdx::eBillboardsData
+			, RenderPipeline::ePass );
+		C3D_ObjectIdsData( writer
+			, PassUboIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
-		C3D_ModelIndices( writer
-			, uint32_t( NodeUboIdx::eModelIndex )
-			, RenderPipeline::eBuffers );
-		shader::ModelDatas c3d_modelData{ writer
-			, uint32_t( NodeUboIdx::eModelData )
-			, RenderPipeline::eBuffers };
-		UBO_BILLBOARD( writer
-			, uint32_t( NodeUboIdx::eBillboard )
-			, RenderPipeline::eBuffers );
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
+		pcb.end();
 
 		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
@@ -1138,17 +1174,17 @@ namespace castor3d
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
-				out.textures0 = c3d_modelIndex.getTextures0();
-				out.textures1 = c3d_modelIndex.getTextures1();
-				out.textures = c3d_modelIndex.getTextures();
-				out.material = c3d_modelIndex.getMaterialId();
-				out.nodeId = c3d_modelIndex.getNodeId();
-				out.skinningId = c3d_modelIndex.getSkinningId();
-				out.drawId = in.drawID;
+				auto nodeId = writer.declLocale( "nodeId"
+					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[nodeId] );
+				out.textures0 = modelData.getTextures0();
+				out.textures1 = modelData.getTextures1();
+				out.textures = modelData.getTextures();
+				out.material = modelData.getMaterialId();
+				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
@@ -1158,14 +1194,16 @@ namespace castor3d
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 
+				auto billboardData = writer.declLocale( "billboardData"
+					, c3d_billboardData[nodeId] );
 				auto right = writer.declLocale( "right"
-					, c3d_billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
+					, billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
 				auto up = writer.declLocale( "up"
-					, c3d_billboardData.getCameraUp( flags.programFlags, c3d_matrixData ) );
+					, billboardData.getCameraUp( flags.programFlags, c3d_matrixData ) );
 				auto width = writer.declLocale( "width"
-					, c3d_billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
+					, billboardData.getWidth( flags.programFlags, c3d_sceneData ) );
 				auto height = writer.declLocale( "height"
-					, c3d_billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
+					, billboardData.getHeight( flags.programFlags, c3d_sceneData ) );
 				auto scaledRight = writer.declLocale( "scaledRight"
 					, right * position.x() * width );
 				auto scaledUp = writer.declLocale( "scaledUp"

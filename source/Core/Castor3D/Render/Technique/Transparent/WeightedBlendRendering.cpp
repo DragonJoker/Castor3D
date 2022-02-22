@@ -61,7 +61,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			UBO_SCENE( writer, uint32_t( SceneUboIndex ), 0u );
+			C3D_Scene( writer, uint32_t( SceneUboIndex ), 0u );
 			UBO_GPINFO( writer, uint32_t( GpuInfoUboIndex ), 0u );
 			UBO_HDR_CONFIG( writer, uint32_t( HdrUboIndex ), 0u );
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), uint32_t( DepthTexIndex ), 0u );

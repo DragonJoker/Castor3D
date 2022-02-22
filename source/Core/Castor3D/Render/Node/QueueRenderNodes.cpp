@@ -550,9 +550,6 @@ namespace castor3d
 	}
 
 	SubmeshRenderNode & QueueRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
-		, GpuDataBufferOffset * modelDataBuffer
-		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data
@@ -561,9 +558,6 @@ namespace castor3d
 		, AnimatedSkeleton * skeleton )
 	{
 		return getOwner()->getCuller().getScene().getRenderNodes().createNode( std::move( passNode )
-			, std::move( modelIndexBuffer )
-			, std::move( modelDataBuffer )
-			, std::move( modelInstancesBuffer )
 			, buffers
 			, sceneNode
 			, data
@@ -573,22 +567,14 @@ namespace castor3d
 	}
 
 	BillboardRenderNode & QueueRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
-		, GpuDataBufferOffset * modelDataBuffer
-		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
-		, BillboardBase & instance
-		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
+		, BillboardBase & instance )
 	{
 		return getOwner()->getCuller().getScene().getRenderNodes().createNode( std::move( passNode )
-			, std::move( modelIndexBuffer )
-			, std::move( modelDataBuffer )
-			, std::move( modelInstancesBuffer )
 			, buffers
 			, sceneNode
-			, instance
-			, billboardBuffer );
+			, instance );
 	}
 
 	ashes::DescriptorSetLayoutCRefArray QueueRenderNodes::getDescriptorSetLayouts( Pass const & pass
