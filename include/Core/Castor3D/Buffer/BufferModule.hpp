@@ -106,6 +106,16 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	A GpuBuffer pool specific for VBO and IBO.
+	*\~french
+	*\brief
+	*	Un pool de GpuBuffer pour les VBO et IBO.
+	*\remark
+	*/
+	class SkinnedObjectBufferPool;
+	/**
+	*\~english
+	*\brief
 	*	A uniform typed buffer, than can contain multiple sub-buffers.
 	*\remarks
 	*	Allocated from a pool.
@@ -170,6 +180,7 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, GpuBufferPool, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ObjectBufferPool, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SkinnedObjectBufferPool, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PoolUniformBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, UniformBufferBase, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, UniformBufferPool, C3D_API );

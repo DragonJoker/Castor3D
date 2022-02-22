@@ -41,25 +41,7 @@ namespace castor3d
 			, AnimatedMesh const * mesh
 			, AnimatedSkeleton const * skeleton )
 		{
-			enum BitVal : uint16_t
-			{
-				SkinningSSBO = 0x0001 << 0,
-			};
-
-			uint16_t spec{};
-
-			if ( !billboard )
-			{
-				CU_Require( submesh );
-
-				if ( skeleton )
-				{
-					spec |= SkinningSSBO;
-				}
-			}
-
-			size_t result{ spec };
-			result <<= 16u;
+			size_t result{};
 			result += texturesCount;
 			return result;
 		}
@@ -93,20 +75,6 @@ namespace castor3d
 			, AnimatedSkeleton const * skeleton )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray uboBindings;
-
-			if ( !billboard )
-			{
-				if ( skeleton )
-				{
-					uboBindings.push_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eSkinningBones )
-						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-						, ( VK_SHADER_STAGE_GEOMETRY_BIT
-							| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-							| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-							| VK_SHADER_STAGE_VERTEX_BIT ) ) );
-				}
-			}
-
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
@@ -149,21 +117,6 @@ namespace castor3d
 			if ( node.uboDescriptorSet )
 			{
 				ashes::DescriptorSet & descriptorSet = *node.uboDescriptorSet;
-
-				if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
-				{
-					SubmeshRenderNode & submeshNode = node;
-
-					if ( submeshNode.skeleton )
-					{
-						auto & bonesBuffer = submeshNode.data.getComponent< BonesComponent >()->getBonesBuffer();
-						descriptorSet.createBinding( layout.getBinding( uint32_t( NodeUboIdx::eSkinningBones ) )
-							, bonesBuffer.getBuffer()
-							, uint32_t( bonesBuffer.getOffset() )
-							, uint32_t( bonesBuffer.getSize() ) );
-					}
-				}
-
 				descriptorSet.update();
 			}
 		}
@@ -371,15 +324,6 @@ namespace castor3d
 		, AnimatedSkeleton const * skeleton )
 	{
 		uniformBuffers++; // ModelInstances UBO
-
-		if ( !billboard )
-		{
-			if ( skeleton )
-			{
-				storageBuffers++; // Skinning SSBO
-			}
-		}
-
 		combinedImages += uint32_t( textureCount );
 	}
 	

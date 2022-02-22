@@ -160,8 +160,17 @@ namespace castor3d
 					indexCount = VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount();
 				}
 
-				m_bufferOffset = device.geometryPools->getBuffer( m_points.size()
-					, indexCount );
+				if ( hasComponent( BonesComponent::Name ) )
+				{
+					m_bufferOffset = device.skinnedGeometryPools->getBuffer( m_points.size()
+						, indexCount );
+				}
+				else
+				{
+					m_bufferOffset = device.geometryPools->getBuffer( m_points.size()
+						, indexCount );
+				}
+
 				doFillVertexBuffer();
 			}
 
@@ -204,7 +213,14 @@ namespace castor3d
 
 		if ( m_bufferOffset )
 		{
-			device.geometryPools->putBuffer( m_bufferOffset );
+			if ( m_bufferOffset.hasBones() )
+			{
+				device.skinnedGeometryPools->putBuffer( m_bufferOffset );
+			}
+			else
+			{
+				device.geometryPools->putBuffer( m_bufferOffset );
+			}
 		}
 
 		m_vertexLayouts.clear();

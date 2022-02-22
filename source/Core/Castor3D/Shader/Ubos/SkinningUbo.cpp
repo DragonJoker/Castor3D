@@ -11,45 +11,11 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	castor::String const SkinningBonesData::BufferName = cuT( "C3D_BonesWeightsData" );
-
-	SkinningBonesData::SkinningBonesData( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
-		, boneIds0{ getMember< sdw::IVec4 >( "boneIds0" ) }
-		, boneIds1{ getMember< sdw::IVec4 >( "boneIds1" ) }
-		, boneWeights0{ getMember< sdw::Vec4 >( "boneWeights0" ) }
-		, boneWeights1{ getMember< sdw::Vec4 >( "boneWeights1" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr SkinningBonesData::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, cuT( "C3D_Bones" ) );
-
-		if ( result->empty() )
-		{
-			result->declMember( "boneIds0", ast::type::Kind::eVec4I );
-			result->declMember( "boneIds1", ast::type::Kind::eVec4I );
-			result->declMember( "boneWeights0", ast::type::Kind::eVec4F );
-			result->declMember( "boneWeights1", ast::type::Kind::eVec4F );
-		}
-
-		return result;
-	}
-
-	//*********************************************************************************************
-
 	castor::String const SkinningUbo::BufferSkinning = cuT( "C3D_Skinning" );
-	castor::String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
 
 	shader::SkinningData SkinningUbo::declare( sdw::ShaderWriter & writer
 		, uint32_t transformsBinding
-		, uint32_t bonesBinding
 		, uint32_t transformsSet
-		, uint32_t bonesSet
 		, ProgramFlags const & flags )
 	{
 		shader::SkinningData result;
@@ -63,11 +29,6 @@ namespace castor3d
 				, transformsBinding
 				, transformsSet
 				, true );
-			result.bones = std::make_unique< sdw::ArraySsboT< SkinningBonesData > >( writer
-				, SkinningBonesData::BufferName
-				, bonesBinding
-				, bonesSet
-				, true );
 		}
 
 		return result;
@@ -79,15 +40,13 @@ namespace castor3d
 		, ProgramFlags const & flags
 		, sdw::Mat4 const & curMtxModel
 		, sdw::UInt const & skinningId
-		, sdw::Int const & vertexIndex )
+		, sdw::UVec4 const & boneIds0
+		, sdw::UVec4 const & boneIds1
+		, sdw::Vec4 const & boneWeights0
+		, sdw::Vec4 const & boneWeights1 )
 	{
 		using namespace sdw;
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( "mtxBoneTransform" );
-		auto & bonesData = *data.bones;
-		auto boneIds0 = writer.declLocale( "boneIds0", bonesData[writer.cast< UInt >( vertexIndex )].boneIds0 );
-		auto boneIds1 = writer.declLocale( "boneIds1", bonesData[writer.cast< UInt >( vertexIndex )].boneIds1 );
-		auto boneWeights0 = writer.declLocale( "boneWeights0", bonesData[writer.cast< UInt >( vertexIndex )].boneWeights0 );
-		auto boneWeights1 = writer.declLocale( "boneWeights1", bonesData[writer.cast< UInt >( vertexIndex )].boneWeights1 );
 		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * 400_u );
 
 		auto & ssbo = *data.transforms;

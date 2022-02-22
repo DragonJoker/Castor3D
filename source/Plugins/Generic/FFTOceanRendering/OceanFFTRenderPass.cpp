@@ -941,19 +941,16 @@ namespace ocean_fft
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
+		auto skinningData = SkinningUbo::declare( writer
+			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
+			, RenderPipeline::ePass
+			, flags.programFlags );
 		UBO_OCEAN( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::ePass );
 		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_heightDisplacementMap"
 			, OceanFFTIdx::eHeightDisplacement
 			, RenderPipeline::ePass );
-
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, uint32_t( NodeUboIdx::eSkinningBones )
-			, RenderPipeline::ePass
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 
 		auto lerpVertex = writer.implementFunction< Vec2 >( "lerpVertex"
 			, [&]( Vec3 patchPosBase
