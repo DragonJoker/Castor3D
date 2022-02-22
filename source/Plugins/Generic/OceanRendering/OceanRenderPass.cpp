@@ -623,11 +623,11 @@ namespace ocean
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
-		C3D_ModelsData( writer
-			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
+			, RenderPipeline::ePass );
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -653,8 +653,10 @@ namespace ocean
 			out.vtx.position = in.position;
 			out.texture0 = in.texture0;
 			out.texture1 = in.texture1;
+			auto objectIdsData = writer.declLocale( "objectIdsData"
+				, c3d_objectIdsData[pipelineID][customDrawID] );
 			auto nodeId = writer.declLocale( "nodeId"
-				, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+				, shader::ObjectsIds::getNodeId( objectIdsData ) );
 			auto modelData = writer.declLocale( "modelData"
 				, c3d_modelsData[nodeId] );
 			out.material = modelData.getMaterialId( flags.programFlags
@@ -704,14 +706,14 @@ namespace ocean
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
+		C3D_ObjectIdsData( writer
+			, GlobalBuffersIdx::eObjectsNodeID
+			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
-			, RenderPipeline::ePass );
-		C3D_ObjectIdsData( writer
-			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -729,8 +731,10 @@ namespace ocean
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
+				auto objectIdsData = writer.declLocale( "objectIdsData"
+					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+					, shader::ObjectsIds::getNodeId( objectIdsData ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );

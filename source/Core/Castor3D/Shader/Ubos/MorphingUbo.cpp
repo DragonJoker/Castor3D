@@ -4,15 +4,17 @@
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
 	namespace shader
 	{
+		castor::String const MorphingData::BufferName = cuT( "Morphing" );
+		castor::String const MorphingData::DataName = cuT( "c3d_morphingData" );
+
 		MorphingData::MorphingData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_time{ getMember< sdw::Float >( "time" ) }
+			, m_data{ getMember< sdw::Vec4 >( "data" ) }
+			, m_time{ m_data.x() }
 		{
 		}
 
@@ -23,16 +25,10 @@ namespace castor3d
 
 			if ( result->empty() )
 			{
-				result->declMember( "time", ast::type::Kind::eFloat );
+				result->declMember( "data", ast::type::Kind::eVec4F );
 			}
 
 			return result;
-		}
-
-		std::unique_ptr< sdw::Struct > MorphingData::declare( sdw::ShaderWriter & writer )
-		{
-			return std::make_unique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
 		}
 
 		void MorphingData::morph( sdw::Vec4 & pos
@@ -202,11 +198,4 @@ namespace castor3d
 			return lhs;
 		}
 	}
-
-	//*********************************************************************************************
-
-	castor::String const MorphingUbo::BufferMorphing = cuT( "Morphing" );
-	castor::String const MorphingUbo::MorphingData = cuT( "c3d_morphingData" );
-
-	//*********************************************************************************************
 }

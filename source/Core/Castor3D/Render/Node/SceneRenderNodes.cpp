@@ -43,30 +43,18 @@ namespace castor3d
 		{
 			enum BitVal : uint16_t
 			{
-				BillboadUBO = 0x0001 << 0,
-				MorphingUBO = 0x0001 << 1,
-				SkinningUBO = 0x0001 << 2,
-				SkinningSSBO = 0x0001 << 3,
+				SkinningSSBO = 0x0001 << 0,
 			};
 
 			uint16_t spec{};
 
-			if ( billboard )
-			{
-				spec |= BillboadUBO; // Billboard UBO
-			}
-			else
+			if ( !billboard )
 			{
 				CU_Require( submesh );
 
-				if ( mesh )
-				{
-					spec |= MorphingUBO; // Morphing UBO
-				}
-
 				if ( skeleton )
 				{
-					spec |= SkinningSSBO; // Skinning SSBO
+					spec |= SkinningSSBO;
 				}
 			}
 
@@ -123,16 +111,6 @@ namespace castor3d
 							| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
 							| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 				}
-
-				if ( mesh )
-				{
-					uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eMorphing )
-						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-						, ( VK_SHADER_STAGE_GEOMETRY_BIT
-							| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-							| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-							| VK_SHADER_STAGE_VERTEX_BIT ) ) );
-				}
 			}
 
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
@@ -181,12 +159,6 @@ namespace castor3d
 				if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
 				{
 					SubmeshRenderNode & submeshNode = node;
-
-					if ( submeshNode.mesh )
-					{
-						submeshNode.morphingUbo.createSizedBinding( descriptorSet
-							, layout.getBinding( uint32_t( NodeUboIdx::eMorphing ) ) );
-					}
 
 					if ( submeshNode.skeleton )
 					{
@@ -413,11 +385,6 @@ namespace castor3d
 
 		if ( !billboard )
 		{
-			if ( mesh )
-			{
-				uniformBuffers++; // Morphing UBO
-			}
-
 			if ( skeleton )
 			{
 				storageBuffers++; // Skinning SSBO

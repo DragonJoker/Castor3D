@@ -253,7 +253,7 @@ namespace castor3d
 			}
 		}
 
-		template< typename NodeT >
+		template< typename NodeT = SubmeshRenderNode >
 		void doFillRenderNodes( NodePtrByPipelineMapT< NodeT > & renderNodes
 			, std::vector< RenderPipeline const * > const & registeredPipelines
 			, PipelineNodes *& pipelinesNodes
@@ -274,6 +274,15 @@ namespace castor3d
 						, indirectCommands
 						, instanceCount );
 					( *pipelinesBuffer )->x = node->getId() - 1u;
+
+					if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
+					{
+						if ( node->mesh )
+						{
+							( *pipelinesBuffer )->y = node->mesh->getId() - 1u;
+						}
+					}
+
 					++pipelinesBuffer;
 				}
 			}
