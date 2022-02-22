@@ -133,22 +133,21 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
+		bool hasTextures = !flags.textures.empty();
 
 		C3D_Scene( writer
 			, PassUboIdx::eScene
 			, RenderPipeline::ePass );
-
 		shader::Materials materials{ writer
-			, uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers };
-		bool hasTextures = !flags.textures.empty();
+			, uint32_t( PassUboIdx::eMaterials )
+			, RenderPipeline::ePass };
 		shader::TextureConfigurations textureConfigs{ writer
-			, uint32_t( NodeUboIdx::eTexConfigs )
-			, RenderPipeline::eBuffers
+			, uint32_t( PassUboIdx::eTexConfigs )
+			, RenderPipeline::ePass
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
-			, uint32_t( NodeUboIdx::eTexAnims )
-			, RenderPipeline::eBuffers
+			, uint32_t( PassUboIdx::eTexAnims )
+			, RenderPipeline::ePass
 			, hasTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
