@@ -66,13 +66,6 @@ namespace castor3d
 	private:
 		enum class PoolType
 		{
-			eMatrix,
-			eModel,
-			eModelInstances,
-			eBillboard,
-			eSkinning,
-			eMorphing,
-			ePicking,
 			eGeneric,
 			eCount,
 		};

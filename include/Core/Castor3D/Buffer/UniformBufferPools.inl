@@ -15,17 +15,6 @@ namespace castor3d
 	template< typename DataT >
 	UniformBufferPools::PoolType UniformBufferPools::getPoolType()
 	{
-		if constexpr ( std::is_same_v< DataT, MatrixUboConfiguration > )
-		{
-			return PoolType::eMatrix;
-		}
-		else if constexpr ( std::is_same_v< DataT, ModelInstancesUboConfiguration > )
-		{
-			return PoolType::eModelInstances;
-		}
-		else
-		{
-			return PoolType::eGeneric;
-		}
+		return PoolType::eGeneric;
 	}
 }

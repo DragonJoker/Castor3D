@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
+#include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 
 namespace castor3d
 {
@@ -14,8 +15,10 @@ namespace castor3d
 	public:
 		ashes::BufferBase const * vtxBuffer{};
 		ashes::BufferBase const * idxBuffer{};
+		ashes::BufferBase const * bonBuffer{};
 		MemChunk vtxChunk{};
 		MemChunk idxChunk{};
+		MemChunk bonChunk{};
 
 		explicit operator bool()const
 		{
@@ -32,6 +35,11 @@ namespace castor3d
 			return *vtxBuffer;
 		}
 
+		ashes::BufferBase const & getBonesBuffer()const
+		{
+			return *bonBuffer;
+		}
+
 		bool hasIndices()const
 		{
 			return idxChunk.askedSize != 0;
@@ -40,6 +48,11 @@ namespace castor3d
 		bool hasVertices()const
 		{
 			return vtxChunk.askedSize != 0;
+		}
+
+		bool hasBones()const
+		{
+			return bonChunk.askedSize != 0;
 		}
 
 		uint32_t getIndexCount()const
@@ -53,6 +66,11 @@ namespace castor3d
 			return uint32_t( vtxChunk.askedSize / sizeof( VertexT ) );
 		}
 
+		uint32_t getBonesCount()const
+		{
+			return uint32_t( bonChunk.askedSize / sizeof( VertexBoneData ) );
+		}
+
 		VkDeviceSize getIndexOffset()const
 		{
 			return idxChunk.offset;
@@ -61,6 +79,11 @@ namespace castor3d
 		VkDeviceSize getVertexOffset()const
 		{
 			return vtxChunk.offset;
+		}
+
+		VkDeviceSize getBonesOffset()const
+		{
+			return bonChunk.offset;
 		}
 
 		uint32_t getFirstIndex()const
@@ -72,6 +95,11 @@ namespace castor3d
 		uint32_t getFirstVertex()const
 		{
 			return uint32_t( getVertexOffset() / sizeof( VertexT ) );
+		}
+
+		uint32_t getFirstBone()const
+		{
+			return uint32_t( getBonesOffset() / sizeof( VertexBoneData ) );
 		}
 	};
 }
