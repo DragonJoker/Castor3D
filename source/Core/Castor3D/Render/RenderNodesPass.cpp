@@ -30,6 +30,7 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -555,6 +556,10 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
+			auto & matCache = getOwner()->getMaterialCache();
+			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( PassUboIdx::eMaterials ) ) );
+			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( PassUboIdx::eTexConfigs ) ) );
+			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( PassUboIdx::eTexAnims ) ) );
 			doFillAdditionalDescriptor( descriptorWrites
 				, shadowMaps );
 			descriptors.set->setBindings( descriptorWrites );
@@ -871,6 +876,10 @@ namespace castor3d
 				, stageFlags ) );
 		}
 
+		auto & matCache = getOwner()->getMaterialCache();
+		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( PassUboIdx::eMaterials ) ) );
+		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( PassUboIdx::eTexConfigs ) ) );
+		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( PassUboIdx::eTexAnims ) ) );
 		doFillAdditionalBindings( addBindings );
 		return addBindings;
 	}
