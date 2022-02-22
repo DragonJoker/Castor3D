@@ -105,9 +105,6 @@ namespace castor3d
 			, AnimatedSkeleton const * skeleton )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray uboBindings;
-			uboBindings.emplace_back( engine.getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
-			uboBindings.emplace_back( engine.getMaterialCache().getTexConfigBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
-			uboBindings.emplace_back( engine.getMaterialCache().getTexAnimBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
 
 			if ( !billboard )
 			{
@@ -180,12 +177,6 @@ namespace castor3d
 			if ( node.uboDescriptorSet )
 			{
 				ashes::DescriptorSet & descriptorSet = *node.uboDescriptorSet;
-				engine.getMaterialCache().getPassBuffer().createBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
-				engine.getMaterialCache().getTexConfigBuffer().createBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
-				engine.getMaterialCache().getTexAnimBuffer().createBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
 
 				if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
 				{
@@ -418,15 +409,9 @@ namespace castor3d
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
-		storageBuffers++; // Materials SSBO
-		storageBuffers++; // Textures Configs SSBO
 		uniformBuffers++; // ModelInstances UBO
 
-		if ( billboard )
-		{
-			storageBuffers++; // Billboard UBO
-		}
-		else
+		if ( !billboard )
 		{
 			if ( mesh )
 			{

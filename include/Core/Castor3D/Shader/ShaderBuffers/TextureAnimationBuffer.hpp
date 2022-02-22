@@ -73,6 +73,13 @@ namespace castor3d
 		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding )const;
 		/**
 		 *\~english
+		 *\brief		Creates the descriptor write for this buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour ce tampon.
+		 */
+		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.
 		 *\param[in]	descriptorSet	The descriptor set that receives the binding.
 		 *\param[in]	binding			The descriptor set layout binding.
