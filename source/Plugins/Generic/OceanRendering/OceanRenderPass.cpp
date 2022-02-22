@@ -653,10 +653,10 @@ namespace ocean
 			out.vtx.position = in.position;
 			out.texture0 = in.texture0;
 			out.texture1 = in.texture1;
-			auto objectIdsData = writer.declLocale( "objectIdsData"
-				, c3d_objectIdsData[pipelineID][customDrawID] );
 			auto nodeId = writer.declLocale( "nodeId"
-				, shader::ObjectsIds::getNodeId( objectIdsData ) );
+				, shader::getNodeId( c3d_objectIdsData
+					, pipelineID
+					, customDrawID ) );
 			auto modelData = writer.declLocale( "modelData"
 				, c3d_modelsData[nodeId] );
 			out.material = modelData.getMaterialId( flags.programFlags
@@ -731,10 +731,10 @@ namespace ocean
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
-				auto objectIdsData = writer.declLocale( "objectIdsData"
-					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, shader::ObjectsIds::getNodeId( objectIdsData ) );
+					, shader::getNodeId( c3d_objectIdsData
+						, pipelineID
+						, customDrawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );

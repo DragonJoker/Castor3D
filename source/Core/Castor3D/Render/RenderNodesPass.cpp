@@ -1106,6 +1106,11 @@ namespace castor3d
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
+				auto ids = shader::getIds( c3d_objectIdsData
+					, in
+					, pipelineID
+					, customDrawID
+					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto v4Normal = writer.declLocale( "v4Normal"
@@ -1113,18 +1118,8 @@ namespace castor3d
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( in.tangent, 0.0_f ) );
 				out.texture0 = in.texture0;
-				auto objectIdsData = writer.declLocale( "objectIdsData"
-					, c3d_objectIdsData[pipelineID][customDrawID] );
-				auto nodeId = writer.declLocale( "nodeId"
-					, shader::ObjectsIds::getNodeId( objectIdsData ) );
-				auto morphingId = writer.declLocale( "morphingId"
-					, shader::ObjectsIds::getMorphingId( objectIdsData )
-					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-				auto skinningId = writer.declLocale( "skinningId"
-					, shader::ObjectsIds::getSkinningId( objectIdsData )
-					, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 				auto morphingData = writer.declLocale( "morphingData"
-					, c3d_morphingData[morphingId]
+					, c3d_morphingData[ids.morphingId]
 					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 				in.morph( morphingData
 					, curPosition
@@ -1132,7 +1127,7 @@ namespace castor3d
 					, v4Tangent
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId] );
+					, c3d_modelsData[ids.nodeId] );
 				out.textures0 = modelData.getTextures0( flags.programFlags
 					, in.textures0 );
 				out.textures1 = modelData.getTextures1( flags.programFlags
@@ -1141,13 +1136,13 @@ namespace castor3d
 					, in.textures );
 				out.material = modelData.getMaterialId( flags.programFlags
 					, in.material );
-				out.nodeId = writer.cast< Int >( nodeId );
+				out.nodeId = writer.cast< Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData
-						, skinningId
+						, ids.skinningId
 						, in.boneIds0
 						, in.boneIds1
 						, in.boneWeights0
@@ -1222,10 +1217,10 @@ namespace castor3d
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
-				auto objectIdsData = writer.declLocale( "objectIdsData"
-					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, shader::ObjectsIds::getNodeId( objectIdsData ) );
+					,  shader::getNodeId( c3d_objectIdsData
+						, pipelineID
+						, customDrawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.textures0 = modelData.getTextures0();
