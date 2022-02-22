@@ -46,9 +46,10 @@ namespace castor3d
 	castor::String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
 
 	shader::SkinningData SkinningUbo::declare( sdw::ShaderWriter & writer
-		, uint32_t sboBinding
+		, uint32_t transformsBinding
 		, uint32_t bonesBinding
-		, uint32_t set
+		, uint32_t transformsSet
+		, uint32_t bonesSet
 		, ProgramFlags const & flags )
 	{
 		shader::SkinningData result;
@@ -58,14 +59,14 @@ namespace castor3d
 			result.transforms = std::make_unique< sdw::ArraySsboT< sdw::Mat4 > >( writer
 				, SkinningUbo::BufferSkinning
 				, writer.getTypesCache().getMat4x4F()
-				, ast::type::MemoryLayout::eStd140
-				, sboBinding
-				, set
+				, ast::type::MemoryLayout::eStd430
+				, transformsBinding
+				, transformsSet
 				, true );
 			result.bones = std::make_unique< sdw::ArraySsboT< SkinningBonesData > >( writer
 				, SkinningBonesData::BufferName
 				, bonesBinding
-				, set
+				, bonesSet
 				, true );
 		}
 
@@ -77,7 +78,7 @@ namespace castor3d
 		, sdw::ShaderWriter & writer
 		, ProgramFlags const & flags
 		, sdw::Mat4 const & curMtxModel
-		, sdw::Int const & instanceIndex
+		, sdw::UInt const & skinningId
 		, sdw::Int const & vertexIndex )
 	{
 		using namespace sdw;
@@ -87,17 +88,17 @@ namespace castor3d
 		auto boneIds1 = writer.declLocale( "boneIds1", bonesData[writer.cast< UInt >( vertexIndex )].boneIds1 );
 		auto boneWeights0 = writer.declLocale( "boneWeights0", bonesData[writer.cast< UInt >( vertexIndex )].boneWeights0 );
 		auto boneWeights1 = writer.declLocale( "boneWeights1", bonesData[writer.cast< UInt >( vertexIndex )].boneWeights1 );
-		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", instanceIndex * 400_i );
+		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * 400_u );
 
 		auto & ssbo = *data.transforms;
-		mtxBoneTransform = ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds0[0_i] )] * boneWeights0[0_i];
-		mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds0[1_i] )] * boneWeights0[1_i];
-		mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds0[2_i] )] * boneWeights0[2_i];
-		mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds0[3_i] )] * boneWeights0[3_i];
-		mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds1[0_i] )] * boneWeights1[0_i];
-		mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds1[1_i] )] * boneWeights1[1_i];
-		mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds1[2_i] )] * boneWeights1[2_i];
-		mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + boneIds1[3_i] )] * boneWeights1[3_i];
+		mtxBoneTransform = ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[0_i] )] * boneWeights0[0_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[1_i] )] * boneWeights0[1_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[2_i] )] * boneWeights0[2_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[3_i] )] * boneWeights0[3_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[0_i] )] * boneWeights1[0_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[1_i] )] * boneWeights1[1_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[2_i] )] * boneWeights1[2_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[3_i] )] * boneWeights1[3_i];
 		mtxBoneTransform = transform * mtxBoneTransform;
 
 		return mtxBoneTransform;
