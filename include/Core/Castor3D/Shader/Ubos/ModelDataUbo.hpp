@@ -34,11 +34,17 @@ namespace castor3d::shader
 			, SkinningData const & skinning
 			, sdw::Mat4 const & transform
 			, sdw::UInt const & skinningId
-			, sdw::Int const & vertexIndex )const;
+			, sdw::UVec4 const & boneIds0
+			, sdw::UVec4 const & boneIds1
+			, sdw::Vec4 const & boneWeights0
+			, sdw::Vec4 const & boneWeights1 )const;
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 			, SkinningData const & skinning
 			, sdw::UInt const & skinningId
-			, sdw::Int const & vertexIndex )const;
+			, sdw::UVec4 const & boneIds0
+			, sdw::UVec4 const & boneIds1
+			, sdw::Vec4 const & boneWeights0
+			, sdw::Vec4 const & boneWeights1 )const;
 		C3D_API sdw::UVec4 getTextures0( ProgramFlags programFlags
 			, sdw::UVec4 const & instanceData )const;
 		C3D_API sdw::UVec4 getTextures0()const;

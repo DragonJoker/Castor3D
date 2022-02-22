@@ -78,19 +78,28 @@ namespace castor3d::shader
 			, sdw::Vec4 & tan
 			, sdw::Vec3 & uvw )const;
 
+		// Base
 		sdw::Vec4 position;
 		sdw::Vec3 normal;
 		sdw::Vec3 tangent;
 		sdw::Vec3 texture0;
-		sdw::Vec3 texture1;
-		sdw::UVec4 textures0;
-		sdw::UVec4 textures1;
-		sdw::Int textures;
-		sdw::Int material;
+		// Morphing
 		sdw::Vec4 position2;
 		sdw::Vec3 normal2;
 		sdw::Vec3 tangent2;
 		sdw::Vec3 texture2;
+		// Instantiation
+		sdw::UVec4 textures0;
+		sdw::UVec4 textures1;
+		sdw::Int textures;
+		sdw::Int material;
+		// Skinning
+		sdw::UVec4 boneIds0;
+		sdw::UVec4 boneIds1;
+		sdw::Vec4 boneWeights0;
+		sdw::Vec4 boneWeights1;
+		// Secondary UV
+		sdw::Vec3 texture1;
 	};
 
 	using InVertexSurface = VertexSurfaceT< ast::var::Flag::eShaderInput >;

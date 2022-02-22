@@ -136,7 +136,6 @@ namespace castor3d
 	enum class NodeUboIdx
 		: uint32_t
 	{
-		eSkinningBones,
 		eModelInstances,
 	};
 	/**
