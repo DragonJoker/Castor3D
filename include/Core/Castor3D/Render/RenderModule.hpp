@@ -140,9 +140,6 @@ namespace castor3d
 		eSkinningBones,
 		eMorphing,
 		eModelInstances,
-		eLpvGridConfig,
-		eLayeredLpvGridConfig,
-		eVoxelData = eLpvGridConfig,
 	};
 	/**
 	*\~english
