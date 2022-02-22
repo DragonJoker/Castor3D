@@ -868,8 +868,9 @@ namespace ocean
 			, RenderPipeline::ePass );
 
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinningSsbo )
+			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, uint32_t( NodeUboIdx::eSkinningBones )
+			, RenderPipeline::ePass
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
