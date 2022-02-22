@@ -48,7 +48,6 @@ namespace castor3d
 		AnimatedMesh * mesh{};
 		// Skinning node
 		AnimatedSkeleton * skeleton{};
-		GpuBufferOffsetT< SkinningUboConfiguration > skinningSsbo{};
 	};
 }
 
