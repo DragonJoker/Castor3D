@@ -69,7 +69,7 @@ namespace castor3d
 
 	void ShadowMapPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -80,7 +80,7 @@ namespace castor3d
 	void ShadowMapPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
 	}

@@ -270,7 +270,7 @@ namespace castor3d
 	void VoxelizePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -331,7 +331,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
 		descriptorWrites.push_back( getDescriptorWrite( m_voxels, index++ ) );
@@ -350,13 +350,13 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		auto skinningData = SkinningUbo::declare( writer
@@ -439,19 +439,19 @@ namespace castor3d
 		auto inCenter = writer.declInput< Vec3 >( "inCenter", 2u );
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_Billboard( writer
-			, PassUboIdx::eBillboardsData
+			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -527,7 +527,7 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		UBO_VOXELIZER( writer
-			, uint32_t( PassUboIdx::eCount ) + 1u
+			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
 			, RenderPipeline::ePass
 			, true );
 
@@ -614,23 +614,23 @@ namespace castor3d
 		shader::Utils utils{ writer, *getEngine() };
 
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		shader::Materials materials{ writer
-			, uint32_t( PassUboIdx::eMaterials )
+			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::ePass };
 		shader::TextureConfigurations textureConfigs{ writer
-			, uint32_t( PassUboIdx::eTexConfigs )
+			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::ePass
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
-			, uint32_t( PassUboIdx::eTexAnims )
+			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::ePass
 			, hasTextures };
-		auto addIndex = uint32_t( PassUboIdx::eCount );
+		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = addIndex++;
 		UBO_VOXELIZER( writer
 			, addIndex++

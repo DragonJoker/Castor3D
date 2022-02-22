@@ -47,7 +47,7 @@ namespace water
 	{
 		enum WaterIdx : uint32_t
 		{
-			eLightBuffer = uint32_t( castor3d::PassUboIdx::eCount ),
+			eLightBuffer = uint32_t( castor3d::GlobalBuffersIdx::eCount ),
 			eWaterUbo,
 			eWaterNormals1,
 			eWaterNormals2,
@@ -554,26 +554,26 @@ namespace water
 		shader::Fog fog{ writer };
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		shader::Materials materials{ writer
-			, uint32_t( PassUboIdx::eMaterials )
+			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::ePass };
 		shader::TextureConfigurations textureConfigs{ writer
-			, uint32_t( PassUboIdx::eTexConfigs )
+			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::ePass
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
-			, uint32_t( PassUboIdx::eTexAnims )
+			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::ePass
 			, hasTextures };
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		UBO_WATER( writer
 			, index++
