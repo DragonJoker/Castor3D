@@ -16,6 +16,7 @@ namespace castor3d
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_dimensions{ getMember< sdw::Vec2 >( "dimensions" ) }
+			, m_dummy{ getMember< sdw::Vec2 >( "dummy" ) }
 		{
 		}
 
@@ -27,6 +28,7 @@ namespace castor3d
 			if ( result->empty() )
 			{
 				result->declMember( "dimensions", ast::type::Kind::eVec2F );
+				result->declMember( "dummy", ast::type::Kind::eVec2F );
 			}
 
 			return result;

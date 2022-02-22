@@ -21,6 +21,7 @@ namespace castor3d
 	{
 		using DataType = Submesh;
 		using InstanceType = Geometry;
+		using VertexType = InterleavedVertex;
 
 		C3D_API SubmeshRenderNode( SubmeshRenderNode const & ) = delete;
 		C3D_API SubmeshRenderNode( SubmeshRenderNode && ) = default;
@@ -28,18 +29,15 @@ namespace castor3d
 		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode && ) = delete;
 
 		C3D_API SubmeshRenderNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
-			, GpuDataBufferOffset * modelDataBuffer
-			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
 			, InstanceType & instance );
 
+		C3D_API uint32_t getId()const;
+		C3D_API uint32_t getInstanceMult( uint32_t instanceMult )const;
+
 		PassRenderNode passNode;
-		UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexUbo;
-		GpuDataBufferOffset * modelDataUbo;
-		UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		GeometryBuffers const & buffers;
 		SceneNode & sceneNode;
 		DataType & data;

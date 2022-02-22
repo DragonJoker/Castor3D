@@ -179,8 +179,8 @@ namespace castor3d
 #define UBO_SSAO_CONFIG( Writer, Binding, Set )\
 	sdw::Ubo ssaoConfig{ Writer\
 		, castor3d::SsaoConfigUbo::BufferSsaoConfig\
-		, Binding\
-		, Set\
+		, uint32_t( Binding )\
+		, uint32_t( Set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_ssaoConfigData = ssaoConfig.declMember< castor3d::shader::SsaoConfigData >( castor3d::SsaoConfigUbo::SsaoConfigData );\

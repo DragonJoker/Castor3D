@@ -42,9 +42,6 @@ namespace castor3d
 			Geometry const & geometry;
 			Submesh const & submesh;
 			Pass const & pass;
-			UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexUbo{};
-			GpuDataBufferOffset * modelDataUbo{};
-			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo{};
 		};
 		using ElementT = Geometry;
 		using ElementKeyT = castor::String;
@@ -161,16 +158,10 @@ namespace castor3d
 		 *\param[in]	element	L'objet.
 		 */
 		C3D_API void add( ElementPtrT element );
-		/**
-		 *\~english
-		 *\return		The models data buffer.
-		 *\~french
-		 *\return		Le tampon dde données de modèles.
-		 */
-		ModelDataBuffer & getModelDataBuffer()const
+
+		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
 		{
-			CU_Require( m_modelDataBuffer );
-			return *m_modelDataBuffer;
+			return *m_nodesData;
 		}
 
 	public:
@@ -178,11 +169,11 @@ namespace castor3d
 
 	private:
 		void doCreateEntry( RenderDevice const & device
-			, Geometry const & geometry
+			, Geometry & geometry
 			, Submesh const & submesh
 			, Pass const & pass );
 		void doRemoveEntry( RenderDevice const & device
-			, Geometry const & geometry
+			, Geometry & geometry
 			, Submesh const & submesh
 			, Pass const & pass );
 		void doRegister( Geometry & geometry );
@@ -197,7 +188,7 @@ namespace castor3d
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< RenderNodesPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
-		castor3d::ModelDataBufferUPtr m_modelDataBuffer;
+		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
 	};
 }
 

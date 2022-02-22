@@ -15,6 +15,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
+#include <unordered_map>
+
 namespace castor3d
 {
 	class Geometry
@@ -138,38 +140,20 @@ namespace castor3d
 		 */
 		C3D_API void setBoundingBox( Submesh const & submesh
 			, castor::BoundingBox const & box );
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh
-		 *\return		The mesh
-		 *\~french
-		 *\brief		Récupère le maillage
-		 *\return		Le maillage
-		 */
+
+		C3D_API uint32_t getId( Submesh const & submesh )const;
+		C3D_API void setId( Submesh const & submesh, uint32_t id );
+
 		MeshResPtr getMesh()const
 		{
 			return m_mesh;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the collision box
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la boîte de collision
-		 *\return		La valeur
-		 */
+
 		castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_box;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the collision sphere
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la sphère de collision
-		 *\return		La valeur
-		 */
+
 		castor::BoundingSphere const & getBoundingSphere()const
 		{
 			return m_sphere;
@@ -191,6 +175,7 @@ namespace castor3d
 		SubmeshBoundingSphereMap m_submeshesSpheres;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
+		std::unordered_map< uint32_t, uint32_t > m_id{};
 	};
 }
 

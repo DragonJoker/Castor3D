@@ -39,6 +39,7 @@ namespace castor3d
 
 		private:
 			sdw::Vec2 m_dimensions;
+			sdw::Vec2 m_dummy;
 		};
 	}
 
@@ -53,14 +54,14 @@ namespace castor3d
 	};
 }
 
-#define UBO_BILLBOARD( writer, binding, set )\
-	sdw::Ubo billboard{ writer\
+#define C3D_Billboard( writer, binding, set )\
+	sdw::Ssbo billboard{ writer\
 		, castor3d::BillboardUbo::BufferBillboard\
-		, binding\
-		, set\
-		, ast::type::MemoryLayout::eStd140\
+		, uint32_t( binding )\
+		, uint32_t( set )\
+		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_billboardData = billboard.declMember< castor3d::shader::BillboardData >( castor3d::BillboardUbo::BillboardData );\
+	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( castor3d::BillboardUbo::BillboardData );\
 	billboard.end()
 
 #endif

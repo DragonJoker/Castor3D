@@ -32,14 +32,25 @@ namespace castor3d
 			return *vtxBuffer;
 		}
 
+		bool hasIndices()const
+		{
+			return idxChunk.askedSize != 0;
+		}
+
+		bool hasVertices()const
+		{
+			return vtxChunk.askedSize != 0;
+		}
+
 		uint32_t getIndexCount()const
 		{
 			return uint32_t( idxChunk.askedSize / sizeof( uint32_t ) );
 		}
 
+		template< typename VertexT >
 		uint32_t getVertexCount()const
 		{
-			return uint32_t( vtxChunk.askedSize / sizeof( InterleavedVertex ) );
+			return uint32_t( vtxChunk.askedSize / sizeof( VertexT ) );
 		}
 
 		VkDeviceSize getIndexOffset()const
@@ -57,9 +68,10 @@ namespace castor3d
 			return uint32_t( getIndexOffset() / sizeof( uint32_t ) );
 		}
 
+		template< typename VertexT >
 		uint32_t getFirstVertex()const
 		{
-			return uint32_t( getVertexOffset() / sizeof( InterleavedVertex ) );
+			return uint32_t( getVertexOffset() / sizeof( VertexT ) );
 		}
 	};
 }

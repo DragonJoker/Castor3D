@@ -153,11 +153,11 @@ namespace castor3d
 	};
 }
 
-#define UBO_MATRIX( writer, binding, set )\
+#define C3D_Matrix( writer, binding, set )\
 	sdw::Ubo matrices{ writer\
 		, castor3d::MatrixUbo::BufferMatrix\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, sdw::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_matrixData = matrices.declMember< castor3d::shader::MatrixData >( castor3d::MatrixUbo::MatrixData );\

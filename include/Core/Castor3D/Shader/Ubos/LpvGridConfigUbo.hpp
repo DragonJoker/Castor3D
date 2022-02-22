@@ -140,8 +140,8 @@ namespace castor3d
 #define UBO_LPVGRIDCONFIG( writer, binding, set, enabled )\
 	sdw::Ubo lpvGridConfig{ writer\
 		, castor3d::LpvGridConfigUbo::LpvGridConfig\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_lpvGridData = lpvGridConfig.declMember< castor3d::shader::LpvGridData >( castor3d::LpvGridConfigUbo::LpvGridData, enabled );\
 	lpvGridConfig.end()

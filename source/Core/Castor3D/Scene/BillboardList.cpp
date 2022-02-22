@@ -35,10 +35,10 @@ namespace castor3d
 			m_count = count;
 			Quad vertices
 			{
-				Vertex{ castor::Point3f{ -0.5f, -0.5f, 1.0f }, castor::Point2f{ 0.0f, 0.0f } },
-				Vertex{ castor::Point3f{ -0.5f, +0.5f, 1.0f }, castor::Point2f{ 0.0f, 1.0f } },
-				Vertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
-				Vertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
+				BillboardVertex{ castor::Point3f{ -0.5f, -0.5f, 1.0f }, castor::Point2f{ 0.0f, 0.0f } },
+				BillboardVertex{ castor::Point3f{ -0.5f, +0.5f, 1.0f }, castor::Point2f{ 0.0f, 1.0f } },
+				BillboardVertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
+				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
 			m_quadBuffer = makeVertexBuffer< Quad >( device
 				, 1u
@@ -56,12 +56,12 @@ namespace castor3d
 			m_quadLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray
 				{
-					{ 0u, sizeof( Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+					{ 0u, sizeof( BillboardVertex ), VK_VERTEX_INPUT_RATE_VERTEX },
 				}
 				, ashes::VkVertexInputAttributeDescriptionArray
 				{
-					{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( Vertex, position ) },
-					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( Vertex, uv ) },
+					{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( BillboardVertex, position ) },
+					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( BillboardVertex, uv ) },
 				} );
 
 			ashes::BufferCRefArray buffers;
@@ -71,8 +71,8 @@ namespace castor3d
 
 			m_geometryBuffers.bufferOffset.vtxBuffer = &m_quadBuffer->getBuffer();
 			m_geometryBuffers.bufferOffset.vtxChunk.offset = 0u;
-			m_geometryBuffers.bufferOffset.vtxChunk.askedSize = 4u * sizeof( Vertex );
-			m_geometryBuffers.bufferOffset.vtxChunk.size = 4u * sizeof( Vertex );
+			m_geometryBuffers.bufferOffset.vtxChunk.askedSize = 4u * sizeof( BillboardVertex );
+			m_geometryBuffers.bufferOffset.vtxChunk.size = 4u * sizeof( BillboardVertex );
 			m_geometryBuffers.other = buffers;
 			m_geometryBuffers.otherOffsets = offsets;
 			m_geometryBuffers.layouts = layouts;

@@ -17,6 +17,11 @@ namespace castor3d
 	/**@name Scene */
 	//@{
 
+	struct BillboardVertex
+	{
+		castor::Point3f position;
+		castor::Point2f uv;
+	};
 	/**
 	*\~english
 	*\brief
@@ -382,11 +387,11 @@ namespace castor3d
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
 	using SubmeshMaterialMap = std::map< Submesh const *, MaterialRPtr >;
-	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry const &, Submesh const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial) >;
+	using OnSubmeshMaterialChangedFunction = std::function< void( Geometry &, Submesh const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial) >;
 	using OnSubmeshMaterialChanged = castor::SignalT< OnSubmeshMaterialChangedFunction >;
 	using OnSubmeshMaterialChangedConnection = OnSubmeshMaterialChanged::connection;
 
-	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase const &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial ) >;
+	using OnBillboardMaterialChangedFunction = std::function< void( BillboardBase &, MaterialRPtr oldMaterial, MaterialRPtr newMaterial ) >;
 	using OnBillboardMaterialChanged = castor::SignalT< OnBillboardMaterialChangedFunction >;
 	using OnBillboardMaterialChangedConnection = OnBillboardMaterialChanged::connection;
 

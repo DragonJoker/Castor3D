@@ -19,7 +19,6 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Shader/ShaderBuffers/ModelDataBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
@@ -109,31 +108,8 @@ namespace castor3d
 			uboBindings.emplace_back( engine.getMaterialCache().getPassBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eMaterials ) ) );
 			uboBindings.emplace_back( engine.getMaterialCache().getTexConfigBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
 			uboBindings.emplace_back( engine.getMaterialCache().getTexAnimBuffer().createLayoutBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelIndex )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, ( VK_SHADER_STAGE_FRAGMENT_BIT
-					| VK_SHADER_STAGE_GEOMETRY_BIT
-					| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-					| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-					| VK_SHADER_STAGE_VERTEX_BIT ) ) );
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelData )
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, ( VK_SHADER_STAGE_FRAGMENT_BIT
-					| VK_SHADER_STAGE_GEOMETRY_BIT
-					| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-					| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-					| VK_SHADER_STAGE_VERTEX_BIT ) ) );
 
-			if ( billboard )
-			{
-				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eBillboard )
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, ( VK_SHADER_STAGE_GEOMETRY_BIT
-						| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-						| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-						| VK_SHADER_STAGE_VERTEX_BIT ) ) );
-			}
-			else
+			if ( !billboard )
 			{
 				if ( skeleton )
 				{
@@ -210,14 +186,9 @@ namespace castor3d
 					, layout.getBinding( uint32_t( NodeUboIdx::eTexConfigs ) ) );
 				engine.getMaterialCache().getTexAnimBuffer().createBinding( descriptorSet
 					, layout.getBinding( uint32_t( NodeUboIdx::eTexAnims ) ) );
-				CU_Require( node.modelIndexUbo );
-				node.modelIndexUbo.createSizedBinding( descriptorSet
-					, layout.getBinding( uint32_t( NodeUboIdx::eModelIndex ) ) );
 
 				if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
 				{
-					node.sceneNode.getScene()->getGeometryCache().getModelDataBuffer().createBinding( descriptorSet
-						, layout.getBinding( uint32_t( NodeUboIdx::eModelData ) ) );
 					SubmeshRenderNode & submeshNode = node;
 
 					if ( submeshNode.mesh )
@@ -239,19 +210,6 @@ namespace castor3d
 							, uint32_t( bonesBuffer.getOffset() )
 							, uint32_t( bonesBuffer.getSize() ) );
 					}
-				}
-				else
-				{
-					node.sceneNode.getScene()->getBillboardListCache().getModelDataBuffer().createBinding( descriptorSet
-						, layout.getBinding( uint32_t( NodeUboIdx::eModelData ) ) );
-					node.billboardUbo.createSizedBinding( descriptorSet
-						, layout.getBinding( uint32_t( NodeUboIdx::eBillboard ) ) );
-				}
-
-				if ( node.modelInstancesUbo )
-				{
-					node.modelInstancesUbo.createSizedBinding( descriptorSet
-						, layout.getBinding( uint32_t( NodeUboIdx::eModelInstances ) ) );
 				}
 
 				descriptorSet.update();
@@ -345,6 +303,52 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	RenderNodeType getRenderNodeType( ProgramFlags const & flags )
+	{
+		bool isFrontCulled = checkFlag( flags, ProgramFlag::eInvertNormals );
+
+		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		{
+			if ( checkFlag( flags, ProgramFlag::eSkinning ) )
+			{
+				return isFrontCulled
+					? RenderNodeType::eFrontInstancedSkinned
+					: RenderNodeType::eBackInstancedSkinned;
+			}
+
+			return isFrontCulled
+				? RenderNodeType::eFrontInstancedStatic
+				: RenderNodeType::eBackInstancedStatic;
+		}
+
+		if ( checkFlag( flags, ProgramFlag::eMorphing ) )
+		{
+			return isFrontCulled
+				? RenderNodeType::eFrontMorphing
+				: RenderNodeType::eBackMorphing;
+		}
+
+		if ( checkFlag( flags, ProgramFlag::eSkinning ) )
+		{
+			return isFrontCulled
+				? RenderNodeType::eFrontSkinned
+				: RenderNodeType::eBackSkinned;
+		}
+
+		if ( checkFlag( flags, ProgramFlag::eBillboards ) )
+		{
+			return isFrontCulled
+				? RenderNodeType::eFrontBillboard
+				: RenderNodeType::eBackBillboard;
+		}
+
+		return isFrontCulled
+			? RenderNodeType::eFrontStatic
+			: RenderNodeType::eBackStatic;
+	}
+
+	//*********************************************************************************************
+
 	static constexpr uint32_t MaxPoolSize = 50u;
 
 	SceneRenderNodes::DescriptorSetPools::DescriptorSetPools( RenderDevice const & device
@@ -416,12 +420,11 @@ namespace castor3d
 	{
 		storageBuffers++; // Materials SSBO
 		storageBuffers++; // Textures Configs SSBO
-		uniformBuffers++; // Model UBO
 		uniformBuffers++; // ModelInstances UBO
 
 		if ( billboard )
 		{
-			uniformBuffers++; // Billboard UBO
+			storageBuffers++; // Billboard UBO
 		}
 		else
 		{
@@ -725,9 +728,6 @@ namespace castor3d
 	}
 
 	SubmeshRenderNode & SceneRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
-		, GpuDataBufferOffset * modelDataBuffer
-		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data
@@ -745,9 +745,9 @@ namespace castor3d
 			, mesh
 			, skeleton
 			, engine
-			, engine.getTextureUnitCache().getDescriptorLayout()
-			, engine.getTextureUnitCache().getDescriptorPool()
-			, engine.getTextureUnitCache().getDescriptorSet()
+			, getOwner()->getBindlessTexDescriptorLayout()
+			, getOwner()->getBindlessTexDescriptorPool()
+			, getOwner()->getBindlessTexDescriptorSet()
 			, m_submeshNodes );
 		auto it = pool.nodes.emplace( makeNodeHash( sceneNode, data, instance ), nullptr );
 
@@ -755,9 +755,6 @@ namespace castor3d
 		{
 			doUpdateDescriptorsCounts( passNode.pass, nullptr, &data, mesh, skeleton );
 			it.first->second = castor::makeUnique< SubmeshRenderNode >( std::move( passNode )
-				, std::move( modelIndexBuffer )
-				, modelDataBuffer
-				, std::move( modelInstancesBuffer )
 				, buffers
 				, sceneNode
 				, data
@@ -770,13 +767,9 @@ namespace castor3d
 	}
 
 	BillboardRenderNode & SceneRenderNodes::createNode( PassRenderNode passNode
-		, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
-		, GpuDataBufferOffset * modelDataBuffer
-		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
-		, BillboardBase & instance
-		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer )
+		, BillboardBase & instance )
 	{
 		auto & pass = passNode.pass;
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
@@ -788,9 +781,9 @@ namespace castor3d
 			, nullptr
 			, nullptr
 			, engine
-			, engine.getTextureUnitCache().getDescriptorLayout()
-			, engine.getTextureUnitCache().getDescriptorPool()
-			, engine.getTextureUnitCache().getDescriptorSet()
+			, getOwner()->getBindlessTexDescriptorLayout()
+			, getOwner()->getBindlessTexDescriptorPool()
+			, getOwner()->getBindlessTexDescriptorSet()
 			, m_billboardNodes );
 		auto it = pool.nodes.emplace( makeNodeHash( sceneNode, instance ), nullptr );
 
@@ -798,13 +791,9 @@ namespace castor3d
 		{
 			doUpdateDescriptorsCounts( passNode.pass, &instance, nullptr, nullptr, nullptr );
 			it.first->second = castor::makeUnique< BillboardRenderNode >( std::move( passNode )
-				, std::move( modelIndexBuffer )
-				, modelDataBuffer
-				, std::move( modelInstancesBuffer )
 				, buffers
 				, sceneNode
-				, instance
-				, billboardBuffer );
+				, instance );
 		}
 
 		return *it.first->second;
@@ -862,9 +851,9 @@ namespace castor3d
 				, mesh
 				, skeleton
 				, engine
-				, engine.getTextureUnitCache().getDescriptorLayout()
-				, engine.getTextureUnitCache().getDescriptorPool()
-				, engine.getTextureUnitCache().getDescriptorSet()
+				, getOwner()->getBindlessTexDescriptorLayout()
+				, getOwner()->getBindlessTexDescriptorPool()
+				, getOwner()->getBindlessTexDescriptorSet()
 				, m_billboardNodes );
 			layouts = &pool.layouts;
 		}
@@ -877,9 +866,9 @@ namespace castor3d
 				, mesh
 				, skeleton
 				, engine
-				, engine.getTextureUnitCache().getDescriptorLayout()
-				, engine.getTextureUnitCache().getDescriptorPool()
-				, engine.getTextureUnitCache().getDescriptorSet()
+				, getOwner()->getBindlessTexDescriptorLayout()
+				, getOwner()->getBindlessTexDescriptorPool()
+				, getOwner()->getBindlessTexDescriptorSet()
 				, m_submeshNodes );
 			layouts = &pool.layouts;
 		}

@@ -953,7 +953,7 @@ namespace castor3d
 		{
 			VertexWriter writer;
 
-			UBO_MATRIX( writer
+			C3D_Matrix( writer
 				, uint32_t( OverlayBindingId::eMatrix )
 				, 0u );
 			UBO_OVERLAY( writer

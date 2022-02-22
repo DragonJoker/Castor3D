@@ -95,8 +95,8 @@ namespace castor3d
 #define UBO_LAYERED_LPVGRIDCONFIG( writer, binding, set, enabled )\
 	sdw::Ubo layeredLpvConfig{ writer\
 		, castor3d::LayeredLpvGridConfigUbo::LayeredLpvConfig\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_llpvGridData = layeredLpvConfig.declMember< castor3d::shader::LayeredLpvGridData >( castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridData, enabled );\
 	layeredLpvConfig.end()
