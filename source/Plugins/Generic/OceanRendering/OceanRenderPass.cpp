@@ -1070,6 +1070,9 @@ namespace ocean
 		C3D_ModelsData( writer
 			, PassUboIdx::eModelsData
 			, RenderPipeline::ePass );
+		shader::Materials materials{ writer
+			, uint32_t( PassUboIdx::eMaterials )
+			, RenderPipeline::ePass };
 		auto index = uint32_t( PassUboIdx::eCount );
 		auto lightsIndex = index++;
 		UBO_OCEAN( writer
@@ -1112,9 +1115,6 @@ namespace ocean
 			, RenderPipeline::ePass
 			, flags.sceneFlags );
 
-		shader::Materials materials{ writer
-			, uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers };
 
 		// Fragment Outputs
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );

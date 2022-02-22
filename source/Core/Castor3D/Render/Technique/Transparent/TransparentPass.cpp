@@ -162,6 +162,17 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, PassUboIdx::eModelsData
 			, RenderPipeline::ePass );
+		shader::Materials materials{ writer
+			, uint32_t( PassUboIdx::eMaterials )
+			, RenderPipeline::ePass };
+		shader::TextureConfigurations textureConfigs{ writer
+			, uint32_t( PassUboIdx::eTexConfigs )
+			, RenderPipeline::ePass
+			, hasTextures };
+		shader::TextureAnimations textureAnims{ writer
+			, uint32_t( PassUboIdx::eTexAnims )
+			, RenderPipeline::ePass
+			, hasTextures };
 		auto index = uint32_t( PassUboIdx::eCount );
 		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
@@ -183,18 +194,6 @@ namespace castor3d
 		indirect.declare( index
 			, RenderPipeline::ePass
 			, flags.sceneFlags );
-
-		shader::Materials materials{ writer
-			, uint32_t( NodeUboIdx::eMaterials )
-			, RenderPipeline::eBuffers };
-		shader::TextureConfigurations textureConfigs{ writer
-			, uint32_t( NodeUboIdx::eTexConfigs )
-			, RenderPipeline::eBuffers
-			, hasTextures };
-		shader::TextureAnimations textureAnims{ writer
-			, uint32_t( NodeUboIdx::eTexAnims )
-			, RenderPipeline::eBuffers
-			, hasTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u

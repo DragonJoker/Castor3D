@@ -253,6 +253,11 @@ namespace castor3d
 		return m_buffer.createLayoutBinding( binding );
 	}
 
+	ashes::WriteDescriptorSet TextureConfigurationBuffer::getBinding( uint32_t binding )const
+	{
+		return m_buffer.getBinding( binding );
+	}
+
 	void TextureConfigurationBuffer::createBinding( ashes::DescriptorSet & descriptorSet
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
