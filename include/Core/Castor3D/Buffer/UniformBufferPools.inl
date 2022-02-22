@@ -23,10 +23,6 @@ namespace castor3d
 		{
 			return PoolType::eModelInstances;
 		}
-		else if constexpr ( std::is_same_v< DataT, MorphingUboConfiguration > )
-		{
-			return PoolType::eMorphing;
-		}
 		else
 		{
 			return PoolType::eGeneric;

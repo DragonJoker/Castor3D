@@ -183,23 +183,25 @@ namespace castor3d
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-		auto nodesBuffer = m_nodesData->lock( 0u, ashes::WholeSize, 0u );
 
-		for ( auto & pair : m_baseEntries )
+		if ( auto nodesBuffer = m_nodesData->lock( 0u, ashes::WholeSize, 0u ) )
 		{
-			auto & entry = pair.second;
-
-			if ( entry.geometry.getParent() )
+			for ( auto & pair : m_baseEntries )
 			{
-				fillEntry( entry.pass
-					, *entry.geometry.getParent()
-					, entry.geometry
-					, nodesBuffer[entry.id - 1u] );
-			}
-		}
+				auto & entry = pair.second;
 
-		m_nodesData->flush( 0u, ashes::WholeSize );
-		m_nodesData->unlock();
+				if ( entry.geometry.getParent() )
+				{
+					fillEntry( entry.pass
+						, *entry.geometry.getParent()
+						, entry.geometry
+						, nodesBuffer[entry.id - 1u] );
+				}
+			}
+
+			m_nodesData->flush( 0u, ashes::WholeSize );
+			m_nodesData->unlock();
+		}
 	}
 
 	GeometryCache::PoolsEntry ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::getUbos( Geometry const & geometry

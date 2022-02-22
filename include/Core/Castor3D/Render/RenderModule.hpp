@@ -138,7 +138,6 @@ namespace castor3d
 	{
 		eSkinningSsbo,
 		eSkinningBones,
-		eMorphing,
 		eModelInstances,
 	};
 	/**
@@ -156,10 +155,11 @@ namespace castor3d
 		eScene,
 		eObjectsNodeID,
 		eModelsData,
-		eBillboardsData,
 		eMaterials,
 		eTexConfigs,
 		eTexAnims,
+		eBillboardsData,
+		eMorphingData,
 		CU_ScopedEnumBounds( eMatrix ),
 	};
 	/**
