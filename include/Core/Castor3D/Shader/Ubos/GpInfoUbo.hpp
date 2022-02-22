@@ -105,8 +105,8 @@ namespace castor3d
 #define UBO_GPINFO( writer, binding, set )\
 	sdw::Ubo gpInfo{ writer\
 		, castor3d::GpInfoUbo::BufferGPInfo\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_gpInfoData = gpInfo.declMember< shader::GpInfoData >( castor3d::GpInfoUbo::GPInfoData );\

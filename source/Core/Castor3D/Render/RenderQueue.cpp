@@ -209,6 +209,7 @@ namespace castor3d
 	{
 		auto & culledNodes = getCulledRenderNodes();
 		culledNodes.parse();
+		culledNodes.fillIndirect();
 	}
 
 	void RenderQueue::doOnCullerCompute( SceneCuller const & culler )

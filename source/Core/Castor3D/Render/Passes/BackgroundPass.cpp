@@ -10,7 +10,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
@@ -192,8 +192,8 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declInput< Vec3 >( "position", 0u );
-			UBO_MATRIX( writer, SceneBackground::MtxUboIdx, 0u );
-			UBO_MODEL( writer, SceneBackground::MdlMtxUboIdx, 0u );
+			C3D_Matrix( writer, SceneBackground::MtxUboIdx, 0u );
+			C3D_ModelData( writer, SceneBackground::MdlMtxUboIdx, 0u );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", 0u );
@@ -213,7 +213,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Inputs
-			UBO_SCENE( writer, SceneBackground::SceneUboIdx, 0u );
+			C3D_Scene( writer, SceneBackground::SceneUboIdx, 0u );
 			UBO_HDR_CONFIG( writer, SceneBackground::HdrCfgUboIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
 			auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", SceneBackground::SkyBoxImgIdx, 0u );
@@ -378,7 +378,7 @@ namespace castor3d
 		, crg::ImageViewId const * depth )
 		: m_device{ device }
 		, m_matrixUbo{ m_device }
-		, m_modelUbo{ m_device.uboPools->getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_modelUbo{ m_device.uboPools->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
 			, std::move( previousPasses )
 			, name

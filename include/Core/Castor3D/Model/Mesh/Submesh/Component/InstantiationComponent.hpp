@@ -18,8 +18,6 @@ namespace castor3d
 		castor::Point4ui m_textures1;
 		int m_textures;
 		int m_material;
-		int m_nodeId;
-		int m_skinningId;
 	};
 
 	class InstantiationComponent

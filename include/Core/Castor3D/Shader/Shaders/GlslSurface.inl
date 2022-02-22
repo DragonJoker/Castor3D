@@ -102,8 +102,6 @@ namespace castor3d::shader
 		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
 		, textures{ this->getMember< sdw::Int >( "textures", true ) }
 		, material{ this->getMember< sdw::Int >( "material", true ) }
-		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
-		, skinningId{ this->getMember< sdw::Int >( "skinningId", true ) }
 		, position2{ this->getMember< sdw::Vec4 >( "position2", true ) }
 		, normal2{ this->getMember< sdw::Vec3 >( "normal2", true ) }
 		, tangent2{ this->getMember< sdw::Vec3 >( "tangent2", true ) }
@@ -190,14 +188,6 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
 				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-			result->declMember( "nodeId", ast::type::Kind::eInt
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-			result->declMember( "skinningId", ast::type::Kind::eInt
-				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) && checkFlag( programFlags, ProgramFlag::eSkinning ) ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) && checkFlag( programFlags, ProgramFlag::eSkinning ) );
 			//@}
 			/**
 			*	Secondary UV
@@ -270,8 +260,6 @@ namespace castor3d::shader
 		, textures{ this->getMember< sdw::Int >( "textures", true ) }
 		, material{ this->getMember< sdw::UInt >( "material", true ) }
 		, nodeId{ this->getMember< sdw::Int >( "nodeId", true ) }
-		, skinningId{ this->getMember< sdw::Int >( "skinningId", true ) }
-		, drawId{ this->getMember< sdw::Int >( "drawId", true ) }
 	{
 	}
 
@@ -361,12 +349,6 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, index++ );
 			result->declMember( "nodeId", ast::type::Kind::eInt
-				, ast::type::NotArray
-				, index++ );
-			result->declMember( "skinningId", ast::type::Kind::eInt
-				, ast::type::NotArray
-				, index++ );
-			result->declMember( "drawId", ast::type::Kind::eInt
 				, ast::type::NotArray
 				, index++ );
 		}

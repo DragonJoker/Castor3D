@@ -369,7 +369,7 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
-			UBO_MATRIX( writer, eMatrixUbo, 0u );
+			C3D_Matrix( writer, eMatrixUbo, 0u );
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< Vec3 >( "createCube"

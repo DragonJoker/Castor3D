@@ -102,7 +102,7 @@ namespace castor3d
 
 	bool MorphComponent::doInitialise( RenderDevice const & device )
 	{
-		auto count = getOwner()->getBufferOffsets().getVertexCount();
+		auto count = getOwner()->getBufferOffsets().getVertexCount< InterleavedVertex >();
 
 		if ( !m_animBuffer || m_animBuffer.getCount() != count )
 		{
@@ -135,9 +135,7 @@ namespace castor3d
 	{
 		if ( getOwner()->hasBufferOffsets() )
 		{
-			auto count = getOwner()->getBufferOffsets().getVertexCount();
-
-			if ( count )
+			if ( getOwner()->getBufferOffsets().hasVertices() )
 			{
 				if ( auto * buffer = m_animBuffer.lock() )
 				{

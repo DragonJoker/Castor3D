@@ -23,7 +23,6 @@
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -33,6 +32,7 @@
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
@@ -97,11 +97,14 @@ namespace castor3d
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
-		UBO_MATRIX( writer
-			, uint32_t( PassUboIdx::eMatrix )
+		C3D_Matrix( writer
+			, PassUboIdx::eMatrix
 			, RenderPipeline::ePass );
-		UBO_SCENE( writer
-			, uint32_t( PassUboIdx::eScene )
+		C3D_Scene( writer
+			, PassUboIdx::eScene
+			, RenderPipeline::ePass );
+		C3D_ModelsData( writer
+			, PassUboIdx::eModelsData
 			, RenderPipeline::ePass );
 		auto index = uint32_t( PassUboIdx::eCount );
 		auto lightsIndex = index++;
@@ -136,9 +139,6 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, hasTextures };
-		shader::ModelDatas c3d_modelData{ writer
-			, uint32_t( NodeUboIdx::eModelData )
-			, RenderPipeline::eBuffers };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -223,7 +223,7 @@ namespace castor3d
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
 					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelData[writer.cast< sdw::UInt >( in.nodeId )] );
+						, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.cameraPosition );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"

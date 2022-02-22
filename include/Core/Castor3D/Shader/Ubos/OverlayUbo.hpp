@@ -54,8 +54,8 @@ namespace castor3d
 #define UBO_OVERLAY( writer, binding, set )\
 	sdw::Ubo overlay{ writer\
 		, castor3d::OverlayUbo::BufferOverlay\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_overlayData = overlay.declMember< castor3d::shader::OverlayData >( castor3d::OverlayUbo::OverlayData );\
