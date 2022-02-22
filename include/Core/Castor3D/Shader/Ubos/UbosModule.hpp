@@ -287,9 +287,9 @@ namespace castor3d
 	*\brief
 	*	Données de morphing (temps).
 	*/
-	struct MorphingUboConfiguration
+	struct MorphingBufferConfiguration
 	{
-		float time;
+		castor::Point4f time;
 	};
 	/**
 	*\~english
