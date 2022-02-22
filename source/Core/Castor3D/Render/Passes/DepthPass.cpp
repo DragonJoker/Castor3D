@@ -114,20 +114,20 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		shader::Materials materials{ writer
-			, uint32_t( PassUboIdx::eMaterials )
+			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::ePass };
 		shader::TextureConfigurations textureConfigs{ writer
-			, uint32_t( PassUboIdx::eTexConfigs )
+			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::ePass
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
-			, uint32_t( PassUboIdx::eTexAnims )
+			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::ePass
 			, hasTextures };
 

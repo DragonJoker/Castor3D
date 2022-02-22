@@ -518,11 +518,11 @@ namespace castor3d
 			descriptors.set = descriptors.pool->createDescriptorSet( getName() + "_Add"
 				, RenderPipeline::ePass );
 			ashes::WriteDescriptorSetArray descriptorWrites;
-			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( PassUboIdx::eMatrix ) ) );
-			descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( PassUboIdx::eScene ) ) );
+			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
+			descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
 
 			auto & nodesIds = m_renderQueue->getCulledRenderNodes().getNodesIds();
-			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( PassUboIdx::eObjectsNodeID )
+			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 				, 0u
 				, 1u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
@@ -534,7 +534,7 @@ namespace castor3d
 			auto & modelBuffer = checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				? scene.getBillboardListCache().getModelBuffer()
 				: scene.getGeometryCache().getModelBuffer();
-			auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( PassUboIdx::eModelsData )
+			auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eModelsData )
 				, 0u
 				, 1u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
@@ -546,7 +546,7 @@ namespace castor3d
 			if ( checkFlag( flags.programFlags,  ProgramFlag::eBillboards ) )
 			{
 				auto & billboardDatas = scene.getBillboardListCache().getBillboardsBuffer();
-				auto write = ashes::WriteDescriptorSet{ uint32_t( PassUboIdx::eBillboardsData )
+				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
@@ -557,9 +557,9 @@ namespace castor3d
 			}
 
 			auto & matCache = getOwner()->getMaterialCache();
-			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( PassUboIdx::eMaterials ) ) );
-			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( PassUboIdx::eTexConfigs ) ) );
-			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( PassUboIdx::eTexAnims ) ) );
+			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
+			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
+			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
 			doFillAdditionalDescriptor( descriptorWrites
 				, shadowMaps );
 			descriptors.set->setBindings( descriptorWrites );
@@ -856,30 +856,30 @@ namespace castor3d
 		}
 
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eMatrix )
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMatrix )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, stageFlags ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eScene )
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eScene )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, stageFlags ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eObjectsNodeID )
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, stageFlags ) );
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eModelsData )
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eModelsData )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, stageFlags ) );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
-			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PassUboIdx::eBillboardsData )
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eBillboardsData )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stageFlags ) );
 		}
 
 		auto & matCache = getOwner()->getMaterialCache();
-		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( PassUboIdx::eMaterials ) ) );
-		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( PassUboIdx::eTexConfigs ) ) );
-		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( PassUboIdx::eTexAnims ) ) );
+		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
+		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
+		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
 		doFillAdditionalBindings( addBindings );
 		return addBindings;
 	}
@@ -1039,16 +1039,16 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		auto skinningData = SkinningUbo::declare( writer
@@ -1153,19 +1153,19 @@ namespace castor3d
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_Scene( writer
-			, PassUboIdx::eScene
+			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_Billboard( writer
-			, PassUboIdx::eBillboardsData
+			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };

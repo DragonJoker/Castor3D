@@ -157,13 +157,13 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 
 		C3D_Matrix( writer
-			, PassUboIdx::eMatrix
+			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
-			, PassUboIdx::eModelsData
+			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
-			, PassUboIdx::eObjectsNodeID
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		auto skinningData = SkinningUbo::declare( writer
@@ -257,17 +257,17 @@ namespace castor3d
 		shader::Utils utils{ writer, *getEngine() };
 
 		shader::Materials materials{ writer
-			, uint32_t( PassUboIdx::eMaterials )
+			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::ePass };
 		shader::TextureConfigurations textureConfigs{ writer
-			, uint32_t( PassUboIdx::eTexConfigs )
+			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::ePass
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
-			, uint32_t( PassUboIdx::eTexAnims )
+			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::ePass
 			, hasTextures };
-		auto index = uint32_t( PassUboIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		UBO_SHADOWMAP( writer
 			, index++
