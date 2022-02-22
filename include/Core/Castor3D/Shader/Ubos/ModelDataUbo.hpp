@@ -100,6 +100,13 @@ namespace castor3d::shader
 	struct ObjectsIds
 		: public sdw::StructInstance
 	{
+		struct Ids
+		{
+			sdw::UInt nodeId;
+			sdw::UInt morphingId;
+			sdw::UInt skinningId;
+		};
+
 		C3D_API ObjectsIds( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled );
@@ -110,21 +117,6 @@ namespace castor3d::shader
 		sdw::UVec4 operator[]( sdw::UInt const & index )const
 		{
 			return m_data[index];
-		}
-
-		static sdw::UInt getNodeId( sdw::UVec4 const & data )
-		{
-			return data.x();
-		}
-
-		static sdw::UInt getMorphingId( sdw::UVec4 const & data )
-		{
-			return data.y();
-		}
-
-		static sdw::UInt getSkinningId( sdw::UVec4 const & data )
-		{
-			return data.z();
 		}
 
 	private:
@@ -139,6 +131,48 @@ namespace castor3d::shader
 	private:
 		sdw::Array< sdw::UVec4 > m_data;
 	};
+
+	template< ast::var::Flag FlagT >
+	static shader::ObjectsIds::Ids getIds( sdw::Array< shader::ObjectsIds > const & data
+		, shader::VertexSurfaceT< FlagT > const & surface
+		, sdw::UInt pipelineID
+		, sdw::UInt drawID
+		, ProgramFlags const & flags )
+	{
+		auto & writer = *data.getWriter();
+		auto objectIdsData = writer.declLocale( "objectIdsData"
+			, data[pipelineID][drawID] );
+		return { writer.declLocale( "nodeId"
+			, objectIdsData.x() )
+			, writer.declLocale( "morphingId"
+				, objectIdsData.y()
+				, checkFlag( flags, ProgramFlag::eMorphing ) )
+			, writer.declLocale( "skinningId"
+				, objectIdsData.z()
+				, checkFlag( flags, ProgramFlag::eSkinning ) ) };
+	}
+
+	template< ast::var::Flag FlagT >
+	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+		, shader::VertexSurfaceT< FlagT > const & surface
+		, sdw::UInt pipelineID
+		, sdw::UInt drawID )
+	{
+		auto & writer = *data.getWriter();
+		auto objectIdsData = writer.declLocale( "objectIdsData"
+			, data[pipelineID][drawID] );
+		return objectIdsData.x();
+	}
+
+	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+		, sdw::UInt pipelineID
+		, sdw::UInt drawID )
+	{
+		auto & writer = *data.getWriter();
+		auto objectIdsData = writer.declLocale( "objectIdsData"
+			, data[pipelineID][drawID] );
+		return objectIdsData.x();
+	}
 }
 
 #define C3D_ObjectIdsData( writer, binding, set )\
