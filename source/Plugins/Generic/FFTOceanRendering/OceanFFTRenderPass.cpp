@@ -695,10 +695,11 @@ namespace ocean_fft
 					, ( ( in.position.xz() / c3d_oceanData.patchSize ) + c3d_oceanData.blockOffset ) * c3d_oceanData.patchSize );
 				out.vtx.position = vec4( pos.x(), 0.0_f, pos.y(), 1.0_f );
 				out.patchWorldPosition = out.vtx.position.xyz();
-				auto objectIdsData = writer.declLocale( "objectIdsData"
-					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, shader::ObjectsIds::getNodeId( objectIdsData ) );
+					, shader::getNodeId( c3d_objectIdsData
+						, in
+						, pipelineID
+						, customDrawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.material = modelData.getMaterialId( flags.programFlags
@@ -749,10 +750,10 @@ namespace ocean_fft
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< PatchT > out )
 			{
-				auto objectIdsData = writer.declLocale( "objectIdsData"
-					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, shader::ObjectsIds::getNodeId( objectIdsData ) );
+					, shader::getNodeId( c3d_objectIdsData
+						, pipelineID
+						, customDrawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
