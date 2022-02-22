@@ -149,7 +149,7 @@ namespace castor3d
 	*\brief
 	*	L'index de binding des UBOs des passes de rendu.
 	*/
-	enum class PassUboIdx
+	enum class GlobalBuffersIdx
 		: uint32_t
 	{
 		eMatrix,
