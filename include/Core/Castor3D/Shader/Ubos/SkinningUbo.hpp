@@ -14,36 +14,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct SkinningBonesData
-		: public sdw::StructInstance
-	{
-		C3D_API SkinningBonesData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, SkinningBonesData );
-
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	public:
-		C3D_API static castor::String const BufferName;
-
-	public:
-		sdw::IVec4 boneIds0;
-		sdw::IVec4 boneIds1;
-		sdw::Vec4 boneWeights0;
-		sdw::Vec4 boneWeights1;
-	};
-
 	namespace shader
 	{
 		struct SkinningData
 		{
 			std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > transforms;
-			std::unique_ptr< sdw::ArraySsboT< SkinningBonesData > > bones;
 		};
 	}
 
@@ -73,9 +48,7 @@ namespace castor3d
 		 */
 		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer
 			, uint32_t transformsBinding
-			, uint32_t bonesBinding
 			, uint32_t transformsSet
-			, uint32_t bonesSet
 			, ProgramFlags const & flags );
 		/**
 		 *\~english
@@ -97,7 +70,10 @@ namespace castor3d
 			, ProgramFlags const & flags
 			, sdw::Mat4 const & curMtxModel
 			, sdw::UInt const & skinningId
-			, sdw::Int const & vertexIndex );
+			, sdw::UVec4 const & boneIds0
+			, sdw::UVec4 const & boneIds1
+			, sdw::Vec4 const & boneWeights0
+			, sdw::Vec4 const & boneWeights1 );
 		/**
 		 *\~english
 		 *\brief		Computes skinning transformation in vertex shader.
@@ -119,7 +95,10 @@ namespace castor3d
 			, ProgramFlags const & flags
 			, sdw::Mat4 const & curMtxModel
 			, sdw::Int const & instanceIndex
-			, sdw::Int const & vertexIndex )
+			, sdw::UVec4 const & boneIds0
+			, sdw::UVec4 const & boneIds1
+			, sdw::Vec4 const & boneWeights0
+			, sdw::Vec4 const & boneWeights1 )
 		{
 			return computeTransform( data
 				, surface.transform
@@ -127,7 +106,10 @@ namespace castor3d
 				, flags
 				, curMtxModel
 				, instanceIndex
-				, vertexIndex );
+				, boneIds0
+				, boneIds1
+				, boneWeights0
+				, boneWeights1 );
 		}
 		/**@}*/
 

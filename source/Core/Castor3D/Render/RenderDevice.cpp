@@ -451,6 +451,7 @@ namespace castor3d
 
 		bufferPool = castor::makeUnique< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
 		geometryPools = castor::makeUnique< ObjectBufferPool >( *this, cuT( "ModelBuffersPool" ) );
+		skinnedGeometryPools = castor::makeUnique< SkinnedObjectBufferPool >( *this, cuT( "SkinnedModelBuffersPool" ) );
 		uboPools = std::make_shared< UniformBufferPools >( renderSystem, *this );
 	}
 
@@ -458,6 +459,7 @@ namespace castor3d
 	{
 		renderSystem.getEngine()->getGraphResourceHandler().clear( makeContext() );
 		uboPools.reset();
+		skinnedGeometryPools.reset();
 		geometryPools.reset();
 		bufferPool.reset();
 		queueFamilies.clear();

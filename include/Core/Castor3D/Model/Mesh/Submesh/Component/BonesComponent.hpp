@@ -104,31 +104,6 @@ namespace castor3d
 			return m_bones;
 		}
 
-		GpuBufferOffsetT< VertexBoneData > const & getBonesBuffer()const
-		{
-			return m_bonesBuffer;
-		}
-
-		GpuBufferOffsetT< VertexBoneData > & getBonesBuffer()
-		{
-			return m_bonesBuffer;
-		}
-
-		bool hasTransformsBuffer()const
-		{
-			return bool( m_transformsBuffer );
-		}
-
-		ShaderBuffer const & getTransformsBuffer()const
-		{
-			return *m_transformsBuffer;
-		}
-
-		ShaderBuffer & getTransformsBuffer()
-		{
-			return *m_transformsBuffer;
-		}
-
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup( RenderDevice const & device )override;
@@ -139,8 +114,7 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 3u;
 
 	private:
-		GpuBufferOffsetT< VertexBoneData > m_bonesBuffer;
-		ShaderBufferUPtr m_transformsBuffer;
+		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 		VertexBoneDataArray m_bones;
 
 		friend class BinaryWriter< BonesComponent >;

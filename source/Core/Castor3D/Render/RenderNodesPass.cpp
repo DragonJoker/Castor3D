@@ -576,14 +576,14 @@ namespace castor3d
 			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 			{
 				auto & transformsDatas = scene.getAnimatedObjectGroupCache().getSkinningTransformsBuffer();
-				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eSkinningTransformData )
+				auto transformsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				write.bufferInfo.push_back( { transformsDatas.getBuffer()
+				transformsWrite.bufferInfo.push_back( { transformsDatas.getBuffer()
 					, 0u
 					, transformsDatas.getBuffer().getSize() } );
-				descriptorWrites.push_back( write );
+				descriptorWrites.push_back( transformsWrite );
 			}
 
 			doFillAdditionalDescriptor( descriptorWrites
@@ -1081,12 +1081,9 @@ namespace castor3d
 			, GlobalBuffersIdx::eMorphingData
 			, RenderPipeline::ePass
 			, flags.programFlags );
-
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::ePass
-			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -1151,7 +1148,10 @@ namespace castor3d
 					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData
 						, skinningId
-						, in.vertexIndex - in.baseVertex ) );
+						, in.boneIds0
+						, in.boneIds1
+						, in.boneWeights0
+						, in.boneWeights1 ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
 					, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
 				auto prvPosition = writer.declLocale( "prvPosition"

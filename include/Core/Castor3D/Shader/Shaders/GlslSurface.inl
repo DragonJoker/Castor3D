@@ -93,19 +93,28 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstance{ writer, std::move( expr ), enabled }
+		// Base
 		, position{ this->getMember< sdw::Vec4 >( "position", true ) }
 		, normal{ this->getMember< sdw::Vec3 >( "normal", true ) }
 		, tangent{ this->getMember< sdw::Vec3 >( "tangent", true ) }
 		, texture0{ this->getMember< sdw::Vec3 >( "texcoord0", true ) }
-		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
-		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
-		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
-		, textures{ this->getMember< sdw::Int >( "textures", true ) }
-		, material{ this->getMember< sdw::Int >( "material", true ) }
+		// Morphing
 		, position2{ this->getMember< sdw::Vec4 >( "position2", true ) }
 		, normal2{ this->getMember< sdw::Vec3 >( "normal2", true ) }
 		, tangent2{ this->getMember< sdw::Vec3 >( "tangent2", true ) }
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
+		// Instantiation
+		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
+		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
+		, textures{ this->getMember< sdw::Int >( "textures", true ) }
+		, material{ this->getMember< sdw::Int >( "material", true ) }
+		// Morphing
+		, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
+		, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
+		, boneWeights0{ this->getMember< sdw::Vec4 >( "boneWeights0", true ) }
+		, boneWeights1{ this->getMember< sdw::Vec4 >( "boneWeights1", true ) }
+		// Secondary UV
+		, texture1{ this->getMember< sdw::Vec3 >( "texcoord1", true ) }
 	{
 	}
 
@@ -188,6 +197,27 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
 				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+			//@}
+			/**
+			*	Skinning
+			*/
+			//@{
+			result->declMember( "boneIds0", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+			result->declMember( "boneIds1", ast::type::Kind::eVec4U
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+			result->declMember( "boneWeights0", ast::type::Kind::eVec4F
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+			result->declMember( "boneWeights1", ast::type::Kind::eVec4F
+				, ast::type::NotArray
+				, ( checkFlag( programFlags, ProgramFlag::eSkinning ) ? index++ : 0 )
+				, checkFlag( programFlags, ProgramFlag::eSkinning ) );
 			//@}
 			/**
 			*	Secondary UV
