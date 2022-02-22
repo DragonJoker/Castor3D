@@ -281,6 +281,11 @@ namespace castor3d
 						{
 							( *pipelinesBuffer )->y = node->mesh->getId() - 1u;
 						}
+
+						if ( node->skeleton )
+						{
+							( *pipelinesBuffer )->z = node->skeleton->getId() - 1u;
+						}
 					}
 
 					++pipelinesBuffer;

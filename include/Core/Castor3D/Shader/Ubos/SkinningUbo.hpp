@@ -50,7 +50,7 @@ namespace castor3d
 	class SkinningUbo
 	{
 	public:
-		using Configuration = SkinningUboConfiguration;
+		using Configuration = SkinningTransformsConfiguration;
 
 	public:
 		/**
@@ -72,9 +72,10 @@ namespace castor3d
 		 *\return		Les données de skinning.
 		 */
 		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer
-			, uint32_t sboBinding
+			, uint32_t transformsBinding
 			, uint32_t bonesBinding
-			, uint32_t set
+			, uint32_t transformsSet
+			, uint32_t bonesSet
 			, ProgramFlags const & flags );
 		/**
 		 *\~english
@@ -95,7 +96,7 @@ namespace castor3d
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags
 			, sdw::Mat4 const & curMtxModel
-			, sdw::Int const & instanceIndex
+			, sdw::UInt const & skinningId
 			, sdw::Int const & vertexIndex );
 		/**
 		 *\~english

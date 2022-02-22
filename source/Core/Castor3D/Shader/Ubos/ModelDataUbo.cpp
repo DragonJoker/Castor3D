@@ -89,7 +89,7 @@ namespace castor3d::shader
 	sdw::Mat4 ModelIndices::getCurModelMtx( ProgramFlags programFlags
 		, SkinningData const & skinning
 		, sdw::Mat4 const & transform
-		, sdw::Int const & instanceIndex
+		, sdw::UInt const & skinningId
 		, sdw::Int const & vertexIndex )const
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -99,7 +99,7 @@ namespace castor3d::shader
 				, *getWriter()
 				, programFlags
 				, m_curMtxModel
-				, instanceIndex
+				, skinningId
 				, vertexIndex );
 		}
 
@@ -113,7 +113,7 @@ namespace castor3d::shader
 
 	sdw::Mat4 ModelIndices::getCurModelMtx( ProgramFlags programFlags
 		, SkinningData const & skinning
-		, sdw::Int const & instanceIndex
+		, sdw::UInt const & skinningId
 		, sdw::Int const & vertexIndex )const
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
@@ -123,7 +123,7 @@ namespace castor3d::shader
 				, *getWriter()
 				, programFlags
 				, m_curMtxModel
-				, instanceIndex
+				, skinningId
 				, vertexIndex );
 		}
 

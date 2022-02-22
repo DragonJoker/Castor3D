@@ -54,7 +54,7 @@ namespace castor3d
 		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
 		 *\param[out]	variable	Reçoit les transformations.
 		 */
-		C3D_API void fillShader( SkinningUboConfiguration * variable )const;
+		C3D_API void fillShader( SkinningTransformsConfiguration * variable )const;
 		/**
 		 *\~english
 		 *\brief		Fills a buffer with this object's skeleton transforms.
@@ -68,62 +68,35 @@ namespace castor3d
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & elapsed )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
-		 */
-		C3D_API bool isPlayingAnimation()const override
+
+		bool isPlayingAnimation()const override
 		{
 			return !m_playingAnimations.empty();
 		}
-		/**
-		 *\~english
-		 *\return		The skeleton.
-		 *\~french
-		 *\return		Le squelette.
-		 */
-		Skeleton const & getSkeleton()const
+
+		Skeleton & getSkeleton()const
 		{
 			return m_skeleton;
 		}
-		/**
-		 *\~english
-		 *\return		The mesh.
-		 *\~french
-		 *\return		Le maillage.
-		 */
-		Mesh const & getMesh()const
+
+		Mesh & getMesh()const
 		{
 			return m_mesh;
 		}
-		/**
-		 *\~english
-		 *\return		The mesh.
-		 *\~french
-		 *\return		Le maillage.
-		 */
-		Mesh & getMesh()
-		{
-			return m_mesh;
-		}
-		/**
-		 *\~english
-		 *\return		The geometry instantiating the mesh.
-		 *\~french
-		 *\return		La géométrie instanciant le maillage.
-		 */
-		Geometry const & getGeometry()const
+
+		Geometry & getGeometry()const
 		{
 			return m_geometry;
 		}
-		/**
-		 *\~english
-		 *\return		The geometry instantiating the mesh.
-		 *\~french
-		 *\return		La géométrie instanciant le maillage.
-		 */
-		Geometry & getGeometry()
+
+		uint32_t getId()const
 		{
-			return m_geometry;
+			return m_id;
+		}
+
+		void setId( uint32_t id )
+		{
+			m_id = id;
 		}
 
 	private:
@@ -133,18 +106,11 @@ namespace castor3d
 		void doClearAnimations()override;
 
 	protected:
-		//!\~english	The skeleton affected by the animations.
-		//!\~french		Le squelette affecté par les animations.
 		Skeleton & m_skeleton;
-		//!\~english	The mesh using the skeleton.
-		//!\~french		Le maillage utilisant le squelette.
 		Mesh & m_mesh;
-		//!\~english	The geometry instantiating the mesh.
-		//!\~french		La géométrie instanciant le maillage.
 		Geometry & m_geometry;
-		//!\~english	Currently playing animations.
-		//!\~french		Les animations en cours de lecture.
 		SkeletonAnimationInstanceArray m_playingAnimations;
+		uint32_t m_id{};
 	};
 }
 

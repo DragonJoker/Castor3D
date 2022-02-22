@@ -36,7 +36,6 @@ namespace castor
 		{
 			castor3d::AnimatedObjectGroup const & group;
 			castor3d::AnimatedSkeleton const & skeleton;
-			castor3d::GpuBufferOffsetT< castor3d::SkinningUboConfiguration > skinningSsbo;
 		};
 		struct MeshPoolsEntry
 		{
@@ -134,6 +133,11 @@ namespace castor
 			return *m_morphingData;
 		}
 
+		ashes::Buffer< castor3d::SkinningTransformsConfiguration > const & getSkinningTransformsBuffer()const
+		{
+			return *m_skinningTransformsData;
+		}
+
 	private:
 		using ElementCacheT::clear;
 
@@ -161,6 +165,7 @@ namespace castor
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
 		ashes::BufferPtr< castor3d::MorphingBufferConfiguration > m_morphingData;
+		ashes::BufferPtr< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;
 	};
 }
 

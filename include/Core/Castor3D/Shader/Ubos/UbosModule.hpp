@@ -450,7 +450,7 @@ namespace castor3d
 	*\brief
 	*	Données de skinning.
 	*/
-	struct SkinningUboConfiguration
+	struct SkinningTransformsConfiguration
 	{
 		castor::Matrix4x4f bonesMatrix[400];
 	};

@@ -364,8 +364,9 @@ namespace castor3d
 			, flags.programFlags );
 
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinningSsbo )
+			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, uint32_t( NodeUboIdx::eSkinningBones )
+			, RenderPipeline::ePass
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
@@ -395,6 +396,9 @@ namespace castor3d
 				auto morphingId = writer.declLocale( "morphingId"
 					, shader::ObjectsIds::getMorphingId( objectIdsData )
 					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+				auto skinningId = writer.declLocale( "skinningId"
+					, shader::ObjectsIds::getSkinningId( objectIdsData )
+					, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.textures0 = modelData.getTextures0( flags.programFlags
@@ -423,7 +427,7 @@ namespace castor3d
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData
-						, in.instanceIndex - in.baseInstance
+						, skinningId
 						, in.vertexIndex - in.baseVertex ) );
 
 				out.vtx.position = ( modelMtx * curPosition );
