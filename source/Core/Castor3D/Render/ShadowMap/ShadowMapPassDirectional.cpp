@@ -25,14 +25,13 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslModelData.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelIndexUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapDirectionalUbo.hpp"
@@ -216,27 +215,32 @@ namespace castor3d
 			, index++
 			, RenderPipeline::ePass );
 #endif
+		C3D_ModelsData( writer
+			, PassUboIdx::eModelsData
+			, RenderPipeline::ePass );
+		C3D_ObjectIdsData( writer
+			, PassUboIdx::eObjectsNodeID
+			, RenderPipeline::ePass );
 
-		C3D_ModelIndices( writer
-			, uint32_t( NodeUboIdx::eModelIndex )
-			, RenderPipeline::eBuffers );
-		shader::ModelDatas c3d_modelData{ writer
-			, uint32_t( NodeUboIdx::eModelData )
-			, RenderPipeline::eBuffers };
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
-		UBO_MORPHING( writer
-			, uint32_t( NodeUboIdx::eMorphing )
+		C3D_Morphing( writer
+			, NodeUboIdx::eMorphing
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 #if C3D_UseTiledDirectionalShadowMap
 		UBO_MODEL_INSTANCES( writer
-			, uint32_t( NodeUboIdx::eModelInstances )
+			, NodeUboIdx::eModelInstances
 			, RenderPipeline::eBuffers );
 #endif
+
+		sdw::Pcb pcb{ writer, "DrawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
+		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags.programFlags
@@ -265,23 +269,21 @@ namespace castor3d
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
-				out.textures0 = c3d_modelIndex.getTextures0( flags.programFlags
+				auto nodeId = writer.declLocale( "nodeId"
+					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[nodeId] );
+				out.textures0 = modelData.getTextures0( flags.programFlags
 					, in.textures0 );
-				out.textures1 = c3d_modelIndex.getTextures1( flags.programFlags
+				out.textures1 = modelData.getTextures1( flags.programFlags
 					, in.textures1 );
-				out.textures = c3d_modelIndex.getTextures( flags.programFlags
+				out.textures = modelData.getTextures( flags.programFlags
 					, in.textures );
-				out.material = c3d_modelIndex.getMaterialId( flags.programFlags
+				out.material = modelData.getMaterialId( flags.programFlags
 					, in.material );
-				out.nodeId = c3d_modelIndex.getNodeId( flags.programFlags
-					, in.nodeId );
-				out.skinningId = c3d_modelIndex.getNodeId( flags.programFlags
-					, in.skinningId );
-				out.drawId = in.drawID;
+				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelData[writer.cast< sdw::UInt >( out.nodeId )] );
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData

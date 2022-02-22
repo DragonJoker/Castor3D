@@ -1483,14 +1483,12 @@ source_group( "Source Files\\Shader" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/LightBuffer.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/ModelDataBuffer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/PassBuffer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/TextureAnimationBuffer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/ShaderBuffers/TextureConfigurationBuffer.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/LightBuffer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/ModelDataBuffer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/PassBuffer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/ShaderBuffersModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/ShaderBuffers/TextureAnimationBuffer.hpp
@@ -1514,7 +1512,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslLighting.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslMaterial.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslModelData.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputComponents.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslReflection.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslShadow.cpp
@@ -1531,7 +1528,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslLight.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslLighting.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslMaterial.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslModelData.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputComponents.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslReflection.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslShadow.hpp
@@ -1563,9 +1559,8 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LpvGridConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LpvLightConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/MatrixUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelDataUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelInstancesUbo.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelIndexUbo.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/MorphingUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/OverlayUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/PickingUbo.cpp
@@ -1585,9 +1580,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LpvGridConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LpvLightConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/MatrixUbo.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelDataUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelInstancesUbo.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelIndexUbo.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/MorphingUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/OverlayUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/PickingUbo.hpp

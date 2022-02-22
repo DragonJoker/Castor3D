@@ -61,7 +61,7 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_GPINFO( writer, uint32_t( IndirectLightingPass::eGpInfo ), 0u );
-			UBO_SCENE( writer, uint32_t( IndirectLightingPass::eScene ), 0u );
+			C3D_Scene( writer, uint32_t( IndirectLightingPass::eScene ), 0u );
 			shader::GlobalIllumination indirect{ writer, utils, true };
 			uint32_t vctIndex = uint32_t( IndirectLightingPass::eVctStart );
 			uint32_t lpvIndex = uint32_t( IndirectLightingPass::eLpvStart );

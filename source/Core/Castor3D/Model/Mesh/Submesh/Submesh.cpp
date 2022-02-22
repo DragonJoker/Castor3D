@@ -151,7 +151,7 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			if ( !m_bufferOffset
-				|| m_points.size() != m_bufferOffset.getVertexCount() )
+				|| m_points.size() != m_bufferOffset.getVertexCount< InterleavedVertex >() )
 			{
 				VkDeviceSize indexCount = 0u;
 
@@ -305,7 +305,7 @@ namespace castor3d
 	uint32_t Submesh::getPointsCount()const
 	{
 		return std::max< uint32_t >( uint32_t( m_points.size() )
-			, ( m_bufferOffset ? uint32_t( m_bufferOffset.getVertexCount() ) : 0u ) );
+			, ( m_bufferOffset ? uint32_t( m_bufferOffset.getVertexCount< InterleavedVertex >() ) : 0u ) );
 	}
 
 	int Submesh::isInMyPoints( castor::Point3f const & vertex
@@ -491,7 +491,7 @@ namespace castor3d
 			auto & renderSystem = *getOwner()->getOwner()->getRenderSystem();
 			auto & device = renderSystem.getRenderDevice();
 			auto offset = m_bufferOffset.getVertexOffset();
-			auto mappedSize = ashes::getAlignedSize( std::min( size, m_bufferOffset.getVertexCount() ) * sizeof( InterleavedVertex )
+			auto mappedSize = ashes::getAlignedSize( std::min( size, m_bufferOffset.getVertexCount< InterleavedVertex >() ) * sizeof( InterleavedVertex )
 				, renderSystem.getValue( GpuMin::eBufferMapSize ) );
 			ashes::StagingBuffer staging{ *device, 0u, mappedSize };
 			auto data = device.graphicsData();

@@ -87,8 +87,8 @@ namespace castor3d
 #define UBO_RSM_CONFIG( writer, binding, set )\
 	sdw::Ubo rsmConfig{ writer\
 		, castor3d::RsmConfigUbo::BufferRsmConfig\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_rsmConfigData = rsmConfig.declMember< castor3d::shader::RsmConfigData >( castor3d::RsmConfigUbo::RsmConfigData );\

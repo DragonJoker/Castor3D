@@ -86,8 +86,8 @@ namespace castor3d
 #define UBO_MODEL_INSTANCES( writer, binding, set )\
 	sdw::Ubo modelInstances{ writer\
 		, castor3d::ModelInstancesUbo::BufferModelInstances\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
 	auto c3d_modelInstancesData = modelInstances.declMember< castor3d::shader::ModelInstancesData >( castor3d::ModelInstancesUbo::ModelInstancesData );\

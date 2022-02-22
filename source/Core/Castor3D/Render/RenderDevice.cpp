@@ -631,6 +631,16 @@ namespace castor3d
 #endif
 	}
 
+	uint32_t RenderDevice::getMaxBindlessStorage()const
+	{
+#if VK_EXT_descriptor_indexing
+		static constexpr uint32_t MaxBindlessResources = 16536u;
+		return std::min( MaxBindlessResources, m_descriptorIndexingProperties.maxDescriptorSetUpdateAfterBindStorageBuffers );
+#else
+		return 0u;
+#endif
+	}
+
 	bool RenderDevice::hasBindless()const
 	{
 #if VK_EXT_descriptor_indexing

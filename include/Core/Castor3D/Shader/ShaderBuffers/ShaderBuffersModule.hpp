@@ -27,15 +27,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	ShaderBuffer holding the model data.
-	*\~french
-	*\brief
-	*	ShaderBuffer contenant les données des modèles.
-	*/
-	class ModelDataBuffer;
-	/**
-	*\~english
-	*\brief
 	*	ShaderBuffer holding the Passes data.
 	*\~french
 	*\brief
@@ -60,15 +51,6 @@ namespace castor3d
 	*	ShaderBuffer contenant les données des TextureAnimation.
 	*/
 	class TextureAnimationBuffer;
-	/**
-	*\~english
-	*\brief
-	*	ShaderBuffer holding the models data.
-	*\~french
-	*\brief
-	*	ShaderBuffer contenant les données des modèles.
-	*/
-	class ModelDataBuffer;
 
 	struct GpuDataBufferOffset;
 	using GpuDataBufferOffsetPtr = std::unique_ptr< GpuDataBufferOffset >;
@@ -79,7 +61,6 @@ namespace castor3d
 
 
 	CU_DeclareCUSmartPtr( castor3d, LightBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ModelDataBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PassBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );

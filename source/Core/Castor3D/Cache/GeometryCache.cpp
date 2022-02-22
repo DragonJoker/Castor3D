@@ -15,7 +15,6 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Shader/ShaderBuffers/ModelDataBuffer.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -77,30 +76,30 @@ namespace castor3d
 			, MovableAttacherT< GeometryCache >{}
 			, MovableDetacherT< GeometryCache >{} }
 		, m_device{ scene.getEngine()->getRenderSystem()->getRenderDevice() }
-		, m_modelDataBuffer{ castor::makeUnique< ModelDataBuffer >( *m_device.renderSystem.getEngine()
-			, m_device
-			, ( m_device.hasBindless()
-				? m_device.getMaxBindlessSampled()
-				: shader::MaxModelDataCount ) ) }
+		, m_nodesData{ makeBuffer< ModelBufferConfiguration >( m_device
+			, 250'000ull
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "GeometryNodesData" ) }
 	{
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::initialise( RenderDevice const & device )
 	{
-		if ( !m_modelDataBuffer )
+		if ( !m_nodesData )
 		{
-			m_modelDataBuffer = castor::makeUnique< ModelDataBuffer >( *device.renderSystem.getEngine()
-				, device
-				, ( device.hasBindless()
-					? device.getMaxBindlessSampled()
-					: shader::MaxModelDataCount ) );
+			m_nodesData = makeBuffer< ModelBufferConfiguration >( m_device
+				, 250'000ull
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "GeometryNodesData" );
 		}
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::cleanup()
 	{
 		ObjectCacheBaseT< Geometry, castor::String, GeometryCacheTraits >::cleanup();
-		m_modelDataBuffer.reset();
+		m_nodesData.reset();
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::registerPass( RenderNodesPass const & renderPass )
@@ -110,9 +109,6 @@ namespace castor3d
 
 		if ( iresult.second )
 		{
-			auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
-			auto & uboPools = *device.uboPools;
-
 			for ( auto entry : m_baseEntries )
 			{
 				entry.second.hash = hash( entry.second.geometry
@@ -121,11 +117,6 @@ namespace castor3d
 					, instanceMult );
 				auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
 				it->second.id = int32_t( m_entries.size() );
-
-				if ( instanceMult )
-				{
-					it->second.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-				}
 			}
 		}
 
@@ -149,8 +140,6 @@ namespace castor3d
 			if ( instIt->second.empty() )
 			{
 				m_instances.erase( instIt );
-				auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
-				auto & uboPools = *device.uboPools;
 
 				for ( auto & entry : m_baseEntries )
 				{
@@ -163,11 +152,6 @@ namespace castor3d
 					{
 						auto entrySave = it->second;
 						m_entries.erase( it );
-
-						if ( entrySave.modelInstancesUbo )
-						{
-							uboPools.putBuffer( entrySave.modelInstancesUbo );
-						}
 					}
 				}
 
@@ -198,62 +182,24 @@ namespace castor3d
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::update( CpuUpdater & updater )
 	{
+		auto lock( castor::makeUniqueLock( *this ) );
+		auto nodesBuffer = m_nodesData->lock( 0u, ashes::WholeSize, 0u );
+
 		for ( auto & pair : m_baseEntries )
 		{
 			auto & entry = pair.second;
 
-			if ( entry.geometry.getParent()
-				&& bool( entry.modelIndexUbo ) )
+			if ( entry.geometry.getParent() )
 			{
-				auto & modelIndex = entry.modelIndexUbo.getData();
-				modelIndex.nodeId = entry.id;
-				modelIndex.materialId = int( entry.pass.getId() );
-				uint32_t index = 0u;
-
-				for ( auto & unit : entry.pass )
-				{
-					if ( index < 4 )
-					{
-						modelIndex.textures0[index] = unit->getId();
-					}
-					else if ( index < 8 )
-					{
-						modelIndex.textures1[index - 4] = unit->getId();
-					}
-
-					++index;
-				}
-
-				while ( index < 8u )
-				{
-					if ( index < 4 )
-					{
-						modelIndex.textures0[index] = 0u;
-					}
-					else
-					{
-						modelIndex.textures1[index - 4] = 0u;
-					}
-
-					++index;
-				}
-
-				modelIndex.textures = int32_t( std::min( 8u, entry.pass.getTextureUnitsCount() ) );
-
-				auto & modelData = entry.modelDataUbo->getData();
-				modelData.shadowEnvMapIndex->x = entry.geometry.isShadowReceiver();
-
-				if ( entry.pass.hasEnvironmentMapping() )
-				{
-					modelData.shadowEnvMapIndex->y = int( getScene()->getEnvironmentMapIndex( *entry.geometry.getParent() ) + 1u );
-				}
-
-				modelData.prvModel = modelData.curModel;
-				modelData.curModel = entry.geometry.getParent()->getDerivedTransformationMatrix();
-				auto normal = castor::Matrix3x3f{ modelData.curModel };
-				modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
+				fillEntry( entry.pass
+					, *entry.geometry.getParent()
+					, entry.geometry
+					, nodesBuffer[entry.id - 1u] );
 			}
 		}
+
+		m_nodesData->flush( 0u, ashes::WholeSize );
+		m_nodesData->unlock();
 	}
 
 	GeometryCache::PoolsEntry ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::getUbos( Geometry const & geometry
@@ -269,21 +215,6 @@ namespace castor3d
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::clear( RenderDevice const & device )
 	{
 		ElementObjectCacheT::clear();
-		auto & uboPools = *device.uboPools;
-
-		for ( auto & entry : m_entries )
-		{
-			if ( entry.second.modelInstancesUbo )
-			{
-				uboPools.putBuffer( entry.second.modelInstancesUbo );
-			}
-		}
-
-		for ( auto & entry : m_baseEntries )
-		{
-			uboPools.putBuffer( entry.second.modelIndexUbo );
-		}
-
 		m_entries.clear();
 		m_baseEntries.clear();
 		m_instances.clear();
@@ -296,7 +227,7 @@ namespace castor3d
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::doCreateEntry( RenderDevice const & device
-		, Geometry const & geometry
+		, Geometry & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
@@ -310,22 +241,13 @@ namespace castor3d
 
 		if ( iresult.second )
 		{
-			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
-			baseEntry.id = int32_t( m_baseEntries.size( ));
-			baseEntry.modelIndexUbo = uboPools.getBuffer< ModelIndexUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			baseEntry.modelDataUbo = &m_modelDataBuffer->getBuffer();
-			CU_Ensure( baseEntry.id - 1u == baseEntry.modelDataUbo->getOffset() / m_modelDataBuffer->getElemAlign() );
+			baseEntry.id = int32_t( m_baseEntries.size() );
+			geometry.setId( submesh, uint32_t( baseEntry.id ) );
 
 			for ( auto instanceMult : m_instances )
 			{
 				auto entry = baseEntry;
-
-				if ( instanceMult.first > 1 )
-				{
-					entry.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-				}
-
 				entry.hash = hash( geometry, submesh, pass, instanceMult.first );
 				m_entries.emplace( entry.hash, entry );
 			}
@@ -333,11 +255,10 @@ namespace castor3d
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::doRemoveEntry( RenderDevice const & device
-		, Geometry const & geometry
+		, Geometry & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		auto & uboPools = *device.uboPools;
 		auto baseHash = hash( geometry, submesh, pass );
 
 		for ( auto instanceMult : m_instances )
@@ -348,22 +269,16 @@ namespace castor3d
 			{
 				auto entry = it->second;
 				m_entries.erase( it );
-
-				if ( entry.modelInstancesUbo )
-				{
-					uboPools.putBuffer( entry.modelInstancesUbo );
-				}
 			}
 		}
 
+		geometry.setId( submesh, 0u );
 		auto it = m_baseEntries.find( baseHash );
 
 		if ( it != m_baseEntries.end() )
 		{
 			auto entry = it->second;
 			m_baseEntries.erase( it );
-			m_modelDataBuffer->putBuffer( *entry.modelDataUbo );
-			uboPools.putBuffer( entry.modelIndexUbo );
 		}
 	}
 
@@ -371,7 +286,7 @@ namespace castor3d
 	{
 		auto & device = getScene()->getEngine()->getRenderSystem()->getRenderDevice();
 		m_connections.emplace( &geometry
-			, geometry.onMaterialChanged.connect( [this, &device]( Geometry const & pgeometry
+			, geometry.onMaterialChanged.connect( [this, &device]( Geometry & pgeometry
 					, Submesh const & submesh
 					, MaterialRPtr oldMaterial
 					, MaterialRPtr newMaterial )

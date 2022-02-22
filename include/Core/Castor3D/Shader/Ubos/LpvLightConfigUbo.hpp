@@ -99,8 +99,8 @@ namespace castor3d
 #define UBO_LPVLIGHTCONFIG( writer, binding, set )\
 	sdw::Ubo lpvLightConfig{ writer\
 		, castor3d::LpvLightConfigUbo::LpvLightConfig\
-		, binding\
-		, set\
+		, uint32_t( binding )\
+		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_lpvLightData = lpvLightConfig.declMember< castor3d::shader::LpvLightData >( castor3d::LpvLightConfigUbo::LpvLightData );\
 	lpvLightConfig.end()

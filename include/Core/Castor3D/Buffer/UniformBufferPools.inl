@@ -19,29 +19,13 @@ namespace castor3d
 		{
 			return PoolType::eMatrix;
 		}
-		else if constexpr ( std::is_same_v< DataT, ModelUboConfiguration > )
-		{
-			return PoolType::eModel;
-		}
 		else if constexpr ( std::is_same_v< DataT, ModelInstancesUboConfiguration > )
 		{
 			return PoolType::eModelInstances;
 		}
-		else if constexpr ( std::is_same_v< DataT, BillboardUboConfiguration > )
-		{
-			return PoolType::eBillboard;
-		}
-		else if constexpr ( std::is_same_v< DataT, SkinningUboConfiguration > )
-		{
-			return PoolType::eSkinning;
-		}
 		else if constexpr ( std::is_same_v< DataT, MorphingUboConfiguration > )
 		{
 			return PoolType::eMorphing;
-		}
-		else if constexpr ( std::is_same_v< DataT, PickingUboConfiguration > )
-		{
-			return PoolType::ePicking;
 		}
 		else
 		{

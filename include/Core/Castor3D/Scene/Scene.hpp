@@ -225,6 +225,10 @@ namespace castor3d
 			, GlobalIlluminationType giType )const;
 		C3D_API crg::SemaphoreWaitArray getRenderTargetsSemaphores()const;
 		C3D_API uint32_t getLpvGridSize()const;
+		C3D_API bool hasBindless()const;
+		C3D_API ashes::DescriptorSetLayout * getBindlessTexDescriptorLayout()const;
+		C3D_API ashes::DescriptorPool * getBindlessTexDescriptorPool()const;
+		C3D_API ashes::DescriptorSet * getBindlessTexDescriptorSet()const;
 
 		castor::BoundingBox const & getBoundingBox()const
 		{

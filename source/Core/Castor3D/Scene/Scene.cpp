@@ -6,10 +6,12 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
@@ -292,10 +294,11 @@ namespace castor3d
 
 	void Scene::initialise()
 	{
-		m_billboardCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
-		m_geometryCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
-		m_lightCache->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
-		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
+		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
+		m_billboardCache->initialise( device );
+		m_geometryCache->initialise( device );
+		m_lightCache->initialise( device );
+		m_background->initialise( device );
 		doUpdateLightsDependent();
 		doUpdateBoundingBox();
 		log::info << "Initialised scene [" << getName() << "], AABB: " << m_boundingBox << std::endl;
@@ -610,6 +613,26 @@ namespace castor3d
 	uint32_t Scene::getLpvGridSize()const
 	{
 		return getEngine()->getLpvGridSize();
+	}
+
+	bool Scene::hasBindless()const
+	{
+		return getEngine()->getTextureUnitCache().hasBindless();
+	}
+
+	ashes::DescriptorSetLayout * Scene::getBindlessTexDescriptorLayout()const
+	{
+		return getEngine()->getTextureUnitCache().getDescriptorLayout();
+	}
+
+	ashes::DescriptorPool * Scene::getBindlessTexDescriptorPool()const
+	{
+		return getEngine()->getTextureUnitCache().getDescriptorPool();
+	}
+
+	ashes::DescriptorSet * Scene::getBindlessTexDescriptorSet()const
+	{
+		return getEngine()->getTextureUnitCache().getDescriptorSet();
 	}
 
 	void Scene::setDirectionalShadowCascades( uint32_t value )

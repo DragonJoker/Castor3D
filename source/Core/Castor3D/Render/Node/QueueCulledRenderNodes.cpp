@@ -9,6 +9,7 @@
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
@@ -24,6 +25,7 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
@@ -31,9 +33,13 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
+
+#pragma warning( disable:4189 )
+#pragma warning( disable:5245 )
 
 CU_ImplementCUSmartPtr( castor3d, QueueCulledRenderNodes )
 
@@ -44,53 +50,82 @@ namespace castor3d
 {
 	namespace
 	{
-		uint32_t getInstanceMult( Submesh const & data
-			, uint32_t instanceMult )
-		{
-			return instanceMult;
-		}
+		//*****************************************************************************************
 
-		uint32_t getInstanceMult( BillboardBase const & data
-			, uint32_t instanceMult )
+		template< typename NodeMapT
+			, typename OnPipelineFuncT
+			, typename OnSubmeshFuncT >
+			void doTraverseNodes( NodeMapT & nodes
+				, OnPipelineFuncT onPipeline
+				, OnSubmeshFuncT onSubmesh )
 		{
-			return data.getCount();
-		}
+			for ( auto & itPipelines : nodes )
+			{
+				onPipeline( *itPipelines.first );
 
-		void fillIndirectCommand( SubmeshRenderNode const & node
-			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
-			, VkDrawIndirectCommand *& indirectCommands
-			, uint32_t instanceCount )
-		{
-			if ( node.buffers.bufferOffset.idxBuffer )
-			{
-				indirectIndexedCommands->indexCount = node.buffers.bufferOffset.getIndexCount();
-				indirectIndexedCommands->instanceCount = getInstanceMult( node.data, instanceCount );
-				indirectIndexedCommands->firstIndex = node.buffers.bufferOffset.getFirstIndex();
-				indirectIndexedCommands->vertexOffset = int32_t( node.buffers.bufferOffset.getFirstVertex() );
-				indirectIndexedCommands->firstInstance = 0u;
-				++indirectIndexedCommands;
-			}
-			else
-			{
-				indirectCommands->vertexCount = node.buffers.bufferOffset.getVertexCount();
-				indirectCommands->instanceCount = getInstanceMult( node.data, instanceCount );
-				indirectCommands->firstVertex = node.buffers.bufferOffset.getFirstVertex();
-				indirectCommands->firstInstance = 0u;
-				++indirectCommands;
+				for ( auto & itPass : itPipelines.second )
+				{
+					for ( auto & itSubmeshes : itPass.second )
+					{
+						onSubmesh( *itPipelines.first
+							, *itPass.first
+							, *itSubmeshes.first
+							, itSubmeshes.second );
+					}
+				}
 			}
 		}
 
-		void fillIndirectCommand( BillboardRenderNode const & node
-			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
-			, VkDrawIndirectCommand *& indirectCommands
-			, uint32_t instanceCount )
+		template< typename NodeMapT
+			, typename OnSubmeshFuncT >
+			void doTraverseNodes( NodeMapT & nodes
+				, OnSubmeshFuncT onSubmesh )
 		{
-			indirectCommands->vertexCount = uint32_t( node.buffers.bufferOffset.vtxChunk.size / sizeof( BillboardBase::Vertex ) );
-			indirectCommands->instanceCount = getInstanceMult( node.data, instanceCount );
-			indirectCommands->firstVertex = node.buffers.bufferOffset.getFirstVertex();
-			indirectCommands->firstInstance = 0u;
-			++indirectCommands;
+			doTraverseNodes( nodes
+				, []( RenderPipeline const & pipeline )
+				{
+				}
+				, onSubmesh );
 		}
+
+		void registerPipelineNodes( RenderPipeline const & pipeline
+			, std::vector< RenderPipeline const * > & cont )
+		{
+			auto it = std::find_if( cont.begin()
+				, cont.end()
+				, [&pipeline]( RenderPipeline const * lookup )
+				{
+					return lookup == &pipeline;
+				} );
+
+			if ( it == cont.end() )
+			{
+				cont.emplace_back( &pipeline );
+			}
+		}
+
+		uint32_t getPipelineNodesIndex( RenderPipeline const & pipeline
+			, std::vector< RenderPipeline const * > const & cont )
+		{
+			auto it = std::find_if( cont.begin()
+				, cont.end()
+				, [&pipeline]( RenderPipeline const * lookup )
+				{
+					return lookup == &pipeline;
+				} );
+			CU_Require( it != cont.end() );
+			return uint32_t( std::distance( cont.begin(), it ) );
+		}
+
+		PipelineNodes & getPipelineNodes( RenderPipeline const & pipeline
+			, std::vector< RenderPipeline const * > const & cont
+			, PipelineNodes * nodes )
+		{
+			auto index = getPipelineNodesIndex( pipeline, cont );
+			return nodes[index];
+		}
+
+		//*****************************************************************************************
 
 		template< typename NodeT >
 		void doAddRenderNode( RenderPipeline & pipeline
@@ -102,36 +137,6 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		void doParseRenderNodes( NodeByPipelineMapT< NodeT > & inputNodes
-			, NodePtrByPipelineMapT< NodeT > & outputNodes
-			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes
-			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
-			, VkDrawIndirectCommand *& indirectCommands
-			, uint32_t instanceCount )
-		{
-			for ( auto & pipelines : inputNodes )
-			{
-				for ( auto & node : pipelines.second )
-				{
-					auto it = std::find( culledNodes.objects.begin()
-						, culledNodes.objects.end()
-						, node.first );
-
-					if ( it != culledNodes.objects.end() )
-					{
-						fillIndirectCommand( *node.second
-							, indirectIndexedCommands
-							, indirectCommands
-							, instanceCount );
-						doAddRenderNode( *pipelines.first
-							, node.second
-							, outputNodes );
-					}
-				}
-			}
-		}
-
-		template< typename NodeT >
 		void doAddInstantiatedRenderNode( Pass & pass
 			, RenderPipeline & pipeline
 			, NodeT * node
@@ -140,8 +145,30 @@ namespace castor3d
 		{
 			auto & pipelineMap = nodes.emplace( &pipeline, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
 			auto & passMap = pipelineMap.emplace( &pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
-			auto & obbjectMap = passMap.emplace( &object, NodePtrArrayT< NodeT >{} ).first->second;
-			obbjectMap.emplace_back( node );
+			auto & objectMap = passMap.emplace( &object, NodePtrArrayT< NodeT >{} ).first->second;
+			objectMap.emplace_back( node );
+		}
+
+		template< typename NodeT >
+		void doParseInstantiatedRenderNodes( NodePtrByPipelineMapT< NodeT > & outputNodes
+			, RenderPipeline & pipeline
+			, Pass & pass
+			, NodeMapT< NodeT > & renderNodes
+			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes )
+		{
+			for ( auto & node : renderNodes )
+			{
+				auto it = std::find( culledNodes.objects.begin()
+					, culledNodes.objects.end()
+					, node.first );
+
+				if ( it != culledNodes.objects.end() )
+				{
+					doAddRenderNode( pipeline
+						, node.second
+						, outputNodes );
+				}
+			}
 		}
 
 		template< typename NodeT >
@@ -149,17 +176,8 @@ namespace castor3d
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, NodeMapT< NodeT > & renderNodes
-			, SceneCuller::CulledInstancesPtrT< CulledSubmesh > const & culledNodes
-			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
-			, VkDrawIndirectCommand *& indirectCommands
-			, uint32_t instanceCount )
+			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes )
 		{
-			instanceCount *= uint32_t( renderNodes.size() );
-			fillIndirectCommand( *renderNodes.begin()->second
-				, indirectIndexedCommands
-				, indirectCommands
-				, instanceCount );
-
 			for ( auto & node : renderNodes )
 			{
 				auto it = std::find( culledNodes.objects.begin()
@@ -170,10 +188,109 @@ namespace castor3d
 				{
 					doAddInstantiatedRenderNode( pass
 						, pipeline
-						, node.second, ( *it )->data
+						, node.second
+						, ( *it )->data
 						, outputNodes );
 				}
 			}
+		}
+
+		template< typename NodeT >
+		void doParseRenderNodes( NodeByPipelineMapT< NodeT > & inputNodes
+			, NodePtrByPipelineMapT< NodeT > & outputNodes
+			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes
+			, std::vector< RenderPipeline const * > & registeredPipelines )
+		{
+			for ( auto & pipelines : inputNodes )
+			{
+				registerPipelineNodes( *pipelines.first, registeredPipelines );
+
+				for ( auto & node : pipelines.second )
+				{
+					auto it = std::find( culledNodes.objects.begin()
+						, culledNodes.objects.end()
+						, node.first );
+
+					if ( it != culledNodes.objects.end() )
+					{
+						doAddRenderNode( *pipelines.first
+							, node.second
+							, outputNodes );
+					}
+				}
+			}
+		}
+
+		//*****************************************************************************************
+
+		template< typename NodeT >
+		using NodeVertexT = typename NodeT::VertexType;
+
+		template< typename NodeT >
+		void fillIndirectCommand( NodeT const & node
+			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
+			, VkDrawIndirectCommand *& indirectCommands
+			, uint32_t instanceCount )
+		{
+			using VertexT = NodeVertexT< NodeT >;
+
+			if ( node.buffers.bufferOffset.idxBuffer )
+			{
+				indirectIndexedCommands->indexCount = node.buffers.bufferOffset.getIndexCount();
+				indirectIndexedCommands->instanceCount = node.getInstanceMult( instanceCount );
+				indirectIndexedCommands->firstIndex = node.buffers.bufferOffset.getFirstIndex();
+				indirectIndexedCommands->vertexOffset = int32_t( node.buffers.bufferOffset.getFirstVertex< VertexT >() );
+				indirectIndexedCommands->firstInstance = 0u;
+				++indirectIndexedCommands;
+			}
+			else
+			{
+				indirectCommands->vertexCount = node.buffers.bufferOffset.getVertexCount< VertexT >();
+				indirectCommands->instanceCount = node.getInstanceMult( instanceCount );
+				indirectCommands->firstVertex = node.buffers.bufferOffset.getFirstVertex< VertexT >();
+				indirectCommands->firstInstance = 0u;
+				++indirectCommands;
+			}
+		}
+
+		template< typename NodeT >
+		void doFillRenderNodes( NodePtrByPipelineMapT< NodeT > & renderNodes
+			, std::vector< RenderPipeline const * > const & registeredPipelines
+			, PipelineNodes *& pipelinesNodes
+			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
+			, VkDrawIndirectCommand *& indirectCommands
+			, uint32_t instanceCount )
+		{
+			for ( auto & pipelines : renderNodes )
+			{
+				RenderPipeline const & pipeline = *pipelines.first;
+				auto & pipelineNodes = getPipelineNodes( pipeline, registeredPipelines, pipelinesNodes );
+				auto pipelinesBuffer = pipelineNodes.data();
+
+				for ( auto & node : pipelines.second )
+				{
+					fillIndirectCommand( *node
+						, indirectIndexedCommands
+						, indirectCommands
+						, instanceCount );
+					( *pipelinesBuffer )->x = node->getId() - 1u;
+					++pipelinesBuffer;
+				}
+			}
+		}
+
+		void doFillInstantiatedRenderNodes( NodePtrArrayT< SubmeshRenderNode > & renderNodes
+			, std::vector< RenderPipeline const * > const & registeredPipelines
+			, PipelineNodes *& pipelinesNodes
+			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
+			, VkDrawIndirectCommand *& indirectCommands
+			, uint32_t instanceCount )
+		{
+			instanceCount *= uint32_t( renderNodes.size() );
+			fillIndirectCommand( **renderNodes.begin()
+				, indirectIndexedCommands
+				, indirectCommands
+				, instanceCount );
 		}
 
 		//*****************************************************************************************
@@ -184,7 +301,8 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
-			, uint32_t & index )
+			, uint32_t & index
+			, uint32_t & drawId )
 		{
 			GeometryBuffers const & geometryBuffers = node.buffers;
 
@@ -203,6 +321,7 @@ namespace castor3d
 				commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet(), pipeline.getPipelineLayout() );
 			}
 
+			commandBuffer.pushConstants( pipeline.getPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT, 4u, 4u, &drawId );
 			commandBuffer.bindVertexBuffer( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
 				, geometryBuffers.bufferOffset.getVertexBuffer()
 				, 0u );
@@ -233,9 +352,12 @@ namespace castor3d
 			}
 
 			++index;
+			++drawId;
 		}
 
 		void doBindPipeline( ashes::CommandBuffer const & commandBuffer
+			, RenderNodesPass const & nodesPass
+			, std::vector< RenderPipeline const * > const & registeredPipelines
 			, RenderPipeline const & pipeline
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor )
@@ -254,24 +376,40 @@ namespace castor3d
 
 			if ( pipeline.getRenderSystem().hasFeature( GpuFeature::eBindless ) )
 			{
-				auto ds = pipeline.getRenderSystem().getEngine()->getTextureUnitCache().getDescriptorSet();
-				commandBuffer.bindDescriptorSet( *ds, pipeline.getPipelineLayout() );
+				commandBuffer.bindDescriptorSet( *pipeline.getOwner()->getCuller().getScene().getBindlessTexDescriptorSet()
+					, pipeline.getPipelineLayout() );
+
+				auto pipelineId = getPipelineNodesIndex( pipeline, registeredPipelines );
+				commandBuffer.pushConstants( pipeline.getPipelineLayout()
+					, VK_SHADER_STAGE_VERTEX_BIT
+					, 0u
+					, 4u
+					, &pipelineId );
 			}
 		}
 
 		template< typename NodeT >
 		void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
+			, RenderNodesPass const & nodesPass
+			, std::vector< RenderPipeline const * > const & registeredPipelines
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & index )
 		{
+
 			for ( auto & pipelines : inputNodes )
 			{
 				RenderPipeline & pipeline = *pipelines.first;
-				doBindPipeline( commandBuffer, pipeline, viewport, scissor );
+				doBindPipeline( commandBuffer
+					, nodesPass
+					, registeredPipelines
+					, pipeline
+					, viewport
+					, scissor );
+				uint32_t drawId = 0u;
 
 				for ( auto & node : pipelines.second )
 				{
@@ -280,7 +418,8 @@ namespace castor3d
 						, commandBuffer
 						, indirectIndexedCommands
 						, indirectCommands
-						, index );
+						, index
+						, drawId );
 				}
 			}
 		}
@@ -293,52 +432,22 @@ namespace castor3d
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & index )
 		{
-			doAddGeometryNodeCommands( pipeline
-				, *renderNodes[0]
-				, commandBuffer
-				, indirectIndexedCommands
-				, indirectCommands
-				, index );
-		}
+			uint32_t drawId = 0u;
 
-		template< typename NodeMapT
-			, typename OnPipelineFuncT
-			, typename OnSumbeshFuncT >
-		void doTraverseNodes( NodeMapT & nodes
-			, OnPipelineFuncT onPipeline
-			, OnSumbeshFuncT onSubmesh )
-		{
-			for ( auto & itPipelines : nodes )
+			for ( auto & node : renderNodes )
 			{
-				onPipeline( *itPipelines.first );
-
-				for ( auto & itPass : itPipelines.second )
-				{
-					for ( auto & itSubmeshes : itPass.second )
-					{
-						onSubmesh( *itPipelines.first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.second );
-					}
-				}
+				doAddGeometryNodeCommands( pipeline
+					, *node
+					, commandBuffer
+					, indirectIndexedCommands
+					, indirectCommands
+					, index
+					, drawId );
 			}
 		}
 
-		template< typename NodeMapT
-			, typename OnSumbeshFuncT >
-		void doTraverseNodes( NodeMapT & nodes
-			, OnSumbeshFuncT onSubmesh )
-		{
-			doTraverseNodes( nodes
-				, []( RenderPipeline const & pipeline )
-				{
-				}
-			, onSubmesh );
-		}
+		//*****************************************************************************************
 	}
-
-	//*************************************************************************************************
 
 	QueueCulledRenderNodes::QueueCulledRenderNodes( RenderQueue const & queue )
 		: castor::OwnedBy< RenderQueue const >{ queue }
@@ -352,6 +461,11 @@ namespace castor3d
 			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, queue.getOwner()->getName() + "IndirectBuffer" ) }
+		, m_nodesIds{ makeBuffer< PipelineNodes >( queue.getOwner()->getEngine()->getRenderSystem()->getRenderDevice()
+			, 1'000ull
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, queue.getOwner()->getName() + "PipelinesNodesIDs" ) }
 	{
 	}
 
@@ -361,136 +475,223 @@ namespace castor3d
 		auto & culler = queue.getOwner()->getCuller();
 
 		auto & allNodes = queue.getAllRenderNodes();
-		instancedStaticNodes.backCulled.clear();
-		instancedStaticNodes.frontCulled.clear();
 		staticNodes.backCulled.clear();
 		staticNodes.frontCulled.clear();
 		skinnedNodes.backCulled.clear();
 		skinnedNodes.frontCulled.clear();
-		instancedSkinnedNodes.backCulled.clear();
-		instancedSkinnedNodes.frontCulled.clear();
 		morphingNodes.backCulled.clear();
 		morphingNodes.frontCulled.clear();
 		billboardNodes.backCulled.clear();
 		billboardNodes.frontCulled.clear();
-		auto indexedBuffer = m_indirectIndexedCommands->lock( 0u, ashes::WholeSize, 0u );
-		auto buffer = m_indirectCommands->lock( 0u, ashes::WholeSize, 0u );
+		m_pipelinesNodes.clear();
 		auto & rp = *queue.getOwner();
-		auto instanceCount = rp.getInstanceMult();
 
 		doTraverseNodes( allNodes.instancedStaticNodes.frontCulled
-			, [this, &queue, &culler, &indexedBuffer, &buffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				doParseInstantiatedRenderNodes( instancedStaticNodes.frontCulled
+				registerPipelineNodes( pipeline, m_pipelinesNodes );
+				doParseInstantiatedRenderNodes( staticNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() )
-					, indexedBuffer
-					, buffer
-					, instanceCount );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 		doTraverseNodes( allNodes.instancedStaticNodes.backCulled
-			, [this, &queue, &culler, &indexedBuffer, &buffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				doParseInstantiatedRenderNodes( instancedStaticNodes.backCulled
+				registerPipelineNodes( pipeline, m_pipelinesNodes );
+				doParseInstantiatedRenderNodes( staticNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() )
-					, indexedBuffer
-					, buffer
-					, instanceCount );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 		doTraverseNodes( allNodes.instancedSkinnedNodes.frontCulled
-			, [this, &queue, &culler, &indexedBuffer, &buffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				doParseInstantiatedRenderNodes( instancedSkinnedNodes.frontCulled
+				registerPipelineNodes( pipeline, m_pipelinesNodes );
+				doParseInstantiatedRenderNodes( skinnedNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() )
-					, indexedBuffer
-					, buffer
-					, instanceCount );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 		doTraverseNodes( allNodes.instancedSkinnedNodes.backCulled
-			, [this, &queue, &culler, &indexedBuffer, &buffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				doParseInstantiatedRenderNodes( instancedSkinnedNodes.backCulled
+				registerPipelineNodes( pipeline, m_pipelinesNodes );
+				doParseInstantiatedRenderNodes( skinnedNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() )
-					, indexedBuffer
-					, buffer
-					, instanceCount );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 
 		doParseRenderNodes( allNodes.staticNodes.frontCulled
 			, staticNodes.frontCulled
 			, culler.getCulledSubmeshes( queue.getMode() )
-			, indexedBuffer
-			, buffer
-			, instanceCount );
+			, m_pipelinesNodes );
 		doParseRenderNodes( allNodes.staticNodes.backCulled
 			, staticNodes.backCulled
 			, culler.getCulledSubmeshes( queue.getMode() )
-			, indexedBuffer
-			, buffer
-			, instanceCount );
+			, m_pipelinesNodes );
 
 		doParseRenderNodes( allNodes.skinnedNodes.frontCulled
 			, skinnedNodes.frontCulled
 			, culler.getCulledSubmeshes( queue.getMode() )
-			, indexedBuffer
-			, buffer
-			, instanceCount );
+			, m_pipelinesNodes );
 		doParseRenderNodes( allNodes.skinnedNodes.backCulled
 			, skinnedNodes.backCulled
 			, culler.getCulledSubmeshes( queue.getMode() )
-			, indexedBuffer
-			, buffer
-			, instanceCount );
+			, m_pipelinesNodes );
 
 		doParseRenderNodes( allNodes.morphingNodes.frontCulled
 			, morphingNodes.frontCulled
 			, culler.getCulledSubmeshes( queue.getMode() )
-			, indexedBuffer
-			, buffer
-			, instanceCount );
+			, m_pipelinesNodes );
 		doParseRenderNodes( allNodes.morphingNodes.backCulled
 			, morphingNodes.backCulled
 			, culler.getCulledSubmeshes( queue.getMode() )
-			, indexedBuffer
-			, buffer
-			, instanceCount );
+			, m_pipelinesNodes );
 
 		doParseRenderNodes( allNodes.billboardNodes.frontCulled
 			, billboardNodes.frontCulled
 			, culler.getCulledBillboards( queue.getMode() )
-			, indexedBuffer
-			, buffer
-			, instanceCount );
+			, m_pipelinesNodes );
 		doParseRenderNodes( allNodes.billboardNodes.backCulled
 			, billboardNodes.backCulled
 			, culler.getCulledBillboards( queue.getMode() )
-			, indexedBuffer
-			, buffer
+			, m_pipelinesNodes );
+	}
+
+	void QueueCulledRenderNodes::fillIndirect()
+	{
+		auto & queue = *getOwner();
+		auto & rp = *queue.getOwner();
+		auto instanceCount = rp.getInstanceMult();
+		auto indIndexedBuffer = m_indirectIndexedCommands->lock( 0u, ashes::WholeSize, 0u );
+		auto indBuffer = m_indirectCommands->lock( 0u, ashes::WholeSize, 0u );
+		auto nodesIdsBuffer = m_nodesIds->lock( 0u, ashes::WholeSize, 0u );
+
+		doTraverseNodes( instancedStaticNodes.frontCulled
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, SubmeshRenderNodePtrArray & nodes )
+			{
+				doFillInstantiatedRenderNodes( nodes
+					, m_pipelinesNodes
+					, nodesIdsBuffer
+					, indIndexedBuffer
+					, indBuffer
+					, instanceCount );
+			} );
+		doTraverseNodes( instancedStaticNodes.backCulled
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, SubmeshRenderNodePtrArray & nodes )
+			{
+				doFillInstantiatedRenderNodes( nodes
+					, m_pipelinesNodes
+					, nodesIdsBuffer
+					, indIndexedBuffer
+					, indBuffer
+					, instanceCount );
+			} );
+		doTraverseNodes( instancedSkinnedNodes.frontCulled
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, SubmeshRenderNodePtrArray & nodes )
+			{
+				doFillInstantiatedRenderNodes( nodes
+					, m_pipelinesNodes
+					, nodesIdsBuffer
+					, indIndexedBuffer
+					, indBuffer
+					, instanceCount );
+			} );
+		doTraverseNodes( instancedSkinnedNodes.backCulled
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+				, Pass & pass
+				, Submesh & submesh
+				, SubmeshRenderNodePtrArray & nodes )
+			{
+				doFillInstantiatedRenderNodes( nodes
+					, m_pipelinesNodes
+					, nodesIdsBuffer
+					, indIndexedBuffer
+					, indBuffer
+					, instanceCount );
+			} );
+
+		doFillRenderNodes( staticNodes.frontCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
+			, instanceCount );
+		doFillRenderNodes( staticNodes.backCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
 			, instanceCount );
 
+		doFillRenderNodes( skinnedNodes.frontCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
+			, instanceCount );
+		doFillRenderNodes( skinnedNodes.backCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
+			, instanceCount );
+
+		doFillRenderNodes( morphingNodes.frontCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
+			, instanceCount );
+		doFillRenderNodes( morphingNodes.backCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
+			, instanceCount );
+
+		doFillRenderNodes( billboardNodes.frontCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
+			, instanceCount );
+		doFillRenderNodes( billboardNodes.backCulled
+			, m_pipelinesNodes
+			, nodesIdsBuffer
+			, indIndexedBuffer
+			, indBuffer
+			, instanceCount );
+
+		m_nodesIds->flush( 0u, ashes::WholeSize );
+		m_nodesIds->unlock();
 		m_indirectCommands->flush( 0u, ashes::WholeSize );
 		m_indirectCommands->unlock();
 		m_indirectIndexedCommands->flush( 0u, ashes::WholeSize );
@@ -513,9 +714,9 @@ namespace castor3d
 		uint32_t index{};
 
 		doTraverseNodes( instancedStaticNodes.frontCulled
-			, [&cb, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
 			{
-				doBindPipeline( cb, pipeline, viewport, scissors );
+				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
@@ -530,9 +731,9 @@ namespace castor3d
 					, index );
 			} );
 		doTraverseNodes( instancedStaticNodes.backCulled
-			, [&cb, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
 			{
-				doBindPipeline( cb, pipeline, viewport, scissors );
+				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
@@ -547,9 +748,9 @@ namespace castor3d
 					, index );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.frontCulled
-			, [&cb, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
 			{
-				doBindPipeline( cb, pipeline, viewport, scissors );
+				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
@@ -564,9 +765,9 @@ namespace castor3d
 					, index );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.backCulled
-			, [&cb, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
 			{
-				doBindPipeline( cb, pipeline, viewport, scissors );
+				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
@@ -583,6 +784,8 @@ namespace castor3d
 
 		doParseRenderNodesCommands( staticNodes.frontCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -590,6 +793,8 @@ namespace castor3d
 			, index );
 		doParseRenderNodesCommands( staticNodes.backCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -598,6 +803,8 @@ namespace castor3d
 
 		doParseRenderNodesCommands( skinnedNodes.frontCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -605,6 +812,8 @@ namespace castor3d
 			, index );
 		doParseRenderNodesCommands( skinnedNodes.backCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -613,6 +822,8 @@ namespace castor3d
 
 		doParseRenderNodesCommands( morphingNodes.frontCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -620,6 +831,8 @@ namespace castor3d
 			, index );
 		doParseRenderNodesCommands( morphingNodes.backCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -628,6 +841,8 @@ namespace castor3d
 
 		doParseRenderNodesCommands( billboardNodes.frontCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -635,6 +850,8 @@ namespace castor3d
 			, index );
 		doParseRenderNodesCommands( billboardNodes.backCulled
 			, cb
+			, rp
+			, m_pipelinesNodes
 			, viewport
 			, scissors
 			, *m_indirectIndexedCommands
@@ -659,5 +876,6 @@ namespace castor3d
 			|| !billboardNodes.backCulled.empty()
 			|| !billboardNodes.frontCulled.empty();
 	}
+
 	//*************************************************************************************************
 }

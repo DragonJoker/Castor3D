@@ -89,9 +89,6 @@ namespace castor3d
 		C3D_API bool hasNodes()const;
 
 		C3D_API SubmeshRenderNode & createNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
-			, GpuDataBufferOffset * modelDataBuffer
-			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, Submesh & data
@@ -99,13 +96,9 @@ namespace castor3d
 			, AnimatedMesh * mesh
 			, AnimatedSkeleton * skeleton );
 		C3D_API BillboardRenderNode & createNode( PassRenderNode passNode
-			, UniformBufferOffsetT< ModelIndexUboConfiguration > modelIndexBuffer
-			, GpuDataBufferOffset * modelDataBuffer
-			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
-			, BillboardBase & instance
-			, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer );
+			, BillboardBase & instance );
 		C3D_API ashes::DescriptorSetLayoutCRefArray getDescriptorSetLayouts( Pass const & pass
 			, BillboardBase const & billboard );
 		C3D_API ashes::DescriptorSetLayoutCRefArray getDescriptorSetLayouts( Pass const & pass

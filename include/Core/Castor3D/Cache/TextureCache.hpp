@@ -74,22 +74,22 @@ namespace castor3d
 
 		bool hasBindless()const
 		{
-			return m_texLayout && m_texSet;
+			return m_bindlessTexLayout && m_bindlessTexSet;
 		}
 
 		ashes::DescriptorSetLayout * getDescriptorLayout()const
 		{
-			return m_texLayout.get();
+			return m_bindlessTexLayout.get();
 		}
 
 		ashes::DescriptorPool * getDescriptorPool()const
 		{
-			return m_texPool.get();
+			return m_bindlessTexPool.get();
 		}
 
 		ashes::DescriptorSet * getDescriptorSet()const
 		{
-			return m_texSet.get();
+			return m_bindlessTexSet.get();
 		}
 
 	private:
@@ -123,10 +123,10 @@ namespace castor3d
 		castor::CheckedMutex m_loadMtx;
 		std::vector< std::unique_ptr< ThreadData > > m_loading;
 		std::unordered_map< size_t, TextureUnitSPtr > m_loaded;
-		ashes::DescriptorSetLayoutPtr m_texLayout;
-		ashes::DescriptorPoolPtr m_texPool;
-		ashes::DescriptorSetPtr m_texSet;
-		std::mutex m_ditryWritesMtx;
+		ashes::DescriptorSetLayoutPtr m_bindlessTexLayout;
+		ashes::DescriptorPoolPtr m_bindlessTexPool;
+		ashes::DescriptorSetPtr m_bindlessTexSet;
+		std::mutex m_dirtyWritesMtx;
 		std::vector< ashes::WriteDescriptorSet > m_dirtyWrites;
 	};
 }
