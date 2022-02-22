@@ -42,6 +42,11 @@ namespace castor
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "MorphingNodesData" ) }
+		, m_skinningTransformsData{ makeBuffer< SkinningTransformsConfiguration >( m_device
+			, 1'000ull
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SkinningTransformNodesData" ) }
 	{
 	}
 
@@ -50,16 +55,22 @@ namespace castor
 		if ( !m_morphingData )
 		{
 			m_morphingData = makeBuffer< MorphingBufferConfiguration >( m_device
-				, 250'000ull
+				, 10'000ull
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, "MorphingNodesData" );
+			m_skinningTransformsData = makeBuffer< SkinningTransformsConfiguration >( m_device
+				, 1'000ull
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "SkinningTransformNodesData" );
 		}
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup()
 	{
 		ResourceCacheBaseT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup();
+		m_skinningTransformsData.reset();
 		m_morphingData.reset();
 	}
 
@@ -67,13 +78,16 @@ namespace castor
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 
-		for ( auto & pair : m_skeletonEntries )
+		if ( auto skinningTransformsBuffer = m_skinningTransformsData->lock( 0u, ashes::WholeSize, 0u ) )
 		{
-			auto & entry = pair.second;
-			auto skinningData = entry.skinningSsbo.lock();
-			entry.skeleton.fillShader( skinningData );
-			entry.skinningSsbo.flush();
-			entry.skinningSsbo.unlock();
+			for ( auto & pair : m_skeletonEntries )
+			{
+				auto & entry = pair.second;
+				entry.skeleton.fillShader( &skinningTransformsBuffer[entry.skeleton.getId() - 1u] );
+			}
+
+			m_skinningTransformsData->flush( 0u, ashes::WholeSize );
+			m_skinningTransformsData->unlock();
 		}
 
 		if ( auto morphingBuffer = m_morphingData->lock( 0u, ashes::WholeSize, 0u ) )
@@ -81,14 +95,12 @@ namespace castor
 			for ( auto & pair : m_meshEntries )
 			{
 				auto & entry = pair.second;
-				auto & morphingData = *morphingBuffer;
+				auto & morphingData = morphingBuffer[entry.mesh.getId() - 1u];
 
 				if ( entry.mesh.isPlayingAnimation() )
 				{
 					morphingData.time->x = entry.mesh.getPlayingAnimation().getRatio();
 				}
-
-				++morphingBuffer;
 			}
 
 			m_morphingData->flush( 0u, ashes::WholeSize );
@@ -110,13 +122,6 @@ namespace castor
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		doClearNoLock();
-		auto & bufferPool = *device.bufferPool;
-
-		for ( auto & entry : m_skeletonEntries )
-		{
-			bufferPool.putBuffer( entry.second.skinningSsbo );
-		}
-
 		m_meshEntries.clear();
 		m_skeletonEntries.clear();
 	}
@@ -136,31 +141,23 @@ namespace castor
 		, AnimatedObjectGroup const & group
 		, AnimatedSkeleton const & skeleton )
 	{
-		auto & bufferPool = *device.bufferPool;
 		return
 		{
 			group,
 			skeleton,
-			bufferPool.getBuffer< SkinningUboConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, 400u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedMesh const & mesh )
 	{
-		auto entry = getUbos( mesh );
 		m_meshEntries.erase( &mesh );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedSkeleton const & skeleton )
 	{
-		auto & bufferPool = *device.bufferPool;
-		auto entry = getUbos( skeleton );
 		m_skeletonEntries.erase( &skeleton );
-		bufferPool.putBuffer( entry.skinningSsbo );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRegister( AnimatedObjectGroup & group )
@@ -200,6 +197,7 @@ namespace castor
 						{
 							m_skeletonEntries.emplace( &skeleton
 								, doCreateEntry( device, pgroup, skeleton ) );
+							skeleton.setId( uint32_t( m_skeletonEntries.size() ) );
 						} ) );
 				} ) );
 		m_skeletonRemovedConnections.emplace( &group
@@ -210,6 +208,7 @@ namespace castor
 						, [this, &skeleton]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
+							skeleton.setId( uint32_t( m_skeletonEntries.size() ) );
 							doRemoveEntry( device, skeleton );
 						} ) );
 				} ) );

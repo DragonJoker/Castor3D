@@ -573,6 +573,19 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
+			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
+			{
+				auto & transformsDatas = scene.getAnimatedObjectGroupCache().getSkinningTransformsBuffer();
+				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eSkinningTransformData )
+					, 0u
+					, 1u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+				write.bufferInfo.push_back( { transformsDatas.getBuffer()
+					, 0u
+					, transformsDatas.getBuffer().getSize() } );
+				descriptorWrites.push_back( write );
+			}
+
 			doFillAdditionalDescriptor( descriptorWrites
 				, shadowMaps );
 			descriptors.set->setBindings( descriptorWrites );
@@ -900,6 +913,13 @@ namespace castor3d
 				, stageFlags ) );
 		}
 
+		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
+		{
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eSkinningTransformData )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, stageFlags ) );
+		}
+
 		doFillAdditionalBindings( addBindings );
 		return addBindings;
 	}
@@ -1030,14 +1050,7 @@ namespace castor3d
 			, mesh
 			, skeleton );
 		CU_Require( !mesh || result.mesh );
-
-		if ( skeleton )
-		{
-			CU_Require( result.skeleton );
-			auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( *skeleton );
-			result.skinningSsbo = animationEntry.skinningSsbo;
-		}
-
+		CU_Require( !skeleton || result.skeleton );
 		return &result;
 	}
 
@@ -1070,8 +1083,9 @@ namespace castor3d
 			, flags.programFlags );
 
 		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( NodeUboIdx::eSkinningSsbo )
+			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, uint32_t( NodeUboIdx::eSkinningBones )
+			, RenderPipeline::ePass
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
@@ -1109,6 +1123,9 @@ namespace castor3d
 				auto morphingId = writer.declLocale( "morphingId"
 					, shader::ObjectsIds::getMorphingId( objectIdsData )
 					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+				auto skinningId = writer.declLocale( "skinningId"
+					, shader::ObjectsIds::getSkinningId( objectIdsData )
+					, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 				auto morphingData = writer.declLocale( "morphingData"
 					, c3d_morphingData[morphingId]
 					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
@@ -1133,7 +1150,7 @@ namespace castor3d
 				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData
-						, in.instanceIndex - in.baseInstance
+						, skinningId
 						, in.vertexIndex - in.baseVertex ) );
 				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel"
 					, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );

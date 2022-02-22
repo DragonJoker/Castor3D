@@ -30,7 +30,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSkeleton::fillShader( SkinningUboConfiguration * variable )const
+	void AnimatedSkeleton::fillShader( SkinningTransformsConfiguration * variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };

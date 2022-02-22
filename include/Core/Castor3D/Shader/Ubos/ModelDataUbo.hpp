@@ -33,11 +33,11 @@ namespace castor3d::shader
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 			, SkinningData const & skinning
 			, sdw::Mat4 const & transform
-			, sdw::Int const & instanceIndex
+			, sdw::UInt const & skinningId
 			, sdw::Int const & vertexIndex )const;
 		C3D_API sdw::Mat4 getCurModelMtx( ProgramFlags programFlags
 			, SkinningData const & skinning
-			, sdw::Int const & instanceIndex
+			, sdw::UInt const & skinningId
 			, sdw::Int const & vertexIndex )const;
 		C3D_API sdw::UVec4 getTextures0( ProgramFlags programFlags
 			, sdw::UVec4 const & instanceData )const;
@@ -114,6 +114,11 @@ namespace castor3d::shader
 		static sdw::UInt getMorphingId( sdw::UVec4 const & data )
 		{
 			return data.y();
+		}
+
+		static sdw::UInt getSkinningId( sdw::UVec4 const & data )
+		{
+			return data.z();
 		}
 
 	private:
