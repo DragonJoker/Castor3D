@@ -110,11 +110,11 @@ namespace castor3d
 	CU_DeclareMap( castor::String, AnimationSPtr, AnimationPtrStr );
 
 
-	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton const & ) >;
+	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
 	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;
 	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
 
-	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh const & ) >;
+	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh & ) >;
 	using OnAnimatedMeshChange = castor::SignalT< OnAnimatedMeshChangeFunction >;
 	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
 	/**

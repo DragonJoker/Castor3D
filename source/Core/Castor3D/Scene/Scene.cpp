@@ -297,6 +297,7 @@ namespace castor3d
 		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
 		m_billboardCache->initialise( device );
 		m_geometryCache->initialise( device );
+		m_animatedObjectGroupCache->initialise( device );
 		m_lightCache->initialise( device );
 		m_background->initialise( device );
 		doUpdateLightsDependent();

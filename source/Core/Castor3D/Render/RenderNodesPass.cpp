@@ -542,8 +542,12 @@ namespace castor3d
 				, 0u
 				, modelBuffer.getBuffer().getSize() } );
 			descriptorWrites.push_back( modelDataWrite );
+			auto & matCache = getOwner()->getMaterialCache();
+			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
+			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
+			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
 
-			if ( checkFlag( flags.programFlags,  ProgramFlag::eBillboards ) )
+			if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 			{
 				auto & billboardDatas = scene.getBillboardListCache().getBillboardsBuffer();
 				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
@@ -556,10 +560,19 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
-			auto & matCache = getOwner()->getMaterialCache();
-			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
-			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
-			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
+			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
+			{
+				auto & morphingDatas = scene.getAnimatedObjectGroupCache().getMorphingBuffer();
+				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eMorphingData )
+					, 0u
+					, 1u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+				write.bufferInfo.push_back( { morphingDatas.getBuffer()
+					, 0u
+					, morphingDatas.getBuffer().getSize() } );
+				descriptorWrites.push_back( write );
+			}
+
 			doFillAdditionalDescriptor( descriptorWrites
 				, shadowMaps );
 			descriptors.set->setBindings( descriptorWrites );
@@ -868,6 +881,10 @@ namespace castor3d
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eModelsData )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, stageFlags ) );
+		auto & matCache = getOwner()->getMaterialCache();
+		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
+		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
+		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
@@ -876,10 +893,13 @@ namespace castor3d
 				, stageFlags ) );
 		}
 
-		auto & matCache = getOwner()->getMaterialCache();
-		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
-		addBindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
-		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
+		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
+		{
+			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMorphingData )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, stageFlags ) );
+		}
+
 		doFillAdditionalBindings( addBindings );
 		return addBindings;
 	}
@@ -1009,13 +1029,7 @@ namespace castor3d
 			, primitive
 			, mesh
 			, skeleton );
-
-		if ( mesh )
-		{
-			CU_Require( result.mesh );
-			auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( *mesh );
-			result.morphingUbo = animationEntry.morphingUbo;
-		}
+		CU_Require( !mesh || result.mesh );
 
 		if ( skeleton )
 		{
@@ -1044,20 +1058,20 @@ namespace castor3d
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
-		C3D_ModelsData( writer
-			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
+			, RenderPipeline::ePass );
+		C3D_Morphing( writer
+			, GlobalBuffersIdx::eMorphingData
+			, RenderPipeline::ePass
+			, flags.programFlags );
 
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, uint32_t( NodeUboIdx::eSkinningBones )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
-		C3D_Morphing( writer
-			, NodeUboIdx::eMorphing
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
@@ -1088,13 +1102,21 @@ namespace castor3d
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( in.tangent, 0.0_f ) );
 				out.texture0 = in.texture0;
-				in.morph( c3d_morphingData
+				auto objectIdsData = writer.declLocale( "objectIdsData"
+					, c3d_objectIdsData[pipelineID][customDrawID] );
+				auto nodeId = writer.declLocale( "nodeId"
+					, shader::ObjectsIds::getNodeId( objectIdsData ) );
+				auto morphingId = writer.declLocale( "morphingId"
+					, shader::ObjectsIds::getMorphingId( objectIdsData )
+					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+				auto morphingData = writer.declLocale( "morphingData"
+					, c3d_morphingData[morphingId]
+					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+				in.morph( morphingData
 					, curPosition
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
-				auto nodeId = writer.declLocale( "nodeId"
-					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.textures0 = modelData.getTextures0( flags.programFlags
@@ -1158,14 +1180,14 @@ namespace castor3d
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
+		C3D_ObjectIdsData( writer
+			, GlobalBuffersIdx::eObjectsNodeID
+			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
-			, RenderPipeline::ePass );
-		C3D_ObjectIdsData( writer
-			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -1183,8 +1205,10 @@ namespace castor3d
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
+				auto objectIdsData = writer.declLocale( "objectIdsData"
+					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+					, shader::ObjectsIds::getNodeId( objectIdsData ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.textures0 = modelData.getTextures0();

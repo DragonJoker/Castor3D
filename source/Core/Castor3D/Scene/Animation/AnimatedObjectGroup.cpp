@@ -120,11 +120,11 @@ namespace castor3d
 			switch ( object->getKind() )
 			{
 			case AnimationType::eMesh:
-				onMeshAdded( *this, static_cast< AnimatedMesh const & >( *object ) );
+				onMeshAdded( *this, static_cast< AnimatedMesh & >( *object ) );
 				break;
 
 			case AnimationType::eSkeleton:
-				onSkeletonAdded( *this, static_cast< AnimatedSkeleton const & >( *object ) );
+				onSkeletonAdded( *this, static_cast< AnimatedSkeleton & >( *object ) );
 				break;
 
 			default:

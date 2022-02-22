@@ -145,20 +145,20 @@ namespace castor3d
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::ePass );
-		C3D_ModelsData( writer
-			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
+			, RenderPipeline::ePass );
+		C3D_Morphing( writer
+			, GlobalBuffersIdx::eMorphingData
+			, RenderPipeline::ePass
+			, flags.programFlags );
 
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( NodeUboIdx::eSkinningSsbo )
 			, uint32_t( NodeUboIdx::eSkinningBones )
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
-		C3D_Morphing( writer
-			, NodeUboIdx::eMorphing
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
@@ -188,14 +188,22 @@ namespace castor3d
 					, vec4( in.normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( in.tangent, 0.0_f ) );
+				auto objectIdsData = writer.declLocale( "objectIdsData"
+					, c3d_objectIdsData[pipelineID][customDrawID] );
+				auto nodeId = writer.declLocale( "nodeId"
+					, shader::ObjectsIds::getNodeId( objectIdsData ) );
+				auto morphingId = writer.declLocale( "morphingId"
+					, shader::ObjectsIds::getMorphingId( objectIdsData )
+					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 				out.texture0 = in.texture0;
-				in.morph( c3d_morphingData
+				auto morphingData = writer.declLocale( "morphingData"
+					, c3d_morphingData[morphingId]
+					, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+				in.morph( morphingData
 					, curPosition
 					, v4Normal
 					, v4Tangent
 					, out.texture0 );
-				auto nodeId = writer.declLocale( "nodeId"
-					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.textures0 = modelData.getTextures0( flags.programFlags

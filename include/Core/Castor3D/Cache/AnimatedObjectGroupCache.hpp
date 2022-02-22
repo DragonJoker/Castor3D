@@ -5,8 +5,10 @@ See LICENSE file in root folder
 #define ___C3D_AnimatedObjectGroupCache_H___
 
 #include "Castor3D/Cache/CacheModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
@@ -40,7 +42,6 @@ namespace castor
 		{
 			castor3d::AnimatedObjectGroup const & group;
 			castor3d::AnimatedMesh const & mesh;
-			castor3d::UniformBufferOffsetT< castor3d::MorphingUboConfiguration > morphingUbo;
 		};
 
 		using ElementT = castor3d::AnimatedObjectGroup;
@@ -79,6 +80,20 @@ namespace castor
 		C3D_API ~ResourceCacheT() = default;
 		/**
 		 *\~english
+		 *\brief		Initialises the cache buffers.
+		 *\~french
+		 *\brief		Initialise les buffers du cache.
+		 */
+		C3D_API void initialise( castor3d::RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
@@ -114,6 +129,11 @@ namespace castor
 		 */
 		C3D_API void clear( castor3d::RenderDevice const & device );
 
+		ashes::Buffer< castor3d::MorphingBufferConfiguration > const & getMorphingBuffer()const
+		{
+			return *m_morphingData;
+		}
+
 	private:
 		using ElementCacheT::clear;
 
@@ -133,12 +153,14 @@ namespace castor
 
 	private:
 		castor3d::Engine & m_engine;
+		castor3d::RenderDevice const & m_device;
 		std::map< castor3d::AnimatedSkeleton const *, SkeletonPoolsEntry > m_skeletonEntries;
 		std::map< castor3d::AnimatedMesh const *, MeshPoolsEntry > m_meshEntries;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
+		ashes::BufferPtr< castor3d::MorphingBufferConfiguration > m_morphingData;
 	};
 }
 

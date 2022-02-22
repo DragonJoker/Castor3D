@@ -101,9 +101,19 @@ namespace castor3d::shader
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 
-		sdw::UInt getNodeId( sdw::UInt const & index )
+		sdw::UVec4 operator[]( sdw::UInt const & index )const
 		{
-			return m_data[index].x();
+			return m_data[index];
+		}
+
+		static sdw::UInt getNodeId( sdw::UVec4 const & data )
+		{
+			return data.x();
+		}
+
+		static sdw::UInt getMorphingId( sdw::UVec4 const & data )
+		{
+			return data.y();
 		}
 
 	private:

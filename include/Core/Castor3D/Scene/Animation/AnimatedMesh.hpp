@@ -45,60 +45,33 @@ namespace castor3d
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
 		C3D_API void update( castor::Milliseconds const & elapsed )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::isPlayingAnimation
-		 */
-		C3D_API bool isPlayingAnimation()const override
+
+		bool isPlayingAnimation()const override
 		{
 			return m_playingAnimation != nullptr;
 		}
-		/**
-		 *\~english
-		 *\return		The mesh.
-		 *\~french
-		 *\return		Le maillage.
-		 */
-		Mesh const & getMesh()const
+
+		Mesh & getMesh()const
 		{
 			return m_mesh;
 		}
-		/**
-		 *\~english
-		 *\return		The mesh.
-		 *\~french
-		 *\return		Le maillage.
-		 */
-		Mesh & getMesh()
-		{
-			return m_mesh;
-		}
-		/**
-		 *\~english
-		 *\return		The geometry instantiating the mesh.
-		 *\~french
-		 *\return		La géométrie instanciant le maillage.
-		 */
-		Geometry const & getGeometry()const
+
+		Geometry & getGeometry()const
 		{
 			return m_geometry;
 		}
-		/**
-		 *\~english
-		 *\return		The geometry instantiating the mesh.
-		 *\~french
-		 *\return		La géométrie instanciant le maillage.
-		 */
-		Geometry & getGeometry()
+
+		uint32_t getId()const
 		{
-			return m_geometry;
+			return m_id;
 		}
-		/**
-		 *\~english
-		 *\return		The currently playing animation for this object.
-		 *\~french
-		 *\return		L'animation en cours de lecture sur cet objet.
-		 */
-		MeshAnimationInstance const & getPlayingAnimation()const
+
+		void setId( uint32_t id )
+		{
+			m_id = id;
+		}
+
+		MeshAnimationInstance & getPlayingAnimation()const
 		{
 			return *m_playingAnimation;
 		}
@@ -110,15 +83,10 @@ namespace castor3d
 		void doClearAnimations()override;
 
 	protected:
-		//!\~english	The submesh affected by the animations.
-		//!\~french		Le sous-maillage affecté par les animations.
 		Mesh & m_mesh;
-		//!\~english	The geometry instantiating the mesh.
-		//!\~french		La géométrie instanciant le maillage.
 		Geometry & m_geometry;
-		//!\~english	Currently playing animation.
-		//!\~french		L'animation en cours de lecture.
 		MeshAnimationInstanceRPtr m_playingAnimation{ nullptr };
+		uint32_t m_id{};
 	};
 }
 
