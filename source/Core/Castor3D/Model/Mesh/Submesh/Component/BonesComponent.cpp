@@ -16,6 +16,40 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace
+	{
+		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout( ShaderFlags shaderFlags
+			, uint32_t & currentLocation )
+		{
+			ashes::VkVertexInputBindingDescriptionArray bindings{ { BonesComponent::BindingPoint
+				, sizeof( VertexBoneData ), VK_VERTEX_INPUT_RATE_VERTEX } };
+
+			ashes::VkVertexInputAttributeDescriptionArray attributes;
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_UINT
+				, offsetof( VertexBoneData, m_ids ) + offsetof( VertexBoneData::Ids::ids, id0 ) } );
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_UINT
+				, offsetof( VertexBoneData, m_ids ) + offsetof( VertexBoneData::Ids::ids, id1 ) } );
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, offsetof( VertexBoneData, m_weights ) + offsetof( VertexBoneData::Weights::weights, weight0 ) } );
+			attributes.push_back( { currentLocation++
+				, BonesComponent::BindingPoint
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, offsetof( VertexBoneData, m_weights ) + offsetof( VertexBoneData::Weights::weights, weight1 ) } );
+
+			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
+		}
+	}
+
+	//*********************************************************************************************
+
 	String const BonesComponent::Name = cuT( "bones" );
 
 	BonesComponent::BonesComponent( Submesh & submesh )
@@ -44,6 +78,23 @@ namespace castor3d
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
+		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+		{
+			auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+			hash = castor::hashCombine( hash, mask.empty() );
+			hash = castor::hashCombine( hash, currentLocation );
+			auto layoutIt = m_bonesLayouts.find( hash );
+
+			if ( layoutIt == m_bonesLayouts.end() )
+			{
+				layoutIt = m_bonesLayouts.emplace( hash
+					, doCreateVertexLayout( shaderFlags, currentLocation ) ).first;
+			}
+
+			buffers.emplace_back( getOwner()->getBufferOffsets().getBonesBuffer() );
+			offsets.emplace_back( 0u );
+			layouts.emplace_back( layoutIt->second );
+		}
 	}
 
 	SubmeshComponentSPtr BonesComponent::clone( Submesh & submesh )const
@@ -60,61 +111,34 @@ namespace castor3d
 
 	bool BonesComponent::doInitialise( RenderDevice const & device )
 	{
-		if ( !m_bonesBuffer || m_bonesBuffer.getCount() != m_bones.size() )
-		{
-			m_bonesBuffer = device.bufferPool->getBuffer< VertexBoneData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, uint32_t( m_bones.size() )
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
-		}
-
-		if ( !m_transformsBuffer )
-		{
-			auto & scene = *getOwner()->getOwner()->getScene();
-			auto & engine = *device.renderSystem.getEngine();
-			auto stride = uint32_t( sizeof( float ) * 16u * 400u );
-			auto size = stride * scene.getDirectionalShadowCascades();
-			m_transformsBuffer = castor::makeUnique< ShaderBuffer >( engine
-				, device
-				, size
-				, cuT( "SkinningTransformsBuffer" ) );
-			engine.registerBuffer( *m_transformsBuffer );
-		}
-
-		return bool( m_bonesBuffer );
+		return true;
 	}
 
 	void BonesComponent::doCleanup( RenderDevice const & device )
 	{
-		if ( m_transformsBuffer )
-		{
-			auto & scene = *getOwner()->getOwner()->getScene();
-			auto & engine = *scene.getEngine();
-			engine.unregisterBuffer( *m_transformsBuffer );
-			m_transformsBuffer.reset();
-		}
-
-		if ( m_bonesBuffer )
-		{
-			device.bufferPool->putBuffer( m_bonesBuffer );
-			m_bonesBuffer = {};
-		}
 	}
 
 	void BonesComponent::doUpload()
 	{
 		auto count = uint32_t( m_bones.size() );
+		auto & offsets = getOwner()->getBufferOffsets();
 
-		if ( count && m_bonesBuffer )
+		if ( count && offsets.hasBones() )
 		{
-			if ( auto * buffer = m_bonesBuffer.lock() )
+			auto mappedSize = ashes::getAlignedSize( offsets.getBonesCount() * sizeof( VertexBoneData )
+				, getOwner()->getOwner()->getEngine()->getRenderSystem()->getValue( GpuMin::eBufferMapSize ) );
+
+			if ( auto * buffer = reinterpret_cast< VertexBoneData * >( offsets.getBonesBuffer().lock( offsets.getBonesOffset(), mappedSize, 0u ) ) )
 			{
 				std::copy( m_bones.begin(), m_bones.end(), buffer );
-				m_bonesBuffer.flush();
-				m_bonesBuffer.unlock();
+				offsets.getBonesBuffer().flush( offsets.getBonesOffset(), mappedSize );
+				offsets.getBonesBuffer().unlock();
 			}
 
 			//m_bones.clear();
 			//m_bonesData.clear();
 		}
 	}
+
+	//*********************************************************************************************
 }

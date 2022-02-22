@@ -861,18 +861,15 @@ namespace ocean
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
+		auto skinningData = SkinningUbo::declare( writer
+			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
+			, RenderPipeline::ePass
+			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
 		UBO_OCEAN( writer
 			, index
 			, RenderPipeline::ePass );
-
-		auto skinningData = SkinningUbo::declare( writer
-			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, uint32_t( NodeUboIdx::eSkinningBones )
-			, RenderPipeline::ePass
-			, RenderPipeline::eBuffers
-			, flags.programFlags );
 
 		auto calculateWave = writer.implementFunction< WaveResult >( "calculateWave"
 			, [&]( Wave wave

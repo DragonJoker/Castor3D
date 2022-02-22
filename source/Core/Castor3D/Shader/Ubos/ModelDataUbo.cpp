@@ -90,7 +90,10 @@ namespace castor3d::shader
 		, SkinningData const & skinning
 		, sdw::Mat4 const & transform
 		, sdw::UInt const & skinningId
-		, sdw::Int const & vertexIndex )const
+		, sdw::UVec4 const & boneIds0
+		, sdw::UVec4 const & boneIds1
+		, sdw::Vec4 const & boneWeights0
+		, sdw::Vec4 const & boneWeights1 )const
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 		{
@@ -100,7 +103,10 @@ namespace castor3d::shader
 				, programFlags
 				, m_curMtxModel
 				, skinningId
-				, vertexIndex );
+				, boneIds0
+				, boneIds1
+				, boneWeights0
+				, boneWeights1 );
 		}
 
 		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
@@ -114,7 +120,10 @@ namespace castor3d::shader
 	sdw::Mat4 ModelIndices::getCurModelMtx( ProgramFlags programFlags
 		, SkinningData const & skinning
 		, sdw::UInt const & skinningId
-		, sdw::Int const & vertexIndex )const
+		, sdw::UVec4 const & boneIds0
+		, sdw::UVec4 const & boneIds1
+		, sdw::Vec4 const & boneWeights0
+		, sdw::Vec4 const & boneWeights1 )const
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 		{
@@ -124,7 +133,10 @@ namespace castor3d::shader
 				, programFlags
 				, m_curMtxModel
 				, skinningId
-				, vertexIndex );
+				, boneIds0
+				, boneIds1
+				, boneWeights0
+				, boneWeights1 );
 		}
 
 		return m_curMtxModel;

@@ -155,12 +155,9 @@ namespace castor3d
 			, GlobalBuffersIdx::eMorphingData
 			, RenderPipeline::ePass
 			, flags.programFlags );
-
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, uint32_t( NodeUboIdx::eSkinningBones )
 			, RenderPipeline::ePass
-			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -225,7 +222,10 @@ namespace castor3d
 					, modelData.getCurModelMtx( flags.programFlags
 						, skinningData
 						, skinningId
-						, in.vertexIndex - in.baseVertex ) );
+						, in.boneIds0
+						, in.boneIds1
+						, in.boneWeights0
+						, in.boneWeights1 ) );
 				auto worldPos = writer.declLocale( "worldPos"
 					, mtxModel * curPosition );
 				out.worldPosition = worldPos;
