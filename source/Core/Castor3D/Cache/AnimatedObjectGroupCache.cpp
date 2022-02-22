@@ -4,6 +4,8 @@
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
@@ -34,11 +36,37 @@ namespace castor
 			}
 			, castor::ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
 		, m_engine{ *scene.getEngine() }
+		, m_device{ m_engine.getRenderSystem()->getRenderDevice() }
+		, m_morphingData{ makeBuffer< MorphingBufferConfiguration >( m_device
+			, 10'000ull
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "MorphingNodesData" ) }
 	{
+	}
+
+	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & device )
+	{
+		if ( !m_morphingData )
+		{
+			m_morphingData = makeBuffer< MorphingBufferConfiguration >( m_device
+				, 250'000ull
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "MorphingNodesData" );
+		}
+	}
+
+	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup()
+	{
+		ResourceCacheBaseT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup();
+		m_morphingData.reset();
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::update( CpuUpdater & updater )
 	{
+		auto lock( castor::makeUniqueLock( *this ) );
+
 		for ( auto & pair : m_skeletonEntries )
 		{
 			auto & entry = pair.second;
@@ -48,15 +76,23 @@ namespace castor
 			entry.skinningSsbo.unlock();
 		}
 
-		for ( auto & pair : m_meshEntries )
+		if ( auto morphingBuffer = m_morphingData->lock( 0u, ashes::WholeSize, 0u ) )
 		{
-			auto & entry = pair.second;
-			auto & morphingData = entry.morphingUbo.getData();
-
-			if ( entry.mesh.isPlayingAnimation() )
+			for ( auto & pair : m_meshEntries )
 			{
-				morphingData.time = entry.mesh.getPlayingAnimation().getRatio();
+				auto & entry = pair.second;
+				auto & morphingData = *morphingBuffer;
+
+				if ( entry.mesh.isPlayingAnimation() )
+				{
+					morphingData.time->x = entry.mesh.getPlayingAnimation().getRatio();
+				}
+
+				++morphingBuffer;
 			}
+
+			m_morphingData->flush( 0u, ashes::WholeSize );
+			m_morphingData->unlock();
 		}
 	}
 
@@ -74,13 +110,7 @@ namespace castor
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		doClearNoLock();
-		auto & uboPools = *device.uboPools;
 		auto & bufferPool = *device.bufferPool;
-
-		for ( auto & entry : m_meshEntries )
-		{
-			uboPools.putBuffer( entry.second.morphingUbo );
-		}
 
 		for ( auto & entry : m_skeletonEntries )
 		{
@@ -95,12 +125,10 @@ namespace castor
 		, AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh )
 	{
-		auto & uboPools = *device.uboPools;
 		return
 		{
 			group,
 			mesh,
-			uboPools.getBuffer< MorphingUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 
@@ -122,10 +150,8 @@ namespace castor
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedMesh const & mesh )
 	{
-		auto & uboPools = *device.uboPools;
 		auto entry = getUbos( mesh );
 		m_meshEntries.erase( &mesh );
-		uboPools.putBuffer( entry.morphingUbo );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
@@ -141,7 +167,7 @@ namespace castor
 	{
 		m_meshAddedConnections.emplace( &group
 			, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & pgroup
-				, AnimatedMesh const & mesh )
+				, AnimatedMesh & mesh )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 						, [this, &pgroup, &mesh]( RenderDevice const & device
@@ -149,22 +175,24 @@ namespace castor
 						{
 							m_meshEntries.emplace( &mesh
 								, doCreateEntry( device, pgroup, mesh ) );
+							mesh.setId( uint32_t( m_meshEntries.size() ) );
 						} ) );
 				} ) );
 		m_meshRemovedConnections.emplace( &group
 			, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
-				, AnimatedMesh const & mesh )
+				, AnimatedMesh & mesh )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 						, [this, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
+							mesh.setId( 0u );
 							doRemoveEntry( device, mesh );
 						} ) );
 				} ) );
 		m_skeletonAddedConnections.emplace( &group
 			, group.onSkeletonAdded.connect( [this]( AnimatedObjectGroup const & pgroup
-				, AnimatedSkeleton const & skeleton )
+				, AnimatedSkeleton & skeleton )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 						, [this, &pgroup, &skeleton]( RenderDevice const & device
@@ -176,7 +204,7 @@ namespace castor
 				} ) );
 		m_skeletonRemovedConnections.emplace( &group
 			, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
-				, AnimatedSkeleton const & skeleton )
+				, AnimatedSkeleton & skeleton )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 						, [this, &skeleton]( RenderDevice const & device

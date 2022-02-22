@@ -666,14 +666,14 @@ namespace ocean_fft
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
-		UBO_OCEAN( writer
-			, OceanFFTIdx::eOceanUbo
+		C3D_ObjectIdsData( writer
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
-		C3D_ObjectIdsData( writer
-			, GlobalBuffersIdx::eObjectsNodeID
+		UBO_OCEAN( writer
+			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -695,8 +695,10 @@ namespace ocean_fft
 					, ( ( in.position.xz() / c3d_oceanData.patchSize ) + c3d_oceanData.blockOffset ) * c3d_oceanData.patchSize );
 				out.vtx.position = vec4( pos.x(), 0.0_f, pos.y(), 1.0_f );
 				out.patchWorldPosition = out.vtx.position.xyz();
+				auto objectIdsData = writer.declLocale( "objectIdsData"
+					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+					, shader::ObjectsIds::getNodeId( objectIdsData ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.material = modelData.getMaterialId( flags.programFlags
@@ -724,8 +726,8 @@ namespace ocean_fft
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
-		UBO_OCEAN( writer
-			, OceanFFTIdx::eOceanUbo
+		C3D_ObjectIdsData( writer
+			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::ePass );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -733,8 +735,8 @@ namespace ocean_fft
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::ePass );
-		C3D_ObjectIdsData( writer
-			, GlobalBuffersIdx::eObjectsNodeID
+		UBO_OCEAN( writer
+			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::ePass );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -747,8 +749,10 @@ namespace ocean_fft
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< PatchT > out )
 			{
+				auto objectIdsData = writer.declLocale( "objectIdsData"
+					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
-					, c3d_objectIdsData[pipelineID].getNodeId( customDrawID ) );
+					, shader::ObjectsIds::getNodeId( objectIdsData ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );

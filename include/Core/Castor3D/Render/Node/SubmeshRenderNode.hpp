@@ -46,7 +46,6 @@ namespace castor3d
 		ashes::DescriptorSet * texDescriptorSet{};
 		// Morphing node
 		AnimatedMesh * mesh{};
-		UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo{};
 		// Skinning node
 		AnimatedSkeleton * skeleton{};
 		GpuBufferOffsetT< SkinningUboConfiguration > skinningSsbo{};
