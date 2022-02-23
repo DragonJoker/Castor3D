@@ -52,17 +52,13 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		template< typename NodeMapT
-			, typename OnPipelineFuncT
+		template< typename NodeT
 			, typename OnSubmeshFuncT >
-			void doTraverseNodes( NodeMapT & nodes
-				, OnPipelineFuncT onPipeline
+			void doTraverseUnculledNodes( ObjectNodesByPipelineMapT< NodeT > & nodes
 				, OnSubmeshFuncT onSubmesh )
 		{
 			for ( auto & itPipelines : nodes )
 			{
-				onPipeline( *itPipelines.first );
-
 				for ( auto & itPass : itPipelines.second )
 				{
 					for ( auto & itSubmeshes : itPass.second )
@@ -76,64 +72,139 @@ namespace castor3d
 			}
 		}
 
-		template< typename NodeMapT
+		template< typename NodeT
+			, typename OnPipelineFuncT
 			, typename OnSubmeshFuncT >
-			void doTraverseNodes( NodeMapT & nodes
+			void doTraverseNodes( ObjectNodesPtrByPipelineMapT< NodeT > & nodes
+				, OnPipelineFuncT onPipeline
+				, OnSubmeshFuncT onSubmesh )
+		{
+			for ( auto & itPipelines : nodes )
+			{
+				auto & pipeline = *itPipelines.first;
+
+				for ( auto & itBuffers : itPipelines.second )
+				{
+					onPipeline( pipeline, *itBuffers.first );
+
+					for ( auto & itPass : itBuffers.second )
+					{
+						for ( auto & itSubmeshes : itPass.second )
+						{
+							onSubmesh( pipeline
+								, *itPass.first
+								, *itSubmeshes.first
+								, itSubmeshes.second );
+						}
+					}
+				}
+			}
+		}
+
+		template< typename NodeT
+			, typename OnSubmeshFuncT >
+			void doTraverseNodes( ObjectNodesPtrByPipelineMapT< NodeT > & nodes
 				, OnSubmeshFuncT onSubmesh )
 		{
 			doTraverseNodes( nodes
-				, []( RenderPipeline const & pipeline )
+				, []( RenderPipeline const & pipeline
+					, ashes::BufferBase const & buffer )
 				{
 				}
 				, onSubmesh );
 		}
 
 		void registerPipelineNodes( RenderPipeline const & pipeline
-			, std::vector< RenderPipeline const * > & cont )
+			, ashes::BufferBase const & buffer
+			, std::vector< PipelineBuffer > & cont )
 		{
 			auto it = std::find_if( cont.begin()
 				, cont.end()
-				, [&pipeline]( RenderPipeline const * lookup )
+				, [&pipeline, &buffer]( PipelineBuffer const & lookup )
 				{
-					return lookup == &pipeline;
+					return lookup.first == &pipeline
+						&& lookup.second == &buffer;
 				} );
 
 			if ( it == cont.end() )
 			{
-				cont.emplace_back( &pipeline );
+				cont.emplace_back( &pipeline, &buffer );
 			}
 		}
 
 		uint32_t getPipelineNodesIndex( RenderPipeline const & pipeline
-			, std::vector< RenderPipeline const * > const & cont )
+			, ashes::BufferBase const & buffer
+			, std::vector< PipelineBuffer > const & cont )
 		{
 			auto it = std::find_if( cont.begin()
 				, cont.end()
-				, [&pipeline]( RenderPipeline const * lookup )
+				, [&pipeline, &buffer]( PipelineBuffer const & lookup )
 				{
-					return lookup == &pipeline;
+					return lookup.first == &pipeline
+						&& lookup.second == &buffer;
 				} );
 			CU_Require( it != cont.end() );
 			return uint32_t( std::distance( cont.begin(), it ) );
 		}
 
 		PipelineNodes & getPipelineNodes( RenderPipeline const & pipeline
-			, std::vector< RenderPipeline const * > const & cont
+			, ashes::BufferBase const & buffer
+			, std::vector< PipelineBuffer > const & cont
 			, PipelineNodes * nodes )
 		{
-			auto index = getPipelineNodesIndex( pipeline, cont );
+			auto index = getPipelineNodesIndex( pipeline, buffer, cont );
 			return nodes[index];
 		}
 
 		//*****************************************************************************************
 
+		VkDeviceSize compareOffsets( GeometryBuffers const & lhs
+			, GeometryBuffers const & rhs )
+		{
+			auto result = lhs.bufferOffset.getVertexOffset() >= rhs.bufferOffset.getVertexOffset();
+
+#if !defined( NDEBUG )
+			CU_Require( lhs.otherOffsets.size() == rhs.otherOffsets.size() );
+			auto lhsIt = lhs.otherOffsets.begin();
+			auto rhsIt = rhs.otherOffsets.begin();
+
+			while ( lhsIt != lhs.otherOffsets.end() )
+			{
+				CU_Require( *lhsIt >= *rhsIt );
+				++lhsIt;
+				++rhsIt;
+			}
+#endif
+
+			return result;
+		}
+
+		template< typename NodeT >
+		VkDeviceSize compareOffsets( NodeT const & lhs
+			, NodeT const & rhs )
+		{
+			return compareOffsets( lhs.buffers, rhs.buffers );
+		}
+
 		template< typename NodeT >
 		void doAddRenderNode( RenderPipeline & pipeline
 			, NodeT * node
-			, NodePtrByPipelineMapT< NodeT > & nodes )
+			, NodePtrByPipelineMapT< NodeT > & nodes
+			, std::vector< PipelineBuffer > & registeredPipelines )
 		{
-			auto & pipelineMap = nodes.emplace( &pipeline, NodePtrArrayT< NodeT >{} ).first->second;
-			pipelineMap.emplace_back( node );
+			auto & pipelineMap = nodes.emplace( &pipeline, NodePtrByBufferMapT< NodeT >{} ).first->second;
+			auto & bufferMap = pipelineMap.emplace( node->buffers.bufferOffset.vtxBuffer, NodePtrArrayT< NodeT >{} ).first->second;
+			auto it = std::find_if( bufferMap.begin()
+				, bufferMap.end()
+				, [node]( NodeT const * lookup )
+				{
+					return compareOffsets( *lookup, *node );
+				} );
+			CU_Require( node->buffers.bufferOffset.vtxBuffer );
+			registerPipelineNodes( pipeline
+				, *node->buffers.bufferOffset.vtxBuffer
+				, registeredPipelines );
+			bufferMap.emplace( it, node );
 		}
 
 		template< typename NodeT >
@@ -141,34 +212,24 @@ namespace castor3d
 			, RenderPipeline & pipeline
 			, NodeT * node
 			, Submesh & object
-			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes )
+			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes
+			, std::vector< PipelineBuffer > & registeredPipelines )
 		{
-			auto & pipelineMap = nodes.emplace( &pipeline, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
-			auto & passMap = pipelineMap.emplace( &pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
+			auto & pipelineMap = nodes.emplace( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ).first->second;
+			auto & bufferMap = pipelineMap.emplace( node->buffers.bufferOffset.vtxBuffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
+			auto & passMap = bufferMap.emplace( &pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
 			auto & objectMap = passMap.emplace( &object, NodePtrArrayT< NodeT >{} ).first->second;
-			objectMap.emplace_back( node );
-		}
-
-		template< typename NodeT >
-		void doParseInstantiatedRenderNodes( NodePtrByPipelineMapT< NodeT > & outputNodes
-			, RenderPipeline & pipeline
-			, Pass & pass
-			, NodeMapT< NodeT > & renderNodes
-			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes )
-		{
-			for ( auto & node : renderNodes )
-			{
-				auto it = std::find( culledNodes.objects.begin()
-					, culledNodes.objects.end()
-					, node.first );
-
-				if ( it != culledNodes.objects.end() )
+			auto it = std::find_if( objectMap.begin()
+				, objectMap.end()
+				, [node]( NodeT const * lookup )
 				{
-					doAddRenderNode( pipeline
-						, node.second
-						, outputNodes );
-				}
-			}
+					return compareOffsets( *lookup, *node );
+				} );
+			CU_Require( node->buffers.bufferOffset.vtxBuffer );
+			registerPipelineNodes( pipeline
+				, *node->buffers.bufferOffset.vtxBuffer
+				, registeredPipelines );
+			objectMap.emplace( it, node );
 		}
 
 		template< typename NodeT >
@@ -176,7 +237,8 @@ namespace castor3d
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, NodeMapT< NodeT > & renderNodes
-			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes )
+			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes
+			, std::vector< PipelineBuffer > & registeredPipelines )
 		{
 			for ( auto & node : renderNodes )
 			{
@@ -190,7 +252,8 @@ namespace castor3d
 						, pipeline
 						, node.second
 						, ( *it )->data
-						, outputNodes );
+						, outputNodes
+						, registeredPipelines );
 				}
 			}
 		}
@@ -199,11 +262,11 @@ namespace castor3d
 		void doParseRenderNodes( NodeByPipelineMapT< NodeT > & inputNodes
 			, NodePtrByPipelineMapT< NodeT > & outputNodes
 			, SceneCuller::CulledInstancesPtrT< NodeCulledT< NodeT > > const & culledNodes
-			, std::vector< RenderPipeline const * > & registeredPipelines )
+			, std::vector< PipelineBuffer > & registeredPipelines )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
-				registerPipelineNodes( *pipelines.first, registeredPipelines );
+				auto & pipeline = *pipelines.first;
 
 				for ( auto & node : pipelines.second )
 				{
@@ -213,9 +276,10 @@ namespace castor3d
 
 					if ( it != culledNodes.objects.end() )
 					{
-						doAddRenderNode( *pipelines.first
+						doAddRenderNode( pipeline
 							, node.second
-							, outputNodes );
+							, outputNodes
+							, registeredPipelines );
 					}
 				}
 			}
@@ -255,7 +319,7 @@ namespace castor3d
 
 		template< typename NodeT = SubmeshRenderNode >
 		void doFillRenderNodes( NodePtrByPipelineMapT< NodeT > & renderNodes
-			, std::vector< RenderPipeline const * > const & registeredPipelines
+			, std::vector< PipelineBuffer > const & registeredPipelines
 			, PipelineNodes *& pipelinesNodes
 			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
 			, VkDrawIndirectCommand *& indirectCommands )
@@ -263,37 +327,44 @@ namespace castor3d
 			for ( auto & pipelines : renderNodes )
 			{
 				RenderPipeline const & pipeline = *pipelines.first;
-				auto & pipelineNodes = getPipelineNodes( pipeline, registeredPipelines, pipelinesNodes );
-				auto pipelinesBuffer = pipelineNodes.data();
 
-				for ( auto & node : pipelines.second )
+				for ( auto & buffers : pipelines.second )
 				{
-					fillIndirectCommand( *node
-						, indirectIndexedCommands
-						, indirectCommands
-						, 1u );
-					( *pipelinesBuffer )->x = node->getId() - 1u;
+					auto & pipelineNodes = getPipelineNodes( pipeline
+						, *buffers.first
+						, registeredPipelines
+						, pipelinesNodes );
+					auto pipelinesBuffer = pipelineNodes.data();
 
-					if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
+					for ( auto & node : buffers.second )
 					{
-						if ( node->mesh )
+						fillIndirectCommand( *node
+							, indirectIndexedCommands
+							, indirectCommands
+							, 1u );
+						( *pipelinesBuffer )->x = node->getId() - 1u;
+
+						if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
 						{
-							( *pipelinesBuffer )->y = node->mesh->getId() - 1u;
+							if ( node->mesh )
+							{
+								( *pipelinesBuffer )->y = node->mesh->getId() - 1u;
+							}
+
+							if ( node->skeleton )
+							{
+								( *pipelinesBuffer )->z = node->skeleton->getId() - 1u;
+							}
 						}
 
-						if ( node->skeleton )
-						{
-							( *pipelinesBuffer )->z = node->skeleton->getId() - 1u;
-						}
+						++pipelinesBuffer;
 					}
-
-					++pipelinesBuffer;
 				}
 			}
 		}
 
 		void doFillInstantiatedRenderNodes( NodePtrArrayT< SubmeshRenderNode > & renderNodes
-			, std::vector< RenderPipeline const * > const & registeredPipelines
+			, std::vector< PipelineBuffer > const & registeredPipelines
 			, PipelineNodes *& pipelinesNodes
 			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
 			, VkDrawIndirectCommand *& indirectCommands )
@@ -306,54 +377,11 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		template< typename NodeT >
-		void doAddGeometryNodeCommands( RenderPipeline & pipeline
-			, NodeT const & node
-			, ashes::CommandBuffer const & commandBuffer
-			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
-			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
-			, uint32_t & index
-			, uint32_t & drawId )
-		{
-			GeometryBuffers const & geometryBuffers = node.buffers;
-			commandBuffer.pushConstants( pipeline.getPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT, 4u, 4u, &drawId );
-			commandBuffer.bindVertexBuffer( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
-				, geometryBuffers.bufferOffset.getVertexBuffer()
-				, 0u );
-
-			for ( uint32_t i = 0u; i < geometryBuffers.other.size(); ++i )
-			{
-				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i + 1u].get().vertexBindingDescriptions[0].binding
-					, geometryBuffers.other[i]
-					, geometryBuffers.otherOffsets[i] );
-			}
-
-			if ( geometryBuffers.bufferOffset.idxBuffer )
-			{
-				commandBuffer.bindIndexBuffer( geometryBuffers.bufferOffset.getIndexBuffer()
-					, 0u
-					, VK_INDEX_TYPE_UINT32 );
-				commandBuffer.drawIndexedIndirect( indirectIndexedCommands.getBuffer()
-					, index * sizeof( VkDrawIndexedIndirectCommand )
-					, 1u
-					, sizeof( VkDrawIndexedIndirectCommand ) );
-			}
-			else
-			{
-				commandBuffer.drawIndirect( indirectCommands.getBuffer()
-					, index * sizeof( VkDrawIndirectCommand )
-					, 1u
-					, sizeof( VkDrawIndirectCommand ) );
-			}
-
-			++index;
-			++drawId;
-		}
-
 		void doBindPipeline( ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
-			, std::vector< RenderPipeline const * > const & registeredPipelines
+			, std::vector< PipelineBuffer > const & registeredPipelines
 			, RenderPipeline const & pipeline
+			, ashes::BufferBase const & buffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor )
 		{
@@ -379,7 +407,7 @@ namespace castor3d
 				commandBuffer.bindDescriptorSet( *pipeline.getOwner()->getCuller().getScene().getBindlessTexDescriptorSet()
 					, pipeline.getPipelineLayout() );
 
-				auto pipelineId = getPipelineNodesIndex( pipeline, registeredPipelines );
+				auto pipelineId = getPipelineNodesIndex( pipeline, buffer, registeredPipelines );
 				commandBuffer.pushConstants( pipeline.getPipelineLayout()
 					, VK_SHADER_STAGE_VERTEX_BIT
 					, 0u
@@ -389,58 +417,98 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
+		void doAddGeometryNodeCommands( RenderPipeline const & pipeline
+			, NodeT const & node
+			, ashes::CommandBuffer const & commandBuffer
+			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
+			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
+			, uint32_t nodesCount
+			, uint32_t & index )
+		{
+			GeometryBuffers const & geometryBuffers = node.buffers;
+			commandBuffer.bindVertexBuffer( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
+				, geometryBuffers.bufferOffset.getVertexBuffer()
+				, 0u );
+
+			for ( uint32_t i = 0u; i < geometryBuffers.other.size(); ++i )
+			{
+				commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i + 1u].get().vertexBindingDescriptions[0].binding
+					, geometryBuffers.other[i]
+					, geometryBuffers.otherOffsets[i] );
+			}
+
+			if ( geometryBuffers.bufferOffset.idxBuffer )
+			{
+				commandBuffer.bindIndexBuffer( geometryBuffers.bufferOffset.getIndexBuffer()
+					, 0u
+					, VK_INDEX_TYPE_UINT32 );
+				commandBuffer.drawIndexedIndirect( indirectIndexedCommands.getBuffer()
+					, index * sizeof( VkDrawIndexedIndirectCommand )
+					, nodesCount
+					, sizeof( VkDrawIndexedIndirectCommand ) );
+			}
+			else
+			{
+				commandBuffer.drawIndirect( indirectCommands.getBuffer()
+					, index * sizeof( VkDrawIndirectCommand )
+					, nodesCount
+					, sizeof( VkDrawIndirectCommand ) );
+			}
+
+			index += nodesCount;
+		}
+
+		template< typename NodeT >
 		void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, RenderNodesPass const & nodesPass
-			, std::vector< RenderPipeline const * > const & registeredPipelines
+			, std::vector< PipelineBuffer > const & registeredPipelines
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & index )
 		{
-
 			for ( auto & pipelines : inputNodes )
 			{
 				RenderPipeline & pipeline = *pipelines.first;
-				doBindPipeline( commandBuffer
-					, nodesPass
-					, registeredPipelines
-					, pipeline
-					, viewport
-					, scissor );
-				uint32_t drawId = 0u;
 
-				for ( auto & node : pipelines.second )
+				for ( auto & buffers : pipelines.second )
 				{
+					doBindPipeline( commandBuffer
+						, nodesPass
+						, registeredPipelines
+						, pipeline
+						, *buffers.first
+						, viewport
+						, scissor );
 					doAddGeometryNodeCommands( pipeline
-						, *node
+						, *buffers.second.front()
 						, commandBuffer
 						, indirectIndexedCommands
 						, indirectCommands
-						, index
-						, drawId );
+						, uint32_t( buffers.second.size() )
+						, index );
 				}
 			}
 		}
 
 		template< typename NodeT >
-		void doParseInstantiatedRenderNodesCommands( ashes::CommandBuffer const & commandBuffer
-			, RenderPipeline & pipeline
+		void doRegisterInstantiatedRenderNodesCommands( ashes::CommandBuffer const & commandBuffer
+			, RenderPipeline const & pipeline
 			, NodePtrArrayT< NodeT > & renderNodes
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & index )
 		{
-			uint32_t drawId = 0u;
 			auto node = renderNodes.front();
 			doAddGeometryNodeCommands( pipeline
 				, *node
 				, commandBuffer
 				, indirectIndexedCommands
 				, indirectCommands
-				, index
-				, drawId );
+				, 1u
+				, index );
 		}
 
 		//*****************************************************************************************
@@ -487,57 +555,57 @@ namespace castor3d
 		m_pipelinesNodes.clear();
 		auto & rp = *queue.getOwner();
 
-		doTraverseNodes( allNodes.instancedStaticNodes.frontCulled
+		doTraverseUnculledNodes( allNodes.instancedStaticNodes.frontCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				registerPipelineNodes( pipeline, m_pipelinesNodes );
 				doParseInstantiatedRenderNodes( instancedStaticNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() ) );
+					, culler.getCulledSubmeshes( queue.getMode() )
+					, m_pipelinesNodes );
 			} );
-		doTraverseNodes( allNodes.instancedStaticNodes.backCulled
+		doTraverseUnculledNodes( allNodes.instancedStaticNodes.backCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				registerPipelineNodes( pipeline, m_pipelinesNodes );
 				doParseInstantiatedRenderNodes( instancedStaticNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() ) );
+					, culler.getCulledSubmeshes( queue.getMode() )
+					, m_pipelinesNodes );
 			} );
-		doTraverseNodes( allNodes.instancedSkinnedNodes.frontCulled
+		doTraverseUnculledNodes( allNodes.instancedSkinnedNodes.frontCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				registerPipelineNodes( pipeline, m_pipelinesNodes );
 				doParseInstantiatedRenderNodes( instancedSkinnedNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() ) );
+					, culler.getCulledSubmeshes( queue.getMode() )
+					, m_pipelinesNodes );
 			} );
-		doTraverseNodes( allNodes.instancedSkinnedNodes.backCulled
+		doTraverseUnculledNodes( allNodes.instancedSkinnedNodes.backCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodeMap & nodes )
 			{
-				registerPipelineNodes( pipeline, m_pipelinesNodes );
 				doParseInstantiatedRenderNodes( instancedSkinnedNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.getMode() ) );
+					, culler.getCulledSubmeshes( queue.getMode() )
+					, m_pipelinesNodes );
 			} );
 
 		doParseRenderNodes( allNodes.staticNodes.frontCulled
@@ -702,16 +770,23 @@ namespace castor3d
 		uint32_t index{};
 
 		doTraverseNodes( instancedStaticNodes.frontCulled
-			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline
+				, ashes::BufferBase const & buffer )
 			{
-				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
+				doBindPipeline( cb
+					, rp
+					, m_pipelinesNodes
+					, pipeline
+					, buffer
+					, viewport
+					, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( cb
+				doRegisterInstantiatedRenderNodesCommands( cb
 					, pipeline
 					, nodes
 					, *m_indirectIndexedCommands
@@ -719,16 +794,23 @@ namespace castor3d
 					, index );
 			} );
 		doTraverseNodes( instancedStaticNodes.backCulled
-			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline
+				, ashes::BufferBase const & buffer )
 			{
-				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
+				doBindPipeline( cb
+					, rp
+					, m_pipelinesNodes
+					, pipeline
+					, buffer
+					, viewport
+					, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( cb
+				doRegisterInstantiatedRenderNodesCommands( cb
 					, pipeline
 					, nodes
 					, *m_indirectIndexedCommands
@@ -736,16 +818,23 @@ namespace castor3d
 					, index );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.frontCulled
-			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline
+					, ashes::BufferBase const & buffer )
 			{
-				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
+				doBindPipeline( cb
+					, rp
+					, m_pipelinesNodes
+					, pipeline
+					, buffer
+					, viewport
+					, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( cb
+				doRegisterInstantiatedRenderNodesCommands( cb
 					, pipeline
 					, nodes
 					, *m_indirectIndexedCommands
@@ -753,16 +842,23 @@ namespace castor3d
 					, index );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.backCulled
-			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline )
+			, [this, &cb, &rp, &viewport, &scissors]( RenderPipeline const & pipeline
+				, ashes::BufferBase const & buffer )
 			{
-				doBindPipeline( cb, rp, m_pipelinesNodes, pipeline, viewport, scissors );
+				doBindPipeline( cb
+					, rp
+					, m_pipelinesNodes
+					, pipeline
+					, buffer
+					, viewport
+					, scissors );
 			}
 			, [this, &cb, &index]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
 			{
-				doParseInstantiatedRenderNodesCommands( cb
+				doRegisterInstantiatedRenderNodesCommands( cb
 					, pipeline
 					, nodes
 					, *m_indirectIndexedCommands

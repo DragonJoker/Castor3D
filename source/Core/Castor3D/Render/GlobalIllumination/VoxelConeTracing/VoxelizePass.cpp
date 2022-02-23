@@ -369,7 +369,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -385,7 +384,7 @@ namespace castor3d
 				auto ids = shader::getIds( c3d_objectIdsData
 					, in
 					, pipelineID
-					, customDrawID
+					, in.drawID
 					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
@@ -459,7 +458,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
 		pcb.end();
 
 		writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
@@ -468,7 +466,7 @@ namespace castor3d
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
 						, pipelineID
-						, customDrawID ) );
+						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.textures0 = modelData.getTextures0();

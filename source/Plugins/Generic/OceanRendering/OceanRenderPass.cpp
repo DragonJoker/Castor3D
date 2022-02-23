@@ -632,7 +632,6 @@ namespace ocean
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
 		pcb.end();
 
 		writer.implementMainT< castor3d::shader::VertexSurfaceT, castor3d::shader::FragmentSurfaceT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
@@ -657,7 +656,7 @@ namespace ocean
 				, shader::getNodeId( c3d_objectIdsData
 					, in
 					, pipelineID
-					, customDrawID
+					, in.drawID
 					, flags.programFlags ) );
 			auto modelData = writer.declLocale( "modelData"
 				, c3d_modelsData[nodeId] );
@@ -719,7 +718,6 @@ namespace ocean
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
 		pcb.end();
 
 		writer.implementMainT< VoidT, castor3d::shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
@@ -735,7 +733,7 @@ namespace ocean
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
 						, pipelineID
-						, customDrawID ) );
+						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
