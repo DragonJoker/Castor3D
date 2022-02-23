@@ -127,8 +127,8 @@ namespace castor3d
 				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 					, LightInjectionPass::RsmFluxIdx
 					, 0u );
-				UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
-				UBO_LPVLIGHTCONFIG( writer, LightInjectionPass::LpvLightUboIdx, 0u );
+				C3D_LpvGridConfig( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
+				C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
 
 				// Utility functions
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -180,8 +180,8 @@ namespace castor3d
 				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 					, LightInjectionPass::RsmFluxIdx
 					, 0u );
-				UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
-				UBO_LPVLIGHTCONFIG( writer, LightInjectionPass::LpvLightUboIdx, 0u );
+				C3D_LpvGridConfig( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
+				C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
 
 				// Utility functions
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -238,8 +238,8 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eFlux )
 				, LightInjectionPass::RsmFluxIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
-			UBO_LPVLIGHTCONFIG( writer, LightInjectionPass::LpvLightUboIdx, 0u );
+			C3D_LpvGridConfig( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
 
 			// Utility functions
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -293,8 +293,8 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
 				, LightInjectionPass::RsmFluxIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
-			UBO_LPVLIGHTCONFIG( writer, LightInjectionPass::LpvLightUboIdx, 0u );
+			C3D_LpvGridConfig( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
 
 			// Utility functions
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -393,7 +393,7 @@ namespace castor3d
 			auto outLpvGridB = writer.declOutput< Vec4 >( "outLpvGridB", 2u );
 
 			//layout( early_fragment_tests )in;//turn on early depth tests
-			UBO_LPVLIGHTCONFIG( writer, LightInjectionPass::LpvLightUboIdx, 0u );
+			C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
 
 			//Should I normalize the dir vector?
 			auto evalCosineLobeToDir = writer.implementFunction< Vec4 >( "evalCosineLobeToDir"

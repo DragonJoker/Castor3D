@@ -67,7 +67,7 @@ namespace smaa
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			UBO_SMAA( writer, SmaaUboIdx, 0u );
+			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", SmaaUboIdx + 1, 0u );
 
 			// Shader outputs

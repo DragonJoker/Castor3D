@@ -100,7 +100,7 @@ namespace castor3d
 	};
 }
 
-#define UBO_HDR_CONFIG( writer, binding, set )\
+#define C3D_HdrConfig( writer, binding, set )\
 	sdw::Ubo hdrConfig{ writer\
 		, castor3d::HdrConfigUbo::BufferHdrConfig\
 		, uint32_t( binding )\

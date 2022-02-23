@@ -575,7 +575,7 @@ namespace water
 			, hasTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
-		UBO_WATER( writer
+		C3D_Water( writer
 			, index++
 			, RenderPipeline::ePass );
 		auto c3d_waveNormals1 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals1"

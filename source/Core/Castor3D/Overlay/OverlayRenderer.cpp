@@ -954,10 +954,10 @@ namespace castor3d
 			VertexWriter writer;
 
 			C3D_Matrix( writer
-				, uint32_t( OverlayBindingId::eMatrix )
+				, OverlayBindingId::eMatrix
 				, 0u );
-			UBO_OVERLAY( writer
-				, uint32_t( OverlayBindingId::eOverlay )
+			C3D_Overlay( writer
+				, OverlayBindingId::eOverlay
 				, 0u );
 
 			writer.implementMainT< OverlaySurfaceT, OverlaySurfaceT >( VertexInT< OverlaySurfaceT >{ writer, true, textOverlay, hasTexture }
@@ -995,8 +995,8 @@ namespace castor3d
 				, 0u
 				, hasTexture };
 
-			UBO_OVERLAY( writer
-				, uint32_t( OverlayBindingId::eOverlay )
+			C3D_Overlay( writer
+				, OverlayBindingId::eOverlay
 				, 0u );
 
 			auto c3d_mapText = writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"

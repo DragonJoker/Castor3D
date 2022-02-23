@@ -51,7 +51,7 @@ namespace castor3d
 	};
 }
 
-#define UBO_OVERLAY( writer, binding, set )\
+#define C3D_Overlay( writer, binding, set )\
 	sdw::Ubo overlay{ writer\
 		, castor3d::OverlayUbo::BufferOverlay\
 		, uint32_t( binding )\

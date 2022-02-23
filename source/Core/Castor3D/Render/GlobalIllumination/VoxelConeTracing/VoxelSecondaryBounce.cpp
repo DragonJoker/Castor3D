@@ -132,7 +132,7 @@ namespace castor3d
 			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
 				, eVoxelBuffer
 				, 0u ) );
-			UBO_VOXELIZER( writer, eVoxelConfig, 0u, true );
+			C3D_Voxelizer( writer, eVoxelConfig, 0u, true );
 			auto firstBounce( writer.declCombinedImg< FImg3DRgba32 >( "firstBounce"
 				, eFirstBounce
 				, 0u ) );

@@ -83,7 +83,7 @@ namespace fxaa
 	};
 }
 
-#define UBO_FXAA( writer, binding, set )\
+#define C3D_Fxaa( writer, binding, set )\
 	sdw::Ubo fxaa{ writer, FxaaUbo::Buffer, binding, set };\
 	auto c3d_fxaaData = fxaa.declMember< FxaaData >( FxaaUbo::Data );\
 	fxaa.end()

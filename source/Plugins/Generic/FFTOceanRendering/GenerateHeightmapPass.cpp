@@ -94,7 +94,7 @@ namespace ocean_fft
 			sdw::ComputeWriter writer;
 			auto const G = writer.declConstant( "G", 9.81_f );
 
-			UBO_OCEAN( writer, GenerateHeightmapPass::eConfig, 0u );
+			C3D_FftOcean( writer, GenerateHeightmapPass::eConfig, 0u );
 
 			auto distr = writer.declStorageBuffer( "Distribution", GenerateHeightmapPass::eInput, 0u );
 			auto distribution = distr.declMemberArray< sdw::Vec2 >( "distribution" );
