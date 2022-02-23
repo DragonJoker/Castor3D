@@ -45,12 +45,10 @@ namespace castor3d
 		 *\brief		Constructor for opaque passes.
 		 *\param[in]	matrixUbo		The scene matrices UBO.
 		 *\param[in]	culler			The scene culler for this pass.
-		 *\param[in]	instanceMult	The object instance multiplier.
 		 *\~french
 		 *\brief		Constructeur pour les passes opaques.
 		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
 		 *\param[in]	culler			Le culler pour cette passe.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
 		RenderNodesPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
@@ -69,13 +67,11 @@ namespace castor3d
 		 *\param[in]	matrixUbo		The scene matrices UBO.
 		 *\param[in]	culler			The scene culler for this pass.
 		 *\param[in]	oit				The order independant status.
-		 *\param[in]	instanceMult	The object instance multiplier.
 		 *\~french
 		 *\brief		Constructeur pour les passes transparents.
 		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
 		RenderNodesPassDesc( VkExtent3D size
 			, MatrixUbo & matrixUbo
@@ -88,17 +84,6 @@ namespace castor3d
 				, oit
 				, false }
 		{
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The object instance multiplier.
-		 *\~french
-		 *\param[in]	value	Le multiplicateur d'instances d'objets.
-		 */
-		RenderNodesPassDesc & instanceMult( uint32_t value )
-		{
-			m_instanceMult = value;
-			return *this;
 		}
 		/**
 		 *\~english
@@ -166,7 +151,6 @@ namespace castor3d
 		bool m_safeBand{};
 		SceneNode const * m_ignored{};
 		uint32_t m_index{ 0u };
-		uint32_t m_instanceMult{ 1u };
 		crg::ru::Config m_ruConfig{ 1u, true };
 	};
 
@@ -547,11 +531,6 @@ namespace castor3d
 				+ m_frontPipelines.size() );
 		}
 
-		uint32_t getInstanceMult()const
-		{
-			return m_instanceMult;
-		}
-
 		bool isDirty()const
 		{
 			return m_isDirty;
@@ -883,7 +862,6 @@ namespace castor3d
 		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;
 		uint32_t m_index{ 0u };
-		uint32_t const m_instanceMult{ 1u };
 		struct PassDescriptors
 		{
 			ashes::DescriptorSetPoolPtr pool;

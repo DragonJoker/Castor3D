@@ -28,7 +28,7 @@ namespace castor3d
 			, DataType & data );
 
 		C3D_API uint32_t getId()const;
-		C3D_API uint32_t getInstanceMult( uint32_t instanceMult )const;
+		C3D_API uint32_t getInstanceCount( uint32_t instanceCount )const;
 
 		PassRenderNode passNode;
 		GeometryBuffers const & buffers;

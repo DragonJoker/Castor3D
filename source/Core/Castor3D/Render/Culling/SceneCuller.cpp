@@ -52,12 +52,6 @@ namespace castor3d
 	{
 		return hash( culled.instance, culled.data, *culled.pass );
 	}
-	
-	size_t hash( CulledSubmesh const & culled
-		, uint32_t instanceMult )
-	{
-		return hash( culled.instance, culled.data, *culled.pass, instanceMult );
-	}
 
 	bool isCulled( CulledSubmesh const & node )
 	{
@@ -88,12 +82,6 @@ namespace castor3d
 	size_t hash( CulledBillboard const & culled )
 	{
 		return hash( culled.data, *culled.pass );
-	}
-	
-	size_t hash( CulledBillboard const & culled
-		, uint32_t instanceMult )
-	{
-		return hash( culled.data, *culled.pass, instanceMult );
 	}
 
 	bool isCulled( CulledBillboard const & node )

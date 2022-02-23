@@ -38,16 +38,6 @@ namespace castor3d
 		return result;
 	}
 
-	size_t hash( Geometry const & geometry
-		, Submesh const & submesh
-		, Pass const & pass
-		, uint32_t instanceMult )
-	{
-		auto result = hash( geometry, submesh, pass );
-		castor::hashCombine( result, instanceMult );
-		return result;
-	}
-
 	//*********************************************************************************************
 
 	ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::ObjectCacheT( Scene & scene
@@ -102,69 +92,6 @@ namespace castor3d
 		m_nodesData.reset();
 	}
 
-	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::registerPass( RenderNodesPass const & renderPass )
-	{
-		auto instanceMult = renderPass.getInstanceMult();
-		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
-
-		if ( iresult.second )
-		{
-			for ( auto entry : m_baseEntries )
-			{
-				entry.second.hash = hash( entry.second.geometry
-					, entry.second.submesh
-					, entry.second.pass
-					, instanceMult );
-				auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
-				it->second.id = int32_t( m_entries.size() );
-			}
-		}
-
-		iresult.first->second.insert( &renderPass );
-	}
-
-	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::unregisterPass( RenderNodesPass const * renderPass
-		, uint32_t instanceMult )
-	{
-		auto instIt = m_instances.find( instanceMult );
-
-		if ( instIt != m_instances.end() )
-		{
-			auto rendIt = instIt->second.find( renderPass );
-
-			if ( rendIt != instIt->second.end() )
-			{
-				instIt->second.erase( rendIt );
-			}
-
-			if ( instIt->second.empty() )
-			{
-				m_instances.erase( instIt );
-
-				for ( auto & entry : m_baseEntries )
-				{
-					auto it = m_entries.find( hash( entry.second.geometry
-						, entry.second.submesh
-						, entry.second.pass
-						, instanceMult ) );
-
-					if ( it != m_entries.end() )
-					{
-						auto entrySave = it->second;
-						m_entries.erase( it );
-					}
-				}
-
-				uint32_t id = 1u;
-
-				for ( auto & entry : m_entries )
-				{
-					entry.second.id = int( id++ );
-				}
-			}
-		}
-	}
-
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::fillInfo( RenderInfo & info )const
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
@@ -186,7 +113,7 @@ namespace castor3d
 
 		if ( auto nodesBuffer = m_nodesData->lock( 0u, ashes::WholeSize, 0u ) )
 		{
-			for ( auto & pair : m_baseEntries )
+			for ( auto & pair : m_entries )
 			{
 				auto & entry = pair.second;
 
@@ -206,10 +133,9 @@ namespace castor3d
 
 	GeometryCache::PoolsEntry ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::getUbos( Geometry const & geometry
 		, Submesh const & submesh
-		, Pass const & pass
-		, uint32_t instanceMult )const
+		, Pass const & pass )const
 	{
-		auto it = m_entries.find( hash( geometry, submesh, pass, instanceMult ) );
+		auto it = m_entries.find( hash( geometry, submesh, pass ) );
 		CU_Require( it != m_entries.end() );
 		return it->second;
 	}
@@ -218,8 +144,6 @@ namespace castor3d
 	{
 		ElementObjectCacheT::clear();
 		m_entries.clear();
-		m_baseEntries.clear();
-		m_instances.clear();
 	}
 
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::add( ElementPtrT element )
@@ -234,7 +158,7 @@ namespace castor3d
 		, Pass const & pass )
 	{
 		auto baseHash = hash( geometry, submesh, pass );
-		auto iresult = m_baseEntries.emplace( baseHash
+		auto iresult = m_entries.emplace( baseHash
 			, GeometryCache::PoolsEntry{ 0u
 				, baseHash
 				, geometry
@@ -244,15 +168,8 @@ namespace castor3d
 		if ( iresult.second )
 		{
 			auto & baseEntry = iresult.first->second;
-			baseEntry.id = int32_t( m_baseEntries.size() );
+			baseEntry.id = int32_t( m_entries.size() );
 			geometry.setId( submesh, uint32_t( baseEntry.id ) );
-
-			for ( auto instanceMult : m_instances )
-			{
-				auto entry = baseEntry;
-				entry.hash = hash( geometry, submesh, pass, instanceMult.first );
-				m_entries.emplace( entry.hash, entry );
-			}
 		}
 	}
 
@@ -262,25 +179,12 @@ namespace castor3d
 		, Pass const & pass )
 	{
 		auto baseHash = hash( geometry, submesh, pass );
-
-		for ( auto instanceMult : m_instances )
-		{
-			auto it = m_entries.find( hash( geometry, submesh, pass, instanceMult.first ) );
-
-			if ( it != m_entries.end() )
-			{
-				auto entry = it->second;
-				m_entries.erase( it );
-			}
-		}
-
 		geometry.setId( submesh, 0u );
-		auto it = m_baseEntries.find( baseHash );
+		auto it = m_entries.find( baseHash );
 
-		if ( it != m_baseEntries.end() )
+		if ( it != m_entries.end() )
 		{
-			auto entry = it->second;
-			m_baseEntries.erase( it );
+			m_entries.erase( it );
 		}
 	}
 

@@ -35,8 +35,7 @@ namespace castor3d
 			GpuBufferOffsetT< InstantiationData > buffer;
 			std::vector< InstantiationData > data;
 		};
-		using DataArray = std::vector< Data >;
-		using InstanceDataMap = std::map< MaterialRPtr, DataArray >;
+		using InstanceDataMap = std::map< MaterialRPtr, Data >;
 
 	public:
 		/**
@@ -116,7 +115,6 @@ namespace castor3d
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t instanceMult
 			, TextureFlagsArray const & mask
 			, uint32_t & currentLocation )override;
 		/**
@@ -132,10 +130,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API InstanceDataMap::const_iterator find( MaterialRPtr material
-			, uint32_t instanceMult )const;
-		C3D_API InstanceDataMap::iterator find( MaterialRPtr material
-			, uint32_t instanceMult );
 		C3D_API ProgramFlags getProgramFlags( MaterialRPtr material )const override;
 
 		inline uint32_t getThreshold()const
@@ -162,13 +156,6 @@ namespace castor3d
 		{
 			needsUpdate();
 			return m_instances.find( material );
-		}
-
-		uint32_t getIndex( uint32_t instanceMult )const
-		{
-			return ( instanceMult <= 1u
-				? 0u
-				: instanceMult - 1u );
 		}
 		/**@}*/
 
