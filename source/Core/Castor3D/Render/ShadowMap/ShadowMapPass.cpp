@@ -31,8 +31,7 @@ namespace castor3d
 		, castor::String name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, ShadowMap const & shadowMap
-		, uint32_t instanceMult )
+		, ShadowMap const & shadowMap )
 		: RenderNodesPass{ pass
 			, context
 			, graph
@@ -40,8 +39,12 @@ namespace castor3d
 			, typeName
 			, cuT( "ShadowMap" )
 			, std::move( name )
-			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId ), matrixUbo, culler, RenderMode::eBoth, true, false }
-				.instanceMult( instanceMult ) }
+			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
+				, matrixUbo
+				, culler
+				, RenderMode::eBoth
+				, true
+				, false } }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }
 	{

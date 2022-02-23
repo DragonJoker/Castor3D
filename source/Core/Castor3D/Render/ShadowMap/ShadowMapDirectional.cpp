@@ -63,47 +63,6 @@ namespace castor3d
 			auto & position = smResult[SmTexture::ePosition];
 			auto & flux = smResult[SmTexture::eFlux];
 
-#if C3D_UseTiledDirectionalShadowMap
-
-			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device ),
-				, std::make_shared< Camera >( cuT( "ShadowMapDirectional" )
-					, scene
-					, *scene.getCameraRootNode()
-					, viewport
-					, true )
-				, nullptr ) );
-			auto & passData = *result.back();
-			passData.culler = std::make_unique< InstantiatedFrustumCuller >( scene
-				, *passData.camera
-				, scene.getDirectionalShadowCascades() );
-			auto & pass = graph.createPass( passData.camera->getName() + cuT( "ShadowMapDirectional" )
-				, [&passData, &matrixUbo, &culler, &device, &shadowMap, &scene]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & runnableGraph )
-				{
-					auto res = std::make_unique< ShadowMapPassDirectional >( framePass
-						, context
-						, runnableGraph
-						, device
-						, *passData.matrixUbo
-						, *passData.culler
-						, shadowMap
-						, scene.getDirectionalShadowCascades() );
-					passData.pass = res.get();
-					device.renderSystem.getEngine()->registerTimer( framePass.getName()
-						, res->getTimer() );
-					return res;
-				} );
-			pass.addDependency( *previousPass );
-			previousPass = &pass;
-			pass.addOutputDepthView( depth.targetViewId, getClearValue( SmTexture::eDepth ) );
-			pass.addOutputColourView( linear.targetViewId, getClearValue( SmTexture::eNormalLinear ) );
-			pass.addOutputColourView( variance.targetViewId, getClearValue( SmTexture::eVariance ) );
-			pass.addOutputColourView( position.targetViewId, getClearValue( SmTexture::ePosition ) );
-			pass.addOutputColourView( flux.targetViewId, getClearValue( SmTexture::eFlux ) );
-			result.emplace_back( std::move( passData ) );
-
-#else
 			graphs.push_back( std::make_unique< crg::FrameGraph >( handler,  "DirectionalSMC" ) );
 			auto & graph = graphs.back()->getDefaultGroup();
 			crg::FramePass const * previousPass{};
@@ -181,8 +140,6 @@ namespace castor3d
 				}
 			}
 
-#endif
-
 			return result;
 		}
 	}
@@ -196,14 +153,8 @@ namespace castor3d
 			, scene
 			, LightType::eDirectional
 			, 0u
-#if C3D_UseTiledDirectionalShadowMap
-			, { ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountX
-				, ShadowMapPassDirectional::TileSize * ShadowMapPassDirectional::TileCountY }
-			, 1u
-#else
 			, { ShadowMapPassDirectional::TileSize, ShadowMapPassDirectional::TileSize }
 			, scene.getDirectionalShadowCascades()
-#endif
 			, 1u }
 		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "DirectionalGB"
 			, 0u
@@ -235,13 +186,6 @@ namespace castor3d
 			node->update();
 			m_shadowType = light.getShadowType();
 
-#if C3D_UseTiledDirectionalShadowMap
-			if ( directional.updateShadow( camera )
-				|| m_passes[0u].pass->isDirty() )
-			{
-				m_passes[0u].pass->update( updater );
-			}
-#else
 			auto shadowModified = directional.updateShadow( camera );
 
 			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
@@ -259,7 +203,6 @@ namespace castor3d
 				updater.index = cascade;
 				m_passes[cascade]->pass->update( updater );
 			}
-#endif
 		}
 	}
 
@@ -290,21 +233,11 @@ namespace castor3d
 	{
 		if ( m_runnables[updater.index] )
 		{
-#if C3D_UseTiledDirectionalShadowMap
-			auto & camera = *updater.camera;
-
-			if ( directional.updateShadow( camera )
-				|| m_passes[0u].pass->isDirty() )
-			{
-				m_passes[0u].pass->update( updater );
-			}
-#else
 			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 			{
 				updater.index = cascade;
 				m_passes[cascade]->pass->update( updater );
 			}
-#endif
 		}
 	}
 }

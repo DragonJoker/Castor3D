@@ -118,21 +118,12 @@ namespace castor3d
 			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
 			{
 				auto inPosition = writer.declInput< Vec2 >( "inPosition", 0u );
-#if C3D_UseTiledDirectionalShadowMap
-				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
-					, GeometryInjectionPass::RsmNormalsIdx
-					, 0u );
-				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
-					, GeometryInjectionPass::RsmPositionIdx
-					, 0u );
-#else
 				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, GeometryInjectionPass::RsmNormalsIdx
 					, 0u );
 				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, GeometryInjectionPass::RsmPositionIdx
 					, 0u );
-#endif
 				UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 				UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
@@ -165,16 +156,10 @@ namespace castor3d
 							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
 							, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
-#if C3D_UseTiledDirectionalShadowMap
-						auto rsmCoords = writer.declLocale( "rsmCoords"
-							, ivec2( in.vertexIndex % rsmTexSize
-								, in.vertexIndex / rsmTexSize ) );
-#else
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize )
 								, cascadeIndex ) );
-#endif
 
 						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();

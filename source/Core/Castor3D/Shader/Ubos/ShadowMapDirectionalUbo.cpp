@@ -10,7 +10,6 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -51,26 +50,6 @@ namespace castor3d
 		{
 			return std::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
-		}
-
-		sdw::UInt ShadowMapDirectionalData::getTileIndex( ModelInstancesData const & modelInstances
-			, sdw::Int const & instanceIndex )const
-		{
-			return min( modelInstances.instanceCount - 1_u
-				, modelInstances.instances[instanceIndex / 4][instanceIndex % 4] );
-		}
-
-		sdw::Vec2 ShadowMapDirectionalData::getTileMin( sdw::UInt const & tileIndex )const
-		{
-			auto & writer = *getWriter();
-			return vec2( writer.cast < sdw::Float > ( tileIndex % writer.cast< sdw::UInt >( m_lightTiles.x() ) )
-					, writer.cast< sdw::Float >( tileIndex / writer.cast< sdw::UInt >( m_lightTiles.x() ) ) )
-				* m_lightTiles.zw() * 2.0 - 1.0;
-		}
-
-		sdw::Vec2 ShadowMapDirectionalData::getTileMax( sdw::Vec2 const & tileMin )const
-		{
-			return tileMin + m_lightTiles.zw() * 2.0_f;
 		}
 
 		sdw::Vec4 ShadowMapDirectionalData::worldToView( sdw::UInt const & tileIndex

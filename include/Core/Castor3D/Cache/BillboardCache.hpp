@@ -15,9 +15,6 @@ namespace castor3d
 {
 	C3D_API size_t hash( BillboardBase const & billboard
 		, Pass const & pass );
-	C3D_API size_t hash( BillboardBase const & billboard
-		, Pass const & pass
-		, uint32_t instanceMult );
 	using BillboardCacheTraits = ObjectCacheTraitsT< BillboardList, castor::String >;
 	/**
 	\~english
@@ -103,9 +100,6 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 
-		C3D_API void registerPass( RenderNodesPass const & renderPass );
-		C3D_API void unregisterPass( RenderNodesPass const * renderPass
-			, uint32_t instanceMult );
 		C3D_API void registerElement( BillboardBase & billboard );
 		C3D_API void unregisterElement( BillboardBase & billboard );
 		/**
@@ -130,17 +124,14 @@ namespace castor3d
 		 *\remarks		Assumes the entry has been previously created.
 		 *\param		billboard		The instance.
 		 *\param		pass			The instance material pass.
-		 *\param		instanceMult	The instance multiplier, to know where to register the nodes.
 		 *\~french
 		 *\brief		Nettoie les pools d'UBO.
 		 *\remarks		Considère que l'entrée a été préalablement créée.
 		 *\param		billboard		L'instance.
 		 *\param		pass			La passe de matériau de l'instance.
-		 *\param		instanceMult	Le multiplicateur d'instances, pour savoir où enregistrer les nodes.
 		 */
 		C3D_API PoolsEntry getUbos( BillboardBase const & billboard
-			, Pass const & pass
-			, uint32_t instanceMult )const;
+			, Pass const & pass )const;
 
 		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
 		{
@@ -162,11 +153,9 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		std::map< size_t, PoolsEntry > m_baseEntries;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< RenderNodesPass const * >;
-		std::map< uint32_t, RenderPassSet > m_instances;
 		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
 		ashes::BufferPtr< BillboardUboConfiguration >m_billboardsData;
 	};

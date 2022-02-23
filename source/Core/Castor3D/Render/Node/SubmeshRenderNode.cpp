@@ -24,8 +24,8 @@ namespace castor3d
 		return instance.getId( data );
 	}
 
-	uint32_t SubmeshRenderNode::getInstanceMult( uint32_t instanceMult )const
+	uint32_t SubmeshRenderNode::getInstanceCount( uint32_t instanceCount )const
 	{
-		return instanceMult;
+		return instanceCount;
 	}
 }
