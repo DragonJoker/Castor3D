@@ -96,7 +96,7 @@ namespace ocean_fft
 		{
 			sdw::ComputeWriter writer;
 
-			UBO_OCEAN( writer, DownsampleDistributionPass::eConfig, 0u );
+			C3D_FftOcean( writer, DownsampleDistributionPass::eConfig, 0u );
 
 			auto distributions = writer.declStorageBuffer( "Distribution", DownsampleDistributionPass::eInput, 0u );
 			auto distribution = distributions.declMemberArray< sdw::Vec2 >( "distribution" );

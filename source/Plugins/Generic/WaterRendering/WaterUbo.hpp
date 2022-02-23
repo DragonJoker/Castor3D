@@ -157,7 +157,7 @@ namespace water
 	};
 }
 
-#define UBO_WATER( writer, binding, set )\
+#define C3D_Water( writer, binding, set )\
 	auto waterBuffer = writer.declUniformBuffer( water::WaterUbo::Buffer, binding, set );\
 	auto c3d_waterData = waterBuffer.declMember< water::WaterData >( water::WaterUbo::Data );\
 	waterBuffer.end()

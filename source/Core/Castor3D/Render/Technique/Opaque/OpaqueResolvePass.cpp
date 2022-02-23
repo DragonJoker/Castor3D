@@ -141,9 +141,9 @@ namespace castor3d
 			shader::Materials materials{ writer
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u };
-			C3D_Scene( writer, uint32_t( ResolveBind::eScene ), 0u );
-			UBO_GPINFO( writer, uint32_t( ResolveBind::eGpInfo ), 0u );
-			UBO_HDR_CONFIG( writer, uint32_t( ResolveBind::eHdrConfig ), 0u );
+			C3D_Scene( writer, ResolveBind::eScene, 0u );
+			C3D_GpInfo( writer, ResolveBind::eGpInfo, 0u );
+			C3D_HdrConfig( writer, ResolveBind::eHdrConfig, 0u );
 
 			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( ResolveBind::eData0 ), 0u );
 			auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( ResolveBind::eData1 ), 0u );

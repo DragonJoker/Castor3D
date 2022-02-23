@@ -176,7 +176,7 @@ namespace castor3d
 	};
 }
 
-#define UBO_SSAO_CONFIG( Writer, Binding, Set )\
+#define C3D_SsaoConfig( Writer, Binding, Set )\
 	sdw::Ubo ssaoConfig{ Writer\
 		, castor3d::SsaoConfigUbo::BufferSsaoConfig\
 		, uint32_t( Binding )\

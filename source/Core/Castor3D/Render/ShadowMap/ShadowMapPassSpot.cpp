@@ -258,7 +258,7 @@ namespace castor3d
 			, hasTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
-		UBO_SHADOWMAP( writer
+		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::ePass );
 		auto lightingModel = shader::LightingModel::createModel( utils

@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "ShadowMapModule.hpp"
 
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
-#include "Castor3D/Shader/Ubos/ShadowMapDirectionalUbo.hpp"
 
 namespace castor3d
 {
@@ -71,9 +70,6 @@ namespace castor3d
 		C3D_API static uint32_t const TileCountX;
 		C3D_API static uint32_t const TileCountY;
 		C3D_API static castor::String const Type;
-
-	private:
-		ShadowMapDirectionalUbo m_shadowMapDirectionalUbo;
 	};
 }
 
