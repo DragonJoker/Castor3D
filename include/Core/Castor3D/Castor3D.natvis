@@ -72,9 +72,9 @@
 	</Type>
 
 	<Type Name="castor3d::Submesh">
-		<DisplayString>{m_parentMesh}({m_id})</DisplayString>
+		<DisplayString>{*m_owner}({m_id})</DisplayString>
 		<Expand>
-			<Item Name="mesh">m_parentMesh</Item>
+			<Item Name="mesh">*m_owner</Item>
 			<Item Name="id">m_id</Item>
 			<Item Name="material">m_defaultMaterial</Item>
 			<Item Name="box">m_box</Item>
@@ -82,15 +82,13 @@
 			<Item Name="points">m_points</Item>
 			<Item Name="components">m_components</Item>
 			<Item Name="instantiation">m_instantiation</Item>
-			<Item Name="instantiatedBones">m_instantiatedBones</Item>
 			<Item Name="indexMapping">m_indexMapping</Item>
 			<Item Name="flags">m_programFlags</Item>
 			<Item Name="generated">m_generated</Item>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="topology">m_topology</Item>
-			<Item Name="vertexBuffer">m_vertexBuffer</Item>
-			<Item Name="indexBuffer">m_indexBuffer</Item>
+			<Item Name="bufferOffset">m_bufferOffset</Item>
 			<Item Name="vertexLayouts">m_vertexLayouts</Item>
 			<Item Name="geometryBuffers">m_geometryBuffers</Item>
 			<Item Name="needsNormalsCompute">m_needsNormalsCompute</Item>
@@ -99,7 +97,7 @@
 	</Type>
 
 	<Type Name="castor3d::Pass">
-		<DisplayString>{m_id} (material={m_owner.m_name})</DisplayString>
+		<DisplayString>{m_id} (material={m_owner->m_name})</DisplayString>
 		<Expand>
 			<Item Name="id">m_id</Item>
 			<Item Name="material">m_owner</Item>
@@ -173,6 +171,7 @@
 	<Type Name="castor3d::Geometry">
 		<DisplayString>{m_name}({m_meshName})</DisplayString>
 		<Expand>
+			<Item Name="ids">m_id</Item>
 			<Item Name="mesh">m_mesh</Item>
 			<Item Name="meshName">m_meshName</Item>
 			<Item Name="listCreated">m_listCreated</Item>

@@ -142,31 +142,9 @@ namespace castor3d::shader
 		return m_curMtxModel;
 	}
 
-	sdw::UVec4 ModelIndices::getTextures0( ProgramFlags programFlags
-		, sdw::UVec4 const & instanceData )const
-	{
-		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-		{
-			return instanceData;
-		}
-
-		return getTextures0();
-	}
-
 	sdw::UVec4 ModelIndices::getTextures0()const
 	{
 		return m_textures0;
-	}
-
-	sdw::UVec4 ModelIndices::getTextures1( ProgramFlags programFlags
-		, sdw::UVec4 const & instanceData )const
-	{
-		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-		{
-			return instanceData;
-		}
-
-		return getTextures1();
 	}
 
 	sdw::UVec4 ModelIndices::getTextures1()const
@@ -174,31 +152,9 @@ namespace castor3d::shader
 		return m_textures1;
 	}
 
-	sdw::Int ModelIndices::getTextures( ProgramFlags programFlags
-		, sdw::Int const & instanceData )const
-	{
-		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-		{
-			return instanceData;
-		}
-
-		return getTextures();
-	}
-
 	sdw::Int ModelIndices::getTextures()const
 	{
 		return m_textures;
-	}
-
-	sdw::UInt ModelIndices::getMaterialId( ProgramFlags programFlags
-		, sdw::Int const & instanceMaterial )const
-	{
-		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-		{
-			return getWriter()->cast< sdw::UInt >( instanceMaterial );
-		}
-
-		return getMaterialId();
 	}
 
 	sdw::UInt ModelIndices::getMaterialId()const
