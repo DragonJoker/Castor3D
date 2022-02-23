@@ -50,30 +50,15 @@ namespace castor3d
 			return buffer;
 		}
 
-		ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( ShaderFlags shaderFlags
+		ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( ProgramFlags programFlags
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { InstantiationComponent::BindingPoint
 				, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE } };
-
-			ashes::VkVertexInputAttributeDescriptionArray attributes;
-			attributes.push_back( { currentLocation++
+			ashes::VkVertexInputAttributeDescriptionArray attributes{ { currentLocation++
 				, InstantiationComponent::BindingPoint
 				, VK_FORMAT_R32G32B32A32_UINT
-				, offsetof( InstantiationData, m_textures0 ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32G32B32A32_UINT
-				, offsetof( InstantiationData, m_textures1 ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32_SINT
-				, offsetof( InstantiationData, m_textures ) } );
-			attributes.push_back( { currentLocation++
-				, InstantiationComponent::BindingPoint
-				, VK_FORMAT_R32_SINT
-				, offsetof( InstantiationData, m_material ) } );
-
+				, offsetof( InstantiationData, m_objectIDs ) } };
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 	}
@@ -214,7 +199,7 @@ namespace castor3d
 			if ( it != m_instances.end()
 				&& it->second[index].buffer )
 			{
-				auto hash = std::hash< ShaderFlags::BaseType >{}( shaderFlags );
+				auto hash = std::hash< ProgramFlags::BaseType >{}( programFlags );
 				hash = castor::hashCombine( hash, mask.empty() );
 				hash = castor::hashCombine( hash, currentLocation );
 				auto layoutIt = m_mtxLayouts.find( hash );
@@ -222,7 +207,7 @@ namespace castor3d
 				if ( layoutIt == m_mtxLayouts.end() )
 				{
 					layoutIt = m_mtxLayouts.emplace( hash
-						, getInstantiationLayout( shaderFlags, currentLocation ) ).first;
+						, getInstantiationLayout( programFlags, currentLocation ) ).first;
 				}
 
 				buffers.emplace_back( it->second[index].buffer.getBuffer().getBuffer() );
@@ -272,11 +257,10 @@ namespace castor3d
 
 	ProgramFlags InstantiationComponent::getProgramFlags( MaterialRPtr material )const
 	{
-		return ProgramFlag( 0 );
-		//auto it = find( material );
-		//return ( it != end() && it->second[0].buffer )
-		//	? ProgramFlag::eInstantiation
-		//	: ProgramFlag( 0 );
+		auto it = find( material );
+		return ( it != end() && it->second[0].buffer )
+			? ProgramFlag::eInstantiation
+			: ProgramFlag( 0 );
 	}
 
 	bool InstantiationComponent::doInitialise( RenderDevice const & device )
