@@ -376,7 +376,6 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API GeometrySPtr getPickedGeometry()const;
-		C3D_API BillboardBaseSPtr getPickedBillboard()const;
 		C3D_API SubmeshSPtr getPickedSubmesh()const;
 		C3D_API uint32_t getPickedFace()const;
 		C3D_API ShadowMapLightTypeArray getShadowMaps()const;

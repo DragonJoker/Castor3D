@@ -33,7 +33,7 @@ namespace castor3d
 	public:
 		struct PoolsEntry
 		{
-			int32_t id;
+			uint32_t id;
 			size_t hash;
 			Geometry const & geometry;
 			Submesh const & submesh;
@@ -117,11 +117,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The UBOs for given geometry, submesh and pass.
+		 *\remarks		Assumes the entry has been previously created.
 		 *\param[in]	geometry		The geometry.
 		 *\param[in]	submesh			The submesh.
 		 *\param[in]	pass			The material pass.
 		 *\~french
 		 *\brief		Les UBOs pour la géométrie, le sous-maillage et la passe donnés.
+		 *\remarks		Considère que l'entrée a été préalablement créée.
 		 *\param[in]	geometry		La géometrie.
 		 *\param[in]	submesh			Le submesh.
 		 *\param[in]	pass			La passe du matériau.
@@ -129,6 +131,15 @@ namespace castor3d
 		C3D_API PoolsEntry getUbos( Geometry const & geometry
 			, Submesh const & submesh
 			, Pass const & pass )const;
+		/**
+		 *\~english
+		 *\return		The pool entry for given ID.
+		 *\param[in]	nodeId	The entry ID.
+		 *\~french
+		 *\brief		L'entrée de pool pour l'ID donné.
+		 *\param[in]	nodeId	L'ID de l'entrée.
+		 */
+		C3D_API PoolsEntry const & getEntry( uint32_t nodeId )const;
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
