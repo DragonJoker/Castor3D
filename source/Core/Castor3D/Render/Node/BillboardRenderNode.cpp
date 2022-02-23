@@ -23,7 +23,7 @@ namespace castor3d
 		return instance.getId();
 	}
 
-	uint32_t BillboardRenderNode::getInstanceMult( uint32_t instanceMult )const
+	uint32_t BillboardRenderNode::getInstanceCount( uint32_t instanceCount )const
 	{
 		return data.getCount();
 	}

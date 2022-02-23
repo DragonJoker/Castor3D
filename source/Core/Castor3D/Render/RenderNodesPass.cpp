@@ -37,7 +37,6 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
@@ -111,23 +110,6 @@ namespace castor3d
 				} );
 		}
 
-		template< typename CulledT >
-		void updateInstancesUbos( std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > & buffers
-			, SceneCuller::CulledInstancesPtrT< CulledT > const & nodes
-			, uint32_t instanceMult )
-		{
-			auto instancesIt = nodes.instances.begin();
-
-			for ( auto & node : nodes.objects )
-			{
-				auto instances = *instancesIt;
-				auto it = buffers.find( hash( *node, instanceMult ) );
-				CU_Require( it != buffers.end() );
-				cpuUpdate( it->second, *instances );
-				++instancesIt;
-			}
-		}
-
 		template< typename PipelineContT >
 		auto findPipeline( PipelineFlags const & flags
 			, PipelineContT & pipelines )
@@ -178,11 +160,8 @@ namespace castor3d
 		, m_safeBand{ desc.m_safeBand }
 		, m_sceneUbo{ m_device }
 		, m_index{ desc.m_index }
-		, m_instanceMult{ desc.m_instanceMult }
 	{
 		m_sceneUbo.setWindowSize( m_size );
-		m_culler.getScene().getGeometryCache().registerPass( *this );
-		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
 
 	RenderNodesPass::~RenderNodesPass()
@@ -364,8 +343,7 @@ namespace castor3d
 		auto & buffers = billboard.getGeometryBuffers();
 		auto & scene = billboard.getParentScene();
 		auto billboardEntry = scene.getBillboardListCache().getUbos( billboard
-			, pass
-			, getInstanceMult() );
+			, pass );
 		m_isDirty = true;
 
 		return &m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
@@ -614,7 +592,7 @@ namespace castor3d
 	uint32_t RenderNodesPass::doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & instanceBuffer )const
 	{
-		auto const count = std::min( uint32_t( instanceBuffer.size() / m_instanceMult )
+		auto const count = std::min( uint32_t( instanceBuffer.size() )
 			, uint32_t( renderNodes.size() ) );
 		auto buffer = instanceBuffer.data();
 		auto it = renderNodes.begin();
@@ -623,27 +601,22 @@ namespace castor3d
 		while ( i < count )
 		{
 			auto & node = *it;
+			CU_Require( node->getId() > 0u );
+			buffer->m_objectIDs->x = node->getId() - 1u;
 
-			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
+			if ( node->mesh )
 			{
-				CU_Require( node->getId() > 0u );
-				buffer->m_objectIDs->x = node->getId() - 1u;
-
-				if ( node->mesh )
-				{
-					CU_Require( node->mesh->getId() > 0u );
-					buffer->m_objectIDs->y = node->mesh->getId() - 1u;
-				}
-
-				if ( node->skeleton )
-				{
-					CU_Require( node->skeleton->getId() > 0u );
-					buffer->m_objectIDs->z = node->skeleton->getId() - 1u;
-				}
-
-				++buffer;
+				CU_Require( node->mesh->getId() > 0u );
+				buffer->m_objectIDs->y = node->mesh->getId() - 1u;
 			}
 
+			if ( node->skeleton )
+			{
+				CU_Require( node->skeleton->getId() > 0u );
+				buffer->m_objectIDs->z = node->skeleton->getId() - 1u;
+			}
+
+			++buffer;
 			++i;
 			++it;
 		}
@@ -674,13 +647,8 @@ namespace castor3d
 		while ( i < count )
 		{
 			auto & node = *it;
-
-			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
-			{
-				node->skeleton->fillBuffer( buffer );
-				buffer += stride;
-			}
-
+			node->skeleton->fillBuffer( buffer );
+			buffer += stride;
 			++i;
 			++it;
 		}
@@ -706,15 +674,14 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, SubmeshRenderNodePtrArray & renderNodes )
 			{
-				auto it = instantiation.find( pass.getOwner(), m_instanceMult );
-				auto index = instantiation.getIndex( m_instanceMult );
+				auto it = instantiation.find( pass.getOwner() );
 
 				if ( !renderNodes.empty()
 					&& it != instantiation.end()
-					&& it->second[index].buffer )
+					&& it->second.buffer )
 				{
 					doCopyNodesIds( renderNodes
-						, it->second[index].data );
+						, it->second.data );
 				}
 			} );
 	}
@@ -729,15 +696,14 @@ namespace castor3d
 				, InstantiationComponent & instantiation
 				, SubmeshRenderNodePtrArray & renderNodes )
 			{
-				auto it = instantiation.find( pass.getOwner(), m_instanceMult );
-				auto index = instantiation.getIndex( m_instanceMult );
+				auto it = instantiation.find( pass.getOwner() );
 
 				if ( !renderNodes.empty()
 					&& it != instantiation.end()
-					&& it->second[index].buffer )
+					&& it->second.buffer )
 				{
 					uint32_t count1 = doCopyNodesIds( renderNodes
-						, it->second[index].data );
+						, it->second.data );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
@@ -1016,14 +982,12 @@ namespace castor3d
 		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
 			, pipeline.getFlags().programFlags
 			, pass.getOwner()
-			, getInstanceMult()
 			, pass.getTexturesMask()
 			, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
-			, pass
-			, getInstanceMult() );
+			, pass );
 		m_isDirty = true;
 
 		auto & result = m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }

@@ -237,7 +237,7 @@ namespace castor3d
 			if ( node.buffers.bufferOffset.idxBuffer )
 			{
 				indirectIndexedCommands->indexCount = node.buffers.bufferOffset.getIndexCount();
-				indirectIndexedCommands->instanceCount = node.getInstanceMult( instanceCount );
+				indirectIndexedCommands->instanceCount = node.getInstanceCount( instanceCount );
 				indirectIndexedCommands->firstIndex = node.buffers.bufferOffset.getFirstIndex();
 				indirectIndexedCommands->vertexOffset = int32_t( node.buffers.bufferOffset.getFirstVertex< VertexT >() );
 				indirectIndexedCommands->firstInstance = 0u;
@@ -246,7 +246,7 @@ namespace castor3d
 			else
 			{
 				indirectCommands->vertexCount = node.buffers.bufferOffset.getVertexCount< VertexT >();
-				indirectCommands->instanceCount = node.getInstanceMult( instanceCount );
+				indirectCommands->instanceCount = node.getInstanceCount( instanceCount );
 				indirectCommands->firstVertex = node.buffers.bufferOffset.getFirstVertex< VertexT >();
 				indirectCommands->firstInstance = 0u;
 				++indirectCommands;
@@ -258,8 +258,7 @@ namespace castor3d
 			, std::vector< RenderPipeline const * > const & registeredPipelines
 			, PipelineNodes *& pipelinesNodes
 			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
-			, VkDrawIndirectCommand *& indirectCommands
-			, uint32_t instanceCount )
+			, VkDrawIndirectCommand *& indirectCommands )
 		{
 			for ( auto & pipelines : renderNodes )
 			{
@@ -272,7 +271,7 @@ namespace castor3d
 					fillIndirectCommand( *node
 						, indirectIndexedCommands
 						, indirectCommands
-						, instanceCount );
+						, 1u );
 					( *pipelinesBuffer )->x = node->getId() - 1u;
 
 					if constexpr ( std::is_same_v< NodeT, SubmeshRenderNode > )
@@ -297,14 +296,12 @@ namespace castor3d
 			, std::vector< RenderPipeline const * > const & registeredPipelines
 			, PipelineNodes *& pipelinesNodes
 			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
-			, VkDrawIndirectCommand *& indirectCommands
-			, uint32_t instanceCount )
+			, VkDrawIndirectCommand *& indirectCommands )
 		{
-			instanceCount *= uint32_t( renderNodes.size() );
 			fillIndirectCommand( **renderNodes.begin()
 				, indirectIndexedCommands
 				, indirectCommands
-				, instanceCount );
+				, uint32_t( renderNodes.size() ) );
 		}
 
 		//*****************************************************************************************
@@ -319,22 +316,6 @@ namespace castor3d
 			, uint32_t & drawId )
 		{
 			GeometryBuffers const & geometryBuffers = node.buffers;
-
-			if ( node.uboDescriptorSet )
-			{
-				commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
-			}
-
-			if ( node.texDescriptorSet )
-			{
-				commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
-			}
-
-			if ( pipeline.hasDescriptorSetLayout() )
-			{
-				commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet(), pipeline.getPipelineLayout() );
-			}
-
 			commandBuffer.pushConstants( pipeline.getPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT, 4u, 4u, &drawId );
 			commandBuffer.bindVertexBuffer( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
 				, geometryBuffers.bufferOffset.getVertexBuffer()
@@ -386,6 +367,11 @@ namespace castor3d
 			if ( scissor )
 			{
 				commandBuffer.setScissor( *scissor );
+			}
+
+			if ( pipeline.hasDescriptorSetLayout() )
+			{
+				commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet(), pipeline.getPipelineLayout() );
 			}
 
 			if ( pipeline.getRenderSystem().hasFeature( GpuFeature::eBindless ) )
@@ -595,13 +581,12 @@ namespace castor3d
 	{
 		auto & queue = *getOwner();
 		auto & rp = *queue.getOwner();
-		auto instanceCount = rp.getInstanceMult();
 		auto indIndexedBuffer = m_indirectIndexedCommands->lock( 0u, ashes::WholeSize, 0u );
 		auto indBuffer = m_indirectCommands->lock( 0u, ashes::WholeSize, 0u );
 		auto nodesIdsBuffer = m_nodesIds->lock( 0u, ashes::WholeSize, 0u );
 
 		doTraverseNodes( instancedStaticNodes.frontCulled
-			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
@@ -610,11 +595,10 @@ namespace castor3d
 					, m_pipelinesNodes
 					, nodesIdsBuffer
 					, indIndexedBuffer
-					, indBuffer
-					, instanceCount );
+					, indBuffer );
 			} );
 		doTraverseNodes( instancedStaticNodes.backCulled
-			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
@@ -623,11 +607,10 @@ namespace castor3d
 					, m_pipelinesNodes
 					, nodesIdsBuffer
 					, indIndexedBuffer
-					, indBuffer
-					, instanceCount );
+					, indBuffer );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.frontCulled
-			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
@@ -636,11 +619,10 @@ namespace castor3d
 					, m_pipelinesNodes
 					, nodesIdsBuffer
 					, indIndexedBuffer
-					, indBuffer
-					, instanceCount );
+					, indBuffer );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.backCulled
-			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer, instanceCount]( RenderPipeline & pipeline
+			, [this, &nodesIdsBuffer, &indIndexedBuffer, &indBuffer]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, SubmeshRenderNodePtrArray & nodes )
@@ -649,61 +631,52 @@ namespace castor3d
 					, m_pipelinesNodes
 					, nodesIdsBuffer
 					, indIndexedBuffer
-					, indBuffer
-					, instanceCount );
+					, indBuffer );
 			} );
 
 		doFillRenderNodes( staticNodes.frontCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 		doFillRenderNodes( staticNodes.backCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 
 		doFillRenderNodes( skinnedNodes.frontCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 		doFillRenderNodes( skinnedNodes.backCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 
 		doFillRenderNodes( morphingNodes.frontCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 		doFillRenderNodes( morphingNodes.backCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 
 		doFillRenderNodes( billboardNodes.frontCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 		doFillRenderNodes( billboardNodes.backCulled
 			, m_pipelinesNodes
 			, nodesIdsBuffer
 			, indIndexedBuffer
-			, indBuffer
-			, instanceCount );
+			, indBuffer );
 
 		m_nodesIds->flush( 0u, ashes::WholeSize );
 		m_nodesIds->unlock();

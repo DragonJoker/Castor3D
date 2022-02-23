@@ -233,7 +233,6 @@ namespace castor3d
 		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
 			, ProgramFlags const & programFlags
 			, MaterialRPtr material
-			, uint32_t instanceMult
 			, TextureFlagsArray const & mask
 			, bool forceTexcoords )const;
 		/**

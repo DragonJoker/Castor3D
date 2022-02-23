@@ -273,7 +273,6 @@ namespace castor3d
 			, SceneNode const * ignored
 			, QueueRenderNodes & nodes )
 		{
-			uint32_t instanceMult = renderPass.getInstanceMult();
 			auto & scene = nodes.getOwner()->getCuller().getScene();
 
 			for ( auto it : nodes.allSubmeshNodes )
@@ -301,7 +300,6 @@ namespace castor3d
 				auto vertexLayouts = submesh.getGeometryBuffers( renderPass.getShaderFlags()
 					, pipelineFlags.programFlags
 					, material
-					, instanceMult
 					, textures
 					, checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords ) ).layouts;
 				auto & backPipeline = renderPass.prepareBackPipeline( pipelineFlags

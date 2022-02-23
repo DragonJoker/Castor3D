@@ -118,17 +118,6 @@ namespace castor3d
 
 			if constexpr ( shader::DirectionalMaxCascadesCount > 1u )
 			{
-#if C3D_UseTiledDirectionalShadowMap
-				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
-					, RsmNormalsIdx
-					, 0u );
-				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
-					, RsmPositionIdx
-					, 0u );
-				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
-					, RsmFluxIdx
-					, 0u );
-#else
 				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, LightInjectionPass::RsmNormalsIdx
 					, 0u );
@@ -138,7 +127,6 @@ namespace castor3d
 				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 					, LightInjectionPass::RsmFluxIdx
 					, 0u );
-#endif
 				UBO_LPVGRIDCONFIG( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
 				UBO_LPVLIGHTCONFIG( writer, LightInjectionPass::LpvLightUboIdx, 0u );
 
@@ -163,16 +151,10 @@ namespace castor3d
 							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
 							, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
-#if C3D_UseTiledDirectionalShadowMap
-						auto rsmCoords = writer.declLocale( "rsmCoords"
-							, ivec2( in.vertexIndex % rsmTexSize
-								, in.vertexIndex / rsmTexSize ) );
-#else
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize )
 								, cascadeIndex ) );
-#endif
 
 						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
