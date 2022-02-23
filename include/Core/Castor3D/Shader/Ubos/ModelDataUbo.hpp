@@ -128,7 +128,7 @@ namespace castor3d::shader
 	static shader::ObjectsIds::Ids getIds( sdw::Array< shader::ObjectsIds > const & data
 		, shader::VertexSurfaceT< FlagT > const & surface
 		, sdw::UInt pipelineID
-		, sdw::UInt drawID
+		, sdw::Int drawID
 		, ProgramFlags const & flags )
 	{
 		auto & writer = *data.getWriter();
@@ -146,7 +146,7 @@ namespace castor3d::shader
 		}
 
 		auto objectIdsData = writer.declLocale( "objectIdsData"
-			, data[pipelineID][drawID] );
+			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
 		return { writer.declLocale( "nodeId"
 			, objectIdsData.x() )
 			, writer.declLocale( "morphingId"
@@ -161,7 +161,7 @@ namespace castor3d::shader
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, shader::VertexSurfaceT< FlagT > const & surface
 		, sdw::UInt pipelineID
-		, sdw::UInt drawID
+		, sdw::Int drawID
 		, ProgramFlags const & flags )
 	{
 		auto & writer = *data.getWriter();
@@ -172,17 +172,17 @@ namespace castor3d::shader
 		}
 
 		auto objectIdsData = writer.declLocale( "objectIdsData"
-			, data[pipelineID][drawID] );
+			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
 		return objectIdsData.x();
 	}
 
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::UInt pipelineID
-		, sdw::UInt drawID )
+		, sdw::Int drawID )
 	{
 		auto & writer = *data.getWriter();
 		auto objectIdsData = writer.declLocale( "objectIdsData"
-			, data[pipelineID][drawID] );
+			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
 		return objectIdsData.x();
 	}
 }
