@@ -99,44 +99,44 @@ namespace castor3d
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::ePass };
+			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( m_ssao ? index++ : 0u )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, m_ssao != nullptr );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, m_mode != RenderMode::eTransparentOnly
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::ePass ) );
+			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.sceneFlags );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"

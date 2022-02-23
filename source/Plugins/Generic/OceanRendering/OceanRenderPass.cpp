@@ -619,16 +619,16 @@ namespace ocean
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -703,19 +703,19 @@ namespace ocean
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -788,7 +788,7 @@ namespace ocean
 		index++; // lights buffer
 		C3D_Ocean( writer
 			, index
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		writer.implementPatchRoutineT< castor3d::shader::FragmentSurfaceT, 3u, VoidT >( TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
 				, false
@@ -855,22 +855,22 @@ namespace ocean
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
 		C3D_Ocean( writer
 			, index
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		auto calculateWave = writer.implementFunction< WaveResult >( "calculateWave"
 			, [&]( Wave wave
@@ -1066,56 +1066,56 @@ namespace ocean
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::ePass };
+			, RenderPipeline::eBuffers };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		C3D_Ocean( writer
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_waveFoam = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveFoam"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_waveNormals1 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals1"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_waveNormals2 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveNormals2"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_waveNoise = writer.declCombinedImg< FImg2DR32 >( "c3d_waveNoise"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_normals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_normals"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_depth = writer.declCombinedImg< FImg2DR32 >( "c3d_depth"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_colour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colour"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, false
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::ePass ) );
+			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.sceneFlags );
 
 
