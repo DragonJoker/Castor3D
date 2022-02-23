@@ -87,19 +87,19 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		GeometrySPtr getPickedGeometry()const
+		Geometry const * getPickedGeometry()const
 		{
-			return m_geometry.lock();
+			return m_geometry;
 		}
 
-		BillboardBaseSPtr getPickedBillboard()const
+		BillboardBase const * getPickedBillboard()const
 		{
-			return m_billboard.lock();
+			return m_billboard;
 		}
 
-		SubmeshSPtr getPickedSubmesh()const
+		Submesh const * getPickedSubmesh()const
 		{
-			return m_submesh.lock();
+			return m_submesh;
 		}
 
 		uint32_t getPickedFace()const
@@ -121,10 +121,9 @@ namespace castor3d
 	private:
 		crg::FramePass doCreatePickingPass( MatrixUbo & matrixUbo
 			, SceneCuller & culler );
-		castor::Point4f doFboPick( castor::Position const & position
-			, Camera const & camera );
-		PickNodeType doPick( castor::Point4f const & pixel
-			, QueueCulledRenderNodes const & nodes );
+		castor::Point4ui doFboPick( castor::Position const & position );
+		PickNodeType doPick( castor::Point4ui const & pixel
+			, Scene const & scene );
 
 	public:
 		static uint32_t constexpr PickingWidth = 32u;
@@ -148,12 +147,12 @@ namespace castor3d
 		VkBufferImageCopy m_copyRegion;
 		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;
-		GeometryWPtr m_geometry;
-		BillboardBaseWPtr m_billboard;
-		SubmeshWPtr m_submesh;
+		ashes::BufferPtr< castor::Point4ui > m_stagingBuffer;
+		Geometry const * m_geometry{};
+		Submesh const * m_submesh{};
+		BillboardBase const * m_billboard{};
 		uint32_t m_face{ 0u };
-		std::vector< castor::Point4f > m_buffer;
+		std::vector< castor::Point4ui > m_buffer;
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 		std::atomic_bool m_picking{ false };

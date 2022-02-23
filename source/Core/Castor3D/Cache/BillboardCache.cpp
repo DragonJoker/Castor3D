@@ -180,6 +180,19 @@ namespace castor3d
 		return it->second;
 	}
 
+	BillboardListCache::PoolsEntry const & ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::getEntry( uint32_t nodeId )const
+	{
+		++nodeId;
+		auto it = std::find_if( m_entries.begin()
+			, m_entries.end()
+			, [nodeId]( std::map< size_t, PoolsEntry >::value_type const & lookup )
+			{
+				return nodeId == lookup.second.id;
+			} );
+		CU_Require( it != m_entries.end() );
+		return it->second;
+	}
+
 	void ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::doCreateEntry( RenderDevice const & device
 		, BillboardBase & billboard
 		, Pass const & pass )
@@ -194,8 +207,8 @@ namespace castor3d
 		if ( iresult.second )
 		{
 			auto & baseEntry = iresult.first->second;
-			baseEntry.id = int32_t( m_entries.size() );
-			billboard.setId( uint32_t( baseEntry.id ) );
+			baseEntry.id = uint32_t( m_entries.size() );
+			billboard.setId( baseEntry.id );
 		}
 	}
 

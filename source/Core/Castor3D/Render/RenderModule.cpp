@@ -73,16 +73,8 @@ namespace castor3d
 		{
 		case PickNodeType::eNone:
 			return cuT( "none" );
-		case PickNodeType::eStatic:
-			return cuT( "static" );
-		case PickNodeType::eInstantiatedStatic:
-			return cuT( "instantiated_static" );
-		case PickNodeType::eSkinning:
-			return cuT( "skinning" );
-		case PickNodeType::eInstantiatedSkinning:
-			return cuT( "instantiated_skinning" );
-		case PickNodeType::eMorphing:
-			return cuT( "morphing" );
+		case PickNodeType::eSubmesh:
+			return cuT( "submesh" );
 		case PickNodeType::eBillboard:
 			return cuT( "billboard" );
 		default:

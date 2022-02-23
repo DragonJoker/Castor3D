@@ -66,7 +66,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API bool updateNodes( VkRect2D const & scissor );
+		C3D_API bool update( VkRect2D const & scissor );
 		/**
 		*\~english
 		*name
@@ -76,7 +76,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API QueueCulledRenderNodes const & getCulledRenderNodes()const;
 		C3D_API TextureFlags getTexturesMask()const override;
 
 		C3D_API ShaderFlags getShaderFlags()const override
@@ -86,10 +85,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpdateNodes( QueueCulledRenderNodes & nodes );
-		void doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes );
-		void doUpdate( BillboardRenderNodePtrByPipelineMap & nodes );
-		void doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes );
 		bool doIsValidPass( Pass const & pass )const override;
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
