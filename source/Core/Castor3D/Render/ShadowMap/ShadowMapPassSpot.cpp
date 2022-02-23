@@ -162,7 +162,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -183,7 +182,7 @@ namespace castor3d
 				auto ids = shader::getIds( c3d_objectIdsData
 					, in
 					, pipelineID
-					, customDrawID
+					, in.drawID
 					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );

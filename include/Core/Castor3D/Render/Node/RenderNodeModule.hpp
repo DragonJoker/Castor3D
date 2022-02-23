@@ -161,7 +161,10 @@ namespace castor3d
 	using BillboardRenderNodePtrArray = NodePtrArrayT< BillboardRenderNode >;
 
 	template< typename NodeT >
-	using NodePtrByPipelineMapT = std::map< RenderPipelineRPtr, NodePtrArrayT< NodeT > >;
+	using NodePtrByBufferMapT = std::map< ashes::BufferBase const *, NodePtrArrayT< NodeT > >;
+
+	template< typename NodeT >
+	using NodePtrByPipelineMapT = std::map< RenderPipelineRPtr, NodePtrByBufferMapT< NodeT > >;
 
 	using SubmeshRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< SubmeshRenderNode >;
 	using BillboardRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< BillboardRenderNode >;
@@ -173,15 +176,14 @@ namespace castor3d
 	template< typename NodeT >
 	using ObjectNodesPtrMapT = std::map< NodeObjectT< NodeT > *, NodePtrArrayT< NodeT > >;
 
-	using SubmeshRenderNodesPtrMap = ObjectNodesPtrMapT< SubmeshRenderNode >;
-
 	template< typename NodeT >
 	using ObjectNodesPtrByPassT = std::map< PassRPtr, ObjectNodesPtrMapT< NodeT > >;
 
-	using SubmeshRenderNodesPtrByPassMap = ObjectNodesPtrByPassT< SubmeshRenderNode >;
+	template< typename NodeT >
+	using ObjectNodesPtrByBufferMapT = std::map< ashes::BufferBase const *, ObjectNodesPtrByPassT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByPipelineMapT = std::map< RenderPipelineRPtr, ObjectNodesPtrByPassT< NodeT > >;
+	using ObjectNodesPtrByPipelineMapT = std::map< RenderPipelineRPtr, ObjectNodesPtrByBufferMapT< NodeT > >;
 
 	using SubmeshRenderNodesPtrByPipelineMap = ObjectNodesPtrByPipelineMapT< SubmeshRenderNode >;
 
