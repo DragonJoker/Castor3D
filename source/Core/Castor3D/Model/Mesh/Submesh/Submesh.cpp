@@ -432,7 +432,6 @@ namespace castor3d
 	GeometryBuffers const & Submesh::getGeometryBuffers( ShaderFlags const & shaderFlags
 		, ProgramFlags const & programFlags
 		, MaterialRPtr material
-		, uint32_t instanceMult
 		, TextureFlagsArray const & mask
 		, bool forceTexcoords )const
 	{
@@ -471,7 +470,6 @@ namespace castor3d
 					, buffers
 					, offsets
 					, layouts
-					, instanceMult
 					, mask
 					, currentLocation );
 			}

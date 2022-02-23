@@ -82,19 +82,10 @@ namespace castor3d
 		{
 			struct
 			{
-#	if C3D_UseTiledDirectionalShadowMap
-				// DirectionalLight => BaseLightComponentsCount + 30 => BaseLightComponentsCount + 1(directionCount) + 1(tiles) + 2(splitDepths) + 2(splitScales) + (6 * 4)(transforms)
-				Float4 directionCount;
-				Float4 tiles;
-				std::array< Float4, 2u > splitDepths;
-				std::array< Float4, 2u > splitScales;
-				std::array< Float4x4, 4u > transforms;
-#	else
 				Float4 directionCount;
 				Float4 splitDepths;
 				Float4 splitScales;
 				std::array< Float4x4, 4u > transforms;
-#	endif
 			} directional;
 			struct
 			{

@@ -20,10 +20,6 @@ namespace castor3d
 	C3D_API size_t hash( Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass );
-	C3D_API size_t hash( Geometry const & geometry
-		, Submesh const & submesh
-		, Pass const & pass
-		, uint32_t instanceMult );
 	/**
 	\~english
 	\brief		Geometry cache.
@@ -108,10 +104,6 @@ namespace castor3d
 		 */
 		C3D_API void cleanup();
 
-		C3D_API void registerPass( RenderNodesPass const & renderPass );
-		C3D_API void unregisterPass( RenderNodesPass const * renderPass
-			, uint32_t instanceMult );
-
 		C3D_API void fillInfo( RenderInfo & info )const;
 		/**
 		 *\~english
@@ -128,18 +120,15 @@ namespace castor3d
 		 *\param[in]	geometry		The geometry.
 		 *\param[in]	submesh			The submesh.
 		 *\param[in]	pass			The material pass.
-		 *\param[in]	instanceMult	The instance multiplier.
 		 *\~french
 		 *\brief		Les UBOs pour la géométrie, le sous-maillage et la passe donnés.
 		 *\param[in]	geometry		La géometrie.
 		 *\param[in]	submesh			Le submesh.
 		 *\param[in]	pass			La passe du matériau.
-		 *\param[in]	instanceMult	Le multiplicateur d'instance.
 		 */
 		C3D_API PoolsEntry getUbos( Geometry const & geometry
 			, Submesh const & submesh
-			, Pass const & pass
-			, uint32_t instanceMult )const;
+			, Pass const & pass )const;
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
@@ -183,11 +172,9 @@ namespace castor3d
 		RenderDevice const & m_device;
 		uint32_t m_faceCount{ 0 };
 		uint32_t m_vertexCount{ 0 };
-		std::map< size_t, PoolsEntry > m_baseEntries;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
 		using RenderPassSet = std::set< RenderNodesPass const * >;
-		std::map< uint32_t, RenderPassSet > m_instances;
 		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
 	};
 }

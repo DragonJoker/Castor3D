@@ -30,7 +30,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
@@ -70,19 +69,6 @@ namespace castor3d
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeCount )
-#if C3D_UseTiledDirectionalShadowMap
-		: ShadowMapPass{ pass
-			, context
-			, graph
-			, device
-			, Type
-			, cuT( "DirectionalSM" )
-			, matrixUbo
-			, culler
-			, shadowMap
-			, createRenderPass( device, shadowMap, cuT( "DirectionalSM" ) )
-			, cascadeCount }
-#else
 		: ShadowMapPass{ pass
 			, context
 			, graph
@@ -91,9 +77,7 @@ namespace castor3d
 			, getPassName( cascadeCount )
 			, matrixUbo
 			, culler
-			, shadowMap
-			, 1u }
-#endif
+			, shadowMap }
 		, m_shadowMapDirectionalUbo{ device }
 	{
 		log::trace << "Created " << m_name << std::endl;
@@ -106,28 +90,7 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::update( CpuUpdater & updater )
 	{
-#if C3D_UseTiledDirectionalShadowMap
-		auto & light = *updater.light;
-		auto & camera = *updater.camera;
-		auto & directional = *light.getDirectionalLight();
-		auto & culler = static_cast< InstantiatedFrustumCuller & >( getCuller() );
-		std::vector< Frustum > frustums;
-
-		for ( uint32_t cascade = 0u; cascade < getInstanceMult(); ++cascade )
-		{
-			frustums.emplace_back( camera.getViewport() );
-			frustums.back().update( directional.getProjMatrix( cascade )
-				, directional.getViewMatrix( cascade ) );
-		}
-
-		culler.setFrustums( std::move( frustums ) );
-		culler.compute();
-		m_outOfDate = m_outOfDate
-			|| culler.areAllChanged()
-			|| culler.areCulledChanged();
-#else
 		getCuller().compute();
-#endif
 		m_outOfDate = true;
 		RenderNodesPass::update( updater );
 	}
@@ -143,11 +106,7 @@ namespace castor3d
 	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
 	{
 		RenderNodesPass::doUpdateUbos( updater );
-#if C3D_UseTiledDirectionalShadowMap
-		m_shadowMapDirectionalUbo.update( *updater.light->getDirectionalLight() );
-#else
 		m_shadowMapUbo.update( *updater.light, updater.index );
-#endif
 	}
 
 	void ShadowMapPassDirectional::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
@@ -165,11 +124,7 @@ namespace castor3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
-#if C3D_UseTiledDirectionalShadowMap
-		descriptorWrites.push_back( m_shadowMapDirectionalUbo.getDescriptorWrite( index++ ) );
-#else
 		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
-#endif
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassDirectional::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -190,9 +145,6 @@ namespace castor3d
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
 		addFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional );
-#if C3D_UseTiledDirectionalShadowMap
-		addFlag( flags.programFlags, ProgramFlag::eInstanceMult );
-#endif
 	}
 
 	ShaderPtr ShadowMapPassDirectional::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -220,20 +172,9 @@ namespace castor3d
 			, RenderPipeline::ePass
 			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + 1u;
-#if C3D_UseTiledDirectionalShadowMap
-		UBO_SHADOWMAP_DIRECTIONAL( writer
-			, index++
-			, RenderPipeline::ePass );
-#else
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::ePass );
-#endif
-#if C3D_UseTiledDirectionalShadowMap
-		UBO_MODEL_INSTANCES( writer
-			, NodeUboIdx::eModelInstances
-			, RenderPipeline::eBuffers );
-#endif
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -295,27 +236,8 @@ namespace castor3d
 				auto worldPos = writer.declLocale( "worldPos"
 					, mtxModel * curPosition );
 				out.worldPosition = worldPos;
-
-#if C3D_UseTiledDirectionalShadowMap
-				auto ti = writer.declLocale( "tileIndex"
-					, c3d_shadowMapDirectionalData.getTileIndex( c3d_modelInstancesData, in ) );
-				auto tileMin = writer.declLocale( "tileMin"
-					, c3d_shadowMapDirectionalData.getTileMin( ti ) );
-				auto tileMax = writer.declLocale( "tileMax"
-					, c3d_shadowMapDirectionalData.getTileMax( tileMin ) );
-
-				curPosition = c3d_shadowMapDirectionalData.worldToView( ti, worldPos );
-				curPosition = c3d_shadowMapDirectionalData.viewToProj( ti, curPosition );
-				out.vtx.position = curPosition;
-
-				out.vtx.clipDistance[0] = dot( vec4( 1.0_f, 0.0_f, 0.0_f, -tileMin.x() ), curPosition );
-				out.vtx.clipDistance[1] = dot( vec4( -1.0_f, 0.0_f, 0.0_f, tileMax.x() ), curPosition );
-				out.vtx.clipDistance[2] = dot( vec4( 0.0_f, -1.0_f, 0.0_f, -tileMin.y() ), curPosition );
-				out.vtx.clipDistance[3] = dot( vec4( 0.0_f, 1.0_f, 0.0_f, tileMax.y() ), curPosition );
-#else
 				curPosition = c3d_shadowMapData.worldToView( worldPos );
 				out.vtx.position = c3d_shadowMapData.viewToProj( curPosition );
-#endif
 
 				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 					, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
@@ -353,15 +275,9 @@ namespace castor3d
 			, hasTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
-#if C3D_UseTiledDirectionalShadowMap
-		UBO_SHADOWMAP_DIRECTIONAL( writer
-			, index++
-			, RenderPipeline::ePass );
-#else
 		UBO_SHADOWMAP( writer
 			, index++
 			, RenderPipeline::ePass );
-#endif
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, LightType::eDirectional
@@ -372,7 +288,6 @@ namespace castor3d
 			, index
 			, RenderPipeline::ePass
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -452,17 +367,12 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-#if C3D_UseTiledDirectionalShadowMap
-				auto light = writer.declLocale( "light"
-					, c3d_shadowMapDirectionalData.getDirectionalLight( *lightingModel ) );
-#else
 				auto light = writer.declLocale( "light"
 					, c3d_shadowMapData.getDirectionalLight( *lightingModel ) );
-#endif
 				pxl_flux.rgb() = lightMat->albedo
 					* light.m_lightBase.m_colour
 					* light.m_lightBase.m_intensity.x()
-					/** clamp( dot( normalize( light.m_direction ), normal ), 0.0_f, 1.0_f )*/;
+				/** clamp( dot( normalize( light.m_direction ), normal ), 0.0_f, 1.0_f )*/;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );

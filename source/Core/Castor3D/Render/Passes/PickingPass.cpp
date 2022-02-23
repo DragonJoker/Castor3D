@@ -203,10 +203,10 @@ namespace castor3d
 				auto it = component.find( pass.getOwner() );
 
 				if ( it != component.end()
-					&& it->second[0].buffer )
+					&& it->second.buffer )
 				{
 					doCopyNodesIds( renderNodes
-						, it->second[0].data );
+						, it->second.data );
 				}
 			} );
 	}

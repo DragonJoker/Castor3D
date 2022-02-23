@@ -80,33 +80,19 @@ namespace castor3d
 
 		if ( it == m_instances.end() )
 		{
-			DataArray data;
-
-			for ( uint32_t i = 0u; i < 6u; ++i )
-			{
-				data.emplace_back( 0u, GpuBufferOffsetT< InstantiationData >{} );
-			}
-
-			it = m_instances.emplace( material, std::move( data ) ).first;
+			it = m_instances.emplace( material, Data{ 0u, GpuBufferOffsetT< InstantiationData >{} } ).first;
 		}
 
-		auto & datas = it->second;
-		auto & data = datas[0];
+		auto & data = it->second;
 		auto result = data.count++;
 
 		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
-			auto & mulData = datas[5];
-			mulData.data.resize( data.count * 6u );
-
-			for ( auto & locData : datas )
-			{
-				locData.buffer = updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
-					, getOwner()->getParent().getName() + "_" + it->first->getName()
-					, locData.count
-					, std::move( locData.buffer ) );
-			}
+			data.buffer = updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
+				, getOwner()->getParent().getName() + "_" + it->first->getName()
+				, data.count
+				, std::move( data.buffer ) );
 		}
 
 		return result;
@@ -119,8 +105,7 @@ namespace castor3d
 
 		if ( it != end() )
 		{
-			auto & datas = it->second;
-			auto & data = datas[0];
+			auto & data = it->second;
 			result = data.count;
 
 			if ( data.count )
@@ -130,13 +115,10 @@ namespace castor3d
 
 			if ( !doCheckInstanced( data.count ) )
 			{
-				for ( auto & resdata : datas )
+				if ( data.buffer )
 				{
-					if ( resdata.buffer )
-					{
-						getOwner()->getOwner()->getEngine()->getRenderSystem()->getRenderDevice().bufferPool->putBuffer( resdata.buffer );
-						resdata.buffer = {};
-					}
+					getOwner()->getOwner()->getEngine()->getRenderSystem()->getRenderDevice().bufferPool->putBuffer( data.buffer );
+					data.buffer = {};
 				}
 			}
 		}
@@ -151,7 +133,7 @@ namespace castor3d
 
 		if ( it != end() )
 		{
-			result = it->second[0].count;
+			result = it->second.count;
 		}
 
 		return result;
@@ -173,7 +155,7 @@ namespace castor3d
 
 		for ( auto & it : m_instances )
 		{
-			count = std::max( count, it.second[0].count );
+			count = std::max( count, it.second.count );
 		}
 
 		return count;
@@ -185,19 +167,15 @@ namespace castor3d
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-		, uint32_t instanceMult
 		, TextureFlagsArray const & mask
 		, uint32_t & currentLocation )
 	{
 		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 		{
 			auto it = m_instances.find( material );
-			auto index = ( instanceMult <= 1u
-				? 0u
-				: instanceMult - 1u );
 
 			if ( it != m_instances.end()
-				&& it->second[index].buffer )
+				&& it->second.buffer )
 			{
 				auto hash = std::hash< ProgramFlags::BaseType >{}( programFlags );
 				hash = castor::hashCombine( hash, mask.empty() );
@@ -210,8 +188,8 @@ namespace castor3d
 						, getInstantiationLayout( programFlags, currentLocation ) ).first;
 				}
 
-				buffers.emplace_back( it->second[index].buffer.getBuffer().getBuffer() );
-				offsets.emplace_back( it->second[index].buffer.getOffset() );
+				buffers.emplace_back( it->second.buffer.getBuffer().getBuffer() );
+				offsets.emplace_back( it->second.buffer.getOffset() );
 				layouts.emplace_back( layoutIt->second );
 			}
 		}
@@ -223,42 +201,10 @@ namespace castor3d
 		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
-	InstantiationComponent::InstanceDataMap::const_iterator InstantiationComponent::find( MaterialRPtr material
-		, uint32_t instanceMult )const
-	{
-		auto result = find( material );
-		auto index = getIndex( instanceMult );
-
-		if ( result != m_instances.end()
-			&& ( result->second.size() <= index
-				|| result->second[index].count == 0u ) )
-		{
-			return m_instances.end();
-		}
-
-		return result;
-	}
-
-	InstantiationComponent::InstanceDataMap::iterator InstantiationComponent::find( MaterialRPtr material
-		, uint32_t instanceMult )
-	{
-		auto result = find( material );
-		auto index = getIndex( instanceMult );
-
-		if ( result != m_instances.end()
-			&& ( result->second.size() <= index
-				|| result->second[index].count == 0u ) )
-		{
-			return m_instances.end();
-		}
-
-		return result;
-	}
-
 	ProgramFlags InstantiationComponent::getProgramFlags( MaterialRPtr material )const
 	{
 		auto it = find( material );
-		return ( it != end() && it->second[0].buffer )
+		return ( it != end() && it->second.buffer )
 			? ProgramFlag::eInstantiation
 			: ProgramFlag( 0 );
 	}
@@ -269,17 +215,14 @@ namespace castor3d
 
 		if ( doCheckInstanced( getMaxRefCount() ) )
 		{
-			for ( auto & datas : m_instances )
+			for ( auto & data : m_instances )
 			{
-				if ( doCheckInstanced( datas.second[0].count ) )
+				if ( doCheckInstanced( data.second.count ) )
 				{
-					for ( auto & data : datas.second )
-					{
-						data.buffer = updateBuffer( device
-							, getOwner()->getParent().getName() + "_" + datas.first->getName()
-							, data.count
-							, std::move( data.buffer ) );
-					}
+					data.second.buffer = updateBuffer( device
+						, getOwner()->getParent().getName() + "_" + data.first->getName()
+						, data.second.count
+						, std::move( data.second.buffer ) );
 				}
 			}
 		}
@@ -289,33 +232,27 @@ namespace castor3d
 
 	void InstantiationComponent::doCleanup( RenderDevice const & device )
 	{
-		for ( auto & datas : m_instances )
+		for ( auto & data : m_instances )
 		{
-			for ( auto & data : datas.second )
+			if ( data.second.buffer )
 			{
-				if ( data.buffer )
-				{
-					device.bufferPool->putBuffer( data.buffer );
-					data.buffer = {};
-				}
+				device.bufferPool->putBuffer( data.second.buffer );
+				data.second.buffer = {};
 			}
 		}
 	}
 
 	void InstantiationComponent::doUpload()
 	{
-		for ( auto & datas : m_instances )
+		for ( auto & data : m_instances )
 		{
-			for ( auto & data : datas.second )
+			if ( data.second.buffer && data.second.count )
 			{
-				if ( data.buffer && data.count )
+				if ( auto * buffer = data.second.buffer.lock() )
 				{
-					if ( auto * buffer = data.buffer.lock() )
-					{
-						std::copy( data.data.begin(), data.data.end(), buffer );
-						data.buffer.flush();
-						data.buffer.unlock();
-					}
+					std::copy( data.second.data.begin(), data.second.data.end(), buffer );
+					data.second.buffer.flush();
+					data.second.buffer.unlock();
 				}
 			}
 		}
