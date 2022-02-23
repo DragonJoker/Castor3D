@@ -15,6 +15,7 @@
 #include "Castor3D/Render/Passes/PickingPass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Sync/Fence.hpp>
@@ -45,99 +46,28 @@ namespace castor3d
 			};
 		}
 
-		template< typename MapType, typename NodeType, typename SubNodeType >
-		inline void pickFromList( MapType const & map
-			, castor::Point4f const & index
-			, std::weak_ptr< NodeType > & node
-			, std::weak_ptr< SubNodeType > & subnode
+		inline void pickSubmesh( GeometryCache const & cache
+			, uint32_t nodeId
+			, uint32_t primitiveId
+			, Geometry const *& node
+			, Submesh const *& subnode
 			, uint32_t & face )
 		{
-			uint32_t pipelineIndex{ ( uint32_t( index[0] ) >> 8 ) - 1 };
-
-			if ( map.size() > pipelineIndex )
-			{
-				auto itPipeline = map.begin();
-
-				while ( pipelineIndex )
-				{
-					++itPipeline;
-					--pipelineIndex;
-				}
-
-				uint32_t nodeIndex{ uint32_t( index[1] ) };
-
-				if ( itPipeline->second.size() > nodeIndex )
-				{
-					auto itNode = itPipeline->second.begin() + nodeIndex;
-
-					subnode = std::static_pointer_cast< SubNodeType >( ( *itNode )->data.shared_from_this() );
-					node = std::static_pointer_cast< NodeType >( ( *itNode )->instance.shared_from_this() );
-					face = uint32_t( index[3] );
-				}
-			}
+			auto & entry = cache.getEntry( nodeId );
+			node = &entry.geometry;
+			subnode = &entry.submesh;
+			face = primitiveId;
 		}
 
-		template< typename MapType, typename NodeType, typename SubNodeType >
-		inline void pickFromInstantiatedList( MapType const & map
-			, castor::Point4f const & index
-			, std::weak_ptr< NodeType > & node
-			, std::weak_ptr< SubNodeType > & subnode
+		inline void pickBillboard( BillboardListCache const & cache
+			, uint32_t nodeId
+			, uint32_t primitiveId
+			, BillboardBase const *& node
 			, uint32_t & face )
 		{
-			uint32_t pipelineIndex{ ( uint32_t( index[0] ) >> 8 ) - 1 };
-
-			if ( map.size() > pipelineIndex )
-			{
-				auto itPipeline = map.begin();
-
-				while ( pipelineIndex )
-				{
-					++itPipeline;
-					--pipelineIndex;
-				}
-
-				auto itPass = itPipeline->second.begin();
-
-				if ( !itPass->second.empty() )
-				{
-					auto itMesh = itPass->second.begin();
-					uint32_t nodeIndex{ uint32_t( index[1] ) };
-
-					while ( nodeIndex && itPass != itPipeline->second.end() )
-					{
-						while ( itMesh != itPass->second.end() && nodeIndex )
-						{
-							++itMesh;
-							--nodeIndex;
-						}
-
-						if ( nodeIndex || itMesh == itPass->second.end() )
-						{
-							++itPass;
-
-							if ( itPass != itPipeline->second.end() )
-							{
-								itMesh = itPass->second.begin();
-							}
-						}
-					}
-
-					if ( itPass != itPipeline->second.end()
-						&& itMesh != itPass->second.end() )
-					{
-						if ( !itMesh->second.empty() )
-						{
-							uint32_t instanceIndex{ uint32_t( index[2] ) };
-							uint32_t faceIndex{ uint32_t( index[3] ) };
-							auto itNode = itMesh->second.begin() + instanceIndex;
-
-							subnode = ( *itNode )->data.shared_from_this();
-							node = std::static_pointer_cast< Geometry >( ( *itNode )->instance.shared_from_this() );
-							face = faceIndex;
-						}
-					}
-				}
-			}
+			auto & entry = cache.getEntry( nodeId );
+			node = &entry.billboard;
+			face = primitiveId;
 		}
 
 		std::vector< VkBufferImageCopy > createPickDisplayRegions()
@@ -178,7 +108,7 @@ namespace castor3d
 		, m_colourImage{ m_graph.createImage( { "PickingColour"
 			, 0u
 			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, VK_FORMAT_R32G32B32A32_UINT
 			, makeExtent3D( size )
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
@@ -212,7 +142,7 @@ namespace castor3d
 			, { PickingWidth, PickingWidth, 1u } }
 		, m_pickDisplayRegions{ createPickDisplayRegions() }
 		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
-		, m_stagingBuffer{ makeBuffer< castor::Point4f >( m_device
+		, m_stagingBuffer{ makeBuffer< castor::Point4ui >( m_device
 			, PickingWidth * PickingWidth
 			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
@@ -249,10 +179,10 @@ namespace castor3d
 		{
 			position = convertToTopDown( position, m_size );
 			m_pickNodeType = PickNodeType::eNone;
-			m_geometry.reset();
-			m_submesh.reset();
+			m_geometry = {};
+			m_submesh = {};
+			m_billboard = {};
 			m_face = 0u;
-			auto & myCamera = m_pickingPass->getCuller().getCamera();
 			int32_t offsetX = std::clamp( position.x() - PickingOffset
 				, 0
 				, int32_t( m_size.getWidth() - PickingWidth ) );
@@ -265,10 +195,11 @@ namespace castor3d
 				{ PickingWidth, PickingWidth },
 			};
 
-			if ( m_pickingPass->updateNodes( scissor ) )
+			if ( m_pickingPass->update( scissor ) )
 			{
-				auto pixel = doFboPick( position, myCamera );
-				m_pickNodeType = doPick( pixel, m_pickingPass->getCulledRenderNodes() );
+				auto pixel = doFboPick( position );
+				m_pickNodeType = doPick( pixel
+					, m_pickingPass->getCuller().getScene() );
 			}
 
 			m_picking = false;
@@ -302,8 +233,7 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Point4f Picking::doFboPick( castor::Position const & position
-		, Camera const & camera )
+	castor::Point4ui Picking::doFboPick( castor::Position const & position )
 	{
 		auto queueData = m_device.graphicsData();
 		auto toWait = m_runnable->run( crg::SemaphoreWaitArray{}, *queueData->queue );
@@ -401,39 +331,33 @@ namespace castor3d
 		return result;
 	}
 
-	PickNodeType Picking::doPick( castor::Point4f const & pixel
-		, QueueCulledRenderNodes const & nodes )
+	PickNodeType Picking::doPick( castor::Point4ui const & pixel
+		, Scene const & scene )
 	{
-		PickNodeType result{ PickNodeType::eNone };
+		auto result{ PickNodeType( pixel->x ) };
 
-		if ( castor::point::lengthSquared( castor::Point3f{ pixel } ) > 0.0f )
+		if ( result != PickNodeType::eNone )
 		{
-			result = PickNodeType( uint32_t( pixel[0] ) & 0xFF );
+			auto nodeId = pixel->y;
+			auto primitiveId = pixel->z;
 
 			switch ( result )
 			{
-			case PickNodeType::eStatic:
-				pickFromList( nodes.staticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
-				break;
-
-			case PickNodeType::eInstantiatedStatic:
-				pickFromInstantiatedList( nodes.instancedStaticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
-				break;
-
-			case PickNodeType::eSkinning:
-				pickFromList( nodes.skinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
-				break;
-
-			case PickNodeType::eInstantiatedSkinning:
-				pickFromInstantiatedList( nodes.instancedSkinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
-				break;
-
-			case PickNodeType::eMorphing:
-				pickFromList( nodes.morphingNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
+			case PickNodeType::eSubmesh:
+				pickSubmesh( scene.getGeometryCache()
+					, nodeId
+					, primitiveId
+					, m_geometry
+					, m_submesh
+					, m_face );
 				break;
 
 			case PickNodeType::eBillboard:
-				pickFromList( nodes.billboardNodes.backCulled, pixel, m_billboard, m_billboard, m_face );
+				pickBillboard( scene.getBillboardListCache()
+					, nodeId
+					, primitiveId
+					, m_billboard
+					, m_face );
 				break;
 
 			default:

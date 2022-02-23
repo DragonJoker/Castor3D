@@ -228,11 +228,7 @@ namespace castor3d
 		: uint8_t
 	{
 		eNone,
-		eStatic,
-		eInstantiatedStatic,
-		eSkinning,
-		eInstantiatedSkinning,
-		eMorphing,
+		eSubmesh,
 		eBillboard
 	};
 	C3D_API castor::String getName( PickNodeType value );
