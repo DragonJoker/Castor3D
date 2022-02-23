@@ -212,7 +212,7 @@ namespace ocean_fft
 	};
 }
 
-#define UBO_OCEAN( writer, binding, set )\
+#define C3D_FftOcean( writer, binding, set )\
 	auto oceanBuffer = writer.declUniformBuffer( ocean_fft::OceanUbo::Buffer, binding, set );\
 	auto c3d_oceanData = oceanBuffer.declMember< ocean_fft::OceanData >( ocean_fft::OceanUbo::Data );\
 	oceanBuffer.end()

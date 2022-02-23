@@ -82,8 +82,8 @@ namespace castor3d
 
 			//////////////////////////////////////////////////
 
-			UBO_SSAO_CONFIG( writer, SsaoCfgUboIdx, 0u );
-			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
+			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
+			C3D_GpInfo( writer, GpInfoUboIdx, 0u );
 			// Negative, "linear" values in world-space units
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
 

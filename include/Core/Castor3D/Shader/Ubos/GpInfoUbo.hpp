@@ -102,7 +102,7 @@ namespace castor3d
 	};
 }
 
-#define UBO_GPINFO( writer, binding, set )\
+#define C3D_GpInfo( writer, binding, set )\
 	sdw::Ubo gpInfo{ writer\
 		, castor3d::GpInfoUbo::BufferGPInfo\
 		, uint32_t( binding )\

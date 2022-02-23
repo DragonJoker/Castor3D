@@ -533,7 +533,7 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		UBO_VOXELIZER( writer
+		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
 			, RenderPipeline::ePass
 			, true );
@@ -639,7 +639,7 @@ namespace castor3d
 			, hasTextures };
 		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = addIndex++;
-		UBO_VOXELIZER( writer
+		C3D_Voxelizer( writer
 			, addIndex++
 			, RenderPipeline::ePass
 			, true );

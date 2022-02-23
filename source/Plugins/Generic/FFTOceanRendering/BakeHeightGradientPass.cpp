@@ -126,7 +126,7 @@ namespace ocean_fft
 			auto scale = pcb.declMember< sdw::Vec4 >( "scale" );
 			pcb.end();
 
-			UBO_OCEAN( writer, BakeHeightGradientPass::eConfig, 0u );
+			C3D_FftOcean( writer, BakeHeightGradientPass::eConfig, 0u );
 
 			auto hgt = writer.declStorageBuffer( "Height", BakeHeightGradientPass::eHeight, 0u );
 			auto heights = hgt.declMemberArray< sdw::Vec2 >( "heights" );
