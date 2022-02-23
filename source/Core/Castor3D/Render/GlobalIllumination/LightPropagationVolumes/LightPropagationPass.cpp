@@ -86,7 +86,7 @@ namespace castor3d
 
 			auto inPosition = writer.declInput< Vec3 >( "inPosition", 0u );
 
-			UBO_LPVGRIDCONFIG( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvGridConfig( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
 
 			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 				, VertexOutT< SurfaceT > out )
@@ -169,7 +169,7 @@ namespace castor3d
 					ivec2( 0_i, -1_i ),
 				} );
 
-			UBO_LPVGRIDCONFIG( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvGridConfig( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
 			auto c3d_lpvGridR = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), LightPropagationPass::RLpvGridIdx, 0u );
 			auto c3d_lpvGridG = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), LightPropagationPass::GLpvGridIdx, 0u );
 			auto c3d_lpvGridB = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), LightPropagationPass::BLpvGridIdx, 0u );

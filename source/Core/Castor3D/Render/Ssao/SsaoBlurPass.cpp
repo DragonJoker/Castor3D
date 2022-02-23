@@ -68,8 +68,8 @@ namespace castor3d
 			using namespace sdw;
 			FragmentWriter writer;
 
-			UBO_SSAO_CONFIG( writer, SsaoCfgUboIdx, 0u );
-			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
+			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
+			C3D_GpInfo( writer, GpInfoUboIdx, 0u );
 			Ubo configuration{ writer, "BlurConfiguration", BlurCfgUboIdx, 0u };
 			/** (1, 0) or (0, 1)*/
 			auto c3d_axis = configuration.declMember< IVec2 >( "c3d_axis" );

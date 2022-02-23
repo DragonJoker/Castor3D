@@ -98,7 +98,7 @@ namespace castor3d
 	};
 }
 
-#define UBO_SHADOWMAP( writer, binding, set )\
+#define C3D_ShadowMap( writer, binding, set )\
 	sdw::Ubo shadowMapCfg{ writer\
 		, castor3d::ShadowMapUbo::BufferShadowMap\
 		, uint32_t( binding )\

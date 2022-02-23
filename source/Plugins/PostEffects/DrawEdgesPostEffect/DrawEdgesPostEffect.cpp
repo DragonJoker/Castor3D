@@ -63,7 +63,7 @@ namespace draw_edges
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
 			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
 			auto c3d_edgeO = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
-			UBO_DRAW_EDGES( writer, eDrawEdges, 0u );
+			C3D_DrawEdges( writer, eDrawEdges, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 

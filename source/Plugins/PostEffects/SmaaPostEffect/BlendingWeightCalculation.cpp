@@ -40,7 +40,7 @@ namespace smaa
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-			UBO_SMAA( writer, SmaaUboIdx, 0u );
+			C3D_Smaa( writer, SmaaUboIdx, 0u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
@@ -96,7 +96,7 @@ namespace smaa
 			FragmentWriter writer;
 
 			// Shader inputs
-			UBO_SMAA( writer, SmaaUboIdx, 0u );
+			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_areaTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_areaTex", AreaTexIdx, 0u );
 			auto c3d_searchTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_searchTex", SearchTexIdx, 0u );
 			auto c3d_edgesTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_edgesTex", EdgesTexIdx, 0u );

@@ -137,7 +137,7 @@ namespace castor3d
 	};
 }
 
-#define UBO_LPVGRIDCONFIG( writer, binding, set, enabled )\
+#define C3D_LpvGridConfig( writer, binding, set, enabled )\
 	sdw::Ubo lpvGridConfig{ writer\
 		, castor3d::LpvGridConfigUbo::LpvGridConfig\
 		, uint32_t( binding )\

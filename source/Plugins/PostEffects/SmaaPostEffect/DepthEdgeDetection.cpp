@@ -42,7 +42,7 @@ namespace smaa
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
-			UBO_SMAA( writer, SmaaUboIdx, 0u );
+			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_depthTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthTex", DepthTexIdx, 0u );
 
 			// Shader outputs

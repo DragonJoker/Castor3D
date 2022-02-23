@@ -138,7 +138,7 @@ namespace castor3d
 	};
 }
 
-#define UBO_VOXELIZER( writer, binding, set, enable )\
+#define C3D_Voxelizer( writer, binding, set, enable )\
 	sdw::Ubo voxelizer{ writer\
 		, castor3d::VoxelizerUbo::BufferVoxelizer\
 		, uint32_t( binding )\

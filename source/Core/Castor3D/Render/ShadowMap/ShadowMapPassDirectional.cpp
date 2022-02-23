@@ -33,7 +33,6 @@
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
-#include "Castor3D/Shader/Ubos/ShadowMapDirectionalUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
@@ -78,7 +77,6 @@ namespace castor3d
 			, matrixUbo
 			, culler
 			, shadowMap }
-		, m_shadowMapDirectionalUbo{ device }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}
@@ -172,7 +170,7 @@ namespace castor3d
 			, RenderPipeline::ePass
 			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + 1u;
-		UBO_SHADOWMAP( writer
+		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::ePass );
 
@@ -275,7 +273,7 @@ namespace castor3d
 			, hasTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
-		UBO_SHADOWMAP( writer
+		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::ePass );
 		auto lightingModel = shader::LightingModel::createModel( utils

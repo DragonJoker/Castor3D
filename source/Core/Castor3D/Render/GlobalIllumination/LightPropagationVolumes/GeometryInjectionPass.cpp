@@ -124,8 +124,8 @@ namespace castor3d
 				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, GeometryInjectionPass::RsmPositionIdx
 					, 0u );
-				UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
-				UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
+				C3D_LpvGridConfig( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
+				C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 				// Utility functions
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -185,8 +185,8 @@ namespace castor3d
 				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, GeometryInjectionPass::RsmPositionIdx
 					, 0u );
-				UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
-				UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
+				C3D_LpvGridConfig( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
+				C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 				// Utility functions
 				shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -251,8 +251,8 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
 				, GeometryInjectionPass::RsmPositionIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
-			UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
+			C3D_LpvGridConfig( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 			// Utility functions
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -317,8 +317,8 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::ePosition )
 				, GeometryInjectionPass::RsmPositionIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
-			UBO_LPVLIGHTCONFIG( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
+			C3D_LpvGridConfig( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
 
 			// Utility functions
 			shader::Utils utils{ writer, *renderSystem.getEngine() };
@@ -424,7 +424,7 @@ namespace castor3d
 
 			//layout( early_fragment_tests )in;//turn on early depth tests
 
-			UBO_LPVGRIDCONFIG( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvGridConfig( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 
 			auto outGeometryVolume = writer.declOutput< Vec4 >( "outGeometryVolume", 0u );
 

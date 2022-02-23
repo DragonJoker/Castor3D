@@ -786,7 +786,7 @@ namespace ocean
 
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
-		UBO_OCEAN( writer
+		C3D_Ocean( writer
 			, index
 			, RenderPipeline::ePass );
 
@@ -868,7 +868,7 @@ namespace ocean
 			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
-		UBO_OCEAN( writer
+		C3D_Ocean( writer
 			, index
 			, RenderPipeline::ePass );
 
@@ -1078,7 +1078,7 @@ namespace ocean
 			, RenderPipeline::ePass };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
-		UBO_OCEAN( writer
+		C3D_Ocean( writer
 			, index++
 			, RenderPipeline::ePass );
 		auto c3d_waveFoam = writer.declCombinedImg< FImg2DRgba32 >( "c3d_waveFoam"

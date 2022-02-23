@@ -215,7 +215,7 @@ namespace ocean
 	};
 }
 
-#define UBO_OCEAN( writer, binding, set )\
+#define C3D_Ocean( writer, binding, set )\
 	auto oceanBuffer = writer.declUniformBuffer( ocean::OceanUbo::Buffer, binding, set );\
 	auto c3d_oceanData = oceanBuffer.declMember< ocean::OceanData >( ocean::OceanUbo::Data );\
 	oceanBuffer.end()

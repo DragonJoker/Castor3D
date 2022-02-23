@@ -60,8 +60,8 @@ namespace castor3d
 			auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 1 );
 
 			// Shader inputs
-			UBO_GPINFO( writer, uint32_t( IndirectLightingPass::eGpInfo ), 0u );
-			C3D_Scene( writer, uint32_t( IndirectLightingPass::eScene ), 0u );
+			C3D_GpInfo( writer, IndirectLightingPass::eGpInfo, 0u );
+			C3D_Scene( writer, IndirectLightingPass::eScene, 0u );
 			shader::GlobalIllumination indirect{ writer, utils, true };
 			uint32_t vctIndex = uint32_t( IndirectLightingPass::eVctStart );
 			uint32_t lpvIndex = uint32_t( IndirectLightingPass::eLpvStart );
