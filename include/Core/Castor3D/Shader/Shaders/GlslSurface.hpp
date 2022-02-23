@@ -89,10 +89,7 @@ namespace castor3d::shader
 		sdw::Vec3 tangent2;
 		sdw::Vec3 texture2;
 		// Instantiation
-		sdw::UVec4 textures0;
-		sdw::UVec4 textures1;
-		sdw::Int textures;
-		sdw::Int material;
+		sdw::UVec4 objectIds;
 		// Skinning
 		sdw::UVec4 boneIds0;
 		sdw::UVec4 boneIds1;

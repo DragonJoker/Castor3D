@@ -45,17 +45,9 @@ namespace castor3d::shader
 			, sdw::UVec4 const & boneIds1
 			, sdw::Vec4 const & boneWeights0
 			, sdw::Vec4 const & boneWeights1 )const;
-		C3D_API sdw::UVec4 getTextures0( ProgramFlags programFlags
-			, sdw::UVec4 const & instanceData )const;
 		C3D_API sdw::UVec4 getTextures0()const;
-		C3D_API sdw::UVec4 getTextures1( ProgramFlags programFlags
-			, sdw::UVec4 const & instanceData )const;
 		C3D_API sdw::UVec4 getTextures1()const;
-		C3D_API sdw::Int getTextures( ProgramFlags programFlags
-			, sdw::Int const & instanceData )const;
 		C3D_API sdw::Int getTextures()const;
-		C3D_API sdw::UInt getMaterialId( ProgramFlags programFlags
-			, sdw::Int const & instanceData )const;
 		C3D_API sdw::UInt getMaterialId()const;
 		C3D_API static sdw::UInt getTexture( sdw::UVec4 const & textures0
 			, sdw::UVec4 const & textures1
@@ -140,6 +132,19 @@ namespace castor3d::shader
 		, ProgramFlags const & flags )
 	{
 		auto & writer = *data.getWriter();
+
+		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		{
+			return { writer.declLocale( "nodeId"
+					, surface.objectIds.x() )
+				, writer.declLocale( "morphingId"
+					, surface.objectIds.y()
+					, checkFlag( flags, ProgramFlag::eMorphing ) )
+				, writer.declLocale( "skinningId"
+					, surface.objectIds.z()
+					, checkFlag( flags, ProgramFlag::eSkinning ) ) };
+		}
+
 		auto objectIdsData = writer.declLocale( "objectIdsData"
 			, data[pipelineID][drawID] );
 		return { writer.declLocale( "nodeId"
@@ -156,9 +161,16 @@ namespace castor3d::shader
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, shader::VertexSurfaceT< FlagT > const & surface
 		, sdw::UInt pipelineID
-		, sdw::UInt drawID )
+		, sdw::UInt drawID
+		, ProgramFlags const & flags )
 	{
 		auto & writer = *data.getWriter();
+
+		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		{
+			return surface.objectIds.x();
+		}
+
 		auto objectIdsData = writer.declLocale( "objectIdsData"
 			, data[pipelineID][drawID] );
 		return objectIdsData.x();

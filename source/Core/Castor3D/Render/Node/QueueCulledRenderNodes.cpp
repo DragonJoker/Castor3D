@@ -447,17 +447,14 @@ namespace castor3d
 			, uint32_t & index )
 		{
 			uint32_t drawId = 0u;
-
-			for ( auto & node : renderNodes )
-			{
-				doAddGeometryNodeCommands( pipeline
-					, *node
-					, commandBuffer
-					, indirectIndexedCommands
-					, indirectCommands
-					, index
-					, drawId );
-			}
+			auto node = renderNodes.front();
+			doAddGeometryNodeCommands( pipeline
+				, *node
+				, commandBuffer
+				, indirectIndexedCommands
+				, indirectCommands
+				, index
+				, drawId );
 		}
 
 		//*****************************************************************************************
@@ -493,6 +490,10 @@ namespace castor3d
 		staticNodes.frontCulled.clear();
 		skinnedNodes.backCulled.clear();
 		skinnedNodes.frontCulled.clear();
+		instancedStaticNodes.backCulled.clear();
+		instancedStaticNodes.frontCulled.clear();
+		instancedSkinnedNodes.backCulled.clear();
+		instancedSkinnedNodes.frontCulled.clear();
 		morphingNodes.backCulled.clear();
 		morphingNodes.frontCulled.clear();
 		billboardNodes.backCulled.clear();
@@ -507,7 +508,7 @@ namespace castor3d
 				, SubmeshRenderNodeMap & nodes )
 			{
 				registerPipelineNodes( pipeline, m_pipelinesNodes );
-				doParseInstantiatedRenderNodes( staticNodes.frontCulled
+				doParseInstantiatedRenderNodes( instancedStaticNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
@@ -520,7 +521,7 @@ namespace castor3d
 				, SubmeshRenderNodeMap & nodes )
 			{
 				registerPipelineNodes( pipeline, m_pipelinesNodes );
-				doParseInstantiatedRenderNodes( staticNodes.backCulled
+				doParseInstantiatedRenderNodes( instancedStaticNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
@@ -533,7 +534,7 @@ namespace castor3d
 				, SubmeshRenderNodeMap & nodes )
 			{
 				registerPipelineNodes( pipeline, m_pipelinesNodes );
-				doParseInstantiatedRenderNodes( skinnedNodes.frontCulled
+				doParseInstantiatedRenderNodes( instancedSkinnedNodes.frontCulled
 					, pipeline
 					, pass
 					, nodes
@@ -546,7 +547,7 @@ namespace castor3d
 				, SubmeshRenderNodeMap & nodes )
 			{
 				registerPipelineNodes( pipeline, m_pipelinesNodes );
-				doParseInstantiatedRenderNodes( skinnedNodes.backCulled
+				doParseInstantiatedRenderNodes( instancedSkinnedNodes.backCulled
 					, pipeline
 					, pass
 					, nodes
