@@ -67,11 +67,11 @@ namespace castor3d
 			auto buffers = std::make_unique< ModelBuffers >( createBuffer< InterleavedVertex >( m_device
 					, vertexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" )
+					, m_debugName + "Vertex" + std::to_string( m_buffers.size() ) )
 				, createBuffer< uint32_t >( m_device
 					, indexCount
 					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" ) );
+					, m_debugName + "Index" + std::to_string( m_buffers.size() ) ) );
 			m_buffers.emplace_back( std::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
@@ -155,15 +155,15 @@ namespace castor3d
 			auto buffers = std::make_unique< ModelBuffers >( createBuffer< InterleavedVertex >( m_device
 					, vertexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" )
+					, m_debugName + "Vertex" + std::to_string( m_buffers.size() ) )
 				, createBuffer< VertexBoneData >( m_device
 					, indexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Bones" )
+					, m_debugName + "Bones" + std::to_string( m_buffers.size() ) )
 				, createBuffer< uint32_t >( m_device
 					, indexCount
 					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" ) );
+					, m_debugName + "Index" + std::to_string( m_buffers.size() ) ) );
 			m_buffers.emplace_back( std::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
