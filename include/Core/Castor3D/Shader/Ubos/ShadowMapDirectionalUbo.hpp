@@ -29,10 +29,6 @@ namespace castor3d
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-			C3D_API sdw::UInt getTileIndex( ModelInstancesData const & modelInstances
-				, sdw::Int const & instanceIndex )const;
-			C3D_API sdw::Vec2 getTileMin( sdw::UInt const & tileIndex )const;
-			C3D_API sdw::Vec2 getTileMax( sdw::Vec2 const & tileMin )const;
 			C3D_API sdw::Vec4 worldToView( sdw::UInt const & tileIndex
 				, sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 viewToProj( sdw::UInt const & tileIndex

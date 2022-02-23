@@ -30,7 +30,6 @@ namespace castor3d
 		 *\param[in]	matrixUbo		The scene matrices UBO.
 		 *\param[in]	culler			The culler for this pass.
 		 *\param[in]	shadowMap		The parent shadow map.
-		 *\param[in]	instanceMult	The object instance multiplier.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name			Le nom de la passe.
@@ -38,7 +37,6 @@ namespace castor3d
 		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	shadowMap		La shadow map parente.
-		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
 		C3D_API ShadowMapPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -48,8 +46,7 @@ namespace castor3d
 			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, ShadowMap const & shadowMap
-			, uint32_t instanceMult = 1u );
+			, ShadowMap const & shadowMap );
 
 		bool isUpToDate()const
 		{

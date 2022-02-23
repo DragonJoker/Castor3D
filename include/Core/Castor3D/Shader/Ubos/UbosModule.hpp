@@ -225,28 +225,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Model matrices UBO.
-	*\~french
-	*\brief
-	*	UBO des matrices modèle.
-	*/
-	class ModelInstancesUbo;
-	/**
-	*\~english
-	*\brief
-	*	Model matrices data.
-	*\~french
-	*\brief
-	*	Données des matrices modèle.
-	*/
-	struct ModelInstancesUboConfiguration
-	{
-		std::array< castor::Point4ui, 7u > instances;
-		uint32_t instanceCount;
-	};
-	/**
-	*\~english
-	*\brief
 	*	Model data UBO.
 	*\~french
 	*\brief
