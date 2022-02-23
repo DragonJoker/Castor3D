@@ -29,7 +29,7 @@ namespace castor3d
 	public:
 		struct PoolsEntry
 		{
-			int32_t id;
+			uint32_t id;
 			size_t hash;
 			BillboardBase const & billboard;
 			Pass const & pass;
@@ -120,18 +120,27 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Cleans up the UBO pools.
+		 *\return		The UBOs for given billboards and pass.
 		 *\remarks		Assumes the entry has been previously created.
 		 *\param		billboard		The instance.
 		 *\param		pass			The instance material pass.
 		 *\~french
-		 *\brief		Nettoie les pools d'UBO.
+		 *\brief		Les UBOs pour les billboards et la passe donnés.
 		 *\remarks		Considère que l'entrée a été préalablement créée.
 		 *\param		billboard		L'instance.
 		 *\param		pass			La passe de matériau de l'instance.
 		 */
 		C3D_API PoolsEntry getUbos( BillboardBase const & billboard
 			, Pass const & pass )const;
+		/**
+		 *\~english
+		 *\return		The pool entry for given ID.
+		 *\param[in]	nodeId	The entry ID.
+		 *\~french
+		 *\brief		L'entrée de pool pour l'ID donné.
+		 *\param[in]	nodeId	L'ID de l'entrée.
+		 */
+		C3D_API PoolsEntry const & getEntry( uint32_t nodeId )const;
 
 		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
 		{

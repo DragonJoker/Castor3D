@@ -140,6 +140,19 @@ namespace castor3d
 		return it->second;
 	}
 
+	GeometryCache::PoolsEntry const & ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::getEntry( uint32_t nodeId )const
+	{
+		++nodeId;
+		auto it = std::find_if( m_entries.begin()
+			, m_entries.end()
+			, [nodeId]( std::map< size_t, PoolsEntry >::value_type const & lookup )
+			{
+				return nodeId == lookup.second.id;
+			} );
+		CU_Require( it != m_entries.end() );
+		return it->second;
+	}
+
 	void ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::clear( RenderDevice const & device )
 	{
 		ElementObjectCacheT::clear();
@@ -168,8 +181,8 @@ namespace castor3d
 		if ( iresult.second )
 		{
 			auto & baseEntry = iresult.first->second;
-			baseEntry.id = int32_t( m_entries.size() );
-			geometry.setId( submesh, uint32_t( baseEntry.id ) );
+			baseEntry.id = uint32_t( m_entries.size() );
+			geometry.setId( submesh, baseEntry.id );
 		}
 	}
 
