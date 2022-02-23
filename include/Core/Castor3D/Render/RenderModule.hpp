@@ -128,19 +128,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	The render nodes UBOs binding index.
-	*\~french
-	*\brief
-	*	L'index de binding des UBOs des noeuds de rendu.
-	*/
-	enum class NodeUboIdx
-		: uint32_t
-	{
-		eModelInstances,
-	};
-	/**
-	*\~english
-	*\brief
 	*	The render pass UBOs binding index.
 	*\~french
 	*\brief

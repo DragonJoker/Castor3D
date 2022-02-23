@@ -42,7 +42,6 @@ namespace castor3d
 		SceneNode & sceneNode;
 		DataType & data;
 		InstanceType & instance;
-		ashes::DescriptorSet * uboDescriptorSet{};
 		ashes::DescriptorSet * texDescriptorSet{};
 		// Morphing node
 		AnimatedMesh * mesh{};
