@@ -104,10 +104,7 @@ namespace castor3d::shader
 		, tangent2{ this->getMember< sdw::Vec3 >( "tangent2", true ) }
 		, texture2{ this->getMember< sdw::Vec3 >( "texcoord2", true ) }
 		// Instantiation
-		, textures0{ this->getMember< sdw::UVec4 >( "textures0", true ) }
-		, textures1{ this->getMember< sdw::UVec4 >( "textures1", true ) }
-		, textures{ this->getMember< sdw::Int >( "textures", true ) }
-		, material{ this->getMember< sdw::Int >( "material", true ) }
+		, objectIds{ this->getMember< sdw::UVec4 >( "objectIds", true ) }
 		// Morphing
 		, boneIds0{ this->getMember< sdw::UVec4 >( "boneIds0", true ) }
 		, boneIds1{ this->getMember< sdw::UVec4 >( "boneIds1", true ) }
@@ -181,19 +178,7 @@ namespace castor3d::shader
 			*	Instantiation
 			*/
 			//@{
-			result->declMember( "textures0", ast::type::Kind::eVec4U
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-			result->declMember( "textures1", ast::type::Kind::eVec4U
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-			result->declMember( "textures", ast::type::Kind::eInt
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-			result->declMember( "material", ast::type::Kind::eInt
+			result->declMember( "objectIds", ast::type::Kind::eVec4U
 				, ast::type::NotArray
 				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
 				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );

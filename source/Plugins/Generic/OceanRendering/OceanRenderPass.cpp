@@ -655,12 +655,13 @@ namespace ocean
 			out.texture1 = in.texture1;
 			auto nodeId = writer.declLocale( "nodeId"
 				, shader::getNodeId( c3d_objectIdsData
+					, in
 					, pipelineID
-					, customDrawID ) );
+					, customDrawID
+					, flags.programFlags ) );
 			auto modelData = writer.declLocale( "modelData"
 				, c3d_modelsData[nodeId] );
-			out.material = modelData.getMaterialId( flags.programFlags
-				, in.material );
+			out.material = modelData.getMaterialId();
 			out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 #if Ocean_DebugPixelShader

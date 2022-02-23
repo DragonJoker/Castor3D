@@ -393,14 +393,10 @@ namespace castor3d
 					, vec4( in.normal, 0.0_f ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId] );
-				out.textures0 = modelData.getTextures0( flags.programFlags
-					, in.textures0 );
-				out.textures1 = modelData.getTextures1( flags.programFlags
-					, in.textures1 );
-				out.textures = modelData.getTextures( flags.programFlags
-					, in.textures );
-				out.material = modelData.getMaterialId( flags.programFlags
-					, in.material );
+				out.textures0 = modelData.getTextures0();
+				out.textures1 = modelData.getTextures1();
+				out.textures = modelData.getTextures();
+				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 
 				if ( hasTextures )

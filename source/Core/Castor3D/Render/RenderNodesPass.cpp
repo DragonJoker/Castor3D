@@ -27,6 +27,7 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -625,38 +626,21 @@ namespace castor3d
 
 			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
 			{
-				buffer->m_material = int32_t( node->passNode.pass.getId() );
-				uint32_t index = 0u;
+				CU_Require( node->getId() > 0u );
+				buffer->m_objectIDs->x = node->getId() - 1u;
 
-				for ( auto & unit : node->passNode.pass )
+				if ( node->mesh )
 				{
-					if ( index < 4 )
-					{
-						buffer->m_textures0[index] = unit->getId();
-					}
-					else if ( index < 8 )
-					{
-						buffer->m_textures1[index - 4] = unit->getId();
-					}
-
-					++index;
+					CU_Require( node->mesh->getId() > 0u );
+					buffer->m_objectIDs->y = node->mesh->getId() - 1u;
 				}
 
-				while ( index < 8u )
+				if ( node->skeleton )
 				{
-					if ( index < 4 )
-					{
-						buffer->m_textures0[index] = 0u;
-					}
-					else
-					{
-						buffer->m_textures1[index - 4] = 0u;
-					}
-
-					++index;
+					CU_Require( node->skeleton->getId() > 0u );
+					buffer->m_objectIDs->z = node->skeleton->getId() - 1u;
 				}
 
-				buffer->m_textures = int32_t( std::min( 8u, node->passNode.pass.getTextureUnitsCount() ) );
 				++buffer;
 			}
 
@@ -1128,14 +1112,10 @@ namespace castor3d
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId] );
-				out.textures0 = modelData.getTextures0( flags.programFlags
-					, in.textures0 );
-				out.textures1 = modelData.getTextures1( flags.programFlags
-					, in.textures1 );
-				out.textures = modelData.getTextures( flags.programFlags
-					, in.textures );
-				out.material = modelData.getMaterialId( flags.programFlags
-					, in.material );
+				out.textures0 = modelData.getTextures0();
+				out.textures1 = modelData.getTextures1();
+				out.textures = modelData.getTextures();
+				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
