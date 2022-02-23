@@ -14,6 +14,8 @@
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Picking.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
@@ -22,6 +24,8 @@
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -829,17 +833,27 @@ namespace castor3d
 
 	GeometrySPtr RenderWindow::getPickedGeometry()const
 	{
-		return m_picking->getPickedGeometry();
-	}
+		auto sel = m_picking->getPickedGeometry();
 
-	BillboardBaseSPtr RenderWindow::getPickedBillboard()const
-	{
-		return m_picking->getPickedBillboard();
+		if ( !sel )
+		{
+			return nullptr;
+		}
+
+		auto geometry = sel->getScene()->getGeometryCache().find( sel->getName() );
+		return geometry.lock();
 	}
 
 	SubmeshSPtr RenderWindow::getPickedSubmesh()const
 	{
-		return m_picking->getPickedSubmesh();
+		auto sel = m_picking->getPickedSubmesh();
+
+		if ( !sel )
+		{
+			return nullptr;
+		}
+
+		return sel->getOwner()->getSubmesh( sel->getId() );
 	}
 
 	uint32_t RenderWindow::getPickedFace()const

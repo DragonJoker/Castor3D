@@ -128,23 +128,11 @@ namespace castor3d
 	{
 	}
 
-	bool PickingPass::updateNodes( VkRect2D const & scissor )
+	bool PickingPass::update( VkRect2D const & scissor )
 	{
 		ShadowMapLightTypeArray shadowMaps;
 		m_renderQueue->update( shadowMaps, scissor );
-		bool result = m_renderQueue->getCulledRenderNodes().hasNodes();
-
-		if ( result )
-		{
-			doUpdateNodes( m_renderQueue->getCulledRenderNodes() );
-		}
-
-		return result;
-	}
-
-	QueueCulledRenderNodes const & PickingPass::getCulledRenderNodes()const
-	{
-		return m_renderQueue->getCulledRenderNodes();
+		return true;
 	}
 
 	TextureFlags PickingPass::getTexturesMask()const
@@ -160,55 +148,6 @@ namespace castor3d
 		}
 
 		return RenderNodesPass::doAreValidPassFlags( pass.getPassFlags() );
-	}
-
-	void PickingPass::doUpdateNodes( QueueCulledRenderNodes & nodes )
-	{
-		auto & myCamera = getCuller().getCamera();
-		m_matrixUbo.cpuUpdate( myCamera.getView()
-			, myCamera.getProjection( false ) );
-		doUpdate( nodes.instancedStaticNodes.backCulled );
-		doUpdate( nodes.staticNodes.backCulled );
-		doUpdate( nodes.skinnedNodes.backCulled );
-		doUpdate( nodes.instancedSkinnedNodes.backCulled );
-		doUpdate( nodes.morphingNodes.backCulled );
-		doUpdate( nodes.billboardNodes.backCulled );
-	}
-
-	void PickingPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, PickNodeType::eStatic
-			, nodes );
-	}
-
-	void PickingPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
-	{
-		updateNonInstanced( *this
-			, PickNodeType::eBillboard
-			, nodes );
-	}
-
-	void PickingPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes )
-	{
-		traverseNodes( *this
-			, nodes
-			, PickNodeType::eInstantiatedStatic
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & component
-				, SubmeshRenderNodePtrArray & renderNodes )
-			{
-				auto it = component.find( pass.getOwner() );
-
-				if ( it != component.end()
-					&& it->second.buffer )
-				{
-					doCopyNodesIds( renderNodes
-						, it->second.data );
-				}
-			} );
 	}
 
 	void PickingPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
@@ -251,7 +190,6 @@ namespace castor3d
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		auto customDrawID = pcb.declMember< sdw::UInt >( "customDrawID" );
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
@@ -272,7 +210,7 @@ namespace castor3d
 				auto ids = shader::getIds( c3d_objectIdsData
 					, in
 					, pipelineID
-					, customDrawID
+					, in.drawID
 					, flags.programFlags );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
@@ -348,7 +286,7 @@ namespace castor3d
 			, hasTextures ) );
 
 		// Fragment Outputs
-		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
+		auto pxl_fragColor( writer.declOutput< UVec4 >( "pxl_fragColor", 0 ) );
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
@@ -399,7 +337,10 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, material.alphaRef );
-				pxl_fragColor = vec4( in.nodeId, in.instanceId, in.primitiveID, 0.0_f );
+				pxl_fragColor = uvec4( ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) ? 2_u : 1_u )
+					, writer.cast< sdw::UInt >( in.nodeId )
+					, writer.cast< sdw::UInt >( in.primitiveID )
+					, 0_u );
 
 #if C3D_DebugPicking
 				pxl_fragColor /= 255.0_f;
