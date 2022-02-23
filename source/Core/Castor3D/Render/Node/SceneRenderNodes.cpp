@@ -66,21 +66,6 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( Engine const & engine
-			, size_t texturesCount
-			, BillboardBase const * billboard
-			, Submesh const * submesh
-			, bool instantiated
-			, AnimatedMesh const * mesh
-			, AnimatedSkeleton const * skeleton )
-		{
-			ashes::VkDescriptorSetLayoutBindingArray uboBindings;
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( NodeUboIdx::eModelInstances )
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-			return uboBindings;
-		}
-
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( size_t texturesCount )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray texBindings;
@@ -106,19 +91,6 @@ namespace castor3d
 		castor::String getName( SubmeshRenderNode const & node )
 		{
 			return node.instance.getName();
-		}
-
-		template< typename NodeT >
-		void doInitialiseUboDescriptor( Engine & engine
-			, ashes::DescriptorSetLayout const & layout
-			, ashes::DescriptorPool const & descriptorPool
-			, NodeT & node )
-		{
-			if ( node.uboDescriptorSet )
-			{
-				ashes::DescriptorSet & descriptorSet = *node.uboDescriptorSet;
-				descriptorSet.update();
-			}
 		}
 
 		template< typename NodeT >
@@ -152,14 +124,6 @@ namespace castor3d
 			, SceneRenderNodes::DescriptorSetLayouts const & descriptorLayout
 			, NodeT & node )
 		{
-			if ( !descriptorLayout.buf->getBindings().empty() )
-			{
-				doInitialiseUboDescriptor( engine
-					, *descriptorLayout.buf
-					, *pools.buf
-					, node );
-			}
-
 			if ( !descriptorLayout.tex->getBindings().empty() )
 			{
 				doInitialiseTextureDescriptor( *descriptorLayout.tex
@@ -262,23 +226,6 @@ namespace castor3d
 	{
 		ashes::VkDescriptorPoolSizeArray bufSizes;
 
-		if ( counts.uniformBuffers )
-		{
-			bufSizes.push_back( { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, counts.uniformBuffers } );
-		}
-
-		if ( counts.storageBuffers )
-		{
-			bufSizes.push_back( { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, counts.storageBuffers } );
-		}
-
-		if ( !bufSizes.empty() )
-		{
-			buf = device->createDescriptorPool( VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
-				, MaxPoolSize
-				, std::move( bufSizes ) );
-		}
-
 		if ( texPool )
 		{
 			tex = texPool;
@@ -323,7 +270,6 @@ namespace castor3d
 		, AnimatedMesh const * mesh
 		, AnimatedSkeleton const * skeleton )
 	{
-		uniformBuffers++; // ModelInstances UBO
 		combinedImages += uint32_t( textureCount );
 	}
 	
@@ -361,7 +307,6 @@ namespace castor3d
 		}
 
 		--m_available;
-		doAllocateBuf( m_pools.back(), node, it->second );
 		doAllocateTex( m_pools.back(), node, it->second );
 	}
 	
@@ -383,7 +328,6 @@ namespace castor3d
 		}
 
 		--m_available;
-		doAllocateBuf( m_pools.back(), node, it->second );
 		doAllocateTex( m_pools.back(), node, it->second );
 	}
 
@@ -394,7 +338,6 @@ namespace castor3d
 		if ( it != m_allocated.end() )
 		{
 			m_allocated.erase( it );
-			node.uboDescriptorSet = nullptr;
 			node.texDescriptorSet = nullptr;
 		}
 	}
@@ -406,44 +349,7 @@ namespace castor3d
 		if ( it != m_allocated.end() )
 		{
 			m_allocated.erase( it );
-			node.uboDescriptorSet = nullptr;
 			node.texDescriptorSet = nullptr;
-		}
-	}
-
-	void SceneRenderNodes::DescriptorPools::doAllocateBuf( DescriptorSetPools const & pools
-		, SubmeshRenderNode & node
-		, SceneRenderNodes::DescriptorPools::NodeSet & allocated )
-	{
-		if ( !m_layouts->buf->getBindings().empty() )
-		{
-			allocated.bufPool = &( *pools.buf );
-			allocated.bufSet = pools.buf->createDescriptorSet( getName( node ) + "Ubo"
-				, *m_layouts->buf
-				, RenderPipeline::eBuffers );
-			node.uboDescriptorSet = allocated.bufSet.get();
-			doInitialiseUboDescriptor( m_engine
-				, *m_layouts->buf
-				, *pools.buf
-				, node );
-		}
-	}
-
-	void SceneRenderNodes::DescriptorPools::doAllocateBuf( DescriptorSetPools const & pools
-		, BillboardRenderNode & node
-		, SceneRenderNodes::DescriptorPools::NodeSet & allocated )
-	{
-		if ( !m_layouts->buf->getBindings().empty() )
-		{
-			allocated.bufPool = &( *pools.buf );
-			allocated.bufSet = pools.buf->createDescriptorSet( getName( node ) + "Ubo"
-				, *m_layouts->buf
-				, RenderPipeline::eBuffers );
-			node.uboDescriptorSet = allocated.bufSet.get();
-			doInitialiseUboDescriptor( m_engine
-				, *m_layouts->buf
-				, *pools.buf
-				, node );
 		}
 	}
 
@@ -505,17 +411,9 @@ namespace castor3d
 		, ashes::DescriptorSetLayout * texLayout )
 		: tex{ texLayout }
 	{
-		auto & device = engine.getRenderSystem()->getRenderDevice();
-		buf = device->createDescriptorSetLayout( doCreateUboBindings( engine
-			, texturesCount
-			, billboard
-			, submesh
-			, instanced
-			, mesh
-			, skeleton ) );
-
 		if ( !tex )
 		{
+			auto & device = engine.getRenderSystem()->getRenderDevice();
 			ownTex = device->createDescriptorSetLayout( doCreateTextureBindings( texturesCount ) );
 			tex = ownTex.get();
 		}
@@ -759,7 +657,6 @@ namespace castor3d
 		}
 
 		ashes::DescriptorSetLayoutCRefArray result;
-		result.emplace_back( *layouts->buf );
 		result.emplace_back( *layouts->tex );
 		return result;
 	}
