@@ -662,19 +662,19 @@ namespace ocean_fft
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -723,22 +723,22 @@ namespace ocean_fft
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -800,10 +800,10 @@ namespace ocean_fft
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		auto tessLevel1f = writer.implementFunction< Float >( "tessLevel1f"
 			, [&]( Float lod
@@ -935,23 +935,23 @@ namespace ocean_fft
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_heightDisplacementMap"
 			, OceanFFTIdx::eHeightDisplacement
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		auto lerpVertex = writer.implementFunction< Vec2 >( "lerpVertex"
 			, [&]( Vec3 patchPosBase
@@ -1083,59 +1083,59 @@ namespace ocean_fft
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::ePass };
+			, RenderPipeline::eBuffers };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		C3D_FftOcean( writer
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "c3d_heightDisplacementMap"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_gradientJacobianMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "c3d_gradientJacobianMap"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_normalsMap = writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "c3d_normalsMap"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_sceneNormals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneNormals"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_sceneDepth = writer.declCombinedImg< FImg2DR32 >( "c3d_sceneDepth"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_sceneColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneColour"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_sceneBaseColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneBaseColour"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto c3d_sceneDiffuseLighting = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneDiffuseLighting"
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, index
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, false
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::ePass ) );
+			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.sceneFlags );
 
 		// Fragment Outputs

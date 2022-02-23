@@ -26,9 +26,8 @@ namespace castor3d
 	public:
 		enum Descriptor
 		{
-			eBuffers,
 			eTextures,
-			ePass,
+			eBuffers,
 			CU_EnumBounds( Descriptor, eBuffers )
 		};
 
