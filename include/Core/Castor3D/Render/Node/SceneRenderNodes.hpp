@@ -71,8 +71,6 @@ namespace castor3d
 				, AnimatedMesh const * mesh
 				, AnimatedSkeleton const * skeleton );
 
-			uint32_t uniformBuffers{};
-			uint32_t storageBuffers{};
 			uint32_t combinedImages{};
 		};
 
@@ -87,7 +85,6 @@ namespace castor3d
 				, AnimatedSkeleton const * skeleton
 				, ashes::DescriptorSetLayout * texLayout );
 
-			ashes::DescriptorSetLayoutPtr buf;
 			ashes::DescriptorSetLayout * tex;
 			ashes::DescriptorSetLayoutPtr ownTex;
 		};
@@ -98,7 +95,6 @@ namespace castor3d
 				, DescriptorCounts const & counts
 				, ashes::DescriptorPool * texPool );
 
-			ashes::DescriptorPoolPtr buf;
 			ashes::DescriptorPool * tex;
 			ashes::DescriptorPoolPtr ownTex;
 		};
@@ -130,20 +126,12 @@ namespace castor3d
 				NodeSet & operator=( NodeSet && ) = default;
 				NodeSet() = default;
 
-				ashes::DescriptorPool * bufPool{};
-				ashes::DescriptorSetPtr bufSet{};
 				ashes::DescriptorPool * texPool{};
 				ashes::DescriptorSet * texSet{};
 				ashes::DescriptorSetPtr ownTexSet;
 			};
 
 		private:
-			void doAllocateBuf( DescriptorSetPools const & pools
-				, SubmeshRenderNode & node
-				, NodeSet & allocated );
-			void doAllocateBuf( DescriptorSetPools const & pools
-				, BillboardRenderNode & node
-				, NodeSet & allocated );
 			void doAllocateTex( DescriptorSetPools const & pools
 				, SubmeshRenderNode & node
 				, NodeSet & allocated );
