@@ -351,20 +351,20 @@ namespace castor3d
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -443,19 +443,19 @@ namespace castor3d
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -465,8 +465,6 @@ namespace castor3d
 		writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 			, VertexOutT< SurfaceT > out )
 			{
-				auto objectIdsData = writer.declLocale( "objectIdsData"
-					, c3d_objectIdsData[pipelineID][customDrawID] );
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
 						, pipelineID
@@ -535,7 +533,7 @@ namespace castor3d
 
 		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, true );
 
 		writer.implementMainT< 3u, TriangleListT< SurfaceT >, TriangleStreamT< SurfaceT > >( [&]( GeometryIn in
@@ -622,37 +620,37 @@ namespace castor3d
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::ePass };
+			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = addIndex++;
 		C3D_Voxelizer( writer
 			, addIndex++
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, true );
 		auto output( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
 			, addIndex++
-			, RenderPipeline::ePass ) );
+			, RenderPipeline::eBuffers ) );
 		auto lightingModel = shader::LightingModel::createDiffuseModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, m_mode != RenderMode::eTransparentOnly
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 

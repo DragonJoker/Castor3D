@@ -157,22 +157,22 @@ namespace castor3d
 
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + 1u;
 		C3D_ShadowMap( writer
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -262,29 +262,29 @@ namespace castor3d
 
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::ePass };
+			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		C3D_ShadowMap( writer
 			, index++
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, LightType::eDirectional
 			, lightsIndex
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, false
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"

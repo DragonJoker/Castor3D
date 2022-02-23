@@ -494,7 +494,7 @@ namespace castor3d
 		{
 			auto & scene = getCuller().getScene();
 			descriptors.set = descriptors.pool->createDescriptorSet( getName() + "_Add"
-				, RenderPipeline::ePass );
+				, RenderPipeline::eBuffers );
 			ashes::WriteDescriptorSetArray descriptorWrites;
 			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
 			descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
@@ -1014,23 +1014,23 @@ namespace castor3d
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -1131,19 +1131,19 @@ namespace castor3d
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );

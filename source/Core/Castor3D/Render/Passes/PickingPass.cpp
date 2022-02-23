@@ -233,20 +233,20 @@ namespace castor3d
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::ePass );
+			, RenderPipeline::eBuffers );
 		C3D_Morphing( writer
 			, GlobalBuffersIdx::eMorphingData
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 		auto skinningData = SkinningUbo::declare( writer
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, flags.programFlags );
 
 		sdw::Pcb pcb{ writer, "DrawData" };
@@ -332,14 +332,14 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::ePass };
+			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
-			, RenderPipeline::ePass
+			, RenderPipeline::eBuffers
 			, hasTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
