@@ -141,7 +141,7 @@ namespace castor3d
 			, uint32_t uboSetIndex
 			, uint32_t texSetIndex )
 		{
-			UBO_VOXELIZER( m_writer, uboBindingIndex++, uboSetIndex, true );
+			C3D_Voxelizer( m_writer, uboBindingIndex++, uboSetIndex, true );
 			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
 			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
 			declareTraceConeRadiance();
@@ -157,7 +157,7 @@ namespace castor3d
 		{
 			if ( declUbo )
 			{
-				UBO_LPVGRIDCONFIG( m_writer, uboBindingIndex++, uboSetIndex, true );
+				C3D_LpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
 			}
 
 			auto c3d_lpvAccumulatorR = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), texBindingIndex++, texSetIndex );
@@ -216,7 +216,7 @@ namespace castor3d
 
 			if ( declUbo )
 			{
-				UBO_LAYERED_LPVGRIDCONFIG( m_writer, uboBindingIndex++, uboSetIndex, true );
+				C3D_LayeredLpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
 			}
 
 			auto c3d_lpvAccumulator1R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), texBindingIndex++, texSetIndex );

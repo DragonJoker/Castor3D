@@ -97,7 +97,7 @@ namespace ocean_fft
 			sdw::ComputeWriter writer;
 			auto const G = writer.declConstant( "G", 9.81_f );
 
-			UBO_OCEAN( writer, GenerateDistributionPass::eConfig, 0u );
+			C3D_FftOcean( writer, GenerateDistributionPass::eConfig, 0u );
 
 			auto seeds = writer.declStorageBuffer( "Seed", GenerateDistributionPass::eInput, 0u );
 			auto seed = seeds.declMemberArray< sdw::Vec2 >( "seed" );

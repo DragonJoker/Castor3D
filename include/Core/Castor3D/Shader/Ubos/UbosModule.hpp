@@ -294,28 +294,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Picking data UBO.
-	*\~french
-	*\brief
-	*	UBO des données de picking.
-	*/
-	class PickingUbo;
-	/**
-	*\~english
-	*\brief
-	*	Picking data.
-	*\~french
-	*\brief
-	*	Données de picking.
-	*/
-	struct PickingUboConfiguration
-	{
-		uint32_t drawIndex;
-		uint32_t nodeIndex;
-	};
-	/**
-	*\~english
-	*\brief
 	*	Reflective Shadow Maps based GI UBO
 	*\~french
 	*\brief
@@ -362,30 +340,6 @@ namespace castor3d
 		castor::Point4f cameraPos;
 		castor::Point4f clipInfo;
 		castor::Point4f fogInfo;
-	};
-	/**
-	*\~english
-	*\brief
-	*	Shadow map data UBO for directional sources.
-	*\~french
-	*\brief
-	*	UBO des données de shadow map pour les sources directionnelles.
-	*/
-	class ShadowMapDirectionalUbo;
-	/**
-	*\~english
-	*\brief
-	*	Shadow map data for directional sources.
-	*\~french
-	*\brief
-	*	Données de shadow map pour les sources directionnelles.
-	*/
-	struct ShadowMapDirectionalUboConfiguration
-	{
-		std::array< castor::Matrix4x4f, 6u > lightProjections;
-		std::array< castor::Matrix4x4f, 6u > lightViews;
-		castor::Point4f lightTiles;
-		uint32_t lightIndex;
 	};
 	/**
 	*\~english

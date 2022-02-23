@@ -672,7 +672,7 @@ namespace ocean_fft
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::ePass );
-		UBO_OCEAN( writer
+		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::ePass );
 
@@ -736,7 +736,7 @@ namespace ocean_fft
 		C3D_Billboard( writer
 			, GlobalBuffersIdx::eBillboardsData
 			, RenderPipeline::ePass );
-		UBO_OCEAN( writer
+		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::ePass );
 
@@ -801,7 +801,7 @@ namespace ocean_fft
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::ePass );
-		UBO_OCEAN( writer
+		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::ePass );
 
@@ -946,7 +946,7 @@ namespace ocean_fft
 			, uint32_t( GlobalBuffersIdx::eSkinningTransformData )
 			, RenderPipeline::ePass
 			, flags.programFlags );
-		UBO_OCEAN( writer
+		C3D_FftOcean( writer
 			, OceanFFTIdx::eOceanUbo
 			, RenderPipeline::ePass );
 		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_heightDisplacementMap"
@@ -1095,7 +1095,7 @@ namespace ocean_fft
 			, RenderPipeline::ePass };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
-		UBO_OCEAN( writer
+		C3D_FftOcean( writer
 			, index++
 			, RenderPipeline::ePass );
 		auto c3d_heightDisplacementMap = writer.declCombinedImg< sdw::CombinedImage2DRgba16 >( "c3d_heightDisplacementMap"

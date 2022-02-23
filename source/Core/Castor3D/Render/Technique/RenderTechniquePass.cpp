@@ -30,7 +30,6 @@
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
-#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 

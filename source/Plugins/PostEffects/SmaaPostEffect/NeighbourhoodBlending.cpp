@@ -44,7 +44,7 @@ namespace smaa
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-			UBO_SMAA( writer, SmaaUboIdx, 0u );
+			C3D_Smaa( writer, SmaaUboIdx, 0u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
@@ -80,7 +80,7 @@ namespace smaa
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInput< Vec4 >( "vtx_offset", 1u );
-			UBO_SMAA( writer, SmaaUboIdx, 0u );
+			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
 			auto c3d_blendTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_blendTex", BlendTexIdx, 0u );
 			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
