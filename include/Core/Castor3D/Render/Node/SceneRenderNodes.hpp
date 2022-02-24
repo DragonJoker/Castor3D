@@ -55,6 +55,16 @@ namespace castor3d
 				|| !m_billboardNodes.empty();
 		}
 
+		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
+		{
+			return *m_nodesData;
+		}
+
+		ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const
+		{
+			return *m_billboardsData;
+		}
+
 	public:
 		struct DescriptorCounts
 		{
@@ -186,14 +196,21 @@ namespace castor3d
 			, Submesh const * submesh
 			, AnimatedMesh * mesh
 			, AnimatedSkeleton * skeleton );
-		void doUpdateNode( SubmeshRenderNode & node );
-		void doUpdateNode( BillboardRenderNode & node );
+		void doUpdateNode( SubmeshRenderNode & node
+			, ModelBufferConfiguration * modelBufferData );
+		void doUpdateNode( BillboardRenderNode & node
+			, ModelBufferConfiguration * modelBufferData
+			, BillboardUboConfiguration * billboardBufferData );
 
 	private:
+		RenderDevice const & m_device;
 		std::mutex m_nodesMutex;
 		DescriptorNodesPoolsT< SubmeshRenderNode > m_submeshNodes;
 		DescriptorNodesPoolsT< BillboardRenderNode > m_billboardNodes;
 		DescriptorCounts m_allDescriptorCounts;
+		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
+		ashes::BufferPtr< BillboardUboConfiguration >m_billboardsData;
+		uint32_t m_nodeId{};
 	};
 }
 

@@ -161,7 +161,6 @@ namespace castor3d
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material );
 		bool result = m_particlesBillboard->initialise( device, m_particlesCount );
-		getScene()->getBillboardListCache().registerElement( *m_particlesBillboard );
 
 		if ( result )
 		{
@@ -190,7 +189,6 @@ namespace castor3d
 
 	void ParticleSystem::cleanup( RenderDevice const & device )
 	{
-		getScene()->getBillboardListCache().unregisterElement( *m_particlesBillboard );
 		m_particlesBillboard->cleanup( device );
 		m_particlesBillboard.reset();
 		m_csImpl->cleanup( device );

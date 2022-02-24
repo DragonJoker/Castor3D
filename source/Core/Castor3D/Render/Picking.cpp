@@ -53,10 +53,10 @@ namespace castor3d
 			, Submesh const *& subnode
 			, uint32_t & face )
 		{
-			auto & entry = cache.getEntry( nodeId );
-			node = &entry.geometry;
-			subnode = &entry.submesh;
-			face = primitiveId;
+			//auto & entry = cache.getEntry( nodeId );
+			//node = &entry.geometry;
+			//subnode = &entry.submesh;
+			//face = primitiveId;
 		}
 
 		inline void pickBillboard( BillboardListCache const & cache
@@ -65,9 +65,9 @@ namespace castor3d
 			, BillboardBase const *& node
 			, uint32_t & face )
 		{
-			auto & entry = cache.getEntry( nodeId );
-			node = &entry.billboard;
-			face = primitiveId;
+			//auto & entry = cache.getEntry( nodeId );
+			//node = &entry.billboard;
+			//face = primitiveId;
 		}
 
 		std::vector< VkBufferImageCopy > createPickDisplayRegions()
