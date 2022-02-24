@@ -219,7 +219,7 @@ namespace castor3d::shader
 					, textureFlags
 					, name
 					, anim
-					, maps[nonuniform( id - 1_u )]
+					, maps[id - 1_u]
 					, texCoords
 					, emissive
 					, opacity
@@ -332,7 +332,7 @@ namespace castor3d::shader
 					, textureFlags
 					, name
 					, anim
-					, maps[nonuniform( id - 1_u )]
+					, maps[id - 1_u]
 					, texCoords
 					, emissive
 					, opacity

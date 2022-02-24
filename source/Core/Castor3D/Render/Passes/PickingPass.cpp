@@ -329,7 +329,7 @@ namespace castor3d
 									, in.texture0.xy() );
 								config.transformUV( anim, texCoord );
 								auto sampledOpacity = writer.declLocale< sdw::Vec4 >( "sampled" + name
-									, c3d_maps[nonuniform( id - 1_u )].sample( texCoord ) );
+									, c3d_maps[id - 1_u].sample( texCoord ) );
 								opacity = config.getOpacity( sampledOpacity, opacity );
 							}
 							FI;
