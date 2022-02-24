@@ -630,6 +630,8 @@ namespace water
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
@@ -662,7 +664,7 @@ namespace water
 				}
 
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( in.material ) );
+					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
@@ -674,8 +676,6 @@ namespace water
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
 					// Direct Lighting
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"

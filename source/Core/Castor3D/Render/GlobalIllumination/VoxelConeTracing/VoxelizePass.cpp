@@ -61,10 +61,6 @@ namespace castor3d
 				, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
 				, normal{ getMember< sdw::Vec3 >( "normal" ) }
 				, texture{ getMember< sdw::Vec3 >( "texcoord" ) }
-				, textures0{ getMember< sdw::UVec4 >( "textures0" ) }
-				, textures1{ getMember< sdw::UVec4 >( "textures1" ) }
-				, textures{ getMember< sdw::Int >( "textures" ) }
-				, material{ getMember< sdw::UInt >( "material" ) }
 				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
 			{
 			}
@@ -98,22 +94,6 @@ namespace castor3d
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
 						, index++ );
-					result->declMember( "textures0"
-						, sdw::type::Kind::eVec4U
-						, sdw::type::NotArray
-						, index++ );
-					result->declMember( "textures1"
-						, sdw::type::Kind::eVec4U
-						, sdw::type::NotArray
-						, index++ );
-					result->declMember( "textures"
-						, sdw::type::Kind::eInt
-						, sdw::type::NotArray
-						, index++ );
-					result->declMember( "material"
-						, sdw::type::Kind::eUInt
-						, sdw::type::NotArray
-						, index++ );
 					result->declMember( "nodeId"
 						, sdw::type::Kind::eInt
 						, sdw::type::NotArray
@@ -127,10 +107,6 @@ namespace castor3d
 			sdw::Vec3 viewPosition;
 			sdw::Vec3 normal;
 			sdw::Vec3 texture;
-			sdw::UVec4 textures0;
-			sdw::UVec4 textures1;
-			sdw::Int textures;
-			sdw::UInt material;
 			sdw::Int nodeId;
 		};
 	}
@@ -392,10 +368,6 @@ namespace castor3d
 					, vec4( in.normal, 0.0_f ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId] );
-				out.textures0 = modelData.getTextures0();
-				out.textures1 = modelData.getTextures1();
-				out.textures = modelData.getTextures();
-				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 
 				if ( hasTextures )
@@ -469,10 +441,6 @@ namespace castor3d
 						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
-				out.textures0 = modelData.getTextures0();
-				out.textures1 = modelData.getTextures1();
-				out.textures = modelData.getTextures();
-				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
@@ -585,11 +553,7 @@ namespace castor3d
 					out.worldPosition = list[i].vtx.position.xyz();
 					out.viewPosition = list[i].viewPosition;
 					out.normal = list[i].normal;
-					out.textures0 = list[i].textures0;
-					out.textures1 = list[i].textures1;
 					out.nodeId = list[i].nodeId;
-					out.textures = list[i].textures;
-					out.material = list[i].material;
 					out.vtx.position = vec4( positions[i], 1.0f );
 
 					if ( hasTextures )
@@ -667,8 +631,10 @@ namespace castor3d
 
 				IF( writer, utils.isSaturated( uvw ) )
 				{
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[in.nodeId] );
 					auto material = writer.declLocale( "material"
-						, materials.getMaterial( in.material ) );
+						, materials.getMaterial( modelData.getMaterialId() ) );
 					auto normal = writer.declLocale( "normal"
 						, normalize( in.normal ) );
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -689,8 +655,8 @@ namespace castor3d
 							, textureConfigs
 							, textureAnims
 							, c3d_maps
-							, in.textures0
-							, in.textures1
+							, modelData.getTextures0()
+							, modelData.getTextures1()
 							, texCoord
 							, emissive
 							, alpha
@@ -703,8 +669,6 @@ namespace castor3d
 
 					if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 					{
-						auto modelData = writer.declLocale( "modelData"
-							, c3d_modelsData[in.nodeId] );
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.cameraPosition );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );

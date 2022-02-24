@@ -112,7 +112,6 @@ namespace ocean_fft
 				: StructInstance{ writer, std::move( expr ), enabled }
 				, patchWorldPosition{ getMember< sdw::Vec3 >( "patchWorldPosition" ) }
 				, patchLods{ getMember< sdw::Vec4 >( "patchLodsGradNormTex" ) }
-				, material{ getMember< sdw::UInt >( "material" ) }
 				, nodeId{ getMember< sdw::Int >( "nodeId" ) }
 				, gradNormalTexcoord{ patchLods }
 			{
@@ -139,10 +138,6 @@ namespace ocean_fft
 						, ast::type::Kind::eVec4F
 						, ast::type::NotArray
 						, index++ );
-					result->declMember( "material"
-						, ast::type::Kind::eUInt
-						, ast::type::NotArray
-						, index++ );
 					result->declMember( "nodeId"
 						, ast::type::Kind::eInt
 						, ast::type::NotArray
@@ -154,7 +149,6 @@ namespace ocean_fft
 
 			sdw::Vec3 patchWorldPosition;
 			sdw::Vec4 patchLods;
-			sdw::UInt material;
 			sdw::Int nodeId;
 			sdw::Vec4 gradNormalTexcoord;
 
@@ -702,7 +696,6 @@ namespace ocean_fft
 						, flags.programFlags ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
-				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -755,7 +748,6 @@ namespace ocean_fft
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
-				out.material = modelData.getMaterialId();
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
@@ -885,7 +877,6 @@ namespace ocean_fft
 					, vec4( l0, l1, l2, l3 ) );
 				patchOut.patchWorldPosition = p0;
 				patchOut.patchLods = lods;
-				patchOut.material = listIn[0u].material;
 				patchOut.nodeId = listIn[0u].nodeId;
 
 				auto outerLods = writer.declLocale( "outerLods"
@@ -1033,7 +1024,6 @@ namespace ocean_fft
 
 				pos += heightDisplacement.yz();
 
-				out.material = patchIn.material;
 				out.nodeId = patchIn.nodeId;
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[writer.cast< sdw::UInt >( out.nodeId )] );
@@ -1162,6 +1152,8 @@ namespace ocean_fft
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 				auto hdrCoords = writer.declLocale( "hdrCoords"
 					, in.fragCoord.xy() / c3d_sceneData.renderSize );
 				auto gradJacobian = writer.declLocale( "gradJacobian"
@@ -1204,7 +1196,7 @@ namespace ocean_fft
 				displayDebugData( eColorMod, vec3( colorMod ), 1.0_f );
 
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( in.material ) );
+					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
@@ -1216,8 +1208,6 @@ namespace ocean_fft
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
 					// Direct Lighting
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
