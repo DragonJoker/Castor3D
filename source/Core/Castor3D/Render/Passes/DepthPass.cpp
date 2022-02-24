@@ -153,7 +153,9 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
-				auto material = materials.getMaterial( in.material );
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
+				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
@@ -177,7 +179,8 @@ namespace castor3d
 						{
 							auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 							auto id = writer.declLocale( "c3d_id" + name
-								, shader::ModelIndices::getTexture( in.textures0, in.textures1, index ) );
+								, shader::ModelIndices::getTexture( modelData.getTextures0()
+									, modelData.getTextures1(), index ) );
 
 							IF( writer, id > 0_u )
 							{
@@ -214,8 +217,6 @@ namespace castor3d
 					, alphaRef );
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 				utils.encodeMaterial( modelData.isShadowReceiver()
 					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
 					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
@@ -225,7 +226,7 @@ namespace castor3d
 				data0 = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
-					, writer.cast< sdw::Float >( in.material ) );
+					, writer.cast< sdw::Float >( modelData.getMaterialId() ) );
 				data1 = vec4( normal, matFlags );
 				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
 			} );
