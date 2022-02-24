@@ -11,6 +11,7 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, AnimatedObjectGroupCache )
 
@@ -108,16 +109,6 @@ namespace castor
 		}
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::getUbos( AnimatedMesh const & mesh )const
-	{
-		return m_meshEntries.at( &mesh );
-	}
-
-	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::getUbos( AnimatedSkeleton const & skeleton )const
-	{
-		return m_skeletonEntries.at( &skeleton );
-	}
-
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::clear( RenderDevice const & device )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
@@ -148,6 +139,13 @@ namespace castor
 		};
 	}
 
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( castor3d::RenderDevice const & device
+		, castor3d::AnimatedObjectGroup const & group
+		, castor3d::AnimatedTexture const & texture )
+	{
+		getOwner()->getEngine()->getMaterialCache().registerTexture( texture );
+	}
+
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedMesh const & mesh )
 	{
@@ -158,6 +156,12 @@ namespace castor
 		, AnimatedSkeleton const & skeleton )
 	{
 		m_skeletonEntries.erase( &skeleton );
+	}
+
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( castor3d::RenderDevice const & device
+		, castor3d::AnimatedTexture const & texture )
+	{
+		getOwner()->getEngine()->getMaterialCache().unregisterTexture( texture );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRegister( AnimatedObjectGroup & group )
@@ -212,6 +216,28 @@ namespace castor
 							doRemoveEntry( device, skeleton );
 						} ) );
 				} ) );
+		m_textureAddedConnections.emplace( &group
+			, group.onTextureAdded.connect( [this]( AnimatedObjectGroup const & pgroup
+				, AnimatedTexture & texture )
+				{
+					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [this, &pgroup, &texture]( RenderDevice const & device
+							, QueueData const & queueData )
+						{
+							doCreateEntry( device, pgroup, texture );
+						} ) );
+				} ) );
+		m_textureRemovedConnections.emplace( &group
+			, group.onTextureRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
+				, AnimatedTexture & texture )
+				{
+					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [this, &texture]( RenderDevice const & device
+							, QueueData const & queueData )
+						{
+							doRemoveEntry( device, texture );
+						} ) );
+				} ) );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doUnregister( AnimatedObjectGroup & group )
@@ -224,6 +250,8 @@ namespace castor
 				m_meshRemovedConnections.erase( &group );
 				m_skeletonAddedConnections.erase( &group );
 				m_skeletonRemovedConnections.erase( &group );
+				m_textureAddedConnections.erase( &group );
+				m_textureRemovedConnections.erase( &group );
 
 				for ( auto & pair : group.getObjects() )
 				{
@@ -232,11 +260,12 @@ namespace castor
 					case AnimationType::eMesh:
 						doRemoveEntry( device, static_cast< AnimatedMesh const & >( *pair.second ) );
 						break;
-
 					case AnimationType::eSkeleton:
 						doRemoveEntry( device, static_cast< AnimatedSkeleton const & >( *pair.second ) );
 						break;
-
+					case AnimationType::eTexture:
+						doRemoveEntry( device, static_cast< AnimatedTexture const & >( *pair.second ) );
+						break;
 					default:
 						break;
 					}

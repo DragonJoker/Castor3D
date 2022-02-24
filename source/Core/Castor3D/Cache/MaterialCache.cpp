@@ -210,7 +210,7 @@ namespace castor
 		}
 	}
 
-	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerTexture( AnimatedTexture & texture )
+	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerTexture( AnimatedTexture const & texture )
 	{
 		if ( m_texAnimBuffer )
 		{
@@ -227,7 +227,7 @@ namespace castor
 		return false;
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterTexture( AnimatedTexture & texture )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterTexture( AnimatedTexture const & texture )
 	{
 		if ( m_texAnimBuffer )
 		{
