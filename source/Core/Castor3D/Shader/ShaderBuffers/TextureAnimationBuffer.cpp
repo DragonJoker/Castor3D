@@ -39,7 +39,7 @@ namespace castor3d
 	{
 	}
 
-	void TextureAnimationBuffer::addTextureAnimation( AnimatedTexture & texture )
+	void TextureAnimationBuffer::addTextureAnimation( AnimatedTexture const & texture )
 	{
 		auto & unit = texture.getTexture();
 		CU_Require( unit.getId() != 0u );
@@ -48,7 +48,7 @@ namespace castor3d
 		++m_count;
 	}
 
-	void TextureAnimationBuffer::removeTextureAnimation( AnimatedTexture & texture )
+	void TextureAnimationBuffer::removeTextureAnimation( AnimatedTexture const & texture )
 	{
 		auto & unit = texture.getTexture();
 		--m_count;

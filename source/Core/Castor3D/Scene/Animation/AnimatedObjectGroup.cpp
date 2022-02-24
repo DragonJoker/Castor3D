@@ -122,11 +122,12 @@ namespace castor3d
 			case AnimationType::eMesh:
 				onMeshAdded( *this, static_cast< AnimatedMesh & >( *object ) );
 				break;
-
 			case AnimationType::eSkeleton:
 				onSkeletonAdded( *this, static_cast< AnimatedSkeleton & >( *object ) );
 				break;
-
+			case AnimationType::eTexture:
+				onTextureAdded( *this, static_cast< AnimatedTexture & >( *object ) );
+				break;
 			default:
 				break;
 			}
