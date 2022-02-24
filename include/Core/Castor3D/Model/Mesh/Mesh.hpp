@@ -296,7 +296,7 @@ namespace castor3d
 			m_serialisable = value;
 		}
 
-		Scene * getScene()const
+		SceneRPtr getScene()const
 		{
 			return m_scene;
 		}

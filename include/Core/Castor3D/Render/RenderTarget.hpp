@@ -159,7 +159,7 @@ namespace castor3d
 		 *\brief		Définit la scène.
 		 *\param[in]	scene	La nouvelle scène.
 		 */
-		C3D_API void setScene( SceneSPtr scene );
+		C3D_API void setScene( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Sets the tone mapping implementation type.
@@ -236,9 +236,9 @@ namespace castor3d
 			return *m_renderTechnique;
 		}
 
-		SceneSPtr getScene()const
+		SceneRPtr getScene()const
 		{
-			return m_scene.lock();
+			return m_scene;
 		}
 
 		CameraSPtr getCamera()const
@@ -383,7 +383,7 @@ namespace castor3d
 		std::atomic_bool m_initialising;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		RenderTechniqueUPtr m_renderTechnique;
-		SceneWPtr m_scene;
+		SceneRPtr m_scene;
 		CameraWPtr m_camera;
 		uint32_t m_index;
 		castor::String m_name;

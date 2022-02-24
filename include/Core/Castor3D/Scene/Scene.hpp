@@ -115,7 +115,7 @@ namespace castor3d
 		 *\brief		Intègre à cette scène le contenu de celle donnée
 		 *\param[in]	scene	La scène à intégrer
 		 */
-		C3D_API void merge( SceneSPtr scene );
+		C3D_API void merge( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertices count

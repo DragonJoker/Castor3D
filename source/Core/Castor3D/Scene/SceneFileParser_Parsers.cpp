@@ -223,12 +223,13 @@ namespace castor3d
 		{
 			String name;
 			params[0]->get( name );
-			parsingContext.scene = parsingContext.parser->getEngine()->getSceneCache().tryFind( name ).lock();
+			parsingContext.scene = parsingContext.parser->getEngine()->getSceneCache().tryFind( name );
 
 			if ( !parsingContext.scene )
 			{
-				parsingContext.scene = std::make_shared< Scene >( name
+				parsingContext.ownScene = castor::makeUnique< Scene >( name
 					, *parsingContext.parser->getEngine() );
+				parsingContext.scene = parsingContext.ownScene.get();
 			}
 
 			parsingContext.sceneNode = parsingContext.scene->getRootNode();
@@ -240,8 +241,9 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserRootLoadingScreen )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.scene = std::make_shared< Scene >( LoadingScreen::SceneName
+		parsingContext.ownScene = castor::makeUnique< Scene >( LoadingScreen::SceneName
 			, *parsingContext.parser->getEngine() );
+		parsingContext.scene = parsingContext.ownScene.get();
 		parsingContext.sceneNode = parsingContext.scene->getRootNode();
 	}
 	CU_EndAttributePush( CSCNSection::eScene )
@@ -470,7 +472,7 @@ namespace castor3d
 
 			if ( it != parsingContext.mapScenes.end() )
 			{
-				parsingContext.renderTarget->setScene( it->second );
+				parsingContext.renderTarget->setScene( *it->second );
 			}
 			else
 			{
@@ -1174,7 +1176,7 @@ namespace castor3d
 			{
 				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::ePanel
-					, parsingContext.scene.get()
+					, parsingContext.scene
 					, parent );
 				parsingContext.overlay->rename( name );
 			}
@@ -1203,7 +1205,7 @@ namespace castor3d
 			{
 				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eBorderPanel
-					, parsingContext.scene.get()
+					, parsingContext.scene
 					, parent );
 				parsingContext.overlay->rename( name );
 			}
@@ -1232,7 +1234,7 @@ namespace castor3d
 			{
 				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eText
-					, parsingContext.scene.get()
+					, parsingContext.scene
 					, parent );
 				parsingContext.overlay->rename( name );
 			}
@@ -1339,14 +1341,14 @@ namespace castor3d
 		{
 			if ( parsingContext.scene->getName() == LoadingScreen::SceneName )
 			{
-				parsingContext.parser->getEngine()->setLoadingScene( std::move( parsingContext.scene ) );
+				parsingContext.parser->getEngine()->setLoadingScene( std::move( parsingContext.ownScene ) );
 			}
 			else
 			{
 				parsingContext.parser->getEngine()->getSceneCache().add( parsingContext.scene->getName()
-					, parsingContext.scene
+					, parsingContext.ownScene
 					, true );
-				parsingContext.scene.reset();
+				parsingContext.scene = {};
 			}
 		}
 	}
@@ -3925,7 +3927,7 @@ namespace castor3d
 		{
 			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::ePanel
-				, parent ? parent->getScene() : parsingContext.scene.get()
+				, parent ? parent->getScene() : parsingContext.scene
 				, parent );
 			parsingContext.overlay->rename( name );
 		}
@@ -3946,7 +3948,7 @@ namespace castor3d
 		{
 			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eBorderPanel
-				, parent ? parent->getScene() : parsingContext.scene.get()
+				, parent ? parent->getScene() : parsingContext.scene
 				, parent );
 			parsingContext.overlay->rename( name );
 		}
@@ -3967,7 +3969,7 @@ namespace castor3d
 		{
 			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eText
-				, parent ? parent->getScene() : parsingContext.scene.get()
+				, parent ? parent->getScene() : parsingContext.scene
 				, parent );
 			parsingContext.overlay->rename( name );
 		}

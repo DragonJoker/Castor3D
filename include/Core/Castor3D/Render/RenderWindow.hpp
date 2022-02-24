@@ -258,7 +258,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La scène.
 		 */
-		C3D_API SceneSPtr getScene()const;
+		C3D_API SceneRPtr getScene()const;
 		/**
 		 *\~english
 		 *\return		The camera.
@@ -290,7 +290,7 @@ namespace castor3d
 		 *\brief		Définit la Scene.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setScene( SceneSPtr value );
+		C3D_API void setScene( Scene & value );
 		/**
 		 *\~english
 		 *\return		The window dimensions.
