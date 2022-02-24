@@ -149,7 +149,7 @@ namespace GuiCommon
 
 	void SceneObjectsList::loadScene( Engine * engine
 		, castor3d::RenderWindow & window
-		, castor3d::SceneSPtr scene )
+		, castor3d::SceneRPtr scene )
 	{
 		m_scene = scene;
 		m_engine = engine;
@@ -294,7 +294,7 @@ namespace GuiCommon
 	void SceneObjectsList::unloadScene()
 	{
 		DeleteAllItems();
-		m_scene.reset();
+		m_scene = {};
 	}
 
 	void SceneObjectsList::select( castor3d::GeometrySPtr geometry

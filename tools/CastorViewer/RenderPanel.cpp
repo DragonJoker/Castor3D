@@ -126,7 +126,7 @@ namespace CastorViewer
 		m_currentState = nullptr;
 		m_nodesStates.clear();
 		m_camera.reset();
-		m_scene.reset();
+		m_scene = {};
 		m_currentNode = nullptr;
 		m_lightsNode = nullptr;
 		m_listener.reset();
@@ -263,7 +263,7 @@ namespace CastorViewer
 	void RenderPanel::doChangeCamera()
 	{
 		auto camera = m_camera.lock();
-		auto scene = m_scene.lock();
+		auto scene = m_scene;
 
 		if ( camera && scene )
 		{

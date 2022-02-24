@@ -671,9 +671,9 @@ namespace castor3d
 		m_fullscreen = value;
 	}
 
-	SceneSPtr RenderWindow::getScene()const
+	SceneRPtr RenderWindow::getScene()const
 	{
-		SceneSPtr result;
+		SceneRPtr result{};
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
@@ -733,7 +733,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setScene( SceneSPtr value )
+	void RenderWindow::setScene( Scene & value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 

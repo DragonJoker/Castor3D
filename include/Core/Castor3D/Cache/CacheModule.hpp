@@ -43,6 +43,100 @@ namespace castor3d
 			return std::make_shared< ElementT >( key
 				, std::forward< ParametersT >( params )... );
 		}
+
+		static ElementObsT makeElementObs( ElementPtrT const & element )
+		{
+			return ElementObsT{ element };
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs.lock() == rhs.lock();
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs.lock() == rhs;
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs == rhs.lock();
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs == rhs;
+		}
+
+		static bool isElementObsNull( ElementObsT const & element )
+		{
+			return element.lock() == nullptr;
+		}
+	};
+
+	template< typename ResT, typename KeyT >
+	struct CUPtrCacheTraitsBaseT
+	{
+		using ElementT = ResT;
+		using ElementKeyT = KeyT;
+		using ElementPtrT = castor::UniquePtr< ElementT >;
+		using ElementObsT = ElementT *;
+		using ElementContT = std::unordered_map< ElementKeyT, ElementPtrT >;
+		using ElementCacheT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, PtrCacheTraitsT< ElementT, ElementKeyT > >;
+
+		using ElementInitialiserT = std::function< void( ElementT & ) >;
+		using ElementCleanerT = std::function< void( ElementT & ) >;
+		using ElementMergerT = std::function< void( ElementCacheT const &
+			, ElementContT &
+			, ElementPtrT ) >;
+
+		template< typename ... ParametersT >
+		static ElementPtrT makeElement( ElementCacheT const & cache
+			, ElementKeyT const & key
+			, ParametersT && ... params )
+		{
+			return castor::makeUnique< ElementT >( key
+				, std::forward< ParametersT >( params )... );
+		}
+
+		static ElementObsT makeElementObs( ElementPtrT const & element )
+		{
+			return element.get();
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs == rhs;
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs == rhs.get();
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs.get() == rhs;
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs == rhs;
+		}
+
+		static bool isElementObsNull( ElementObsT const & element )
+		{
+			return element == nullptr;
+		}
 	};
 	/**
 	*\~english

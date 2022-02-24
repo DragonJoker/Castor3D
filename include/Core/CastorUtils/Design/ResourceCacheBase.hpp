@@ -387,7 +387,7 @@ namespace castor
 			auto lock( castor::makeUniqueLock( *this ) );
 			auto result = this->doTryFindNoLock( name );
 
-			if ( !result.lock() )
+			if ( ElementCacheTraitsT::isElementObsNull( result ) )
 			{
 				this->reportUnknown( name );
 			}
@@ -408,7 +408,7 @@ namespace castor
 		{
 			auto result = this->doTryFindNoLock( name );
 
-			if ( !result.lock() )
+			if ( ElementCacheTraitsT::isElementObsNull( result ) )
 			{
 				this->reportUnknown( name );
 			}
@@ -491,12 +491,12 @@ namespace castor
 
 		bool has( ElementKeyT const & name )const
 		{
-			return tryFind( name ).lock() != ElementPtrT{};
+			return !ElementCacheTraitsT::isElementObsNull( tryFind( name ) );
 		}
 
 		bool hasNoLock( ElementKeyT const & name )const
 		{
-			return tryFindNoLock( name ).lock() != ElementPtrT{};
+			return !ElementCacheTraitsT::isElementObsNull( tryFindNoLock( name ) );
 		}
 
 		bool isEmpty()const
@@ -645,14 +645,14 @@ namespace castor
 				}
 			}
 
-			return ElementObsT{ ires.first->second };
+			return ElementCacheTraitsT::makeElementObs( ires.first->second );
 		}
 
 		ElementObsT doAddNoLock( ElementKeyT const & name
 			, ElementPtrT & element
 			, bool initialise = true )
 		{
-			ElementObsT result{ element };
+			auto result = ElementCacheTraitsT::makeElementObs( element );
 
 			if ( element )
 			{
@@ -661,7 +661,7 @@ namespace castor
 					, initialise );
 
 				if ( element != nullptr
-					&& element != result.lock() )
+					&& !ElementCacheTraitsT::areElementsEqual( result, element ) )
 				{
 					reportDuplicate( name );
 				}
@@ -690,15 +690,17 @@ namespace castor
 			{
 				ires.first->second = doCreateT( name
 					, std::forward< ParametersT >( parameters )... );
-				created = ires.first->second;
+				created = ElementCacheTraitsT::makeElementObs( ires.first->second );
 
-				if ( initialise && created.lock() && m_initialise )
+				if ( initialise
+					&& m_initialise
+					&& !ElementCacheTraitsT::isElementObsNull( created ) )
 				{
 					m_initialise( *ires.first->second );
 				}
 			}
 
-			return ires.first->second;
+			return ElementCacheTraitsT::makeElementObs( ires.first->second );
 		}
 
 		template< typename ... ParametersT >
@@ -711,7 +713,7 @@ namespace castor
 				, created
 				, std::forward< ParametersT >( parameters )... );
 
-			if ( result.lock() != created.lock() )
+			if ( !ElementCacheTraitsT::areElementsEqual( result, created ) )
 			{
 				reportDuplicate( name );
 			}
@@ -746,13 +748,13 @@ namespace castor
 
 		ElementObsT doTryFindNoLock( ElementKeyT const & name )const
 		{
-			ElementObsT result;
+			ElementObsT result{};
 			auto it = m_resources.find( name );
 			
 			if ( it != m_resources.end() )
 			{
 				ElementPtrT & element = it->second;
-				result = ElementObsT{ element };
+				result = ElementCacheTraitsT::makeElementObs( element );
 			}
 
 			return result;

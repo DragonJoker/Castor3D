@@ -98,13 +98,13 @@ namespace castor3d
 			return m_type;
 		}
 
-		Scene * getScene()const
+		SceneRPtr getScene()const
 		{
 			return m_scene;
 		}
 
 	protected:
-		Scene * m_scene;
+		SceneRPtr m_scene;
 		//!\~english	Movable object type.
 		//!\~french		Le type d'objet déplaçable.
 		MovableType m_type;
