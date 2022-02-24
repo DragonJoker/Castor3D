@@ -1080,10 +1080,6 @@ namespace castor3d
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId] );
-				out.textures0 = modelData.getTextures0();
-				out.textures1 = modelData.getTextures1();
-				out.textures = modelData.getTextures();
-				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
@@ -1170,10 +1166,6 @@ namespace castor3d
 						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
-				out.textures0 = modelData.getTextures0();
-				out.textures1 = modelData.getTextures1();
-				out.textures = modelData.getTextures();
-				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 

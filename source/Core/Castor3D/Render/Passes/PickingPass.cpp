@@ -223,10 +223,6 @@ namespace castor3d
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId] );
-				out.textures0 = modelData.getTextures0();
-				out.textures1 = modelData.getTextures1();
-				out.textures = modelData.getTextures();
-				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
@@ -266,8 +262,13 @@ namespace castor3d
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 
-		// UBOs
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		shader::Utils utils{ writer, *renderSystem.getEngine() };
+
+		// UBOs
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
+			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -287,7 +288,6 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< UVec4 >( "pxl_fragColor", 0 ) );
-		shader::Utils utils{ writer, *renderSystem.getEngine() };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags.programFlags
@@ -299,7 +299,9 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 			, FragmentOut out )
 			{
-				auto material = materials.getMaterial( in.material );
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
+				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
 				auto textureFlags = merge( flags.textures );
@@ -310,7 +312,9 @@ namespace castor3d
 					{
 						auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
 						auto id = writer.declLocale( "id" + name
-							, shader::ModelIndices::getTexture( in.textures0, in.textures1, index ) );
+							, shader::ModelIndices::getTexture( modelData.getTextures0()
+								, modelData.getTextures1()
+								, index ) );
 
 						IF( writer, id > 0_u )
 						{

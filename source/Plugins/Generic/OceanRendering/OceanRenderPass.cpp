@@ -660,7 +660,6 @@ namespace ocean
 					, flags.programFlags ) );
 			auto modelData = writer.declLocale( "modelData"
 				, c3d_modelsData[nodeId] );
-			out.material = modelData.getMaterialId();
 			out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 #if Ocean_DebugPixelShader
@@ -737,7 +736,6 @@ namespace ocean
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
-				out.material = modelData.getMaterialId();
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
@@ -829,7 +827,6 @@ namespace ocean
 				, TrianglesTessControlListOutT< castor3d::shader::FragmentSurfaceT > listOut )
 			{
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
-				listOut.material = listIn[in.invocationID].material;
 				listOut.nodeId = listIn[in.invocationID].nodeId;
 				listOut.texture0 = listIn[in.invocationID].texture0;
 				listOut.texture1 = listIn[in.invocationID].texture1;
@@ -956,7 +953,6 @@ namespace ocean
 				out.texture1 = patchIn.tessCoord.x() * listIn[0].texture1
 					+ patchIn.tessCoord.y() * listIn[1].texture1
 					+ patchIn.tessCoord.z() * listIn[2].texture1;
-				out.material = listIn[0].material;
 				out.nodeId = listIn[0].nodeId;
 				auto texcoord = writer.declLocale( "texcoord"
 					, patchIn.tessCoord.x() * listIn[0].texture0
@@ -1130,6 +1126,8 @@ namespace ocean
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
@@ -1162,7 +1160,7 @@ namespace ocean
 				}
 
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( in.material ) );
+					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
@@ -1173,8 +1171,6 @@ namespace ocean
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 					// Direct Lighting
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );

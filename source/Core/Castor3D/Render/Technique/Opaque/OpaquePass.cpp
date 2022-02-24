@@ -23,6 +23,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
@@ -138,6 +139,9 @@ namespace castor3d
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
+			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -178,8 +182,10 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 			, FragmentOut out )
 			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[in.nodeId] );
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( in.material ) );
+					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto texCoord = writer.declLocale( "texCoord"
 					, in.texture0 );
 				auto alpha = writer.declLocale( "alpha"
@@ -204,8 +210,8 @@ namespace castor3d
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
-					, in.textures0
-					, in.textures1
+					, modelData.getTextures0()
+					, modelData.getTextures1()
 					, texCoord
 					, normal
 					, tangent

@@ -215,10 +215,6 @@ namespace castor3d
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[ids.nodeId] );
-				out.textures0 = modelData.getTextures0();
-				out.textures1 = modelData.getTextures1();
-				out.textures = modelData.getTextures();
-				out.material = modelData.getMaterialId();
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
@@ -258,6 +254,9 @@ namespace castor3d
 
 		shader::Utils utils{ writer, *getEngine() };
 
+		C3D_ModelsData( writer
+			, GlobalBuffersIdx::eModelsData
+			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
@@ -297,15 +296,17 @@ namespace castor3d
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-			, flags.programFlags
-			, getShaderFlags()
-			, textureFlags
-			, flags.passFlags
-			, hasTextures }
-		, FragmentOut{ writer }
+				, flags.programFlags
+				, getShaderFlags()
+				, textureFlags
+				, flags.passFlags
+				, hasTextures }
+			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-			, FragmentOut out )
+				, FragmentOut out )
 			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[in.nodeId] );
 				pxl_normalLinear = vec4( 0.0_f );
 				pxl_variance = vec2( 0.0_f );
 				pxl_position = vec4( 0.0_f );
@@ -318,7 +319,7 @@ namespace castor3d
 					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( in.bitangent ) );
-				auto material = materials.getMaterial( in.material );
+				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto emissive = writer.declLocale( "emissive"
 					, vec3( material.emissive ) );
 				auto alpha = writer.declLocale( "alpha"
@@ -339,8 +340,8 @@ namespace castor3d
 						, textureConfigs
 						, textureAnims
 						, c3d_maps
-						, in.textures0
-						, in.textures1
+						, modelData.getTextures0()
+						, modelData.getTextures1()
 						, texCoord
 						, normal
 						, tangent
