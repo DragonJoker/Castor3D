@@ -343,9 +343,6 @@ namespace castor3d
 		, BillboardBase & billboard )
 	{
 		auto & buffers = billboard.getGeometryBuffers();
-		auto & scene = billboard.getParentScene();
-		auto billboardEntry = scene.getBillboardListCache().getUbos( billboard
-			, pass );
 		m_isDirty = true;
 
 		return &m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
@@ -512,9 +509,7 @@ namespace castor3d
 				, nodesIds.getBuffer().getSize() } );
 			descriptorWrites.push_back( nodesIdsWrite );
 
-			auto & modelBuffer = checkFlag( flags.programFlags, ProgramFlag::eBillboards )
-				? scene.getBillboardListCache().getModelBuffer()
-				: scene.getGeometryCache().getModelBuffer();
+			auto & modelBuffer = scene.getModelBuffer();
 			auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eModelsData )
 				, 0u
 				, 1u
@@ -530,7 +525,7 @@ namespace castor3d
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 			{
-				auto & billboardDatas = scene.getBillboardListCache().getBillboardsBuffer();
+				auto & billboardDatas = scene.getBillboardsBuffer();
 				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
 					, 0u
 					, 1u
@@ -989,10 +984,6 @@ namespace castor3d
 			, pass.getOwner()
 			, pass.getTexturesMask()
 			, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
-		auto & scene = *primitive.getScene();
-		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
-			, submesh
-			, pass );
 		m_isDirty = true;
 
 		auto & result = m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }

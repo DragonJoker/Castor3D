@@ -102,24 +102,6 @@ namespace castor
 		C3D_API void update( castor3d::CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\return		The entry related to given AnimatedMesh.
-		 *\param[in]	mesh	The mexh.
-		 *\~french
-		 *\brief		L'entrée relative à l'AnimatedMesh donné.
-		 *\param[in]	mesh	Le mesh.
-		 */
-		C3D_API MeshPoolsEntry getUbos( castor3d::AnimatedMesh const & mesh )const;
-		/**
-		 *\~english
-		 *\return		The entry related to given AnimatedSkeleton.
-		 *\param[in]	skeleton	The skeleton.
-		 *\~french
-		 *\brief		L'entrée relative à l'AnimatedSkeleton donné.
-		 *\param[in]	skeleton	Le squelette.
-		 */
-		C3D_API SkeletonPoolsEntry getUbos( castor3d::AnimatedSkeleton const & skeleton )const;
-		/**
-		 *\~english
 		 *\brief		Flushes the collection.
 		 *\param[in]	device	The GPU device.
 		 *\~french
@@ -148,9 +130,6 @@ namespace castor
 		MeshPoolsEntry doCreateEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedObjectGroup const & group
 			, castor3d::AnimatedMesh const & mesh );
-		void doCreateEntry( castor3d::RenderDevice const & device
-			, castor3d::AnimatedObjectGroup const & group
-			, castor3d::AnimatedTexture const & texture );
 		void doRemoveEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedSkeleton const & skeleton );
 		void doRemoveEntry( castor3d::RenderDevice const & device

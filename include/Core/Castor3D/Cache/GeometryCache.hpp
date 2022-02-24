@@ -33,7 +33,6 @@ namespace castor3d
 	public:
 		struct PoolsEntry
 		{
-			uint32_t id;
 			size_t hash;
 			Geometry const & geometry;
 			Submesh const & submesh;
@@ -89,66 +88,8 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ObjectCacheT() = default;
-		/**
-		 *\~english
-		 *\brief		Initialises the cache buffers.
-		 *\~french
-		 *\brief		Initialise les buffers du cache.
-		 */
-		C3D_API void initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
-		 *\~french
-		 *\brief		Met tous les éléments à nettoyer.
-		 */
-		C3D_API void cleanup();
 
 		C3D_API void fillInfo( RenderInfo & info )const;
-		/**
-		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API void update( CpuUpdater & updater );
-		/**
-		 *\~english
-		 *\return		The UBOs for given geometry, submesh and pass.
-		 *\remarks		Assumes the entry has been previously created.
-		 *\param[in]	geometry		The geometry.
-		 *\param[in]	submesh			The submesh.
-		 *\param[in]	pass			The material pass.
-		 *\~french
-		 *\brief		Les UBOs pour la géométrie, le sous-maillage et la passe donnés.
-		 *\remarks		Considère que l'entrée a été préalablement créée.
-		 *\param[in]	geometry		La géometrie.
-		 *\param[in]	submesh			Le submesh.
-		 *\param[in]	pass			La passe du matériau.
-		 */
-		C3D_API PoolsEntry getUbos( Geometry const & geometry
-			, Submesh const & submesh
-			, Pass const & pass )const;
-		/**
-		 *\~english
-		 *\return		The pool entry for given ID.
-		 *\param[in]	nodeId	The entry ID.
-		 *\~french
-		 *\brief		L'entrée de pool pour l'ID donné.
-		 *\param[in]	nodeId	L'ID de l'entrée.
-		 */
-		C3D_API PoolsEntry const & getEntry( uint32_t nodeId )const;
-		/**
-		 *\~english
-		 *\brief		Flushes the collection.
-		 *\param[in]	device	The GPU device.
-		 *\~french
-		 *\brief		Vide la collection.
-		 *\param[in]	device	Le device GPU.
-		 */
-		C3D_API void clear( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Adds an object.
@@ -159,34 +100,12 @@ namespace castor3d
 		 */
 		C3D_API void add( ElementPtrT element );
 
-		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
-		{
-			return *m_nodesData;
-		}
-
 	public:
 		using ElementObjectCacheT::add;
 
 	private:
-		void doCreateEntry( RenderDevice const & device
-			, Geometry & geometry
-			, Submesh const & submesh
-			, Pass const & pass );
-		void doRemoveEntry( RenderDevice const & device
-			, Geometry & geometry
-			, Submesh const & submesh
-			, Pass const & pass );
-		void doRegister( Geometry & geometry );
-		void doUnregister( Geometry & geometry );
-
-	private:
-		RenderDevice const & m_device;
 		uint32_t m_faceCount{ 0 };
 		uint32_t m_vertexCount{ 0 };
-		std::map< size_t, PoolsEntry > m_entries;
-		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
-		using RenderPassSet = std::set< RenderNodesPass const * >;
-		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
 	};
 }
 
