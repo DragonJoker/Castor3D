@@ -42,7 +42,6 @@ namespace castor3d
 		C3D_API AnimatedTexture( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & config
 			, Pass & pass );
-		C3D_API ~AnimatedTexture()override;
 		/**
 		 *\copydoc		castor3d::AnimatedObject::update
 		 */
@@ -59,30 +58,20 @@ namespace castor3d
 		 *name Getters.
 		**/
 		/**@{*/
-		TextureUnit const & getTexture()const
+		TextureUnit & getTexture()const
 		{
 			CU_Require( m_texture );
 			return *m_texture;
 		}
 
-		TextureUnit & getTexture()
-		{
-			CU_Require( m_texture );
-			return *m_texture;
-		}
-
-		Pass const & getPass()const
+		Pass & getPass()const
 		{
 			return m_pass;
 		}
 
-		Pass & getPass()
+		TextureAnimationInstance & getPlayingAnimation()const
 		{
-			return m_pass;
-		}
-
-		TextureAnimationInstance const & getPlayingAnimation()const
-		{
+			CU_Require( m_playingAnimation );
 			return *m_playingAnimation;
 		}
 		/**@}*/

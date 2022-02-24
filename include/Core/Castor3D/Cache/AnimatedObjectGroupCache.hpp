@@ -148,10 +148,15 @@ namespace castor
 		MeshPoolsEntry doCreateEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedObjectGroup const & group
 			, castor3d::AnimatedMesh const & mesh );
+		void doCreateEntry( castor3d::RenderDevice const & device
+			, castor3d::AnimatedObjectGroup const & group
+			, castor3d::AnimatedTexture const & texture );
 		void doRemoveEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedSkeleton const & skeleton );
 		void doRemoveEntry( castor3d::RenderDevice const & device
 			, castor3d::AnimatedMesh const & mesh );
+		void doRemoveEntry( castor3d::RenderDevice const & device
+			, castor3d::AnimatedTexture const & texture );
 		void doRegister( castor3d::AnimatedObjectGroup & group );
 		void doUnregister( castor3d::AnimatedObjectGroup & group );
 
@@ -164,6 +169,8 @@ namespace castor
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
+		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureAddedConnections;
+		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureRemovedConnections;
 		ashes::BufferPtr< castor3d::MorphingBufferConfiguration > m_morphingData;
 		ashes::BufferPtr< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;
 	};
