@@ -64,11 +64,6 @@ namespace castor3d
 	{
 	}
 
-	AnimatedTexture::~AnimatedTexture()
-	{
-		m_pass.getOwner()->getEngine()->getMaterialCache().unregisterTexture( *this );
-	}
-
 	void AnimatedTexture::update( Milliseconds const & elpased )
 	{
 		if ( m_playingAnimation )
@@ -117,7 +112,6 @@ namespace castor3d
 				auto & animation = m_texture->getAnimation();
 				auto instance = std::make_unique< TextureAnimationInstance >( *this, animation );
 				m_animations.emplace( name, std::move( instance ) );
-				m_pass.getOwner()->getEngine()->getMaterialCache().registerTexture( *this );
 				startAnimation( animation.getName() );
 			}
 		}

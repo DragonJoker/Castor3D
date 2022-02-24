@@ -249,6 +249,8 @@ namespace castor3d
 		OnAnimatedSkeletonChange onSkeletonRemoved;
 		OnAnimatedMeshChange onMeshAdded;
 		OnAnimatedMeshChange onMeshRemoved;
+		OnAnimatedTextureChange onTextureAdded;
+		OnAnimatedTextureChange onTextureRemoved;
 
 	private:
 		GroupAnimationMap m_animations;
