@@ -112,6 +112,7 @@ namespace castor3d
 				auto & animation = m_texture->getAnimation();
 				auto instance = std::make_unique< TextureAnimationInstance >( *this, animation );
 				m_animations.emplace( name, std::move( instance ) );
+				m_pass.getOwner()->getEngine()->getMaterialCache().registerTexture( *this );
 				startAnimation( animation.getName() );
 			}
 		}

@@ -297,8 +297,6 @@ namespace castor3d
 	void Scene::initialise()
 	{
 		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
-		m_billboardCache->initialise( device );
-		m_geometryCache->initialise( device );
 		m_animatedObjectGroupCache->initialise( device );
 		m_lightCache->initialise( device );
 		m_background->initialise( device );
@@ -348,8 +346,6 @@ namespace castor3d
 			doUpdateAnimations( updater );
 			doUpdateMaterials();
 			m_lightCache->update( updater );
-			m_geometryCache->update( updater );
-			m_billboardCache->update( updater );
 			m_animatedObjectGroupCache->update( updater );
 			onUpdate( *this );
 			m_changed = false;
@@ -360,6 +356,7 @@ namespace castor3d
 	{
 		updater.scene = this;
 		m_lightCache->update( updater );
+		m_renderNodes->update( updater );
 		m_meshCache->forEach( []( Mesh & mesh )
 			{
 				for ( auto & submesh : mesh )
@@ -636,6 +633,18 @@ namespace castor3d
 	ashes::DescriptorSet * Scene::getBindlessTexDescriptorSet()const
 	{
 		return getEngine()->getTextureUnitCache().getDescriptorSet();
+	}
+
+	ashes::Buffer< ModelBufferConfiguration > const & Scene::getModelBuffer()const
+	{
+		CU_Require( m_renderNodes );
+		return m_renderNodes->getModelBuffer();
+	}
+
+	ashes::Buffer< BillboardUboConfiguration > const & Scene::getBillboardsBuffer()const
+	{
+		CU_Require( m_renderNodes );
+		return m_renderNodes->getBillboardsBuffer();
 	}
 
 	void Scene::setDirectionalShadowCascades( uint32_t value )

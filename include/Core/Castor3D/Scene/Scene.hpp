@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
@@ -229,6 +230,8 @@ namespace castor3d
 		C3D_API ashes::DescriptorSetLayout * getBindlessTexDescriptorLayout()const;
 		C3D_API ashes::DescriptorPool * getBindlessTexDescriptorPool()const;
 		C3D_API ashes::DescriptorSet * getBindlessTexDescriptorSet()const;
+		C3D_API ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const;
+		C3D_API ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const;
 
 		castor::BoundingBox const & getBoundingBox()const
 		{

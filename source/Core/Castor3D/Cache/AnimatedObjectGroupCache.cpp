@@ -139,13 +139,6 @@ namespace castor
 		};
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( castor3d::RenderDevice const & device
-		, castor3d::AnimatedObjectGroup const & group
-		, castor3d::AnimatedTexture const & texture )
-	{
-		getOwner()->getEngine()->getMaterialCache().registerTexture( texture );
-	}
-
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
 		, AnimatedMesh const & mesh )
 	{
@@ -212,19 +205,8 @@ namespace castor
 						, [this, &skeleton]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
-							skeleton.setId( uint32_t( m_skeletonEntries.size() ) );
+							skeleton.setId( 0u );
 							doRemoveEntry( device, skeleton );
-						} ) );
-				} ) );
-		m_textureAddedConnections.emplace( &group
-			, group.onTextureAdded.connect( [this]( AnimatedObjectGroup const & pgroup
-				, AnimatedTexture & texture )
-				{
-					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-						, [this, &pgroup, &texture]( RenderDevice const & device
-							, QueueData const & queueData )
-						{
-							doCreateEntry( device, pgroup, texture );
 						} ) );
 				} ) );
 		m_textureRemovedConnections.emplace( &group
