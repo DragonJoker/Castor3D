@@ -36,6 +36,8 @@
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, Scene )
+
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -379,19 +381,19 @@ namespace castor3d
 		onSetBackground( *m_background );
 	}
 
-	void Scene::merge( SceneSPtr scene )
+	void Scene::merge( Scene & scene )
 	{
-		scene->getAnimatedObjectGroupCache().mergeInto( *m_animatedObjectGroupCache );
-		scene->getCameraCache().mergeInto( *m_cameraCache );
-		scene->getBillboardListCache().mergeInto( *m_billboardCache );
-		scene->getParticleSystemCache().mergeInto( *m_particleSystemCache );
-		scene->getGeometryCache().mergeInto( *m_geometryCache );
-		scene->getLightCache().mergeInto( *m_lightCache );
-		scene->getSceneNodeCache().mergeInto( *m_sceneNodeCache );
-		m_ambientLight = scene->getAmbientLight();
+		scene.getAnimatedObjectGroupCache().mergeInto( *m_animatedObjectGroupCache );
+		scene.getCameraCache().mergeInto( *m_cameraCache );
+		scene.getBillboardListCache().mergeInto( *m_billboardCache );
+		scene.getParticleSystemCache().mergeInto( *m_particleSystemCache );
+		scene.getGeometryCache().mergeInto( *m_geometryCache );
+		scene.getLightCache().mergeInto( *m_lightCache );
+		scene.getSceneNodeCache().mergeInto( *m_sceneNodeCache );
+		m_ambientLight = scene.getAmbientLight();
 		setChanged();
 
-		scene->cleanup();
+		scene.cleanup();
 	}
 
 	uint32_t Scene::getVertexCount()const
@@ -599,7 +601,7 @@ namespace castor3d
 
 		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
 		{
-			if ( target->getScene().get() != this )
+			if ( target->getScene() != this )
 			{
 				auto toWait = target->getSemaphore();
 				result.insert( result.end()

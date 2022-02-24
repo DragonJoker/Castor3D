@@ -759,7 +759,7 @@ namespace castor3d
 			} );
 	}
 
-	void Engine::setLoadingScene( SceneSPtr scene )
+	void Engine::setLoadingScene( SceneUPtr scene )
 	{
 		m_loadingScene = std::move( scene );
 		m_loadingScene->initialise();

@@ -343,7 +343,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( Camera );
 	CU_DeclareSmartPtr( Geometry );
 	CU_DeclareSmartPtr( MovableObject );
-	CU_DeclareSmartPtr( Scene );
+	CU_DeclareCUSmartPtr( castor3d, Scene, C3D_API );
 	CU_DeclareSmartPtr( SceneFileContext );
 	CU_DeclareSmartPtr( SceneFileParser );
 	CU_DeclareSmartPtr( SceneImporter );
@@ -364,7 +364,7 @@ namespace castor3d
 	//! Geometry pointer map, sorted by name.
 	CU_DeclareMap( castor::String, GeometrySPtr, GeometryPtrStr );
 	//! Scene pointer map, sorted by name.
-	CU_DeclareMap( castor::String, SceneSPtr, ScenePtrStr );
+	CU_DeclareMap( castor::String, SceneRPtr, ScenePtrStr );
 	//! SceneNode pointer map, sorted by name.
 	CU_DeclareMap( castor::String, SceneNodeSPtr, SceneNodePtrStr );
 	//! BillboardList pointer map, sorted by name.
@@ -409,11 +409,11 @@ namespace castor3d
 	*/
 	template<>
 	struct PtrCacheTraitsT< Scene, castor::String >
-		: PtrCacheTraitsBaseT< Scene, castor::String >
+		: CUPtrCacheTraitsBaseT< Scene, castor::String >
 	{
 		using ResT = Scene;
 		using KeyT = castor::String;
-		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
+		using Base = CUPtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
@@ -494,6 +494,40 @@ namespace castor3d
 		{
 			return std::make_shared< ElementT >( key
 				, std::forward< ParametersT >( params )... );
+		}
+
+		static ElementObsT makeElementObs( ElementPtrT const & element )
+		{
+			return ElementObsT{ element };
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs.lock() == rhs.lock();
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs.lock() == rhs;
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs == rhs.lock();
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs == rhs;
+		}
+
+		static bool isElementObsNull( ElementObsT const & element )
+		{
+			return element.lock() == nullptr;
 		}
 	};
 	/**

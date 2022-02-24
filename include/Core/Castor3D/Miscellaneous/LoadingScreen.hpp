@@ -36,7 +36,7 @@ namespace castor3d
 		C3D_API LoadingScreen( ProgressBar & progressBar
 			, RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, SceneSPtr scene
+			, SceneRPtr scene
 			, VkRenderPass renderPass
 			, castor::Size const & size );
 		C3D_API ~LoadingScreen();
@@ -146,7 +146,7 @@ namespace castor3d
 		ProgressBar & m_progressBar;
 		crg::FrameGraph m_graph;
 		std::atomic_bool m_enabled{};
-		SceneSPtr m_scene;
+		SceneRPtr m_scene;
 		SceneBackground & m_background;
 		VkRenderPass m_renderPass;
 		castor::Size m_renderSize;

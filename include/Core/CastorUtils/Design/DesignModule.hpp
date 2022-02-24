@@ -445,6 +445,40 @@ namespace castor
 			return makeResource< ElementT, ElementKeyT >( key
 				, std::forward< ParametersT >( params )... );
 		}
+
+		static ElementObsT makeElementObs( ElementPtrT const & element )
+		{
+			return ElementObsT{ element };
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs.lock() == rhs.lock();
+		}
+
+		static bool areElementsEqual( ElementObsT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs.lock() == rhs;
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementObsT const & rhs )
+		{
+			return lhs == rhs.lock();
+		}
+
+		static bool areElementsEqual( ElementPtrT const & lhs
+			, ElementPtrT const & rhs )
+		{
+			return lhs == rhs;
+		}
+
+		static bool isElementObsNull( ElementObsT const & element )
+		{
+			return element.lock() == nullptr;
+		}
 	};
 	/**
 	\~english
