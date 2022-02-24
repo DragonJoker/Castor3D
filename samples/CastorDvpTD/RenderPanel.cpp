@@ -87,7 +87,7 @@ namespace castortd
 			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
 			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
 				, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
-			SceneSPtr scene = target->getScene();
+			SceneRPtr scene = target->getScene();
 
 			if ( scene )
 			{

@@ -625,9 +625,9 @@ namespace castor3d
 			return m_lightingModelFactory;
 		}
 
-		SceneSPtr getLoadingScene()const
+		SceneRPtr getLoadingScene()const
 		{
-			return m_loadingScene;
+			return m_loadingScene.get();
 		}
 		/**@}*/
 		/**
@@ -639,7 +639,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		C3D_API void setLoadingScene( SceneSPtr scene );
+		C3D_API void setLoadingScene( SceneUPtr scene );
 
 		void setUserInputListener( UserInputListenerSPtr listener )
 		{
@@ -705,7 +705,7 @@ namespace castor3d
 		castor::AsyncJobQueue m_gpuJobs;
 		crg::ResourceHandler m_resourceHandler;
 		shader::LightingModelFactory m_lightingModelFactory;
-		SceneSPtr m_loadingScene;
+		SceneUPtr m_loadingScene;
 		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
 		std::unordered_map< castor::String, std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
 	};

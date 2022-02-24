@@ -52,6 +52,16 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::Overlay">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="category">m_category</Item>
+			<Item Name="scene">m_scene</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::SubmeshComponent">
 		<DisplayString>{m_type}</DisplayString>
 		<Expand>

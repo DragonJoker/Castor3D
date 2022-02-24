@@ -493,9 +493,8 @@ namespace CastorViewer
 	void MainFrame::doCleanupScene()
 	{
 		m_fpsTimer->Stop();
-		auto scene = m_mainScene.lock();
 
-		if ( scene )
+		if ( m_mainScene )
 		{
 			auto engine = wxGetApp().getCastor();
 
@@ -509,7 +508,7 @@ namespace CastorViewer
 			}
 
 			m_renderPanel->reset();
-			scene->cleanup();
+			m_mainScene->cleanup();
 			engine->getRenderLoop().renderSyncFrame();
 
 			auto target = m_renderPanel->getRenderWindow().getRenderTarget();
@@ -520,9 +519,8 @@ namespace CastorViewer
 			}
 
 			engine->getRenderLoop().cleanup();
-			engine->getSceneCache().remove( scene->getName() );
+			engine->getSceneCache().remove( m_mainScene->getName() );
 			Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
-			scene.reset();
 
 			if ( engine->isThreaded() )
 			{
@@ -530,7 +528,7 @@ namespace CastorViewer
 			}
 		}
 
-		m_mainScene.reset();
+		m_mainScene = {};
 	}
 
 	void MainFrame::doSaveFrame()
@@ -699,12 +697,11 @@ namespace CastorViewer
 
 		m_renderPanel->setTarget( target );
 		m_mainScene = target->getScene();
-		auto scene = m_mainScene.lock();
 		auto engine = wxGetApp().getCastor();
 
-		if ( scene )
+		if ( m_mainScene )
 		{
-			m_sceneObjects->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), scene );
+			m_sceneObjects->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), m_mainScene );
 		}
 
 #if CV_MainFrameToolbar
@@ -874,7 +871,7 @@ namespace CastorViewer
 			m_timerErr = nullptr;
 		}
 
-		m_mainScene.reset();
+		m_mainScene = {};
 		auto castor = wxGetApp().getCastor();
 		CU_Require( castor );
 
@@ -964,10 +961,8 @@ namespace CastorViewer
 		{
 			return;
 		}
-		
-		SceneSPtr scene = m_mainScene.lock();
 
-		if ( scene )
+		if ( m_mainScene )
 		{
 			wxString wildcard = _( "Castor3D scene" );
 			wildcard += CSCN_WILDCARD;
@@ -980,7 +975,7 @@ namespace CastorViewer
 				{
 					Path pathFile( make_String( fileDialog.GetPath() ) );
 					exporter::CscnSceneExporter exporter{ options };
-					auto result = exporter.exportScene( *scene, pathFile );
+					auto result = exporter.exportScene( *m_mainScene, pathFile );
 
 					if ( result )
 					{

@@ -196,13 +196,13 @@ namespace castor3d
 			return dummy;
 		}
 
-		Scene * getScene()const
+		SceneRPtr getScene()const
 		{
 			return m_scene;
 		}
 
 	private:
-		Scene * m_scene;
+		SceneRPtr m_scene;
 		BonePtrArray m_bones;
 		castor::Matrix4x4f m_globalInverse;
 		std::map< Mesh *, std::vector< castor::BoundingBox > > m_boxes;

@@ -256,7 +256,7 @@ namespace castor3d
 	LoadingScreen::LoadingScreen( ProgressBar & progressBar
 		, RenderDevice const & device
 		, crg::ResourceHandler & handler
-		, SceneSPtr scene
+		, SceneRPtr scene
 		, VkRenderPass renderPass
 		, castor::Size const & size )
 		: m_device{ device }
@@ -296,7 +296,6 @@ namespace castor3d
 		m_backgroundRenderer.reset();
 		m_culler.reset();
 		m_camera.reset();
-		m_scene.reset();
 		m_depth.destroy();
 		m_colour.destroy();
 	}
@@ -319,7 +318,7 @@ namespace castor3d
 			auto oldScene = updater.scene;
 			auto oldSafeBanded = updater.isSafeBanded;
 			updater.camera = m_camera.get();
-			updater.scene = m_scene.get();
+			updater.scene = m_scene;
 			updater.isSafeBanded = false;
 
 			m_scene->update( updater );
@@ -349,7 +348,7 @@ namespace castor3d
 			auto oldCamera = updater.camera;
 			auto oldScene = updater.scene;
 			updater.camera = m_camera.get();
-			updater.scene = m_scene.get();
+			updater.scene = m_scene;
 
 			m_scene->update( updater );
 			m_backgroundRenderer->update( updater );
