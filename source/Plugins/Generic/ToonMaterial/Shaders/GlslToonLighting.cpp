@@ -222,7 +222,7 @@ namespace toon::shader
 					, textureFlags
 					, name
 					, anim
-					, maps[nonuniform( id - 1_u )]
+					, maps[id - 1_u]
 					, texCoords
 					, emissive
 					, opacity
@@ -335,7 +335,7 @@ namespace toon::shader
 					, textureFlags
 					, name
 					, anim
-					, maps[nonuniform( id - 1_u )]
+					, maps[id - 1_u]
 					, texCoords
 					, emissive
 					, opacity
@@ -1490,7 +1490,7 @@ namespace toon::shader
 					, textureFlags
 					, name
 					, anim
-					, maps[nonuniform( id - 1_u )]
+					, maps[id - 1_u]
 					, texCoords
 					, emissive
 					, opacity
@@ -1607,7 +1607,7 @@ namespace toon::shader
 					, textureFlags
 					, name
 					, anim
-					, maps[nonuniform( id - 1_u )]
+					, maps[id - 1_u]
 					, texCoords
 					, emissive
 					, opacity

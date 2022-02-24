@@ -196,7 +196,7 @@ namespace castor3d
 										, textureFlags
 										, name
 										, anim
-										, c3d_maps[nonuniform( id - 1_u )]
+										, c3d_maps[id - 1_u]
 										, texCoord
 										, opacity
 										, normal
