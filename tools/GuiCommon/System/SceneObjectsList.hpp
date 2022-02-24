@@ -26,7 +26,7 @@ namespace GuiCommon
 
 		void loadScene( castor3d::Engine * engine
 			, castor3d::RenderWindow & window
-			, castor3d::SceneSPtr scene );
+			, castor3d::SceneRPtr scene );
 		void unloadScene();
 		void select( castor3d::GeometrySPtr geometry
 			, castor3d::SubmeshSPtr submesh );
@@ -58,7 +58,7 @@ namespace GuiCommon
 		void onMouseRButtonUp( wxTreeEvent & event );
 
 	private:
-		castor3d::SceneWPtr m_scene;
+		castor3d::SceneRPtr m_scene;
 		castor3d::Engine * m_engine;
 		PropertiesContainer * m_propertiesHolder;
 		GeometrySubmeshIdMap m_ids;

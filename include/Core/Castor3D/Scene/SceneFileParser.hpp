@@ -119,7 +119,8 @@ namespace castor3d
 		};
 
 		castor::LoggerInstance * logger{};
-		SceneSPtr scene{};
+		SceneRPtr scene{};
+		SceneUPtr ownScene{};
 		RenderWindowDesc window{};
 		bool inWindow{};
 		SceneNodeSPtr sceneNode{};

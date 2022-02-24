@@ -581,7 +581,7 @@ namespace castor3d
 		}
 
 		crg::SemaphoreWaitArray result{};
-		SceneSPtr scene = getScene();
+		auto scene = getScene();
 
 		if ( scene )
 		{
@@ -591,7 +591,7 @@ namespace castor3d
 
 				if ( camera )
 				{
-					getEngine()->getRenderSystem()->pushScene( scene.get() );
+					getEngine()->getRenderSystem()->pushScene( scene );
 					scene->getGeometryCache().fillInfo( info );
 					result = doRender( device, info, queue, getCamera(), signalsToWait );
 					getEngine()->getRenderSystem()->popScene();
@@ -627,13 +627,13 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::setScene( SceneSPtr scene )
+	void RenderTarget::setScene( Scene & scene )
 	{
 		auto myScene = getScene();
 
-		if ( myScene != scene )
+		if ( myScene != &scene )
 		{
-			m_scene = scene;
+			m_scene = &scene;
 			m_culler.reset();
 		}
 	}
@@ -949,7 +949,7 @@ namespace castor3d
 		, CameraSPtr camera
 		, crg::SemaphoreWaitArray signalsToWait )
 	{
-		SceneSPtr scene = getScene();
+		auto scene = getScene();
 
 		if ( m_type == TargetType::eWindow )
 		{
@@ -991,7 +991,7 @@ namespace castor3d
 
 			if ( category->getOverlay().isVisible()
 				&& ( ( !scene && m_type == TargetType::eWindow )
-					|| scene == getScene().get() ) )
+					|| scene == getScene() ) )
 			{
 				category->update( *m_overlayRenderer );
 				category->accept( preparer );
