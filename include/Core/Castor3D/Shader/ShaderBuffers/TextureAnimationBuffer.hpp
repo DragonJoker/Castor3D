@@ -47,7 +47,7 @@ namespace castor3d
 		 *\brief		Ajoute une configuration au tampon.
 		 *\param[in]	unit	La texture.
 		 */
-		C3D_API void addTextureAnimation( AnimatedTexture & texture );
+		C3D_API void addTextureAnimation( AnimatedTexture const & texture );
 		/**
 		 *\~english
 		 *\brief		Removes a configuration from the buffer.
@@ -56,7 +56,7 @@ namespace castor3d
 		 *\brief		Supprime une configuration du tampon.
 		 *\param[in]	unit	La texture.
 		 */
-		C3D_API void removeTextureAnimation( AnimatedTexture & texture );
+		C3D_API void removeTextureAnimation( AnimatedTexture const & texture );
 		/**
 		 *\~english
 		 *\brief		Updates the configurations buffer.

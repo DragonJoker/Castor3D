@@ -97,6 +97,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( AnimatedMesh );
 	CU_DeclareSmartPtr( AnimatedObject );
 	CU_DeclareSmartPtr( AnimatedSkeleton );
+	CU_DeclareSmartPtr( AnimatedTexture );
 	CU_DeclareSmartPtr( Animation );
 	CU_DeclareSmartPtr( AnimationInstance );
 
@@ -117,6 +118,10 @@ namespace castor3d
 	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh & ) >;
 	using OnAnimatedMeshChange = castor::SignalT< OnAnimatedMeshChangeFunction >;
 	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
+
+	using OnAnimatedTextureChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedTexture & ) >;
+	using OnAnimatedTextureChange = castor::SignalT< OnAnimatedTextureChangeFunction >;
+	using OnAnimatedTextureChangeConnection = OnAnimatedTextureChange::connection;
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
