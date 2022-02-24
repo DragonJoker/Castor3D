@@ -160,8 +160,10 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 			, FragmentOut out )
 			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( in.material ) );
+					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
 				auto emissive = writer.declLocale( "emissive"
@@ -191,8 +193,8 @@ namespace castor3d
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
-					, in.textures0
-					, in.textures1
+					, modelData.getTextures0()
+					, modelData.getTextures1()
 					, texCoord
 					, normal
 					, tangent
@@ -221,8 +223,6 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.cameraPosition );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"

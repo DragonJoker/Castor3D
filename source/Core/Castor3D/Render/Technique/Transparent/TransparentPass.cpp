@@ -215,6 +215,8 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 			, FragmentOut out )
 			{
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
@@ -222,7 +224,7 @@ namespace castor3d
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( in.bitangent ) );
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( in.material ) );
+					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
@@ -248,8 +250,8 @@ namespace castor3d
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
-					, in.textures0
-					, in.textures1
+					, modelData.getTextures0()
+					, modelData.getTextures1()
 					, texCoord
 					, normal
 					, tangent
@@ -268,8 +270,6 @@ namespace castor3d
 
 				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
