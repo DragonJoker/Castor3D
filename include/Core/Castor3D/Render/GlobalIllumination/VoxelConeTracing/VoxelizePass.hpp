@@ -89,8 +89,9 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doUpdateFlags( PipelineFlags & flags )const override;
-		SceneFlags doAdjustFlags( SceneFlags flags )const override;
+		PassFlags doAdjustPassFlags( PassFlags flags )const override;
+		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
+		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;

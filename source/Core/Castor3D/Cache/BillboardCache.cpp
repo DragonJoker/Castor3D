@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -42,7 +43,17 @@ namespace castor3d
 			, rootCameraNode
 			, [this]( ElementT & element )
 			{
-				getScene()->getListener().postEvent( makeGpuInitialiseEvent( element ) );
+				auto scene = getScene();
+				auto & nodes = scene->getRenderNodes();
+				auto material = element.getMaterial();
+
+				for ( auto & pass : *material )
+				{
+					nodes.createNode( *pass
+						, element );
+				}
+
+				scene->getListener().postEvent( makeGpuInitialiseEvent( element ) );
 			}
 			, [this]( ElementT & element )
 			{

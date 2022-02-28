@@ -3,54 +3,43 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
+#include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
 namespace castor3d
 {
 	namespace
 	{
-		template< typename CulledT >
+		template< typename NodeT >
 		void cullNodes( Camera const & camera
-			, SceneCuller::CulledInstancesT< CulledT > & all
-			, SceneCuller::CulledInstancesPtrT< CulledT > & culled )
+			, SceneRenderNodes::DescriptorNodesPoolsT< NodeT > const & all
+			, SceneCuller::NodeArrayT< NodeT > & culled )
 		{
-			auto objectIt = all.objects.begin();
-			auto instanceIt = all.instances.begin();
-
-			while ( objectIt != all.objects.end() )
+			for ( auto & itPass : all )
 			{
-				CulledT & node = *objectIt;
-				UInt32Array & instances = *instanceIt;
-
-				if ( !isCulled( node )
-					|| isVisible( camera, node ) )
+				for ( auto & itNode : itPass.second )
 				{
-					culled.push_back( &node, &instances );
+					auto & node = *itNode.second;
+
+					if ( !isCulled( node )
+						|| isVisible( camera, node ) )
+					{
+						culled.push_back( &node );
+					}
 				}
-
-				++objectIt;
-				++instanceIt;
-			}
-		}
-
-		template< typename CulledT >
-		void cullNodes( Camera const & camera
-			, SceneCuller::CulledInstanceArrayT< CulledT > & all
-			, SceneCuller::CulledInstancePtrArrayT< CulledT > & culled )
-		{
-			for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
-			{
-				cullNodes( camera, all[i], culled[i] );
 			}
 		}
 	}
 
 	FrustumCuller::FrustumCuller( Scene & scene
 		, Camera & camera )
-		: SceneCuller{ scene, &camera, 1u }
+		: SceneCuller{ scene, &camera }
 	{
 	}
 
@@ -61,11 +50,15 @@ namespace castor3d
 
 	void FrustumCuller::doCullGeometries()
 	{
-		cullNodes( getCamera(), m_allSubmeshes, m_culledSubmeshes );
+		cullNodes( getCamera()
+			, getScene().getRenderNodes().getSubmeshNodes()
+			, m_culledSubmeshes );
 	}
 
 	void FrustumCuller::doCullBillboards()
 	{
-		cullNodes( getCamera(), m_allBillboards, m_culledBillboards );
+		cullNodes( getCamera()
+			, getScene().getRenderNodes().getBillboardNodes()
+			, m_culledBillboards );
 	}
 }

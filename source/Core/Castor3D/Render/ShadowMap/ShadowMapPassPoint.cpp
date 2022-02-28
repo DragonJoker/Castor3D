@@ -11,7 +11,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -95,7 +95,7 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			doUpdateNodes( m_renderQueue->getCulledRenderNodes() );
+			doUpdateNodes( m_renderQueue->getRenderNodes() );
 		}
 	}
 
@@ -116,14 +116,11 @@ namespace castor3d
 			, m_projection );
 	}
 
-	void ShadowMapPassPoint::doUpdateNodes( QueueCulledRenderNodes & nodes )
+	void ShadowMapPassPoint::doUpdateNodes( QueueRenderNodes & nodes )
 	{
-		RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled );
-		RenderNodesPass::doUpdate( nodes.staticNodes.backCulled );
-		RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled );
-		RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
-		RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled );
-		RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled );
+		RenderNodesPass::doUpdate( nodes.submeshNodes );
+		RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes );
+		RenderNodesPass::doUpdate( nodes.billboardNodes );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -138,12 +135,17 @@ namespace castor3d
 			, uint32_t( SmTexture::eCount ) - 1u );
 	}
 
-	void ShadowMapPassPoint::doUpdateFlags( PipelineFlags & flags )const
+	PassFlags ShadowMapPassPoint::doAdjustPassFlags( PassFlags flags )const
 	{
-		addFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		addFlag( flags.programFlags, ProgramFlag::eShadowMapPoint );
+		remFlag( flags, PassFlag::eAlphaBlending );
+		return flags;
+	}
+
+	ProgramFlags ShadowMapPassPoint::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		addFlag( flags, ProgramFlag::eLighting );
+		addFlag( flags, ProgramFlag::eShadowMapPoint );
+		return flags;
 	}
 
 	ShaderPtr ShadowMapPassPoint::doGetVertexShaderSource( PipelineFlags const & flags )const

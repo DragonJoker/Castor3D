@@ -66,15 +66,20 @@ namespace castor3d
 			| TextureFlag::eHeight };
 	}
 
-	void DepthPass::doUpdateFlags( PipelineFlags & flags )const
+	PassFlags DepthPass::doAdjustPassFlags( PassFlags flags )const
 	{
-		remFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
-		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+		remFlag( flags, PassFlag::eAlphaBlending );
+		return flags;
 	}
 
-	SceneFlags DepthPass::doAdjustFlags( SceneFlags flags )const
+	ProgramFlags DepthPass::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		remFlag( flags, ProgramFlag::eLighting );
+		addFlag( flags, ProgramFlag::eDepthPass );
+		return flags;
+	}
+
+	SceneFlags DepthPass::doAdjustSceneFlags( SceneFlags flags )const
 	{
 		remFlag( flags, SceneFlag::eLpvGI );
 		remFlag( flags, SceneFlag::eLayeredLpvGI );
