@@ -1,26 +1,41 @@
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
 
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+
 namespace castor3d
 {
 	DummyCuller::DummyCuller( Scene & scene
 		, Camera * camera )
-		: SceneCuller{ scene, camera, 1u }
+		: SceneCuller{ scene, camera }
 	{
 	}
 
 	void DummyCuller::doCullGeometries()
 	{
-		for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+		auto & nodes = getScene().getRenderNodes().getSubmeshNodes();
+		auto & culled = m_culledSubmeshes;
+
+		for ( auto & itPass : nodes )
 		{
-			m_allSubmeshes[i].copy( m_culledSubmeshes[i] );
+			for ( auto & itNode : itPass.second )
+			{
+				culled.push_back( itNode.second.get() );
+			}
 		}
 	}
 
 	void DummyCuller::doCullBillboards()
 	{
-		for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+		auto & nodes = getScene().getRenderNodes().getBillboardNodes();
+		auto & culled = m_culledBillboards;
+
+		for ( auto & itPass : nodes )
 		{
-			m_allBillboards[i].copy( m_culledBillboards[i] );
+			for ( auto & itNode : itPass.second )
+			{
+				culled.push_back( itNode.second.get() );
+			}
 		}
 	}
 }

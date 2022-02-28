@@ -20,7 +20,6 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -83,11 +82,11 @@ namespace castor3d
 		{
 			for ( auto & itPipelines : nodes )
 			{
-				for ( auto & itBuffers : itPipelines.second )
+				for ( auto & itBuffers : itPipelines.second.second )
 				{
 					for ( auto & itPass : itBuffers.second )
 					{
-						subFunction( *itPipelines.first, itPass );
+						subFunction( *itPipelines.second.first, itPass );
 					}
 				}
 			}
@@ -164,6 +163,7 @@ namespace castor3d
 		, m_index{ desc.m_index }
 	{
 		m_sceneUbo.setWindowSize( m_size );
+		m_culler.registerRenderPass( *this );
 	}
 
 	RenderNodesPass::~RenderNodesPass()
@@ -225,6 +225,21 @@ namespace castor3d
 		return doGetPixelShaderSource( flags );
 	}
 
+	PassFlags RenderNodesPass::adjustFlags( PassFlags flags )const
+	{
+		return doAdjustPassFlags( flags );
+	}
+
+	ProgramFlags RenderNodesPass::adjustFlags( ProgramFlags flags )const
+	{
+		return doAdjustProgramFlags( flags );
+	}
+
+	SceneFlags RenderNodesPass::adjustFlags( SceneFlags flags )const
+	{
+		return doAdjustSceneFlags( flags );
+	}
+
 	PipelineFlags RenderNodesPass::createPipelineFlags( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, PassFlags passFlags
@@ -236,7 +251,8 @@ namespace castor3d
 		, TextureFlagsArray const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, VkPrimitiveTopology topology )
+		, VkPrimitiveTopology topology
+		, bool isFrontCulled )
 	{
 		auto result = PipelineFlags{ colourBlendMode
 			, alphaBlendMode
@@ -251,7 +267,13 @@ namespace castor3d
 			, alphaFunc
 			, blendAlphaFunc
 			, textures };
-		updateFlags( result );
+
+		if ( isFrontCulled )
+		{
+			addFlag( result.programFlags, ProgramFlag::eInvertNormals );
+		}
+
+		doUpdateFlags( result );
 		return result;
 	}
 
@@ -259,7 +281,8 @@ namespace castor3d
 		, TextureFlagsArray const & textures
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, VkPrimitiveTopology topology )
+		, VkPrimitiveTopology topology
+		, bool isFrontCulled )
 	{
 		return createPipelineFlags( pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
@@ -274,91 +297,29 @@ namespace castor3d
 			, textures
 			, programFlags
 			, sceneFlags
-			, topology );
+			, topology
+			, isFrontCulled );
 	}
 
 	RenderPipeline & RenderNodesPass::prepareBackPipeline( PipelineFlags pipelineFlags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts )
 	{
 		return doPreparePipeline( vertexLayouts
-			, std::move( descriptorLayouts )
 			, std::move( pipelineFlags )
 			, VK_CULL_MODE_BACK_BIT );
 	}
 
 	RenderPipeline & RenderNodesPass::prepareFrontPipeline( PipelineFlags pipelineFlags
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts )
 	{
 		return doPreparePipeline( vertexLayouts
-			, std::move( descriptorLayouts )
 			, std::move( pipelineFlags )
 			, VK_CULL_MODE_FRONT_BIT );
-	}
-
-	SubmeshRenderNode * RenderNodesPass::createSkinningNode( Pass & pass
-		, RenderPipeline & pipeline
-		, Submesh & submesh
-		, Geometry & primitive
-		, AnimatedSkeleton & skeleton )
-	{
-		return doCreateSubmeshNode( pass
-			, pipeline
-			, submesh
-			, primitive
-			, nullptr
-			, &skeleton );
-	}
-
-	SubmeshRenderNode * RenderNodesPass::createMorphingNode( Pass & pass
-		, RenderPipeline & pipeline
-		, Submesh & submesh
-		, Geometry & primitive
-		, AnimatedMesh & mesh )
-	{
-		return doCreateSubmeshNode( pass
-			, pipeline
-			, submesh
-			, primitive
-			, &mesh
-			, nullptr );
-	}
-
-	SubmeshRenderNode * RenderNodesPass::createStaticNode( Pass & pass
-		, RenderPipeline & pipeline
-		, Submesh & submesh
-		, Geometry & primitive )
-	{
-		return doCreateSubmeshNode( pass
-			, pipeline
-			, submesh
-			, primitive
-			, nullptr
-			, nullptr );
-	}
-
-	BillboardRenderNode * RenderNodesPass::createBillboardNode( Pass & pass
-		, RenderPipeline & pipeline
-		, BillboardBase & billboard )
-	{
-		auto & buffers = billboard.getGeometryBuffers();
-		m_isDirty = true;
-
-		return &m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
-			, buffers
-			, *billboard.getNode()
-			, billboard );
 	}
 
 	void RenderNodesPass::updatePipeline( RenderPipeline & pipeline )
 	{
 		doUpdatePipeline( pipeline );
-	}
-
-	void RenderNodesPass::updateFlags( PipelineFlags & flags )const
-	{
-		doUpdateFlags( flags );
 	}
 
 	FilteredTextureFlags RenderNodesPass::filterTexturesFlags( TextureFlagsArray const & textures )const
@@ -482,12 +443,22 @@ namespace castor3d
 		return hasNodes();
 	}
 
+	Scene & RenderNodesPass::getScene()const
+	{
+		return getCuller().getScene();
+	}
+
+	SceneNode const * RenderNodesPass::getIgnoredNode()const
+	{
+		return m_renderQueue->getIgnoredNode();
+	}
+
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto flags = pipeline.getFlags();
-		doUpdateFlags( flags );
-		auto nodeType = getRenderNodeType( flags.programFlags );
+		auto programFlags = pipeline.getFlags().programFlags;
+		programFlags = doAdjustProgramFlags( programFlags );
+		auto nodeType = getRenderNodeType( programFlags );
 		auto & descriptors = m_additionalDescriptors[size_t( nodeType )];
 
 		if ( !descriptors.set )
@@ -499,7 +470,7 @@ namespace castor3d
 			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
 			descriptorWrites.push_back( m_sceneUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
 
-			auto & nodesIds = m_renderQueue->getCulledRenderNodes().getNodesIds();
+			auto & nodesIds = getCuller().getNodesIds( *this );
 			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 				, 0u
 				, 1u
@@ -523,7 +494,7 @@ namespace castor3d
 			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
 			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+			if ( checkFlag( programFlags, ProgramFlag::eBillboards ) )
 			{
 				auto & billboardDatas = scene.getBillboardsBuffer();
 				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
@@ -536,7 +507,7 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
+			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto & morphingDatas = scene.getAnimatedObjectGroupCache().getMorphingBuffer();
 				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eMorphingData )
@@ -549,7 +520,7 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
+			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				auto & transformsDatas = scene.getAnimatedObjectGroupCache().getSkinningTransformsBuffer();
 				auto transformsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eSkinningTransformData )
@@ -630,38 +601,6 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t RenderNodesPass::doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
-		, ShaderBuffer & bonesBuffer )const
-	{
-		uint32_t const mtxSize = sizeof( float ) * 16;
-		VkDeviceSize const stride = mtxSize * 400u;
-		auto const count = std::min( uint32_t( bonesBuffer.getSize() / stride ), uint32_t( renderNodes.size() ) );
-		CU_Require( count <= renderNodes.size() );
-		auto buffer = bonesBuffer.getPtr();
-		auto it = renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < count )
-		{
-			auto & node = *it;
-			node->skeleton->fillBuffer( buffer );
-			buffer += stride;
-			++i;
-			++it;
-		}
-
-		return count;
-	}
-
-	uint32_t RenderNodesPass::doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
-		, ShaderBuffer & bonesBuffer
-		, RenderInfo & info )const
-	{
-		auto count = doCopyNodesBones( renderNodes, bonesBuffer );
-		info.m_visibleObjectsCount += count;
-		return count;
-	}
-
 	void RenderNodesPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( nodes
@@ -716,7 +655,7 @@ namespace castor3d
 		{
 			for ( auto & itPipelines : nodes )
 			{
-				pass.updatePipeline( *itPipelines.first );
+				pass.updatePipeline( *itPipelines.second.first );
 			}
 		}
 
@@ -726,7 +665,7 @@ namespace castor3d
 		{
 			for ( auto & itPipelines : nodes )
 			{
-				for ( auto & itBuffers : itPipelines.second )
+				for ( auto & itBuffers : itPipelines.second.second )
 				{
 					for ( auto & renderNode : itBuffers.second )
 					{
@@ -788,7 +727,17 @@ namespace castor3d
 			&& doAreValidPassFlags( pass.getPassFlags() );
 	}
 
-	SceneFlags RenderNodesPass::doAdjustFlags( SceneFlags flags )const
+	PassFlags RenderNodesPass::doAdjustPassFlags( PassFlags flags )const
+	{
+		return flags;
+	}
+
+	ProgramFlags RenderNodesPass::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		return flags;
+	}
+
+	SceneFlags RenderNodesPass::doAdjustSceneFlags( SceneFlags flags )const
 	{
 		return flags;
 	}
@@ -895,28 +844,12 @@ namespace castor3d
 	}
 
 	RenderPipeline & RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 		, PipelineFlags flags
 		, VkCullModeFlags cullMode )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-
-		if ( m_mode != RenderMode::eTransparentOnly )
-		{
-			flags.alphaBlendMode = BlendMode::eNoBlend;
-		}
-
-		if ( checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT ) )
-		{
-			addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		}
-		else
-		{
-			remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		}
-
 		auto & descriptors = m_additionalDescriptors[size_t( getRenderNodeType( flags.programFlags ) )];
 
 		if ( !descriptors.layout )
@@ -959,8 +892,7 @@ namespace castor3d
 				pipeline->setDescriptorSetLayout( *descriptors.layout );
 				pipeline->setPushConstantRanges( { { VK_SHADER_STAGE_VERTEX_BIT, 0u, 4u } } );
 				pipeline->initialise( device
-					, getRenderPass()
-					, std::move( descriptorLayouts ) );
+					, getRenderPass() );
 				pipelines.emplace_back( std::move( pipeline ) );
 				it = std::next( pipelines.begin()
 					, ptrdiff_t( pipelines.size() - 1u ) );
@@ -972,30 +904,21 @@ namespace castor3d
 		return *result;
 	}
 
-	SubmeshRenderNode * RenderNodesPass::doCreateSubmeshNode( Pass & pass
-		, RenderPipeline & pipeline
-		, Submesh & submesh
-		, Geometry & primitive
-		, AnimatedMesh * mesh
-		, AnimatedSkeleton * skeleton )
+	void RenderNodesPass::doUpdateFlags( PipelineFlags & flags )const
 	{
-		auto & buffers = submesh.getGeometryBuffers( getShaderFlags()
-			, pipeline.getFlags().programFlags
-			, pass.getOwner()
-			, pass.getTexturesMask()
-			, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eForceTexCoords ) );
-		m_isDirty = true;
+		if ( m_mode != RenderMode::eTransparentOnly )
+		{
+			flags.alphaBlendMode = BlendMode::eNoBlend;
+		}
 
-		auto & result = m_renderQueue->getAllRenderNodes().createNode( PassRenderNode{ pass }
-			, buffers
-			, *primitive.getParent()
-			, submesh
-			, primitive
-			, mesh
-			, skeleton );
-		CU_Require( !mesh || result.mesh );
-		CU_Require( !skeleton || result.skeleton );
-		return &result;
+		flags.programFlags = doAdjustProgramFlags( flags.programFlags );
+		flags.passFlags = doAdjustPassFlags( flags.passFlags );
+		flags.sceneFlags = doAdjustSceneFlags( flags.sceneFlags );
+		doAdjustFlags( flags );
+	}
+
+	void RenderNodesPass::doAdjustFlags( PipelineFlags & flags )const
+	{
 	}
 
 	ShaderPtr RenderNodesPass::doGetVertexShaderSource( PipelineFlags const & flags )const

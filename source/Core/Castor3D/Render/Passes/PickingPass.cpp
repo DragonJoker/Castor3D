@@ -17,7 +17,7 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -354,11 +354,17 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	void PickingPass::doUpdateFlags( PipelineFlags & flags )const
+	PassFlags PickingPass::doAdjustPassFlags( PassFlags flags )const
 	{
-		remFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		addFlag( flags.programFlags, ProgramFlag::ePicking );
+		remFlag( flags, PassFlag::eAlphaBlending );
+		return flags;
+	}
+
+	ProgramFlags PickingPass::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		remFlag( flags, ProgramFlag::eLighting );
+		addFlag( flags, ProgramFlag::ePicking );
+		return flags;
 	}
 
 	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )

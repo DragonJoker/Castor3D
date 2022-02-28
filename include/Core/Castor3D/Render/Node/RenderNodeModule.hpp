@@ -63,15 +63,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	The nodes used to render a scene (culled).
-	*\~french
-	*\brief
-	*	Les noeuds utilisés pour dessiner une scène (culled).
-	*/
-	struct QueueCulledRenderNodes;
-	/**
-	*\~english
-	*\brief
 	*	The base holder of all the render nodes of a scene.
 	*\~french
 	*\brief
@@ -82,28 +73,29 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, BillboardRenderNode, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SubmeshRenderNode, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, QueueRenderNodes, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, QueueCulledRenderNodes, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SceneRenderNodes, C3D_API );
 
 	/**@name Traits */
 	//@{
 
+	struct PipelineComp
+	{
+		C3D_API bool operator()( RenderPipeline const * lhs
+			, RenderPipeline const * rhs )const;
+	};
+
 	template< typename NodeT >
 	struct RenderNodeTraitsT
 	{
-		using Culled = CulledSubmesh;
 		using Object = Submesh;
 	};
 
 	template<>
 	struct RenderNodeTraitsT< BillboardRenderNode >
 	{
-		using Culled = CulledBillboard;
-		using Object = BillboardList;
+		using Object = BillboardBase;
 	};
 
-	template< typename NodeT >
-	using NodeCulledT = typename RenderNodeTraitsT< NodeT >::Culled;
 	template< typename NodeT >
 	using NodeObjectT = typename RenderNodeTraitsT< NodeT >::Object;
 
@@ -114,48 +106,7 @@ namespace castor3d
 	//@{
 
 	template< typename NodeT >
-	using NodeArrayT = std::vector< NodeCulledT< NodeT > const *, NodeT * >;
-
-	template< typename NodeT >
-	using NodeMapT = std::map< NodeCulledT< NodeT > const *, NodeT * >;
-
-	using SubmeshRenderNodeMap = NodeMapT< SubmeshRenderNode >;
-	using BillboardRenderNodeMap = NodeMapT< BillboardRenderNode >;
-
-	template< typename NodeT >
-	using NodeByPipelineMapT = std::map< RenderPipelineRPtr, NodeMapT< NodeT > >;
-
-	using SubmeshRenderNodeByPipelineMap = NodeByPipelineMapT< SubmeshRenderNode >;
-	using BillboardRenderNodeByPipelineMap = NodeByPipelineMapT< BillboardRenderNode >;
-
-	//@}
-	/**@name Instanced */
-	//@{
-
-	template< typename NodeT >
-	using ObjectNodesMapT = std::map< NodeObjectT< NodeT > *, NodeMapT< NodeT > >;
-
-	using SubmeshRenderNodesMap = ObjectNodesMapT< SubmeshRenderNode >;
-
-	template< typename NodeT >
-	using ObjectNodesByPassMapT = std::map< PassRPtr, ObjectNodesMapT< NodeT > >;
-
-	using SubmeshRenderNodesByPassMap = ObjectNodesByPassMapT< SubmeshRenderNode >;
-
-	template< typename NodeT >
-	using ObjectNodesByPipelineMapT = std::map< RenderPipelineRPtr, ObjectNodesByPassMapT< NodeT > >;
-
-	using SubmeshRenderNodesByPipelineMap = ObjectNodesByPipelineMapT< SubmeshRenderNode >;
-
-	//@}
-	//@}
-	/**@name Culled nodes */
-	//@{
-	/**@name Non instanced */
-	//@{
-
-	template< typename NodeT >
-	using NodePtrArrayT = std::vector< NodeT * >;
+	using NodePtrArrayT = std::vector< NodeT const * >;
 
 	using SubmeshRenderNodePtrArray = NodePtrArrayT< SubmeshRenderNode >;
 	using BillboardRenderNodePtrArray = NodePtrArrayT< BillboardRenderNode >;
@@ -164,7 +115,7 @@ namespace castor3d
 	using NodePtrByBufferMapT = std::map< ashes::BufferBase const *, NodePtrArrayT< NodeT > >;
 
 	template< typename NodeT >
-	using NodePtrByPipelineMapT = std::map< RenderPipelineRPtr, NodePtrByBufferMapT< NodeT > >;
+	using NodePtrByPipelineMapT = std::map< uint32_t, std::pair< RenderPipeline *, NodePtrByBufferMapT< NodeT > > >;
 
 	using SubmeshRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< SubmeshRenderNode >;
 	using BillboardRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< BillboardRenderNode >;
@@ -183,7 +134,7 @@ namespace castor3d
 	using ObjectNodesPtrByBufferMapT = std::map< ashes::BufferBase const *, ObjectNodesPtrByPassT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByPipelineMapT = std::map< RenderPipelineRPtr, ObjectNodesPtrByBufferMapT< NodeT > >;
+	using ObjectNodesPtrByPipelineMapT = std::map< uint32_t, std::pair< RenderPipeline *, ObjectNodesPtrByBufferMapT< NodeT > > >;
 
 	using SubmeshRenderNodesPtrByPipelineMap = ObjectNodesPtrByPipelineMapT< SubmeshRenderNode >;
 

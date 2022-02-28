@@ -6,13 +6,9 @@ CU_ImplementCUSmartPtr( castor3d, BillboardRenderNode )
 
 namespace castor3d
 {
-	BillboardRenderNode::BillboardRenderNode( PassRenderNode passNode
-		, GeometryBuffers const & buffers
-		, SceneNode & sceneNode
+	BillboardRenderNode::BillboardRenderNode( Pass & pass
 		, BillboardBase & data )
-		: passNode{ std::move( passNode ) }
-		, buffers{ buffers }
-		, sceneNode{ sceneNode }
+		: pass{ pass }
 		, data{ data }
 		, instance{ data }
 	{
@@ -23,8 +19,17 @@ namespace castor3d
 		return instance.getId();
 	}
 
-	uint32_t BillboardRenderNode::getInstanceCount( uint32_t instanceCount )const
+	uint32_t BillboardRenderNode::getInstanceCount()const
 	{
 		return data.getCount();
+	}
+
+	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags
+		, ProgramFlags const & programFlags
+		, Material & material
+		, TextureFlagsArray const & texturesMask
+		, bool forceTexCoords )const
+	{
+		return data.getGeometryBuffers();
 	}
 }

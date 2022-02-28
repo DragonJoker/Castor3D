@@ -9,7 +9,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"

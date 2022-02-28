@@ -14,7 +14,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
@@ -161,30 +161,20 @@ namespace castor3d
 
 	void RenderTechniquePass::update( GpuUpdater & updater )
 	{
-		doUpdateNodes( m_renderQueue->getCulledRenderNodes()
+		doUpdateNodes( m_renderQueue->getRenderNodes()
 			, updater.jitter
 			, updater.info );
 	}
 
-	void RenderTechniquePass::doUpdateNodes( QueueCulledRenderNodes & nodes
+	void RenderTechniquePass::doUpdateNodes( QueueRenderNodes & nodes
 		, castor::Point2f const & jitter
 		, RenderInfo & info )
 	{
-		if ( nodes.hasNodes() )
+		if ( m_renderQueue->hasNodes() )
 		{
-			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.staticNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.morphingNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.billboardNodes.frontCulled );
-
-			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
-			RenderNodesPass::doUpdate( nodes.staticNodes.backCulled, info );
-			RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled, info );
-			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
-			RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled, info );
-			RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled, info );
+			RenderNodesPass::doUpdate( nodes.submeshNodes );
+			RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes );
+			RenderNodesPass::doUpdate( nodes.billboardNodes );
 		}
 	}
 
@@ -194,19 +184,19 @@ namespace castor3d
 			, updater.camera );
 	}
 
-	void RenderTechniquePass::doUpdateFlags( PipelineFlags & flags )const
+	ProgramFlags RenderTechniquePass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		addFlag( flags.programFlags, ProgramFlag::eLighting );
+		addFlag( flags, ProgramFlag::eLighting );
 
 		if ( m_environment )
 		{
-			addFlag( flags.programFlags, ProgramFlag::eEnvironmentMapping );
+			addFlag( flags, ProgramFlag::eEnvironmentMapping );
 		}
 
-		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+		return flags;
 	}
 
-	SceneFlags RenderTechniquePass::doAdjustFlags( SceneFlags flags )const
+	SceneFlags RenderTechniquePass::doAdjustSceneFlags( SceneFlags flags )const
 	{
 		if ( !m_vctConfigUbo || !m_vctFirstBounce || !m_vctSecondaryBounce )
 		{
@@ -249,7 +239,7 @@ namespace castor3d
 	void RenderTechniquePass::doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
@@ -293,7 +283,7 @@ namespace castor3d
 	void RenderTechniquePass::doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
@@ -360,7 +350,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		bindShadowMaps( m_graph
 			, sceneFlags
 			, shadowMaps
@@ -401,7 +391,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
@@ -476,7 +466,7 @@ namespace castor3d
 
 	void RenderTechniquePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -491,7 +481,7 @@ namespace castor3d
 	void RenderTechniquePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 

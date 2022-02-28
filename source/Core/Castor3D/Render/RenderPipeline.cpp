@@ -7,6 +7,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -49,8 +50,7 @@ namespace castor3d
 	}
 
 	void RenderPipeline::initialise( RenderDevice const & device
-		, VkRenderPass renderPass
-		, ashes::DescriptorSetLayoutCRefArray descriptorLayouts )
+		, VkRenderPass renderPass )
 	{
 		ashes::VkVertexInputBindingDescriptionArray bindings;
 		ashes::VkVertexInputAttributeDescriptionArray attributes;
@@ -64,6 +64,9 @@ namespace castor3d
 				, layout.vertexAttributeDescriptions.begin()
 				, layout.vertexAttributeDescriptions.end() );
 		}
+
+		ashes::DescriptorSetLayoutCRefArray descriptorLayouts;
+		descriptorLayouts.emplace_back( *getOwner()->getScene().getBindlessTexDescriptorLayout() );
 
 		if ( m_addDescriptorLayout )
 		{
@@ -134,17 +137,6 @@ namespace castor3d
 	{
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
-	}
-
-	void RenderPipeline::createDescriptorPools( uint32_t maxSets )
-	{
-		m_addDescriptorSet = nullptr;
-		m_descriptorPool.reset();
-
-		if ( hasDescriptorSetLayout() )
-		{
-			m_descriptorPool = getDescriptorSetLayout().createPool( getOwner()->getName() + "RenderPipeline", maxSets );
-		}
 	}
 
 	void RenderPipeline::setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )

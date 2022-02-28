@@ -78,7 +78,7 @@ namespace castor3d
 		 *\brief		Met à jour les noeuds donnés.
 		 *\param		nodes	Les noeuds.
 		 */
-		void doUpdateNodes( QueueCulledRenderNodes & nodes );
+		void doUpdateNodes( QueueRenderNodes & nodes );
 
 	private:
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;

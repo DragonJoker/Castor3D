@@ -13,7 +13,6 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Culling/InstantiatedFrustumCuller.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -97,7 +96,7 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			doUpdateNodes( m_renderQueue->getCulledRenderNodes() );
+			doUpdateNodes( m_renderQueue->getRenderNodes() );
 		}
 	}
 
@@ -137,12 +136,17 @@ namespace castor3d
 			, uint32_t( SmTexture::eCount ) - 1u );
 	}
 
-	void ShadowMapPassDirectional::doUpdateFlags( PipelineFlags & flags )const
+	PassFlags ShadowMapPassDirectional::doAdjustPassFlags( PassFlags flags )const
 	{
-		addFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		addFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional );
+		remFlag( flags, PassFlag::eAlphaBlending );
+		return flags;
+	}
+
+	ProgramFlags ShadowMapPassDirectional::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		addFlag( flags, ProgramFlag::eLighting );
+		addFlag( flags, ProgramFlag::eShadowMapDirectional );
+		return flags;
 	}
 
 	ShaderPtr ShadowMapPassDirectional::doGetVertexShaderSource( PipelineFlags const & flags )const

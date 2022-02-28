@@ -11,7 +11,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 
 using ashes::operator==;
 using ashes::operator!=;
@@ -31,7 +31,6 @@ namespace castor3d
 			} ) )
 		, m_ignoredNode{ ignored }
 		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this ) }
-		, m_culledRenderNodes{ castor::makeUnique < QueueCulledRenderNodes >( *this ) }
 		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
 	{
@@ -39,13 +38,11 @@ namespace castor3d
 
 	RenderQueue::~RenderQueue()
 	{
-		{
-			auto lock( castor::makeUniqueLock( m_eventMutex ) );
+		auto lock( castor::makeUniqueLock( m_eventMutex ) );
 
-			if ( m_initEvent )
-			{
-				m_initEvent->skip();
-			}
+		if ( m_initEvent )
+		{
+			m_initEvent->skip();
 		}
 	}
 
@@ -70,30 +67,17 @@ namespace castor3d
 
 	void RenderQueue::cleanup()
 	{
-		m_culledRenderNodes.reset();
 		m_renderNodes.reset();
 		m_commandBuffer.reset();
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
-		if ( m_allChanged )
-		{
-			doParseAllRenderNodes();
-			m_allChanged = false;
-		}
-
 		if ( m_commandBuffer )
 		{
-			if ( m_sortedChanged )
-			{
-				doSortAllRenderNodes( shadowMaps );
-				m_sortedChanged = false;
-			}
-
 			if ( m_culledChanged )
 			{
-				doParseCulledRenderNodes();
+				doSortRenderNodes( shadowMaps );
 				m_culledChanged = false;
 			}
 
@@ -123,15 +107,13 @@ namespace castor3d
 
 	void RenderQueue::setIgnoredNode( SceneNode const & node )
 	{
-		m_allChanged = m_allChanged || ( m_ignoredNode != &node );
+		m_culledChanged = m_culledChanged || ( m_ignoredNode != &node );
 		m_ignoredNode = &node;
 	}
 
 	bool RenderQueue::hasNodes()const
 	{
-		return ( m_renderNodes
-			? m_renderNodes->hasNodes()
-			: false );
+		return getCuller().hasCulledNodes( *getOwner() );
 	}
 
 	RenderMode RenderQueue::getMode()const
@@ -186,37 +168,21 @@ namespace castor3d
 		getOwner()->resetCommandBuffer();
 		CU_Require( m_commandBuffer );
 		m_commandBuffer->reset();
-		auto & culledNodes = getCulledRenderNodes();
-		culledNodes.prepareCommandBuffers( *this
-			, m_viewport.value()
+		auto & nodes = getRenderNodes();
+		nodes.prepareCommandBuffers( m_viewport.value()
 			, m_scissor.value() );
 		getOwner()->reRecordCurrent();
 	}
 
-	void RenderQueue::doParseAllRenderNodes()
+	void RenderQueue::doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps )
 	{
-		auto & allNodes = getAllRenderNodes();
-		allNodes.parse();
-	}
-
-	void RenderQueue::doSortAllRenderNodes( ShadowMapLightTypeArray & shadowMaps )
-	{
-		auto & allNodes = getAllRenderNodes();
-		allNodes.sort( shadowMaps );
-	}
-
-	void RenderQueue::doParseCulledRenderNodes()
-	{
-		auto & culledNodes = getCulledRenderNodes();
-		culledNodes.parse();
-		culledNodes.fillIndirect();
+		auto & nodes = getRenderNodes();
+		nodes.sort( shadowMaps );
 	}
 
 	void RenderQueue::doOnCullerCompute( SceneCuller const & culler )
 	{
-		m_allChanged = m_allChanged || culler.areAllChanged();
-		m_sortedChanged = m_sortedChanged || m_allChanged;
 		m_culledChanged = m_culledChanged || culler.areCulledChanged();
-		m_commandsChanged = m_commandsChanged || m_culledChanged || m_allChanged;
+		m_commandsChanged = m_commandsChanged || m_culledChanged;
 	}
 }
