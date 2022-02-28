@@ -153,7 +153,24 @@ namespace castor3d
 			, m_rootNode
 			, m_rootCameraNode
 			, m_rootObjectNode
-			, GpuEventInitialiserT< ParticleSystemCache >{ getListener() }
+			, [this]( ParticleSystem & element )
+			{
+				auto & nodes = getRenderNodes();
+
+				getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [&element, &nodes]( RenderDevice const & device
+						, QueueData const & queueData )
+					{
+						element.initialise( device );
+						auto material = element.getMaterial();
+
+						for ( auto & pass : *material )
+						{
+							nodes.createNode( *pass
+								, *element.getBillboards() );
+						}
+					} ) );
+			}
 			, GpuEventCleanerT< ParticleSystemCache >{ getListener() }
 			, MovableMergerT< ParticleSystemCache >{ getName() }
 			, MovableAttacherT< ParticleSystemCache >{}

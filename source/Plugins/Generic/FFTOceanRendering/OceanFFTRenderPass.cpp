@@ -13,7 +13,6 @@
 #include <Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp>
 #include <Castor3D/Render/Node/BillboardRenderNode.hpp>
 #include <Castor3D/Render/Node/SubmeshRenderNode.hpp>
-#include <Castor3D/Render/Node/QueueCulledRenderNodes.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
 #include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Scene/Camera.hpp>
@@ -519,7 +518,7 @@ namespace ocean_fft
 
 	void OceanRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( OceanFFTIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( OceanFFTIdx::eOceanUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -597,7 +596,7 @@ namespace ocean_fft
 	void OceanRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( OceanFFTIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo->getDescriptorWrite( OceanFFTIdx::eOceanUbo ) );
 		auto index = uint32_t( OceanFFTIdx::eHeightDisplacement );
@@ -614,26 +613,33 @@ namespace ocean_fft
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
-	void OceanRenderPass::doUpdateFlags( castor3d::PipelineFlags & flags )const
+	castor3d::PassFlags OceanRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
-		addFlag( flags.programFlags, castor3d::ProgramFlag::eLighting );
-		addFlag( flags.programFlags, castor3d::ProgramFlag::eHasTessellation );
+		remFlag( flags, castor3d::PassFlag::eReflection );
+		remFlag( flags, castor3d::PassFlag::eRefraction );
+		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingOne );
+		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingRepeat );
+		remFlag( flags, castor3d::PassFlag::eDistanceBasedTransmittance );
+		remFlag( flags, castor3d::PassFlag::eSubsurfaceScattering );
+		remFlag( flags, castor3d::PassFlag::eAlphaBlending );
+		remFlag( flags, castor3d::PassFlag::eAlphaTest );
+		remFlag( flags, castor3d::PassFlag::eBlendAlphaTest );
+		return flags;
+	}
 
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eMorphing );
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eInstantiation );
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eSecondaryUV );
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eForceTexCoords );
+	castor3d::ProgramFlags OceanRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
+	{
+		addFlag( flags, castor3d::ProgramFlag::eLighting );
+		addFlag( flags, castor3d::ProgramFlag::eHasTessellation );
+		remFlag( flags, castor3d::ProgramFlag::eMorphing );
+		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
+		remFlag( flags, castor3d::ProgramFlag::eSecondaryUV );
+		remFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
+		return flags;
+	}
 
-		remFlag( flags.passFlags, castor3d::PassFlag::eReflection );
-		remFlag( flags.passFlags, castor3d::PassFlag::eRefraction );
-		remFlag( flags.passFlags, castor3d::PassFlag::eParallaxOcclusionMappingOne );
-		remFlag( flags.passFlags, castor3d::PassFlag::eParallaxOcclusionMappingRepeat );
-		remFlag( flags.passFlags, castor3d::PassFlag::eDistanceBasedTransmittance );
-		remFlag( flags.passFlags, castor3d::PassFlag::eSubsurfaceScattering );
-		remFlag( flags.passFlags, castor3d::PassFlag::eAlphaBlending );
-		remFlag( flags.passFlags, castor3d::PassFlag::eAlphaTest );
-		remFlag( flags.passFlags, castor3d::PassFlag::eBlendAlphaTest );
-
+	void OceanRenderPass::doAdjustFlags( castor3d::PipelineFlags & flags )const
+	{
 		flags.topology = VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
 		flags.patchVertices = OutputVertices;
 	}

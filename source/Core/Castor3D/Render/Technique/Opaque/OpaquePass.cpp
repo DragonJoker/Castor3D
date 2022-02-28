@@ -10,7 +10,6 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -90,13 +89,13 @@ namespace castor3d
 			| ShaderFlag::eVelocity;
 	}
 
-	void OpaquePass::doUpdateFlags( PipelineFlags & flags )const
+	ProgramFlags OpaquePass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		remFlag( flags.programFlags, ProgramFlag::eLighting );
-		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+		remFlag( flags, ProgramFlag::eLighting );
+		return flags;
 	}
 
-	SceneFlags OpaquePass::doAdjustFlags( SceneFlags flags )const
+	SceneFlags OpaquePass::doAdjustSceneFlags( SceneFlags flags )const
 	{
 		remFlag( flags, SceneFlag::eLpvGI );
 		remFlag( flags, SceneFlag::eLayeredLpvGI );

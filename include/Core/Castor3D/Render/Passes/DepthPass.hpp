@@ -50,8 +50,9 @@ namespace castor3d
 		}
 
 	private:
-		void doUpdateFlags( PipelineFlags & flags )const override;
-		SceneFlags doAdjustFlags( SceneFlags flags )const override;
+		PassFlags doAdjustPassFlags( PassFlags flags )const override;
+		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
+		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		void doUpdatePipeline( RenderPipeline & pipeline)override;
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override
 		{

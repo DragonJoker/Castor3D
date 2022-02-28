@@ -802,16 +802,12 @@ source_group( "Source Files\\Render" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/DummyCuller.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/FrustumCuller.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/InstantiatedDummyCuller.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/InstantiatedFrustumCuller.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/SceneCuller.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/CullingModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/DummyCuller.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/FrustumCuller.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/InstantiatedDummyCuller.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/InstantiatedFrustumCuller.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/SceneCuller.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -921,16 +917,12 @@ source_group( "Source Files\\Render\\GlobalIllumination\\VoxelConeTracing" FILES
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/BillboardRenderNode.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/PassRenderNode.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/QueueCulledRenderNodes.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/QueueRenderNodes.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/SceneRenderNodes.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Node/SubmeshRenderNode.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Node/BillboardRenderNode.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Node/PassRenderNode.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Node/QueueCulledRenderNodes.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Node/QueueRenderNodes.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Node/RenderNodeModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Node/SceneRenderNodes.hpp

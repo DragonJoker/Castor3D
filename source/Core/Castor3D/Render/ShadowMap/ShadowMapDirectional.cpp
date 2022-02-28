@@ -10,7 +10,6 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
-#include "Castor3D/Render/Culling/InstantiatedFrustumCuller.hpp"
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Scene/Scene.hpp"

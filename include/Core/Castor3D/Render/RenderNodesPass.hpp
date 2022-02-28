@@ -256,6 +256,33 @@ namespace castor3d
 		C3D_API ShaderPtr getPixelShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
+		 *\brief		Adjusts given flags to match the render pass requirements.
+		 *\param[in]	flags	The flags.
+		 *\~french
+		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
+		 *\param[in]	flags	Les flags.
+		 */
+		C3D_API PassFlags adjustFlags( PassFlags flags )const;
+		/**
+		 *\~english
+		 *\brief		Adjusts given flags to match the render pass requirements.
+		 *\param[in]	flags	The flags.
+		 *\~french
+		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
+		 *\param[in]	flags	Les flags.
+		 */
+		C3D_API ProgramFlags adjustFlags( ProgramFlags flags )const;
+		/**
+		 *\~english
+		 *\brief		Adjusts given flags to match the render pass requirements.
+		 *\param[in]	flags	The flags.
+		 *\~french
+		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
+		 *\param[in]	flags	Les flags.
+		 */
+		C3D_API SceneFlags adjustFlags( SceneFlags flags )const;
+		/**
+		 *\~english
 		 *\brief			Creates the pipeline flags for given configuration.
 		 *\param[in]		pass			The pass for whic the pipeline is created.
 		 *\param[in,out]	textures		The textures configuration.
@@ -281,7 +308,8 @@ namespace castor3d
 			, TextureFlagsArray const & textures
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, VkPrimitiveTopology topology );
+			, VkPrimitiveTopology topology
+			, bool isFrontCulled );
 		/**
 		 *\~english
 		 *\brief			Creates the pipeline flags for given configuration.
@@ -302,7 +330,8 @@ namespace castor3d
 			, TextureFlagsArray const & textures
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, VkPrimitiveTopology topology );
+			, VkPrimitiveTopology topology
+			, bool isFrontCulled );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
@@ -316,8 +345,7 @@ namespace castor3d
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
 		C3D_API RenderPipeline & prepareBackPipeline( PipelineFlags pipelineFlags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
@@ -331,91 +359,7 @@ namespace castor3d
 		 *\param[in]		descriptorLayouts	Les layouts des descriptor sets de noeud de rendu.
 		 */
 		C3D_API RenderPipeline & prepareFrontPipeline( PipelineFlags pipelineFlags
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
-		/**
-		 *\~english
-		 *\brief		Creates an animated render node.
-		 *\param[in]	pass		The pass.
-		 *\param[in]	pipeline	The pipeline.
-		 *\param[in]	submesh		The submesh.
-		 *\param[in]	primitive	The geometry.
-		 *\param[in]	skeleton	The animated skeleton.
-		 *\return		The render node.
-		 *\~french
-		 *\brief		Crée un noeud de rendu animé.
-		 *\param[in]	pass		La passe.
-		 *\param[in]	pipeline	Le pipeline.
-		 *\param[in]	submesh		Le sous-maillage.
-		 *\param[in]	primitive	La géométrie.
-		 *\param[in]	skeleton	Le squelette animé.
-		 *\return		Le noeud de rendu.
-		 */
-		C3D_API SubmeshRenderNode * createSkinningNode( Pass & pass
-			, RenderPipeline & pipeline
-			, Submesh & submesh
-			, Geometry & primitive
-			, AnimatedSkeleton & skeleton );
-		/**
-		 *\~english
-		 *\brief		Creates an animated render node.
-		 *\param[in]	pass		The pass.
-		 *\param[in]	pipeline	The pipeline.
-		 *\param[in]	submesh		The submesh.
-		 *\param[in]	primitive	The geometry.
-		 *\param[in]	mesh		The animated mesh.
-		 *\return		The render node.
-		 *\~french
-		 *\brief		Crée un noeud de rendu animé.
-		 *\param[in]	pass		La passe.
-		 *\param[in]	pipeline	Le pipeline.
-		 *\param[in]	submesh		Le sous-maillage.
-		 *\param[in]	primitive	La géométrie.
-		 *\param[in]	mesh		Le maillage animé.
-		 *\return		Le noeud de rendu.
-		 */
-		C3D_API SubmeshRenderNode * createMorphingNode( Pass & pass
-			, RenderPipeline & pipeline
-			, Submesh & submesh
-			, Geometry & primitive
-			, AnimatedMesh & mesh );
-		/**
-		 *\~english
-		 *\brief		Creates a static render node.
-		 *\param[in]	pass		The pass.
-		 *\param[in]	pipeline	The pipeline.
-		 *\param[in]	submesh		The submesh.
-		 *\param[in]	primitive	The geometry.
-		 *\return		The render node.
-		 *\~french
-		 *\brief		Crée un noeud de rendu statique.
-		 *\param[in]	pass		La passe.
-		 *\param[in]	pipeline	Le pipeline.
-		 *\param[in]	submesh		Le sous-maillage.
-		 *\param[in]	primitive	La géométrie.
-		 *\return		Le noeud de rendu.
-		 */
-		C3D_API SubmeshRenderNode * createStaticNode( Pass & pass
-			, RenderPipeline & pipeline
-			, Submesh & submesh
-			, Geometry & primitive );
-		/**
-		 *\~english
-		 *\brief		Creates a static render node.
-		 *\param[in]	pass		The pass.
-		 *\param[in]	pipeline	The pipeline.
-		 *\param[in]	billboard	The billboard.
-		 *\return		The render node.
-		 *\~french
-		 *\brief		Crée un noeud de rendu statique.
-		 *\param[in]	pass		La passe.
-		 *\param[in]	pipeline	Le pipeline.
-		 *\param[in]	billboard	Le billboard.
-		 *\return		Le noeud de rendu.
-		 */
-		C3D_API BillboardRenderNode * createBillboardNode( Pass & pass
-			, RenderPipeline & pipeline
-			, BillboardBase & billboard );
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts );
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.
@@ -437,15 +381,6 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ShadowMapLightTypeArray const & shadowMaps );
-		/**
-		 *\~english
-		 *\brief			Modifies the given flags to make them match the render pass requirements.
-		 *\param[in,out]	flags	The pipeline flags.
-		 *\~french
-		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API void updateFlags( PipelineFlags & flags )const;
 		/**
 		 *\~english
 		 *\brief		Filters the given textures flags using this pass needed textures.
@@ -488,6 +423,8 @@ namespace castor3d
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool hasNodes()const;
 		C3D_API bool isPassEnabled()const;
+		C3D_API Scene & getScene()const;
+		C3D_API SceneNode const * getIgnoredNode()const;
 
 		C3D_API virtual ShaderFlags getShaderFlags()const
 		{
@@ -595,35 +532,6 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Copies the instantiated skinned nodes model matrices into given matrix buffer.
-		 *\param[in]	renderNodes	The instantiated nodes.
-		 *\param[in]	bonesBuffer	The bones matrix buffer.
-		 *\~french
-		 *\brief		Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
-		 *\param[in]	renderNodes	Les noeuds instanciés.
-		 *\param[in]	bonesBuffer	Le tampon de matrices des os.
-		 */
-		C3D_API uint32_t doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
-			, ShaderBuffer & bonesBuffer )const;
-		/**
-		 *\~english
-		 *\brief			Copies the instantiated skinned nodes model matrices into given matrix buffer.
-		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
-		 *\param[in]		renderNodes	The instantiated nodes.
-		 *\param[in]		bonesBuffer	The bones matrix buffer.
-		 *\param[in, out]	info		Receives the render informations.
-		 *\~french
-		 *\brief			Copie les matrices de noeuds skinnés instanciés dans le tampon de matrices donné.
-		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
-		 *\param[in]		renderNodes	Les noeuds instanciés.
-		 *\param[in]		bonesBuffer	Le tampon de matrices des os.
-		 *\param[in,out]	info		Reçoit les informations de rendu.
-		 */
-		C3D_API uint32_t doCopyNodesBones( SubmeshRenderNodePtrArray const & renderNodes
-			, ShaderBuffer & bonesBuffer
-			, RenderInfo & info )const;
-		/**
-		 *\~english
 		 *\brief		Updates instantiated submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
@@ -718,7 +626,9 @@ namespace castor3d
 		C3D_API virtual void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 		C3D_API virtual bool doAreValidPassFlags( PassFlags const & passFlags )const;
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
-		C3D_API virtual SceneFlags doAdjustFlags( SceneFlags flags )const;
+		C3D_API virtual PassFlags doAdjustPassFlags( PassFlags flags )const;
+		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
+		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 
@@ -729,15 +639,9 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		RenderPipeline & doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts
 			, PipelineFlags flags
 			, VkCullModeFlags cullMode );
-		SubmeshRenderNode * doCreateSubmeshNode( Pass & pass
-			, RenderPipeline & pipeline
-			, Submesh & submesh
-			, Geometry & primitive
-			, AnimatedMesh * mesh
-			, AnimatedSkeleton * skeleton );
+		void doUpdateFlags( PipelineFlags & flags )const;
 		/**
 		 *\~english
 		 *\brief		Creates the depth stencil state.
@@ -774,15 +678,6 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english
-		 *\brief			Modifies the given flags to make them match the render pass requirements.
-		 *\param[in,out]	flags	The pipeline flags.
-		 *\~french
-		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doUpdateFlags( PipelineFlags & flags )const = 0;
-		/**
-		 *\~english
 		 *\brief		Updates the pipeline.
 		 *\param[in]	pipeline	The render pipeline.
 		 *\~french
@@ -790,6 +685,15 @@ namespace castor3d
 		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
 		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline ) = 0;
+		/**
+		 *\~english
+		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	flags	The pipeline flags.
+		 *\~french
+		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual void doAdjustFlags( PipelineFlags & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.

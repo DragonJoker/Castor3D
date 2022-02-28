@@ -88,7 +88,7 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			doUpdateNodes( m_renderQueue->getCulledRenderNodes() );
+			doUpdateNodes( m_renderQueue->getRenderNodes() );
 		}
 	}
 
@@ -124,12 +124,17 @@ namespace castor3d
 			, uint32_t( SmTexture::eCount ) - 1u );
 	}
 
-	void ShadowMapPassSpot::doUpdateFlags( PipelineFlags & flags )const
+	PassFlags ShadowMapPassSpot::doAdjustPassFlags( PassFlags flags )const
 	{
-		addFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		addFlag( flags.programFlags, ProgramFlag::eShadowMapSpot );
+		remFlag( flags, PassFlag::eAlphaBlending );
+		return flags;
+	}
+
+	ProgramFlags ShadowMapPassSpot::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		addFlag( flags, ProgramFlag::eLighting );
+		addFlag( flags, ProgramFlag::eShadowMapSpot );
+		return flags;
 	}
 
 	ShaderPtr ShadowMapPassSpot::doGetVertexShaderSource( PipelineFlags const & flags )const

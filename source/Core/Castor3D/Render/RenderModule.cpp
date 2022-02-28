@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 

@@ -399,15 +399,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	The culled render nodes for a specific scene.
-	*\~french
-	*\brief
-	*	Les noeuds de rendu culled pour une scène spécifique.
-	*/
-	struct QueueCulledRenderNodes;
-	/**
-	*\~english
-	*\brief
 	*	The render nodes for a specific scene.
 	*\~french
 	*\brief

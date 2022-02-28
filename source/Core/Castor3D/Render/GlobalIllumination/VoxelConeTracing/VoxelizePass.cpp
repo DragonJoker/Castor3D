@@ -13,7 +13,7 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -165,23 +165,13 @@ namespace castor3d
 	{
 		if ( m_voxelConfig.enabled )
 		{
-			auto & nodes = m_renderQueue->getCulledRenderNodes();
+			auto & nodes = m_renderQueue->getRenderNodes();
 
-			if ( nodes.hasNodes() )
+			if ( m_renderQueue->hasNodes() )
 			{
-				RenderNodesPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-				RenderNodesPass::doUpdate( nodes.staticNodes.frontCulled );
-				RenderNodesPass::doUpdate( nodes.skinnedNodes.frontCulled );
-				RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-				RenderNodesPass::doUpdate( nodes.morphingNodes.frontCulled );
-				RenderNodesPass::doUpdate( nodes.billboardNodes.frontCulled );
-
-				RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
-				RenderNodesPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
-				RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
-				RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
-				RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
-				RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
+				RenderNodesPass::doUpdate( nodes.submeshNodes, updater.info );
+				RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes, updater.info );
+				RenderNodesPass::doUpdate( nodes.billboardNodes, updater.info );
 			}
 
 			static const castor::Matrix4x4f identity
@@ -210,25 +200,28 @@ namespace castor3d
 		}
 	}
 
-	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const
+	PassFlags VoxelizePass::doAdjustPassFlags( PassFlags flags )const
 	{
-		addFlag( flags.programFlags, ProgramFlag::eHasGeometry );
-		addFlag( flags.programFlags, ProgramFlag::eLighting );
-
-
-		remFlag( flags.passFlags, PassFlag::eReflection );
-		remFlag( flags.passFlags, PassFlag::eRefraction );
-		remFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingOne );
-		remFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingRepeat );
-		remFlag( flags.passFlags, PassFlag::eDistanceBasedTransmittance );
-		remFlag( flags.passFlags, PassFlag::eSubsurfaceScattering );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		remFlag( flags.passFlags, PassFlag::eAlphaTest );
-		remFlag( flags.passFlags, PassFlag::eBlendAlphaTest );
-		flags.sceneFlags = doAdjustFlags( flags.sceneFlags );
+		remFlag( flags, PassFlag::eReflection );
+		remFlag( flags, PassFlag::eRefraction );
+		remFlag( flags, PassFlag::eParallaxOcclusionMappingOne );
+		remFlag( flags, PassFlag::eParallaxOcclusionMappingRepeat );
+		remFlag( flags, PassFlag::eDistanceBasedTransmittance );
+		remFlag( flags, PassFlag::eSubsurfaceScattering );
+		remFlag( flags, PassFlag::eAlphaBlending );
+		remFlag( flags, PassFlag::eAlphaTest );
+		remFlag( flags, PassFlag::eBlendAlphaTest );
+		return flags;
 	}
 
-	SceneFlags VoxelizePass::doAdjustFlags( SceneFlags flags )const
+	ProgramFlags VoxelizePass::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		addFlag( flags, ProgramFlag::eHasGeometry );
+		addFlag( flags, ProgramFlag::eLighting );
+		return flags;
+	}
+
+	SceneFlags VoxelizePass::doAdjustSceneFlags( SceneFlags flags )const
 	{
 		remFlag( flags, SceneFlag::eLpvGI );
 		remFlag( flags, SceneFlag::eLayeredLpvGI );
@@ -245,7 +238,7 @@ namespace castor3d
 
 	void VoxelizePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -306,7 +299,7 @@ namespace castor3d
 	void VoxelizePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
