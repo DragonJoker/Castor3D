@@ -137,6 +137,11 @@ namespace castor3d
 			return m_geometryBuffers;
 		}
 
+		ObjectBufferOffset const & getBufferOffsets()const
+		{
+			return getGeometryBuffers().bufferOffset;
+		}
+
 		Scene const & getParentScene()const
 		{
 			return m_scene;

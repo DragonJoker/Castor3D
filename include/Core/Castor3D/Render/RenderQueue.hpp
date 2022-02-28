@@ -119,16 +119,10 @@ namespace castor3d
 			return *m_commandBuffer;
 		}
 
-		QueueRenderNodes & getAllRenderNodes()const
+		QueueRenderNodes & getRenderNodes()const
 		{
 			CU_Require( m_renderNodes );
 			return *m_renderNodes;
-		}
-
-		QueueCulledRenderNodes & getCulledRenderNodes()const
-		{
-			CU_Require( m_culledRenderNodes );
-			return *m_culledRenderNodes;
 		}
 
 		SceneCuller const & getCuller()const
@@ -145,9 +139,7 @@ namespace castor3d
 	private:
 		void doInitialise( QueueData const & queueData );
 		void doPrepareCommandBuffer();
-		void doParseAllRenderNodes();
-		void doSortAllRenderNodes( ShadowMapLightTypeArray & shadowMaps );
-		void doParseCulledRenderNodes();
+		void doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:
@@ -155,12 +147,9 @@ namespace castor3d
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;
-		QueueCulledRenderNodesUPtr m_culledRenderNodes;
 		castor::SpinMutex m_eventMutex;
 		GpuFrameEvent * m_initEvent{};
 		ashes::CommandBufferPtr m_commandBuffer;
-		bool m_allChanged{};
-		bool m_sortedChanged{};
 		bool m_culledChanged{};
 		bool m_commandsChanged{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;

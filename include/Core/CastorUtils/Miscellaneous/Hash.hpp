@@ -12,6 +12,16 @@ See LICENSE file in root folder
 namespace castor
 {
 	template< typename T >
+	inline uint32_t hashCombine32( uint32_t & hash
+		, T const & rhs )
+	{
+		const uint32_t kMul = 0x9e3779b9u;
+		std::hash< T > hasher;
+		hash ^= hasher( rhs ) + kMul + ( hash << 6 ) + ( hash >> 2 );
+		return hash;
+	}
+
+	template< typename T >
 	inline size_t hashCombine( size_t & hash
 		, T const & rhs )
 	{

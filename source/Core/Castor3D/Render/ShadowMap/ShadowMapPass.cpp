@@ -4,8 +4,9 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Node/QueueCulledRenderNodes.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -50,23 +51,13 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPass::doUpdateNodes( QueueCulledRenderNodes & nodes )
+	void ShadowMapPass::doUpdateNodes( QueueRenderNodes & nodes )
 	{
-		if ( nodes.hasNodes() )
+		if ( m_renderQueue->hasNodes() )
 		{
-			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.staticNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.morphingNodes.frontCulled );
-			RenderNodesPass::doUpdate( nodes.billboardNodes.frontCulled );
-
-			RenderNodesPass::doUpdate( nodes.instancedStaticNodes.backCulled );
-			RenderNodesPass::doUpdate( nodes.staticNodes.backCulled );
-			RenderNodesPass::doUpdate( nodes.skinnedNodes.backCulled );
-			RenderNodesPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
-			RenderNodesPass::doUpdate( nodes.morphingNodes.backCulled );
-			RenderNodesPass::doUpdate( nodes.billboardNodes.backCulled );
+			RenderNodesPass::doUpdate( nodes.submeshNodes );
+			RenderNodesPass::doUpdate( nodes.instancedSubmeshNodes );
+			RenderNodesPass::doUpdate( nodes.billboardNodes );
 		}
 	}
 

@@ -58,13 +58,14 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater )override;
 
 	protected:
-		void doUpdateNodes( QueueCulledRenderNodes & nodes );
+		void doUpdateNodes( QueueRenderNodes & nodes );
 
 	private:
 		void doUpdateUbos( CpuUpdater & updater )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		void doUpdateFlags( PipelineFlags & flags )const override;
+		PassFlags doAdjustPassFlags( PassFlags flags )const override;
+		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 

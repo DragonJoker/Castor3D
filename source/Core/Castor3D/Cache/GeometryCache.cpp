@@ -12,9 +12,13 @@
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
+#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -50,7 +54,36 @@ namespace castor3d
 			, rootCameraNode
 			, [this]( ElementT & element )
 			{
-				getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				auto scene = getScene();
+				auto mesh = element.getMesh().lock();
+
+				if ( mesh )
+				{
+					auto & nodes = scene->getRenderNodes();
+
+					for ( auto & submesh : *mesh )
+					{
+						auto material = element.getMaterial( *submesh );
+						auto submeshFlags = submesh->getProgramFlags( material );
+						auto animMesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+							? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *scene, element.getName() + cuT( "_Mesh" ) ) )
+							: nullptr;
+						auto animSkeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+							? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *scene, element.getName() + cuT( "_Skeleton" ) ) )
+							: nullptr;
+
+						for ( auto & pass : *material )
+						{
+							nodes.createNode( *pass
+								, *submesh
+								, element
+								, animMesh.get()
+								, animSkeleton.get() );
+						}
+					}
+				}
+
+				scene->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
 					, [&element, this]( RenderDevice const & device
 						, QueueData const & queueData )
 					{

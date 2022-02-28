@@ -7,162 +7,206 @@ See LICENSE file in root folder
 #include "CullingModule.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Render/Node/RenderNodeModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 namespace castor3d
 {
-	struct CulledSubmesh
-	{
-		Geometry & instance;
-		Submesh & data;
-		PassSPtr pass;
-		SceneNode & sceneNode;
-	};
-	size_t hash( CulledSubmesh const & culled );
-	bool isCulled( CulledSubmesh const & node );
-	bool isVisible( Camera const & camera
-		, CulledSubmesh const & node );
-	bool isVisible( Frustum const & frustum
-		, CulledSubmesh const & node );
+	using PipelineNodes = std::array< castor::Point4ui, 10'000u >;
+	using PipelineBuffer = std::pair< size_t, ashes::BufferBase const * >;
 
-	struct CulledBillboard
-	{
-		BillboardBase & instance;
-		BillboardBase & data;
-		PassSPtr pass;
-		SceneNode & sceneNode;
-	};
-	size_t hash( CulledBillboard const & culled );
-	bool isCulled( CulledBillboard const & node );
+	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
+		, castor::String const & name );
+	uint32_t getPipelineBaseHash( ProgramFlags programFlags
+		, PassFlags passFlags
+		, uint32_t texturesCount
+		, TextureFlags texturesFlags );
+	uint32_t getPipelineBaseHash( RenderNodesPass const & renderPass
+		, Submesh const & data
+		, Pass const & pass
+		, bool isFrontCulled );
+	uint32_t getPipelineBaseHash( RenderNodesPass const & renderPass
+		, BillboardBase const & data
+		, Pass const & pass );
+
+	size_t hash( SubmeshRenderNode const & culled );
+	bool isCulled( SubmeshRenderNode const & node );
 	bool isVisible( Camera const & camera
-		, CulledBillboard const & node );
+		, SubmeshRenderNode const & node );
 	bool isVisible( Frustum const & frustum
-		, CulledBillboard const & node );
+		, SubmeshRenderNode const & node );
+
+	size_t hash( BillboardRenderNode const & culled );
+	bool isCulled( BillboardRenderNode const & node );
+	bool isVisible( Camera const & camera
+		, BillboardRenderNode const & node );
+	bool isVisible( Frustum const & frustum
+		, BillboardRenderNode const & node );
 
 	class SceneCuller
 	{
 	public:
-		template< typename CulledT, typename ArrayT >
-		struct CulledInstancesArrayT
+		template< typename NodeT >
+		using NodeArrayT = std::vector< NodeT const * >;
+		template< typename NodeT >
+		using SidedNodeArrayT = std::vector< std::pair< NodeT const *, bool > >;
+
+		template< typename NodeT >
+		using SidedNodeBufferMapT = std::map< ashes::BufferBase const *, SidedNodeArrayT< NodeT > >;
+		template< typename NodeT >
+		using SidedNodePipelineMapT = std::map< uint32_t, SidedNodeBufferMapT< NodeT > >;
+
+		template< typename NodeT >
+		using SidedObjectNodeMapT = std::map< NodeObjectT< NodeT > const *, SidedNodeArrayT< NodeT > >;
+		template< typename NodeT >
+		using SidedObjectNodePassMapT = std::map< Pass const *, SidedObjectNodeMapT< NodeT > >;
+		template< typename NodeT >
+		using SidedObjectNodeBufferMapT = std::map< ashes::BufferBase const *, SidedObjectNodePassMapT< NodeT > >;
+		template< typename NodeT >
+		using SidedObjectNodePipelineMapT = std::map< uint32_t, SidedObjectNodeBufferMapT< NodeT > >;
+
+		using IndexedDrawCommandsBuffer = ashes::BufferPtr< VkDrawIndexedIndirectCommand >;
+		using DrawCommandsBuffer = ashes::BufferPtr< VkDrawIndirectCommand >;
+		using PipelineNodesBuffer = ashes::BufferPtr< PipelineNodes >;
+
+		using PipelineBufferArray = std::vector< PipelineBuffer >;
+
+		struct RenderPassBuffers
 		{
-			std::vector< CulledT > objects;
-			std::vector< ArrayT > instances;
-			uint32_t count;
-
-			void clear()noexcept
-			{
-				objects.clear();
-				instances.clear();
-			}
-
-			void push_back( CulledT object
-				, ArrayT instance )
-			{
-				objects.push_back( std::move( object ) );
-				instances.push_back( std::move( instance ) );
-			}
-
-			void copy( CulledInstancesArrayT< CulledT *, ArrayT * > & dst )
-			{
-				for ( auto & node : objects )
-				{
-					dst.objects.push_back( &node );
-				}
-
-				for ( auto & node : instances )
-				{
-					dst.instances.push_back( &node );
-				}
-			}
+			IndexedDrawCommandsBuffer submeshIdxIndirectCommands;
+			DrawCommandsBuffer submeshNIdxIndirectCommands;
+			DrawCommandsBuffer billboardIndirectCommands;
+			PipelineNodesBuffer pipelinesNodes;
+			PipelineBufferArray nodesIds;
+			SidedNodePipelineMapT< SubmeshRenderNode > sortedSubmeshes;
+			SidedObjectNodePipelineMapT< SubmeshRenderNode > sortedInstancedSubmeshes;
+			SidedNodePipelineMapT< BillboardRenderNode > sortedBillboards;
 		};
-
-		template< typename CulledT >
-		using CulledInstancesT = CulledInstancesArrayT< CulledT, UInt32Array >;
-		template< typename CulledT >
-		using CulledInstancesPtrT = CulledInstancesArrayT< CulledT *, UInt32Array * >;
-
-		template< typename CulledT >
-		using CulledInstanceArrayT = std::array< CulledInstancesT< CulledT >, size_t( RenderMode::eCount ) >;
-		template< typename CulledT >
-		using CulledInstancePtrArrayT = std::array< CulledInstancesPtrT< CulledT >, size_t( RenderMode::eCount ) >;
 
 	public:
 		C3D_API SceneCuller( Scene & scene
-			, Camera * camera
-			, uint32_t instancesCount );
+			, Camera * camera );
 		C3D_API virtual ~SceneCuller() = default;
+		C3D_API void registerRenderPass( RenderNodesPass const & renderPass );
+		C3D_API void unregisterRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void compute();
+		C3D_API uint32_t getPipelineNodesIndex( RenderNodesPass const & renderPass
+			, Submesh const & submesh
+			, Pass const & pass
+			, ashes::BufferBase const & buffer
+			, bool isFrontCulled )const;
+		C3D_API uint32_t getPipelineNodesIndex( RenderNodesPass const & renderPass
+			, BillboardBase const & billboard
+			, Pass const & pass
+			, ashes::BufferBase const & buffer
+			, bool isFrontCulled )const;
 
-		inline float getMinCastersZ()
+		float getMinCastersZ()
 		{
 			return m_minCullersZ;
 		}
 
-		inline Scene & getScene()const
+		Scene & getScene()const
 		{
 			return m_scene;
 		}
 
-		inline bool hasCamera()const
+		bool hasCamera()const
 		{
 			return m_camera != nullptr;
 		}
 
-		inline Camera const & getCamera()const
+		Camera const & getCamera()const
 		{
 			CU_Require( hasCamera() );
 			return *m_camera;
 		}
 
-		inline Camera & getCamera()
+		Camera & getCamera()
 		{
 			CU_Require( hasCamera() );
 			return *m_camera;
 		}
 
-		inline bool areAllChanged()const
+		bool areAllChanged()const
 		{
 			return m_allChanged;
 		}
 
-		inline bool areCulledChanged()const
+		bool areCulledChanged()const
 		{
 			return m_culledChanged;
 		}
 
-		inline CulledInstancesT< CulledSubmesh > const & getAllSubmeshes( RenderMode mode )const
+		bool hasCulledNodes( RenderNodesPass const & renderPass )const
 		{
-			return m_allSubmeshes[size_t( mode )];
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return !it->second.sortedSubmeshes.empty()
+				|| !it->second.sortedInstancedSubmeshes.empty()
+				|| !it->second.sortedBillboards.empty();
 		}
 
-		inline CulledInstancesT< CulledBillboard > const & getAllBillboards( RenderMode mode )const
+		ashes::Buffer< VkDrawIndexedIndirectCommand > const & getSubmeshIdxCommands( RenderNodesPass const & renderPass )const
 		{
-			return m_allBillboards[size_t( mode )];
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return *it->second.submeshIdxIndirectCommands;
 		}
 
-		inline CulledInstancesPtrT< CulledSubmesh > const & getCulledSubmeshes( RenderMode mode )const
+		ashes::Buffer< VkDrawIndirectCommand > const & getSubmeshNIdxCommands( RenderNodesPass const & renderPass )const
 		{
-			return m_culledSubmeshes[size_t( mode )];
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return *it->second.submeshNIdxIndirectCommands;
 		}
 
-		inline CulledInstancesPtrT< CulledBillboard > const & getCulledBillboards( RenderMode mode )const
+		ashes::Buffer< VkDrawIndirectCommand > const & getBillboardCommands( RenderNodesPass const & renderPass )const
 		{
-			return m_culledBillboards[size_t( mode )];
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return *it->second.billboardIndirectCommands;
+		}
+
+		ashes::Buffer< PipelineNodes > const & getNodesIds( RenderNodesPass const & renderPass )const
+		{
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return *it->second.pipelinesNodes;
+		}
+
+		SidedNodePipelineMapT< SubmeshRenderNode > const & getSubmeshNodes( RenderNodesPass const & renderPass )const
+		{
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return it->second.sortedSubmeshes;
+		}
+
+		SidedObjectNodePipelineMapT< SubmeshRenderNode > const & getInstancedSubmeshNodes( RenderNodesPass const & renderPass )const
+		{
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return it->second.sortedInstancedSubmeshes;
+		}
+
+		SidedNodePipelineMapT< BillboardRenderNode > const & getBillboardNodes( RenderNodesPass const & renderPass )const
+		{
+			auto it = m_renderPasses.find( &renderPass );
+			CU_Require( it != m_renderPasses.end() );
+			return it->second.sortedBillboards;
 		}
 
 	public:
 		mutable SceneCullerSignal onCompute;
-
-	protected:
-		UInt32Array getInitialInstances()const;
 
 	private:
 		void onSceneChanged( Scene const & scene );
 		void onCameraChanged( Camera const & camera );
 		void doClearAll();
 		void doClearCulled();
-		void doListGeometries();
-		void doListBillboards();
-		void doListParticles();
+		void doUpdateMinCuller();
+		void doSortNodes();
+		void doFillIndirect();
 		virtual void doCullGeometries() = 0;
 		virtual void doCullBillboards() = 0;
 
@@ -171,16 +215,18 @@ namespace castor3d
 		Camera * m_camera;
 
 	protected:
-		uint32_t m_instancesCount;
+		uint32_t m_index;
 		bool m_allChanged{ true };
 		bool m_culledChanged{ true };
 		bool m_sceneDirty{ true };
 		bool m_cameraDirty{ true };
 		float m_minCullersZ{ 0.0f };
-		CulledInstanceArrayT< CulledSubmesh > m_allSubmeshes;
-		CulledInstanceArrayT< CulledBillboard > m_allBillboards;
-		CulledInstancePtrArrayT< CulledSubmesh > m_culledSubmeshes;
-		CulledInstancePtrArrayT< CulledBillboard > m_culledBillboards;
+
+		NodeArrayT< SubmeshRenderNode > m_culledSubmeshes;
+		NodeArrayT< BillboardRenderNode > m_culledBillboards;
+
+		std::map< RenderNodesPass const *, RenderPassBuffers > m_renderPasses;
+
 		OnSceneChangedConnection m_sceneChanged;
 		OnCameraChangedConnection m_cameraChanged;
 	};

@@ -13,7 +13,6 @@
 #include <Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp>
 #include <Castor3D/Render/Node/BillboardRenderNode.hpp>
 #include <Castor3D/Render/Node/SubmeshRenderNode.hpp>
-#include <Castor3D/Render/Node/QueueCulledRenderNodes.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
 #include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Scene/Scene.hpp>
@@ -398,7 +397,7 @@ namespace water
 
 	void WaterRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaterIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaterIdx::eWaterUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -469,7 +468,7 @@ namespace water
 	void WaterRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto sceneFlags = doAdjustFlags( m_scene.getFlags() );
+		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaterIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo.getDescriptorWrite( WaterIdx::eWaterUbo ) );
 		auto index = uint32_t( WaterIdx::eWaterNormals1 );
@@ -484,25 +483,29 @@ namespace water
 		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
 	}
 
-	void WaterRenderPass::doUpdateFlags( castor3d::PipelineFlags & flags )const
+	castor3d::PassFlags WaterRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
 	{
-		addFlag( flags.programFlags, castor3d::ProgramFlag::eLighting );
-		addFlag( flags.programFlags, castor3d::ProgramFlag::eForceTexCoords );
+		remFlag( flags, castor3d::PassFlag::eReflection );
+		remFlag( flags, castor3d::PassFlag::eRefraction );
+		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingOne );
+		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingRepeat );
+		remFlag( flags, castor3d::PassFlag::eDistanceBasedTransmittance );
+		remFlag( flags, castor3d::PassFlag::eSubsurfaceScattering );
+		remFlag( flags, castor3d::PassFlag::eAlphaBlending );
+		remFlag( flags, castor3d::PassFlag::eAlphaTest );
+		remFlag( flags, castor3d::PassFlag::eBlendAlphaTest );
+		return flags;
+	}
 
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eInstantiation );
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eMorphing );
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eSkinning );
-		remFlag( flags.programFlags, castor3d::ProgramFlag::eSecondaryUV );
-
-		remFlag( flags.passFlags, castor3d::PassFlag::eReflection );
-		remFlag( flags.passFlags, castor3d::PassFlag::eRefraction );
-		remFlag( flags.passFlags, castor3d::PassFlag::eParallaxOcclusionMappingOne );
-		remFlag( flags.passFlags, castor3d::PassFlag::eParallaxOcclusionMappingRepeat );
-		remFlag( flags.passFlags, castor3d::PassFlag::eDistanceBasedTransmittance );
-		remFlag( flags.passFlags, castor3d::PassFlag::eSubsurfaceScattering );
-		remFlag( flags.passFlags, castor3d::PassFlag::eAlphaBlending );
-		remFlag( flags.passFlags, castor3d::PassFlag::eAlphaTest );
-		remFlag( flags.passFlags, castor3d::PassFlag::eBlendAlphaTest );
+	castor3d::ProgramFlags WaterRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
+	{
+		addFlag( flags, castor3d::ProgramFlag::eLighting );
+		addFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
+		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
+		remFlag( flags, castor3d::ProgramFlag::eMorphing );
+		remFlag( flags, castor3d::ProgramFlag::eSkinning );
+		remFlag( flags, castor3d::ProgramFlag::eSecondaryUV );
+		return flags;
 	}
 
 	void WaterRenderPass::doUpdatePipeline( castor3d::RenderPipeline & pipeline )
