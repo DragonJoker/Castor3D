@@ -219,11 +219,12 @@ namespace castor3d
 		using RenderNodesPass::update;
 
 	protected:
-		C3D_API void doUpdateNodes( QueueCulledRenderNodes & nodes
+		C3D_API void doUpdateNodes( QueueRenderNodes & nodes
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
 		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
-		C3D_API SceneFlags doAdjustFlags( SceneFlags flags )const override;
+		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
+		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		C3D_API void doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -241,7 +242,6 @@ namespace castor3d
 			, uint32_t & index )const;
 
 	private:
-		void doUpdateFlags( PipelineFlags & flags )const override;
 		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;

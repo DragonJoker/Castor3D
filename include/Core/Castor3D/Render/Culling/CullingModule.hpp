@@ -36,41 +36,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	No culling.
-	*\remarks
-	*	Used by render passes that use an instance multiplier.
-	*\~french
-	*\brief
-	*	Aucun culling.
-	*\remarks
-	*	Utilisé par les render passes qui utilisent un multiplicateur d'instances.
-	*/
-	class InstantiatedDummyCuller;
-	/**
-	*\~english
-	*\brief
-	*	Culls nodes against a frustum.
-	*\remarks
-	*	Used by render passes that use an instance multiplier.
-	*\~french
-	*\brief
-	*	Elimine les noeuds par rapport à un frustum.
-	*\remarks
-	*	Utilisé par les render passes qui utilisent un multiplicateur d'instances.
-	*/
-	class InstantiatedFrustumCuller;
-	/**
-	*\~english
-	*\brief
 	*	Base class to cull nodes, before adding them to the render queue.
 	*\~french
 	*\brief
 	*	Classe de base pour éliminer les noeuds, avant de les ajouter à la file de rendu.
 	*/
 	class SceneCuller;
-
-	struct CulledSubmesh;
-	struct CulledBillboard;
 
 	CU_DeclareSmartPtr( SceneCuller );
 

@@ -106,8 +106,7 @@ namespace castor3d
 		*	La passe de rendu à laquelle ce pipeline est lié.
 		*/
 		C3D_API void initialise( RenderDevice const & device
-			, VkRenderPass renderPass
-			, ashes::DescriptorSetLayoutCRefArray descriptorLayouts );
+			, VkRenderPass renderPass );
 		/**
 		*\~english
 		*\brief
@@ -121,19 +120,6 @@ namespace castor3d
 		*	Le device GPU.
 		*/
 		C3D_API void cleanup( RenderDevice const & device );
-		/**
-		*\~english
-		*\brief
-		*	Creates the descriptor pools for \p maxSets descriptor sets per descriptor set layout.
-		*\param[in] maxSets
-		*	The number of descriptor sets to be allocatable by the pools, per layout.
-		*\~french
-		*\brief
-		*	Crée les pools de descripteurs pour \p maxSets ensembles de descripteurs par layout d'ensemble de descripteurs.
-		*\param[in] maxSets
-		*	Le nombre d'ensembles de descripteurs allouables par les pools, par layout.
-		*/
-		C3D_API void createDescriptorPools( uint32_t maxSets );
 		/**
 		*\~english
 		*name
@@ -231,11 +217,6 @@ namespace castor3d
 			return m_addDescriptorLayout != nullptr;
 		}
 
-		ashes::DescriptorSetPool const & getDescriptorPool()const
-		{
-			return *m_descriptorPool;
-		}
-
 		RenderSystem & getRenderSystem()const
 		{
 			return m_renderSystem;
@@ -251,7 +232,6 @@ namespace castor3d
 		ShaderProgramSPtr m_program;
 		PipelineFlags m_flags;
 		std::vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
-		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		ashes::VkPushConstantRangeArray m_pushConstantRanges;
 		std::unique_ptr< VkViewport > m_viewport;
 		std::unique_ptr< VkRect2D > m_scissor;

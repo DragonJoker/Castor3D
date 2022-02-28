@@ -8,7 +8,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
-#include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -28,18 +27,19 @@ namespace castor3d
 		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode const & ) = delete;
 		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode && ) = delete;
 
-		C3D_API SubmeshRenderNode( PassRenderNode passNode
-			, GeometryBuffers const & buffers
-			, SceneNode & sceneNode
+		C3D_API SubmeshRenderNode( Pass & pass
 			, DataType & data
 			, InstanceType & instance );
 
 		C3D_API uint32_t getId()const;
-		C3D_API uint32_t getInstanceCount( uint32_t instanceCount )const;
+		C3D_API uint32_t getInstanceCount()const;
+		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
+			, ProgramFlags const & programFlags
+			, Material & material
+			, TextureFlagsArray const & texturesMask
+			, bool forceTexCoords )const;
 
-		PassRenderNode passNode;
-		GeometryBuffers const & buffers;
-		SceneNode & sceneNode;
+		Pass & pass;
 		DataType & data;
 		InstanceType & instance;
 		ashes::DescriptorSet * texDescriptorSet{};

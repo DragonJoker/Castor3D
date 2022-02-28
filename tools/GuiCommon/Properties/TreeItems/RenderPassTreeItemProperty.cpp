@@ -48,7 +48,8 @@ namespace GuiCommon
 						, castor3d::TextureFlagsArray{}
 						, castor3d::ProgramFlag::eNone
 						, castor3d::SceneFlag::eNone
-						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST )
+						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+						, false )
 					, renderPass.getScene()
 					, grid
 					, prop };
