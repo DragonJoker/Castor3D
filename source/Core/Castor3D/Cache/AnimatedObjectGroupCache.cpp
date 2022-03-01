@@ -24,6 +24,27 @@ namespace castor
 {
 	using namespace castor3d;
 
+	namespace
+	{
+		void doInitialiseBuffer( ashes::Buffer< castor3d::SkinningTransformsConfiguration > & transforms )
+		{
+			if ( auto buffer = transforms.lock( 0u, ashes::WholeSize, 0u ) )
+			{
+				auto view = castor::makeArrayView( buffer, buffer + 1000u );
+
+				for ( auto & dst : view )
+				{
+					std::fill_n( dst.bonesMatrix.begin()
+						, dst.bonesMatrix.size()
+						, castor::Matrix4x4f::getIdentity() );
+				}
+
+				transforms.flush( 0u, ashes::WholeSize );
+				transforms.unlock();
+			}
+		}
+	}
+
 	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::ResourceCacheT( Scene & scene )
 		: OwnedBy< Scene >{ scene }
 		, ElementCacheT{ scene.getEngine()->getLogger()
@@ -49,6 +70,7 @@ namespace castor
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "SkinningTransformNodesData" ) }
 	{
+		doInitialiseBuffer( *m_skinningTransformsData );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & device )
@@ -65,6 +87,7 @@ namespace castor
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, "SkinningTransformNodesData" );
+			doInitialiseBuffer( *m_skinningTransformsData );
 		}
 	}
 
