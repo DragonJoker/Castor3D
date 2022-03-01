@@ -248,7 +248,6 @@ namespace castor3d
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 

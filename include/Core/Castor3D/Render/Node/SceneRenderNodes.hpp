@@ -43,6 +43,7 @@ namespace castor3d
 			, AnimatedSkeleton * skeleton );
 		C3D_API BillboardRenderNode & createNode( Pass & pass
 			, BillboardBase & instance );
+		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
 
 		bool hasNodes()const
@@ -86,6 +87,7 @@ namespace castor3d
 		ashes::BufferPtr< ModelBufferConfiguration > m_nodesData;
 		ashes::BufferPtr< BillboardUboConfiguration >m_billboardsData;
 		uint32_t m_nodeId{};
+		bool m_dirty{ true };
 	};
 }
 

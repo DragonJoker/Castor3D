@@ -644,10 +644,6 @@ namespace ocean_fft
 		flags.patchVertices = OutputVertices;
 	}
 
-	void OceanRenderPass::doUpdatePipeline( castor3d::RenderPipeline & pipeline )
-	{
-	}
-
 	castor3d::ShaderPtr OceanRenderPass::doGetVertexShaderSource( castor3d::PipelineFlags const & flags )const
 	{
 		using namespace sdw;

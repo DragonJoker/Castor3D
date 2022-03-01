@@ -87,10 +87,6 @@ namespace castor3d
 		return flags;
 	}
 
-	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )
-	{
-	}
-
 	ashes::PipelineDepthStencilStateCreateInfo DepthPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
 		return ashes::PipelineDepthStencilStateCreateInfo{ 0u

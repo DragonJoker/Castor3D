@@ -92,7 +92,6 @@ namespace castor3d
 		PassFlags doAdjustPassFlags( PassFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
-		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
