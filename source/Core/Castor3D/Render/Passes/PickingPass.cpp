@@ -51,58 +51,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace
-	{
-		template< typename NodeT, typename FuncT >
-		inline void traverseNodes( PickingPass & pass
-			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes
-			, PickNodeType type
-			, FuncT function )
-		{
-			uint32_t count{ 1u };
-
-			for ( auto itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-
-				for ( auto itPass : itPipelines.second )
-				{
-					for ( auto itSubmeshes : itPass.second )
-					{
-						if ( !itSubmeshes.second.empty() )
-						{
-							function( *itPipelines.first
-								, *itPass.first
-								, *itSubmeshes.first
-								, itSubmeshes.first->getInstantiation()
-								, itSubmeshes.second );
-						}
-					}
-				}
-
-				count++;
-			}
-		}
-
-		template< typename NodeT >
-		inline void updateNonInstanced( PickingPass & pass
-			, PickNodeType type
-			, NodePtrByPipelineMapT< NodeT > & nodes )
-		{
-			uint32_t count{ 1u };
-
-			for ( auto itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-				count++;
-			}
-		}
-	}
-
-	//*********************************************************************************************
-
 	uint32_t const PickingPass::UboBindingPoint = 7u;
 	castor::String const PickingPass::Type = "c3d.pick";
 
@@ -367,10 +315,6 @@ namespace castor3d
 		return flags;
 	}
 
-	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )
-	{
-	}
-
 	ashes::PipelineDepthStencilStateCreateInfo PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
 		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
@@ -380,6 +324,4 @@ namespace castor3d
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
-
-	//*********************************************************************************************
 }

@@ -207,6 +207,7 @@ namespace castor3d
 			it.first->second->mesh = mesh;
 			it.first->second->skeleton = skeleton;
 			instance.setId( data, ++m_nodeId );
+			m_dirty = true;
 		}
 
 		return *it.first->second;
@@ -224,9 +225,54 @@ namespace castor3d
 			it.first->second = castor::makeUnique< BillboardRenderNode >( pass
 				, instance );
 			instance.setId( ++m_nodeId );
+			m_dirty = true;
 		}
 
 		return *it.first->second;
+	}
+
+	void SceneRenderNodes::update( CpuUpdater & updater )
+	{
+		if ( !m_dirty )
+		{
+			return;
+		}
+
+		std::map< Submesh const *, std::map< Pass const *, uint32_t > > indices;
+
+		for ( auto & nodes : m_submeshNodes )
+		{
+			for ( auto & nodeIt : nodes.second )
+			{
+				auto & node = nodeIt.second;
+				auto & instantiation = node->data.getInstantiation();
+
+				if ( instantiation.isInstanced() )
+				{
+					auto & passes = indices.emplace( &node->data, std::map< Pass const *, uint32_t >{} ).first->second;
+					auto & index = passes.emplace( &node->pass, 0u ).first->second;
+					auto it = instantiation.find( node->pass.getOwner() );
+					CU_Require( it != instantiation.end() );
+					CU_Require( node->getId() > 0u );
+					auto & buffer = it->second.data[index++];
+					buffer.m_objectIDs->x = node->getId() - 1u;
+
+					if ( node->mesh )
+					{
+						CU_Require( node->mesh->getId() > 0u );
+						buffer.m_objectIDs->y = node->mesh->getId() - 1u;
+					}
+
+					if ( node->skeleton )
+					{
+						CU_Require( node->skeleton->getId() > 0u );
+						buffer.m_objectIDs->z = node->skeleton->getId() - 1u;
+					}
+				}
+			}
+		}
+
+		m_dirty = false;
 	}
 
 	void SceneRenderNodes::update( GpuUpdater & updater )
