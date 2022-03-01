@@ -358,8 +358,4 @@ namespace castor3d
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
-
-	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )
-	{
-	}
 }

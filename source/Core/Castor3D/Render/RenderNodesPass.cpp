@@ -76,41 +76,6 @@ namespace castor3d
 			return instance.getCount();
 		}
 
-		template< typename MapType, typename SubFuncType >
-		inline void subTraverseNodes( MapType & nodes
-			, SubFuncType subFunction )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				for ( auto & itBuffers : itPipelines.second.second )
-				{
-					for ( auto & itPass : itBuffers.second )
-					{
-						subFunction( *itPipelines.second.first, itPass );
-					}
-				}
-			}
-		}
-
-		template< typename MapType, typename FuncType >
-		inline void traverseNodes( MapType & nodes
-			, FuncType function )
-		{
-			subTraverseNodes( nodes
-				, [&function]( auto & first
-					, auto & itPass )
-				{
-					for ( auto & itSubmeshes : itPass.second )
-					{
-						function( first
-							, *itPass.first
-							, *itSubmeshes.first
-							, itSubmeshes.first->getInstantiation()
-							, itSubmeshes.second );
-					}
-				} );
-		}
-
 		template< typename PipelineContT >
 		auto findPipeline( PipelineFlags const & flags
 			, PipelineContT & pipelines )
@@ -315,11 +280,6 @@ namespace castor3d
 		return doPreparePipeline( vertexLayouts
 			, std::move( pipelineFlags )
 			, VK_CULL_MODE_FRONT_BIT );
-	}
-
-	void RenderNodesPass::updatePipeline( RenderPipeline & pipeline )
-	{
-		doUpdatePipeline( pipeline );
 	}
 
 	FilteredTextureFlags RenderNodesPass::filterTexturesFlags( TextureFlagsArray const & textures )const
@@ -557,108 +517,44 @@ namespace castor3d
 			, &secondary );
 	}
 
-	uint32_t RenderNodesPass::doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
-		, std::vector< InstantiationData > & instanceBuffer )const
-	{
-		auto const count = std::min( uint32_t( instanceBuffer.size() )
-			, uint32_t( renderNodes.size() ) );
-		auto buffer = instanceBuffer.data();
-		auto it = renderNodes.begin();
-		auto i = 0u;
-
-		while ( i < count )
-		{
-			auto & node = *it;
-			CU_Require( node->getId() > 0u );
-			buffer->m_objectIDs->x = node->getId() - 1u;
-
-			if ( node->mesh )
-			{
-				CU_Require( node->mesh->getId() > 0u );
-				buffer->m_objectIDs->y = node->mesh->getId() - 1u;
-			}
-
-			if ( node->skeleton )
-			{
-				CU_Require( node->skeleton->getId() > 0u );
-				buffer->m_objectIDs->z = node->skeleton->getId() - 1u;
-			}
-
-			++buffer;
-			++i;
-			++it;
-		}
-
-		return count;
-	}
-
-	uint32_t RenderNodesPass::doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
-		, std::vector< InstantiationData > & instanceBuffer
-		, RenderInfo & info )const
-	{
-		auto count = doCopyNodesIds( renderNodes, instanceBuffer );
-		info.m_visibleObjectsCount += count;
-		return count;
-	}
-
 	void RenderNodesPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes )
 	{
-		traverseNodes( nodes
-			, [this]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SubmeshRenderNodePtrArray & renderNodes )
-			{
-				auto it = instantiation.find( pass.getOwner() );
-
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer )
-				{
-					doCopyNodesIds( renderNodes
-						, it->second.data );
-				}
-			} );
 	}
 
 	void RenderNodesPass::doUpdate( SubmeshRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		traverseNodes( nodes
-			, [this, &info]( RenderPipeline & pipeline
-				, Pass & pass
-				, Submesh & submesh
-				, InstantiationComponent & instantiation
-				, SubmeshRenderNodePtrArray & renderNodes )
-			{
-				auto it = instantiation.find( pass.getOwner() );
+		doUpdate( nodes );
 
-				if ( !renderNodes.empty()
-					&& it != instantiation.end()
-					&& it->second.buffer )
+		for ( auto & itPipelines : nodes )
+		{
+			for ( auto & itBuffers : itPipelines.second.second )
+			{
+				for ( auto & itPass : itBuffers.second )
 				{
-					uint32_t count1 = doCopyNodesIds( renderNodes
-						, it->second.data );
-					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
-					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
-					++info.m_drawCalls;
+					for ( auto & itSubmeshes : itPass.second )
+					{
+						auto & instantiation = itSubmeshes.first->getInstantiation();
+						auto it = instantiation.find( itPass.first->getOwner() );
+
+						if ( !itSubmeshes.second.empty()
+							&& it != instantiation.end()
+							&& it->second.buffer )
+						{
+							auto const count = std::min( uint32_t( it->second.data.size() )
+								, uint32_t( itSubmeshes.second.size() ) );
+							info.m_visibleFaceCount += itSubmeshes.first->getFaceCount() * count;
+							info.m_visibleVertexCount += itSubmeshes.first->getPointsCount() * count;
+							++info.m_drawCalls;
+						}
+					}
 				}
-			} );
+			}
+		}
 	}
 
 	namespace
 	{
-		template< typename NodeT >
-		inline void renderNonInstanced( RenderNodesPass & pass
-			, NodePtrByPipelineMapT< NodeT > & nodes )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.second.first );
-			}
-		}
-
 		template< typename NodeT >
 		inline void doUpdateInfos( NodePtrByPipelineMapT< NodeT > & nodes
 			, RenderInfo & info )
@@ -681,7 +577,6 @@ namespace castor3d
 
 	void RenderNodesPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes )
 	{
-		renderNonInstanced( *this, nodes );
 	}
 
 	void RenderNodesPass::doUpdate( SubmeshRenderNodePtrByPipelineMap & nodes
@@ -693,8 +588,6 @@ namespace castor3d
 
 	void RenderNodesPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes )
 	{
-		renderNonInstanced( *this
-			, nodes );
 	}
 
 	void RenderNodesPass::doUpdate( BillboardRenderNodePtrByPipelineMap & nodes

@@ -607,10 +607,6 @@ namespace ocean
 #endif
 	}
 
-	void OceanRenderPass::doUpdatePipeline( castor3d::RenderPipeline & pipeline )
-	{
-	}
-
 	castor3d::ShaderPtr OceanRenderPass::doGetVertexShaderSource( castor3d::PipelineFlags const & flags )const
 	{
 		using namespace sdw;
