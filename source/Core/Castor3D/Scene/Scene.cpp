@@ -363,6 +363,7 @@ namespace castor3d
 			doUpdateAnimations( updater );
 			doUpdateMaterials();
 			m_lightCache->update( updater );
+			m_renderNodes->update( updater );
 			m_animatedObjectGroupCache->update( updater );
 			onUpdate( *this );
 			m_changed = false;
