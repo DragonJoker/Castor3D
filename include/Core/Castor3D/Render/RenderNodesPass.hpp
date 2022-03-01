@@ -362,15 +362,6 @@ namespace castor3d
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts );
 		/**
 		 *\~english
-		 *\brief		Updates the opaque pipeline.
-		 *\param[in]	pipeline	The render pipeline.
-		 *\~french
-		 *\brief		Met à jour lee pipeline opaque.
-		 *\param[in]	pipeline	Le pipeline de rendu.
-		 */
-		C3D_API void updatePipeline( RenderPipeline & pipeline );
-		/**
-		 *\~english
 		 *\brief		Initialises the additional descriptor set of a billboard node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
@@ -501,35 +492,6 @@ namespace castor3d
 			, uint32_t index );
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Copies the instantiated nodes model matrices into given matrix buffer.
-		 *\param[in]	renderNodes		The instantiated nodes.
-		 *\param[in]	matrixBuffer	The matrix buffer.
-		 *\~french
-		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
-		 *\param[in]	renderNodes		Les noeuds instanciés.
-		 *\param[in]	matrixBuffer	Le tampon de matrices.
-		 */
-		C3D_API uint32_t doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
-			, std::vector< InstantiationData > & instanceBuffer )const;
-		/**
-		 *\~english
-		 *\brief			Copies the instantiated nodes model matrices into given matrix buffer.
-		 *\remarks			The nodes which are copied will be registered in the rendered nodes list.
-		 *\param[in]		renderNodes		The instantiated nodes.
-		 *\param[in]		matrixBuffer	The matrix buffer.
-		 *\param[in, out]	info			Receives the render informations.
-		 *\~french
-		 *\brief			Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
-		 *\remarks			Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
-		 *\param[in]		renderNodes		Les noeuds instanciés.
-		 *\param[in]		matrixBuffer	Le tampon de matrices.
-		 *\param[in,out]	info			Reçoit les informations de rendu.
-		 */
-		C3D_API uint32_t doCopyNodesIds( SubmeshRenderNodePtrArray const & renderNodes
-			, std::vector< InstantiationData > & instanceBuffer
-			, RenderInfo & info )const;
 		/**
 		 *\~english
 		 *\brief		Updates instantiated submeshes.
@@ -676,15 +638,6 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
-		/**
-		 *\~english
-		 *\brief		Updates the pipeline.
-		 *\param[in]	pipeline	The render pipeline.
-		 *\~french
-		 *\brief		Met à jour le pipeline.
-		 *\param[in]	pipeline	Le pipeline de rendu.
-		 */
-		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline ) = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.

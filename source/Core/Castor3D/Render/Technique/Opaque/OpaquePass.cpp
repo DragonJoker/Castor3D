@@ -103,10 +103,6 @@ namespace castor3d
 		return flags;
 	}
 
-	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )
-	{
-	}
-
 	void OpaquePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 	}

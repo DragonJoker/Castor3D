@@ -508,10 +508,6 @@ namespace water
 		return flags;
 	}
 
-	void WaterRenderPass::doUpdatePipeline( castor3d::RenderPipeline & pipeline )
-	{
-	}
-
 	castor3d::ShaderPtr WaterRenderPass::doGetHullShaderSource( castor3d::PipelineFlags const & flags )const
 	{
 		return nullptr;

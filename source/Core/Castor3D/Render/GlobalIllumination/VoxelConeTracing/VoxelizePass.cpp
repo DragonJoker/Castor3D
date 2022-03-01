@@ -231,11 +231,6 @@ namespace castor3d
 		return flags;
 	}
 
-	void VoxelizePass::doUpdatePipeline( RenderPipeline & pipeline )
-	{
-		m_sceneUbo.cpuUpdate( m_scene, &m_camera );
-	}
-
 	void VoxelizePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );

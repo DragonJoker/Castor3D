@@ -231,11 +231,6 @@ namespace castor3d
 		return nullptr;
 	}
 
-	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )
-	{
-		m_sceneUbo.cpuUpdate( m_scene, m_camera );
-	}
-
 	void RenderTechniquePass::doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{

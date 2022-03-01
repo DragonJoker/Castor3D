@@ -87,7 +87,6 @@ namespace castor3d
 		ShaderPtr doGetHullShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetDomainShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		void doUpdatePipeline( RenderPipeline & pipeline )override;
 
 	protected:
 		ShadowMap const & m_shadowMap;
