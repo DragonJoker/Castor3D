@@ -19,6 +19,13 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
+			ModelBuffers( GpuPackedBuffer vtx
+				, GpuPackedBuffer idx )
+				: vertex{ std::move( vtx ) }
+				, index{ std::move( idx ) }
+			{
+			}
+
 			GpuPackedBuffer vertex;
 			GpuPackedBuffer index;
 		};
@@ -89,6 +96,15 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
+			ModelBuffers( GpuPackedBuffer vtx
+				, GpuPackedBuffer bon
+				, GpuPackedBuffer idx )
+				: vertex{ std::move( vtx ) }
+				, bones{ std::move( bon ) }
+				, index{ std::move( idx ) }
+			{
+			}
+
 			GpuPackedBuffer vertex;
 			GpuPackedBuffer bones;
 			GpuPackedBuffer index;

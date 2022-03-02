@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#include <CastorUtils/Design/UnicityException.hpp>
+
 #include <thread>
 
 #include <wx/image.h>

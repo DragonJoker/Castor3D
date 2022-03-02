@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include <ashespp/Core/WindowHandle.hpp>
 
 #include <chrono>
+#include <unordered_set>
 
 namespace castor3d
 {
