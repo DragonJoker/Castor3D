@@ -76,11 +76,10 @@ namespace castor3d
 	{
 	}
 
-	bool PickingPass::update( VkRect2D const & scissor )
+	void PickingPass::updateArea( VkRect2D const & scissor )
 	{
 		ShadowMapLightTypeArray shadowMaps;
 		m_renderQueue->update( shadowMaps, scissor );
-		return true;
 	}
 
 	TextureFlags PickingPass::getTexturesMask()const

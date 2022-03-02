@@ -66,7 +66,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API bool update( VkRect2D const & scissor );
+		C3D_API void updateArea( VkRect2D const & scissor );
 		/**
 		*\~english
 		*name

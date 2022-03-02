@@ -484,7 +484,6 @@ namespace ocean
 
 	void OceanRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaveIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eWavesUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -558,7 +557,6 @@ namespace ocean
 	void OceanRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaveIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo.getDescriptorWrite( WaveIdx::eWavesUbo ) );
 		auto index = uint32_t( WaveIdx::eWaveFoam );
