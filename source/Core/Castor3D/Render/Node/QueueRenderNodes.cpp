@@ -90,10 +90,10 @@ namespace castor3d
 			, NodePtrByPipelineMapT< NodeT > & nodes )
 		{
 			auto & flags = pipeline.getFlags();
-			auto baseHash = getPipelineBaseHash( flags.programFlags
-				, flags.passFlags
-				, uint32_t( flags.textures.size() )
-				, flags.texturesFlags );
+			auto baseHash = getPipelineBaseHash( *pipeline.getOwner()
+				, node.data
+				, node.pass
+				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
 			auto & bufferOffsets = node.data.getBufferOffsets();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, NodePtrByBufferMapT< NodeT >{} ) ).first->second.second;
@@ -114,10 +114,10 @@ namespace castor3d
 			, ObjectNodesPtrByPipelineMapT< NodeT > & nodes )
 		{
 			auto & flags = pipeline.getFlags();
-			auto baseHash = getPipelineBaseHash( flags.programFlags
-				, flags.passFlags
-				, uint32_t( flags.textures.size() )
-				, flags.texturesFlags );
+			auto baseHash = getPipelineBaseHash( *pipeline.getOwner()
+				, node.data
+				, node.pass
+				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
 			auto & bufferOffsets = node.data.getBufferOffsets();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ) ).first->second.second;
