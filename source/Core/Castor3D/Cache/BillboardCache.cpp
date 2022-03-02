@@ -41,10 +41,9 @@ namespace castor3d
 			, rootNode
 			, rootCameraNode
 			, rootCameraNode
-			, [this]( ElementT & element )
+			, [&scene]( ElementT & element )
 			{
-				auto scene = getScene();
-				auto & nodes = scene->getRenderNodes();
+				auto & nodes = scene.getRenderNodes();
 				auto material = element.getMaterial();
 
 				for ( auto & pass : *material )
@@ -53,11 +52,11 @@ namespace castor3d
 						, element );
 				}
 
-				scene->getListener().postEvent( makeGpuInitialiseEvent( element ) );
+				scene.getListener().postEvent( makeGpuInitialiseEvent( element ) );
 			}
-			, [this]( ElementT & element )
+			, [&scene]( ElementT & element )
 			{
-				getScene()->getListener().postEvent( makeGpuCleanupEvent( element ) );
+				scene.getListener().postEvent( makeGpuCleanupEvent( element ) );
 			}
 			, MovableMergerT< BillboardListCache >{ scene.getName() }
 			, MovableAttacherT< BillboardListCache >{}

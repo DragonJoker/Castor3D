@@ -114,13 +114,6 @@ namespace castor
 			, uint32_t minBlockSize );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~BuddyAllocatorT();
-		/**
-		 *\~english
 		 *\param[in]	size	The requested memory size.
 		 *\return		\p true if there is enough remaining memory for given size.
 		 *\~french

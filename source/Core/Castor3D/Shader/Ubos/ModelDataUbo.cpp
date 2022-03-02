@@ -203,4 +203,16 @@ namespace castor3d::shader
 	}
 
 	//*********************************************************************************************
+
+	sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+		, sdw::UInt pipelineID
+		, sdw::Int drawID )
+	{
+		auto & writer = *data.getWriter();
+		auto objectIdsData = writer.declLocale( "objectIdsData"
+			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
+		return objectIdsData.x();
+	}
+
+	//*********************************************************************************************
 }
