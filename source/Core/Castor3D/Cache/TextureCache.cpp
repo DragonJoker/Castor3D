@@ -642,10 +642,10 @@ namespace castor3d
 	}
 
 	void TextureUnitCache::doLoadSource( TextureSourceInfo const & sourceInfo
-		, PassTextureConfig const & config
+		, PassTextureConfig const & passConfig
 		, TextureUnit & unit )
 	{
-		auto & data = doCreateThreadData( sourceInfo, config, unit );
+		auto & data = doCreateThreadData( sourceInfo, passConfig, unit );
 
 		if ( sourceInfo.isRenderTarget() )
 		{

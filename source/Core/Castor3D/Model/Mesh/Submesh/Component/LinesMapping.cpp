@@ -7,7 +7,7 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-using namespace castor;
+#include <ashespp/Buffer/StagingBuffer.hpp>
 
 //*************************************************************************************************
 
@@ -27,7 +27,7 @@ namespace castor3d
 		CU_DeclareVector( LineDistance, LineDist );
 	}
 
-	String const LinesMapping::Name = "lines_mapping";
+	castor::String const LinesMapping::Name = "lines_mapping";
 
 	LinesMapping::LinesMapping( Submesh & submesh
 		, VkMemoryPropertyFlags bufferMemoryFlags
@@ -56,7 +56,7 @@ namespace castor3d
 	void LinesMapping::addLineGroup( LineIndices const * const begin
 		, LineIndices const * const end )
 	{
-		for ( auto & line : makeArrayView( begin, end ) )
+		for ( auto & line : castor::makeArrayView( begin, end ) )
 		{
 			addLine( line.m_index[0], line.m_index[1] );
 		}
@@ -123,9 +123,9 @@ namespace castor3d
 							{
 								double dDistance = 0.0;
 								auto & vtx1 = vertex[it[0]].pos;
-								dDistance += point::lengthSquared( vtx1 - cameraPosition );
+								dDistance += castor::point::lengthSquared( vtx1 - cameraPosition );
 								auto & vtx2 = vertex[it[1]].pos;
-								dDistance += point::lengthSquared( vtx2 - cameraPosition );
+								dDistance += castor::point::lengthSquared( vtx2 - cameraPosition );
 								arraySorted.push_back( LineDistance{ { it[0], it[1] }, dDistance } );
 							}
 
@@ -147,7 +147,7 @@ namespace castor3d
 				}
 			}
 		}
-		catch ( Exception const & exc )
+		catch ( castor::Exception const & exc )
 		{
 			log::error << "Submesh::SortLines - Error: " << exc.what() << std::endl;
 		}

@@ -6,11 +6,12 @@ See LICENSE file in root folder
 
 #include "RenderNodeModule.hpp"
 
-#include "Castor3D/Buffer/GpuBufferOffset.hpp"
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Model/ModelModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
-#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
@@ -42,7 +43,6 @@ namespace castor3d
 		Pass & pass;
 		DataType & data;
 		InstanceType & instance;
-		ashes::DescriptorSet * texDescriptorSet{};
 		// Morphing node
 		AnimatedMesh * mesh{};
 		// Skinning node

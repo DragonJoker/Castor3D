@@ -195,13 +195,10 @@ namespace castor3d
 				{ PickingWidth, PickingWidth },
 			};
 
-			if ( m_pickingPass->update( scissor ) )
-			{
-				auto pixel = doFboPick( position );
-				m_pickNodeType = doPick( pixel
-					, m_pickingPass->getCuller().getScene() );
-			}
-
+			m_pickingPass->updateArea( scissor );
+			auto pixel = doFboPick( position );
+			m_pickNodeType = doPick( pixel
+				, m_pickingPass->getCuller().getScene() );
 			m_picking = false;
 		}
 

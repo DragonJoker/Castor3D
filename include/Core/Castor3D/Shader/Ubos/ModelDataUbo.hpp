@@ -176,15 +176,9 @@ namespace castor3d::shader
 		return objectIdsData.x();
 	}
 
-	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+	C3D_API sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::UInt pipelineID
-		, sdw::Int drawID )
-	{
-		auto & writer = *data.getWriter();
-		auto objectIdsData = writer.declLocale( "objectIdsData"
-			, data[pipelineID][writer.cast< sdw::UInt >( drawID )] );
-		return objectIdsData.x();
-	}
+		, sdw::Int drawID );
 }
 
 #define C3D_ObjectIdsData( writer, binding, set )\

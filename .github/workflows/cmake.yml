@@ -28,7 +28,7 @@ jobs:
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v4
       with:
-        vcpkgGitCommitId: 'd15470bb6464a3bb0ce3d98d118190cfd5189080'
+        vcpkgGitCommitId: '11be87ec561d9d70dc527afad886744fe149c2ce'
         setupOnly: true
   
     - name: Install necessary G++ version (Linux)

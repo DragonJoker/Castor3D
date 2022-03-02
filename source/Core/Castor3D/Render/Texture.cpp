@@ -8,6 +8,8 @@
 
 #include <RenderGraph/ResourceHandler.hpp>
 
+#include <ashespp/Image/Image.hpp>
+
 namespace castor3d
 {
 	//*********************************************************************************************
