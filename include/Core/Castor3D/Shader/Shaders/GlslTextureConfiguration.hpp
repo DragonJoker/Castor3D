@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "SdwModule.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
 namespace castor3d

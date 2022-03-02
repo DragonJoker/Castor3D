@@ -1,6 +1,8 @@
 #include "GuiCommon/Properties/Math/CubeBoxProperties.hpp"
 #include "GuiCommon/Properties/Math/SphereBoxProperties.hpp"
 
+#include <Castor3D/Engine.hpp>
+
 #pragma warning( push )
 #pragma warning( disable: 4371 )
 

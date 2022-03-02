@@ -52,24 +52,23 @@ namespace castor3d
 			, rootNode
 			, rootCameraNode
 			, rootCameraNode
-			, [this]( ElementT & element )
+			, [this, &scene]( ElementT & element )
 			{
-				auto scene = getScene();
 				auto mesh = element.getMesh().lock();
 
 				if ( mesh )
 				{
-					auto & nodes = scene->getRenderNodes();
+					auto & nodes = scene.getRenderNodes();
 
 					for ( auto & submesh : *mesh )
 					{
 						auto material = element.getMaterial( *submesh );
 						auto submeshFlags = submesh->getProgramFlags( material );
 						auto animMesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
-							? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *scene, element.getName() + cuT( "_Mesh" ) ) )
+							? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( scene, element.getName() + cuT( "_Mesh" ) ) )
 							: nullptr;
 						auto animSkeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
-							? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *scene, element.getName() + cuT( "_Skeleton" ) ) )
+							? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, element.getName() + cuT( "_Skeleton" ) ) )
 							: nullptr;
 
 						for ( auto & pass : *material )
@@ -83,7 +82,7 @@ namespace castor3d
 					}
 				}
 
-				scene->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				scene.getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
 					, [&element, this]( RenderDevice const & device
 						, QueueData const & queueData )
 					{

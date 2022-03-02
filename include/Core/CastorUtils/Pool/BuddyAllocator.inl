@@ -15,11 +15,6 @@ namespace castor
 	}
 
 	template< typename Traits >
-	inline BuddyAllocatorT< Traits >::~BuddyAllocatorT()
-	{
-	}
-
-	template< typename Traits >
 	inline bool BuddyAllocatorT< Traits >::hasAvailable( size_t size )const
 	{
 		auto level = doGetLevel( size );

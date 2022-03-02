@@ -9,7 +9,7 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-using namespace castor;
+#include <ashespp/Buffer/StagingBuffer.hpp>
 
 //*************************************************************************************************
 
@@ -29,7 +29,7 @@ namespace castor3d
 		CU_DeclareVector( FaceDistance, FaceDist );
 	}
 
-	String const TriFaceMapping::Name = "triface_mapping";
+	castor::String const TriFaceMapping::Name = "triface_mapping";
 
 	TriFaceMapping::TriFaceMapping( Submesh & submesh
 		, VkMemoryPropertyFlags bufferMemoryFlags
@@ -59,7 +59,7 @@ namespace castor3d
 	void TriFaceMapping::addFaceGroup( FaceIndices const * const begin
 		, FaceIndices const * const end )
 	{
-		for ( auto & face : makeArrayView( begin, end ) )
+		for ( auto & face : castor::makeArrayView( begin, end ) )
 		{
 			addFace( face.m_index[0], face.m_index[1], face.m_index[2] );
 		}
@@ -74,10 +74,10 @@ namespace castor3d
 	{
 		addFace( a, b, c );
 		addFace( a, c, d );
-		getOwner()->getPoint( a ).tex = Point3f{ minUV[0], minUV[1], 0.0f };
-		getOwner()->getPoint( b ).tex = Point3f{ maxUV[0], minUV[1], 0.0f };
-		getOwner()->getPoint( c ).tex = Point3f{ maxUV[0], maxUV[1], 0.0f };
-		getOwner()->getPoint( d ).tex = Point3f{ minUV[0], maxUV[1], 0.0f };
+		getOwner()->getPoint( a ).tex = castor::Point3f{ minUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( b ).tex = castor::Point3f{ maxUV[0], minUV[1], 0.0f };
+		getOwner()->getPoint( c ).tex = castor::Point3f{ maxUV[0], maxUV[1], 0.0f };
+		getOwner()->getPoint( d ).tex = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
 	}
 
 	void TriFaceMapping::clearFaces()
@@ -171,11 +171,11 @@ namespace castor3d
 							{
 								double dDistance = 0.0;
 								auto & vtx1 = vertex[it[0]].pos;
-								dDistance += point::lengthSquared( vtx1 - cameraPosition );
+								dDistance += castor::point::lengthSquared( vtx1 - cameraPosition );
 								auto & vtx2 = vertex[it[1]].pos;
-								dDistance += point::lengthSquared( vtx2 - cameraPosition );
+								dDistance += castor::point::lengthSquared( vtx2 - cameraPosition );
 								auto & vtx3 = vertex[it[2]].pos;
-								dDistance += point::lengthSquared( vtx3 - cameraPosition );
+								dDistance += castor::point::lengthSquared( vtx3 - cameraPosition );
 								arraySorted.push_back( FaceDistance{ { it[0], it[1], it[2] }, dDistance } );
 							}
 
@@ -198,7 +198,7 @@ namespace castor3d
 				}
 			}
 		}
-		catch ( Exception const & exc )
+		catch ( castor::Exception const & exc )
 		{
 			log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
 		}

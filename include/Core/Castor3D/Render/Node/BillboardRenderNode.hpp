@@ -4,9 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardRenderNode_H___
 #define ___C3D_BillboardRenderNode_H___
 
-#include "Castor3D/Buffer/GpuBufferOffset.hpp"
-#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+#include "RenderNodeModule.hpp"
+
+#include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 namespace castor3d
 {
