@@ -27,7 +27,8 @@ namespace castor3d
 		, bool isFrontCulled );
 	uint32_t getPipelineBaseHash( RenderNodesPass const & renderPass
 		, BillboardBase const & data
-		, Pass const & pass );
+		, Pass const & pass
+		, bool isFrontCulled );
 
 	size_t hash( SubmeshRenderNode const & culled );
 	bool isCulled( SubmeshRenderNode const & node );
