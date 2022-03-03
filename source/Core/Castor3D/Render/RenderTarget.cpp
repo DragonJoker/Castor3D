@@ -38,8 +38,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, RenderTarget )
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace
@@ -250,7 +248,7 @@ namespace castor3d
 		, m_initialised{ false }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
-		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
+		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
 		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
 		, m_velocity{ std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
 			, getOwner()->getGraphResourceHandler()
@@ -459,11 +457,11 @@ namespace castor3d
 			}
 
 			stepProgressBar( progress, "Creating overlay renderer" );
-			m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Overlays" ) );
+			m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( device
 				, m_overlays
 				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-
+			getEngine()->registerTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
 			m_initialising = false;
 		}
@@ -480,6 +478,7 @@ namespace castor3d
 		{
 			m_signalReady.reset();
 			m_overlayRenderer.reset();
+			getEngine()->unregisterTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
 			m_runnable.reset();
 
@@ -638,7 +637,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::setToneMappingType( String const & name
+	void RenderTarget::setToneMappingType( castor::String const & name
 		, Parameters const & parameters )
 	{
 		m_toneMappingName = name;
@@ -777,7 +776,7 @@ namespace castor3d
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating combine pass" );
-		auto & result = m_graph.createPass( "Combine"
+		auto & result = m_graph.createPass( "Other/Combine"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -789,7 +788,7 @@ namespace castor3d
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
 					.build( pass, context, graph );
-				getOwner()->registerTimer( graph.getName() + "/Combine"
+				getOwner()->registerTimer( pass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
@@ -819,9 +818,9 @@ namespace castor3d
 					, m_ssaoConfig
 					, progress );
 			}
-			catch ( Exception & exc )
+			catch ( castor::Exception & exc )
 			{
-				log::error << cuT( "Couldn't load render technique: " ) << string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
+				log::error << cuT( "Couldn't load render technique: " ) << castor::string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
 				throw;
 			}
 		}
@@ -839,7 +838,7 @@ namespace castor3d
 		if ( source != target )
 		{
 			stepProgressBar( progress, "Creating " + name + " copy commands" );
-			auto & pass = m_graph.createPass( getName() + name + "Copy"
+			auto & pass = m_graph.createPass( "Other/" + name + "Copy"
 				, [this, progress, name]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
@@ -849,7 +848,7 @@ namespace castor3d
 						, context
 						, graph
 						, getSafeBandedExtent3D( m_size ) );
-					getOwner()->registerTimer( graph.getName() + "/" + name + "Copy"
+					getOwner()->registerTimer( pass.getFullName()
 						, result->getTimer() );
 					return result;
 				} );
@@ -870,7 +869,7 @@ namespace castor3d
 		auto bandedSize = castor3d::getSafeBandedExtent3D(m_size );
 		auto bandRatioU = bandSize / bandedSize.width;
 		auto bandRatioV = bandSize / bandedSize.height;
-		Point4f velocityMetrics{ bandRatioU
+		castor::Point4f velocityMetrics{ bandRatioU
 			, bandRatioV
 			, float( 1.0 - 2.0 * bandRatioU )
 			, float( 1.0 - 2.0 * bandRatioV ) };
