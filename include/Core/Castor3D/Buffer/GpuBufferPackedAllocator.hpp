@@ -20,7 +20,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	size	La taille allouée.
 		 */
-		C3D_API GpuBufferPackedAllocator( size_t size );
+		C3D_API explicit GpuBufferPackedAllocator( size_t size );
 		/**
 		 *\~english
 		 *\brief		Allocates memory.
