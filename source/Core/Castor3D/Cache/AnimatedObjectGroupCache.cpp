@@ -119,10 +119,10 @@ namespace castor
 			for ( auto & pair : m_meshEntries )
 			{
 				auto & entry = pair.second;
-				auto & morphingData = morphingBuffer[entry.mesh.getId() - 1u];
 
 				if ( entry.mesh.isPlayingAnimation() )
 				{
+					auto & morphingData = morphingBuffer[entry.mesh.getId() - 1u];
 					morphingData.time->x = entry.mesh.getPlayingAnimation().getRatio();
 				}
 			}
