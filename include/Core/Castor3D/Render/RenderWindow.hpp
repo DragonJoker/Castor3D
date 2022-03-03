@@ -508,7 +508,7 @@ namespace castor3d
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
-		void doInitialisTransferCommands( CommandsSemaphore & commands
+		void doInitialiseTransferCommands( CommandsSemaphore & commands
 			, uint32_t index );
 
 	private:

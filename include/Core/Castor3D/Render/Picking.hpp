@@ -112,6 +112,16 @@ namespace castor3d
 			return m_pickNodeType;
 		}
 
+		crg::ImageViewId const & getImageView()const
+		{
+			return m_colourImageView;
+		}
+
+		crg::SemaphoreWaitArray const & getSemaphoreWait()const
+		{
+			return m_toWait;
+		}
+
 		bool isPicking()const
 		{
 			return m_picking;
@@ -119,7 +129,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass doCreatePickingPass( MatrixUbo & matrixUbo
+		crg::FramePass & doCreatePickingPass( MatrixUbo & matrixUbo
 			, SceneCuller & culler );
 		castor::Point4ui doFboPick( castor::Position const & position );
 		PickNodeType doPick( castor::Point4ui const & pixel
@@ -139,7 +149,7 @@ namespace castor3d
 		crg::ImageViewId m_colourImageView;
 		crg::ImageId m_depthImage;
 		crg::ImageViewId m_depthImageView;
-		crg::FramePass m_pickingPassDesc;
+		crg::FramePass * m_pickingPassDesc;
 		PickingPass * m_pickingPass;
 		crg::RunnableGraphPtr m_runnable;
 		ashes::ImagePtr m_colourTexture;
@@ -156,6 +166,8 @@ namespace castor3d
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 		std::atomic_bool m_picking{ false };
+		crg::SemaphoreWaitArray m_toWait;
+		bool m_first{ true };
 	};
 }
 
