@@ -43,6 +43,8 @@ namespace castor3d
 			, AnimatedSkeleton * skeleton );
 		C3D_API BillboardRenderNode & createNode( Pass & pass
 			, BillboardBase & instance );
+		C3D_API SubmeshRenderNode const * getSubmeshNode( uint32_t nodeId );
+		C3D_API BillboardRenderNode const * getBillboardNode( uint32_t nodeId );
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
 

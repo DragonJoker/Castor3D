@@ -315,6 +315,16 @@ namespace castor3d
 		return ashes::makeClearValue( VkClearDepthStencilValue{ depth, stencil } );
 	}
 
+	inline VkClearValue makeClearValue( uint32_t r, uint32_t g, uint32_t b, uint32_t a )
+	{
+		VkClearColorValue v{};
+		v.uint32[0] = r;
+		v.uint32[1] = g;
+		v.uint32[2] = b;
+		v.uint32[3] = a;
+		return ashes::makeClearValue( v );
+	}
+
 	inline VkClearValue makeClearValue( float r, float g, float b, float a = 1.0f )
 	{
 		return ashes::makeClearValue( { r, g, b, a } );

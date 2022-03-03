@@ -292,10 +292,6 @@ namespace castor3d
 					, writer.cast< sdw::UInt >( in.nodeId )
 					, writer.cast< sdw::UInt >( in.primitiveID )
 					, 0_u );
-
-#if C3D_DebugPicking
-				pxl_fragColor /= 255.0_f;
-#endif
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

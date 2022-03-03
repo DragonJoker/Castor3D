@@ -231,6 +231,38 @@ namespace castor3d
 		return *it.first->second;
 	}
 
+	SubmeshRenderNode const * SceneRenderNodes::getSubmeshNode( uint32_t nodeId )
+	{
+		for ( auto & poolsIt : m_submeshNodes )
+		{
+			for ( auto & nodeIt : poolsIt.second )
+			{
+				if ( nodeIt.second->getId() == nodeId )
+				{
+					return nodeIt.second.get();
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
+	BillboardRenderNode const * SceneRenderNodes::getBillboardNode( uint32_t nodeId )
+	{
+		for ( auto & poolsIt : m_billboardNodes )
+		{
+			for ( auto & nodeIt : poolsIt.second )
+			{
+				if ( nodeIt.second->getId() == nodeId )
+				{
+					return nodeIt.second.get();
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
 	void SceneRenderNodes::update( CpuUpdater & updater )
 	{
 		if ( !m_dirty )
