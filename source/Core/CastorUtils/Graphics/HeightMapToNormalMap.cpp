@@ -107,8 +107,8 @@ namespace castor
 		try
 		{
 			castor::Size origDimensions{ image.getDimensions() };
-			castor::Size dimensions{ origDimensions.getWidth() * 16u
-				, origDimensions.getHeight() * 16u };
+			castor::Size dimensions{ origDimensions.getWidth() * 4u
+				, origDimensions.getHeight() * 4u };
 			image.resample( dimensions );
 			auto buffer = castor::PxBufferBase::create( dimensions
 				, castor::PixelFormat::eR8_UNORM
