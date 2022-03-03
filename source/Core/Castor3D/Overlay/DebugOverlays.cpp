@@ -221,6 +221,11 @@ namespace castor3d
 
 	void DebugOverlays::PassOverlays::update()
 	{
+		if ( !m_cpu.value || !m_gpu.value )
+		{
+			return;
+		}
+
 		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
 		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
 
@@ -386,7 +391,7 @@ namespace castor3d
 
 		m_container->setPixelPosition( castor::Position{ 330, int32_t( 20 * offset ) } );
 		m_container->setPixelSize( castor::Size{ uint32_t( m_posX )
-			, ( m_detailed ? getPanelCount() : 1u ) * 20u } );
+			, ( ( m_detailed && *m_detailed ) ? getPanelCount() : 1u ) * 20u } );
 	}
 
 	void DebugOverlays::CategoryOverlays::addTimer( FramePassTimer & timer )
@@ -449,6 +454,11 @@ namespace castor3d
 
 	void DebugOverlays::CategoryOverlays::update()
 	{
+		if ( !m_cpu.value || !m_gpu.value )
+		{
+			return;
+		}
+
 		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
 		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
 
@@ -536,13 +546,14 @@ namespace castor3d
 	uint32_t DebugOverlays::registerTimer( castor::String const & category
 		, FramePassTimer & timer )
 	{
+		auto realCategory = category.substr( 0u, category.find_last_of( cuT( '/' ) ) );
 		auto & cache = getEngine()->getOverlayCache();
-		auto ires = m_renderPasses.emplace( category, CategoryOverlays{} );
+		auto ires = m_renderPasses.emplace( realCategory, CategoryOverlays{} );
 		auto it = ires.first;
 
 		if ( ires.second )
 		{
-			it->second = CategoryOverlays{ category, cache, m_detailed };
+			it->second = CategoryOverlays{ realCategory, cache, m_detailed };
 			it->second.setVisible( m_visible );
 		}
 

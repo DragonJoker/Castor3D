@@ -321,7 +321,7 @@ namespace castor3d
 #endif
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
-		, m_colour{ device
+		, m_colour{ m_device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechCol"
 			, 0u
@@ -337,14 +337,14 @@ namespace castor3d
 		, m_colourTexture{ doCreateTextureUnit( m_device
 			, queueData
 			, m_colour.imageId ) }
-		, m_depth{ std::make_shared< Texture >( device
+		, m_depth{ std::make_shared< Texture >( m_device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechDpt"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
 			, 1u
-			, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+			, m_device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
@@ -355,7 +355,7 @@ namespace castor3d
 		, m_depthBuffer{ doCreateTextureUnit( m_device
 			, queueData
 			, m_depth->imageId ) }
-		, m_depthObj{ std::make_shared< Texture >( device
+		, m_depthObj{ std::make_shared< Texture >( m_device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechData0"
 			, 0u
@@ -365,7 +365,7 @@ namespace castor3d
 			, getFormat( DsTexture::eData0 )
 			, getUsageFlags( DsTexture::eData0 )
 			, getBorderColor( DsTexture::eData0 ) ) }
-		, m_normal{ std::make_shared< Texture >( device
+		, m_normal{ std::make_shared< Texture >( m_device
 			, getOwner()->getGraphResourceHandler()
 			, getName() + "TechData1"
 			, 0u
@@ -382,7 +382,7 @@ namespace castor3d
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
 		, m_depthPassDecl{ &doCreateDepthPass( progress ) }
-		, m_depthRange{ makeBuffer< int32_t >( device
+		, m_depthRange{ makeBuffer< int32_t >( m_device
 			, 2u
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -393,7 +393,7 @@ namespace castor3d
 #else
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
 #endif
-			, device
+			, m_device
 			, progress
 			, *m_depthPassDecl
 			, makeSize( m_colour.getExtent() )
@@ -402,8 +402,9 @@ namespace castor3d
 			, *m_normal
 			, m_gpInfoUbo ) }
 		, m_voxelizer{ castor::makeUnique< Voxelizer >( getOwner()->getGraphResourceHandler()
-			, device
+			, m_device
 			, progress
+			, getName()
 			, *m_renderTarget.getScene()
 			, *m_renderTarget.getCamera()
 			, m_matrixUbo
@@ -433,7 +434,7 @@ namespace castor3d
 #endif
 #if C3D_UseDeferredRendering
 		, m_opaquePassResult{ castor::makeUnique< OpaquePassResult >( getOwner()->getGraphResourceHandler()
-			, device
+			, m_device
 			, m_depthObj
 			, m_normal
 			, m_renderTarget.getVelocity() ) }
