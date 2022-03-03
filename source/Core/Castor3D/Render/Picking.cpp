@@ -11,6 +11,7 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Passes/PickingPass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -53,10 +54,14 @@ namespace castor3d
 			, Submesh const *& subnode
 			, uint32_t & face )
 		{
-			//auto & entry = cache.getEntry( nodeId );
-			//node = &entry.geometry;
-			//subnode = &entry.submesh;
-			//face = primitiveId;
+			auto renderNode = cache.getScene()->getRenderNodes().getSubmeshNode( nodeId + 1u );
+
+			if ( renderNode )
+			{
+				node = &renderNode->instance;
+				subnode = &renderNode->data;
+				face = primitiveId;
+			}
 		}
 
 		inline void pickBillboard( BillboardListCache const & cache
@@ -65,9 +70,13 @@ namespace castor3d
 			, BillboardBase const *& node
 			, uint32_t & face )
 		{
-			//auto & entry = cache.getEntry( nodeId );
-			//node = &entry.billboard;
-			//face = primitiveId;
+			auto renderNode = cache.getScene()->getRenderNodes().getBillboardNode( nodeId + 1u );
+
+			if ( renderNode )
+			{
+				node = &renderNode->instance;
+				face = primitiveId;
+			}
 		}
 
 		std::vector< VkBufferImageCopy > createPickDisplayRegions()
@@ -133,7 +142,7 @@ namespace castor3d
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_depthImage.data->info.format
 			, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_pickingPassDesc{ doCreatePickingPass( matrixUbo, culler ) }
+		, m_pickingPassDesc{ &doCreatePickingPass( matrixUbo, culler ) }
 		, m_copyRegion{ 0u
 			, 0u
 			, 0u
@@ -183,19 +192,29 @@ namespace castor3d
 			m_submesh = {};
 			m_billboard = {};
 			m_face = 0u;
+#if !C3D_DebugPicking
+			auto scissor = VkRect2D{ { 0u, 0u }
+				, { m_size.getWidth(), m_size.getHeight() } };
+#else
 			int32_t offsetX = std::clamp( position.x() - PickingOffset
 				, 0
 				, int32_t( m_size.getWidth() - PickingWidth ) );
 			int32_t offsetY = std::clamp( position.y() - PickingOffset
 				, 0
 				, int32_t( m_size.getHeight() - PickingWidth ) );
-			VkRect2D scissor =
-			{
-				{ offsetX, offsetY },
-				{ PickingWidth, PickingWidth },
-			};
+			auto scissor = VkRect2D{ { offsetX, offsetY }
+			, { m_size.getWidth(), m_size.getHeight() } };
+#endif
 
 			m_pickingPass->updateArea( scissor );
+
+			if ( m_first )
+			{
+				doFboPick( position );
+				m_pickingPass->updateArea( scissor );
+				m_first = false;
+			}
+
 			auto pixel = doFboPick( position );
 			m_pickNodeType = doPick( pixel
 				, m_pickingPass->getCuller().getScene() );
@@ -205,7 +224,7 @@ namespace castor3d
 		return m_pickNodeType;
 	}
 
-	crg::FramePass Picking::doCreatePickingPass( MatrixUbo & matrixUbo
+	crg::FramePass & Picking::doCreatePickingPass( MatrixUbo & matrixUbo
 		, SceneCuller & culler )
 	{
 		auto & result = m_graph.createPass( "PickingPass"
@@ -225,15 +244,22 @@ namespace castor3d
 			} );
 		result.addOutputDepthView( m_depthImageView
 			, defaultClearDepthStencil );
+#if C3D_DebugPicking
 		result.addOutputColourView( m_colourImageView
-			, makeClearValue( 1.0f, 0.5f, 0.5f, 1.0f ) );
+			, makeClearValue( 0u, 0u, 0u, 0u )
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+#else
+		result.addOutputColourView( m_colourImageView
+			, makeClearValue( 0u, 0u, 0u, 0u )
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+#endif
 		return result;
 	}
 
 	castor::Point4ui Picking::doFboPick( castor::Position const & position )
 	{
 		auto queueData = m_device.graphicsData();
-		auto toWait = m_runnable->run( crg::SemaphoreWaitArray{}, *queueData->queue );
+		m_toWait = m_runnable->run( crg::SemaphoreWaitArray{}, *queueData->queue );
 
 		m_copyRegion.imageOffset.x = std::clamp( position.x() - PickingOffset
 			, 0
@@ -250,9 +276,6 @@ namespace castor3d
 		m_commandBuffer->memoryBarrier( pipelineStageFlags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_colourView.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
@@ -291,40 +314,42 @@ namespace castor3d
 			, VK_PIPELINE_STAGE_HOST_BIT
 			, m_stagingBuffer->getBuffer().makeHostRead() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_colourView.makeShaderInputResource( layout ) );
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, m_colourView.makeColourAttachment( layout ) );
 		m_commandBuffer->endDebugBlock();
-#endif
-
 		m_commandBuffer->end();
 
 		std::vector< VkSemaphore > semaphores;
 		std::vector< VkPipelineStageFlags > dstStageMasks;
-		convert( toWait, semaphores, dstStageMasks );
-		queueData->queue->submit( *m_commandBuffer
+		convert( m_toWait, semaphores, dstStageMasks );
+		queueData->queue->submit( { *m_commandBuffer }
 			, semaphores
 			, dstStageMasks
-			, {}
+			, ashes::VkSemaphoreArray{}
 			, *m_transferFence );
 		m_transferFence->wait( ashes::MaxTimeout );
 		m_transferFence->reset();
+		m_toWait.clear();
 
+#endif
 #if !C3D_DebugPicking
+
 		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), 0u ) )
 		{
 			std::copy( data, data + m_stagingBuffer->getCount(), m_buffer.begin() );
 			m_stagingBuffer->unlock();
 		}
+
 #endif
 
 		auto & result = *( m_buffer.begin() + BufferOffset );
 		log::trace << cuT( "Picked" )
-			<< cuT( ": " ) << result->x
-			<< cuT( ", " ) << result->y
-			<< cuT( ", " ) << result->z
-			<< cuT( ", " ) << result->w
-			<< cuT( ", at " ) << position[0]
-			<< cuT( "x" ) << position[1] << std::endl;
+			<< cuT( ": " ) << std::dec << result->x
+			<< cuT( ", " ) << std::dec << result->y
+			<< cuT( ", " ) << std::dec << result->z
+			<< cuT( ", " ) << std::dec << result->w
+			<< cuT( ", at " ) << std::dec << position[0]
+			<< cuT( "x" ) << std::dec << position[1] << std::endl;
 		return result;
 	}
 
