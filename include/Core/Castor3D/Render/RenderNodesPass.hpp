@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
@@ -412,6 +413,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual TextureFlags getTexturesMask()const;
 		C3D_API bool isValidPass( Pass const & pass )const;
+		C3D_API bool isValidRenderable( RenderedObject const & object )const;
 		C3D_API bool hasNodes()const;
 		C3D_API bool isPassEnabled()const;
 		C3D_API Scene & getScene()const;
@@ -588,6 +590,7 @@ namespace castor3d
 		C3D_API virtual void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 		C3D_API virtual bool doAreValidPassFlags( PassFlags const & passFlags )const;
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
+		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
 		C3D_API virtual PassFlags doAdjustPassFlags( PassFlags flags )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;

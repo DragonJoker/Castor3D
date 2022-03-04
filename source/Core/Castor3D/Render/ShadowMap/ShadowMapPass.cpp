@@ -61,6 +61,11 @@ namespace castor3d
 		}
 	}
 
+	bool ShadowMapPass::doIsValidRenderable( RenderedObject const & object )const
+	{
+		return object.isShadowCaster();
+	}
+
 	void ShadowMapPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
