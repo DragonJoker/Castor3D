@@ -503,18 +503,42 @@ namespace castor3d
 		if ( size )
 		{
 			auto & renderSystem = *getOwner()->getOwner()->getRenderSystem();
-			auto & device = renderSystem.getRenderDevice();
-			auto offset = m_bufferOffset.getVertexOffset();
 			auto mappedSize = ashes::getAlignedSize( std::min( size, m_bufferOffset.getVertexCount< InterleavedVertex >() ) * sizeof( InterleavedVertex )
 				, renderSystem.getValue( GpuMin::eBufferMapSize ) );
-			ashes::StagingBuffer staging{ *device, 0u, mappedSize };
+			auto & device = renderSystem.getRenderDevice();
 			auto data = device.graphicsData();
-			staging.uploadBufferData( *data->queue
-				, *data->commandPool
+
+			if ( !m_staging || mappedSize > m_staging->getBuffer().getSize() )
+			{
+				m_staging = std::make_unique< ashes::StagingBuffer >( *device, 0u, mappedSize );
+			}
+
+			if ( !m_uploadCmd )
+			{
+				m_uploadCmd = data->commandPool->createCommandBuffer( getOwner()->getName() + std::to_string( m_id ) + "Upload"
+					, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+				m_uploadFence = device->createFence( getOwner()->getName() + std::to_string( m_id ) + "Upload"
+					, VK_FENCE_CREATE_SIGNALED_BIT );
+			}
+
+			m_uploadFence->reset();
+			m_uploadCmd->begin();
+			m_staging->uploadBufferData( *m_uploadCmd
 				, reinterpret_cast< uint8_t const * >( m_points.data() )
 				, m_points.size() * sizeof( InterleavedVertex )
-				, offset
+				, m_bufferOffset.getVertexOffset()
 				, m_bufferOffset.getVertexBuffer() );
+			m_uploadCmd->end();
+			data->queue->submit( *m_uploadCmd
+				, m_uploadFence.get() );
+			m_uploadFence->wait( ashes::MaxTimeout );
+
+			if ( !m_dynamic )
+			{
+				m_staging.reset();
+				m_uploadCmd.reset();
+				m_uploadFence.reset();
+			}
 		}
 	}
 }
