@@ -81,6 +81,7 @@ namespace castor3d
 		void doUpdateNodes( QueueRenderNodes & nodes );
 
 	private:
+		bool doIsValidRenderable( RenderedObject const & object )const override;
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;

@@ -541,6 +541,7 @@ namespace castor3d
 				culled->pass.prepareTextures();
 
 				if ( renderPass.isValidPass( culled->pass )
+					&& renderPass.isValidRenderable( culled->instance )
 					&& culled->instance.getParent() != renderPass.getIgnoredNode() )
 				{
 					bool needsFront = renderPass.getRenderMode() == RenderMode::eTransparentOnly
@@ -593,6 +594,7 @@ namespace castor3d
 				culled->pass.prepareTextures();
 
 				if ( renderPass.isValidPass( culled->pass )
+					&& renderPass.isValidRenderable( culled->instance )
 					&& culled->instance.getNode() != renderPass.getIgnoredNode() )
 				{
 					addRenderNode( *culled
