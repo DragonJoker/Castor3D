@@ -393,6 +393,11 @@ namespace castor3d
 		return doIsValidPass( pass );
 	}
 
+	bool RenderNodesPass::isValidRenderable( RenderedObject const & object )const
+	{
+		return doIsValidRenderable( object );
+	}
+
 	bool RenderNodesPass::hasNodes()const
 	{
 		return m_renderQueue->hasNodes();
@@ -618,6 +623,11 @@ namespace castor3d
 	{
 		return ( pass.getRenderPassInfo() == nullptr || pass.getRenderPassInfo()->create == nullptr )
 			&& doAreValidPassFlags( pass.getPassFlags() );
+	}
+
+	bool RenderNodesPass::doIsValidRenderable( RenderedObject const & object )const
+	{
+		return true;
 	}
 
 	PassFlags RenderNodesPass::doAdjustPassFlags( PassFlags flags )const
