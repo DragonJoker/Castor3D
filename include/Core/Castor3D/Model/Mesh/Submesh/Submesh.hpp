@@ -20,7 +20,9 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
-#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <unordered_map>
 
@@ -391,6 +393,7 @@ namespace castor3d
 		InstantiationComponentSPtr m_instantiation;
 		IndexMappingSPtr m_indexMapping;
 		ProgramFlags m_programFlags{ 0u };
+		bool m_dynamic{ false };
 		bool m_generated{ false };
 		bool m_initialised{ false };
 		bool m_dirty{ true };
@@ -400,6 +403,9 @@ namespace castor3d
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
+		ashes::StagingBufferPtr m_staging;
+		ashes::CommandBufferPtr m_uploadCmd;
+		ashes::FencePtr m_uploadFence;
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;

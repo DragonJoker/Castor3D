@@ -173,6 +173,7 @@ namespace castor3d
 
 	inline void Submesh::needsUpdate()
 	{
+		m_dynamic = true;
 		m_dirty = true;
 	}
 
