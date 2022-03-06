@@ -5,15 +5,9 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
-#if C3D_DebugFrustum
-extern bool C3D_DebugFrustumDisplay;
-#endif
-
-using namespace castor;
-
 namespace castor3d
 {
-	Camera::Camera( String const & name
+	Camera::Camera( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
 		, Viewport viewport
@@ -30,7 +24,7 @@ namespace castor3d
 		onNodeChanged( node );
 	}
 
-	Camera::Camera( String const & name
+	Camera::Camera( castor::String const & name
 		, Scene & scene
 		, SceneNode & node
 		, bool ownProjMtx )
@@ -83,11 +77,11 @@ namespace castor3d
 				castor::Point3f up{ 0.0, 1.0, 0.0 };
 				orientation.transform( right, right );
 				orientation.transform( up, up );
-				castor::Point3f front{ point::cross( right, up ) };
-				up = point::cross( front, right );
+				castor::Point3f front{ castor::point::cross( right, up ) };
+				up = castor::point::cross( front, right );
 
 				// Update view matrix
-				matrix::lookAt( m_view, position, position + front, up );
+				castor::matrix::lookAt( m_view, position, position + front, up );
 				updateFrustum();
 				m_nodeChanged = false;
 			}
@@ -108,26 +102,12 @@ namespace castor3d
 
 	bool Camera::isVisible( Geometry const & geometry, Submesh const & submesh )const
 	{
-#if C3D_DebugFrustum
-		//C3D_DebugFrustumDisplay = geometry.getName() == cuT( "buisson_droit_8" );
-
-		if ( C3D_DebugFrustumDisplay )
-		{
-			std::clog << cuT( "Geometry: " ) << geometry.getName() << cuT( " - Submesh: " ) << submesh.getId();
-		}
-#endif
 		auto & sceneNode = *geometry.getParent();
 		auto result = m_frustum.isVisible( geometry.getBoundingSphere( submesh )
 				, sceneNode.getDerivedTransformationMatrix()
 				, sceneNode.getDerivedScale() )
 			&& m_frustum.isVisible( geometry.getBoundingBox( submesh )
 				, sceneNode.getDerivedTransformationMatrix() );
-#if C3D_DebugFrustum
-		if ( C3D_DebugFrustumDisplay )
-		{
-			std::clog << std::endl;
-		}
-#endif
 		return result;
 	}
 
