@@ -1,5 +1,7 @@
 #include "Castor3D/Render/Frustum.hpp"
 
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
@@ -8,15 +10,91 @@ using namespace castor;
 
 #define C3D_DisableFrustumCulling 0
 
-#if C3D_DebugFrustum
-bool C3D_DebugFrustumDisplay = false;
-#endif
-
 namespace castor3d
 {
+	namespace
+	{
+		void updatePoints( std::array< castor::Point3f, 8u > const & corners
+			, std::array< InterleavedVertex, 24u > & points )
+		{
+			uint32_t index = 0u;
+			// Near face
+			points[index++].pos = corners[size_t( FrustumCorner::eNearLeftBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearRightBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearRightTop )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearLeftTop )];
+
+			// Far face
+			points[index++].pos = corners[size_t( FrustumCorner::eFarRightBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarLeftBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarLeftTop )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarRightTop )];
+
+			// Left face
+			points[index++].pos = corners[size_t( FrustumCorner::eFarLeftBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearLeftBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearLeftTop )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarLeftTop )];
+
+			// Right face
+			points[index++].pos = corners[size_t( FrustumCorner::eNearRightBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarRightBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarRightTop )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearRightTop )];
+
+			// Bottom face
+			points[index++].pos = corners[size_t( FrustumCorner::eNearLeftBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarLeftBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarRightBottom )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearRightBottom )];
+
+			// Top face
+			points[index++].pos = corners[size_t( FrustumCorner::eNearLeftTop )];
+			points[index++].pos = corners[size_t( FrustumCorner::eNearRightTop )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarRightTop )];
+			points[index++].pos = corners[size_t( FrustumCorner::eFarLeftTop )];
+		}
+	}
+
 	Frustum::Frustum( Viewport & viewport )
 		: m_viewport{ viewport }
 	{
+		uint32_t index = 0u;
+		// Near face
+		m_points[index++].nml = { 0.0f, 0.0f, -1.0f };
+		m_points[index++].nml = { 0.0f, 0.0f, -1.0f };
+		m_points[index++].nml = { 0.0f, 0.0f, -1.0f };
+		m_points[index++].nml = { 0.0f, 0.0f, -1.0f };
+
+		// Far face
+		m_points[index++].nml = { 0.0f, 0.0f, +1.0f };
+		m_points[index++].nml = { 0.0f, 0.0f, +1.0f };
+		m_points[index++].nml = { 0.0f, 0.0f, +1.0f };
+		m_points[index++].nml = { 0.0f, 0.0f, +1.0f };
+
+		// Left face
+		m_points[index++].nml = { -1.0f, 0.0f, 0.0f };
+		m_points[index++].nml = { -1.0f, 0.0f, 0.0f };
+		m_points[index++].nml = { -1.0f, 0.0f, 0.0f };
+		m_points[index++].nml = { -1.0f, 0.0f, 0.0f };
+
+		// Right face
+		m_points[index++].nml = { +1.0f, 0.0f, 0.0f };
+		m_points[index++].nml = { +1.0f, 0.0f, 0.0f };
+		m_points[index++].nml = { +1.0f, 0.0f, 0.0f };
+		m_points[index++].nml = { +1.0f, 0.0f, 0.0f };
+
+		// Bottom face
+		m_points[index++].nml = { 0.0f, -1.0f, 0.0f };
+		m_points[index++].nml = { 0.0f, -1.0f, 0.0f };
+		m_points[index++].nml = { 0.0f, -1.0f, 0.0f };
+		m_points[index++].nml = { 0.0f, -1.0f, 0.0f };
+
+		// Top face
+		m_points[index++].nml = { 0.0f, +1.0f, 0.0f };
+		m_points[index++].nml = { 0.0f, +1.0f, 0.0f };
+		m_points[index++].nml = { 0.0f, +1.0f, 0.0f };
+		m_points[index++].nml = { 0.0f, +1.0f, 0.0f };
 	}
 
 	Frustum::Planes Frustum::update( castor::Matrix4x4f const & projection
@@ -66,15 +144,24 @@ namespace castor3d
 		m_planes[size_t( FrustumPlane::eRight )].set( castor::Point3f{ points[size_t( FrustumPlane::eRight )] }, points[size_t( FrustumPlane::eRight )][3] );
 		m_planes[size_t( FrustumPlane::eTop )].set( castor::Point3f{ points[size_t( FrustumPlane::eTop )] }, points[size_t( FrustumPlane::eTop )][3] );
 		m_planes[size_t( FrustumPlane::eBottom )].set( castor::Point3f{ points[size_t( FrustumPlane::eBottom )] }, points[size_t( FrustumPlane::eBottom )][3] );
-#endif
-#if C3D_DebugFrustum
-		std::clog << cuT( "Frustum" ) << std::endl
-			<< cuT( "  - Bottom: " ) << m_planes[size_t( FrustumPlane::eBottom )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eBottom )].getDistance() << std::endl
-			<< cuT( "  - Far:    " ) << m_planes[size_t( FrustumPlane::eFar )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eFar )].getDistance() << std::endl
-			<< cuT( "  - Left:   " ) << m_planes[size_t( FrustumPlane::eLeft )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eLeft )].getDistance() << std::endl
-			<< cuT( "  - Near:   " ) << m_planes[size_t( FrustumPlane::eNear )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eNear )].getDistance() << std::endl
-			<< cuT( "  - Right:  " ) << m_planes[size_t( FrustumPlane::eRight )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eRight )].getDistance() << std::endl
-			<< cuT( "  - Top:    " ) << m_planes[size_t( FrustumPlane::eTop )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eTop )].getDistance() << std::endl;
+
+		std::array< castor::Point3f, 8u > corners;
+		corners[size_t( FrustumCorner::eFarLeftBottom )]   = { -1.0f, -1.0f, 1.0f };
+		corners[size_t( FrustumCorner::eFarLeftTop )]      = { -1.0f,  1.0f, 1.0f };
+		corners[size_t( FrustumCorner::eFarRightTop )]     = { -1.0f,  1.0f, 1.0f };
+		corners[size_t( FrustumCorner::eFarRightBottom )]  = {  1.0f, -1.0f, 1.0f };
+		corners[size_t( FrustumCorner::eNearLeftBottom )]  = { -1.0f, -1.0f, 0.0f };
+		corners[size_t( FrustumCorner::eNearLeftTop )]     = { -1.0f,  1.0f, 0.0f };
+		corners[size_t( FrustumCorner::eNearRightTop )]    = {  1.0f,  1.0f, 0.0f };
+		corners[size_t( FrustumCorner::eNearRightBottom )] = {  1.0f, -1.0f, 0.0f };
+		auto invViewProj = viewProjection.getInverse();
+
+		for ( auto & corner : corners )
+		{
+			corner = invViewProj * corner;
+		}
+
+		updatePoints( corners, m_points );
 #endif
 
 		return m_planes;
@@ -143,15 +230,8 @@ namespace castor3d
 		m_planes[size_t( FrustumPlane::eTop )].set( corners[size_t( FrustumCorner::eNearRightTop )]
 			, corners[size_t( FrustumCorner::eNearLeftTop )]
 			, corners[size_t( FrustumCorner::eFarLeftTop )] );
-#endif
-#if C3D_DebugFrustum
-		std::clog << cuT( "Frustum" ) << std::endl
-			<< cuT( "  - Bottom: " ) << m_planes[size_t( FrustumPlane::eBottom )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eBottom )].getDistance() << std::endl
-			<< cuT( "  - Far:    " ) << m_planes[size_t( FrustumPlane::eFar )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eFar )].getDistance() << std::endl
-			<< cuT( "  - Left:   " ) << m_planes[size_t( FrustumPlane::eLeft )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eLeft )].getDistance() << std::endl
-			<< cuT( "  - Near:   " ) << m_planes[size_t( FrustumPlane::eNear )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eNear )].getDistance() << std::endl
-			<< cuT( "  - Right:  " ) << m_planes[size_t( FrustumPlane::eRight )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eRight )].getDistance() << std::endl
-			<< cuT( "  - Top:    " ) << m_planes[size_t( FrustumPlane::eTop )].getNormal() << " - " << m_planes[size_t( FrustumPlane::eTop )].getDistance() << std::endl;
+
+		updatePoints( corners, m_points );
 #endif
 
 		return m_planes;
@@ -195,54 +275,6 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#	if C3D_DebugFrustum
-
-		if ( C3D_DebugFrustumDisplay )
-		{
-			if ( !result )
-			{
-				auto index = 0u;
-
-				while ( results[index] )
-				{
-					++index;
-				}
-
-				static String const names[]
-				{
-					cuT( "  Near" ),
-					cuT( "   Far" ),
-					cuT( "  Left" ),
-					cuT( " Right" ),
-					cuT( "   Top" ),
-					cuT( "Bottom" )
-				};
-
-				auto vp = aabb.getPositiveVertex( m_planes[index].getNormal() );
-				auto dist = m_planes[index].distance( vp );
-				auto center = aabb.getCenter();
-				auto dimension = aabb.getDimensions();
-				std::clog << cuT( " - BoundingBox" )
-					<< cuT( " - P: " ) << names[index]
-					<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
-					<< cuT( " - V: " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << vp[2]
-					<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[2]
-					<< cuT( " - S: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << dimension[2];
-			}
-			else
-			{
-				std::clog << cuT( " - BoundingBox - OK" );
-			}
-		}
-
-#	endif
-
 		return result;
 #endif
 	}
@@ -274,46 +306,6 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
 
-#	if C3D_DebugFrustum
-
-		if ( C3D_DebugFrustumDisplay )
-		{
-			if ( !result )
-			{
-				auto index = 0u;
-
-				while ( results[index] )
-				{
-					++index;
-				}
-
-				static String const names[]
-				{
-					cuT( "  Near" ),
-					cuT( "   Far" ),
-					cuT( "  Left" ),
-					cuT( " Right" ),
-					cuT( "   Top" ),
-					cuT( "Bottom" )
-				};
-
-				auto dist = m_planes[index].distance( center );
-				std::clog << cuT( " - BoundingSphere" )
-					<< cuT( " - P: " ) << names[index]
-					<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
-					<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << center[2]
-					<< cuT( " - R: " ) << std::setw( 7 ) << std::setprecision( 4 ) << radius;
-			}
-			else
-			{
-				std::clog << cuT( " - BoundingSphere - OK" );
-			}
-		}
-
-#	endif
-
 		return result;
 #endif
 	}
@@ -339,45 +331,6 @@ namespace castor3d
 			&& results[size_t( FrustumPlane::eRight )]
 			&& results[size_t( FrustumPlane::eTop )]
 			&& results[size_t( FrustumPlane::eBottom )];
-
-#	if C3D_DebugFrustum
-
-		if ( C3D_DebugFrustumDisplay )
-		{
-			if ( !result )
-			{
-				auto index = 0u;
-
-				while ( results[index] )
-				{
-					++index;
-				}
-
-				static String const names[]
-				{
-					cuT( "  Near" ),
-					cuT( "   Far" ),
-					cuT( "  Left" ),
-					cuT( " Right" ),
-					cuT( "   Top" ),
-					cuT( "Bottom" )
-				};
-
-				auto dist = m_planes[index].distance( point );
-				std::clog << cuT( " - Point" )
-					<< cuT( " - P: " ) << names[index]
-					<< cuT( " - D: " ) << std::setw( 7 ) << std::setprecision( 4 ) << dist
-					<< cuT( " - C: " ) << std::setw( 7 ) << std::setprecision( 4 ) << point[0]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << point[1]
-					<< cuT( ", " ) << std::setw( 7 ) << std::setprecision( 4 ) << point[2];
-			}
-			else
-			{
-				std::clog << cuT( " - Point - OK" );
-			}
-		}
-
-#	endif
 
 		return result;
 #endif
