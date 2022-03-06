@@ -54,6 +54,7 @@ namespace castor3d
 		std::vector< std::unique_ptr< GaussianBlur > > m_blurs;
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;
+		std::vector< MeshResPtr > m_frustumMeshes;
 	};
 }
 

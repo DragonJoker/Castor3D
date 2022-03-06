@@ -5,10 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_Frustum_H___
 
 #include "RenderModule.hpp"
+#include "Castor3D/Model/VertexGroup.hpp"
 
 #include <CastorUtils/Math/PlaneEquation.hpp>
-
-#define C3D_DebugFrustum 0
 
 namespace castor3d
 {
@@ -117,9 +116,15 @@ namespace castor3d
 		 */
 		C3D_API bool isVisible( castor::Point3f const & point )const;
 
+		std::array< InterleavedVertex, 6u * 4u > const & getPoints()const
+		{
+			return m_points;
+		}
+
 	private:
 		Viewport & m_viewport;
 		Planes m_planes;
+		std::array< InterleavedVertex, 6u * 4u > m_points;
 	};
 }
 
