@@ -2,9 +2,16 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -31,10 +38,84 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
+#define C3D_DebugCascadeFrustum 0
+
 namespace castor3d
 {
 	namespace
 	{
+#if C3D_DebugCascadeFrustum
+
+		MeshResPtr doCreateFrustumMesh( castor::String const name
+			, Scene & scene
+			, castor::RgbColour const & colour
+			, castor::String const & colourName )
+		{
+			auto result = scene.getMeshCache().add( name, scene );
+			result.lock()->setSerialisable( false );
+			auto submesh = result.lock()->createSubmesh();
+			InterleavedVertexArray vertex{
+				InterleavedVertex{}.position( { -1, -1, -1 } ),
+				InterleavedVertex{}.position( { -1, +1, -1 } ),
+				InterleavedVertex{}.position( { +1, +1, -1 } ),
+				InterleavedVertex{}.position( { +1, -1, -1 } ),
+				InterleavedVertex{}.position( { -1, -1, +1 } ),
+				InterleavedVertex{}.position( { -1, +1, +1 } ),
+				InterleavedVertex{}.position( { +1, +1, +1 } ),
+				InterleavedVertex{}.position( { +1, -1, +1 } ),
+				InterleavedVertex{}.position( { -1, -1, -1 } ),
+				InterleavedVertex{}.position( { -1, +1, -1 } ),
+				InterleavedVertex{}.position( { +1, +1, -1 } ),
+				InterleavedVertex{}.position( { +1, -1, -1 } ),
+				InterleavedVertex{}.position( { -1, -1, +1 } ),
+				InterleavedVertex{}.position( { -1, +1, +1 } ),
+				InterleavedVertex{}.position( { +1, +1, +1 } ),
+				InterleavedVertex{}.position( { +1, -1, +1 } ),
+				InterleavedVertex{}.position( { -1, -1, -1 } ),
+				InterleavedVertex{}.position( { -1, +1, -1 } ),
+				InterleavedVertex{}.position( { +1, +1, -1 } ),
+				InterleavedVertex{}.position( { +1, -1, -1 } ),
+				InterleavedVertex{}.position( { -1, -1, +1 } ),
+				InterleavedVertex{}.position( { -1, +1, +1 } ),
+				InterleavedVertex{}.position( { +1, +1, +1 } ),
+				InterleavedVertex{}.position( { +1, -1, +1 } ), };
+			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST );
+			submesh->addPoints( vertex );
+			auto mapping = std::make_shared< TriFaceMapping >( *submesh );
+			mapping->addQuadFace( 0u, 1u, 2u, 3u );
+			mapping->addQuadFace( 4u, 5u, 6u, 7u );
+			mapping->addQuadFace( 8u, 9u, 10u, 11u );
+			mapping->addQuadFace( 12u, 13u, 14u, 15u );
+			mapping->addQuadFace( 16u, 17u, 18u, 19u );
+			mapping->addQuadFace( 20u, 21u, 22u, 23u );
+			submesh->setIndexMapping( mapping );
+			MaterialResPtr material;
+			castor::String matName = cuT( "Frustum_" ) + colourName;
+
+			if ( !scene.getEngine()->getMaterialCache().has( matName ) )
+			{
+				material = scene.getEngine()->getMaterialCache().add( matName
+					, *scene.getEngine()
+					, scene.getPassesType() );
+				auto pass = material.lock()->createPass();
+				pass->enableLighting( false );
+				pass->enablePicking( false );
+				pass->setColour( colour );
+				pass->setOpacity( 0.2f );
+			}
+			else
+			{
+				material = scene.getEngine()->getMaterialCache().find( matName );
+			}
+
+			submesh->setDefaultMaterial( material.lock().get() );
+			result.lock()->computeContainers();
+			scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
+			return result;
+		}
+
+#endif
+
 		std::vector< ShadowMap::PassDataPtr > createPasses( crg::ResourceHandler & handler
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< crg::RunnableGraphPtr > & runnables
@@ -171,6 +252,41 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
+#if C3D_DebugCascadeFrustum
+		std::array< castor::RgbColour, 4u > colours{ castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed )
+			, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eGreen )
+			, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eBlue )
+			, castor::RgbColour::fromComponents( 1.0f, 1.0f, 0.0f ) };
+		std::array< castor::String, 4u > colourNames{ cuT( "Red" )
+			, cuT( "Green" )
+			, cuT( "Blue" )
+			, cuT( "Yellow" ) };
+
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			auto name = "CascadeFrustum" + std::to_string( cascade );
+			auto mesh = doCreateFrustumMesh( name, scene, colours[cascade], colourNames[cascade] );
+			m_frustumMeshes.push_back( mesh );
+
+			if ( !scene.getGeometryCache().has( name ) )
+			{
+				auto sceneNode = scene.getSceneNodeCache().add( name, scene ).lock();
+				auto geometry = std::make_shared< Geometry >( name, scene, *sceneNode, mesh );
+				geometry->setShadowCaster( false );
+				geometry->setCulled( false );
+
+				for ( auto & submesh : *geometry->getMesh().lock() )
+				{
+					geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
+				}
+
+				sceneNode->attachTo( *scene.getObjectRootNode() );
+				sceneNode->setVisible( false );
+				scene.getGeometryCache().add( std::move( geometry ) );
+			}
+		}
+
+#endif
 		stepProgressBar( progress, "Creating ShadowMapDirectional" );
 	}
 
@@ -194,9 +310,35 @@ namespace castor3d
 					auto & culler = m_passes[cascade]->pass->getCuller();
 					auto & lightCamera = culler.getCamera();
 					lightCamera.attachTo( *node );
-					lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
-					lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
+					lightCamera.setProjection( directional.getProjMatrix( cascade ) );
+					lightCamera.setView( directional.getViewMatrix( cascade ) );
 					lightCamera.updateFrustum();
+
+#if C3D_DebugCascadeFrustum
+					auto name = "CascadeFrustum" + std::to_string( cascade );
+					auto & scene = *light.getScene();
+					auto sceneNode = scene.getGeometryCache().tryFind( name ).lock();
+					sceneNode->setVisible( true );
+					auto & frustum = lightCamera.getFrustum();
+					auto mesh = m_frustumMeshes[cascade].lock();
+					auto submesh = mesh->getSubmesh( 0u );
+					auto & points = submesh->getPoints();
+
+					for ( auto i = 0u; i < points.size(); ++i )
+					{
+						points[i] = frustum.getPoints()[i];
+					}
+
+					submesh->needsUpdate();
+					submesh->computeContainers();
+					scene.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [submesh]( RenderDevice const & device
+							, QueueData const & queueData )
+						{
+							submesh->update();
+						} ) );
+#endif
+
 				}
 
 				updater.index = cascade;
