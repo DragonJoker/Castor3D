@@ -201,12 +201,13 @@ namespace C3dAssimp
 		{
 		public:
 			static void submit( aiMaterial const & material
+				, aiScene const & scene
 				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
 				, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
-				PassFiller vis{ material, sampler, importer, textureRemaps, pass };
+				PassFiller vis{ material, scene, sampler, importer, textureRemaps, pass };
 				pass.accept( vis );
 				vis.finish();
 				pass.prepareTextures();
@@ -214,12 +215,14 @@ namespace C3dAssimp
 
 		private:
 			PassFiller( aiMaterial const & material
+				, aiScene const & scene
 				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
 				, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & result )
 				: castor3d::PassVisitor{ {} }
 				, m_material{ material }
+				, m_scene{ scene }
 				, m_sampler{ sampler }
 				, m_importer{ importer }
 				, m_textureRemaps{ textureRemaps }
@@ -263,7 +266,6 @@ namespace C3dAssimp
 					spcInfo = getTextureInfo( castor3d::TextureFlag::eSpecular );
 				}
 
-
 				if ( spcInfo.name.empty() )
 				{
 					spcInfo = getTextureInfo( aiTextureType_UNKNOWN, 0 );
@@ -281,6 +283,34 @@ namespace C3dAssimp
 						}
 
 						m_textureRemaps.emplace( TextureFlag::eSpecular, spcConfig );
+					}
+				}
+
+				if ( opaInfo.name.empty() )
+				{
+					aiString value;
+					if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
+					{
+						std::string mode = value.C_Str();
+
+						if ( mode != "OPAQUE" )
+						{
+							auto colConfig = getRemap( TextureFlag::eDiffuse, TextureConfiguration::DiffuseTexture );
+							colConfig.opacityMask[0] = 0xFF000000;
+							m_textureRemaps.emplace( TextureFlag::eDiffuse, colConfig );
+							m_result.setTwoSided( true );
+							m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
+							m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+
+							if ( mode == "BLEND" )
+							{
+								m_result.setTwoSided( true );
+								m_result.setAlphaValue( 0.95f );
+								m_result.setAlphaFunc( VK_COMPARE_OP_GREATER );
+								m_result.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+								m_result.setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+							}
+						}
 					}
 				}
 
@@ -509,6 +539,14 @@ namespace C3dAssimp
 						value = ior;
 					}
 				}
+				else if ( name == "Alpha ref. value" )
+				{
+					float ref{ 1.0f };
+					if ( m_material.Get( AI_MATKEY_GLTF_ALPHACUTOFF, ref ) == aiReturn_SUCCESS )
+					{
+						value = ref;
+					}
+				}
 			}
 
 			void visit( castor::String const & name
@@ -657,28 +695,65 @@ namespace C3dAssimp
 				if ( !info.name.empty() )
 				{
 					auto & loader = m_result.getOwner()->getEngine()->getImageLoader();
-					auto path = castor::Path{ info.name };
 
 					try
 					{
-						auto sourceInfo = m_importer.loadTexture( m_sampler, path, texConfig );
-						auto layout = loader.load( path.getFileName(), sourceInfo.folder() / sourceInfo.relative(), { false, false, false } ).getLayout();
-						texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
-							, castor::Angle::fromRadians( info.transform.mRotation )
-							, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
-						auto create = ashes::ImageCreateInfo{ 0u
-							, VkImageType( layout.type )
-							, VkFormat( layout.format )
-							, { layout.extent->x, layout.extent->y, layout.extent->z }
-							, layout.levels
-							, layout.layers
-							, VK_SAMPLE_COUNT_1_BIT
-							, VK_IMAGE_TILING_OPTIMAL
-							, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
-						m_importer.loadTexture( m_sampler
-							, castor::Path{ info.name }
-							, { create, texConfig }
-							, m_result );
+						if ( info.name[0] == '*' )
+						{
+							auto id = uint32_t( castor::string::toInt( info.name.substr( 1u ) ) );
+
+							if ( id < m_scene.mNumTextures )
+							{
+								auto texture = m_scene.mTextures[id];
+								castor::ByteArray data;
+								data.resize( texture->mWidth );
+								std::memcpy( data.data(), texture->pcData, data.size() );
+								auto sourceInfo = m_importer.loadTexture( m_sampler
+									, "Image" + castor::string::toString( id )
+									, texture->achFormatHint
+									, std::move( data )
+									, texConfig );
+								auto layout = loader.load( info.name
+									, sourceInfo.type()
+									, sourceInfo.buffer().data()
+									, uint32_t( sourceInfo.buffer().size() )
+									, { false, false, false } ).getLayout();
+								texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+									, castor::Angle::fromRadians( info.transform.mRotation )
+									, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
+								auto create = ashes::ImageCreateInfo{ 0u
+									, VkImageType( layout.type )
+									, VkFormat( layout.format )
+									, { layout.extent->x, layout.extent->y, layout.extent->z }
+									, layout.levels
+									, layout.layers
+									, VK_SAMPLE_COUNT_1_BIT
+									, VK_IMAGE_TILING_OPTIMAL
+									, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
+								m_result.registerTexture( std::move( sourceInfo )
+									, { create, texConfig } );
+							}
+						}
+						else
+						{
+							auto path = castor::Path{ info.name };
+							auto sourceInfo = m_importer.loadTexture( m_sampler, path, texConfig );
+							auto layout = loader.load( path.getFileName(), sourceInfo.folder() / sourceInfo.relative(), { false, false, false } ).getLayout();
+							texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+								, castor::Angle::fromRadians( info.transform.mRotation )
+								, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
+							auto create = ashes::ImageCreateInfo{ 0u
+								, VkImageType( layout.type )
+								, VkFormat( layout.format )
+								, { layout.extent->x, layout.extent->y, layout.extent->z }
+								, layout.levels
+								, layout.layers
+								, VK_SAMPLE_COUNT_1_BIT
+								, VK_IMAGE_TILING_OPTIMAL
+								, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
+							m_result.registerTexture( std::move( sourceInfo )
+								, { create, texConfig } );
+						}
 					}
 					catch ( std::exception & )
 					{
@@ -806,6 +881,7 @@ namespace C3dAssimp
 
 		private:
 			aiMaterial const & m_material;
+			aiScene const & m_scene;
 			castor3d::SamplerRes m_sampler;
 			castor3d::MeshImporter const & m_importer;
 			std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
@@ -874,6 +950,7 @@ namespace C3dAssimp
 			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 			, Pass & pass
 			, aiMaterial const & aiMaterial
+			, aiScene const & aiScene
 			, AssimpImporter & importer )
 		{
 			aiShadingMode shadingMode{};
@@ -887,7 +964,7 @@ namespace C3dAssimp
 				log::warn << "Switching from " << passFactory.getIdName( srcType ) << " to " << passFactory.getIdName( dstType ) << " pass type." << std::endl;
 			}
 
-			PassFiller::submit( aiMaterial, sampler, importer, textureRemaps, pass );
+			PassFiller::submit( aiMaterial, aiScene, sampler, importer, textureRemaps, pass );
 
 			if ( !pass.getTextureUnits( TextureFlag::eOpacity ).empty()
 				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
@@ -1578,7 +1655,7 @@ namespace C3dAssimp
 
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
-			material = doProcessMaterial( scene, *aiScene.mMaterials[aiMesh.mMaterialIndex], aiMesh.mMaterialIndex );
+			material = doProcessMaterial( scene, aiScene, *aiScene.mMaterials[aiMesh.mMaterialIndex], aiMesh.mMaterialIndex );
 			log::debug << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( " (" ) << material.lock()->getName() << cuT( ")]" ) << std::endl;
 		}
 
@@ -1683,6 +1760,7 @@ namespace C3dAssimp
 	}
 
 	MaterialResPtr AssimpImporter::doProcessMaterial( Scene & scene
+		, aiScene const & aiScene
 		, aiMaterial const & aiMaterial
 		, uint32_t index )
 	{
@@ -1720,6 +1798,7 @@ namespace C3dAssimp
 				, m_textureRemaps
 				, *pass
 				, aiMaterial
+				, aiScene
 				, *this );
 		}
 

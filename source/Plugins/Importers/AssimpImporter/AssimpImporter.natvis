@@ -49,6 +49,367 @@
 		</Expand>
 	</Type>
 
+	<Type Name="aiVector3D">
+		<DisplayString>{x} {y} {z}</DisplayString>
+		<Expand>
+			<Item Name="[x]">x</Item>
+			<Item Name="[y]">y</Item>
+			<Item Name="[z]">z</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVector4D">
+		<DisplayString>{x} {y} {z} {w}</DisplayString>
+		<Expand>
+			<Item Name="[x]">x</Item>
+			<Item Name="[y]">y</Item>
+			<Item Name="[z]">z</Item>
+			<Item Name="[w]">w</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiQuaternion">
+		<DisplayString>{w} {x} {y} {z}</DisplayString>
+		<Expand>
+			<Item Name="[w]">w</Item>
+			<Item Name="[x]">x</Item>
+			<Item Name="[y]">y</Item>
+			<Item Name="[z]">z</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiColor3D">
+		<DisplayString>{r} {g} {b}</DisplayString>
+		<Expand>
+			<Item Name="[r]">r</Item>
+			<Item Name="[g]">g</Item>
+			<Item Name="[b]">b</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiColor4D">
+		<DisplayString>{r} {g} {b} {a}</DisplayString>
+		<Expand>
+			<Item Name="[r]">r</Item>
+			<Item Name="[g]">g</Item>
+			<Item Name="[b]">b</Item>
+			<Item Name="[a]">a</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiFace">
+		<DisplayString>{mNumIndices}</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>mNumIndices</Size>
+				<ValuePointer>mIndices</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVertexWeight">
+		<DisplayString>{mVertexId} {mWeight}</DisplayString>
+		<Expand>
+			<Item Name="[vertexId]">mVertexId</Item>
+			<Item Name="[weight]">mWeight</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVectorKey">
+		<DisplayString>{mTime} {mValue}</DisplayString>
+		<Expand>
+			<Item Name="[time]">mTime</Item>
+			<Item Name="[value]">mValue</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiQuatKey">
+		<DisplayString>{mTime} {mValue}</DisplayString>
+		<Expand>
+			<Item Name="[time]">mTime</Item>
+			<Item Name="[value]">mValue</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiBone">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Item Name="[offsetMatrix]">mOffsetMatrix</Item>
+			<Synthetic Name="[weights]">
+				<DisplayString>[size={mNumWeights}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumWeights</Size>
+						<ValuePointer>mWeights</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiNodeAnim">
+		<DisplayString>{mNodeName}</DisplayString>
+		<Expand>
+			<Item Name="[nodeName]">mNodeName</Item>
+			<Item Name="[preState]">mPreState</Item>
+			<Item Name="[postState]">mPostState</Item>
+			<Synthetic Name="[positionKeys]">
+				<DisplayString>[size={mNumPositionKeys}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumPositionKeys</Size>
+						<ValuePointer>mPositionKeys</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[rotationKeys]">
+				<DisplayString>[size={mNumRotationKeys}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumRotationKeys</Size>
+						<ValuePointer>mRotationKeys</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[scalingKeys]">
+				<DisplayString>[size={mNumScalingKeys}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumScalingKeys</Size>
+						<ValuePointer>mScalingKeys</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiAnimation">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Item Name="[duration]">mDuration</Item>
+			<Item Name="[ticksPerSecond]">mTicksPerSecond</Item>
+			<Synthetic Name="[channels]">
+				<DisplayString>[size={mNumChannels}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumChannels</Size>
+						<ValuePointer>mChannels</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[meshChannels]">
+				<DisplayString>[size={mNumMeshChannels}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumMeshChannels</Size>
+						<ValuePointer>mMeshChannels</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[morphChannels]">
+				<DisplayString>[size={mNumMorphMeshChannels}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumMorphMeshChannels</Size>
+						<ValuePointer>mMorphMeshChannels</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiAABB">
+		<DisplayString>{mMin} {mMax}</DisplayString>
+		<Expand>
+			<Item Name="[min]">mMin</Item>
+			<Item Name="[max]">mMax</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMesh">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Item Name="[primitiveTypes]">mPrimitiveTypes</Item>
+			<Item Name="[materialIndex]">mMaterialIndex</Item>
+			<Item Name="[numUVComponents]">mNumUVComponents</Item>
+			<Item Name="[morphingMethod]">mMethod</Item>
+			<Item Name="[aabb]">mAABB</Item>
+			<Synthetic Name="[vertices]" Condition="mVertices!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mVertices</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[normals]" Condition="mNormals!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mNormals</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[tangents]" Condition="mTangents!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mTangents</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[bitangents]" Condition="mBitangents!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mBitangents</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[textureCoords]" Condition="mTextureCoords!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mTextureCoords</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[colors]" Condition="mColors!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mColors</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[faces]" Condition="mFaces!=0">
+				<DisplayString>[size={mNumFaces}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumFaces</Size>
+						<ValuePointer>mFaces</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[bones]" Condition="mBones!=0">
+				<DisplayString>[size={mNumBones}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumBones</Size>
+						<ValuePointer>mBones</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[animMeshes]" Condition="mAnimMeshes!=0">
+				<DisplayString>[size={mNumAnimMeshes}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumAnimMeshes</Size>
+						<ValuePointer>mAnimMeshes</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiAnimMesh">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Item Name="[weight]">mWeight</Item>
+			<Synthetic Name="[vertices]" Condition="mVertices!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mVertices</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[normals]" Condition="mNormals!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mNormals</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[tangents]" Condition="mTangents!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mTangents</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[bitangents]" Condition="mBitangents!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mBitangents</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[textureCoords]" Condition="mTextureCoords!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mTextureCoords</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[colors]" Condition="mColors!=0">
+				<DisplayString>[size={mNumVertices}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumVertices</Size>
+						<ValuePointer>mColors</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[faces]" Condition="mFaces!=0">
+				<DisplayString>[size={mNumFaces}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumFaces</Size>
+						<ValuePointer>mFaces</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[bones]" Condition="mBones!=0">
+				<DisplayString>[size={mNumBones}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumBones</Size>
+						<ValuePointer>mBones</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[animMeshes]" Condition="mAnimMeshes!=0">
+				<DisplayString>[size={mNumAnimMeshes}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumAnimMeshes</Size>
+						<ValuePointer>mAnimMeshes</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
 	<Type Name="aiScene">
 		<Expand>
 			<Item Name="[flags]">mFlags</Item>
