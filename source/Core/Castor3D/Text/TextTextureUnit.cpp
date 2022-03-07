@@ -41,6 +41,7 @@ namespace castor
 			auto image = texture->getPath();
 			hasTexture = !image.empty() || !texture->isStatic();
 			bool createImageFile = false;
+			auto config = unit.getConfiguration();
 
 			if ( !hasTexture
 				&& texture->isStatic() )
@@ -48,6 +49,11 @@ namespace castor
 				hasTexture = true;
 				createImageFile = true;
 				image = Path{ Path{ texture->getName() }.getFileName() + cuT( ".dds" ) };
+
+				if ( Path{ texture->getName() }.getExtension() != "dds" )
+				{
+					config.needsYInversion = 1u - config.needsYInversion;
+				}
 			}
 
 			if ( hasTexture )
@@ -126,7 +132,7 @@ namespace castor
 
 					if ( result )
 					{
-						result = writeSub( file, unit.getConfiguration(), m_type, m_isPbr );
+						result = writeSub( file, config, m_type, m_isPbr );
 						checkError( result, "configuration" );
 					}
 
@@ -136,7 +142,6 @@ namespace castor
 						auto rotate = transform.rotate.degrees();
 						auto translate = castor::Point3f{ transform.translate };
 						auto scale = castor::Point3f{ transform.scale };
-						auto & config = unit.getConfiguration();
 
 						if ( config.tileSet->z > 1 || config.tileSet->w > 1 )
 						{
