@@ -320,6 +320,60 @@ namespace castor3d
 					|| checkFlag( flags, TextureFlag::eEmissive ) );
 		}
 
+		castor::PxBufferBaseUPtr getImageBuffer( castor::Image const & image
+			, TextureConfiguration const & config )
+		{
+			auto format = ( ( isSRGBFormat( image.getPixels()->getFormat() ) && allowSRGB( config ) )
+				? image.getPixels()->getFormat()
+				: getNonSRGBFormat( image.getPixels()->getFormat() ) );
+			auto buffer = castor::PxBufferBase::createUnique( image.getPixels()->getDimensions()
+				, image.getPixels()->getLayers()
+				, image.getPixels()->getLevels()
+				, format
+				, image.getPixels()->getConstPtr()
+				, format
+				, image.getPixels()->getAlign() );
+			buffer = adaptBuffer( std::move( buffer ) );
+
+			if ( !buffer )
+			{
+				CU_LoaderError( "Couldn't adapt image buffer." );
+			}
+
+			if ( image.getPixels()->isFlipped() )
+			{
+				buffer->flip();
+			}
+
+			return buffer;
+		}
+
+		castor::PxBufferBaseUPtr getBufferImage( Engine & engine
+			, castor::String const & name
+			, castor::String const & type
+			, castor::ByteArray const & data
+			, TextureConfiguration const & config )
+		{
+			auto image = engine.getImageCache().tryFind( name );
+
+			if ( !image.lock() )
+			{
+				image = engine.getImageCache().add( name
+					, castor::ImageCreateParams{ type
+						, data
+						, { false, false, false } } );
+			}
+
+			auto img = image.lock();
+
+			if ( !img )
+			{
+				CU_LoaderError( "Couldn't load image." );
+			}
+
+			return getImageBuffer( *img, config );
+		}
+
 		castor::PxBufferBaseUPtr getFileImage( Engine & engine
 			, castor::String const & name
 			, castor::Path const & folder
@@ -342,29 +396,7 @@ namespace castor3d
 				CU_LoaderError( "Couldn't load image." );
 			}
 
-			auto format = ( ( isSRGBFormat( img->getPixels()->getFormat() ) && allowSRGB( config ) )
-				? img->getPixels()->getFormat()
-				: getNonSRGBFormat( img->getPixels()->getFormat() ) );
-			auto buffer = castor::PxBufferBase::createUnique( img->getPixels()->getDimensions()
-				, img->getPixels()->getLayers()
-				, img->getPixels()->getLevels()
-				, format
-				, img->getPixels()->getConstPtr()
-				, format
-				, img->getPixels()->getAlign() );
-			buffer = adaptBuffer( std::move( buffer ) );
-
-			if ( !buffer )
-			{
-				CU_LoaderError( "Couldn't adapt image buffer." );
-			}
-
-			if ( img->getPixels()->isFlipped() )
-			{
-				buffer->flip();
-			}
-
-			return buffer;
+			return getImageBuffer( *img, config );
 		}
 
 		TextureLayoutSPtr getTextureLayout( Engine & engine
@@ -684,6 +716,21 @@ namespace castor3d
 					data.unit->initialise( device, queueData );
 					doUpdateWrite( *data.unit );
 					doDestroyThreadData( data );
+				} );
+		}
+		else if ( sourceInfo.isBufferImage() )
+		{
+			getEngine()->pushCpuJob( [this, &data]()
+				{
+					// Load CPU buffer on CPU thread
+					data.buffer = getBufferImage( *getEngine()
+						, data.sourceInfo.name()
+						, data.sourceInfo.type()
+						, data.sourceInfo.buffer()
+						, data.config.config );
+					doCreateLayout( data, data.sourceInfo.name() );
+					// On buffer load end, upload to VRAM on GPU thread.
+					doUpload( data );
 				} );
 		}
 		else

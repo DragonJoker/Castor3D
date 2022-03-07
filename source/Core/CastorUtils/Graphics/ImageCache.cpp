@@ -15,7 +15,7 @@ namespace castor
 	{
 		ImageSPtr result;
 
-		if ( params.mode )
+		if ( params.mode == ImageCreateParams::eParam )
 		{
 			return makeResource< Image, String >( name
 				, Path{}
@@ -24,6 +24,16 @@ namespace castor
 		}
 
 		auto & realCache = static_cast< ResourceCacheT< Image, String, ResourceCacheTraitsT< Image, String > > const & >( cache );
+
+		if ( params.mode == ImageCreateParams::eBuffer )
+		{
+			return makeResource< Image, String >( realCache.getLoader().load( name
+				, params.type
+				, params.data.data()
+				, uint32_t( params.data.size() )
+				, params.loadConfig ) );
+		}
+
 		return makeResource< Image, String >( realCache.getLoader().load( name
 			, params.path
 			, params.loadConfig ) );

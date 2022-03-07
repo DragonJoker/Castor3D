@@ -21,27 +21,47 @@ namespace castor
 	*/
 	struct ImageCreateParams
 	{
+		enum Mode
+		{
+			eFile,
+			eBuffer,
+			eParam,
+		};
+
 		explicit ImageCreateParams( Path const & ppath
 			, ImageLoaderConfig ploadConfig = { true, true, true } )
-			: mode{ false }
+			: mode{ eFile }
 			, path{ ppath }
 			, loadConfig{ std::move( ploadConfig ) }
 		{
 		}
 
+		explicit ImageCreateParams( String const & ptype
+			, ByteArray const & pdata
+			, ImageLoaderConfig ploadConfig = { true, true, true } )
+			: mode{ eBuffer }
+			, loadConfig{ std::move( ploadConfig ) }
+			, type{ ptype }
+			, data{ pdata }
+		{
+		}
+
 		ImageCreateParams( Size const & psize
 			, PixelFormat pformat )
-			: mode{ true }
+			: mode{ eParam }
 			, size{ psize }
 			, format{ pformat }
 		{
 		}
 
-		bool mode;
+		Mode mode;
 		// mode 0
 		Path path;
 		ImageLoaderConfig loadConfig{};
 		// mode 1
+		String type;
+		ByteArray data;
+		// mode 2
 		Size size{};
 		PixelFormat format{};
 	};
