@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Geometry.hpp"
 
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -195,15 +196,26 @@ namespace castor3d
 		doUpdateContainers();
 	}
 
-	uint32_t Geometry::getId( Submesh const & submesh )const
+	uint32_t Geometry::getId( Pass const & pass
+		, Submesh const & submesh )const
 	{
-		auto it = m_id.find( submesh.getId() );
-		return it == m_id.end() ? 0u : it->second;
+		auto itPass = m_ids.find( &pass );
+
+		if ( itPass != m_ids.end() )
+		{
+			auto it = itPass->second.find( submesh.getId() );
+			return it == itPass->second.end() ? 0u : it->second;
+		}
+
+		return 0u;
 	}
 
-	void Geometry::setId( Submesh const & submesh, uint32_t id )
+	void Geometry::setId( Pass const & pass
+		, Submesh const & submesh
+		, uint32_t id )
 	{
-		m_id[submesh.getId()] = id;
+		auto itPass = m_ids.emplace( &pass, std::unordered_map< uint32_t, uint32_t >{} ).first;
+		itPass->second[submesh.getId()] = id;
 	}
 
 	void Geometry::doUpdateMesh()

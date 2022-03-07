@@ -20,7 +20,7 @@ namespace castor3d
 
 	uint32_t SubmeshRenderNode::getId()const
 	{
-		return instance.getId( data );
+		return instance.getId( pass, data );
 	}
 
 	uint32_t SubmeshRenderNode::getInstanceCount()const

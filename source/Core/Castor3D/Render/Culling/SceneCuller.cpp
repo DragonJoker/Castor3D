@@ -29,14 +29,14 @@ namespace castor3d
 
 	namespace
 	{
-		uint32_t getPipelineHash( RenderNodesPass const & renderPass
+		uint64_t getPipelineHash( RenderNodesPass const & renderPass
 			, SubmeshRenderNode const & culled
 			, bool isFrontCulled )
 		{
 			return getPipelineBaseHash( renderPass, culled.data, culled.pass, isFrontCulled );
 		}
 
-		uint32_t getPipelineHash( RenderNodesPass const & renderPass
+		uint64_t getPipelineHash( RenderNodesPass const & renderPass
 			, BillboardRenderNode const & culled
 			, bool isFrontCulled )
 		{
@@ -95,7 +95,7 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		uint32_t getPipelineNodeIndex( size_t hash
+		uint32_t getPipelineNodeIndex( uint64_t hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > const & cont )
 		{
@@ -110,7 +110,7 @@ namespace castor3d
 			return uint32_t( std::distance( cont.begin(), it ) );
 		}
 
-		PipelineNodes & getPipelineNodes( size_t hash
+		PipelineNodes & getPipelineNodes( uint64_t hash
 			, ashes::BufferBase const & buffer
 			, std::vector< PipelineBuffer > const & cont
 			, PipelineNodes * nodes )
@@ -198,7 +198,7 @@ namespace castor3d
 				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Skeleton" ) ) )
 				: nullptr;
 
-			( *pipelinesBuffer )->x = node.instance.getId( node.data ) - 1u;
+			( *pipelinesBuffer )->x = node.instance.getId( node.pass, node.data ) - 1u;
 
 			if ( mesh )
 			{
@@ -216,10 +216,11 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	uint32_t getPipelineBaseHash( ProgramFlags programFlags
+	uint64_t getPipelineBaseHash( ProgramFlags programFlags
 		, PassFlags passFlags
 		, uint32_t texturesCount
-		, TextureFlags texturesFlags )
+		, TextureFlags texturesFlags
+		, uint32_t layerIndex )
 	{
 		remFlag( programFlags, ProgramFlag::eLighting );
 		remFlag( programFlags, ProgramFlag::eShadowMapDirectional );
@@ -237,10 +238,10 @@ namespace castor3d
 		castor::hashCombine32( result, texturesCount );
 		castor::hashCombine32( result, uint32_t( texturesFlags ) );
 		castor::hashCombine32( result, checkFlag( programFlags, ProgramFlag::eInvertNormals ) );
-		return result;
+		return uint64_t( result ) | ( uint64_t( layerIndex ) << 32ull );
 	}
 
-	uint32_t getPipelineBaseHash( RenderNodesPass const & renderPass
+	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
 		, bool isFrontCulled )
@@ -255,10 +256,11 @@ namespace castor3d
 		return getPipelineBaseHash( renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getTextureUnitsCount()
-			, pass.getTextures() );
+			, pass.getTextures()
+			, pass.getIndex() );
 	}
 
-	uint32_t getPipelineBaseHash( RenderNodesPass const & renderPass
+	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
 		, BillboardBase const & data
 		, Pass const & pass
 		, bool isFrontCulled )
@@ -273,7 +275,8 @@ namespace castor3d
 		return getPipelineBaseHash( renderPass.adjustFlags( programFlags )
 			, renderPass.adjustFlags( pass.getPassFlags() )
 			, pass.getTextureUnitsCount()
-			, pass.getTextures() );
+			, pass.getTextures()
+			, pass.getIndex() );
 	}
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
@@ -735,7 +738,7 @@ namespace castor3d
 							{
 								auto culled = sidedCulled.first;
 								fillIndirectCommand( *culled, indirectBuffer );
-								( *pipelinesBuffer )->x = culled->instance.getId() - 1u;
+								( *pipelinesBuffer )->x = culled->instance.getId( culled->pass ) - 1u;
 								++pipelinesBuffer;
 							}
 						}
