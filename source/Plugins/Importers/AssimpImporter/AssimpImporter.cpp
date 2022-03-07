@@ -33,6 +33,7 @@
 #include <CastorUtils/Log/Logger.hpp>
 
 #include <assimp/version.h>
+#include <assimp/pbrmaterial.h>
 
 // Materials
 #include <PhongPass.hpp>
@@ -212,25 +213,6 @@ namespace C3dAssimp
 			}
 
 		private:
-			struct CommonTextureInfos
-			{
-				TextureInfo colTex{};
-				TextureInfo emiTex{};
-				TextureInfo nmlTex{};
-				TextureInfo spcTex{};
-				TextureInfo hgtTex{};
-				TextureInfo opaTex{};
-				TextureInfo occTex{};
-			};
-
-			struct CommonMaterialInfos
-			{
-				aiColor3D colour{};
-				aiColor3D emissive{};
-				aiColor3D ambient{};
-				aiColor3D specular{};
-			};
-
 			PassFiller( aiMaterial const & material
 				, castor3d::SamplerRes sampler
 				, castor3d::MeshImporter const & importer
@@ -281,10 +263,31 @@ namespace C3dAssimp
 					spcInfo = getTextureInfo( castor3d::TextureFlag::eSpecular );
 				}
 
+
+				if ( spcInfo.name.empty() )
+				{
+					spcInfo = getTextureInfo( aiTextureType_UNKNOWN, 0 );
+
+					if ( !spcInfo.name.empty() )
+					{
+						castor3d::TextureConfiguration spcConfig{};
+						spcConfig.roughnessMask[0] = 0x0000FF00;
+						spcConfig.metalnessMask[0] = 0x000000FF;
+
+						if ( spcInfo.name == occInfo.name )
+						{
+							spcConfig.occlusionMask[0] = 0x00FF0000;
+							occInfo.name.clear();
+						}
+
+						m_textureRemaps.emplace( TextureFlag::eSpecular, spcConfig );
+					}
+				}
+
 				loadTexture( colInfo, getRemap( TextureFlag::eDiffuse, TextureConfiguration::DiffuseTexture ) );
 				loadTexture( emiInfo, getRemap( TextureFlag::eEmissive, TextureConfiguration::EmissiveTexture ) );
-				loadTexture( occInfo, getRemap( TextureFlag::eOcclusion, TextureConfiguration::OcclusionTexture ) );
 				loadTexture( spcInfo, getRemap( TextureFlag::eSpecular, TextureConfiguration::SpecularTexture ) );
+				loadTexture( occInfo, getRemap( TextureFlag::eOcclusion, TextureConfiguration::OcclusionTexture ) );
 
 				// force non 0.0 opacity when an opacity map is set
 				if ( !opaInfo.name.empty()
@@ -321,8 +324,10 @@ namespace C3dAssimp
 				if ( name == "Two sided" )
 				{
 					int twoSided = 0;
-					m_material.Get( AI_MATKEY_TWOSIDED, twoSided );
-					value = ( twoSided != 0 );
+					if ( m_material.Get( AI_MATKEY_TWOSIDED, twoSided ) == aiReturn_SUCCESS )
+					{
+						value = ( twoSided != 0 );
+					}
 				}
 			}
 
@@ -366,44 +371,143 @@ namespace C3dAssimp
 				, float & value
 				, bool * control )override
 			{
-				if ( name == "Shininess"
-					|| name == "Glossiness"
-					|| name == "Roughness" )
+				if ( name == "Roughness" )
+				{
+					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, value ) != aiReturn_SUCCESS )
+					{
+						float shininess = 0.5f;
+
+						if ( m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, shininess ) == aiReturn_SUCCESS
+							|| m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS, shininess ) == aiReturn_SUCCESS )
+						{
+							value = 1.0f - shininess;
+						}
+						else if ( m_material.Get( AI_MATKEY_SHININESS, shininess ) == aiReturn_SUCCESS )
+						{
+							float shininessStrength = 1.0f;
+
+							if ( m_material.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength ) == aiReturn_SUCCESS )
+							{
+								shininess *= shininessStrength;
+							}
+
+							shininess /= 1000.0f;
+							shininess = 1.0f - shininess;
+
+							if ( shininess > 0 )
+							{
+								value = shininess;
+							}
+						}
+					}
+				}
+				else if ( name == "Glossiness" )
+				{
+					if ( m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, value ) != aiReturn_SUCCESS
+						&& m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS, value ) != aiReturn_SUCCESS )
+					{
+						float shininess = 0.5f;
+
+						if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, shininess ) == aiReturn_SUCCESS )
+						{
+							value = 1.0f - shininess;
+						}
+						else if ( m_material.Get( AI_MATKEY_SHININESS, shininess ) == aiReturn_SUCCESS )
+						{
+							float shininessStrength = 1.0f;
+
+							if ( m_material.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength ) == aiReturn_SUCCESS )
+							{
+								shininess *= shininessStrength;
+							}
+
+							shininess /= 1000.0f;
+
+							if ( shininess > 0 )
+							{
+								value = shininess;
+							}
+						}
+					}
+				}
+				else if ( name == "Shininess" )
 				{
 					float shininess = 0.5f;
-					m_material.Get( AI_MATKEY_SHININESS, shininess );
-					float shininessStrength = 1.0f;
-					m_material.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
-					shininess *= shininessStrength;
 
-					if ( name != "Shininess" )
+					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, shininess ) == aiReturn_SUCCESS )
 					{
-						shininess /= PhongPass::MaxShininess;
+						value = ( 1.0f - shininess ) * PhongPass::MaxShininess;
 					}
-
-					if ( name == "Shininess" )
+					else if ( m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, shininess ) == aiReturn_SUCCESS
+						|| m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS, shininess ) == aiReturn_SUCCESS )
 					{
-						shininess = 1.0f - shininess;
+						value = shininess * PhongPass::MaxShininess;
 					}
-
-					if ( shininess > 0 )
+					else if ( m_material.Get( AI_MATKEY_SHININESS, shininess ) == aiReturn_SUCCESS )
 					{
-						value = shininess;
+						float shininessStrength = 1.0f;
+
+						if ( m_material.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength ) == aiReturn_SUCCESS )
+						{
+							shininess *= shininessStrength;
+						}
+
+						if ( shininess > 0 )
+						{
+							value = shininess;
+						}
 					}
 				}
 				else if ( name == "Metalness" )
 				{
-					m_mtlInfos.specular = { 1, 1, 1 };
-					m_material.Get( AI_MATKEY_COLOR_SPECULAR, m_mtlInfos.specular );
-					value = m_mtlInfos.specular.r;
-					m_mtlInfos.specular.g = 0.0f;
-					m_mtlInfos.specular.b = 0.0f;
+					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR, value ) != aiReturn_SUCCESS )
+					{
+						aiColor4D specular = { 1, 1, 1, 1 };
+						if ( m_material.Get( AI_MATKEY_COLOR_SPECULAR, specular ) == aiReturn_SUCCESS )
+						{
+							value = float( castor::point::length( castor::Point3f{ specular.r
+								, specular.g
+								, specular.b } ) );
+						}
+					}
 				}
 				else if ( name == "Opacity" )
 				{
 					float opacity = 1;
-					m_material.Get( AI_MATKEY_OPACITY, opacity );
-					value = opacity;
+					if ( m_material.Get( AI_MATKEY_OPACITY, opacity ) == aiReturn_SUCCESS )
+					{
+						value = opacity;
+					}
+					else if ( m_material.Get( AI_MATKEY_TRANSPARENCYFACTOR, opacity ) == aiReturn_SUCCESS )
+					{
+						value = opacity;
+					}
+					else
+					{
+						aiColor4D colour = { 1, 1, 1, 1 };
+						if ( m_material.Get( AI_MATKEY_COLOR_DIFFUSE, colour ) == aiReturn_SUCCESS )
+						{
+							value = colour.a;
+						}
+					}
+				}
+				else if ( name == "Emissive" )
+				{
+					aiColor4D emissive = { 1, 1, 1, 1 };
+					if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS )
+					{
+						value = float( castor::point::length( castor::Point3f{ emissive.r
+							, emissive.g
+							, emissive.b } ) );
+					}
+				}
+				else if ( name == "Refraction ratio" )
+				{
+					float ior{ 1.0f };
+					if ( m_material.Get( AI_MATKEY_REFRACTI, ior ) == aiReturn_SUCCESS )
+					{
+						value = ior;
+					}
 				}
 			}
 
@@ -432,42 +536,71 @@ namespace C3dAssimp
 			}
 
 			void visit( castor::String const & name
+				, castor::Point3f & value
+				, bool * control )override
+			{
+				if ( name == "Transmission" )
+				{
+					aiColor4D transmission = { 1, 1, 1, 1 };
+					if ( m_material.Get( AI_MATKEY_COLOR_TRANSPARENT, transmission ) == aiReturn_SUCCESS )
+					{
+						value = { transmission.r
+							, transmission.g
+							, transmission.b };
+					}
+				}
+			}
+
+			void visit( castor::String const & name
 				, castor::RgbColour & value
 				, bool * control )override
 			{
 				if ( name == "Ambient" )
 				{
-					m_mtlInfos.ambient = { 1, 1, 1 };
-					m_material.Get( AI_MATKEY_COLOR_AMBIENT, m_mtlInfos.ambient );
-					value = castor::RgbColour::fromComponents( m_mtlInfos.ambient.r
-						, m_mtlInfos.ambient.g
-						, m_mtlInfos.ambient.b );
+					aiColor4D ambient = { 1, 1, 1, 1 };
+					if ( m_material.Get( AI_MATKEY_COLOR_AMBIENT, ambient ) == aiReturn_SUCCESS )
+					{
+						value = castor::RgbColour::fromComponents( ambient.r
+							, ambient.g
+							, ambient.b );
+					}
 				}
-				else if ( name == "Albedo"
-					|| name == "Colour"
+				else if ( name == "Albedo" )
+				{
+					aiColor4D colour = { 1, 1, 1, 1 };
+					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, colour ) == aiReturn_SUCCESS )
+					{
+						value = castor::RgbColour::fromComponents( colour.r
+							, colour.g
+							, colour.b );
+					}
+					else if ( m_material.Get( AI_MATKEY_COLOR_DIFFUSE, colour ) == aiReturn_SUCCESS )
+					{
+						value = castor::RgbColour::fromComponents( colour.r
+							, colour.g
+							, colour.b );
+					}
+				}
+				else if ( name == "Colour"
 					|| name == "Diffuse" )
 				{
-					m_mtlInfos.colour = { 1, 1, 1 };
-					m_material.Get( AI_MATKEY_COLOR_DIFFUSE, m_mtlInfos.colour );
-					value = castor::RgbColour::fromComponents( m_mtlInfos.colour.r
-						, m_mtlInfos.colour.g
-						, m_mtlInfos.colour.b );
+					aiColor4D colour = { 1, 1, 1, 1 };
+					if ( m_material.Get( AI_MATKEY_COLOR_DIFFUSE, colour ) == aiReturn_SUCCESS )
+					{
+						value = castor::RgbColour::fromComponents( colour.r
+							, colour.g
+							, colour.b );
+					}
 				}
 				else if ( name == "Specular" )
 				{
-					m_mtlInfos.specular = { 1, 1, 1 };
-					m_material.Get( AI_MATKEY_COLOR_SPECULAR, m_mtlInfos.specular );
-					value = castor::RgbColour::fromComponents( m_mtlInfos.specular.r
-						, m_mtlInfos.specular.g
-						, m_mtlInfos.specular.b );
-				}
-				else if ( name == "Emissive" )
-				{
-					m_mtlInfos.emissive = { 1, 1, 1 };
-					m_material.Get( AI_MATKEY_COLOR_EMISSIVE, m_mtlInfos.emissive );
-					value = castor::RgbColour::fromComponents( m_mtlInfos.emissive.r
-						, m_mtlInfos.emissive.g
-						, m_mtlInfos.emissive.b );
+					aiColor4D specular = { 1, 1, 1, 1 };
+					if ( m_material.Get( AI_MATKEY_COLOR_SPECULAR, specular ) == aiReturn_SUCCESS )
+					{
+						value = castor::RgbColour::fromComponents( specular.r
+							, specular.g
+							, specular.b );
+					}
 				}
 			}
 
@@ -557,16 +690,16 @@ namespace C3dAssimp
 				}
 			}
 
-			TextureInfo getTextureInfo( aiTextureType type )
+			TextureInfo getTextureInfo( aiTextureType type, uint32_t index = 0u )
 			{
 				TextureInfo result;
 				aiString name;
-				m_material.Get( AI_MATKEY_TEXTURE( type, 0 ), name );
+				m_material.Get( AI_MATKEY_TEXTURE( type, index ), name );
 
 				if ( name.length > 0 )
 				{
 					result.name = castor::string::stringCast< xchar >( name.C_Str() );
-					m_material.Get( AI_MATKEY_UVTRANSFORM( type, 0 ), result.transform );
+					m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
 				}
 
 				return result;
@@ -586,21 +719,40 @@ namespace C3dAssimp
 					break;
 				case castor3d::TextureFlag::eNormal:
 					result = getTextureInfo( aiTextureType_NORMALS );
+					if ( result.name == std::string{} )
+					{
+						static auto constexpr TextureType_NORMAL_CAMERA = aiTextureType( 13 );
+						result = getTextureInfo( TextureType_NORMAL_CAMERA );
+					}
 					break;
 				case castor3d::TextureFlag::eEmissive:
 					result = getTextureInfo( aiTextureType_EMISSIVE );
+					if ( result.name == std::string{} )
+					{
+						static auto constexpr TextureType_EMISSION_COLOR = aiTextureType( 14 );
+						result = getTextureInfo( TextureType_EMISSION_COLOR );
+					}
 					break;
 				case castor3d::TextureFlag::eOcclusion:
 					if ( aiGetVersionMajor() >= 4u )
 					{
 						static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
 						result = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
+						if ( result.name == std::string{} )
+						{
+							result = getTextureInfo( aiTextureType_LIGHTMAP );
+						}
 					}
 					break;
 				case castor3d::TextureFlag::eTransmittance:
 					break;
 				case castor3d::TextureFlag::eColour:
 					result = getTextureInfo( aiTextureType_DIFFUSE );
+					if ( result.name == std::string{} )
+					{
+						static auto constexpr TextureType_BASE_COLOR = aiTextureType( 12 );
+						result = getTextureInfo( TextureType_BASE_COLOR );
+					}
 					break;
 				case castor3d::TextureFlag::eSpecular:
 					result = getTextureInfo( aiTextureType_SPECULAR );
@@ -611,7 +763,11 @@ namespace C3dAssimp
 						static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
 						result = getTextureInfo( TextureType_METALNESS );
 					}
-					else
+					if ( result.name == std::string{} )
+					{
+						result = getTextureInfo( aiTextureType_UNKNOWN );
+					}
+					if ( result.name == std::string{} )
 					{
 						result = getTextureInfo( aiTextureType_SPECULAR );
 					}
@@ -625,7 +781,7 @@ namespace C3dAssimp
 						static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
 						result = getTextureInfo( TextureType_DIFFUSE_ROUGHNESS );
 					}
-					else
+					if ( result.name == std::string{} )
 					{
 						result = getTextureInfo( aiTextureType_SHININESS );
 					}
@@ -654,7 +810,6 @@ namespace C3dAssimp
 			castor3d::MeshImporter const & m_importer;
 			std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
 			castor3d::Pass & m_result;
-			CommonMaterialInfos m_mtlInfos{};
 		};
 
 		PassTypeID convert( PassFactory const & factory
@@ -1423,7 +1578,7 @@ namespace C3dAssimp
 
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
-			material = doProcessMaterial( scene, *aiScene.mMaterials[aiMesh.mMaterialIndex] );
+			material = doProcessMaterial( scene, *aiScene.mMaterials[aiMesh.mMaterialIndex], aiMesh.mMaterialIndex );
 			log::debug << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( " (" ) << material.lock()->getName() << cuT( ")]" ) << std::endl;
 		}
 
@@ -1528,13 +1683,22 @@ namespace C3dAssimp
 	}
 
 	MaterialResPtr AssimpImporter::doProcessMaterial( Scene & scene
-		, aiMaterial const & aiMaterial )
+		, aiMaterial const & aiMaterial
+		, uint32_t index )
 	{
 		MaterialResPtr result;
 		auto & cache = scene.getMaterialView();
 		aiString mtlname;
-		aiMaterial.Get( AI_MATKEY_NAME, mtlname );
-		castor::String name = "Imp." + castor::string::stringCast< xchar >( mtlname.C_Str() );
+		castor::String name = cuT( "Imp." );
+
+		if ( aiMaterial.Get( AI_MATKEY_NAME, mtlname ) == aiReturn_SUCCESS )
+		{
+			name += castor::string::stringCast< xchar >( mtlname.C_Str() );
+		}
+		else
+		{
+			name += castor::string::toString( index );
+		}
 
 		if ( name.empty() )
 		{

@@ -55,6 +55,9 @@ if( assimp_FOUND )
 	set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
 	set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
+	set( ${PROJECT_NAME}_NVS_FILES
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.natvis
+	)
 	set( ${PROJECT_NAME}_HDR_FILES
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.hpp
 	)
@@ -69,6 +72,10 @@ if( assimp_FOUND )
 	source_group( "Source Files"
 		FILES
 			${${PROJECT_NAME}_SRC_FILES}
+	)
+	source_group( "Natvis Files"
+		FILES
+			${${PROJECT_NAME}_NVS_FILES}
 	)
 	add_target_min(
 		${PROJECT_NAME}
@@ -98,7 +105,7 @@ if( assimp_FOUND )
 	install_target_ex( ${PROJECT_NAME}
 		Plugins
 		plugin
-		${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}
 	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES

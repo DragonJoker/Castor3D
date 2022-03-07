@@ -47,7 +47,10 @@ namespace castor
 			{
 				for ( auto const & effect : target.getHDRPostEffects() )
 				{
-					result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
+					if ( effect->isEnabled() )
+					{
+						result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
+					}
 				}
 			}
 
@@ -55,7 +58,10 @@ namespace castor
 			{
 				for ( auto const & effect : target.getSRGBPostEffects() )
 				{
-					result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
+					if ( effect->isEnabled() )
+					{
+						result = effect->writeInto( file, tabs() ) && writeText( file, cuT( "\n" ) );
+					}
 				}
 			}
 

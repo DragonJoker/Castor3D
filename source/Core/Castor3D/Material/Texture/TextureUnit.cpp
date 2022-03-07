@@ -17,36 +17,6 @@ namespace castor3d
 {
 	namespace
 	{
-		void doUpdateStartIndex( castor::Point2ui & mask
-			, castor::PixelFormat format )
-		{
-			if ( mask[0] )
-			{
-				auto components = getPixelComponents( mask[0] );
-
-				switch ( components.size() )
-				{
-				case 1:
-					mask[1] = castor::getComponentIndex( *components.begin(), format );
-					break;
-				case 3:
-					if ( mask[0] & 0xFF000000 )
-					{
-						mask[1] = 1;
-					}
-					else
-					{
-						mask[1] = 0;
-					}
-					break;
-				default:
-					CU_Failure( "Invalid component count for a texture component flag" );
-					mask[1] = 0;
-					break;
-				}
-			}
-		}
-
 		TextureUnit createTextureUnit( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & name
@@ -464,21 +434,13 @@ namespace castor3d
 
 		m_configuration = std::move( value );
 		m_configuration.needsYInversion = m_texture
-			? ( m_texture->needsYInversion()
-				? 1u
-				: 0u )
+			? ( ( m_texture->needsYInversion() && value.needsYInversion )
+				? 0u
+				: ( ( m_texture->needsYInversion() || value.needsYInversion )
+					? 1u
+					: 0u ) )
 			: 0u;
-		doUpdateStartIndex( m_configuration.colourMask, format );
-		doUpdateStartIndex( m_configuration.specularMask, format );
-		doUpdateStartIndex( m_configuration.metalnessMask, format );
-		doUpdateStartIndex( m_configuration.glossinessMask, format );
-		doUpdateStartIndex( m_configuration.roughnessMask, format );
-		doUpdateStartIndex( m_configuration.opacityMask, format );
-		doUpdateStartIndex( m_configuration.emissiveMask, format );
-		doUpdateStartIndex( m_configuration.normalMask, format );
-		doUpdateStartIndex( m_configuration.heightMask, format );
-		doUpdateStartIndex( m_configuration.occlusionMask, format );
-		doUpdateStartIndex( m_configuration.transmittanceMask, format );
+		updateIndices( format, m_configuration );
 		onChanged( *this );
 	}
 

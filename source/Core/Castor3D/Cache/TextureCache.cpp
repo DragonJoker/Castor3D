@@ -411,6 +411,8 @@ namespace castor3d
 			, PassTextureConfig const & config )
 		{
 			auto result = TextureSourceInfoHasher{}( sourceInfo );
+			auto flags = getFlags( config.config );
+			castor::hashCombine( result, uint16_t( flags ) );
 			return result;
 		}
 
@@ -430,6 +432,27 @@ namespace castor3d
 			{
 				it->second = std::make_shared< TextureUnit >( engine, sourceInfo );
 				it->second->setConfiguration( config.config );
+			}
+			else
+			{
+				auto merged = config.config;
+
+				if ( it->second->getTexture() )
+				{
+					updateIndices( convert( it->second->getTexture()->getPixelFormat() )
+						, merged );
+				}
+				else
+				{
+					updateIndices( castor::PixelFormat::eR8G8B8A8_UNORM
+						, merged );
+				}
+
+				if ( merged != it->second->getConfiguration() )
+				{
+					mergeConfigs( it->second->getConfiguration(), merged );
+					it->second->setConfiguration( merged );
+				}
 			}
 
 			result = it->second;
