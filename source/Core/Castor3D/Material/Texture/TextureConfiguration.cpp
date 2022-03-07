@@ -12,6 +12,36 @@ namespace castor3d
 				? flag
 				: TextureFlag::eNone;
 		}
+
+		void updateStartIndex( castor::PixelFormat format
+			, castor::Point2ui & mask )
+		{
+			if ( mask[0] )
+			{
+				auto components = getPixelComponents( mask[0] );
+
+				switch ( components.size() )
+				{
+				case 1:
+					mask[1] = castor::getComponentIndex( *components.begin(), format );
+					break;
+				case 3:
+					if ( mask[0] & 0xFF000000 )
+					{
+						mask[1] = 1;
+					}
+					else
+					{
+						mask[1] = 0;
+					}
+					break;
+				default:
+					CU_Failure( "Invalid component count for a texture component flag" );
+					mask[1] = 0;
+					break;
+				}
+			}
+		}
 	}
 
 	//*********************************************************************************************
@@ -201,5 +231,21 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void updateIndices( castor::PixelFormat format
+		, TextureConfiguration & config )
+	{
+		updateStartIndex( format, config.colourMask );
+		updateStartIndex( format, config.specularMask );
+		updateStartIndex( format, config.metalnessMask );
+		updateStartIndex( format, config.glossinessMask );
+		updateStartIndex( format, config.roughnessMask );
+		updateStartIndex( format, config.opacityMask );
+		updateStartIndex( format, config.emissiveMask );
+		updateStartIndex( format, config.normalMask );
+		updateStartIndex( format, config.heightMask );
+		updateStartIndex( format, config.occlusionMask );
+		updateStartIndex( format, config.transmittanceMask );
 	}
 }

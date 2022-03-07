@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+	<Type Name="aiString">
+		<DisplayString>{data,s}</DisplayString>
+		<Expand>
+			<Item Name="[data]">data</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMaterialProperty">
+		<DisplayString Condition="mType==1">{mKey} {*(float*)mData}</DisplayString>
+		<DisplayString Condition="mType==2">{mKey} {*(double*)mData}</DisplayString>
+		<DisplayString Condition="mType==3">{mKey} {mData+4,s}</DisplayString>
+		<DisplayString Condition="mType==4">{mKey} {*(int*)mData}</DisplayString>
+		<DisplayString Condition="mType>4">{mKey} {mData}</DisplayString>
+		<Expand>
+			<Item Name="[key]">mKey</Item>
+			<Item Name="[value]" Condition="mType==1">*(float*)mData</Item>
+			<Item Name="[value]" Condition="mType==2">*(double*)mData</Item>
+			<Item Name="[value]" Condition="mType==3">mData+4,s</Item>
+			<Item Name="[value]" Condition="mType==4">*(int*)mData</Item>
+			<Synthetic Name="[value]" Condition="mType==5">
+				<DisplayString>[size={mDataLength}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mDataLength</Size>
+						<ValuePointer>mData</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Item Name="[semantic]">mSemantic</Item>
+			<Item Name="[index]">mIndex</Item>
+			<Item Name="[type]">mType</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMaterial">
+		<Expand>
+			<Synthetic Name="[properties]">
+				<DisplayString>[size={mNumProperties}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumProperties</Size>
+						<ValuePointer>mProperties</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiScene">
+		<Expand>
+			<Item Name="[flags]">mFlags</Item>
+			<Item Name="[rootNode]">mRootNode</Item>
+			<Synthetic Name="[meshes]">
+				<DisplayString>[size={mNumMeshes}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumMeshes</Size>
+						<ValuePointer>mMeshes</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[materials]">
+				<DisplayString>[size={mNumMaterials}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumMaterials</Size>
+						<ValuePointer>mMaterials</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[animations]">
+				<DisplayString>[size={mNumAnimations}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumAnimations</Size>
+						<ValuePointer>mAnimations</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[textures]">
+				<DisplayString>[size={mNumTextures}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumTextures</Size>
+						<ValuePointer>mTextures</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[lights]">
+				<DisplayString>[size={mNumLights}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumLights</Size>
+						<ValuePointer>mLights</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[cameras]">
+				<DisplayString>[size={mNumCameras}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumCameras</Size>
+						<ValuePointer>mCameras</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+</AutoVisualizer>
