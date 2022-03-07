@@ -99,6 +99,25 @@ namespace castor3d
 			, TextureConfiguration const & config )const;
 		/**
 		 *\~english
+		 *\brief		Loads a texture.
+		 *\param[in]	type	The image data type.
+		 *\param[in]	data	The image data.
+		 *\param[in]	config	The texture unit configuration.
+		 *\return		The texture unit.
+		 *\~french
+		 *\brief		Charge une texture.
+		 *\param[in]	type	Le type des données de l'image.
+		 *\param[in]	data	Les données de l'image.
+		 *\param[in]	config	La configuration de la texture.
+		 *\return		L'unité de texture.
+		 */
+		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerRes sampler
+			, castor::String name
+			, castor::String type
+			, castor::ByteArray data
+			, TextureConfiguration const & config )const;
+		/**
+		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
 		 *\param[in]	path	The image file path (can be relative or absolute).
 		 *\param[in]	config	The texture unit configuration.
@@ -113,6 +132,28 @@ namespace castor3d
 		 */
 		C3D_API void loadTexture( castor3d::SamplerRes sampler
 			, castor::Path const & path
+			, PassTextureConfig const & config
+			, Pass & pass )const;
+		/**
+		 *\~english
+		 *\brief		Loads a texture and adds it to the given pass.
+		 *\param[in]	type	The image data type.
+		 *\param[in]	data	The image data.
+		 *\param[in]	config	The texture unit configuration.
+		 *\param[in]	pass	The pass.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\param[in]	type	Le type des données de l'image.
+		 *\param[in]	data	Les données de l'image.
+		 *\param[in]	config	La configuration de la texture.
+		 *\param[in]	pass	La passe.
+		 *\return		\p false en cas d'erreur.
+		 */
+		C3D_API void loadTexture( castor3d::SamplerRes sampler
+			, castor::String name
+			, castor::String type
+			, castor::ByteArray data
 			, PassTextureConfig const & config
 			, Pass & pass )const;
 		/**
