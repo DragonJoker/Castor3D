@@ -1393,6 +1393,12 @@ namespace castor3d
 
 	bool TextureLayout::needsYInversion()const
 	{
+		if ( getDefaultView().needsYInversion()
+			&& m_image.getPixels()->isFlipped() )
+		{
+			return false;
+		}
+
 		return getDefaultView().needsYInversion()
 			|| m_image.getPixels()->isFlipped();
 	}
