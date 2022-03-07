@@ -2,6 +2,7 @@
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -222,6 +223,17 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	uint32_t BillboardBase::getId( Pass const & pass )const
+	{
+		auto it = m_ids.find( &pass );
+		return it == m_ids.end() ? 0u : it->second;
+	}
+
+	void BillboardBase::setId( Pass const & pass, uint32_t id )
+	{
+		m_ids[&pass] = id;
 	}
 
 	void BillboardBase::setMaterial( MaterialRPtr value )

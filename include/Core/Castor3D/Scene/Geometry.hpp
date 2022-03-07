@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "SceneModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
 #include "Castor3D/Scene/MovableObject.hpp"
@@ -141,8 +142,11 @@ namespace castor3d
 		C3D_API void setBoundingBox( Submesh const & submesh
 			, castor::BoundingBox const & box );
 
-		C3D_API uint32_t getId( Submesh const & submesh )const;
-		C3D_API void setId( Submesh const & submesh, uint32_t id );
+		C3D_API uint32_t getId( Pass const & pass
+			, Submesh const & submesh )const;
+		C3D_API void setId( Pass const & pass
+			, Submesh const & submesh
+			, uint32_t id );
 
 		MeshResPtr getMesh()const
 		{
@@ -175,7 +179,7 @@ namespace castor3d
 		SubmeshBoundingSphereMap m_submeshesSpheres;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
-		std::unordered_map< uint32_t, uint32_t > m_id{};
+		std::unordered_map< Pass const *, std::unordered_map< uint32_t, uint32_t > > m_ids{};
 	};
 }
 

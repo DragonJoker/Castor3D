@@ -253,7 +253,8 @@ namespace castor3d
 			&& lhs.alphaFunc == rhs.alphaFunc
 			&& lhs.blendAlphaFunc == rhs.blendAlphaFunc
 			&& lhs.textures.size() == rhs.textures.size()
-			&& lhs.texturesFlags == rhs.texturesFlags;
+			&& lhs.texturesFlags == rhs.texturesFlags
+			&& lhs.layerIndex == rhs.layerIndex;
 	}
 
 	//*********************************************************************************************

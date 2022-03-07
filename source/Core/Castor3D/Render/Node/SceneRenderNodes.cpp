@@ -37,17 +37,21 @@ namespace castor3d
 
 	namespace
 	{
-		size_t makeNodeHash( Submesh & data
+		size_t makeNodeHash( Pass & pass
+			, Submesh & data
 			, Geometry & instance )
 		{
 			auto hash = std::hash< Submesh * >{}( &data );
 			hash = castor::hashCombinePtr( hash, instance );
+			hash = castor::hashCombinePtr( hash, pass );
 			return hash;
 		}
 
-		size_t makeNodeHash( BillboardBase & instance )
+		size_t makeNodeHash( Pass & pass
+			, BillboardBase & instance )
 		{
 			auto hash = std::hash< BillboardBase * >{}( &instance );
+			hash = castor::hashCombinePtr( hash, pass );
 			return hash;
 		}
 
@@ -173,7 +177,7 @@ namespace castor3d
 		{
 			for ( auto & node : nodes.second )
 			{
-				node.second->instance.setId( node.second->data, 0u );
+				node.second->instance.setId( node.second->pass, node.second->data, 0u );
 			}
 		}
 
@@ -181,7 +185,7 @@ namespace castor3d
 		{
 			for ( auto & node : nodes.second )
 			{
-				node.second->instance.setId( 0u );
+				node.second->instance.setId( node.second->pass, 0u );
 			}
 		}
 
@@ -197,7 +201,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 		auto & pool = m_submeshNodes.emplace( pass.getTexturesMask().size(), DescriptorNodesPtrT< SubmeshRenderNode >{} ).first->second;
-		auto it = pool.emplace( makeNodeHash( data, instance ), nullptr );
+		auto it = pool.emplace( makeNodeHash( pass, data, instance ), nullptr );
 
 		if ( it.second )
 		{
@@ -206,7 +210,7 @@ namespace castor3d
 				, instance );
 			it.first->second->mesh = mesh;
 			it.first->second->skeleton = skeleton;
-			instance.setId( data, ++m_nodeId );
+			instance.setId( pass, data, ++m_nodeId );
 			m_dirty = true;
 		}
 
@@ -218,13 +222,13 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 		auto & pool = m_billboardNodes.emplace( pass.getTexturesMask().size(), DescriptorNodesPtrT< BillboardRenderNode >{} ).first->second;
-		auto it = pool.emplace( makeNodeHash( instance ), nullptr );
+		auto it = pool.emplace( makeNodeHash( pass, instance ), nullptr );
 
 		if ( it.second )
 		{
 			it.first->second = castor::makeUnique< BillboardRenderNode >( pass
 				, instance );
-			instance.setId( ++m_nodeId );
+			instance.setId( pass, ++m_nodeId );
 			m_dirty = true;
 		}
 
