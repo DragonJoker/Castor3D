@@ -326,7 +326,8 @@ namespace castor3d
 			, uint32_t patchVertices = 3u
 			, VkCompareOp alphaFunc = VK_COMPARE_OP_ALWAYS
 			, VkCompareOp blendAlphaFunc = VK_COMPARE_OP_ALWAYS
-			, TextureFlagsArray textures = {} )
+			, TextureFlagsArray textures = {}
+			, uint32_t layerIndex = {} )
 			: colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
 			, passFlags{ passFlags }
@@ -341,23 +342,25 @@ namespace castor3d
 			, blendAlphaFunc{ blendAlphaFunc }
 			, textures{ textures }
 			, texturesFlags{ merge( textures ) }
+			, layerIndex{ layerIndex }
 		{
 		}
 
-		BlendMode colourBlendMode{ BlendMode::eNoBlend };
-		BlendMode alphaBlendMode{ BlendMode::eNoBlend };
-		PassFlags passFlags{ PassFlag::eNone };
-		RenderPassTypeID renderPassType{ 0u };
-		PassTypeID passType{ 0u };
-		uint32_t heightMapIndex{ InvalidIndex };
-		ProgramFlags programFlags{ ProgramFlag::eNone };
-		SceneFlags sceneFlags{ SceneFlag::eNone };
-		VkPrimitiveTopology topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
-		uint32_t patchVertices{ 3u };
-		VkCompareOp alphaFunc{ VK_COMPARE_OP_ALWAYS };
-		VkCompareOp blendAlphaFunc{ VK_COMPARE_OP_ALWAYS };
+		BlendMode colourBlendMode;
+		BlendMode alphaBlendMode;
+		PassFlags passFlags;
+		RenderPassTypeID renderPassType;
+		PassTypeID passType;
+		uint32_t heightMapIndex;
+		ProgramFlags programFlags;
+		SceneFlags sceneFlags;
+		VkPrimitiveTopology topology;
+		uint32_t patchVertices;
+		VkCompareOp alphaFunc;
+		VkCompareOp blendAlphaFunc;
 		TextureFlagsArray textures;
 		TextureFlags texturesFlags;
+		uint32_t layerIndex;
 	};
 	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
 	/**

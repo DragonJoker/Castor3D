@@ -35,17 +35,6 @@ namespace castor3d
 {
 	namespace
 	{
-		uint64_t getPipelineHash( RenderPipeline const & pipeline )
-		{
-			auto & flags = pipeline.getFlags();
-			auto baseHash = getPipelineBaseHash( flags.programFlags
-				, flags.passFlags
-				, uint32_t( flags.textures.size() )
-				, flags.texturesFlags );
-			uint64_t result = uint64_t( intptr_t( &pipeline ) ) & 0x00000000FFFFFFFF;
-			return ( uint64_t( baseHash ) << 32 ) | result;
-		}
-
 		template< typename NodeT
 			, typename OnSubmeshFuncT >
 			void doTraverseNodes( ObjectNodesPtrByPipelineMapT< NodeT > & nodes
@@ -519,13 +508,6 @@ namespace castor3d
 	{
 		return getOwner()->getCuller().getScene().getRenderNodes().createNode( pass
 			, instance );
-	}
-
-	//*********************************************************************************************
-
-	bool PipelineComp::operator()( RenderPipeline const * lhs, RenderPipeline const * rhs )const
-	{
-		return getPipelineHash( *lhs ) < getPipelineHash( *rhs );
 	}
 
 	//*********************************************************************************************
