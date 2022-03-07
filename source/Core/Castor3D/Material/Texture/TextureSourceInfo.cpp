@@ -20,6 +20,19 @@ namespace castor3d
 	}
 
 	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
+		, castor::String name
+		, castor::String type
+		, castor::ByteArray data
+		, castor::ImageLoaderConfig loadConfig )
+		: m_sampler{ std::move( sampler ) }
+		, m_loadConfig{ std::move( loadConfig ) }
+		, m_name{ std::move( name ) }
+		, m_type{ std::move( type ) }
+		, m_data{ std::move( data ) }
+	{
+	}
+
+	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
 		, RenderTargetSPtr renderTarget )
 		: m_sampler{ std::move( sampler ) }
 		, m_renderTarget{ std::move( renderTarget ) }
@@ -49,8 +62,18 @@ namespace castor3d
 			return castor::hashCombinePtr( result, *value.renderTarget() );
 		}
 
-		result = castor::hashCombine( result, static_cast< castor::String const & >( value.folder() ) );
-		result = castor::hashCombine( result, static_cast< castor::String const & >( value.relative() ) );
+		if ( value.isBufferImage() )
+		{
+			result = castor::hashCombine( result, value.name() );
+			result = castor::hashCombine( result, value.type() );
+			result = castor::hashCombine( result, value.buffer().size() );
+		}
+		else
+		{
+			result = castor::hashCombine( result, static_cast< castor::String const & >( value.folder() ) );
+			result = castor::hashCombine( result, static_cast< castor::String const & >( value.relative() ) );
+		}
+
 		result = castor::hashCombine( result, value.allowCompression() );
 		return castor::hashCombine( result, value.generateMips() );
 	}
@@ -72,10 +95,25 @@ namespace castor3d
 				&& ( lhs.renderTarget() == rhs.renderTarget() );
 		}
 
-		result = result && ( lhs.folder() == rhs.folder() );
-		result = result && ( lhs.relative() == rhs.relative() );
-		result = result && ( lhs.allowCompression() == rhs.allowCompression() );
-		return result && ( lhs.generateMips() == rhs.generateMips() );
+		if ( lhs.isBufferImage() || rhs.isBufferImage() )
+		{
+			result = result
+				&& ( lhs.isBufferImage() && rhs.isBufferImage() )
+				&& ( lhs.name() == rhs.name() )
+				&& ( lhs.type() == rhs.type() )
+				&& ( lhs.buffer().size() == rhs.buffer().size() );
+		}
+		else if ( lhs.isFileImage() || rhs.isFileImage() )
+		{
+			result = result
+				&& ( lhs.isFileImage() && rhs.isFileImage() )
+				&& ( lhs.folder() == rhs.folder() )
+				&& ( lhs.relative() == rhs.relative() );
+		}
+
+		return result
+			&& ( lhs.allowCompression() == rhs.allowCompression() )
+			&& ( lhs.generateMips() == rhs.generateMips() );
 	}
 
 	//************************************************************************************************

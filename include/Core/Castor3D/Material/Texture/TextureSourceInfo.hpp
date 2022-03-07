@@ -22,6 +22,11 @@ namespace castor3d
 			, castor::Path relative
 			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
 		C3D_API TextureSourceInfo( SamplerRes sampler
+			, castor::String name
+			, castor::String type
+			, castor::ByteArray data
+			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
+		C3D_API TextureSourceInfo( SamplerRes sampler
 			, RenderTargetSPtr renderTarget );
 		C3D_API TextureSourceInfo( SamplerRes sampler
 			, ashes::ImageCreateInfo const & createInfo );
@@ -39,6 +44,11 @@ namespace castor3d
 		bool isFileImage()const
 		{
 			return !m_relative.empty();
+		}
+
+		bool isBufferImage()const
+		{
+			return !m_data.empty();
 		}
 
 		bool isVulkanImage()const
@@ -64,27 +74,45 @@ namespace castor3d
 			return m_relative;
 		}
 
+		castor::String const & name()const
+		{
+			CU_Require( isBufferImage() );
+			return m_name;
+		}
+
+		castor::String const & type()const
+		{
+			CU_Require( isBufferImage() );
+			return m_type;
+		}
+
+		castor::ByteArray const & buffer()const
+		{
+			CU_Require( isBufferImage() );
+			return m_data;
+		}
+
 		bool allowCompression()const
 		{
-			CU_Require( isFileImage() );
+			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig.allowCompression;
 		}
 
 		bool generateMips()const
 		{
-			CU_Require( isFileImage() );
+			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig.generateMips;
 		}
 
 		bool layersToTiles()const
 		{
-			CU_Require( isFileImage() );
+			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig.layersToTiles;
 		}
 
 		castor::ImageLoaderConfig const & config()const
 		{
-			CU_Require( isFileImage() );
+			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig;
 		}
 
@@ -92,6 +120,7 @@ namespace castor3d
 		{
 			CU_Require( !isRenderTarget() );
 			CU_Require( !isFileImage() );
+			CU_Require( !isBufferImage() );
 			return m_createInfo;
 		}
 
@@ -103,6 +132,10 @@ namespace castor3d
 		castor::Path m_folder{};
 		castor::Path m_relative{};
 		castor::ImageLoaderConfig m_loadConfig{};
+		// Image buffer mode
+		castor::String m_name{};
+		castor::String m_type{};
+		castor::ByteArray m_data{};
 		// Vulkan image mode.
 		ashes::ImageCreateInfo m_createInfo{ {} };
 	};
