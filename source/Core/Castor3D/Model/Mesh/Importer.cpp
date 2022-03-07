@@ -356,6 +356,20 @@ namespace castor3d
 			, { allowCompression, true, true } };
 	}
 
+	TextureSourceInfo MeshImporter::loadTexture( castor3d::SamplerRes sampler
+		, castor::String name
+		, castor::String type
+		, castor::ByteArray data
+		, TextureConfiguration const & config )const
+	{
+		bool allowCompression = config.normalMask[0] == 0;
+		return TextureSourceInfo{ sampler
+			, std::move( name )
+			, std::move( type )
+			, std::move( data )
+			, { allowCompression, true, true } };
+	}
+
 	void MeshImporter::loadTexture( castor3d::SamplerRes sampler
 		, castor::Path const & path
 		, PassTextureConfig const & config
@@ -364,6 +378,28 @@ namespace castor3d
 		try
 		{
 			pass.registerTexture( loadTexture( sampler, path, config.config )
+				, config );
+		}
+		catch ( std::exception & exc )
+		{
+			log::error << exc.what() << std::endl;
+		}
+	}
+
+	void MeshImporter::loadTexture( castor3d::SamplerRes sampler
+		, castor::String name
+		, castor::String type
+		, castor::ByteArray data
+		, PassTextureConfig const & config
+		, Pass & pass )const
+	{
+		try
+		{
+			pass.registerTexture( loadTexture( sampler
+					, std::move( name )
+					, std::move( type )
+					, std::move( data )
+					, config.config )
 				, config );
 		}
 		catch ( std::exception & exc )
