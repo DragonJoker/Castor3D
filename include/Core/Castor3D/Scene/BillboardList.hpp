@@ -101,6 +101,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API ProgramFlags getProgramFlags()const;
+		C3D_API uint32_t getId( Pass const & pass )const;
 
 		MaterialRPtr getMaterial()const
 		{
@@ -166,16 +167,6 @@ namespace castor3d
 		{
 			return m_billboardSize;
 		}
-
-		uint32_t getId()const
-		{
-			return m_id;
-		}
-
-		void setId( uint32_t id )
-		{
-			m_id = id;
-		}
 		/**@}*/
 		/**
 		*\~english
@@ -186,6 +177,8 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
+		C3D_API void setId( Pass const & pass, uint32_t id );
+
 		void setDimensions( castor::Point2f const & value )
 		{
 			m_dimensions = value;
@@ -243,7 +236,7 @@ namespace castor3d
 		uint32_t m_centerOffset{ 0u };
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
-		uint32_t m_id{};
+		std::unordered_map< Pass const *, uint32_t > m_ids{};
 	};
 
 	class BillboardList

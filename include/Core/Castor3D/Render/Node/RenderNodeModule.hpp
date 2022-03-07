@@ -78,12 +78,6 @@ namespace castor3d
 	/**@name Traits */
 	//@{
 
-	struct PipelineComp
-	{
-		C3D_API bool operator()( RenderPipeline const * lhs
-			, RenderPipeline const * rhs )const;
-	};
-
 	template< typename NodeT >
 	struct RenderNodeTraitsT
 	{
@@ -115,7 +109,7 @@ namespace castor3d
 	using NodePtrByBufferMapT = std::map< ashes::BufferBase const *, NodePtrArrayT< NodeT > >;
 
 	template< typename NodeT >
-	using NodePtrByPipelineMapT = std::map< uint32_t, std::pair< RenderPipeline *, NodePtrByBufferMapT< NodeT > > >;
+	using NodePtrByPipelineMapT = std::map< uint64_t, std::pair< RenderPipeline *, NodePtrByBufferMapT< NodeT > > >;
 
 	using SubmeshRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< SubmeshRenderNode >;
 	using BillboardRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< BillboardRenderNode >;
@@ -134,7 +128,7 @@ namespace castor3d
 	using ObjectNodesPtrByBufferMapT = std::map< ashes::BufferBase const *, ObjectNodesPtrByPassT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByPipelineMapT = std::map< uint32_t, std::pair< RenderPipeline *, ObjectNodesPtrByBufferMapT< NodeT > > >;
+	using ObjectNodesPtrByPipelineMapT = std::map< uint64_t, std::pair< RenderPipeline *, ObjectNodesPtrByBufferMapT< NodeT > > >;
 
 	using SubmeshRenderNodesPtrByPipelineMap = ObjectNodesPtrByPipelineMapT< SubmeshRenderNode >;
 

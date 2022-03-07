@@ -17,15 +17,16 @@ namespace castor3d
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name );
-	uint32_t getPipelineBaseHash( ProgramFlags programFlags
+	uint64_t getPipelineBaseHash( ProgramFlags programFlags
 		, PassFlags passFlags
 		, uint32_t texturesCount
-		, TextureFlags texturesFlags );
-	uint32_t getPipelineBaseHash( RenderNodesPass const & renderPass
+		, TextureFlags texturesFlags
+		, uint32_t layerIndex );
+	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
 		, bool isFrontCulled );
-	uint32_t getPipelineBaseHash( RenderNodesPass const & renderPass
+	uint64_t getPipelineBaseHash( RenderNodesPass const & renderPass
 		, BillboardBase const & data
 		, Pass const & pass
 		, bool isFrontCulled );
@@ -55,7 +56,7 @@ namespace castor3d
 		template< typename NodeT >
 		using SidedNodeBufferMapT = std::map< ashes::BufferBase const *, SidedNodeArrayT< NodeT > >;
 		template< typename NodeT >
-		using SidedNodePipelineMapT = std::map< uint32_t, SidedNodeBufferMapT< NodeT > >;
+		using SidedNodePipelineMapT = std::map< uint64_t, SidedNodeBufferMapT< NodeT > >;
 
 		template< typename NodeT >
 		using SidedObjectNodeMapT = std::map< NodeObjectT< NodeT > const *, SidedNodeArrayT< NodeT > >;
@@ -64,7 +65,7 @@ namespace castor3d
 		template< typename NodeT >
 		using SidedObjectNodeBufferMapT = std::map< ashes::BufferBase const *, SidedObjectNodePassMapT< NodeT > >;
 		template< typename NodeT >
-		using SidedObjectNodePipelineMapT = std::map< uint32_t, SidedObjectNodeBufferMapT< NodeT > >;
+		using SidedObjectNodePipelineMapT = std::map< uint64_t, SidedObjectNodeBufferMapT< NodeT > >;
 
 		using IndexedDrawCommandsBuffer = ashes::BufferPtr< VkDrawIndexedIndirectCommand >;
 		using DrawCommandsBuffer = ashes::BufferPtr< VkDrawIndirectCommand >;
