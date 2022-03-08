@@ -52,26 +52,29 @@ namespace castor3d
 				, [this, prv]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
-					auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
-					auto & vertexBuffer = offsets.getVertexBuffer();
-					auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
-					auto & staging = m_animationObject.getComponent().getStagingBuffer();
-					auto & commandBuffer = m_animationObject.getComponent().getCommandBuffer();
-					commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-					staging.uploadBufferData( commandBuffer
-						, reinterpret_cast< uint8_t const * >( prv.m_buffer.data() )
-						, prv.m_buffer.size() * sizeof( InterleavedVertex )
-						, vertexBuffer );
-					commandBuffer.end();
-					queueData.queue->submit( commandBuffer );
-
-					if ( auto * buffer = animBuffer.lock() )
+					if ( m_animationObject.getComponent().isReady() )
 					{
-						std::copy( prv.m_buffer.begin()
-							, prv.m_buffer.end()
-							, buffer );
-						animBuffer.flush();
-						animBuffer.unlock();
+						auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
+						auto & vertexBuffer = offsets.getVertexBuffer();
+						auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
+						auto & staging = m_animationObject.getComponent().getStagingBuffer();
+						auto & commandBuffer = m_animationObject.getComponent().getCommandBuffer();
+						commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+						staging.uploadBufferData( commandBuffer
+							, reinterpret_cast< uint8_t const * >( prv.m_buffer.data() )
+							, prv.m_buffer.size() * sizeof( InterleavedVertex )
+							, vertexBuffer );
+						commandBuffer.end();
+						queueData.queue->submit( commandBuffer );
+
+						if ( auto * buffer = animBuffer.lock() )
+						{
+							std::copy( prv.m_buffer.begin()
+								, prv.m_buffer.end()
+								, buffer );
+							animBuffer.flush();
+							animBuffer.unlock();
+						}
 					}
 				} ) );
 		}
