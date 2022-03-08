@@ -31,7 +31,7 @@ namespace castor3d
 		 *\param[in]		submesh	Le sous-maillage.
 		 *\param[in,out]	triFace	Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeFacesFromPolygonVertex( Submesh & submesh
+		C3D_API static void computeFacesFromPolygonVertex( InterleavedVertexArray & points
 			, TriFaceMapping & triFace );
 		/**
 		 *\~english
@@ -45,33 +45,9 @@ namespace castor3d
 		 *\param[in]		reverted	Dit si les normales doivent être inversées.
 		 *\param[in,out]	triFace		Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeNormals( Submesh & submesh
-			, TriFaceMapping & triFace
+		C3D_API static void computeNormals( InterleavedVertexArray & points
+			, TriFaceMapping const & triFace
 			, bool reverted = false );
-		/**
-		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face.
-		 *\param[in]	submesh	The submesh.
-		 *\param[in]	face	The face.
-		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	submesh	Le sous-maillage.
-		 *\param[in]	face	La face.
-		 */
-		C3D_API static void computeNormals( Submesh & submesh
-			, Face const & face );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face.
-		 *\param[in]	submesh	The submesh.
-		 *\param[in]	face	The face.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	submesh	Le sous-maillage.
-		 *\param[in]	face	La face.
-		 */
-		C3D_API static void computeTangents( Submesh & submesh
-			, Face const & face );
 		/**
 		 *\~english
 		 *\brief			Computes tangent for each vertex of the submesh.
@@ -84,8 +60,32 @@ namespace castor3d
 		 *\param[in]		submesh	Le sous-maillage.
 		 *\param[in,out]	triFace	Le composant qui va recevoir les faces calculées.
 		 */
-		C3D_API static void computeTangentsFromNormals( Submesh & submesh
-			, TriFaceMapping & triFace );
+		C3D_API static void computeTangentsFromNormals( InterleavedVertexArray & points
+			, TriFaceMapping const & triFace );
+		/**
+		 *\~english
+		 *\brief		Computes normal and tangent for each vertex of the given face.
+		 *\param[in]	submesh	The submesh.
+		 *\param[in]	face	The face.
+		 *\~french
+		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\param[in]	face	La face.
+		 */
+		C3D_API static void computeNormals( InterleavedVertexArray & points
+			, Face const & face );
+		/**
+		 *\~english
+		 *\brief		Computes tangent for each vertex of the given face.
+		 *\param[in]	submesh	The submesh.
+		 *\param[in]	face	The face.
+		 *\~french
+		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
+		 *\param[in]	submesh	Le sous-maillage.
+		 *\param[in]	face	La face.
+		 */
+		C3D_API static void computeTangents( InterleavedVertexArray & points
+			, Face const & face );
 	};
 }
 

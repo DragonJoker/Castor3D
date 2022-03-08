@@ -8,11 +8,9 @@ using namespace castor;
 
 namespace castor3d
 {
-	void SubmeshUtils::computeFacesFromPolygonVertex( Submesh & submesh
+	void SubmeshUtils::computeFacesFromPolygonVertex( InterleavedVertexArray & points
 		, TriFaceMapping & triFace )
 	{
-		auto & points = submesh.getPoints();
-
 		if ( !points.empty() )
 		{
 			auto * v1 = &points[0];
@@ -34,11 +32,10 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshUtils::computeNormals( Submesh & submesh
-		, TriFaceMapping & triFace
+	void SubmeshUtils::computeNormals( InterleavedVertexArray & points
+		, TriFaceMapping const & triFace
 		, bool reverted )
 	{
-		auto & points = submesh.getPoints();
 		auto & faces = triFace.getFaces();
 		castor::Point3f pt0;
 
@@ -103,43 +100,9 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshUtils::computeNormals( Submesh & submesh
-		, Face const & face )
+	void SubmeshUtils::computeTangentsFromNormals( InterleavedVertexArray & points
+		, TriFaceMapping const & triFace )
 	{
-		auto & points = submesh.getPoints();
-		auto & vtx1 = points[face[0]];
-		auto & vtx2 = points[face[1]];
-		auto & vtx3 = points[face[2]];
-		auto const vec2m1 = vtx2.pos - vtx1.pos;
-		auto const vec3m1 = vtx3.pos - vtx1.pos;
-		auto const faceNormal = point::getNormalised( -point::cross( vec3m1, vec2m1 ) );
-		vtx1.nml += faceNormal;
-		vtx2.nml += faceNormal;
-		vtx3.nml += faceNormal;
-		computeTangents( submesh, face );
-	}
-
-	void SubmeshUtils::computeTangents( Submesh & submesh
-		, Face const & face )
-	{
-		auto & points = submesh.getPoints();
-		auto & vtx1 = points[face[0]];
-		auto & vtx2 = points[face[1]];
-		auto & vtx3 = points[face[2]];
-		auto const vec2m1 = vtx2.pos - vtx1.pos;
-		auto const vec3m1 = vtx3.pos - vtx1.pos;
-		auto const tex2m1 = vtx2.tex - vtx1.tex;
-		auto const tex3m1 = vtx3.tex - vtx1.tex;
-		auto const faceTangent = point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
-		vtx1.tan += faceTangent;
-		vtx2.tan += faceTangent;
-		vtx3.tan += faceTangent;
-	}
-
-	void SubmeshUtils::computeTangentsFromNormals( Submesh & submesh
-		, TriFaceMapping & triFace )
-	{
-		auto & points = submesh.getPoints();
 		auto & faces = triFace.getFaces();
 		castor::Point3fArray arrayTangents( points.size() );
 
@@ -182,5 +145,36 @@ namespace castor3d
 			point.tan = tangent;
 			i++;
 		}
+	}
+
+	void SubmeshUtils::computeNormals( InterleavedVertexArray & points
+		, Face const & face )
+	{
+		auto & vtx1 = points[face[0]];
+		auto & vtx2 = points[face[1]];
+		auto & vtx3 = points[face[2]];
+		auto const vec2m1 = vtx2.pos - vtx1.pos;
+		auto const vec3m1 = vtx3.pos - vtx1.pos;
+		auto const faceNormal = point::getNormalised( -point::cross( vec3m1, vec2m1 ) );
+		vtx1.nml += faceNormal;
+		vtx2.nml += faceNormal;
+		vtx3.nml += faceNormal;
+		computeTangents( points, face );
+	}
+
+	void SubmeshUtils::computeTangents( InterleavedVertexArray & points
+		, Face const & face )
+	{
+		auto & vtx1 = points[face[0]];
+		auto & vtx2 = points[face[1]];
+		auto & vtx3 = points[face[2]];
+		auto const vec2m1 = vtx2.pos - vtx1.pos;
+		auto const vec3m1 = vtx3.pos - vtx1.pos;
+		auto const tex2m1 = vtx2.tex - vtx1.tex;
+		auto const tex3m1 = vtx3.tex - vtx1.tex;
+		auto const faceTangent = point::getNormalised( ( vec2m1 * tex3m1[1] ) - ( vec3m1 * tex2m1[1] ) );
+		vtx1.tan += faceTangent;
+		vtx2.tan += faceTangent;
+		vtx3.tan += faceTangent;
 	}
 }

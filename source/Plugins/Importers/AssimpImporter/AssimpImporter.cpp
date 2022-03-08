@@ -1840,32 +1840,48 @@ namespace C3dAssimp
 					}
 				}
 
-				if ( !aiMesh.mNormals )
+				if ( !aiMesh.HasNormals() )
 				{
 					mapping->computeNormals( true );
 				}
-				else if ( !aiMesh.mTangents )
+				else if ( !aiMesh.HasTangentsAndBitangents() )
 				{
 					mapping->computeTangentsFromNormals();
 				}
 
 				submesh.setIndexMapping( mapping );
 
-				if ( aiScene.HasAnimations() )
+				if ( aiMesh.mNumAnimMeshes )
 				{
-					for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
-					{
-						auto it = std::find_if( aiAnimation->mMeshChannels
-							, aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels
-							, [&aiMesh]( aiMeshAnim const * lookup )
-							{
-								return lookup->mName == aiMesh.mName;
-							} );
+					int32_t index = 0u;
+					castor::String name{ castor::string::stringCast< xchar >( aiMesh.mName.C_Str() ) };
+					log::info << cuT( "  Mesh Animation found: [" ) << name << cuT( "]" ) << std::endl;
+					auto & animation = mesh.createAnimation( name );
+					MeshAnimationSubmesh animSubmesh{ animation, submesh };
+					animation.addChild( std::move( animSubmesh ) );
+					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+						, castor::Milliseconds{ int64_t( index++ * 2000 ) } );
+					keyFrame->addSubmeshBuffer( submesh, submesh.getPoints() );
+					animation.addKeyFrame( std::move( keyFrame ) );
+					auto const & cmapping = *mapping;
 
-						if ( it != aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels )
+					for ( auto aiAnimMesh : castor::makeArrayView( aiMesh.mAnimMeshes, aiMesh.mNumAnimMeshes ) )
+					{
+						keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
+							, castor::Milliseconds{ int64_t( index++ * 2000 ) } );
+						auto points = createVertexBuffer( *aiAnimMesh );
+
+						if ( !aiAnimMesh->HasNormals() )
 						{
-							doProcessAnimationMeshes( mesh, submesh, aiMesh, *( *it ) );
+							cmapping.computeNormals( points, true );
 						}
+						else if ( !aiAnimMesh->HasTangentsAndBitangents() )
+						{
+							cmapping.computeTangentsFromNormals( points );
+						}
+
+						keyFrame->addSubmeshBuffer( submesh, points );
+						animation.addKeyFrame( std::move( keyFrame ) );
 					}
 				}
 
@@ -1879,24 +1895,9 @@ namespace C3dAssimp
 	void AssimpImporter::doProcessAnimationMeshes( Mesh & mesh
 		, Submesh & submesh
 		, aiMesh const & aiMesh
-		, aiMeshAnim const & aiMeshAnim )
+		, aiAnimMesh const & aiAnimMesh
+		, uint32_t index )
 	{
-		if ( aiMeshAnim.mNumKeys )
-		{
-			castor::String name{ castor::string::stringCast< xchar >( aiMeshAnim.mName.C_Str() ) };
-			log::debug << cuT( "  Mesh Animation found: [" ) << name << cuT( "]" ) << std::endl;
-			auto & animation = mesh.createAnimation( name );
-			MeshAnimationSubmesh animSubmesh{ animation, submesh };
-			animation.addChild( std::move( animSubmesh ) );
-
-			for ( auto aiKey : castor::makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
-			{
-				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
-					, castor::Milliseconds{ int64_t( aiKey.mTime * 1000 ) } );
-				keyFrame->addSubmeshBuffer( submesh, createVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
-				animation.addKeyFrame( std::move( keyFrame ) );
-			}
-		}
 	}
 
 	MaterialResPtr AssimpImporter::doProcessMaterial( Scene & scene
@@ -2000,7 +2001,7 @@ namespace C3dAssimp
 			name = animName;
 		}
 
-		log::debug << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		log::info << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & animation = skeleton.createAnimation( name );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
@@ -2207,6 +2208,13 @@ namespace C3dAssimp
 		, aiNode const & aiNode
 		, aiNodeAnim const & aiNodeAnim )
 	{
+		if ( aiNodeAnim.mNumPositionKeys <= 1
+			&& aiNodeAnim.mNumScalingKeys <= 1
+			&& aiNodeAnim.mNumRotationKeys <= 1 )
+		{
+			return;
+		}
+
 		castor::String name{ castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
 
 		if ( name.empty() )
@@ -2214,7 +2222,7 @@ namespace C3dAssimp
 			name = node.getName();
 		}
 
-		log::debug << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & animation = node.createAnimation( name );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
