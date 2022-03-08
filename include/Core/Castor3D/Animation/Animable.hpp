@@ -41,13 +41,18 @@ namespace castor3d
 		inline void cleanupAnimations();
 		/**
 		 *\~english
-		 *\brief		Retrieves an animation
-		 *\param[in]	name	The animation name
-		 *\return		The animation
+		 *\return		\p true if the object has an animation.
 		 *\~french
-		 *\brief		Récupère une animation
+		 *\return		\p true si l'objet a une animation.
+		 */
+		inline bool hasAnimation()const;
+		/**
+		 *\~english
+		 *\param[in]	name	The animation name
+		 *\return		\p true it the object has an animation with given name.
+		 *\~french
 		 *\param[in]	name	Le nom de l'animation
-		 *\return		L'animation
+		 *\return		\p true si l'objet a une animation ayant le nom donné.
 		 */
 		inline bool hasAnimation( castor::String const & name )const;
 		/**
