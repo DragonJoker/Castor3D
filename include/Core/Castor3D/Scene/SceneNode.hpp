@@ -47,7 +47,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~SceneNode();
+		C3D_API ~SceneNode()override;
 		/**
 		 *\~english
 		 *\brief		Updates the scene node matrices.
