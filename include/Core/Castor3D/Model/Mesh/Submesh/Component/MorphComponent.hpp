@@ -59,6 +59,14 @@ namespace castor3d
 			return *m_stagingBuffer;
 		}
 
+		bool isReady()const
+		{
+			return m_commandBuffer
+				&& m_stagingBuffer
+				&& m_animBuffer
+				&& m_fence;
+		}
+
 		ashes::CommandBuffer & getCommandBuffer()const
 		{
 			return *m_commandBuffer;
