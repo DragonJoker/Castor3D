@@ -93,6 +93,11 @@ namespace castor3d
 		 */
 		C3D_API void computeFacesFromPolygonVertex();
 		/**
+		 *\copydoc		castor3d::IndexMapping::computeNormals
+		 */
+		C3D_API void computeNormals( InterleavedVertexArray & points
+			, bool reverted = false )const;
+		/**
 		 *\~english
 		 *\brief		Computes normal and tangent for each vertex of the given face.
 		 *\param[in]	face	The face.
@@ -101,6 +106,16 @@ namespace castor3d
 		 *\param[in]	face	La face.
 		 */
 		C3D_API void computeNormals( Face const & face );
+		/**
+		 *\~english
+		 *\brief		Computes normal and tangent for each vertex of the given face.
+		 *\param[in]	face	The face.
+		 *\~french
+		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
+		 *\param[in]	face	La face.
+		 */
+		C3D_API void computeNormals( InterleavedVertexArray & points
+			, Face const & face )const;
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the given face.
@@ -112,6 +127,16 @@ namespace castor3d
 		C3D_API void computeTangents( Face const & face );
 		/**
 		 *\~english
+		 *\brief		Computes tangent for each vertex of the given face.
+		 *\param[in]	face	The face.
+		 *\~french
+		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
+		 *\param[in]	face	La face.
+		 */
+		C3D_API void computeTangents( InterleavedVertexArray & points
+			, Face const & face )const;
+		/**
+		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh.
 		 *\remarks		This function supposes the normals are defined.
 		 *\~french
@@ -119,6 +144,15 @@ namespace castor3d
 		 *\remarks		Cette fonction suppose que les normales sont définies.
 		 */
 		C3D_API void computeTangentsFromNormals();
+		/**
+		 *\~english
+		 *\brief		Computes tangent for each vertex of the submesh.
+		 *\remarks		This function supposes the normals are defined.
+		 *\~french
+		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage.
+		 *\remarks		Cette fonction suppose que les normales sont définies.
+		 */
+		C3D_API void computeTangentsFromNormals( InterleavedVertexArray & points )const;
 		/**
 		 *\copydoc		castor3d::IndexMapping::getCount
 		 */
@@ -147,7 +181,7 @@ namespace castor3d
 		 *\brief		Crée et ajoute une face au sous-maillage.
 		 *\param[in]	faces	Les faces.
 		 */
-		inline void addFaceGroup( std::vector< FaceIndices > const & faces )
+		void addFaceGroup( std::vector< FaceIndices > const & faces )
 		{
 			addFaceGroup( faces.data(), faces.data() + faces.size() );
 		}
@@ -160,7 +194,7 @@ namespace castor3d
 		 *\param[in]	faces	Les faces.
 		 */
 		template< size_t Count >
-		inline void addFaceGroup( std::array< FaceIndices, Count > const & faces )
+		void addFaceGroup( std::array< FaceIndices, Count > const & faces )
 		{
 			addFaceGroup( faces.data(), faces.data() + Count );
 		}
@@ -187,7 +221,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\return		La valeur.
 		 */
-		inline Face const & operator[]( uint32_t index )const
+		Face const & operator[]( uint32_t index )const
 		{
 			CU_Require( index < m_faces.size() );
 			return m_faces[index];
@@ -198,7 +232,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tableau de faces.
 		 */
-		inline FaceArray const & getFaces()const
+		FaceArray const & getFaces()const
 		{
 			return m_faces;
 		}
@@ -208,7 +242,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tableau de faces.
 		 */
-		inline FaceArray & getFaces()
+		FaceArray & getFaces()
 		{
 			return m_faces;
 		}

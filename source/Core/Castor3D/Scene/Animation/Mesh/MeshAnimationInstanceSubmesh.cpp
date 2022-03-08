@@ -49,7 +49,7 @@ namespace castor3d
 		if ( &cur != m_cur )
 		{
 			getOwner()->getAnimatedMesh().getMesh().getScene()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, prv]( RenderDevice const & device
+				, [this, prv, cur]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
 					if ( m_animationObject.getComponent().isReady() )
@@ -69,8 +69,8 @@ namespace castor3d
 
 						if ( auto * buffer = animBuffer.lock() )
 						{
-							std::copy( prv.m_buffer.begin()
-								, prv.m_buffer.end()
+							std::copy( cur.m_buffer.begin()
+								, cur.m_buffer.end()
 								, buffer );
 							animBuffer.flush();
 							animBuffer.unlock();
