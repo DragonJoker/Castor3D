@@ -140,6 +140,22 @@ namespace castor
 		m_skeletonEntries.clear();
 	}
 
+	std::vector< AnimatedObject * > ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::findObject( castor::String const & name )const
+	{
+		std::vector< AnimatedObject * > result;
+		auto lock( castor::makeUniqueLock( *this ) );
+
+		for ( auto it : *this )
+		{
+			if ( auto animObject = it.second->findObject( name ) )
+			{
+				result.push_back( animObject );
+			}
+		}
+
+		return result;
+	}
+
 	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const & device
 		, AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh )
@@ -255,7 +271,6 @@ namespace castor
 				m_meshRemovedConnections.erase( &group );
 				m_skeletonAddedConnections.erase( &group );
 				m_skeletonRemovedConnections.erase( &group );
-				m_textureAddedConnections.erase( &group );
 				m_textureRemovedConnections.erase( &group );
 
 				for ( auto & pair : group.getObjects() )

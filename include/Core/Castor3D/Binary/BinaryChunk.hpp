@@ -55,9 +55,6 @@ namespace castor3d
 			| ( uint64_t( h ) << 0 ) );
 	}
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		15/04/2013
 	\~english
 	\brief		Binary data chunk types enumeration
 	\~french
@@ -115,6 +112,13 @@ namespace castor3d
 		eSubmeshIndexComponentCount = makeChunkID( 'S', 'M', 'F', 'C', 'C', 'P', 'C', 'T' ),
 		eSubmeshIndexCount = makeChunkID( 'S', 'M', 'S', 'H', 'I', 'C', 'C', 'T' ),
 		eSubmeshIndices = makeChunkID( 'S', 'M', 'S', 'H', 'I', 'D', 'C', 'S' ),
+		// Version 1.5
+		eSceneNodeAnimation = makeChunkID( 'S', 'C', 'N', 'D', 'A', 'N', 'I', 'M' ),
+		eSceneNodeAnimationKeyFrame = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'R', 'M' ),
+		eSceneNodeAnimationKeyFrameTime = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'T', 'M' ),
+		eSceneNodeAnimationKeyFrameTranslate = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'T', 'R' ),
+		eSceneNodeAnimationKeyFrameRotate = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'R', 'T' ),
+		eSceneNodeAnimationKeyFrameScale = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'S', 'L' ),
 	};
 	/**
 	 *\~english

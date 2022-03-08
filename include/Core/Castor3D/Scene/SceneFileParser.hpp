@@ -183,7 +183,7 @@ namespace castor3d
 		AnimatedObjectGroupSPtr animGroup{};
 		AnimatedObjectSPtr animSkeleton{};
 		AnimatedObjectSPtr animMesh{};
-		AnimatedObjectSPtr animMovable{};
+		AnimatedObjectSPtr animNode{};
 		AnimatedObjectSPtr animTexture{};
 		TextureAnimationUPtr textureAnimation{};
 		SceneBackgroundSPtr background{};

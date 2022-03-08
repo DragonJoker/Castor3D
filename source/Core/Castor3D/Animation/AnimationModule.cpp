@@ -6,8 +6,8 @@ namespace castor3d
 	{
 		switch ( value )
 		{
-		case AnimationType::eMovable:
-			return cuT( "movable" );
+		case AnimationType::eSceneNode:
+			return cuT( "scene_node" );
 		case AnimationType::eSkeleton:
 			return cuT( "skeleton" );
 		case AnimationType::eMesh:

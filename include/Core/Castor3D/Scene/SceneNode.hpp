@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneNode_H___
 #define ___C3D_SceneNode_H___
 
-#include "SceneModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+
+#include "Castor3D/Animation/Animable.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
@@ -16,7 +18,7 @@ namespace castor3d
 {
 	class SceneNode
 		: public std::enable_shared_from_this< SceneNode >
-		, public castor::OwnedBy< Scene >
+		, public Animable
 		, public castor::Named
 	{
 	public:
@@ -38,21 +40,6 @@ namespace castor3d
 		 *\param[in]	scene		La scène parente.
 		 */
 		C3D_API SceneNode( castor::String const & name
-			, Scene & scene );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	name		The node's name.
-		 *\param[in]	parent		The parent node.
-		 *\param[in]	scene		The parent scene.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	name		Le nom du noeud.
-		 *\param[in]	parent		Le noeud parent.
-		 *\param[in]	scene		La scène parente.
-		 */
-		C3D_API SceneNode( castor::String const & name
-			, SceneNode & parent
 			, Scene & scene );
 		/**
 		 *\~english
@@ -213,6 +200,26 @@ namespace castor3d
 		 *\param[in]	s	La valeur d'échelle
 		 */
 		C3D_API void scale( castor::Point3f const & s );
+		/**
+		 *\~english
+		 *\brief		Creates an animation
+		 *\param[in]	name	The animation name
+		 *\return		The animation
+		 *\~french
+		 *\brief		Crée une animation
+		 *\param[in]	name	Le nom de l'animation
+		 *\return		l'animation
+		 */
+		C3D_API SceneNodeAnimation & createAnimation( castor::String const & name );
+		/**
+		 *\~english
+		 *\brief		Removes an animation
+		 *\param[in]	name	The animation name
+		 *\~french
+		 *\brief		Retire une animation
+		 *\param[in]	name	Le nom de l'animation
+		 */
+		C3D_API void removeAnimation( castor::String const & name );
 		/**@}*/
 		/**
 		 *\name Absolute value getters.
@@ -262,6 +269,11 @@ namespace castor3d
 		{
 			return m_parent;
 		}
+
+		Scene * getScene()const
+		{
+			return &m_scene;
+		}
 		/**@}*/
 		/**
 		 *\name Other getters.
@@ -297,6 +309,7 @@ namespace castor3d
 
 	private:
 		static uint64_t CurrentId;
+		Scene & m_scene;
 		uint64_t m_id;
 		bool m_displayable;
 		bool m_visible{ true };
