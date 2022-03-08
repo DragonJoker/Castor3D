@@ -15,6 +15,8 @@ namespace castor3d
 		: AnimationInstance{ object, animation }
 		, m_animatedSceneNode{ object }
 		, m_sceneNodeAnimation{ animation }
+		, m_prev{ animation.isEmpty() ? animation.end() : animation.begin() }
+		, m_curr{ animation.isEmpty() ? animation.end() : animation.begin() + 1 }
 		, m_initialTranslate{ object.getSceneNode().getPosition() }
 		, m_initialRotate{ object.getSceneNode().getOrientation() }
 		, m_initialScale{ object.getSceneNode().getScale() }
@@ -23,26 +25,22 @@ namespace castor3d
 
 	void SceneNodeAnimationInstance::doUpdate()
 	{
-		if ( m_first )
+		if ( !m_sceneNodeAnimation.isEmpty() )
 		{
-			m_prev = m_sceneNodeAnimation.isEmpty() ? m_sceneNodeAnimation.end() : m_sceneNodeAnimation.begin();
-			m_curr = m_sceneNodeAnimation.isEmpty() ? m_sceneNodeAnimation.end() : m_sceneNodeAnimation.begin() + 1;
-			m_first = false;
+			m_sceneNodeAnimation.findKeyFrame( m_currentTime
+				, m_prev
+				, m_curr );
+			auto & prev = static_cast< SceneNodeAnimationKeyFrame const & >( **m_prev );
+			auto & curr = static_cast< SceneNodeAnimationKeyFrame const & >( **m_curr );
+			auto ratio = float( ( m_currentTime - ( *m_prev )->getTimeIndex() ).count() ) / float( ( ( *m_curr )->getTimeIndex() - ( *m_prev )->getTimeIndex() ).count() );
+
+			auto translate = m_vecInterpolator.interpolate( prev.getPosition(), curr.getPosition(), ratio );
+			auto rotate = m_quatInterpolator.interpolate( prev.getRotation(), curr.getRotation(), ratio );
+			auto scale = m_vecInterpolator.interpolate( prev.getScale(), curr.getScale(), ratio );
+
+			m_animatedSceneNode.getSceneNode().setPosition( translate );
+			m_animatedSceneNode.getSceneNode().setOrientation( rotate );
+			m_animatedSceneNode.getSceneNode().setScale( scale );
 		}
-
-		m_sceneNodeAnimation.findKeyFrame( m_currentTime
-			, m_prev
-			, m_curr );
-		auto & prev = static_cast< SceneNodeAnimationKeyFrame const & >( **m_prev );
-		auto & curr = static_cast< SceneNodeAnimationKeyFrame const & >( **m_curr );
-		auto ratio = float( ( m_currentTime - ( *m_prev )->getTimeIndex() ).count() ) / float( ( ( *m_curr )->getTimeIndex() - ( *m_prev )->getTimeIndex() ).count() );
-
-		auto translate = m_vecInterpolator.interpolate( prev.getPosition(), curr.getPosition(), ratio );
-		auto rotate = m_quatInterpolator.interpolate( prev.getRotation(), curr.getRotation(), ratio );
-		auto scale = m_vecInterpolator.interpolate( prev.getScale(), curr.getScale(), ratio );
-
-		m_animatedSceneNode.getSceneNode().setPosition( translate );
-		m_animatedSceneNode.getSceneNode().setOrientation( rotate );
-		m_animatedSceneNode.getSceneNode().setScale( scale );
 	}
 }
