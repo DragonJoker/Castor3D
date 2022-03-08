@@ -1,6 +1,7 @@
 #include "SceneExporter/CscnExporter.hpp"
 
 #include <Castor3D/Binary/BinaryMesh.hpp>
+#include <Castor3D/Binary/BinaryMeshAnimation.hpp>
 #include <Castor3D/Binary/BinarySceneNodeAnimation.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Binary/BinarySkeletonAnimation.hpp>
@@ -15,6 +16,7 @@
 #include <Castor3D/Model/Mesh/Importer.hpp>
 #include <Castor3D/Model/Mesh/ImporterFactory.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
@@ -639,6 +641,16 @@ namespace castor3d::exporter
 						castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
 						castor3d::BinaryWriter< castor3d::Mesh > writer;
 						result = writer.write( options.object, file );
+					}
+
+					for ( auto & animation : options.object.getAnimations() )
+					{
+						if ( result )
+						{
+							castor::BinaryFile animFile{ options.path / ( options.name + cuT( "-" ) + animation.first + cuT( ".cmsa" ) )
+								, castor::File::OpenMode::eWrite };
+							result = castor3d::BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation.second ), animFile );
+						}
 					}
 				}
 
