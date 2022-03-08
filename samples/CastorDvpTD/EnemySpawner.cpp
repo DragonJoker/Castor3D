@@ -60,12 +60,10 @@ namespace castortd
 		{
 			String name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
 			auto baseNode = p_game.getScene().getSceneNodeCache().add( name + cuT( "_Base" )
-				, *p_game.getScene().getObjectRootNode()
 				, p_game.getScene() ).lock();
 			baseNode->setPosition( p_game.convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 } );
 			baseNode->attachTo( *p_game.getMapNode() );
 			auto node = p_game.getScene().getSceneNodeCache().add( name
-				, *p_game.getScene().getObjectRootNode()
 				, p_game.getScene() ).lock();
 			node->setOrientation( Quaternion::fromAxisAngle( castor::Point3f{ 1, 0, 1 }, 45.0_degrees ) );
 			node->attachTo( *baseNode );
