@@ -38,6 +38,11 @@ namespace castor3d
 	{
 	}
 
+	void TriFaceMapping::clearFaces()
+	{
+		m_faces.clear();
+	}
+
 	Face TriFaceMapping::addFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		Face result{ a, b, c };
@@ -80,50 +85,51 @@ namespace castor3d
 		getOwner()->getPoint( d ).tex = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
 	}
 
-	void TriFaceMapping::clearFaces()
-	{
-		m_faces.clear();
-	}
-
 	void TriFaceMapping::computeFacesFromPolygonVertex()
 	{
-		SubmeshUtils::computeFacesFromPolygonVertex( *getOwner()
+		SubmeshUtils::computeFacesFromPolygonVertex( getOwner()->getPoints()
 			, *this );
 	}
 
-	void TriFaceMapping::computeNormals( bool reverted )
+	void TriFaceMapping::computeNormals( InterleavedVertexArray & points
+		, bool reverted )const
 	{
-		if ( !m_hasNormals )
-		{
-			SubmeshUtils::computeNormals( *getOwner()
-				, *this
-				, reverted );
-			m_hasNormals = true;
-		}
-	}
-
-	SubmeshComponentSPtr TriFaceMapping::clone( Submesh & submesh )const
-	{
-		auto result = std::make_shared< TriFaceMapping >( submesh );
-		result->m_faces = m_faces;
-		result->m_hasNormals = m_hasNormals;
-		result->m_cameraPosition = m_cameraPosition;
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		SubmeshUtils::computeNormals( points
+			, *this
+			, reverted );
 	}
 
 	void TriFaceMapping::computeNormals( Face const & face )
 	{
-		SubmeshUtils::computeNormals( *getOwner(), face );
+		SubmeshUtils::computeNormals( getOwner()->getPoints(), face );
+	}
+
+	void TriFaceMapping::computeNormals( InterleavedVertexArray & points
+		, Face const & face )const
+	{
+		SubmeshUtils::computeNormals( points, face );
 	}
 
 	void TriFaceMapping::computeTangents( Face const & face )
 	{
-		SubmeshUtils::computeTangents( *getOwner(), face );
+		SubmeshUtils::computeTangents( getOwner()->getPoints(), face );
+	}
+
+	void TriFaceMapping::computeTangents( InterleavedVertexArray & points
+		, Face const & face )const
+	{
+		SubmeshUtils::computeTangents( points, face );
 	}
 
 	void TriFaceMapping::computeTangentsFromNormals()
 	{
-		SubmeshUtils::computeTangentsFromNormals( *getOwner()
+		SubmeshUtils::computeTangentsFromNormals( getOwner()->getPoints()
+			, *this );
+	}
+
+	void TriFaceMapping::computeTangentsFromNormals( InterleavedVertexArray & points )const
+	{
+		SubmeshUtils::computeTangentsFromNormals( points
 			, *this );
 	}
 
@@ -202,6 +208,26 @@ namespace castor3d
 		{
 			log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
 		}
+	}
+
+	void TriFaceMapping::computeNormals( bool reverted )
+	{
+		if ( !m_hasNormals )
+		{
+			SubmeshUtils::computeNormals( getOwner()->getPoints()
+				, *this
+				, reverted );
+			m_hasNormals = true;
+		}
+	}
+
+	SubmeshComponentSPtr TriFaceMapping::clone( Submesh & submesh )const
+	{
+		auto result = std::make_shared< TriFaceMapping >( submesh );
+		result->m_faces = m_faces;
+		result->m_hasNormals = m_hasNormals;
+		result->m_cameraPosition = m_cameraPosition;
+		return std::static_pointer_cast< SubmeshComponent >( result );
 	}
 
 	void TriFaceMapping::doCleanup( RenderDevice const & device )

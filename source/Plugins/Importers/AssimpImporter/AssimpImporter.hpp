@@ -133,7 +133,8 @@ namespace C3dAssimp
 		void doProcessAnimationMeshes( castor3d::Mesh & mesh
 			, castor3d::Submesh & submesh
 			, aiMesh const & aiMesh
-			, aiMeshAnim const & aiMeshAnim );
+			, aiAnimMesh const & aiAnimMesh
+			, uint32_t index );
 		void doProcessAnimationSceneNodes( castor3d::SceneNode & node
 			, aiAnimation const & aiAnimation
 			, aiNode const & aiNode
