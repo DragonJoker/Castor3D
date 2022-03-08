@@ -96,6 +96,12 @@ namespace castor3d
 			{
 				auto animName = cleanName( fileName.getFileName().substr( meshName.size() ) );
 				auto animation = std::make_unique< MeshAnimation >( mesh, animName );
+
+				for ( auto & submesh : mesh )
+				{
+					animation->addChild( MeshAnimationSubmesh{ *animation, *submesh } );
+				}
+
 				BinaryFile animFile{ fileName, File::OpenMode::eRead };
 				result = BinaryParser< MeshAnimation >{}.parse( *animation, animFile );
 

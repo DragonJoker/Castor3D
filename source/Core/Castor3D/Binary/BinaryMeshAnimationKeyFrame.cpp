@@ -151,7 +151,7 @@ namespace castor3d
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eMeshAnimationKeyFrameBufferData:
-				if ( m_fileVersion > Version{ 1, 3, 0 } )
+				if ( m_fileVersion <= Version{ 1, 3, 0 } )
 				{
 					result = doParseChunk( bufferd, chunk );
 					checkError( result, "Couldn't parse buffer data." );
