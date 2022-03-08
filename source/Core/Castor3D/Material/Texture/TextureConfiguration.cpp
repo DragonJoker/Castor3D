@@ -1,5 +1,7 @@
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 
+#include <CastorUtils/Graphics/PixelFormat.hpp>
+
 namespace castor3d
 {
 	namespace
