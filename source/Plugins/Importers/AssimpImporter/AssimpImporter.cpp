@@ -22,6 +22,8 @@
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Animation/SceneNodeAnimation.hpp>
+#include <Castor3D/Scene/Animation/SceneNodeAnimationKeyFrame.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Light/DirectionalLight.hpp>
@@ -990,16 +992,17 @@ namespace C3dAssimp
 			return result;
 		}
 
-		SkeletonAnimationKeyFrame & getKeyFrame( castor::Milliseconds const & time
-			, SkeletonAnimation & animation
-			, SkeletonAnimationKeyFrameMap & keyframes )
+		template< typename KeyFrameT, typename AnimationT >
+		KeyFrameT & getKeyFrame( castor::Milliseconds const & time
+			, AnimationT & animation
+			, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes )
 		{
 			auto it = keyframes.find( time );
 
 			if ( it == keyframes.end() )
 			{
 				it = keyframes.emplace( time
-					, std::make_unique< SkeletonAnimationKeyFrame >( animation, time ) ).first;
+					, std::make_unique< KeyFrameT >( animation, time ) ).first;
 			}
 
 			return *it->second;
@@ -1111,6 +1114,49 @@ namespace C3dAssimp
 					auto rotate = interpolate( time, quatInterpolator, rotates );
 					getKeyFrame( time, animation, keyframes ).addAnimationObject( object
 						, translate
+						, rotate
+						, scale );
+				}
+			}
+		}
+
+		void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
+			, std::map< castor::Milliseconds, castor::Point3f > const & scales
+			, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
+			, std::set< castor::Milliseconds > const & times
+			, uint32_t fps
+			, int64_t ticksPerSecond
+			, SceneNodeAnimation & animation
+			, SceneNodeAnimationKeyFrameMap & keyframes )
+		{
+			InterpolatorT< castor::Point3f, InterpolatorType::eLinear > pointInterpolator;
+			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
+
+			if ( fps == castor3d::RenderLoop::UnlimitedFPS
+				|| ticksPerSecond >= fps )
+			{
+				for ( auto time : times )
+				{
+					auto translate = interpolate( time, pointInterpolator, translates );
+					auto scale = interpolate( time, pointInterpolator, scales );
+					auto rotate = interpolate( time, quatInterpolator, rotates );
+					getKeyFrame( time, animation, keyframes ).setTransform( translate
+						, rotate
+						, scale );
+				}
+			}
+			else
+			{
+				// Limit the key frames per second to 60, to spare RAM...
+				castor::Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
+				castor::Milliseconds maxTime{ *times.rbegin() };
+
+				for ( auto time = 0_ms; time <= maxTime; time += step )
+				{
+					auto translate = interpolate( time, pointInterpolator, translates );
+					auto scale = interpolate( time, pointInterpolator, scales );
+					auto rotate = interpolate( time, quatInterpolator, rotates );
+					getKeyFrame( time, animation, keyframes ).setTransform( translate
 						, rotate
 						, scale );
 				}
@@ -1359,6 +1405,25 @@ namespace C3dAssimp
 			node->setOrientation( castor::Quaternion{ castor::Point4f{ orientation.x, orientation.y, orientation.z, orientation.w } } );
 			m_nodes.push_back( node );
 			lnode = scene.getSceneNodeCache().add( node->getName(), node );
+			node = lnode.lock();
+
+			if ( aiScene.HasAnimations() )
+			{
+				for ( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
+				{
+					auto it = std::find_if( aiAnimation->mChannels
+						, aiAnimation->mChannels + aiAnimation->mNumChannels
+						, [&aiNode]( aiNodeAnim const * lookup )
+						{
+							return lookup->mNodeName == aiNode.mName;
+						} );
+
+					if ( it != aiAnimation->mChannels + aiAnimation->mNumChannels )
+					{
+						doProcessAnimationSceneNodes( *node, *aiAnimation, aiNode, *( *it ) );
+					}
+				}
+			}
 		}
 
 		parent = lnode.lock();
@@ -1416,6 +1481,20 @@ namespace C3dAssimp
 						node->attachObject( *geom );
 						scene.getGeometryCache().add( geom );
 						auto skeleton = meshRepl->mesh->getSkeleton();
+
+						if ( node->hasAnimation() )
+						{
+							auto animGroup = scene.getAnimatedObjectGroupCache().add( node->getName() + "Node", scene ).lock();
+							auto animObject = animGroup->addObject( *node, node->getName() + cuT( "_Node" ) );
+
+							for ( auto & animation : node->getAnimations() )
+							{
+								animGroup->addAnimation( animation.first );
+								animGroup->setAnimationLooped( animation.first, true );
+							}
+
+							animGroup->startAnimation( node->getAnimations().begin()->first );
+						}
 
 						if ( meshRepl->mesh->hasAnimation() )
 						{
@@ -1915,13 +1994,13 @@ namespace C3dAssimp
 		, aiAnimation const & aiAnimation )
 	{
 		castor::String name{ castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
-		log::debug << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
 
 		if ( name.empty() )
 		{
 			name = animName;
 		}
 
+		log::debug << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & animation = skeleton.createAnimation( name );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
@@ -2121,6 +2200,66 @@ namespace C3dAssimp
 			, object
 			, animation
 			, keyframes );
+	}
+
+	void AssimpImporter::doProcessAnimationSceneNodes( castor3d::SceneNode & node
+		, aiAnimation const & aiAnimation
+		, aiNode const & aiNode
+		, aiNodeAnim const & aiNodeAnim )
+	{
+		castor::String name{ castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
+
+		if ( name.empty() )
+		{
+			name = node.getName();
+		}
+
+		log::debug << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		auto & animation = node.createAnimation( name );
+		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
+			? int64_t( aiAnimation.mTicksPerSecond )
+			: 25ll;
+		std::set< castor::Milliseconds > times;
+		gatherTimes( aiNodeAnim.mPositionKeys
+			, aiNodeAnim.mNumPositionKeys
+			, ticksPerSecond
+			, times );
+		gatherTimes( aiNodeAnim.mScalingKeys
+			, aiNodeAnim.mNumScalingKeys
+			, ticksPerSecond
+			, times );
+		gatherTimes( aiNodeAnim.mRotationKeys
+			, aiNodeAnim.mNumRotationKeys
+			, ticksPerSecond
+			, times );
+
+		auto translates = processVec3Keys( aiNodeAnim.mPositionKeys
+			, aiNodeAnim.mNumPositionKeys
+			, ticksPerSecond
+			, times );
+		auto scales = processVec3Keys( aiNodeAnim.mScalingKeys
+			, aiNodeAnim.mNumScalingKeys
+			, ticksPerSecond
+			, times );
+		auto rotates = processQuatKeys( aiNodeAnim.mRotationKeys
+			, aiNodeAnim.mNumRotationKeys
+			, ticksPerSecond
+			, times );
+
+		SceneNodeAnimationKeyFrameMap keyframes;
+		synchroniseKeys( translates
+			, scales
+			, rotates
+			, times
+			, getEngine()->getRenderLoop().getWantedFps()
+			, ticksPerSecond
+			, animation
+			, keyframes );
+
+		for ( auto & keyFrame : keyframes )
+		{
+			animation.addKeyFrame( std::move( keyFrame.second ) );
+		}
 	}
 
 	//*********************************************************************************************
