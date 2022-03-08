@@ -40,6 +40,7 @@ See LICENSE file in root folder
 namespace C3dAssimp
 {
 	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
+	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
 
 	struct SubmeshData
@@ -133,6 +134,10 @@ namespace C3dAssimp
 			, castor3d::Submesh & submesh
 			, aiMesh const & aiMesh
 			, aiMeshAnim const & aiMeshAnim );
+		void doProcessAnimationSceneNodes( castor3d::SceneNode & node
+			, aiAnimation const & aiAnimation
+			, aiNode const & aiNode
+			, aiNodeAnim const & aiNodeAnim );
 
 	public:
 		static castor::String const Name;
