@@ -320,7 +320,6 @@ namespace castortd
 		{
 			String name = cuT( "Bullet_" ) + std::to_string( ++m_totalBullets );
 			auto node = m_scene.getSceneNodeCache().add( name
-				, *m_scene.getObjectRootNode()
 				, m_scene ).lock();
 			auto geometry = m_scene.getGeometryCache().add( name
 				, m_scene
@@ -552,7 +551,6 @@ namespace castortd
 	{
 		String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto node = m_scene.getSceneNodeCache().add( name
-			, *m_scene.getObjectRootNode()
 			, m_scene ).lock();
 		auto geometry = m_scene.getGeometryCache().add( name
 			, m_scene
@@ -597,28 +595,28 @@ namespace castortd
 	{
 		String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto node = m_scene.getSceneNodeCache().add( name
-			, *m_scene.getObjectRootNode()
 			, m_scene ).lock();
 		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
 		auto mesh = doSelectMesh( *p_category );
 		auto tower = m_scene.getGeometryCache().add( name
 			, m_scene
-			, *node, mesh ).lock();
+			, *node
+			, mesh ).lock();
 		auto animGroup = m_scene.getAnimatedObjectGroupCache().add( name
 			, m_scene ).lock();
 		Milliseconds time{ 0 };
 
-		if ( !tower->getAnimations().empty() )
+		if ( node->hasAnimation() )
 		{
-			animGroup->addObject( *tower, tower->getName() + cuT( "_Movable" ) );
+			animGroup->addObject( *node, tower->getName() + cuT( "_Node" ) );
 		}
 
 		if ( tower->getMesh().lock() )
 		{
 			auto tmesh = tower->getMesh().lock();
 
-			if ( !tmesh->getAnimations().empty() )
+			if ( tmesh->hasAnimation() )
 			{
 			  animGroup->addObject( *tmesh, *tower, tower->getName() + cuT( "_Mesh" ) );
 				time = std::max( time
@@ -629,7 +627,7 @@ namespace castortd
 
 			if ( skeleton )
 			{
-				if ( !skeleton->getAnimations().empty() )
+				if ( skeleton->hasAnimation() )
 				{
 					animGroup->addObject( *skeleton, *tmesh, *tower, tower->getName() + cuT( "_Skeleton" ) );
 					time = std::max( time

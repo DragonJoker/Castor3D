@@ -71,6 +71,8 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimation.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimationKeyFrame.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySceneNodeAnimation.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySceneNodeAnimationKeyFrame.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeleton.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimation.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationBone.cpp
@@ -90,6 +92,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryMeshAnimationKeyFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinaryParser.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySceneNodeAnimation.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySceneNodeAnimationKeyFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeleton.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimation.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Binary/BinarySkeletonAnimationBone.hpp
@@ -1267,17 +1271,23 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObject.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObjectGroup.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedTexture.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedSceneNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedSkeleton.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimationInstance.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/SceneNodeAnimation.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/SceneNodeAnimationKeyFrame.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedMesh.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObject.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObjectGroup.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedSceneNode.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedSkeleton.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedTexture.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimationInstance.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimationModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/SceneNodeAnimation.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/SceneNodeAnimationKeyFrame.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
@@ -1309,6 +1319,24 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Scene\\Animation\\Mesh" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Scene\\Animation\\Mesh" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/SceneNode/SceneNodeAnimationInstance.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/SceneNode/SceneNodeAnimationModule.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Scene\\Animation\\SceneNode" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Scene\\Animation\\SceneNode" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/Skeleton/SkeletonAnimationInstance.cpp

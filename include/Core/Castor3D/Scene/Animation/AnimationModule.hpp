@@ -18,10 +18,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Represents the animated submeshes
+	*	An animated mesh.
 	*\~french
 	*\brief
-	*	Représente les sous-maillages animés
+	*	Un maillage animé.
 	*/
 	class AnimatedMesh;
 	/**
@@ -49,19 +49,28 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Represents the animated objects
+	*	An animated scene node.
 	*\~french
 	*\brief
-	*	Représente les objets animés
+	*	Un noeud de scène animé.
+	*/
+	class AnimatedSceneNode;
+	/**
+	*\~english
+	*\brief
+	*	An animated skeleton.
+	*\~french
+	*\brief
+	*	Un squelette animé.
 	*/
 	class AnimatedSkeleton;
 	/**
 	*\~english
 	*\brief
-	*	Represents the animated textures
+	*	An animated texture.
 	*\~french
 	*\brief
-	*	Représente les texture animées.
+	*	Une texture animée.
 	*/
 	class AnimatedTexture;
 	/**
@@ -77,6 +86,15 @@ namespace castor3d
 	*	Utilisée pour jouer une animation sur un objet particulier.
 	*/
 	class AnimationInstance;
+
+	/**@name SceneNode */
+	//@{
+	class SceneNodeAnimation;
+	class SceneNodeAnimationKeyFrame;
+
+	CU_DeclareSmartPtr( SceneNodeAnimation );
+	CU_DeclareSmartPtr( SceneNodeAnimationKeyFrame );
+	//@}
 
 	struct GroupAnimation
 	{
@@ -96,6 +114,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( AnimatedObjectGroup );
 	CU_DeclareSmartPtr( AnimatedMesh );
 	CU_DeclareSmartPtr( AnimatedObject );
+	CU_DeclareSmartPtr( AnimatedSceneNode );
 	CU_DeclareSmartPtr( AnimatedSkeleton );
 	CU_DeclareSmartPtr( AnimatedTexture );
 	CU_DeclareSmartPtr( Animation );
@@ -110,7 +129,6 @@ namespace castor3d
 	//! Animation pointer map, sorted by name.
 	CU_DeclareMap( castor::String, AnimationSPtr, AnimationPtrStr );
 
-
 	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
 	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;
 	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
@@ -122,6 +140,10 @@ namespace castor3d
 	using OnAnimatedTextureChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedTexture & ) >;
 	using OnAnimatedTextureChange = castor::SignalT< OnAnimatedTextureChangeFunction >;
 	using OnAnimatedTextureChangeConnection = OnAnimatedTextureChange::connection;
+
+	using OnAnimatedSceneNodeChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSceneNode & ) >;
+	using OnAnimatedSceneNodeChange = castor::SignalT< OnAnimatedSceneNodeChangeFunction >;
+	using OnAnimatedSceneNodeChangeConnection = OnAnimatedSceneNodeChange::connection;
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.

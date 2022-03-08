@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Binary/BinarySceneNodeAnimation.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
@@ -2413,9 +2414,35 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext.scene->getSceneNodeCache().add( parsingContext.sceneNode->getName()
-				, parsingContext.sceneNode );
+			auto name = parsingContext.sceneNode->getName();
+			auto node = parsingContext.scene->getSceneNodeCache().add( name, parsingContext.sceneNode ).lock();
 			parsingContext.sceneNode.reset();
+
+			castor::PathArray files;
+			File::listDirectoryFiles( context.file.getPath(), files, true );
+
+			for ( auto fileName : files )
+			{
+				if ( fileName.getExtension() == "csna" )
+				{
+					auto fName = fileName.getFileName();
+					auto pos = fName.find( name );
+					
+					if ( pos == 0u
+						&& fName[name.size()] == '-' )
+					{
+						auto animName = fName.substr( name.size() + 1u );
+
+						if ( !animName.empty() )
+						{
+							auto & animation = node->createAnimation( animName );
+							BinaryParser< SceneNodeAnimation > parser;
+							castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
+							parser.parse( animation, animFile );
+						}
+					}
+				}
+			}
 		}
 	}
 	CU_EndAttributePop()
@@ -4620,17 +4647,19 @@ namespace castor3d
 
 			if ( geometry )
 			{
-				if ( !geometry->getAnimations().empty() )
+				auto node = geometry->getParent();
+
+				if ( node && node->hasAnimation() )
 				{
-					parsingContext.animMovable = parsingContext.animGroup->addObject( *geometry
-						, geometry->getName() + cuT( "_Movable" ) );
+					parsingContext.animNode = parsingContext.animGroup->addObject( *node
+						, node->getName() + cuT( "_Node" ) );
 				}
 
 				auto mesh = geometry->getMesh().lock();
 
 				if ( mesh )
 				{
-					if ( !mesh->getAnimations().empty() )
+					if ( mesh->hasAnimation() )
 					{
 						parsingContext.animMesh = parsingContext.animGroup->addObject( *mesh
 							, *geometry
@@ -4641,7 +4670,7 @@ namespace castor3d
 
 					if ( skeleton )
 					{
-						if ( !skeleton->getAnimations().empty() )
+						if ( skeleton->hasAnimation() )
 						{
 							parsingContext.animSkeleton = parsingContext.animGroup->addObject( *skeleton
 								, *mesh
@@ -4653,7 +4682,20 @@ namespace castor3d
 			}
 			else
 			{
-				CU_ParsingError( cuT( "No geometry with name " ) + name );
+				SceneNodeSPtr node = parsingContext.scene->getSceneNodeCache().find( name ).lock();
+
+				if ( node )
+				{
+					if ( node->hasAnimation() )
+					{
+						parsingContext.animNode = parsingContext.animGroup->addObject( *node
+							, node->getName() + cuT( "_Node" ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No geometry or node with name " ) + name );
+				}
 			}
 		}
 		else

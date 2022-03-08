@@ -49,7 +49,7 @@ namespace castor3d
 	{
 		//!\~english	Scene node animation.
 		//!\~french		Animation de noeud de scène.
-		eMovable,
+		eSceneNode,
 		//!\~english	Skeleton animation.
 		//!\~french		Animation de squelette.
 		eSkeleton,
@@ -59,7 +59,7 @@ namespace castor3d
 		//!\~english	Texture animation.
 		//!\~french		Animation de texture.
 		eTexture,
-		CU_ScopedEnumBounds( eMovable )
+		CU_ScopedEnumBounds( eSceneNode )
 	};
 	C3D_API castor::String getName( AnimationType value );
 	/**

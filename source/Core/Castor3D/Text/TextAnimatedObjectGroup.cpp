@@ -55,6 +55,7 @@ namespace castor
 				bool write{ true };
 				size_t skel = name.find( cuT( "_Skeleton" ) );
 				size_t mesh = name.find( cuT( "_Mesh" ) );
+				size_t node = name.find( cuT( "_Node" ) );
 
 				// Only add objects, and not skeletons or meshes
 				if ( skel != String::npos )
@@ -66,6 +67,12 @@ namespace castor
 				else if ( mesh != String::npos )
 				{
 					name = name.substr( 0, mesh );
+					write = group.getObjects().find( name ) == group.getObjects().end()
+						&& written.find( name ) == written.end();
+				}
+				else if ( node != String::npos )
+				{
+					name = name.substr( 0, node );
 					write = group.getObjects().find( name ) == group.getObjects().end()
 						&& written.find( name ) == written.end();
 				}
