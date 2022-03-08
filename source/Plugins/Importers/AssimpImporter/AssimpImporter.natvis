@@ -1,10 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
+	<Type Name="aiPlane">
+		<DisplayString>{a} {b} {c} {d}</DisplayString>
+		<Expand>
+			<Item Name="[a]">a</Item>
+			<Item Name="[b]">b</Item>
+			<Item Name="[c]">c</Item>
+			<Item Name="[d]">d</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiRay">
+		<DisplayString>{pos} {dir}</DisplayString>
+		<Expand>
+			<Item Name="[pos]">pos</Item>
+			<Item Name="[dir]">dir</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiColor3D">
+		<DisplayString>{r} {g} {b}</DisplayString>
+		<Expand>
+			<Item Name="[r]">r</Item>
+			<Item Name="[g]">g</Item>
+			<Item Name="[b]">b</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiColor4D">
+		<DisplayString>{r} {g} {b} {a}</DisplayString>
+		<Expand>
+			<Item Name="[r]">r</Item>
+			<Item Name="[g]">g</Item>
+			<Item Name="[b]">b</Item>
+			<Item Name="[a]">a</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="aiString">
 		<DisplayString>{data,s}</DisplayString>
 		<Expand>
 			<Item Name="[data]">data</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVector3D">
+		<DisplayString>{x} {y} {z}</DisplayString>
+		<Expand>
+			<Item Name="[x]">x</Item>
+			<Item Name="[y]">y</Item>
+			<Item Name="[z]">z</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVector4D">
+		<DisplayString>{x} {y} {z} {w}</DisplayString>
+		<Expand>
+			<Item Name="[x]">x</Item>
+			<Item Name="[y]">y</Item>
+			<Item Name="[z]">z</Item>
+			<Item Name="[w]">w</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiQuaternion">
+		<DisplayString>{w} {x} {y} {z}</DisplayString>
+		<Expand>
+			<Item Name="[w]">w</Item>
+			<Item Name="[x]">x</Item>
+			<Item Name="[y]">y</Item>
+			<Item Name="[z]">z</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMatrix3x3">
+		<Expand>
+			<Synthetic Name="[row 1]">
+				<DisplayString>{a1} {a2} {a3}</DisplayString>
+				<Expand>
+					<Item Name="[a1]">a1</Item>
+					<Item Name="[a2]">a2</Item>
+					<Item Name="[a3]">a3</Item>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[row 2]">
+				<DisplayString>{b1} {b2} {b3}</DisplayString>
+				<Expand>
+					<Item Name="[b1]">b1</Item>
+					<Item Name="[b2]">b2</Item>
+					<Item Name="[b3]">b3</Item>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[row 3]">
+				<DisplayString>{c1} {c2} {c3}</DisplayString>
+				<Expand>
+					<Item Name="[c1]">c1</Item>
+					<Item Name="[c2]">c2</Item>
+					<Item Name="[c3]">c3</Item>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMatrix4x4">
+		<Expand>
+			<Synthetic Name="[row 1]">
+				<DisplayString>{a1} {a2} {a3} {a4}</DisplayString>
+				<Expand>
+					<Item Name="[a1]">a1</Item>
+					<Item Name="[a2]">a2</Item>
+					<Item Name="[a3]">a3</Item>
+					<Item Name="[a4]">a4</Item>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[row 2]">
+				<DisplayString>{b1} {b2} {b3} {b4}</DisplayString>
+				<Expand>
+					<Item Name="[b1]">b1</Item>
+					<Item Name="[b2]">b2</Item>
+					<Item Name="[b3]">b3</Item>
+					<Item Name="[b4]">b4</Item>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[row 3]">
+				<DisplayString>{c1} {c2} {c3} {c4}</DisplayString>
+				<Expand>
+					<Item Name="[c1]">c1</Item>
+					<Item Name="[c2]">c2</Item>
+					<Item Name="[c3]">c3</Item>
+					<Item Name="[c4]">c4</Item>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[row 4]">
+				<DisplayString>{d1} {d2} {d3} {d4}</DisplayString>
+				<Expand>
+					<Item Name="[d1]">d1</Item>
+					<Item Name="[d2]">d2</Item>
+					<Item Name="[d3]">d3</Item>
+					<Item Name="[d4]">d4</Item>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiFace">
+		<DisplayString>{mNumIndices}</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>mNumIndices</Size>
+				<ValuePointer>mIndices</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVertexWeight">
+		<DisplayString>{mVertexId} {mWeight}</DisplayString>
+		<Expand>
+			<Item Name="[vertexId]">mVertexId</Item>
+			<Item Name="[weight]">mWeight</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiVectorKey">
+		<DisplayString>{mTime} {mValue}</DisplayString>
+		<Expand>
+			<Item Name="[time]">mTime</Item>
+			<Item Name="[value]">mValue</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiQuatKey">
+		<DisplayString>{mTime} {mValue}</DisplayString>
+		<Expand>
+			<Item Name="[time]">mTime</Item>
+			<Item Name="[value]">mValue</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMeshKey">
+		<DisplayString>{mTime} {mValue}</DisplayString>
+		<Expand>
+			<Item Name="[time]">mTime</Item>
+			<Item Name="[value]">mValue</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMeshMorphKey">
+		<DisplayString>{mTime}</DisplayString>
+		<Expand>
+			<Item Name="[time]">mTime</Item>
+			<Synthetic Name="[values]">
+				<DisplayString>[size={mNumValuesAndWeights}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumValuesAndWeights</Size>
+						<ValuePointer>mValues</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[weights]">
+				<DisplayString>[size={mNumValuesAndWeights}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumValuesAndWeights</Size>
+						<ValuePointer>mWeights</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiAABB">
+		<DisplayString>{mMin} {mMax}</DisplayString>
+		<Expand>
+			<Item Name="[min]">mMin</Item>
+			<Item Name="[max]">mMax</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiUVTransform">
+		<DisplayString>{mTranslation} {mScaling} {mRotation}</DisplayString>
+		<Expand>
+			<Item Name="[translation]">mTranslation</Item>
+			<Item Name="[scaling]">mScaling</Item>
+			<Item Name="[rotation]">mRotation</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiTexel">
+		<DisplayString>{r,x} {g,x} {b,x} {a,x}</DisplayString>
+		<Expand>
+			<Item Name="[r]">r,x</Item>
+			<Item Name="[g]">g,x</Item>
+			<Item Name="[b]">b,x</Item>
+			<Item Name="[a]">a,x</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMetadata">
+		<Expand>
+			<Synthetic Name="[keys]">
+				<DisplayString>[size={mNumProperties}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumProperties</Size>
+						<ValuePointer>mKeys</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[values]">
+				<DisplayString>[size={mNumProperties}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumProperties</Size>
+						<ValuePointer>mValues</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
 		</Expand>
 	</Type>
 
@@ -46,88 +299,6 @@
 					</ArrayItems>
 				</Expand>
 			</Synthetic>
-		</Expand>
-	</Type>
-
-	<Type Name="aiVector3D">
-		<DisplayString>{x} {y} {z}</DisplayString>
-		<Expand>
-			<Item Name="[x]">x</Item>
-			<Item Name="[y]">y</Item>
-			<Item Name="[z]">z</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="aiVector4D">
-		<DisplayString>{x} {y} {z} {w}</DisplayString>
-		<Expand>
-			<Item Name="[x]">x</Item>
-			<Item Name="[y]">y</Item>
-			<Item Name="[z]">z</Item>
-			<Item Name="[w]">w</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="aiQuaternion">
-		<DisplayString>{w} {x} {y} {z}</DisplayString>
-		<Expand>
-			<Item Name="[w]">w</Item>
-			<Item Name="[x]">x</Item>
-			<Item Name="[y]">y</Item>
-			<Item Name="[z]">z</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="aiColor3D">
-		<DisplayString>{r} {g} {b}</DisplayString>
-		<Expand>
-			<Item Name="[r]">r</Item>
-			<Item Name="[g]">g</Item>
-			<Item Name="[b]">b</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="aiColor4D">
-		<DisplayString>{r} {g} {b} {a}</DisplayString>
-		<Expand>
-			<Item Name="[r]">r</Item>
-			<Item Name="[g]">g</Item>
-			<Item Name="[b]">b</Item>
-			<Item Name="[a]">a</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="aiFace">
-		<DisplayString>{mNumIndices}</DisplayString>
-		<Expand>
-			<ArrayItems>
-				<Size>mNumIndices</Size>
-				<ValuePointer>mIndices</ValuePointer>
-			</ArrayItems>
-		</Expand>
-	</Type>
-
-	<Type Name="aiVertexWeight">
-		<DisplayString>{mVertexId} {mWeight}</DisplayString>
-		<Expand>
-			<Item Name="[vertexId]">mVertexId</Item>
-			<Item Name="[weight]">mWeight</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="aiVectorKey">
-		<DisplayString>{mTime} {mValue}</DisplayString>
-		<Expand>
-			<Item Name="[time]">mTime</Item>
-			<Item Name="[value]">mValue</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="aiQuatKey">
-		<DisplayString>{mTime} {mValue}</DisplayString>
-		<Expand>
-			<Item Name="[time]">mTime</Item>
-			<Item Name="[value]">mValue</Item>
 		</Expand>
 	</Type>
 
@@ -184,6 +355,38 @@
 		</Expand>
 	</Type>
 
+	<Type Name="aiMeshAnim">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Synthetic Name="[keys]">
+				<DisplayString>[size={mNumKeys}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumKeys</Size>
+						<ValuePointer>mKeys</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiMeshMorphAnim">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Synthetic Name="[keys]">
+				<DisplayString>[size={mNumKeys}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumKeys</Size>
+						<ValuePointer>mKeys</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
 	<Type Name="aiAnimation">
 		<DisplayString>{mName}</DisplayString>
 		<Expand>
@@ -217,14 +420,6 @@
 					</ArrayItems>
 				</Expand>
 			</Synthetic>
-		</Expand>
-	</Type>
-
-	<Type Name="aiAABB">
-		<DisplayString>{mMin} {mMax}</DisplayString>
-		<Expand>
-			<Item Name="[min]">mMin</Item>
-			<Item Name="[max]">mMax</Item>
 		</Expand>
 	</Type>
 
@@ -410,10 +605,92 @@
 		</Expand>
 	</Type>
 
+	<Type Name="aiNode">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Item Name="[transformation]">mTransformation</Item>
+			<Item Name="[parent]" Condition="mParent!=0">mParent</Item>
+			<Item Name="[metaData]" Condition="mParent!=0">mMetaData</Item>
+			<Synthetic Name="[children]" Condition="mChildren!=0">
+				<DisplayString>[size={mNumChildren}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumChildren</Size>
+						<ValuePointer>mChildren</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[meshes]" Condition="mMeshes!=0">
+				<DisplayString>[size={mNumMeshes}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mNumMeshes</Size>
+						<ValuePointer>mMeshes</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiTexture">
+		<DisplayString>{mFilename} {achFormatHint,s}</DisplayString>
+		<Expand>
+			<Item Name="[filename]">mFilename</Item>
+			<Item Name="[formatHint]">achFormatHint</Item>
+			<Item Name="[width]">mWidth</Item>
+			<Item Name="[height]">mHeight</Item>
+			<Synthetic Name="[data]" Condition="pcData!=0">
+				<DisplayString>[size={(mWidth>0?mWidth:1)*(mHeight>0?mHeight:1)}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>(mWidth>0?mWidth:1)*(mHeight>0?mHeight:1)</Size>
+						<ValuePointer>pcData</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+
+	<Type Name="aiLight">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Item Name="[type]">mType</Item>
+			<Item Name="[colorDiffuse]">mColorDiffuse</Item>
+			<Item Name="[colorSpecular]">mColorSpecular</Item>
+			<Item Name="[colorAmbient]">mColorAmbient</Item>
+			<Item Name="[position]" Condition="mType!=1">mPosition</Item>
+			<Item Name="[direction]" Condition="mType!=2">mDirection</Item>
+			<Item Name="[up]" Condition="mType!=2">mUp</Item>
+			<Item Name="[attenuationConstant]" Condition="mType!=1">mAttenuationConstant</Item>
+			<Item Name="[attenuationLinear]" Condition="mType!=1">mAttenuationLinear</Item>
+			<Item Name="[attenuationQuadratic]" Condition="mType!=1">mAttenuationQuadratic</Item>
+			<Item Name="[angleInnerCone]">mAngleInnerCone</Item>
+			<Item Name="[angleOuterCone]">mAngleOuterCone</Item>
+			<Item Name="[size]" Condition="mType==5">mSize</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="aiCamera">
+		<DisplayString>{mName}</DisplayString>
+		<Expand>
+			<Item Name="[name]">mName</Item>
+			<Item Name="[position]">mPosition</Item>
+			<Item Name="[up]">mUp</Item>
+			<Item Name="[lookAt]">mLookAt</Item>
+			<Item Name="[horizontalFOV]">mHorizontalFOV</Item>
+			<Item Name="[clipPlaneNear]">mClipPlaneNear</Item>
+			<Item Name="[clipPlaneFar]">mClipPlaneFar</Item>
+			<Item Name="[aspect]">mAspect</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="aiScene">
 		<Expand>
 			<Item Name="[flags]">mFlags</Item>
 			<Item Name="[rootNode]">mRootNode</Item>
+			<Item Name="[metaData]">mMetaData</Item>
 			<Synthetic Name="[meshes]">
 				<DisplayString>[size={mNumMeshes}]</DisplayString>
 				<Expand>
