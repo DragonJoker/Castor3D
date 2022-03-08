@@ -110,6 +110,8 @@ namespace castor
 		 */
 		C3D_API void clear( castor3d::RenderDevice const & device );
 
+		C3D_API std::vector< castor3d::AnimatedObject * > findObject( castor::String const & name )const;
+
 		ashes::Buffer< castor3d::MorphingBufferConfiguration > const & getMorphingBuffer()const
 		{
 			return *m_morphingData;
@@ -148,7 +150,6 @@ namespace castor
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
-		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureRemovedConnections;
 		ashes::BufferPtr< castor3d::MorphingBufferConfiguration > m_morphingData;
 		ashes::BufferPtr< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;

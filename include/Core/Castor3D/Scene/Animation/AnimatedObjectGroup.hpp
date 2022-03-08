@@ -42,15 +42,15 @@ namespace castor3d
 		C3D_API ~AnimatedObjectGroup();
 		/**
 		 *\~english
-		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list.
-		 *\param[in]	object	The MovableObject from which AnimatedObject is created.
-		 *\param[in]	name	The MovableObject instance name.
+		 *\brief		Creates an AnimatedObject from the SceneNode given as a parameter, adds it to the list.
+		 *\param[in]	node	The SceneNode from which AnimatedObject is created.
+		 *\param[in]	name	The SceneNode instance name.
 		 *\~french
-		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste.
-		 *\param[in]	object	Le MovableObject à partir duquel l'AnimatedObject est créé.
-		 *\param[in]	name	Le nom de l'instance du MovableObject.
+		 *\brief		Crée un AnimatedObject à partir du SceneNode donné, l'ajoute à la liste.
+		 *\param[in]	node	Le SceneNode à partir duquel l'AnimatedObject est créé.
+		 *\param[in]	name	Le nom de l'instance du SceneNode.
 		 */
-		C3D_API AnimatedObjectSPtr addObject( MovableObject & object
+		C3D_API AnimatedObjectSPtr addObject( SceneNode & node
 			, castor::String const & name );
 		/**
 		 *\~english
@@ -109,6 +109,15 @@ namespace castor3d
 		 *\param[in]	object	Le AnimatedObject à ajouter
 		 */
 		C3D_API bool addObject( AnimatedObjectSPtr object );
+		/**
+		 *\~english
+		 *\brief		Find an AnimatedObject given its name.
+		 *\param[in]	name	The AnimatedObject name.
+		 *\~french
+		 *\brief		Recherche un AnimatedObject en fonction de son nom.
+		 *\param[in]	name	Le nom de l'AnimatedObject.
+		 */
+		C3D_API AnimatedObject * findObject( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		adds the animation to the list
@@ -251,6 +260,8 @@ namespace castor3d
 		OnAnimatedMeshChange onMeshRemoved;
 		OnAnimatedTextureChange onTextureAdded;
 		OnAnimatedTextureChange onTextureRemoved;
+		OnAnimatedSceneNodeChange onSceneNodeAdded;
+		OnAnimatedSceneNodeChange onSceneNodeRemoved;
 
 	private:
 		GroupAnimationMap m_animations;

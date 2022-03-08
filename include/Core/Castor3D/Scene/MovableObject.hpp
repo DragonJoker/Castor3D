@@ -15,7 +15,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class MovableObject
-		: public Animable
+		: public castor::OwnedBy< Scene >
 		, public castor::Named
 	{
 	public:
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~MovableObject()override;
+		C3D_API virtual ~MovableObject();
 		/**
 		 *\~english
 		 *\brief		Detaches the movable object from it's parent
@@ -73,38 +73,20 @@ namespace castor3d
 		 *\brief		Attache l'object à un noeud
 		 */
 		C3D_API virtual void attachTo( SceneNode & node );
-		/**
-		 *\~english
-		 *\brief		Retrieves the parent node
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le noeud parent
-		 *\return		La valeur
-		 */
+
+		C3D_API EngineRPtr getEngine()const;
+
 		SceneNode *  getParent()const
 		{
 			return m_sceneNode;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the object type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type d'objet
-		 *\return		La valeur
-		 */
+
 		MovableType getType()const
 		{
 			return m_type;
 		}
 
-		SceneRPtr getScene()const
-		{
-			return m_scene;
-		}
-
 	protected:
-		SceneRPtr m_scene;
 		//!\~english	Movable object type.
 		//!\~french		Le type d'objet déplaçable.
 		MovableType m_type;
