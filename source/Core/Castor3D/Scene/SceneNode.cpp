@@ -3,6 +3,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 
 namespace castor3d
 {
@@ -11,8 +12,9 @@ namespace castor3d
 
 	SceneNode::SceneNode( castor::String const & name
 		, Scene & scene )
-		: castor::OwnedBy< Scene >{ scene }
+		: Animable{ *scene.getEngine() }
 		, castor::Named{ name }
+		, m_scene{ scene }
 		, m_id{ CurrentId++ }
 		, m_displayable{ name == Scene::RootNode }
 	{
@@ -23,13 +25,6 @@ namespace castor3d
 		}
 
 		Count++;
-	}
-
-	SceneNode::SceneNode( castor::String const & name
-		, SceneNode & parent
-		, Scene & scene )
-		: SceneNode{ name, scene }
-	{
 	}
 
 	SceneNode::~SceneNode()
@@ -43,6 +38,7 @@ namespace castor3d
 		}
 
 		detachChildren();
+		cleanupAnimations();
 	}
 
 	void SceneNode::update()
@@ -241,6 +237,24 @@ namespace castor3d
 		m_scale *= scale;
 		doUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
+	}
+
+	SceneNodeAnimation & SceneNode::createAnimation( castor::String const & name )
+	{
+		if ( !hasAnimation( name ) )
+		{
+			addAnimation( std::make_unique< SceneNodeAnimation >( *this, name ) );
+		}
+
+		return doGetAnimation< SceneNodeAnimation >( name );
+	}
+
+	void SceneNode::removeAnimation( castor::String const & name )
+	{
+		if ( hasAnimation( name ) )
+		{
+			doRemoveAnimation( name );
+		}
 	}
 
 	void SceneNode::setOrientation( castor::Quaternion const & orientation )

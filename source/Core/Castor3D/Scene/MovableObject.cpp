@@ -11,9 +11,8 @@ namespace castor3d
 		, Scene & scene
 		, MovableType type
 		, SceneNode & node )
-		: Animable{ *scene.getEngine() }
+		: castor::OwnedBy< Scene >{ scene }
 		, Named( name )
-		, m_scene{ &scene }
 		, m_type( type )
 		, m_sceneNode( &node )
 	{
@@ -37,7 +36,6 @@ namespace castor3d
 	MovableObject::~MovableObject()
 	{
 		detach();
-		Animable::cleanupAnimations();
 	}
 
 	void MovableObject::detach()
@@ -64,5 +62,10 @@ namespace castor3d
 		{
 			m_strNodeName.clear();
 		}
+	}
+
+	EngineRPtr MovableObject::getEngine()const
+	{
+		return getScene()->getEngine();
 	}
 }

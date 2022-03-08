@@ -5,8 +5,10 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
+#include "Castor3D/Scene/Animation/AnimatedSceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -60,10 +62,17 @@ namespace castor3d
 		m_animations.clear();
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::addObject( MovableObject & object
+	AnimatedObjectSPtr AnimatedObjectGroup::addObject( SceneNode & node
 		, castor::String const & name )
 	{
-		return nullptr;
+		auto object = std::make_shared< AnimatedSceneNode >( name, node );
+
+		if ( !addObject( object ) )
+		{
+			object.reset();
+		}
+
+		return std::static_pointer_cast< AnimatedObject >( object );
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Mesh & mesh
@@ -119,11 +128,14 @@ namespace castor3d
 
 			switch ( object->getKind() )
 			{
-			case AnimationType::eMesh:
-				onMeshAdded( *this, static_cast< AnimatedMesh & >( *object ) );
+			case AnimationType::eSceneNode:
+				onSceneNodeAdded( *this, static_cast< AnimatedSceneNode & >( *object ) );
 				break;
 			case AnimationType::eSkeleton:
 				onSkeletonAdded( *this, static_cast< AnimatedSkeleton & >( *object ) );
+				break;
+			case AnimationType::eMesh:
+				onMeshAdded( *this, static_cast< AnimatedMesh & >( *object ) );
 				break;
 			case AnimationType::eTexture:
 				onTextureAdded( *this, static_cast< AnimatedTexture & >( *object ) );
@@ -144,6 +156,19 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	AnimatedObject * AnimatedObjectGroup::findObject( castor::String const & name )const
+	{
+		for ( auto & it : m_objects )
+		{
+			if ( it.first == name )
+			{
+				return it.second.get();
+			}
+		}
+
+		return nullptr;
 	}
 
 	void AnimatedObjectGroup::addAnimation( castor::String const & name )

@@ -1,6 +1,7 @@
 #include "SceneExporter/CscnExporter.hpp"
 
 #include <Castor3D/Binary/BinaryMesh.hpp>
+#include <Castor3D/Binary/BinarySceneNodeAnimation.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Binary/BinarySkeletonAnimation.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
@@ -22,6 +23,9 @@
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/Animation/SceneNodeAnimation.hpp>
+#include <Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/AnimatedSceneNode.hpp>
 #include <Castor3D/Text/TextGeometry.hpp>
 #include <Castor3D/Text/TextLight.hpp>
 #include <Castor3D/Text/TextMaterial.hpp>
@@ -281,6 +285,47 @@ namespace castor3d::exporter
 		using MeshWriterOptions = ObjectWriterOptionsT< castor3d::Mesh >;
 		using SkeletonWriterOptions = ObjectWriterOptionsT< castor3d::Skeleton >;
 
+		template<>
+		struct ObjectWriterOptionsT< castor3d::SceneNode >
+		{
+			ObjectWriterOptionsT( ExportOptions const & options
+				, SceneNode const & object
+				, castor::Path path
+				, castor::String name
+				, castor::String subfolder
+				, castor::String outputName )
+				: options{ options }
+				, object{ object }
+				, path{ path }
+				, name{ name }
+				, subfolder{ subfolder }
+				, outputName{ outputName }
+			{
+			}
+
+			template< typename ObjectU >
+			ObjectWriterOptionsT( ObjectWriterOptionsT< ObjectU > const & options
+				, SceneNode const & object
+				, castor::String name )
+				: options{ options.options }
+				, object{ object }
+				, path{ options.path }
+				, name{ name }
+				, subfolder{ options.subfolder }
+				, outputName{ options.outputName }
+			{
+			}
+
+			ExportOptions const & options;
+			SceneNode const & object;
+			castor::Path path;
+			castor::String name;
+			castor::String subfolder;
+			castor::String outputName;
+		};
+
+		using SceneNodeWriterOptions = ObjectWriterOptionsT< castor3d::SceneNode >;
+
 		struct SplitInfo
 		{
 			castor3d::Mesh const * mesh;
@@ -464,6 +509,31 @@ namespace castor3d::exporter
 							castor::BinaryFile animFile{ options.path / ( options.name + cuT( "-" ) + animation.first + cuT( ".cska" ) )
 								, castor::File::OpenMode::eWrite };
 							result = castor3d::BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation.second ), animFile );
+						}
+					}
+				}
+
+				return result;
+			}
+		};
+
+		template< bool SplitT >
+		struct ObjectPostWriterT< SplitT, castor3d::SceneNode >
+		{
+			bool operator()( SceneNodeWriterOptions const & options
+				, SplitInfo const & split )
+			{
+				bool result = true;
+
+				if constexpr ( !SplitT )
+				{
+					for ( auto & animation : options.object.getAnimations() )
+					{
+						if ( result )
+						{
+							castor::BinaryFile animFile{ options.path / ( options.name + cuT( "-" ) + animation.first + cuT( ".csna" ) )
+								, castor::File::OpenMode::eWrite };
+							result = castor3d::BinaryWriter< SceneNodeAnimation >{}.write( static_cast< SceneNodeAnimation const & >( *animation.second ), animFile );
 						}
 					}
 				}
@@ -697,8 +767,46 @@ namespace castor3d::exporter
 
 				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
 				{
-					result = result
-						&& writer( *it.second.lock(), stream );
+					auto node = it.second.lock();
+
+					if ( node->hasAnimation() )
+					{
+						auto found = node->getScene()->getAnimatedObjectGroupCache().findObject( node->getName() + "_Node" );
+
+						if ( !found.empty() )
+						{
+							auto animNode = static_cast< AnimatedSceneNode * >( found.front() );
+
+							if ( animNode->isPlayingAnimation() )
+							{
+								auto & anim = animNode->getPlayingAnimation();
+								auto pos = node->getPosition();
+								auto rot = node->getOrientation();
+								auto scl = node->getScale();
+								node->setPosition( anim.getInitialPosition() );
+								node->setOrientation( anim.getInitialOrientation() );
+								node->setScale( anim.getInitialScale() );
+								result = result
+									&& writer( *node, stream );
+								node->setPosition( pos );
+								node->setOrientation( rot );
+								node->setScale( scl );
+							}
+						}
+					}
+					else
+					{
+						result = result
+							&& writer( *node, stream );
+					}
+
+					result = postWriteT< false >( SceneNodeWriterOptions{ exportOptions
+							, *node
+							, options.rootFolder / options.nodesFile.getPath()
+							, it.first
+							, options.subfolder
+							, it.first }
+						, { nullptr, nullptr } );
 				}
 			}
 			return result;
