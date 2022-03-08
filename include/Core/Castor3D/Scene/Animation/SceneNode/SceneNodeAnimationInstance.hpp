@@ -77,7 +77,6 @@ namespace castor3d
 	protected:
 		AnimatedSceneNode & m_animatedSceneNode;
 		SceneNodeAnimation & m_sceneNodeAnimation;
-		bool m_first{ true };
 		AnimationKeyFrameArray::iterator m_prev;
 		AnimationKeyFrameArray::iterator m_curr;
 		InterpolatorT< castor::Point3f, InterpolatorType::eLinear > m_vecInterpolator;
