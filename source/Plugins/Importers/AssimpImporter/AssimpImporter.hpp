@@ -67,7 +67,7 @@ namespace C3dAssimp
 		/**
 		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
-		bool doImportMesh( castor3d::Mesh & p_mesh )override;
+		bool doImportMesh( castor3d::Mesh & mesh )override;
 		bool doImportScene( castor3d::Scene & scene )override;
 
 		void doProcessLight( aiLight const & light
@@ -102,37 +102,37 @@ namespace C3dAssimp
 			, aiScene const & aiScene
 			, aiMaterial const & aiMaterial
 			, uint32_t index );
-		castor3d::BoneSPtr doAddBone( castor::String const & p_name
-			, castor::Matrix4x4f const & p_offset
-			, castor3d::Skeleton & p_skeleton
-			, uint32_t & p_index );
-		void doProcessBones( castor3d::Skeleton & p_pSkeleton
-			, aiBone const * const * p_aiBones
-			, uint32_t p_count
-			, std::vector< castor3d::VertexBoneData > & p_arrayVertices );
-		void doProcessAnimation( castor3d::Mesh & p_mesh
-			, castor::String const & p_name
-			, castor3d::Skeleton & p_skeleton
-			, aiNode const & p_aiNode
-			, aiAnimation const & p_aiAnimation );
-		void doProcessAnimationNodes( castor3d::Mesh & p_mesh
-			, castor3d::SkeletonAnimation & p_animation
-			, int64_t p_ticksPerMilliSecond
-			, castor3d::Skeleton & p_skeleton
-			, aiNode const & p_aiNode
-			, aiAnimation const & p_aiAnimation
-			, castor3d::SkeletonAnimationObjectSPtr p_object
+		castor3d::BoneSPtr doAddBone( castor::String const & name
+			, castor::Matrix4x4f const & offset
+			, castor3d::Skeleton & skeleton
+			, uint32_t & index );
+		void doProcessBones( castor3d::Skeleton & pSkeleton
+			, aiBone const * const * aiBones
+			, uint32_t count
+			, std::vector< castor3d::VertexBoneData > & arrayVertices );
+		void doProcessAnimation( castor3d::Mesh & mesh
+			, castor::String const & name
+			, castor3d::Skeleton & skeleton
+			, aiNode const & aiNode
+			, aiAnimation const & aiAnimation );
+		void doProcessAnimationNodes( castor3d::Mesh & mesh
+			, castor3d::SkeletonAnimation & animation
+			, int64_t ticksPerSecond
+			, castor3d::Skeleton & skeleton
+			, aiNode const & aiNode
+			, aiAnimation const & aiAnimation
+			, castor3d::SkeletonAnimationObjectSPtr object
 			, SkeletonAnimationKeyFrameMap & keyFrames
 			, SkeletonAnimationObjectSet & notAnimated );
 		void doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
-			, int64_t ticksPerMilliSecond
+			, int64_t ticksPerSecond
 			, castor3d::SkeletonAnimationObject & object
 			, castor3d::SkeletonAnimation & animation
 			, SkeletonAnimationKeyFrameMap & keyframes );
-		void doProcessAnimationMeshes( castor3d::Mesh & p_mesh
-			, castor3d::Submesh & p_submesh
-			, aiMesh const & p_aiMesh
-			, aiMeshAnim const & p_aiMeshAnim );
+		void doProcessAnimationMeshes( castor3d::Mesh & mesh
+			, castor3d::Submesh & submesh
+			, aiMesh const & aiMesh
+			, aiMeshAnim const & aiMeshAnim );
 
 	public:
 		static castor::String const Name;

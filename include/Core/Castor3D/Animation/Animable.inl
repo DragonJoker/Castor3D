@@ -17,6 +17,12 @@ namespace castor3d
 	}
 
 	template< typename AnimableHandlerT >
+	inline bool AnimableT< AnimableHandlerT >::hasAnimation()const
+	{
+		return !m_animations.empty();
+	}
+
+	template< typename AnimableHandlerT >
 	inline bool AnimableT< AnimableHandlerT >::hasAnimation( castor::String const & name )const
 	{
 		return m_animations.find( name ) != m_animations.end();
