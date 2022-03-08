@@ -290,19 +290,23 @@ namespace castor3d
 					auto it = instantiation.find( node->pass.getOwner() );
 					CU_Require( it != instantiation.end() );
 					CU_Require( node->getId() > 0u );
-					auto & buffer = it->second.data[index++];
-					buffer.m_objectIDs->x = node->getId() - 1u;
 
-					if ( node->mesh )
+					if ( it->second.count > index )
 					{
-						CU_Require( node->mesh->getId() > 0u );
-						buffer.m_objectIDs->y = node->mesh->getId() - 1u;
-					}
+						auto & buffer = it->second.data[index++];
+						buffer.m_objectIDs->x = node->getId() - 1u;
 
-					if ( node->skeleton )
-					{
-						CU_Require( node->skeleton->getId() > 0u );
-						buffer.m_objectIDs->z = node->skeleton->getId() - 1u;
+						if ( node->mesh )
+						{
+							CU_Require( node->mesh->getId() > 0u );
+							buffer.m_objectIDs->y = node->mesh->getId() - 1u;
+						}
+
+						if ( node->skeleton )
+						{
+							CU_Require( node->skeleton->getId() > 0u );
+							buffer.m_objectIDs->z = node->skeleton->getId() - 1u;
+						}
 					}
 				}
 			}

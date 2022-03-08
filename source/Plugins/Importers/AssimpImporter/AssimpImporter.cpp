@@ -21,6 +21,7 @@
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Light/DirectionalLight.hpp>
@@ -50,7 +51,7 @@ namespace C3dAssimp
 
 	namespace
 	{
-		aiNodeAnim const * doFindNodeAnim( const aiAnimation & animation
+		aiNodeAnim const * findNodeAnim( const aiAnimation & animation
 			, const castor::String & nodeName )
 		{
 			aiNodeAnim const * result = nullptr;
@@ -70,7 +71,7 @@ namespace C3dAssimp
 		}
 
 		template< typename aiMeshType >
-		InterleavedVertexArray doCreateVertexBuffer( aiMeshType const & aiMesh )
+		InterleavedVertexArray createVertexBuffer( aiMeshType const & aiMesh )
 		{
 			InterleavedVertexArray vertices{ aiMesh.mNumVertices };
 			uint32_t index{ 0u };
@@ -123,71 +124,6 @@ namespace C3dAssimp
 			}
 
 			return vertices;
-		}
-
-		template< typename T >
-		void doFind( castor::Milliseconds time
-			, typename std::map< castor::Milliseconds, T > const & map
-			, typename std::map< castor::Milliseconds, T >::const_iterator & prv
-			, typename std::map< castor::Milliseconds, T >::const_iterator & cur )
-		{
-			if ( map.empty() )
-			{
-				prv = cur = map.end();
-			}
-			else
-			{
-				cur = std::find_if( map.begin()
-					, map.end()
-					, [&time]( std::pair< castor::Milliseconds, T > const & pair )
-					{
-						return pair.first > time;
-					} );
-
-				if ( cur == map.end() )
-				{
-					--cur;
-				}
-
-				prv = cur;
-
-				if ( prv != map.begin() )
-				{
-					prv--;
-				}
-			}
-		}
-
-		template< typename T >
-		T doCompute( castor::Milliseconds const & from
-			, Interpolator< T > const & interpolator
-			, std::map< castor::Milliseconds, T > const & values )
-		{
-			T result;
-
-			if ( values.size() == 1 )
-			{
-				result = values.begin()->second;
-			}
-			else
-			{
-				auto prv = values.begin();
-				auto cur = values.begin();
-				doFind( from, values, prv, cur );
-
-				if ( prv != cur )
-				{
-					auto dt = cur->first - prv->first;
-					float factor = float( ( from - prv->first ).count() ) / float( dt.count() );
-					result = interpolator.interpolate( prv->second, cur->second, factor );
-				}
-				else
-				{
-					result = prv->second;
-				}
-			}
-
-			return result;
 		}
 
 		struct TextureInfo
@@ -945,7 +881,7 @@ namespace C3dAssimp
 			return result;
 		}
 
-		void doProcessMaterialPass( Scene & scene
+		void processMaterialPass( Scene & scene
 			, SamplerRes sampler
 			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps
 			, Pass & pass
@@ -977,9 +913,34 @@ namespace C3dAssimp
 			}
 		}
 
-		std::map< castor::Milliseconds, castor::Point3f > doProcessVec3Keys( aiVectorKey const * const keys
+		castor::Milliseconds convert( double ticks
+			, int64_t ticksPerSecond )
+		{
+			// Turn ticks to seconds.
+			auto time = ticks / double( ticksPerSecond );
+			// Turn seconds to milliseconds.
+			return castor::Milliseconds{ int64_t( time * 1000.0 ) };
+		}
+
+		template< typename KeyT >
+		void gatherTimes( KeyT const * keys
 			, uint32_t count
-			, int64_t ticksPerMilliSecond
+			, int64_t ticksPerSecond
+			, std::set< castor::Milliseconds > & times )
+		{
+			for ( auto & key : castor::makeArrayView( keys, count ) )
+			{
+				if ( key.mTime >= 0.0 )
+				{
+					auto time = convert( key.mTime, ticksPerSecond );
+					times.insert( time );
+				}
+			}
+		}
+
+		std::map< castor::Milliseconds, castor::Point3f > processVec3Keys( aiVectorKey const * const keys
+			, uint32_t count
+			, int64_t ticksPerSecond
 			, std::set< castor::Milliseconds > const & times )
 		{
 			std::map< castor::Milliseconds, castor::Point3f > result;
@@ -988,7 +949,7 @@ namespace C3dAssimp
 			{
 				if ( key.mTime > 0 )
 				{
-					auto time = castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+					auto time = convert( key.mTime, ticksPerSecond );
 					result[time] = castor::Point3f{ key.mValue.x, key.mValue.y, key.mValue.z };
 				}
 				else
@@ -1003,9 +964,9 @@ namespace C3dAssimp
 			return result;
 		}
 
-		std::map< castor::Milliseconds, castor::Quaternion > doProcessQuatKeys( aiQuatKey const * const keys
+		std::map< castor::Milliseconds, castor::Quaternion > processQuatKeys( aiQuatKey const * const keys
 			, uint32_t count
-			, int64_t ticksPerMilliSecond
+			, int64_t ticksPerSecond
 			, std::set< castor::Milliseconds > const & times )
 		{
 			std::map< castor::Milliseconds, castor::Quaternion > result;
@@ -1014,7 +975,7 @@ namespace C3dAssimp
 			{
 				if ( key.mTime > 0 )
 				{
-					auto time = castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+					auto time = convert( key.mTime, ticksPerSecond );
 					result[time] = castor::Quaternion::fromMatrix( makeMatrix4x4f( key.mValue.GetMatrix().Transpose() ) );
 				}
 				else
@@ -1029,7 +990,7 @@ namespace C3dAssimp
 			return result;
 		}
 
-		SkeletonAnimationKeyFrame & doGetKeyFrame( castor::Milliseconds const & time
+		SkeletonAnimationKeyFrame & getKeyFrame( castor::Milliseconds const & time
 			, SkeletonAnimation & animation
 			, SkeletonAnimationKeyFrameMap & keyframes )
 		{
@@ -1044,12 +1005,78 @@ namespace C3dAssimp
 			return *it->second;
 		}
 
-		void doSynchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
+		template< typename T >
+		void findValue( castor::Milliseconds time
+			, typename std::map< castor::Milliseconds, T > const & map
+			, typename std::map< castor::Milliseconds, T >::const_iterator & prv
+			, typename std::map< castor::Milliseconds, T >::const_iterator & cur )
+		{
+			if ( map.empty() )
+			{
+				prv = map.end();
+				cur = map.end();
+			}
+			else
+			{
+				cur = std::find_if( map.begin()
+					, map.end()
+					, [&time]( std::pair< castor::Milliseconds, T > const & pair )
+					{
+						return pair.first > time;
+					} );
+
+				if ( cur == map.end() )
+				{
+					--cur;
+				}
+
+				prv = cur;
+
+				if ( prv != map.begin() )
+				{
+					prv--;
+				}
+			}
+		}
+
+		template< typename T >
+		T interpolate( castor::Milliseconds const & from
+			, Interpolator< T > const & interpolator
+			, std::map< castor::Milliseconds, T > const & values )
+		{
+			T result;
+
+			if ( values.size() == 1 )
+			{
+				result = values.begin()->second;
+			}
+			else
+			{
+				auto prv = values.begin();
+				auto cur = values.begin();
+				findValue( from, values, prv, cur );
+
+				if ( prv != cur )
+				{
+					auto dt = cur->first - prv->first;
+					float factor = float( ( from - prv->first ).count() ) / float( dt.count() );
+					result = interpolator.interpolate( prv->second, cur->second, factor );
+				}
+				else
+				{
+					result = prv->second;
+				}
+			}
+
+			return result;
+		}
+
+		void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
 			, std::map< castor::Milliseconds, castor::Point3f > const & scales
 			, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
 			, std::set< castor::Milliseconds > const & times
 			, uint32_t fps
-			, int64_t ticksPerMilliSecond
+			, int64_t ticksPerSecond
 			, SkeletonAnimationObject & object
 			, SkeletonAnimation & animation
 			, SkeletonAnimationKeyFrameMap & keyframes )
@@ -1058,14 +1085,14 @@ namespace C3dAssimp
 			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
 
 			if ( fps == castor3d::RenderLoop::UnlimitedFPS
-				|| ticksPerMilliSecond / 1000 >= fps )
+				|| ticksPerSecond >= fps )
 			{
 				for ( auto time : times )
 				{
-					auto translate = doCompute( time, pointInterpolator, translates );
-					auto scale = doCompute( time, pointInterpolator, scales );
-					auto rotate = doCompute( time, quatInterpolator, rotates );
-					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+					auto translate = interpolate( time, pointInterpolator, translates );
+					auto scale = interpolate( time, pointInterpolator, scales );
+					auto rotate = interpolate( time, quatInterpolator, rotates );
+					getKeyFrame( time, animation, keyframes ).addAnimationObject( object
 						, translate
 						, rotate
 						, scale );
@@ -1075,14 +1102,14 @@ namespace C3dAssimp
 			{
 				// Limit the key frames per second to 60, to spare RAM...
 				castor::Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
-				castor::Milliseconds maxTime{ *times.rbegin() + step };
+				castor::Milliseconds maxTime{ *times.rbegin() };
 
-				for ( auto time = 0_ms; time < maxTime; time += step )
+				for ( auto time = 0_ms; time <= maxTime; time += step )
 				{
-					auto translate = doCompute( time, pointInterpolator, translates );
-					auto scale = doCompute( time, pointInterpolator, scales );
-					auto rotate = doCompute( time, quatInterpolator, rotates );
-					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
+					auto translate = interpolate( time, pointInterpolator, translates );
+					auto scale = interpolate( time, pointInterpolator, scales );
+					auto rotate = interpolate( time, quatInterpolator, rotates );
+					getKeyFrame( time, animation, keyframes ).addAnimationObject( object
 						, translate
 						, rotate
 						, scale );
@@ -1387,7 +1414,41 @@ namespace C3dAssimp
 
 						m_geometries.emplace( geom->getName(), geom );
 						node->attachObject( *geom );
-						scene.getGeometryCache().add( std::move( geom ) );
+						scene.getGeometryCache().add( geom );
+						auto skeleton = meshRepl->mesh->getSkeleton();
+
+						if ( meshRepl->mesh->hasAnimation() )
+						{
+							auto animGroup = scene.getAnimatedObjectGroupCache().add( geom->getName() + "Morph", scene ).lock();
+							auto animObject = animGroup->addObject( *meshRepl->mesh
+								, *geom
+								, geom->getName() + cuT( "_Mesh" ) );
+
+							for ( auto & animation : meshRepl->mesh->getAnimations() )
+							{
+								animGroup->addAnimation( animation.first );
+								animGroup->setAnimationLooped( animation.first, true );
+							}
+
+							animGroup->startAnimation( meshRepl->mesh->getAnimations().begin()->first );
+						}
+
+						if ( skeleton && skeleton->hasAnimation() )
+						{
+							auto animGroup = scene.getAnimatedObjectGroupCache().add( geom->getName() + "Skin", scene ).lock();
+							auto animObject = animGroup->addObject( *skeleton
+								, *meshRepl->mesh
+								, *geom
+								, geom->getName() + cuT( "_Skeleton" ) );
+
+							for ( auto & animation : skeleton->getAnimations() )
+							{
+								animGroup->addAnimation( animation.first );
+								animGroup->setAnimationLooped( animation.first, true );
+							}
+
+							animGroup->startAnimation( skeleton->getAnimations().begin()->first );
+						}
 					}
 				}
 			}
@@ -1674,7 +1735,7 @@ namespace C3dAssimp
 			{
 				m_submeshByID.emplace( aiMeshIndex, submesh.getId() );
 				submesh.setDefaultMaterial( material.lock().get() );
-				submesh.addPoints( doCreateVertexBuffer( aiMesh ) );
+				submesh.addPoints( createVertexBuffer( aiMesh ) );
 
 				if ( aiMesh.HasBones() )
 				{
@@ -1753,7 +1814,7 @@ namespace C3dAssimp
 			{
 				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
 					, castor::Milliseconds{ int64_t( aiKey.mTime * 1000 ) } );
-				keyFrame->addSubmeshBuffer( submesh, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
+				keyFrame->addSubmeshBuffer( submesh, createVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
 				animation.addKeyFrame( std::move( keyFrame ) );
 			}
 		}
@@ -1793,7 +1854,7 @@ namespace C3dAssimp
 				, *scene.getEngine()
 				, scene.getPassesType() );
 			auto pass = result.lock()->createPass();
-			doProcessMaterialPass( scene
+			processMaterialPass( scene
 				, getEngine()->getDefaultSampler().lock()
 				, m_textureRemaps
 				, *pass
@@ -1862,14 +1923,14 @@ namespace C3dAssimp
 		}
 
 		auto & animation = skeleton.createAnimation( name );
-		int64_t ticksPerMilliSecond = aiAnimation.mTicksPerSecond != 0.0
+		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
 			: 25ll;
 		SkeletonAnimationKeyFrameMap keyframes;
 		SkeletonAnimationObjectSet notAnimated;
 		doProcessAnimationNodes( mesh
 			, animation
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, skeleton
 			, aiNode
 			, aiAnimation
@@ -1898,7 +1959,7 @@ namespace C3dAssimp
 
 	void AssimpImporter::doProcessAnimationNodes( Mesh & mesh
 		, SkeletonAnimation & animation
-		, int64_t ticksPerMilliSecond
+		, int64_t ticksPerSecond
 		, Skeleton & skeleton
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation
@@ -1907,7 +1968,7 @@ namespace C3dAssimp
 		, SkeletonAnimationObjectSet & notAnimated )
 	{
 		castor::String name = castor::string::stringCast< xchar >( aiNode.mName.data );
-		const aiNodeAnim * aiNodeAnim = doFindNodeAnim( aiAnimation, name );
+		const aiNodeAnim * aiNodeAnim = findNodeAnim( aiAnimation, name );
 		SkeletonAnimationObjectSPtr object;
 		auto itBone = m_mapBoneByID.find( name );
 
@@ -1994,7 +2055,7 @@ namespace C3dAssimp
 		if ( aiNodeAnim )
 		{
 			doProcessAnimationNodeKeys( *aiNodeAnim
-				, ticksPerMilliSecond
+				, ticksPerSecond
 				, *object
 				, animation
 				, keyFrames );
@@ -2008,7 +2069,7 @@ namespace C3dAssimp
 		{
 			doProcessAnimationNodes( mesh
 				, animation
-				, ticksPerMilliSecond
+				, ticksPerSecond
 				, skeleton
 				, *node
 				, aiAnimation
@@ -2018,24 +2079,8 @@ namespace C3dAssimp
 		}
 	}
 
-	template< typename KeyT >
-	void gatherTimes( KeyT const * keys
-		, uint32_t count
-		, int64_t ticksPerMilliSecond
-		, std::set< castor::Milliseconds > & times )
-	{
-		for ( auto & key : castor::makeArrayView( keys, count ) )
-		{
-			if ( key.mTime >= 0.0 )
-			{
-				auto time = castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
-				times.insert( time );
-			}
-		}
-	}
-
 	void AssimpImporter::doProcessAnimationNodeKeys( aiNodeAnim const & aiNodeAnim
-		, int64_t ticksPerMilliSecond
+		, int64_t ticksPerSecond
 		, SkeletonAnimationObject & object
 		, SkeletonAnimation & animation
 		, SkeletonAnimationKeyFrameMap & keyframes )
@@ -2043,35 +2088,36 @@ namespace C3dAssimp
 		std::set< castor::Milliseconds > times;
 		gatherTimes( aiNodeAnim.mPositionKeys
 			, aiNodeAnim.mNumPositionKeys
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, times );
 		gatherTimes( aiNodeAnim.mScalingKeys
 			, aiNodeAnim.mNumScalingKeys
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, times );
 		gatherTimes( aiNodeAnim.mRotationKeys
 			, aiNodeAnim.mNumRotationKeys
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, times );
 
-		auto translates = doProcessVec3Keys( aiNodeAnim.mPositionKeys
+		auto translates = processVec3Keys( aiNodeAnim.mPositionKeys
 			, aiNodeAnim.mNumPositionKeys
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, times );
-		auto scales = doProcessVec3Keys( aiNodeAnim.mScalingKeys
+		auto scales = processVec3Keys( aiNodeAnim.mScalingKeys
 			, aiNodeAnim.mNumScalingKeys
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, times );
-		auto rotates = doProcessQuatKeys( aiNodeAnim.mRotationKeys
+		auto rotates = processQuatKeys( aiNodeAnim.mRotationKeys
 			, aiNodeAnim.mNumRotationKeys
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, times );
-		doSynchroniseKeys( translates
+
+		synchroniseKeys( translates
 			, scales
 			, rotates
 			, times
 			, getEngine()->getRenderLoop().getWantedFps()
-			, ticksPerMilliSecond
+			, ticksPerSecond
 			, object
 			, animation
 			, keyframes );
