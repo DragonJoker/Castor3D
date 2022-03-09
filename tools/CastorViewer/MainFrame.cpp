@@ -782,7 +782,7 @@ namespace CastorViewer
 				}
 				else if ( !castor->isThreaded() )
 				{
-					castor->getRenderLoop().renderSyncFrame();
+					castor->getRenderLoop().renderSyncFrame( castor::Milliseconds{ 1000 / castor->getRenderLoop().getWantedFps() } );
 				}
 			}
 		}
