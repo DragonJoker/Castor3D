@@ -852,19 +852,19 @@ namespace C3dAssimp
 		castor::Matrix4x4f makeMatrix4x4f( aiMatrix4x4 const & aiMatrix )
 		{
 			std::array< float, 16u > data
-			{ aiMatrix.a1, aiMatrix.a2, aiMatrix.a3, aiMatrix.a4
-				, aiMatrix.b1, aiMatrix.b2, aiMatrix.b3, aiMatrix.b4
-				, aiMatrix.c1, aiMatrix.c2, aiMatrix.c3, aiMatrix.c4
-				, aiMatrix.d1, aiMatrix.d2, aiMatrix.d3, aiMatrix.d4 };
+				{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1, aiMatrix.d1
+				, aiMatrix.a2, aiMatrix.b2, aiMatrix.c2, aiMatrix.d2
+				, aiMatrix.a3, aiMatrix.b3, aiMatrix.c3, aiMatrix.d3
+				, aiMatrix.a4, aiMatrix.b4, aiMatrix.c4, aiMatrix.d4 };
 			return castor::Matrix4x4f{ data.data() };
 		}
 
 		castor::Matrix4x4f makeMatrix4x4f( aiMatrix3x3 const & aiMatrix )
 		{
 			std::array< float, 9u > data
-			{ aiMatrix.a1, aiMatrix.a2, aiMatrix.a3
-				, aiMatrix.b1, aiMatrix.b2, aiMatrix.b3
-				, aiMatrix.c1, aiMatrix.c2, aiMatrix.c3 };
+				{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1
+				, aiMatrix.a2, aiMatrix.b2, aiMatrix.c2
+				, aiMatrix.a3, aiMatrix.b3, aiMatrix.c3 };
 			return castor::Matrix4x4f{ castor::Matrix3x3f{ data.data() } };
 		}
 
@@ -924,68 +924,48 @@ namespace C3dAssimp
 			return castor::Milliseconds{ int64_t( time * 1000.0 ) };
 		}
 
+		castor::Point3f convert( aiVector3D const & v )
+		{
+			return castor::Point3f{ v.x, v.y, v.z };
+		}
+
+		castor::Quaternion convert( aiQuaternion const & v )
+		{
+			return castor::Quaternion::fromMatrix( makeMatrix4x4f( v.GetMatrix() ) );
+		}
+
 		template< typename KeyT >
-		void gatherTimes( KeyT const * keys
-			, uint32_t count
+		struct KeyDataTyperT;
+
+		template<>
+		struct KeyDataTyperT< aiVectorKey >
+		{
+			using Type = castor::Point3f;
+		};
+
+		template<>
+		struct KeyDataTyperT< aiQuatKey >
+		{
+			using Type = castor::Quaternion;
+		};
+
+		template< typename KeyT >
+		using KeyDataTypeT = typename KeyDataTyperT< KeyT >::Type;
+
+		template< typename KeyT >
+		std::map< castor::Milliseconds, KeyDataTypeT< KeyT > > processKeys( castor::ArrayView< KeyT > const & keys
 			, int64_t ticksPerSecond
 			, std::set< castor::Milliseconds > & times )
 		{
-			for ( auto & key : castor::makeArrayView( keys, count ) )
+			std::map< castor::Milliseconds, KeyDataTypeT< KeyT > > result;
+
+			for ( auto const & key : keys )
 			{
-				if ( key.mTime >= 0.0 )
+				if ( key.mTime >= 0 )
 				{
 					auto time = convert( key.mTime, ticksPerSecond );
 					times.insert( time );
-				}
-			}
-		}
-
-		std::map< castor::Milliseconds, castor::Point3f > processVec3Keys( aiVectorKey const * const keys
-			, uint32_t count
-			, int64_t ticksPerSecond
-			, std::set< castor::Milliseconds > const & times )
-		{
-			std::map< castor::Milliseconds, castor::Point3f > result;
-
-			for ( auto const & key : castor::makeArrayView( keys, count ) )
-			{
-				if ( key.mTime > 0 )
-				{
-					auto time = convert( key.mTime, ticksPerSecond );
-					result[time] = castor::Point3f{ key.mValue.x, key.mValue.y, key.mValue.z };
-				}
-				else
-				{
-					for ( auto & time : times )
-					{
-						result[time] = castor::Point3f{ key.mValue.x, key.mValue.y, key.mValue.z };
-					}
-				}
-			}
-
-			return result;
-		}
-
-		std::map< castor::Milliseconds, castor::Quaternion > processQuatKeys( aiQuatKey const * const keys
-			, uint32_t count
-			, int64_t ticksPerSecond
-			, std::set< castor::Milliseconds > const & times )
-		{
-			std::map< castor::Milliseconds, castor::Quaternion > result;
-
-			for ( auto const & key : castor::makeArrayView( keys, count ) )
-			{
-				if ( key.mTime > 0 )
-				{
-					auto time = convert( key.mTime, ticksPerSecond );
-					result[time] = castor::Quaternion::fromMatrix( makeMatrix4x4f( key.mValue.GetMatrix().Transpose() ) );
-				}
-				else
-				{
-					for ( auto & time : times )
-					{
-						result[time] = castor::Quaternion::fromMatrix( makeMatrix4x4f( key.mValue.GetMatrix().Transpose() ) );
-					}
+					result.emplace( time, convert( key.mValue ) );
 				}
 			}
 
@@ -1074,20 +1054,21 @@ namespace C3dAssimp
 			return result;
 		}
 
+		template< typename AnimationT, typename KeyFrameT, typename FuncT >
 		void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
 			, std::map< castor::Milliseconds, castor::Point3f > const & scales
 			, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
 			, std::set< castor::Milliseconds > const & times
 			, uint32_t fps
 			, int64_t ticksPerSecond
-			, SkeletonAnimationObject & object
-			, SkeletonAnimation & animation
-			, SkeletonAnimationKeyFrameMap & keyframes )
+			, AnimationT & animation
+			, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes
+			, FuncT fillKeyFrame )
 		{
 			InterpolatorT< castor::Point3f, InterpolatorType::eLinear > pointInterpolator;
 			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
 			// Limit the key frames per second to 60, to spare RAM...
-			auto wantedFps = std::max( ticksPerSecond, std::min< int64_t >( 60, int64_t( fps ) ) );
+			auto wantedFps = std::min< int64_t >( 60, int64_t( fps ) );
 			castor::Milliseconds step{ 1000 / wantedFps };
 			castor::Milliseconds maxTime{ *times.rbegin() };
 
@@ -1096,38 +1077,46 @@ namespace C3dAssimp
 				auto translate = interpolate( time, pointInterpolator, translates );
 				auto scale = interpolate( time, pointInterpolator, scales );
 				auto rotate = interpolate( time, quatInterpolator, rotates );
-				getKeyFrame( time, animation, keyframes ).addAnimationObject( object
+				fillKeyFrame( getKeyFrame( time, animation, keyframes )
 					, translate
 					, rotate
 					, scale );
 			}
 		}
 
-		void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
-			, std::map< castor::Milliseconds, castor::Point3f > const & scales
-			, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
-			, std::set< castor::Milliseconds > const & times
-			, uint32_t fps
+		template< typename aiAnimT
+			, typename AnimationT
+			, typename KeyFrameT
+			, typename FuncT >
+		void processAnimationNodeKeys( aiAnimT const & aiAnim
+			, uint32_t wantedFps
 			, int64_t ticksPerSecond
-			, SceneNodeAnimation & animation
-			, SceneNodeAnimationKeyFrameMap & keyframes )
+			, AnimationT & animation
+			, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes
+			, FuncT fillKeyFrame )
 		{
-			InterpolatorT< castor::Point3f, InterpolatorType::eLinear > pointInterpolator;
-			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
-			// Limit the key frames per second to 60, to spare RAM...
-			auto wantedFps = std::max( ticksPerSecond, std::min< int64_t >( 60, int64_t( fps ) ) );
-			castor::Milliseconds step{ 1000 / wantedFps };
-			castor::Milliseconds maxTime{ *times.rbegin() };
-
-			for ( auto time = 0_ms; time <= maxTime; time += step )
-			{
-				auto translate = interpolate( time, pointInterpolator, translates );
-				auto scale = interpolate( time, pointInterpolator, scales );
-				auto rotate = interpolate( time, quatInterpolator, rotates );
-				getKeyFrame( time, animation, keyframes ).setTransform( translate
-					, rotate
-					, scale );
-			}
+			std::set< castor::Milliseconds > times;
+			auto translates = processKeys( castor::makeArrayView( aiAnim.mPositionKeys
+					, aiAnim.mNumPositionKeys )
+				, ticksPerSecond
+				, times );
+			auto scales = processKeys( castor::makeArrayView( aiAnim.mScalingKeys
+					, aiAnim.mNumScalingKeys )
+				, ticksPerSecond
+				, times );
+			auto rotates = processKeys( castor::makeArrayView( aiAnim.mRotationKeys
+					, aiAnim.mNumRotationKeys )
+				, ticksPerSecond
+				, times );
+			synchroniseKeys( translates
+				, scales
+				, rotates
+				, times
+				, wantedFps
+				, ticksPerSecond
+				, animation
+				, keyframes
+				, fillKeyFrame );
 		}
 
 		bool operator==( castor::Point3f const & lhs
@@ -1627,8 +1616,7 @@ namespace C3dAssimp
 		, castor3d::Mesh & mesh )
 	{
 		SkeletonSPtr skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
-		auto transform = aiScene.mRootNode->mTransformation;
-		skeleton->setGlobalInverseTransform( makeMatrix4x4f( transform.Transpose().Inverse() ) );
+		skeleton->setGlobalInverseTransform( makeMatrix4x4f( aiScene.mRootNode->mTransformation ).getInverse() );
 
 		bool create = true;
 		uint32_t aiMeshIndex = 0u;
@@ -1939,13 +1927,12 @@ namespace C3dAssimp
 
 			if ( m_mapBoneByID.find( name ) == m_mapBoneByID.end() )
 			{
-				auto mtx = aiBone.mOffsetMatrix;
-				doAddBone( name, makeMatrix4x4f( mtx.Transpose() ), skeleton, index );
+				doAddBone( name, makeMatrix4x4f( aiBone.mOffsetMatrix ), skeleton, index );
 			}
 			else
 			{
 				index = m_mapBoneByID[name];
-				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == makeMatrix4x4f( aiMatrix4x4{ aiBone.mOffsetMatrix }.Transpose() ) );
+				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == makeMatrix4x4f( aiBone.mOffsetMatrix ) );
 			}
 
 			for ( auto weight : castor::makeArrayView( aiBone.mWeights, aiBone.mNumWeights ) )
@@ -2071,7 +2058,7 @@ namespace C3dAssimp
 			else
 			{
 				object = animation.getObject( SkeletonAnimationObjectType::eBone, aiNode.mName.C_Str() );
-				CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ).getTransposed() );
+				CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ) );
 				CU_Ensure( object->getParent() == parent || object == parent );
 				added = false;
 			}
@@ -2084,7 +2071,7 @@ namespace C3dAssimp
 		else
 		{
 			object = animation.getObject( SkeletonAnimationObjectType::eNode, aiNode.mName.C_Str() );
-			CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ).getTransposed() );
+			CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ) );
 			CU_Ensure( object->getParent() == parent || object == parent );
 			added = false;
 		}
@@ -2096,7 +2083,7 @@ namespace C3dAssimp
 				parent->addChild( object );
 			}
 
-			object->setNodeTransform( makeMatrix4x4f( aiNode.mTransformation ).getTransposed() );
+			object->setNodeTransform( makeMatrix4x4f( aiNode.mTransformation ) );
 		}
 
 		if ( aiNodeAnim )
@@ -2132,42 +2119,18 @@ namespace C3dAssimp
 		, SkeletonAnimation & animation
 		, SkeletonAnimationKeyFrameMap & keyframes )
 	{
-		std::set< castor::Milliseconds > times;
-		gatherTimes( aiNodeAnim.mPositionKeys
-			, aiNodeAnim.mNumPositionKeys
-			, ticksPerSecond
-			, times );
-		gatherTimes( aiNodeAnim.mScalingKeys
-			, aiNodeAnim.mNumScalingKeys
-			, ticksPerSecond
-			, times );
-		gatherTimes( aiNodeAnim.mRotationKeys
-			, aiNodeAnim.mNumRotationKeys
-			, ticksPerSecond
-			, times );
-
-		auto translates = processVec3Keys( aiNodeAnim.mPositionKeys
-			, aiNodeAnim.mNumPositionKeys
-			, ticksPerSecond
-			, times );
-		auto scales = processVec3Keys( aiNodeAnim.mScalingKeys
-			, aiNodeAnim.mNumScalingKeys
-			, ticksPerSecond
-			, times );
-		auto rotates = processQuatKeys( aiNodeAnim.mRotationKeys
-			, aiNodeAnim.mNumRotationKeys
-			, ticksPerSecond
-			, times );
-
-		synchroniseKeys( translates
-			, scales
-			, rotates
-			, times
+		processAnimationNodeKeys( aiNodeAnim
 			, getEngine()->getRenderLoop().getWantedFps()
 			, ticksPerSecond
-			, object
 			, animation
-			, keyframes );
+			, keyframes
+			, [&object]( SkeletonAnimationKeyFrame & keyframe
+				, castor::Point3f const & position
+				, castor::Quaternion const & orientation
+				, castor::Point3f const & scale )
+			{
+				keyframe.addAnimationObject( object, position, orientation, scale );
+			} );
 	}
 
 	void AssimpImporter::doProcessAnimationSceneNodes( castor3d::SceneNode & node
@@ -2194,42 +2157,19 @@ namespace C3dAssimp
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
 			: 25ll;
-		std::set< castor::Milliseconds > times;
-		gatherTimes( aiNodeAnim.mPositionKeys
-			, aiNodeAnim.mNumPositionKeys
-			, ticksPerSecond
-			, times );
-		gatherTimes( aiNodeAnim.mScalingKeys
-			, aiNodeAnim.mNumScalingKeys
-			, ticksPerSecond
-			, times );
-		gatherTimes( aiNodeAnim.mRotationKeys
-			, aiNodeAnim.mNumRotationKeys
-			, ticksPerSecond
-			, times );
-
-		auto translates = processVec3Keys( aiNodeAnim.mPositionKeys
-			, aiNodeAnim.mNumPositionKeys
-			, ticksPerSecond
-			, times );
-		auto scales = processVec3Keys( aiNodeAnim.mScalingKeys
-			, aiNodeAnim.mNumScalingKeys
-			, ticksPerSecond
-			, times );
-		auto rotates = processQuatKeys( aiNodeAnim.mRotationKeys
-			, aiNodeAnim.mNumRotationKeys
-			, ticksPerSecond
-			, times );
-
 		SceneNodeAnimationKeyFrameMap keyframes;
-		synchroniseKeys( translates
-			, scales
-			, rotates
-			, times
+		processAnimationNodeKeys( aiNodeAnim
 			, getEngine()->getRenderLoop().getWantedFps()
 			, ticksPerSecond
 			, animation
-			, keyframes );
+			, keyframes
+			, []( SceneNodeAnimationKeyFrame & keyframe
+				, castor::Point3f const & position
+				, castor::Quaternion const & orientation
+				, castor::Point3f const & scale )
+			{
+				keyframe.setTransform( position, orientation, scale );
+			} );
 
 		for ( auto & keyFrame : keyframes )
 		{
