@@ -1043,7 +1043,7 @@ namespace C3dAssimp
 		}
 
 		template< typename T >
-		T interpolate( castor::Milliseconds const & from
+		T interpolate( castor::Milliseconds const & time
 			, Interpolator< T > const & interpolator
 			, std::map< castor::Milliseconds, T > const & values )
 		{
@@ -1057,12 +1057,12 @@ namespace C3dAssimp
 			{
 				auto prv = values.begin();
 				auto cur = values.begin();
-				findValue( from, values, prv, cur );
+				findValue( time, values, prv, cur );
 
 				if ( prv != cur )
 				{
 					auto dt = cur->first - prv->first;
-					float factor = float( ( from - prv->first ).count() ) / float( dt.count() );
+					float factor = float( ( time - prv->first ).count() ) / float( dt.count() );
 					result = interpolator.interpolate( prv->second, cur->second, factor );
 				}
 				else
@@ -1086,37 +1086,20 @@ namespace C3dAssimp
 		{
 			InterpolatorT< castor::Point3f, InterpolatorType::eLinear > pointInterpolator;
 			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
+			// Limit the key frames per second to 60, to spare RAM...
+			auto wantedFps = std::max( ticksPerSecond, std::min< int64_t >( 60, int64_t( fps ) ) );
+			castor::Milliseconds step{ 1000 / wantedFps };
+			castor::Milliseconds maxTime{ *times.rbegin() };
 
-			if ( fps == castor3d::RenderLoop::UnlimitedFPS
-				|| ticksPerSecond >= fps )
+			for ( auto time = 0_ms; time <= maxTime; time += step )
 			{
-				for ( auto time : times )
-				{
-					auto translate = interpolate( time, pointInterpolator, translates );
-					auto scale = interpolate( time, pointInterpolator, scales );
-					auto rotate = interpolate( time, quatInterpolator, rotates );
-					getKeyFrame( time, animation, keyframes ).addAnimationObject( object
-						, translate
-						, rotate
-						, scale );
-				}
-			}
-			else
-			{
-				// Limit the key frames per second to 60, to spare RAM...
-				castor::Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
-				castor::Milliseconds maxTime{ *times.rbegin() };
-
-				for ( auto time = 0_ms; time <= maxTime; time += step )
-				{
-					auto translate = interpolate( time, pointInterpolator, translates );
-					auto scale = interpolate( time, pointInterpolator, scales );
-					auto rotate = interpolate( time, quatInterpolator, rotates );
-					getKeyFrame( time, animation, keyframes ).addAnimationObject( object
-						, translate
-						, rotate
-						, scale );
-				}
+				auto translate = interpolate( time, pointInterpolator, translates );
+				auto scale = interpolate( time, pointInterpolator, scales );
+				auto rotate = interpolate( time, quatInterpolator, rotates );
+				getKeyFrame( time, animation, keyframes ).addAnimationObject( object
+					, translate
+					, rotate
+					, scale );
 			}
 		}
 
@@ -1131,35 +1114,19 @@ namespace C3dAssimp
 		{
 			InterpolatorT< castor::Point3f, InterpolatorType::eLinear > pointInterpolator;
 			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
+			// Limit the key frames per second to 60, to spare RAM...
+			auto wantedFps = std::max( ticksPerSecond, std::min< int64_t >( 60, int64_t( fps ) ) );
+			castor::Milliseconds step{ 1000 / wantedFps };
+			castor::Milliseconds maxTime{ *times.rbegin() };
 
-			if ( fps == castor3d::RenderLoop::UnlimitedFPS
-				|| ticksPerSecond >= fps )
+			for ( auto time = 0_ms; time <= maxTime; time += step )
 			{
-				for ( auto time : times )
-				{
-					auto translate = interpolate( time, pointInterpolator, translates );
-					auto scale = interpolate( time, pointInterpolator, scales );
-					auto rotate = interpolate( time, quatInterpolator, rotates );
-					getKeyFrame( time, animation, keyframes ).setTransform( translate
-						, rotate
-						, scale );
-				}
-			}
-			else
-			{
-				// Limit the key frames per second to 60, to spare RAM...
-				castor::Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
-				castor::Milliseconds maxTime{ *times.rbegin() };
-
-				for ( auto time = 0_ms; time <= maxTime; time += step )
-				{
-					auto translate = interpolate( time, pointInterpolator, translates );
-					auto scale = interpolate( time, pointInterpolator, scales );
-					auto rotate = interpolate( time, quatInterpolator, rotates );
-					getKeyFrame( time, animation, keyframes ).setTransform( translate
-						, rotate
-						, scale );
-				}
+				auto translate = interpolate( time, pointInterpolator, translates );
+				auto scale = interpolate( time, pointInterpolator, scales );
+				auto rotate = interpolate( time, quatInterpolator, rotates );
+				getKeyFrame( time, animation, keyframes ).setTransform( translate
+					, rotate
+					, scale );
 			}
 		}
 
