@@ -142,7 +142,7 @@ namespace GuiCommon
 				static const wxString Validate{ _( "Enables rendering API validation." ) };
 				static const wxString SyncRender{ _( "Sets the rendering to synchronous (render loop is user triggered)." ) };
 				static const wxString UnlimFPS{ _( "Disables FPS limit (has no effect if '" ) + option::lg::SyncRender + _( "' option is specified)." ) };
-				static const wxString FixedFPS{ _( "Defines wanted FPS (has no effect if '" ) + option::lg::SyncRender + _( "' or '" ) + option::lg::UnlimFPS + _( "' options are specified)." ) };
+				static const wxString FixedFPS{ _( "Defines wanted FPS (has no effect if '" ) + option::lg::UnlimFPS + _( "' option is specified)." ) };
 				static const wxString GpuIndex{ _( "The index of the wanted Vulkan physical device." ) };
 				static const wxString SceneFile{ _( "The initial scene file." ) };
 
@@ -222,6 +222,11 @@ namespace GuiCommon
 				if ( !config.syncRender )
 				{
 					config.unlimFPS = has( option::st::UnlimFPS );
+				}
+
+				if ( !config.unlimFPS )
+				{
+					config.fixedFPS = getLong( option::st::FixedFPS, config.fixedFPS );
 				}
 
 				for ( auto & plugin : list )
