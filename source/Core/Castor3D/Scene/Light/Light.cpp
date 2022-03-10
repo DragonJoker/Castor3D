@@ -86,5 +86,6 @@ namespace castor3d
 	{
 		m_dirty = true;
 		m_category->updateNode( node );
+		onChanged( *this );
 	}
 }
