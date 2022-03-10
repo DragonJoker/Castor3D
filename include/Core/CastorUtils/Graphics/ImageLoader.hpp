@@ -99,6 +99,13 @@ namespace castor
 			, Path const & imagePath
 			, uint8_t const * data
 			, uint32_t size )const;
+		/**
+		 *\~english
+		 *\return		The pixel format for given image file.
+		 *\~french
+		 *\return		Le format des pixels de ldu fichier image donné.
+		 */
+		CU_API virtual PixelFormat getFormat( Path const & imagePath )const = 0;
 	};
 
 	class ImageLoader
@@ -203,6 +210,13 @@ namespace castor
 			, uint8_t const * data
 			, uint32_t size
 			, ImageLoaderConfig const & config )const;
+		/**
+		 *\~english
+		 *\return		The pixel format for given image file.
+		 *\~french
+		 *\return		Le format des pixels de ldu fichier image donné.
+		 */
+		CU_API PixelFormat getFormat( Path const & imagePath )const;
 
 		void setCompressionSupport( PxCompressionSupport support )
 		{

@@ -100,6 +100,21 @@ namespace castor3d
 				&& !animation;
 		}
 
+		bool areFormatsCompatible( VkFormat lhs, VkFormat rhs )
+		{
+			if ( isSRGBFormat( convert( rhs ) ) )
+			{
+				return isSRGBFormat( getSRGBFormat( convert( lhs ) ) );
+			}
+			else if ( isSRGBFormat( convert( lhs ) ) )
+			{
+				return isSRGBFormat( getSRGBFormat( convert( rhs ) ) );
+			}
+
+			return !ashes::isCompressedFormat( lhs )
+				&& !ashes::isCompressedFormat( rhs );
+		}
+
 		uint32_t & getMask( TextureConfiguration & config
 			, uint32_t offset )
 		{
@@ -535,13 +550,26 @@ namespace castor3d
 			}
 			else
 			{
+				auto & imgCache = getOwner()->getEngine()->getImageCache();
+
+				if ( lhsIt.first.isFileImage() )
+				{
+					lhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( lhsIt.first.folder() / lhsIt.first.relative() ) );
+				}
+
+				if ( rhsIt.first.isFileImage() )
+				{
+					rhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( rhsIt.first.folder() / rhsIt.first.relative() ) );
+				}
+
 				auto lhsFlags = getFlags( lhsIt.second.config );
 				auto rhsFlags = getFlags( rhsIt.second.config );
 
 				if ( lhsFlags.size() == 1u
 					&& rhsFlags.size() == 1u
 					&& isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
-					&& isMergeable( rhsIt.first, rhsIt.second, rhsAnim ) )
+					&& isMergeable( rhsIt.first, rhsIt.second, rhsAnim )
+					&& areFormatsCompatible( lhsIt.second.imageInfo->format, rhsIt.second.imageInfo->format ) )
 				{
 					log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
 					auto resultSourceInfo = mergeSourceInfos( lhsIt.first, rhsIt.first );

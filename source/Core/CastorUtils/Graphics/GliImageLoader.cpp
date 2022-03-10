@@ -168,4 +168,31 @@ namespace castor
 
 		return result;
 	}
+
+	PixelFormat GliImageLoader::getFormat( Path const & imagePath )const
+	{
+		PixelFormat result{ PixelFormat::eUNDEFINED };
+		auto imageFormat = string::lowerCase( imagePath.getExtension() );
+		gli::texture texture;
+
+		if ( imageFormat.find( cuT( "dds" ) ) != String::npos )
+		{
+			texture = gli::load_dds( imagePath );
+		}
+		else if ( imageFormat.find( cuT( "kmg" ) ) != String::npos )
+		{
+			texture = gli::load_kmg( imagePath );
+		}
+		else if ( imageFormat.find( cuT( "ktx" ) ) != String::npos )
+		{
+			texture = gli::load_ktx( imagePath );
+		}
+
+		if ( !texture.empty() )
+		{
+			result = convert( texture.format() );
+		}
+
+		return result;
+	}
 }

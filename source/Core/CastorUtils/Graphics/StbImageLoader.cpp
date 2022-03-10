@@ -64,15 +64,12 @@ namespace castor
 				case 1:
 					format = PixelFormat::eR8_SRGB;
 					break;
-
 				case 2:
 					format = PixelFormat::eR8G8_SRGB;
 					break;
-
 				case 3:
 					format = PixelFormat::eR8G8B8_SRGB;
 					break;
-
 				case 4:
 				default:
 					format = PixelFormat::eR8G8B8A8_SRGB;
@@ -117,15 +114,12 @@ namespace castor
 				case 1:
 					format = PixelFormat::eR32_SFLOAT;
 					break;
-
 				case 2:
 					format = PixelFormat::eR32G32_SFLOAT;
 					break;
-
 				case 3:
 					format = PixelFormat::eR32G32B32_SFLOAT;
 					break;
-
 				case 4:
 				default:
 					format = PixelFormat::eR32G32B32A32_SFLOAT;
@@ -199,5 +193,57 @@ namespace castor
 		}
 
 		return ImageLayout{ ImageLayout::e2D, *buffer };
+	}
+
+	PixelFormat StbImageLoader::getFormat( Path const & imagePath )const
+	{
+		PixelFormat result = PixelFormat::eUNDEFINED;
+		int w, h, channels;
+
+		if ( stbi_info( imagePath.c_str(), &w, &h, &channels ) )
+		{
+			if ( string::upperCase( imagePath.getExtension() ).find( cuT( "HDR" ) ) != String::npos )
+			{
+				switch ( channels )
+				{
+				case 1:
+					result = PixelFormat::eR32_SFLOAT;
+					break;
+				case 2:
+					result = PixelFormat::eR32G32_SFLOAT;
+					break;
+				case 3:
+					result = PixelFormat::eR32G32B32_SFLOAT;
+					break;
+				case 4:
+					result = PixelFormat::eR32G32B32A32_SFLOAT;
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				switch ( channels )
+				{
+				case 1:
+					result = PixelFormat::eR8_SRGB;
+					break;
+				case 2:
+					result = PixelFormat::eR8G8_SRGB;
+					break;
+				case 3:
+					result = PixelFormat::eR8G8B8_SRGB;
+					break;
+				case 4:
+					result = PixelFormat::eR8G8B8A8_SRGB;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		return result;
 	}
 }
