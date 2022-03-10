@@ -95,16 +95,7 @@ namespace castor3d
 	void ShadowMapPassSpot::doUpdateUbos( CpuUpdater & updater )
 	{
 		auto & light = *updater.light;
-		auto & spotLight = *light.getSpotLight();
 		auto & myCamera = getCuller().getCamera();
-		auto & aabb = light.getScene()->getBoundingBox();
-		auto farPlane = light.getFarPlane();
-		myCamera.getViewport().setPerspective( spotLight.getCutOff()
-			, 1.0f
-			, ( std::min( double( farPlane ), castor::point::length( aabb.getDimensions() ) ) > 1000.0
-				? 1.0f
-				: 0.1f )
-			, farPlane );
 		m_shadowType = light.getShadowType();
 		m_shadowMapUbo.update( light
 			, updater.index );
@@ -385,7 +376,7 @@ namespace castor3d
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
 				pxl_normalLinear.w() = depth;
-				pxl_normalLinear.xyz() = spotFactor * normal;
+				pxl_normalLinear.xyz() = normal;
 				pxl_position.xyz() = in.worldPosition.xyz();
 
 				pxl_variance.x() = depth;
