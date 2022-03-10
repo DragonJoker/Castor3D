@@ -20,6 +20,8 @@ namespace castor3d
 {
 	C3D_API void mergeConfigs( TextureConfiguration const & lhs
 		, TextureConfiguration & rhs );
+	C3D_API castor::PixelFormat getSRGBFormat( castor::PixelFormat pformat );
+	C3D_API castor::PixelFormat getNonSRGBFormat( castor::PixelFormat pformat );
 
 	class TextureUnitCache
 		: public castor::OwnedBy< Engine >
