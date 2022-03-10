@@ -419,12 +419,13 @@ namespace toon::shader
 						IF( m_writer, receivesShadows != 0_i )
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
-								, m_shadowModel->computeDirectional( light.m_lightBase
-									, surface
-									, light.m_transforms[cascadeIndex]
-									, lightDirection
-									, cascadeIndex
-									, light.m_cascadeCount ) );
+								, cascadeFactors.y()
+									* m_shadowModel->computeDirectional( light.m_lightBase
+										, surface
+										, light.m_transforms[cascadeIndex]
+										, lightDirection
+										, cascadeIndex
+										, light.m_cascadeCount ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
@@ -529,12 +530,13 @@ namespace toon::shader
 						IF( m_writer, receivesShadows != 0_i )
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
-								, m_shadowModel->computeDirectional( light.m_lightBase
-									, surface
-									, light.m_transforms[cascadeIndex]
-									, lightDirection
-									, cascadeIndex
-									, light.m_cascadeCount ) );
+								, cascadeFactors.y()
+									* m_shadowModel->computeDirectional( light.m_lightBase
+										, surface
+										, light.m_transforms[cascadeIndex]
+										, lightDirection
+										, cascadeIndex
+										, light.m_cascadeCount ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
