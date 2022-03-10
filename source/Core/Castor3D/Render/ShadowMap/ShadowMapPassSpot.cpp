@@ -374,7 +374,7 @@ namespace castor3d
 					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
-					, in.fragCoord.z() );
+					, c3d_shadowMapData.getLinearisedDepth( in.worldPosition.xyz() ) );
 				pxl_normalLinear.w() = depth;
 				pxl_normalLinear.xyz() = normal;
 				pxl_position.xyz() = in.worldPosition.xyz();
