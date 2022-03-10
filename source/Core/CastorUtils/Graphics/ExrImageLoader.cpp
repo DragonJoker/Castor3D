@@ -93,4 +93,9 @@ namespace castor
 
 		return ImageLayout{ ImageLayout::e2D, *buffer };
 	}
+
+	PixelFormat ExrImageLoader::getFormat( Path const & imagePath )const
+	{
+		return PixelFormat::eR32G32B32A32_SFLOAT;
+	}
 }
