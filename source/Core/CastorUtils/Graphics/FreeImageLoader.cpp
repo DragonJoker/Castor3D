@@ -100,70 +100,61 @@ namespace castor
 		}
 
 		auto imageType = FreeImage_GetImageType( fiImage );
+		bool needsComponentSwap = false;
 
-		if ( fiFormat == FIF_HDR
-			|| fiFormat == FIF_EXR )
+		switch ( imageType )
 		{
-			auto bpp = FreeImage_GetBPP( fiImage ) / 8;
+		case FIT_UINT16:
+			sourceFmt = PixelFormat::eR16_UINT;
+			break;
+		case FIT_INT16:
+			sourceFmt = PixelFormat::eR16_SINT;
+			break;
+		case FIT_UINT32:
+			sourceFmt = PixelFormat::eR32_UINT;
+			break;
+		case FIT_INT32:
+			sourceFmt = PixelFormat::eR32_SINT;
+			break;
+		case FIT_FLOAT:
+			sourceFmt = PixelFormat::eR32_SFLOAT;
+			break;
+		case FIT_DOUBLE:
+			sourceFmt = PixelFormat::eR64_SFLOAT;
+			break;
+		case FIT_COMPLEX:
+			sourceFmt = PixelFormat::eR64G64_SFLOAT;
+			break;
+		case FIT_RGB16:
+			sourceFmt = PixelFormat::eR16G16B16_SINT;
+			needsComponentSwap = true;
+			break;
+		case FIT_RGBA16:
+			sourceFmt = PixelFormat::eR16G16B16A16_SINT;
+			needsComponentSwap = true;
+			break;
+		case FIT_RGBF:
+			sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
+			needsComponentSwap = true;
+			break;
+		case FIT_RGBAF:
+			sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
+			needsComponentSwap = true;
+			break;
+		default:
+			{
+				sourceFmt = PixelFormat::eR8G8B8A8_SRGB;
+				needsComponentSwap = true;
+				FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
+				FreeImage_Unload( fiImage );
+				fiImage = dib;
 
-			if ( imageType == FIT_RGBAF )
-			{
-				if ( bpp == getBytesPerPixel( PixelFormat::eR16G16B16A16_SFLOAT ) )
+				if ( !fiImage )
 				{
-					sourceFmt = PixelFormat::eR16G16B16A16_SFLOAT;
-				}
-				else if ( bpp == getBytesPerPixel( PixelFormat::eR32G32B32A32_SFLOAT ) )
-				{
-					sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
-				}
-				else
-				{
-					CU_LoaderError( "Unsupported HDR RGBA image format" );
+					CU_LoaderError( "Can't convert image to 32 bits" );
 				}
 			}
-			else if ( imageType == FIT_RGBF )
-			{
-				if ( bpp == getBytesPerPixel( PixelFormat::eR16G16B16_SFLOAT ) )
-				{
-					sourceFmt = PixelFormat::eR16G16B16_SFLOAT;
-				}
-				else if ( bpp == getBytesPerPixel( PixelFormat::eR32G32B32_SFLOAT ) )
-				{
-					sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
-				}
-				else
-				{
-					CU_LoaderError( "Unsupported HDR RGB image format" );
-				}
-			}
-			else if ( imageType == FIT_FLOAT )
-			{
-				if ( bpp == getBytesPerPixel( PixelFormat::eR16_SFLOAT ) )
-				{
-					sourceFmt = PixelFormat::eR16_SFLOAT;
-				}
-				else if ( bpp == getBytesPerPixel( PixelFormat::eR32_SFLOAT ) )
-				{
-					sourceFmt = PixelFormat::eR32_SFLOAT;
-				}
-				else
-				{
-					CU_LoaderError( "Unsupported HDR R image format" );
-				}
-			}
-		}
-		else
-		{
-			sourceFmt = PixelFormat::eR8G8B8A8_SRGB;
-			
-			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
-			FreeImage_Unload( fiImage );
-			fiImage = dib;
-
-			if ( !fiImage )
-			{
-				CU_LoaderError( "Can't convert image to 32 bits" );
-			}
+			break;
 		}
 
 		uint32_t width = FreeImage_GetWidth( fiImage );
@@ -171,7 +162,10 @@ namespace castor
 		Size dimensions( width, height );
 		uint8_t * pixels = FreeImage_GetBits( fiImage );
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
-		swapComponents( pixels, sourceFmt, width, height );
+		if ( needsComponentSwap )
+		{
+			swapComponents( pixels, sourceFmt, width, height );
+		}
 #endif
 		buffer = PxBufferBase::create( dimensions
 			, sourceFmt
@@ -186,5 +180,60 @@ namespace castor
 		return ImageLayout{ ImageLayout::e2D };
 
 #endif
+	}
+
+	PixelFormat FreeImageLoader::getFormat( Path const & imagePath )const
+	{
+		auto result = PixelFormat::eUNDEFINED;
+		auto fiImage = FreeImage_Load( FreeImage_GetFileType( imagePath.c_str() )
+			, imagePath.c_str() );
+
+		if ( fiImage )
+		{
+			auto imageType = FreeImage_GetImageType( fiImage );
+			FreeImage_Unload( fiImage );
+
+			switch ( imageType )
+			{
+			case FIT_UINT16:
+				result = PixelFormat::eR16_UINT;
+				break;
+			case FIT_INT16:
+				result = PixelFormat::eR16_SINT;
+				break;
+			case FIT_UINT32:
+				result = PixelFormat::eR32_UINT;
+				break;
+			case FIT_INT32:
+				result = PixelFormat::eR32_SINT;
+				break;
+			case FIT_FLOAT:
+				result = PixelFormat::eR32_SFLOAT;
+				break;
+			case FIT_DOUBLE:
+				result = PixelFormat::eR64_SFLOAT;
+				break;
+			case FIT_COMPLEX:
+				result = PixelFormat::eR64G64_SFLOAT;
+				break;
+			case FIT_RGB16:
+				result = PixelFormat::eR16G16B16_SINT;
+				break;
+			case FIT_RGBA16:
+				result = PixelFormat::eR16G16B16A16_SINT;
+				break;
+			case FIT_RGBF:
+				result = PixelFormat::eR32G32B32_SFLOAT;
+				break;
+			case FIT_RGBAF:
+				result = PixelFormat::eR32G32B32A32_SFLOAT;
+				break;
+			default:
+				result = PixelFormat::eR8G8B8A8_SRGB;
+				break;
+			}
+		}
+
+		return result;
 	}
 }
