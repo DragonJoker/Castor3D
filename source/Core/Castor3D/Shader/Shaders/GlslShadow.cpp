@@ -276,10 +276,10 @@ namespace castor3d
 					, Float const & maxSlopeOffset )
 				{
 					auto cosAlpha = m_writer.declLocale( "cosAlpha"
-						, clamp( dot( normal, normalize( lightDirection ) ), 0.0_f, 1.0_f ) );
-					auto offset = m_writer.declLocale( "offset"
+						, clamp( dot( normal, lightDirection ), 0.0_f, 1.0_f ) );
+					auto slope = m_writer.declLocale( "slope"
 						, sqrt( 1.0_f - cosAlpha ) );
-					m_writer.returnStmt( minOffset + maxSlopeOffset * offset );
+					m_writer.returnStmt( minOffset + maxSlopeOffset * slope );
 				}
 				, InVec3( m_writer, "normal" )
 				, InVec3( m_writer, "lightDirection" )
@@ -755,8 +755,6 @@ namespace castor3d
 									auto bias = m_writer.declLocale( "bias"
 										, m_getShadowOffset( surface.worldNormal
 											, normalize( lightToVertex )
-											, length( lightToVertex )
-											, light.m_farPlane
 											, light.m_pcfShadowOffsets.x()
 											, light.m_pcfShadowOffsets.y() ) );
 #if C3D_UseTiledDirectionalShadowMap
