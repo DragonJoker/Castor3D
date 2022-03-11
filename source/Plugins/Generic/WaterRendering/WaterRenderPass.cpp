@@ -539,7 +539,6 @@ namespace water
 		using namespace castor3d;
 		FragmentWriter writer;
 
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto textureFlags = filterTexturesFlags( flags.textures );
 		bool hasTextures = !flags.textures.empty();
 		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
@@ -601,8 +600,7 @@ namespace water
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers
-			, false
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, false );
 		auto reflections = lightingModel->getReflectionModel( index
 			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };

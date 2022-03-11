@@ -90,8 +90,8 @@ namespace castor3d::shader
 		, Surface surface )
 	{
 		declareComputeCookTorranceDiffuse();
-		return m_computeCookTorranceDiffuse( light.m_colour
-			, light.m_intensity.r()
+		return m_computeCookTorranceDiffuse( light.colour
+			, light.intensity.r()
 			, worldEye
 			, direction
 			, specular
@@ -127,8 +127,8 @@ namespace castor3d::shader
 		, Surface surface )
 	{
 		declareComputeCookTorranceDiffuseAON();
-		return m_computeCookTorranceDiffuseAON( light.m_colour
-			, light.m_intensity.r()
+		return m_computeCookTorranceDiffuseAON( light.colour
+			, light.intensity.r()
 			, worldEye
 			, direction
 			, specular
@@ -249,7 +249,7 @@ namespace castor3d::shader
 				auto N = m_writer.declLocale( "N"
 					, normalize( surface.worldNormal ) );
 				auto radiance = m_writer.declLocale( "radiance"
-					, light.m_colour );
+					, light.colour );
 
 				auto NdotL = m_writer.declLocale( "NdotL"
 					, max( 0.0_f, dot( N, L ) ) );
@@ -285,9 +285,9 @@ namespace castor3d::shader
 				kD *= 1.0_f - metalness;
 
 				auto result = m_writer.declLocale( "result"
-					, max( radiance * light.m_intensity.r() * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > } );
+					, max( radiance * light.intensity.r() * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > } );
 				output.m_diffuse = NdotL * result;
-				output.m_specular = max( specReflectance * radiance * light.m_intensity.g() * NdotL, vec3( 0.0_f ) );
+				output.m_specular = max( specReflectance * radiance * light.intensity.g() * NdotL, vec3( 0.0_f ) );
 				m_writer.returnStmt( result );
 			}
 			, InLight( m_writer, "light" )
@@ -331,7 +331,7 @@ namespace castor3d::shader
 				auto N = m_writer.declLocale( "N"
 					, normalize( surface.worldNormal ) );
 				auto radiance = m_writer.declLocale( "radiance"
-					, light.m_colour );
+					, light.colour );
 
 				auto NdotL = m_writer.declLocale( "NdotL"
 					, max( 0.0_f, dot( N, L ) ) );
@@ -371,10 +371,10 @@ namespace castor3d::shader
 
 				kD *= 1.0_f - metalness;
 
-				output.m_diffuse = max( radiance * light.m_intensity.r() * diffuseFactor * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > };
+				output.m_diffuse = max( radiance * light.intensity.r() * diffuseFactor * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > };
 
 				specReflectance = smoothStep( vec3( 0.0_f ), vec3( 0.01_f * smoothBand ), specReflectance );
-				output.m_specular = max( specReflectance * radiance * light.m_intensity.g() * NdotL, vec3( 0.0_f ) );
+				output.m_specular = max( specReflectance * radiance * light.intensity.g() * NdotL, vec3( 0.0_f ) );
 			}
 			, InLight( m_writer, "light" )
 			, sdw::InVec3( m_writer, "worldEye" )

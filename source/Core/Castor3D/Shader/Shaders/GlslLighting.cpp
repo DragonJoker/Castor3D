@@ -98,12 +98,10 @@ namespace castor3d::shader
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
-		, bool hasSsbo
 		, std::string prefix )
 		: m_writer{ writer }
 		, m_utils{ utils }
 		, m_isOpaqueProgram{ isOpaqueProgram }
-		, m_hasSsbo{ hasSsbo }
 		, m_prefix{ std::move( prefix ) }
 		, m_shadowModel{ std::make_shared< Shadow >( shadowOptions, writer ) }
 		, m_sssTransmittance{ ( sssProfiles
@@ -217,14 +215,12 @@ namespace castor3d::shader
 		, SssProfiles const * sssProfiles
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
 			, sssProfiles
-			, true
-			, hasSsbo );
+			, true );
 		result->declareModel( lightsBufBinding
 			, lightsBufSet
 			, shadowMapBinding
@@ -241,14 +237,12 @@ namespace castor3d::shader
 		, ShadowOptions const & shadows
 		, SssProfiles const * sssProfiles
 		, uint32_t & shadowMapBinding
-		, uint32_t shadowMapSet
-		, bool hasSsbo )
+		, uint32_t shadowMapSet )
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
 			, sssProfiles
-			, true
-			, hasSsbo );
+			, true );
 
 		switch ( lightType )
 		{
@@ -383,14 +377,12 @@ namespace castor3d::shader
 		, ShadowOptions const & shadows
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
 			, nullptr
-			, isOpaqueProgram
-			, hasSsbo );
+			, isOpaqueProgram );
 		result->declareDiffuseModel( lightsBufBinding
 			, lightsBufSet
 			, shadowMapBinding
@@ -518,21 +510,12 @@ namespace castor3d::shader
 	void LightingModel::doDeclareLightsBuffer( uint32_t binding
 		, uint32_t set )
 	{
-		if ( m_hasSsbo )
-		{
-			m_ssbo = std::make_unique< sdw::Ssbo >( m_writer
-				, LightBufferName
-				, binding
-				, set );
-			m_ssbo->declMemberArray< sdw::Vec4 >( "data" );
-			m_ssbo->end();
-		}
-		else
-		{
-			m_tbo = std::make_unique< sdw::RImageBufferRgba32 >( m_writer.declStorageImg< RFImgBufferRgba32 >( "c3d_lights"
-				, binding
-				, set ) );
-		}
+		m_ssbo = std::make_unique< sdw::Ssbo >( m_writer
+			, LightBufferName
+			, binding
+			, set );
+		m_ssbo->declMemberArray< sdw::Vec4 >( "data" );
+		m_ssbo->end();
 	}
 
 	void LightingModel::doDeclareDirectionalLightUbo( uint32_t binding
@@ -573,26 +556,12 @@ namespace castor3d::shader
 				result.m_colourIndex = vec4( 1.0_f, 1.0f, 1.0f, -1.0f );
 				result.m_intensityFarPlane = vec4( 0.8_f, 1.0f, 1.0f, 0.0f );
 #else
-
-				if ( m_hasSsbo )
-				{
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					result.m_colourIndex = lightsData[offset]; ++offset;
-					result.m_intensityFarPlane = lightsData[offset]; ++offset;
-					result.m_volumetric = lightsData[offset]; ++offset;
-					result.m_shadowsOffsets = lightsData[offset]; ++offset;
-					result.m_shadowsVariances = lightsData[offset]; ++offset;
-				}
-				else
-				{
-					auto & lightsData = *m_tbo;
-					result.m_colourIndex = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_intensityFarPlane = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_volumetric = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_shadowsOffsets = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_shadowsVariances = lightsData.load( sdw::Int{ offset } ); ++offset;
-				}
-
+				auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
+				result.m_colourIndex = lightsData[offset]; ++offset;
+				result.m_intensityFarPlane = lightsData[offset]; ++offset;
+				result.m_volumetric = lightsData[offset]; ++offset;
+				result.m_shadowsOffsets = lightsData[offset]; ++offset;
+				result.m_shadowsVariances = lightsData[offset]; ++offset;
 #endif
 
 				m_writer.returnStmt( result );
@@ -615,60 +584,32 @@ namespace castor3d::shader
 					, vec4( 0.0_f, 0.0_f, 1.0_f, 0.0_f )
 					, vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 #else
-
 				auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-				result.m_lightBase = getBaseLight( offset );
+				result.base = getBaseLight( offset );
 
-				if ( m_hasSsbo )
+				auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
+				result.m_directionCount = lightsData[offset]; ++offset;
+				result.m_direction = normalize( result.m_direction );
+				result.m_tiles = lightsData[offset]; ++offset;
+				result.m_splitDepths[0] = lightsData[offset]; ++offset;
+				result.m_splitDepths[1] = lightsData[offset]; ++offset;
+				result.m_splitScales[0] = lightsData[offset]; ++offset;
+				result.m_splitScales[1] = lightsData[offset]; ++offset;
+				auto col0 = m_writer.declLocale< Vec4 >( "col0" );
+				auto col1 = m_writer.declLocale< Vec4 >( "col1" );
+				auto col2 = m_writer.declLocale< Vec4 >( "col2" );
+				auto col3 = m_writer.declLocale< Vec4 >( "col3" );
+
+				for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
 				{
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					result.m_directionCount = lightsData[offset]; ++offset;
-					result.m_direction = normalize( result.m_direction );
-					result.m_tiles = lightsData[offset]; ++offset;
-					result.m_splitDepths[0] = lightsData[offset]; ++offset;
-					result.m_splitDepths[1] = lightsData[offset]; ++offset;
-					result.m_splitScales[0] = lightsData[offset]; ++offset;
-					result.m_splitScales[1] = lightsData[offset]; ++offset;
-					auto col0 = m_writer.declLocale< Vec4 >( "col0" );
-					auto col1 = m_writer.declLocale< Vec4 >( "col1" );
-					auto col2 = m_writer.declLocale< Vec4 >( "col2" );
-					auto col3 = m_writer.declLocale< Vec4 >( "col3" );
-
-					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
-					{
-						col0 = lightsData[offset]; ++offset;
-						col1 = lightsData[offset]; ++offset;
-						col2 = lightsData[offset]; ++offset;
-						col3 = lightsData[offset]; ++offset;
-						result.m_transforms[i] = mat4( col0, col1, col2, col3 );
-					}
+					col0 = lightsData[offset]; ++offset;
+					col1 = lightsData[offset]; ++offset;
+					col2 = lightsData[offset]; ++offset;
+					col3 = lightsData[offset]; ++offset;
+					result.m_transforms[i] = mat4( col0, col1, col2, col3 );
 				}
-				else
-				{
-					auto & lightsData = *m_tbo;
-					result.m_directionCount = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_direction = normalize( result.m_direction );
-					result.m_tiles = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_splitDepths[0] = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_splitDepths[1] = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_splitScales[0] = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_splitScales[1] = lightsData.load( sdw::Int{ offset } ); ++offset;
-					auto col0 = m_writer.declLocale< Vec4 >( "col0" );
-					auto col1 = m_writer.declLocale< Vec4 >( "col1" );
-					auto col2 = m_writer.declLocale< Vec4 >( "col2" );
-					auto col3 = m_writer.declLocale< Vec4 >( "col3" );
-
-					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
-					{
-						col0 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						col1 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						col2 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						col3 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						result.m_transforms[i] = mat4( col0, col1, col2, col3 );
-					}
-				}
-
 #endif
+
 				m_writer.returnStmt( result );
 			}
 			, sdw::InUInt{ m_writer, "index" } );
@@ -685,53 +626,29 @@ namespace castor3d::shader
 					, vec4( 0.0_f, 0.0_f, 1.0_f, 0.0_f )
 					, vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 #else
-
 				auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-				result.m_lightBase = getBaseLight( offset );
+				result.base = getBaseLight( offset );
 
-				if ( m_hasSsbo )
+				auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
+				result.m_directionCount = lightsData[offset]; ++offset;
+				result.direction = normalize( result.direction );
+				result.splitDepths = lightsData[offset]; ++offset;
+				result.splitScales = lightsData[offset]; ++offset;
+				auto col0 = m_writer.declLocale< sdw::Vec4 >( "col0" );
+				auto col1 = m_writer.declLocale< sdw::Vec4 >( "col1" );
+				auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
+				auto col3 = m_writer.declLocale< sdw::Vec4 >( "col3" );
+
+				for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
 				{
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					result.m_directionCount = lightsData[offset]; ++offset;
-					result.m_direction = normalize( result.m_direction );
-					result.m_splitDepths = lightsData[offset]; ++offset;
-					result.m_splitScales = lightsData[offset]; ++offset;
-					auto col0 = m_writer.declLocale< sdw::Vec4 >( "col0" );
-					auto col1 = m_writer.declLocale< sdw::Vec4 >( "col1" );
-					auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
-					auto col3 = m_writer.declLocale< sdw::Vec4 >( "col3" );
-
-					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
-					{
-						col0 = lightsData[offset]; ++offset;
-						col1 = lightsData[offset]; ++offset;
-						col2 = lightsData[offset]; ++offset;
-						col3 = lightsData[offset]; ++offset;
-						result.m_transforms[i] = mat4( col0, col1, col2, col3 );
-					}
-				}
-				else
-				{
-					auto & lightsData = *m_tbo;
-					result.m_directionCount = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_direction = normalize( result.m_direction );
-					result.m_splitDepths = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_splitScales = lightsData.load( sdw::Int{ offset } ); ++offset;
-					auto col0 = m_writer.declLocale< sdw::Vec4 >( "col0" );
-					auto col1 = m_writer.declLocale< sdw::Vec4 >( "col1" );
-					auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
-					auto col3 = m_writer.declLocale< sdw::Vec4 >( "col3" );
-
-					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
-					{
-						col0 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						col1 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						col2 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						col3 = lightsData.load( sdw::Int{ offset } ); ++offset;
-						result.m_transforms[i] = mat4( col0, col1, col2, col3 );
-					}
+					col0 = lightsData[offset]; ++offset;
+					col1 = lightsData[offset]; ++offset;
+					col2 = lightsData[offset]; ++offset;
+					col3 = lightsData[offset]; ++offset;
+					result.transforms[i] = mat4( col0, col1, col2, col3 );
 				}
 #endif
+
 				m_writer.returnStmt( result );
 			}
 			, sdw::InUInt{ m_writer, "index" } );
@@ -745,20 +662,11 @@ namespace castor3d::shader
 			{
 				auto result = m_writer.declLocale< PointLight >( "result" );
 				auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-				result.m_lightBase = getBaseLight( offset );
+				result.base = getBaseLight( offset );
 
-				if ( m_hasSsbo )
-				{
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					result.m_position4 = lightsData[offset]; ++offset;
-					result.m_attenuation4 = lightsData[offset]; ++offset;
-				}
-				else
-				{
-					auto & lightsData = *m_tbo;
-					result.m_position4 = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_attenuation4 = lightsData.load( sdw::Int{ offset } ); ++offset;
-				}
+				auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
+				result.m_position4 = lightsData[offset]; ++offset;
+				result.m_attenuation4 = lightsData[offset]; ++offset;
 
 				m_writer.returnStmt( result );
 			}
@@ -772,32 +680,17 @@ namespace castor3d::shader
 			{
 				auto result = m_writer.declLocale< SpotLight >( "result" );
 				auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-				result.m_lightBase = getBaseLight( offset );
+				result.base = getBaseLight( offset );
 
-				if ( m_hasSsbo )
-				{
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					result.m_position4 = lightsData[offset]; ++offset;
-					result.m_attenuation4 = lightsData[offset]; ++offset;
-					result.m_direction4 = normalize( lightsData[offset] ); ++offset;
-					result.m_exponentCutOff = lightsData[offset]; ++offset;
-					result.m_transform = mat4( lightsData[offset + 0_u]
-						, lightsData[offset + 1_u]
-						, lightsData[offset + 2_u]
-						, lightsData[offset + 3_u] );
-				}
-				else
-				{
-					auto & lightsData = *m_tbo;
-					result.m_position4 = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_attenuation4 = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_direction4 = normalize( lightsData.load( sdw::Int{ offset } ) ); ++offset;
-					result.m_exponentCutOff = lightsData.load( sdw::Int{ offset } ); ++offset;
-					result.m_transform = mat4( lightsData.load( sdw::Int{ offset } + 0_i )
-						, lightsData.load( sdw::Int{ offset } + 1_i )
-						, lightsData.load( sdw::Int{ offset } + 2_i )
-						, lightsData.load( sdw::Int{ offset } + 3_i ) );
-				}
+				auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
+				result.m_position4 = lightsData[offset]; ++offset;
+				result.m_attenuation4 = lightsData[offset]; ++offset;
+				result.m_direction4 = normalize( lightsData[offset] ); ++offset;
+				result.m_exponentCutOff = lightsData[offset]; ++offset;
+				result.transform = mat4( lightsData[offset + 0_u]
+					, lightsData[offset + 1_u]
+					, lightsData[offset + 2_u]
+					, lightsData[offset + 3_u] );
 
 				m_writer.returnStmt( result );
 			}
