@@ -720,7 +720,7 @@ namespace castor3d::shader
 						, length( lightToVertex ) );
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
-					doComputeLight( light.m_lightBase
+					auto rawDiffuse = doComputeLight( light.m_lightBase
 						, material
 						, surface
 						, worldEye
@@ -753,6 +753,25 @@ namespace castor3d::shader
 								, light.m_attenuation.x() ) ) );
 					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.m_cutOff ) );
 					output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
+
+#if !C3D_DisableSSSTransmittance
+					if ( m_shadowModel->isEnabled() && m_sssTransmittance )
+					{
+						IF( m_writer
+							, ( light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
+							&& ( light.m_lightBase.m_index >= 0_i )
+							&& ( receivesShadows != 0_i )
+							&& ( material.sssProfileIndex != 0.0_f ) )
+						{
+							output.m_diffuse += ( spotFactor * rawDiffuse / attenuation )
+								* m_sssTransmittance->compute( material
+									, light
+									, surface );
+						}
+						FI;
+					}
+#endif
+
 					output.m_specular = spotFactor * output.m_specular / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
@@ -770,7 +789,7 @@ namespace castor3d::shader
 	void PhongLightingModel::doDeclareComputeLight()
 	{
 		OutputComponents outputs{ m_writer };
-		m_computeLight = m_writer.implementFunction< sdw::Void >( m_prefix + "doComputeLight"
+		m_computeLight = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "doComputeLight"
 			, [this]( Light const & light
 				, PhongLightMaterial const & material
 				, Surface const & surface
@@ -783,9 +802,11 @@ namespace castor3d::shader
 					, dot( surface.worldNormal, -lightDirection ) );
 				auto isLit = m_writer.declLocale( "isLit"
 					, 1.0_f - step( diffuseFactor, 0.0_f ) );
+				auto result = m_writer.declLocale( "result"
+					, light.m_colour
+					* light.m_intensity.x() );
 				output.m_diffuse = isLit
-					* light.m_colour
-					* light.m_intensity.x()
+					* result
 					* diffuseFactor;
 
 				// Specular term.
@@ -812,6 +833,8 @@ namespace castor3d::shader
 					* light.m_colour
 					* light.m_intensity.y()
 					* pow( specularFactor, clamp( material.shininess, 1.0_f, 256.0_f ) );
+
+				m_writer.returnStmt( result );
 			}
 			, InLight( m_writer, "light" )
 			, InPhongLightMaterial{ m_writer, "material" }
@@ -821,14 +844,14 @@ namespace castor3d::shader
 			, outputs );
 	}
 
-	void PhongLightingModel::doComputeLight( Light const & light
+	sdw::Vec3 PhongLightingModel::doComputeLight( Light const & light
 		, PhongLightMaterial const & material
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & lightDirection
 		, OutputComponents & parentOutput )
 	{
-		m_computeLight( light
+		return m_computeLight( light
 			, material
 			, surface
 			, worldEye
