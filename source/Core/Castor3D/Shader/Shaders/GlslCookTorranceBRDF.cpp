@@ -23,7 +23,7 @@ namespace castor3d::shader
 	{
 	}
 
-	void CookTorranceBRDF::compute( Light const & light
+	sdw::Vec3 CookTorranceBRDF::compute( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
 		, sdw::Vec3 const & specular
@@ -33,7 +33,7 @@ namespace castor3d::shader
 		, OutputComponents & output )
 	{
 		declareComputeCookTorrance();
-		m_computeCookTorrance( light
+		return m_computeCookTorrance( light
 			, worldEye
 			, direction
 			, specular
@@ -229,7 +229,7 @@ namespace castor3d::shader
 		declareDistribution();
 		declareGeometry();
 		OutputComponents outputs{ m_writer };
-		m_computeCookTorrance = m_writer.implementFunction< sdw::Void >( "c3d_computeCookTorrance"
+		m_computeCookTorrance = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorrance"
 			, [this]( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & direction
@@ -284,8 +284,11 @@ namespace castor3d::shader
 
 				kD *= 1.0_f - metalness;
 
-				output.m_diffuse = max( radiance * light.m_intensity.r() * NdotL * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > };
+				auto result = m_writer.declLocale( "result"
+					, max( radiance * light.m_intensity.r() * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > } );
+				output.m_diffuse = NdotL * result;
 				output.m_specular = max( specReflectance * radiance * light.m_intensity.g() * NdotL, vec3( 0.0_f ) );
+				m_writer.returnStmt( result );
 			}
 			, InLight( m_writer, "light" )
 			, sdw::InVec3( m_writer, "worldEye" )

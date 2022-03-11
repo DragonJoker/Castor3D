@@ -147,7 +147,7 @@ namespace castor3d::shader
 		void doDeclareComputeSpotLightDiffuse()override;
 
 	private:
-		void doComputeLight( Light const & light
+		sdw::Vec3 doComputeLight( Light const & light
 			, PhongLightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
@@ -165,7 +165,7 @@ namespace castor3d::shader
 		C3D_API static castor::String getName();
 		bool m_isBlinnPhong{};
 		std::string m_prefix;
-		sdw::Function< sdw::Void
+		sdw::Function< sdw::Vec3
 			, InLight
 			, InPhongLightMaterial
 			, InSurface
