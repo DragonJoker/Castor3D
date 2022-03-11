@@ -28,6 +28,7 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -1028,6 +1029,8 @@ namespace castor3d
 		pass.addDependency( previousPass );
 		engine.getMaterialCache().getPassBuffer().createPassBinding( pass
 			, uint32_t( LightPassIdx::eMaterials ) );
+		engine.getMaterialCache().getSssProfileBuffer().createPassBinding( pass
+			, uint32_t( LightPassIdx::eSssProfiles ) );
 		m_gpInfoUbo.createPassBinding( pass
 			, uint32_t( LightPassIdx::eGpInfo ) );
 		m_sceneUbo.createPassBinding( pass

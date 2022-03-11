@@ -140,6 +140,7 @@ namespace castor3d
 					, 0u
 					, false
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
+					, nullptr
 					, index
 					, 1u
 					, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -193,6 +194,7 @@ namespace castor3d
 					, 0u
 					, false
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
+					, nullptr
 					, index
 					, 1u
 					, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -251,6 +253,7 @@ namespace castor3d
 				, 0u
 				, false
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
+				, nullptr
 				, index
 				, 1u
 				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -306,6 +309,7 @@ namespace castor3d
 				, 0u
 				, false
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
+				, nullptr
 				, index
 				, 1u
 				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );

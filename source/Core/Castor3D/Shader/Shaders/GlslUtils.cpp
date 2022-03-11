@@ -27,6 +27,7 @@ namespace castor3d::shader
 
 	LightingModelPtr Utils::createLightingModel( castor::String const & name
 		, ShadowOptions shadowsOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 	{
@@ -34,6 +35,7 @@ namespace castor3d::shader
 			, m_writer
 			, *this
 			, std::move( shadowsOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo );
 	}

@@ -74,8 +74,8 @@ namespace castor3d::shader
 	static uint32_t constexpr MaxLightsCount = 2000u;
 	// Pass Buffer.
 	static uint32_t constexpr MaxMaterialsCount = 2000u;
-	static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
-	static int constexpr MaxMaterialComponentsCount = MaxTransmittanceProfileSize + 9;
+	static uint32_t constexpr MaxSssProfilesCount = 100u;
+	static int constexpr MaxMaterialComponentsCount = 8;
 	// Texture Configuration Buffer.
 	static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
 	static int constexpr MaxTextureConfigurationComponentsCount = 12;
@@ -96,6 +96,7 @@ namespace castor3d::shader
 	struct OutputComponents;
 	struct PointLight;
 	struct SpotLight;
+	struct SssProfile;
 	struct TextureAnimData;
 	struct TextureConfigData;
 	struct TiledDirectionalLight;
@@ -115,6 +116,8 @@ namespace castor3d::shader
 	class LightingModel;
 	class ReflectionModel;
 	class Shadow;
+	class SssProfiles;
+	class SssTransmittance;
 	class TextureAnimations;
 	class TextureConfigurations;
 	class Utils;
@@ -132,6 +135,7 @@ namespace castor3d::shader
 	using LightingModelCreator = std::function< LightingModelPtr( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowsOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo ) >;
 

@@ -132,44 +132,30 @@ namespace castor
 		C3D_API void unregisterUnit( castor3d::TextureUnit & unit );
 		C3D_API bool registerTexture( castor3d::AnimatedTexture const & texture );
 		C3D_API void unregisterTexture( castor3d::AnimatedTexture const & texture );
-		/**
-		 *\~english
-		 *\brief		Retrieves the default material
-		 *\~french
-		 *\brief		Récupère le matériau par défaut
-		 */
+
 		castor3d::MaterialRPtr getDefaultMaterial()const
 		{
 			return m_defaultMaterial;
 		}
-		/**
-		 *\~english
-		 *\return		The pass buffer.
-		 *\~french
-		 *\return		Le tampon de passes.
-		 */
+
 		castor3d::PassBuffer const & getPassBuffer()const
 		{
 			CU_Require( m_passBuffer );
 			return *m_passBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		The textures configurations buffer.
-		 *\~french
-		 *\return		Le tampon de configurations de textures.
-		 */
+
+		castor3d::SssProfileBuffer const & getSssProfileBuffer()const
+		{
+			CU_Require( m_sssProfileBuffer );
+			return *m_sssProfileBuffer;
+		}
+
 		castor3d::TextureConfigurationBuffer const & getTexConfigBuffer()const
 		{
 			CU_Require( m_texConfigBuffer );
 			return *m_texConfigBuffer;
 		}
-		/**
-		 *\~english
-		 *\return		The textures animations buffer.
-		 *\~french
-		 *\return		Le tampon d'animations de textures.
-		 */
+
 		castor3d::TextureAnimationBuffer const & getTexAnimBuffer()const
 		{
 			CU_Require( m_texAnimBuffer );
@@ -184,6 +170,7 @@ namespace castor
 		castor3d::Engine & m_engine;
 		castor3d::MaterialRPtr m_defaultMaterial{};
 		castor3d::PassBufferSPtr m_passBuffer;
+		castor3d::SssProfileBufferSPtr m_sssProfileBuffer;
 		castor3d::TextureConfigurationBufferSPtr m_texConfigBuffer;
 		castor3d::TextureAnimationBufferSPtr m_texAnimBuffer;
 		std::vector< castor3d::Pass * > m_pendingPasses;

@@ -141,6 +141,7 @@ namespace castor3d
 		eObjectsNodeID,
 		eModelsData,
 		eMaterials,
+		eSssProfiles,
 		eTexConfigs,
 		eTexAnims,
 		eBillboardsData,
