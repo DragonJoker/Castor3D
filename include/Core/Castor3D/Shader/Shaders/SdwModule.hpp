@@ -136,8 +136,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
-		, bool hasSsbo ) >;
+		, bool isOpaqueProgram ) >;
 
 	using LightingModelFactory = castor::Factory< LightingModel
 		, castor::String

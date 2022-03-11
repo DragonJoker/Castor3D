@@ -34,26 +34,35 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, Light );
 
+			void updateShadowType( ShadowType type )
+			{
+				m_intensityFarPlane.w() = sdw::Float{ float( type ) };
+			}
+
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+		private:
+			friend class LightingModel;
 			// Raw values
 			sdw::Vec4 m_colourIndex;
 			sdw::Vec4 m_intensityFarPlane;
 			sdw::Vec4 m_volumetric;
 			sdw::Vec4 m_shadowsOffsets;
 			sdw::Vec4 m_shadowsVariances;
+
+		public:
 			// Specific values
-			sdw::Vec3 m_colour;
-			sdw::Vec2 m_intensity;
-			sdw::Float m_farPlane;
-			sdw::Int m_shadowType;
-			sdw::Int m_index;
-			sdw::UInt m_volumetricSteps;
-			sdw::Float m_volumetricScattering;
-			sdw::Vec2 m_rawShadowOffsets;
-			sdw::Vec2 m_pcfShadowOffsets;
-			sdw::Vec2 m_vsmShadowVariance;
+			sdw::Vec3 colour;
+			sdw::Vec2 intensity;
+			sdw::Float farPlane;
+			sdw::Int shadowType;
+			sdw::Int index;
+			sdw::UInt volumetricSteps;
+			sdw::Float volumetricScattering;
+			sdw::Vec2 rawShadowOffsets;
+			sdw::Vec2 pcfShadowOffsets;
+			sdw::Vec2 vsmShadowVariance;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -71,15 +80,20 @@ namespace castor3d
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			Light base;
+
+		private:
+			friend class LightingModel;
 			// Raw values
-			Light m_lightBase;
 			sdw::Vec4 m_directionCount;
-			sdw::Vec4 m_splitDepths;
-			sdw::Vec4 m_splitScales;
-			sdw::Array< sdw::Mat4 > m_transforms;
+
+		public:
+			sdw::Vec4 splitDepths;
+			sdw::Vec4 splitScales;
+			sdw::Array< sdw::Mat4 > transforms;
 			// Specific values
-			sdw::Vec3 m_direction;
-			sdw::UInt m_cascadeCount;
+			sdw::Vec3 direction;
+			sdw::UInt cascadeCount;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -97,16 +111,21 @@ namespace castor3d
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			Light base;
+
+		private:
+			friend class LightingModel;
 			// Raw values
-			Light m_lightBase;
 			sdw::Vec4 m_directionCount;
-			sdw::Vec4 m_tiles;
-			sdw::Array< sdw::Vec4 > m_splitDepths;
-			sdw::Array< sdw::Vec4 > m_splitScales;
-			sdw::Array< sdw::Mat4 > m_transforms;
+
+		public:
+			sdw::Vec4 tiles;
+			sdw::Array< sdw::Vec4 > splitDepths;
+			sdw::Array< sdw::Vec4 > splitScales;
+			sdw::Array< sdw::Mat4 > transforms;
 			// Specific values
-			sdw::Vec3 m_direction;
-			sdw::UInt m_cascadeCount;
+			sdw::Vec3 direction;
+			sdw::UInt cascadeCount;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -121,16 +140,29 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, PointLight );
 
+			sdw::Float getAttenuationFactor( sdw::Float const & distance )const
+			{
+				return sdw::fma( m_attenuation4.z()
+					, distance * distance
+					, sdw::fma( m_attenuation4.y()
+						, distance
+						, m_attenuation4.x() ) );
+			}
+
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			Light base;
+
+		private:
+			friend class LightingModel;
 			// Raw values
-			Light m_lightBase;
 			sdw::Vec4 m_position4;
 			sdw::Vec4 m_attenuation4;
+
+		public:
 			// SpecificValues
-			sdw::Vec3 m_position;
-			sdw::Vec3 m_attenuation;
+			sdw::Vec3 position;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -145,22 +177,35 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, SpotLight );
 
+			sdw::Float getAttenuationFactor( sdw::Float const & distance )const
+			{
+				return sdw::fma( m_attenuation4.z()
+					, distance * distance
+					, sdw::fma( m_attenuation4.y()
+						, distance
+						, m_attenuation4.x() ) );
+			}
+
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			Light base;
+
+		private:
+			friend class LightingModel;
 			// Raw values
-			Light m_lightBase;
 			sdw::Vec4 m_position4;
 			sdw::Vec4 m_attenuation4;
 			sdw::Vec4 m_direction4;
 			sdw::Vec4 m_exponentCutOff;
-			sdw::Mat4 m_transform;
+
+		public:
+			sdw::Mat4 transform;
 			// SpecificValues
-			sdw::Vec3 m_position;
-			sdw::Vec3 m_attenuation;
-			sdw::Vec3 m_direction;
-			sdw::Float m_exponent;
-			sdw::Float m_cutOff;
+			sdw::Vec3 position;
+			sdw::Vec3 direction;
+			sdw::Float exponent;
+			sdw::Float cutOff;
 
 		private:
 			using sdw::StructInstance::getMember;

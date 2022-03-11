@@ -165,8 +165,7 @@ namespace castor3d
 		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
 			, nullptr
-			, true
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, true );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags.programFlags

@@ -83,14 +83,12 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 		: LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
 			, isOpaqueProgram
-			, hasSsbo
 			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_" } : std::string{ "c3d_pbrmr_" } }
 		, m_isSpecularGlossiness{ isSpecularGlossiness }
 		, m_cookTorrance{ writer, utils }
@@ -378,8 +376,8 @@ namespace castor3d::shader
 				OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 					, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 				auto lightDirection = m_writer.declLocale( "lightDirection"
-					, normalize( -light.m_direction ) );
-				m_cookTorrance.compute( light.m_lightBase
+					, normalize( -light.direction ) );
+				m_cookTorrance.compute( light.base
 					, worldEye
 					, lightDirection
 					, material.specular
@@ -391,7 +389,7 @@ namespace castor3d::shader
 				if ( m_shadowModel->isEnabled() )
 				{
 					IF( m_writer
-						, ( light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) ) )
+						, ( light.base.shadowType != sdw::Int( int( ShadowType::eNone ) ) ) )
 					{
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
@@ -399,14 +397,14 @@ namespace castor3d::shader
 							, 0_u );
 						auto c3d_maxCascadeCount = m_writer.getVariable< sdw::UInt >( "c3d_maxCascadeCount" );
 						auto maxCount = m_writer.declLocale( "maxCount"
-							, m_writer.cast< sdw::UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+							, m_writer.cast< sdw::UInt >( clamp( light.cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
 
 						// Get cascade index for the current fragment's view position
 						FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 						{
 							auto factors = m_writer.declLocale( "factors"
 								, m_getTileFactors( sdw::Vec3{ surface.viewPosition }
-									, light.m_splitDepths
+									, light.splitDepths
 									, i ) );
 
 							IF( m_writer, factors.x() != 0.0_f )
@@ -423,22 +421,22 @@ namespace castor3d::shader
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, cascadeFactors.y()
-									* m_shadowModel->computeDirectional( light.m_lightBase
+									* m_shadowModel->computeDirectional( light.base
 										, surface
-										, light.m_transforms[cascadeIndex]
+										, light.transforms[cascadeIndex]
 										, -lightDirection
 										, cascadeIndex
-										, light.m_cascadeCount ) );
+										, light.cascadeCount ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
 								shadowFactor += cascadeFactors.z()
-									* m_shadowModel->computeDirectional( light.m_lightBase
+									* m_shadowModel->computeDirectional( light.base
 										, surface
-										, light.m_transforms[cascadeIndex - 1u]
+										, light.transforms[cascadeIndex - 1u]
 										, -lightDirection
 										, cascadeIndex - 1u
-										, light.m_cascadeCount );
+										, light.cascadeCount );
 							}
 							FI;
 
@@ -449,15 +447,15 @@ namespace castor3d::shader
 
 						if ( m_isOpaqueProgram )
 						{
-							IF( m_writer, light.m_lightBase.m_volumetricSteps != 0_u )
+							IF( m_writer, light.base.volumetricSteps != 0_u )
 							{
-								m_shadowModel->computeVolumetric( light.m_lightBase
+								m_shadowModel->computeVolumetric( light.base
 									, surface
 									, worldEye
-									, light.m_transforms[cascadeIndex]
-									, light.m_direction
+									, light.transforms[cascadeIndex]
+									, light.direction
 									, cascadeIndex
-									, light.m_cascadeCount
+									, light.cascadeCount
 									, output );
 							}
 							FI;
@@ -482,7 +480,7 @@ namespace castor3d::shader
 						ELSE
 						{
 							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
-						output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 						}
 						FI;
 #endif
@@ -515,8 +513,8 @@ namespace castor3d::shader
 				OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 					, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 				auto lightDirection = m_writer.declLocale( "lightDirection"
-					, normalize( -light.m_direction ) );
-				m_cookTorrance.compute( light.m_lightBase
+					, normalize( -light.direction ) );
+				m_cookTorrance.compute( light.base
 					, worldEye
 					, lightDirection
 					, material.specular
@@ -528,7 +526,7 @@ namespace castor3d::shader
 				if ( m_shadowModel->isEnabled() )
 				{
 					IF( m_writer
-						, ( light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) ) )
+						, ( light.base.shadowType != sdw::Int( int( ShadowType::eNone ) ) ) )
 					{
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
@@ -536,14 +534,14 @@ namespace castor3d::shader
 							, 0_u );
 						auto c3d_maxCascadeCount = m_writer.getVariable< sdw::UInt >( "c3d_maxCascadeCount" );
 						auto maxCount = m_writer.declLocale( "maxCount"
-							, m_writer.cast< sdw::UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+							, m_writer.cast< sdw::UInt >( clamp( light.cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
 
 						// Get cascade index for the current fragment's view position
 						FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 						{
 							auto factors = m_writer.declLocale( "factors"
 								, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition }
-									, light.m_splitDepths
+									, light.splitDepths
 									, i ) );
 
 							IF( m_writer, factors.x() != 0.0_f )
@@ -560,22 +558,22 @@ namespace castor3d::shader
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, cascadeFactors.y()
-									* m_shadowModel->computeDirectional( light.m_lightBase
+									* m_shadowModel->computeDirectional( light.base
 										, surface
-										, light.m_transforms[cascadeIndex]
+										, light.transforms[cascadeIndex]
 										, -lightDirection
 										, cascadeIndex
-										, light.m_cascadeCount ) );
+										, light.cascadeCount ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
 								shadowFactor += cascadeFactors.z()
-									* m_shadowModel->computeDirectional( light.m_lightBase
+									* m_shadowModel->computeDirectional( light.base
 										, surface
-										, light.m_transforms[cascadeIndex - 1u]
+										, light.transforms[cascadeIndex - 1u]
 										, -lightDirection
 										, cascadeIndex - 1u
-										, light.m_cascadeCount );
+										, light.cascadeCount );
 							}
 							FI;
 
@@ -586,15 +584,15 @@ namespace castor3d::shader
 
 						if ( m_isOpaqueProgram )
 						{
-							IF( m_writer, light.m_lightBase.m_volumetricSteps != 0_u )
+							IF( m_writer, light.base.volumetricSteps != 0_u )
 							{
-								m_shadowModel->computeVolumetric( light.m_lightBase
+								m_shadowModel->computeVolumetric( light.base
 									, surface
 									, worldEye
-									, light.m_transforms[cascadeIndex]
-									, light.m_direction
+									, light.transforms[cascadeIndex]
+									, light.direction
 									, cascadeIndex
-									, light.m_cascadeCount
+									, light.cascadeCount
 									, output );
 							}
 							FI;
@@ -652,12 +650,12 @@ namespace castor3d::shader
 				OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 					, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 				auto vertexToLight = m_writer.declLocale( "vertexToLight"
-					, light.m_position.xyz() - surface.worldPosition );
+					, light.position - surface.worldPosition );
 				auto distance = m_writer.declLocale( "distance"
 					, length( vertexToLight ) );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( vertexToLight ) );
-				m_cookTorrance.compute( light.m_lightBase
+				m_cookTorrance.compute( light.base
 					, worldEye
 					, lightDirection
 					, material.specular
@@ -669,14 +667,14 @@ namespace castor3d::shader
 				if ( m_shadowModel->isEnabled() )
 				{
 					IF( m_writer
-						, ( light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
-							&& ( light.m_lightBase.m_index >= 0_i )
+						, ( light.base.shadowType != sdw::Int( int( ShadowType::eNone ) ) )
+							&& ( light.base.index >= 0_i )
 							&& ( receivesShadows != 0_i ) )
 					{
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, m_shadowModel->computePoint( light.m_lightBase
+							, m_shadowModel->computePoint( light.base
 								, surface
-								, light.m_position.xyz() ) );
+								, light.position ) );
 						output.m_diffuse *= shadowFactor;
 						output.m_specular *= shadowFactor;
 					}
@@ -684,11 +682,7 @@ namespace castor3d::shader
 				}
 
 				auto attenuation = m_writer.declLocale( "attenuation"
-					, sdw::fma( light.m_attenuation.z()
-						, distance * distance
-						, sdw::fma( light.m_attenuation.y()
-							, distance
-							, light.m_attenuation.x() ) ) );
+					, light.getAttenuationFactor( distance ) );
 				output.m_diffuse = output.m_diffuse / attenuation;
 				output.m_specular = output.m_specular / attenuation;
 				parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
@@ -714,20 +708,20 @@ namespace castor3d::shader
 				, OutputComponents & parentOutput )
 			{
 				auto vertexToLight = m_writer.declLocale( "vertexToLight"
-					, light.m_position.xyz() - surface.worldPosition );
+					, light.position - surface.worldPosition );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( vertexToLight ) );
 				auto spotFactor = m_writer.declLocale( "spotFactor"
-					, dot( lightDirection, -light.m_direction ) );
+					, dot( lightDirection, -light.direction ) );
 
-				IF( m_writer, spotFactor > light.m_cutOff )
+				IF( m_writer, spotFactor > light.cutOff )
 				{
 					auto distance = m_writer.declLocale( "distance"
 						, length( vertexToLight ) );
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-						, m_cookTorrance.compute( light.m_lightBase
+						, m_cookTorrance.compute( light.base
 							, worldEye
 							, lightDirection
 							, material.specular
@@ -739,14 +733,14 @@ namespace castor3d::shader
 					if ( m_shadowModel->isEnabled() )
 					{
 						IF( m_writer
-							, ( light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
-								&& ( light.m_lightBase.m_index >= 0_i )
+							, ( light.base.shadowType != sdw::Int( int( ShadowType::eNone ) ) )
+								&& ( light.base.index >= 0_i )
 								&& ( receivesShadows != 0_i ) )
 						{
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
-								, m_shadowModel->computeSpot( light.m_lightBase
+								, m_shadowModel->computeSpot( light.base
 								, surface
-								, light.m_transform
+								, light.transform
 								, -vertexToLight ) );
 							output.m_diffuse *= shadowFactor;
 							output.m_specular *= shadowFactor;
@@ -755,20 +749,16 @@ namespace castor3d::shader
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
-						, sdw::fma( light.m_attenuation.z()
-							, distance * distance
-							, sdw::fma( light.m_attenuation.y()
-								, distance
-								, light.m_attenuation.x() ) ) );
-					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.m_cutOff ) );
+						, light.getAttenuationFactor( distance ) );
+					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.cutOff ) );
 					output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
 
 #if !C3D_DisableSSSTransmittance
 					if ( m_shadowModel->isEnabled() && m_sssTransmittance )
 					{
 						IF( m_writer
-							, ( light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
-							&& ( light.m_lightBase.m_index >= 0_i )
+							, ( light.base.shadowType != sdw::Int( int( ShadowType::eNone ) ) )
+							&& ( light.base.index >= 0_i )
 							&& ( receivesShadows != 0_i )
 							&& ( material.sssProfileIndex != 0.0_f ) )
 						{
@@ -809,9 +799,9 @@ namespace castor3d::shader
 				, sdw::Int const & receivesShadows )
 			{
 				auto lightDirection = m_writer.declLocale( "lightDirection"
-					, normalize( -light.m_direction ) );
+					, normalize( -light.direction ) );
 				auto diffuse = m_writer.declLocale( "diffuse"
-					, m_cookTorrance.computeDiffuse( light.m_lightBase
+					, m_cookTorrance.computeDiffuse( light.base
 						, worldEye
 						, lightDirection
 						, material.specular
@@ -821,21 +811,21 @@ namespace castor3d::shader
 				if ( m_shadowModel->isEnabled() )
 				{
 					IF( m_writer
-						, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) )
+						, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
 							&& receivesShadows != 0_i )
 					{
-						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
+						light.base.updateShadowType( castor3d::ShadowType::eRaw );
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
-							, light.m_cascadeCount - 1_u );
+							, light.cascadeCount - 1_u );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, m_shadowModel->computeDirectional( light.m_lightBase
+							, m_shadowModel->computeDirectional( light.base
 								, surface
-								, light.m_transforms[cascadeIndex]
+								, light.transforms[cascadeIndex]
 								, -lightDirection
 								, cascadeIndex
-								, light.m_cascadeCount ) );
+								, light.cascadeCount ) );
 						diffuse *= shadowFactor;
 					}
 					FI;
@@ -862,8 +852,8 @@ namespace castor3d::shader
 				auto diffuse = m_writer.declLocale( "diffuse"
 					, vec3( 0.0_f ) );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
-					, normalize( -light.m_direction ) );
-				diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
+					, normalize( -light.direction ) );
+				diffuse = m_cookTorrance.computeDiffuse( light.base
 					, worldEye
 					, lightDirection
 					, material.specular
@@ -873,21 +863,21 @@ namespace castor3d::shader
 				if ( m_shadowModel->isEnabled() )
 				{
 					IF( m_writer
-						, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) )
+						, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
 							&& receivesShadows != 0_i )
 					{
-						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
+						light.base.updateShadowType( castor3d::ShadowType::eRaw );
 						auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 						auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
-							, light.m_cascadeCount - 1_u );
+							, light.cascadeCount - 1_u );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, m_shadowModel->computeDirectional( light.m_lightBase
+							, m_shadowModel->computeDirectional( light.base
 								, surface
-								, light.m_transforms[cascadeIndex]
+								, light.transforms[cascadeIndex]
 								, -lightDirection
 								, cascadeIndex
-								, light.m_cascadeCount ) );
+								, light.cascadeCount ) );
 						diffuse *= shadowFactor;
 					}
 					FI;
@@ -914,12 +904,12 @@ namespace castor3d::shader
 				auto diffuse = m_writer.declLocale( "diffuse"
 					, vec3( 0.0_f ) );
 				auto lightToVertex = m_writer.declLocale( "lightToVertex"
-					, light.m_position.xyz() - surface.worldPosition );
+					, light.position - surface.worldPosition );
 				auto distance = m_writer.declLocale( "distance"
 					, length( lightToVertex ) );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( lightToVertex ) );
-				diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
+				diffuse = m_cookTorrance.computeDiffuse( light.base
 					, worldEye
 					, lightDirection
 					, material.specular
@@ -929,26 +919,22 @@ namespace castor3d::shader
 				if ( m_shadowModel->isEnabled() )
 				{
 					IF( m_writer
-						, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) )
-							&& light.m_lightBase.m_index >= 0_i
+						, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
+							&& light.base.index >= 0_i
 							&& receivesShadows != 0_i )
 					{
-						light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
+						light.base.updateShadowType( castor3d::ShadowType::eRaw );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, m_shadowModel->computePoint( light.m_lightBase
+							, m_shadowModel->computePoint( light.base
 								, surface
-								, light.m_position.xyz() ) );
+								, light.position ) );
 						diffuse *= shadowFactor;
 					}
 					FI;
 				}
 
 				auto attenuation = m_writer.declLocale( "attenuation"
-					, sdw::fma( light.m_attenuation.z()
-						, distance * distance
-						, sdw::fma( light.m_attenuation.y()
-							, distance
-							, light.m_attenuation.x() ) ) );
+					, light.getAttenuationFactor( distance ) );
 				m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 			}
 			, InOutPointLight( m_writer, "light" )
@@ -968,19 +954,19 @@ namespace castor3d::shader
 				, sdw::Int const & receivesShadows )
 			{
 				auto lightToVertex = m_writer.declLocale( "lightToVertex"
-					, light.m_position.xyz() - surface.worldPosition );
+					, light.position - surface.worldPosition );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( lightToVertex ) );
 				auto spotFactor = m_writer.declLocale( "spotFactor"
-					, dot( lightDirection, -light.m_direction ) );
+					, dot( lightDirection, -light.direction ) );
 				auto diffuse = m_writer.declLocale( "diffuse"
 					, vec3( 0.0_f ) );
 
-				IF( m_writer, spotFactor > light.m_cutOff )
+				IF( m_writer, spotFactor > light.cutOff )
 				{
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					diffuse = m_cookTorrance.computeDiffuse( light.m_lightBase
+					diffuse = m_cookTorrance.computeDiffuse( light.base
 						, worldEye
 						, lightDirection
 						, material.specular
@@ -990,15 +976,15 @@ namespace castor3d::shader
 					if ( m_shadowModel->isEnabled() )
 					{
 						IF( m_writer
-							, light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) )
-								&& light.m_lightBase.m_index >= 0_i
+							, light.base.shadowType != sdw::Int( int( ShadowType::eNone ) )
+								&& light.base.index >= 0_i
 								&& receivesShadows != 0_i )
 						{
-							light.m_lightBase.m_intensityFarPlane.w() = sdw::Float( float( castor3d::ShadowType::eRaw ) );
+							light.base.updateShadowType( castor3d::ShadowType::eRaw );
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
-								, m_shadowModel->computeSpot( light.m_lightBase
+								, m_shadowModel->computeSpot( light.base
 									, surface
-									, light.m_transform
+									, light.transform
 									, -lightToVertex ) );
 							diffuse *= shadowFactor;
 						}
@@ -1006,12 +992,8 @@ namespace castor3d::shader
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
-						, sdw::fma( light.m_attenuation.z()
-							, distance * distance
-							, sdw::fma( light.m_attenuation.y()
-								, distance
-								, light.m_attenuation.x() ) ) );
-					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.m_cutOff ) );
+						, light.getAttenuationFactor( distance ) );
+					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.cutOff ) );
 					diffuse = max( vec3( 0.0_f ), spotFactor * diffuse / attenuation );
 				}
 				FI;
@@ -1031,15 +1013,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 		: PbrLightingModel{ false
 			, writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
-			, hasSsbo }
+			, isOpaqueProgram }
 	{
 	}
 
@@ -1052,15 +1032,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 	{
 		return std::make_unique< PbrMRLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
-			, hasSsbo );
+			, isOpaqueProgram );
 	}
 
 	std::unique_ptr< LightMaterial > PbrMRLightingModel::declMaterial( std::string const & name )
@@ -1074,15 +1052,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 		: PbrLightingModel{ true
 			, writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
-			, hasSsbo }
+			, isOpaqueProgram }
 	{
 	}
 
@@ -1095,15 +1071,13 @@ namespace castor3d::shader
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 	{
 		return std::make_unique< PbrSGLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
-			, isOpaqueProgram
-			, hasSsbo );
+			, isOpaqueProgram );
 	}
 
 	std::unique_ptr< LightMaterial > PbrSGLightingModel::declMaterial( std::string const & name )

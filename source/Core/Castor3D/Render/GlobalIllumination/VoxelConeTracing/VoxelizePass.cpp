@@ -561,8 +561,6 @@ namespace castor3d
 
 	ShaderPtr VoxelizePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-
 		using namespace sdw;
 		FragmentWriter writer;
 		bool hasTextures = !flags.textures.empty();
@@ -601,8 +599,7 @@ namespace castor3d
 			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, addIndex
 			, RenderPipeline::eBuffers
-			, m_mode != RenderMode::eTransparentOnly
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, m_mode != RenderMode::eTransparentOnly );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
