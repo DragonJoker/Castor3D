@@ -16,6 +16,7 @@
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
@@ -194,6 +195,12 @@ namespace castor3d
 			onChanged( *this );
 			m_dirty = false;
 		}
+
+		if ( m_sssDirty )
+		{
+			onSssProfileChanged( *this );
+			m_sssDirty = false;
+		}
 	}
 
 	void Pass::accept( PassVisitorBase & vis )
@@ -240,6 +247,39 @@ namespace castor3d
 			, m_normalFactor );
 		vis.visit( cuT( "Object factor" )
 			, m_objectFactor );
+	}
+
+	void Pass::fillSssProfileBuffer( SssProfileBuffer & buffer )const
+	{
+		auto data = buffer.getData( getSssProfileId() );
+
+		if ( hasSubsurfaceScattering() )
+		{
+			auto & subsurfaceScattering = getSubsurfaceScattering();
+			data.sssInfo->x = float( subsurfaceScattering.getProfileSize() );
+			data.sssInfo->y = subsurfaceScattering.getGaussianWidth();
+			data.sssInfo->z = subsurfaceScattering.getStrength();
+			data.sssInfo->w = 0.0f;
+
+			auto i = 0u;
+			auto & transmittanceProfile = *data.transmittanceProfile;
+
+			for ( auto & factor : subsurfaceScattering )
+			{
+				transmittanceProfile[i].x = factor[0];
+				transmittanceProfile[i].y = factor[1];
+				transmittanceProfile[i].z = factor[2];
+				transmittanceProfile[i].w = factor[3];
+				++i;
+			}
+		}
+		else
+		{
+			data.sssInfo->x = 0.0f;
+			data.sssInfo->y = 0.0f;
+			data.sssInfo->z = 0.0f;
+			data.sssInfo->w = 0.0f;
+		}
 	}
 
 	void Pass::fillConfig( TextureConfiguration & configuration
@@ -423,7 +463,7 @@ namespace castor3d
 			{
 				onSssChanged( sss );
 			} );
-		m_dirty = true;
+		m_sssDirty = true;
 	}
 
 	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
@@ -469,6 +509,7 @@ namespace castor3d
 		data.common->r = 0.0f;
 		data.common->g = getEmissive();
 		data.common->b = getAlphaValue();
+		data.common->a = float( getSssProfileId() );
 		data.opacity->r = powf( getTransmission()->x, 2.2f );
 		data.opacity->g = powf( getTransmission()->y, 2.2f );
 		data.opacity->b = powf( getTransmission()->z, 2.2f );
@@ -477,34 +518,6 @@ namespace castor3d
 		data.reflRefr->g = hasRefraction() ? 1.0f : 0.0f;
 		data.reflRefr->b = hasReflections() ? 1.0f : 0.0f;
 		data.reflRefr->a = float( getBWAccumulationOperator() );
-
-		if ( hasSubsurfaceScattering() )
-		{
-			auto & subsurfaceScattering = getSubsurfaceScattering();
-			data.extended.sssInfo->r = 1.0f;
-			data.extended.sssInfo->g = subsurfaceScattering.getGaussianWidth();
-			data.extended.sssInfo->b = subsurfaceScattering.getStrength();
-			data.extended.sssInfo->a = float( subsurfaceScattering.getProfileSize() );
-
-			auto i = 0u;
-			auto & transmittanceProfile = *data.extended.transmittanceProfile;
-
-			for ( auto & factor : subsurfaceScattering )
-			{
-				transmittanceProfile[i].r = factor[0];
-				transmittanceProfile[i].g = factor[1];
-				transmittanceProfile[i].b = factor[2];
-				transmittanceProfile[i].a = factor[3];
-				++i;
-			}
-		}
-		else
-		{
-			data.extended.sssInfo->r = 0.0f;
-			data.extended.sssInfo->g = 0.0f;
-			data.extended.sssInfo->b = 0.0f;
-			data.extended.sssInfo->a = 0.0f;
-		}
 	}
 
 	void Pass::doMergeImages( TextureFlag lhsFlag
@@ -698,7 +711,7 @@ namespace castor3d
 
 	void Pass::onSssChanged( SubsurfaceScattering const & sss )
 	{
-		m_dirty = true;
+		m_sssDirty = true;
 	}
 
 	void Pass::doJoinNmlHgt( TextureUnitPtrArray & result )

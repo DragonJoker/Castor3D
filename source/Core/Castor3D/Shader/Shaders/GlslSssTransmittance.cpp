@@ -8,159 +8,122 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
 	namespace shader
 	{
-		SssTransmittance::SssTransmittance( ShaderWriter & writer
+		SssTransmittance::SssTransmittance( sdw::ShaderWriter & writer
 			, Shadow & shadow
 			, Utils & utils
-			, bool shadowMap )
+			, ShadowOptions shadowOptions
+			, SssProfiles const & sssProfiles )
 			: m_writer{ writer }
 			, m_shadow{ shadow }
 			, m_utils{ utils }
-			, m_shadowMap{ shadowMap }
+			, m_sssProfiles{ sssProfiles }
+			, m_shadowMap{ shadowOptions.type != SceneFlag::eNone }
 		{
 		}
 
-		void SssTransmittance::declare( LightType type )
+		void SssTransmittance::declare()
 		{
-			m_compute = m_writer.implementFunction< Vec3 >( "computeSssTransmittance"
-				, [this]( Float const & shadowDepth
-					, Int const & transmittanceProfileSize
-					, Array< Vec4 > const & transmittanceProfile
-					, Float const & sssWidth
-					, Vec3 const & lightSpacePosition
-					, Vec3 const & worldNormal
-					, Float const & translucency
-					, Vec3 const & lightVector
-					, Float const & lightFarPlane
-					, Vec3 const & lightAttenuation )
+			m_compute = m_writer.implementFunction< sdw::Vec3 >( "computeSssTransmittance"
+				, [this]( sdw::Float const & lightSpaceDepth
+					, sdw::Float const & shadowDepth
+					, sdw::UInt const & sssProfileIndex
+					, sdw::Vec3 const & worldNormal
+					, sdw::Float const & translucency
+					, sdw::Vec3 const & lightVector
+					, sdw::Float const & lightFarPlane )
 				{
+					auto sssProfile = m_writer.declLocale( "sssProfile"
+						, m_sssProfiles.getProfile( m_writer.cast< sdw::UInt >( sssProfileIndex ) ) );
 					auto factor = m_writer.declLocale( "factor"
 						, vec3( 0.0_f ) );
 
-					if ( m_shadowMap )
+					/**
+					* Calculate the scale of the effect.
+					*/
+					auto scale = m_writer.declLocale( "scale"
+						, 8.25_f * translucency / sssProfile.gaussianWidth );
+
+					/**
+					* Now we calculate the thickness from the light point of view:
+					*/
+					auto d = m_writer.declLocale( "d"
+						, scale * sdw::abs( ( shadowDepth * lightFarPlane ) - lightSpaceDepth ) );
+
+					/**
+					* Armed with the thickness, we can now calculate the color by means of the
+					* transmittance profile.
+					*/
+					auto dd = m_writer.declLocale( "dd"
+						, -d * d );
+					auto profile = m_writer.declLocale( "profile"
+						, vec3( 0.0_f ) );
+
+					FOR( m_writer, sdw::Int, i, 0, i < sssProfile.transmittanceProfileSize, ++i )
 					{
-						IF( m_writer, transmittanceProfileSize > 0_i )
-						{
-							/**
-							 * Calculate the scale of the effect.
-							 */
-							auto scale = m_writer.declLocale( "scale"
-								, 8.25_f * translucency / sssWidth );
-
-							/**
-							 * Now we calculate the thickness from the light point of view:
-							 */
-							auto d = m_writer.declLocale( "d"
-								, sdw::abs( shadowDepth - lightSpacePosition.z() ) * lightFarPlane );
-
-#if C3D_DebugSSSTransmittance
-
-							auto dd = m_writer.declLocale( "dd"
-								, -d * d );
-
-							FOR( m_writer, Int, i, 0, i < transmittanceProfileSize, ++i )
-							{
-								auto profileFactor = m_writer.declLocale( "profileFactor"
-									, transmittanceProfile[i] );
-								factor += profileFactor.rgb() * exp( dd / profileFactor.a() );
-							}
-							ROF;
-
-							factor = factor
-								* scale
-								* clamp( 0.3_f + dot( lightVector, -worldNormal )
-									, 0.0_f
-									, 1.0_f );
-							//factor = vec3( lightSpacePosition.z() );
-
-#else
-
-							/**
-							 * Armed with the thickness, we can now calculate the color by means of the
-							 * transmittance profile.
-							 */
-							auto dd = m_writer.declLocale( "dd"
-								, -d * d );
-
-							FOR( m_writer, Int, i, 0, i < transmittanceProfileSize, ++i )
-							{
-								auto profileFactor = m_writer.declLocale( "profileFactor"
-									, transmittanceProfile[i] );
-								factor += profileFactor.rgb() * exp( dd / profileFactor.a() );
-							}
-							ROF;
-							/**
-							 * Using the profile, we finally approximate the transmitted lighting from
-							 * the back of the object:
-							 */
-							factor = factor
-								* scale
-								* clamp( 0.3_f + dot( lightVector, -worldNormal )
-									, 0.0_f
-									, 1.0_f );
-
-#endif
-						}
-						FI;
+						auto profileFactors = m_writer.declLocale( "profileFactors"
+							, sssProfile.transmittanceProfile[i] );
+						profile += profileFactors.rgb() * exp( dd / profileFactors.a() );
 					}
-
+					ROF;
+					/**
+						* Using the profile, we finally approximate the transmitted lighting from
+						* the back of the object:
+						*/
+					factor = profile
+						* translucency
+						* clamp( 0.3_f + dot( lightVector, -worldNormal )
+							, 0.0_f
+							, 1.0_f );
 					m_writer.returnStmt( factor );
 				}
-				, InFloat{ m_writer, "shadowDepth" }
-				, InInt{ m_writer, "transmittanceProfileSize" }
-				, InVec4Array{ m_writer, "transmittanceProfile", 10u }
-				, InFloat{ m_writer, "sssWidth" }
-				, InVec3{ m_writer, "lightSpacePosition" }
-				, InVec3{ m_writer, "worldNormal" }
-				, InFloat{ m_writer, "transmittance" }
-				, InVec3{ m_writer, "lightVector" }
-				, InFloat{ m_writer, "lightFarPlane" }
-				, InVec3{ m_writer, "lightAttenuation" } );
+				, sdw::InFloat{ m_writer, "lightSpaceDepth" }
+				, sdw::InFloat{ m_writer, "shadowDepth" }
+				, sdw::InUInt{ m_writer, "sssProfileIndex" }
+				, sdw::InVec3{ m_writer, "worldNormal" }
+				, sdw::InFloat{ m_writer, "transmittance" }
+				, sdw::InVec3{ m_writer, "lightVector" }
+				, sdw::InFloat{ m_writer, "lightFarPlane" } );
 		}
 		
-		Vec3 SssTransmittance::compute( Material const & material
+		sdw::Vec3 SssTransmittance::compute( LightMaterial const & material
 			, DirectionalLight const & light
-			, Vec2 const & uv
-			, Surface surface
-			, Float const & translucency )
+			, Surface const & surface )
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
 				, vec3( 0.0_f ) );
 
 			if ( m_shadowMap )
 			{
-				declare( LightType::eDirectional );
+				declare();
 
-				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
+				IF( m_writer
+					, material.sssProfileIndex != 0.0_f )
 				{
-					auto c3d_mapDepthDirectional = m_writer.getVariable< CombinedImage2DRgba32 >( Shadow::MapNormalDepthDirectional );
-					/**
-					* First we shrink the position inwards the surface to avoid artifacts:
-					* (Note that this can be done once for all the lights)
-					*/
+					auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayRgba32 >( Shadow::MapNormalDepthDirectional );
+
+					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, surface.worldPosition - surface.worldNormal * 0.005_f );
+
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-						, m_shadow.getLightSpacePosition( light.m_transforms[0_u]
-							, shrinkedPos ) );
-					auto shadowDepth = m_writer.declLocale( "d1"
-						, c3d_mapDepthDirectional.sample( lightSpacePosition.xy() ).w() );
-					ssstResult = m_compute( shadowDepth
-						, material.transmittanceProfileSize
-						, material.transmittanceProfile
-						, material.gaussianWidth
-						, lightSpacePosition.xyz()
+						, m_shadow.getLightSpacePosition( light.m_transforms[0_u], shrinkedPos ) );
+					lightSpacePosition.xy() /= lightSpacePosition.w();
+					lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
+						, vec2( 0.5_f )
+						, vec2( 0.5_f ) );
+					auto shadowDepth = m_writer.declLocale( "shadowDepth"
+						, c3d_mapNormalDepthDirectional.sample( vec3( lightSpacePosition.xy(), 0.0_f ) ).w() );
+					ssstResult = m_compute( lightSpacePosition.z()
+						, shadowDepth
+						, m_writer.cast< sdw::UInt >( material.sssProfileIndex )
 						, surface.worldNormal
-						, translucency
+						, material.sssTransmittance
 						, light.m_direction
-						, light.m_lightBase.m_farPlane
-						, vec3( 1.0_f, 0.0_f, 0.0_f ) );
+						, light.m_lightBase.m_farPlane );
 				}
 				FI;
 			}
@@ -168,50 +131,37 @@ namespace castor3d
 			return ssstResult;
 		}
 
-		Vec3 SssTransmittance::compute( Material const & material
+		sdw::Vec3 SssTransmittance::compute( LightMaterial const & material
 			, PointLight const & light
-			, Vec2 const & uv
-			, Surface surface
-			, Float const & translucency )
+			, Surface const & surface )
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
 				, vec3( 0.0_f ) );
 
 			if ( m_shadowMap )
 			{
-				declare( LightType::ePoint );
-
-				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
+				declare();
+				
+				IF( m_writer
+					, material.sssProfileIndex != 0.0_f )
 				{
-					auto c3d_mtxInvViewProj = m_writer.getVariable< Mat4 >( "c3d_mtxInvViewProj" );
-					auto c3d_mapDepthPoint = m_writer.getVariable< CombinedImageCubeRgba32 >( Shadow::MapNormalDepthPoint );
-					/**
-					* First we shrink the position inwards the surface to avoid artifacts:
-					* (Note that this can be done once for all the lights)
-					*/
+					auto c3d_mapNormalDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( Shadow::MapNormalDepthPoint );
+
+					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, surface.worldPosition - surface.worldNormal * 0.005_f );
 
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
 						, shrinkedPos - light.m_position );
-					auto direction = m_writer.declLocale( "direction"
-						, vertexToLight );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, c3d_mapDepthPoint.sample( direction ).w() );
-					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-						, m_utils.calcWSPosition( uv
-							, shadowDepth
-							, c3d_mtxInvViewProj ) );
-					ssstResult = m_compute( shadowDepth
-						, material.transmittanceProfileSize
-						, material.transmittanceProfile
-						, material.gaussianWidth
-						, lightSpacePosition
+						, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.m_lightBase.m_index ) ) ).w() );
+					ssstResult = m_compute( ( shrinkedPos - light.m_position ).z()
+						, shadowDepth
+						, m_writer.cast< sdw::UInt >( material.sssProfileIndex )
 						, surface.worldNormal
-						, translucency
-						, normalize( -vertexToLight )
-						, light.m_lightBase.m_farPlane
-						, light.m_attenuation );
+						, material.sssTransmittance
+						, -vertexToLight
+						, light.m_lightBase.m_farPlane );
 				}
 				FI;
 			}
@@ -219,40 +169,42 @@ namespace castor3d
 			return ssstResult;
 		}
 
-		Vec3 SssTransmittance::compute( Material const & material
+		sdw::Vec3 SssTransmittance::compute( LightMaterial const & material
 			, SpotLight const & light
-			, Vec2 const & uv
-			, Surface surface
-			, Float const & translucency )
+			, Surface const & surface )
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
 				, vec3( 0.0_f ) );
 
 			if ( m_shadowMap )
 			{
-				declare( LightType::eSpot );
-
-				IF( m_writer, material.subsurfaceScatteringEnabled != 0_i )
+				declare();
+				
+				IF( m_writer
+					, material.sssProfileIndex != 0.0_f )
 				{
-					auto c3d_mapDepthSpot = m_writer.getVariable< CombinedImage2DRgba32 >( Shadow::MapNormalDepthSpot );
+					auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayRgba32 >( Shadow::MapNormalDepthSpot );
+
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, surface.worldPosition - surface.worldNormal * 0.005_f );
+
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-						, m_shadow.getLightSpacePosition( light.m_transform
-							, shrinkedPos ) );
+						, light.m_transform * vec4( shrinkedPos, 1.0_f ) );
+					lightSpacePosition.xy() /= lightSpacePosition.w();
+					lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
+						, vec2( 0.5_f )
+						, vec2( 0.5_f ) );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, c3d_mapDepthSpot.sample( lightSpacePosition.xy() ).w() );
-					ssstResult = m_compute( shadowDepth
-						, material.transmittanceProfileSize
-						, material.transmittanceProfile
-						, material.gaussianWidth
-						, lightSpacePosition.xyz()
+						, c3d_mapNormalDepthSpot.sample( vec3( lightSpacePosition.xy()
+							, m_writer.cast< sdw::Float >( light.m_lightBase.m_index ) ) ).w() );
+					ssstResult = m_compute( lightSpacePosition.z()
+						, shadowDepth
+						, m_writer.cast< sdw::UInt >( material.sssProfileIndex )
 						, surface.worldNormal
-						, translucency
-						, normalize( light.m_position - surface.worldPosition )
-						, light.m_lightBase.m_farPlane
-						, light.m_attenuation );
+						, material.sssTransmittance
+						, light.m_position - surface.worldPosition
+						, light.m_lightBase.m_farPlane );
 				}
 				FI;
 			}

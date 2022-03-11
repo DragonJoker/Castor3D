@@ -10,6 +10,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -64,6 +65,9 @@ namespace castor
 			m_passBuffer = std::make_shared< PassBuffer >( m_engine
 				, device
 				, shader::MaxMaterialsCount );
+			m_sssProfileBuffer = std::make_shared< SssProfileBuffer >( m_engine
+				, device
+				, shader::MaxSssProfilesCount );
 			m_texConfigBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
 				, device
 				, ( device.hasBindless()
@@ -114,6 +118,7 @@ namespace castor
 			, [this]()
 			{
 				m_passBuffer.reset();
+				m_sssProfileBuffer.reset();
 				m_texConfigBuffer.reset();
 				m_texAnimBuffer.reset();
 			} ) );
@@ -148,6 +153,7 @@ namespace castor
 		if ( m_passBuffer )
 		{
 			m_passBuffer->update( cb );
+			m_sssProfileBuffer->update( cb );
 			m_texConfigBuffer->update( cb );
 			m_texAnimBuffer->update( cb );
 		}
@@ -171,6 +177,12 @@ namespace castor
 		if ( m_passBuffer )
 		{
 			m_passBuffer->addPass( pass );
+
+			if ( pass.hasSubsurfaceScattering() )
+			{
+				m_sssProfileBuffer->addPass( pass );
+			}
+
 			return true;
 		}
 
@@ -183,6 +195,11 @@ namespace castor
 		if ( m_passBuffer
 			&& pass.getId() )
 		{
+			if ( pass.hasSubsurfaceScattering() )
+			{
+				m_sssProfileBuffer->removePass( pass );
+			}
+
 			m_passBuffer->removePass( pass );
 		}
 	}

@@ -76,6 +76,7 @@ namespace castor3d
 				, config.sceneFlags );
 			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
+				, nullptr
 				, true
 				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), uint32_t( IndirectLightingPass::eDepth ), 0u );

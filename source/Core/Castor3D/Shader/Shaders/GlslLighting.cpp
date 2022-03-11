@@ -6,6 +6,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -45,6 +46,8 @@ namespace castor3d::shader
 		, objectFactor{ edgeFactors.w() }
 		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
 		, spcDiv{ getMember< sdw::Float >( "spcDiv" ) }
+		, sssProfileIndex{ getMember< sdw::Float >( "sssProfileIndex" ) }
+		, sssTransmittance{ getMember< sdw::Float >( "sssTransmittance" ) }
 	{
 	}
 
@@ -62,6 +65,8 @@ namespace castor3d::shader
 			result->declMember( "specular", ast::type::Kind::eVec3F );
 			result->declMember( "albDiv", ast::type::Kind::eFloat );
 			result->declMember( "spcDiv", ast::type::Kind::eFloat );
+			result->declMember( "sssProfileIndex", ast::type::Kind::eFloat );
+			result->declMember( "sssTransmittance", ast::type::Kind::eFloat );
 		}
 
 		return result;
@@ -91,6 +96,7 @@ namespace castor3d::shader
 	LightingModel::LightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo
 		, std::string prefix )
@@ -99,7 +105,14 @@ namespace castor3d::shader
 		, m_isOpaqueProgram{ isOpaqueProgram }
 		, m_hasSsbo{ hasSsbo }
 		, m_prefix{ std::move( prefix ) }
-		, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer ) }
+		, m_shadowModel{ std::make_shared< Shadow >( shadowOptions, writer ) }
+		, m_sssTransmittance{ ( sssProfiles
+			? std::make_shared< SssTransmittance >( writer
+				, *m_shadowModel
+				, utils
+				, std::move( shadowOptions )
+				, *sssProfiles )
+			: nullptr ) }
 	{
 	}
 
@@ -201,6 +214,7 @@ namespace castor3d::shader
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
 		, ShadowOptions const & shadows
+		, SssProfiles const * sssProfiles
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet
 		, bool isOpaqueProgram
@@ -208,6 +222,7 @@ namespace castor3d::shader
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
+			, sssProfiles
 			, true
 			, hasSsbo );
 		result->declareModel( lightsBufBinding
@@ -224,12 +239,14 @@ namespace castor3d::shader
 		, uint32_t lightBinding
 		, uint32_t lightSet
 		, ShadowOptions const & shadows
+		, SssProfiles const * sssProfiles
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet
 		, bool hasSsbo )
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
+			, sssProfiles
 			, true
 			, hasSsbo );
 
@@ -371,6 +388,7 @@ namespace castor3d::shader
 	{
 		auto result = utils.createLightingModel( name
 			, shadows
+			, nullptr
 			, isOpaqueProgram
 			, hasSsbo );
 		result->declareDiffuseModel( lightsBufBinding

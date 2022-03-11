@@ -34,6 +34,7 @@ namespace castor3d
 		: uint32_t
 	{
 		eMaterials,
+		eSssProfiles,
 		eGpInfo,
 		eScene,
 		eData0,

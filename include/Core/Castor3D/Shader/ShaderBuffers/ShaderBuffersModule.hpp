@@ -36,6 +36,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	ShaderBuffer holding the Subsurface Scattering profiles data.
+	*\~french
+	*\brief
+	*	ShaderBuffer contenant les données des profils de Subsurface Scattering.
+	*/
+	class SssProfileBuffer;
+	/**
+	*\~english
+	*\brief
 	*	ShaderBuffer holding the TextureConfigurations data.
 	*\~french
 	*\brief
@@ -62,6 +71,7 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, LightBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PassBuffer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SssProfileBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );
 

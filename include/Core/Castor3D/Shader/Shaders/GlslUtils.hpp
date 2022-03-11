@@ -20,6 +20,7 @@ namespace castor3d::shader
 
 		C3D_API LightingModelPtr createLightingModel( castor::String const & name
 			, ShadowOptions shadowsOptions
+			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
