@@ -96,17 +96,18 @@ namespace castor
 		"|-?9[0-1]\\d{17}"
 		"|-?[1-8]\\d{18}"
 		"|-?\\d{1,18})" );
-	xchar const * const RegexFormat< float >::Value = cuT( "(-?[0-9]{1,6}\\.[0-9]{1,9}e-?[0-9]{1,3}"
-		"|-?[0-9]{1,6}\\.[0-9]{1,9}"
-		"|-?[0-9]{1,6}"
-		"|-?\\.[0-9]{1,9})" );
-	xchar const * const RegexFormat< double >::Value = cuT( "(-?[0-9]{1,9}\\.[0-9]{1,13}e-?[0-9]{1,3}"
-		"|-?[0-9]{1,9}\\.[0-9]{1,13}"
-		"|-?[0-9]{1,9}"
-		"|-?\\.[0-9]{1,13})" );
-	xchar const * const RegexFormat< long double >::Value = cuT( "(-?[0-9]{1,9}\\.[0-9]{1,13}"
-		"|-?[0-9]{1,9}"
-		"|-?\\.[0-9]{1,13})" );
+	xchar const * const RegexFormat< float >::Value = cuT( "(-?[0-9]+\\.[0-9]+e-?[0-9]{1,5}"
+		"|-?[0-9]+\\.[0-9]+"
+		"|-?[0-9]+"
+		"|-?\\.[0-9]+)" );
+	xchar const * const RegexFormat< double >::Value = cuT( "(-?[0-9]+\\.[0-9]+e-?[0-9]{1,5}"
+		"|-?[0-9]+\\.[0-9]+"
+		"|-?[0-9]+"
+		"|-?\\.[0-9]+)" );
+	xchar const * const RegexFormat< long double >::Value = cuT( "(-?[0-9]+\\.[0-9]+e-?[0-9]{1,5}"
+		"|-?[0-9]+\\.[0-9]+"
+		"|-?[0-9]+"
+		"|-?\\.[0-9]+)" );
 	xchar const * const RegexFormat< RgbColour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
 	xchar const * const RegexFormat< HdrRgbColour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
 	xchar const * const RegexFormat< RgbaColour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})"
