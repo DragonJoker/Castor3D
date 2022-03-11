@@ -726,14 +726,15 @@ namespace castor3d::shader
 						, length( vertexToLight ) );
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
-					m_cookTorrance.compute( light.m_lightBase
-						, worldEye
-						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
-						, surface
-						, output );
+					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+						, m_cookTorrance.compute( light.m_lightBase
+							, worldEye
+							, lightDirection
+							, material.specular
+							, material.getMetalness()
+							, material.getRoughness()
+							, surface
+							, output ) );
 
 					if ( m_shadowModel->isEnabled() )
 					{
@@ -761,6 +762,25 @@ namespace castor3d::shader
 								, light.m_attenuation.x() ) ) );
 					spotFactor = 1.0_f - ( 1.0_f - spotFactor ) * ( 1.0_f / ( 1.0_f - light.m_cutOff ) );
 					output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
+
+#if !C3D_DisableSSSTransmittance
+					if ( m_shadowModel->isEnabled() && m_sssTransmittance )
+					{
+						IF( m_writer
+							, ( light.m_lightBase.m_shadowType != sdw::Int( int( ShadowType::eNone ) ) )
+							&& ( light.m_lightBase.m_index >= 0_i )
+							&& ( receivesShadows != 0_i )
+							&& ( material.sssProfileIndex != 0.0_f ) )
+						{
+							output.m_diffuse += ( spotFactor * rawDiffuse / attenuation )
+								* m_sssTransmittance->compute( material
+								, light
+								, surface );
+						}
+						FI;
+					}
+#endif
+
 					output.m_specular = spotFactor * output.m_specular / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
