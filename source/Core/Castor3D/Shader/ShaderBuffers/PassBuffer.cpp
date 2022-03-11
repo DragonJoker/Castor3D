@@ -180,8 +180,6 @@ namespace castor3d
 		result.common = &data.common[index];
 		result.opacity = &data.opacity[index];
 		result.reflRefr = &m_data.reflRefr[index];
-		result.extended.sssInfo = &data.extended.sssInfo[index];
-		result.extended.transmittanceProfile = &data.extended.transmittanceProfile[index];
 
 
 #else
@@ -195,8 +193,6 @@ namespace castor3d
 		result.common = &data.common;
 		result.opacity = &data.opacity;
 		result.reflRefr = &data.reflRefr;
-		result.extended.sssInfo = &data.extended.sssInfo;
-		result.extended.transmittanceProfile = &data.extended.transmittanceProfile;
 
 #endif
 

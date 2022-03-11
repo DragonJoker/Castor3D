@@ -14,7 +14,6 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
@@ -22,15 +21,12 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace castor3d
 {
 	//************************************************************************************************
 
 	float getMaxDistance( LightCategory const & light
-		, Point3f const & attenuation )
+		, castor::Point3f const & attenuation )
 	{
 		constexpr float threshold = 0.000001f;
 		auto constant = std::abs( attenuation[0] );
@@ -79,7 +75,7 @@ namespace castor3d
 	}
 
 	float getMaxDistance( LightCategory const & light
-		, Point3f const & attenuation
+		, castor::Point3f const & attenuation
 		, float max )
 	{
 		return std::min( max, getMaxDistance( light, attenuation ) );
@@ -121,6 +117,9 @@ namespace castor3d
 		shader::Materials materials{ writer
 			, uint32_t( LightPassIdx::eMaterials )
 			, 0u };
+		shader::SssProfiles sssProfiles{ writer
+			, uint32_t( LightPassIdx::eSssProfiles )
+			, 0u };
 		C3D_GpInfo( writer, LightPassIdx::eGpInfo, 0u );
 		C3D_Scene( writer, LightPassIdx::eScene, 0u );
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
@@ -144,14 +143,10 @@ namespace castor3d
 			, 1u
 			, true
 			, shader::ShadowOptions{ shadows, lightType, false }
+			, &sssProfiles
 			, index
 			, 1u
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-		shader::SssTransmittance sss{ writer
-			, lightingModel->getShadowModel()
-			, utils
-			, shadows && shadowType != ShadowType::eNone };
-		sss.declare( lightType );
 
 		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 			, FragmentOut out )
@@ -186,13 +181,13 @@ namespace castor3d
 						, writer.cast< UInt >( data0.w() ) );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
-					auto translucency = writer.declLocale( "translucency"
-						, data4.w() );
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( albedo
 						, data3
 						, data2
 						, material );
+					lightMat->sssProfileIndex = writer.cast< sdw::Float >( material.sssProfileIndex );
+					lightMat->sssTransmittance = data4.w();
 
 					auto eye = writer.declLocale( "eye"
 						, c3d_sceneData.cameraPosition );
@@ -209,7 +204,7 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular };
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal, vec3( texCoord, 0.0_f ) );
 
 					switch ( lightType )
 					{
@@ -221,42 +216,12 @@ namespace castor3d
 						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
 #endif
 						auto light = writer.declLocale( "light", c3d_light );
-#if !C3D_DisableSSSTransmittance
-						IF( writer, !c3d_debugDeferredSSSTransmittance )
-						{
-							lightingModel->compute( light
-								, eye
-								, *lightMat
-								, shadowReceiver
-								, surface
-								, output );
-							lightDiffuse += sss.compute( material
-								, light
-								, texCoord
-								, wsPosition
-								, wsNormal
-								, translucency
-								, c3d_gpInfoData.getInvViewProj() );
-						}
-						ELSE
-						{
-							lightDiffuse = sss.compute( material
-								, light
-								, texCoord
-								, wsPosition
-								, wsNormal
-								, translucency
-								, c3d_gpInfoData.getInvViewProj() );
-						}
-						FI;
-#else
 						lightingModel->compute( light
 							, *lightMat
 							, surface
 							, eye
 							, shadowReceiver
 							, output );
-#endif
 						break;
 					}
 
@@ -264,42 +229,12 @@ namespace castor3d
 					{
 						auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
 						auto light = writer.declLocale( "light", c3d_light );
-#if !C3D_DisableSSSTransmittance
-						IF( writer, !c3d_debugDeferredSSSTransmittance )
-						{
-							lightingModel->compute( light
-								, eye
-								, *lightMat
-								, shadowReceiver
-								, surface
-								, output );
-							lightDiffuse += sss.compute( material
-								, light
-								, texCoord
-								, wsPosition
-								, wsNormal
-								, translucency
-								, c3d_gpInfoData.getInvViewProj() );
-						}
-						ELSE
-						{
-							lightDiffuse = sss.compute( material
-								, light
-								, texCoord
-								, wsPosition
-								, wsNormal
-								, translucency
-								, c3d_gpInfoData.getInvViewProj() );
-						}
-						FI;
-#else
 						lightingModel->compute( light
 							, *lightMat
 							, surface
 							, eye
 							, shadowReceiver
 							, output );
-#endif
 						break;
 					}
 
@@ -307,42 +242,12 @@ namespace castor3d
 					{
 						auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
 						auto light = writer.declLocale( "light", c3d_light );
-#if !C3D_DisableSSSTransmittance
-						IF( writer, !c3d_debugDeferredSSSTransmittance )
-						{
-							lightingModel->compute( light
-								, eye
-								, *lightMat
-								, shadowReceiver
-								, surface
-								, output );
-							lightDiffuse += sss.compute( material
-								, light
-								, texCoord
-								, wsPosition
-								, wsNormal
-								, translucency
-								, c3d_gpInfoData.getInvViewProj() );
-						}
-						ELSE
-						{
-							lightDiffuse = sss.compute( material
-								, light
-								, texCoord
-								, wsPosition
-								, wsNormal
-								, translucency
-								, c3d_gpInfoData.getInvViewProj() );
-						}
-						FI;
-#else
 						lightingModel->compute( light
 							, *lightMat
 							, surface
 							, eye
 							, shadowReceiver
 							, output );
-#endif
 						break;
 					}
 

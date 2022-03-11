@@ -22,13 +22,9 @@ namespace castor3d::shader
 			, bool enabled );
 		SDW_DeclStructInstance( C3D_API, Material );
 
-		C3D_API void create( sdw::CombinedImageT< FImgBufferRgba32 > & materials
-			, sdw::Int & offset );
-
 		C3D_API sdw::Vec3 colour()const;
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 	protected:
 		using sdw::StructInstance::getMember;
@@ -45,23 +41,17 @@ namespace castor3d::shader
 		sdw::Vec4 m_common;
 		sdw::Vec4 m_opacityTransmission;
 		sdw::Vec4 m_reflRefr;
-		sdw::Vec4 m_sssInfo;
 
 	public:
-		sdw::Array< sdw::Vec4 > transmittanceProfile;
-
 		sdw::Float opacity;
 		sdw::Vec3 transmission;
 		sdw::Float emissive;
 		sdw::Float alphaRef;
+		sdw::UInt sssProfileIndex;
 		sdw::Float refractionRatio;
 		sdw::Int hasRefraction;
 		sdw::Int hasReflection;
 		sdw::Float bwAccumulationOperator;
-		sdw::Int subsurfaceScatteringEnabled;
-		sdw::Float gaussianWidth;
-		sdw::Float subsurfaceScatteringStrength;
-		sdw::Int transmittanceProfileSize;
 		sdw::Float edgeWidth;
 		sdw::Float depthFactor;
 		sdw::Float normalFactor;
@@ -78,7 +68,6 @@ namespace castor3d::shader
 			, uint32_t binding
 			, uint32_t set
 			, bool enable = true );
-		virtual ~Materials() = default;
 		C3D_API void declare( uint32_t binding
 			, uint32_t set );
 		C3D_API Material getMaterial( sdw::UInt const & index )const;
@@ -86,6 +75,50 @@ namespace castor3d::shader
 	protected:
 		sdw::ShaderWriter & m_writer;
 		std::unique_ptr< sdw::ArraySsboT< Material > > m_ssbo;
+	};
+
+	struct SssProfile
+		: public sdw::StructInstance
+	{
+		friend class SssProfiles;
+		C3D_API SssProfile( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( C3D_API, SssProfile );
+
+		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+
+	protected:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
+
+	private:
+		sdw::Vec4 m_sssInfo;
+
+	public:
+		sdw::Array< sdw::Vec4 > transmittanceProfile;
+		sdw::Int transmittanceProfileSize;
+		sdw::Float gaussianWidth;
+		sdw::Float subsurfaceScatteringStrength;
+	};
+
+	CU_DeclareSmartPtr( SssProfile );
+
+	class SssProfiles
+	{
+	public:
+		C3D_API explicit SssProfiles( sdw::ShaderWriter & writer );
+		C3D_API explicit SssProfiles( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, bool enable = true );
+		C3D_API void declare( uint32_t binding
+			, uint32_t set );
+		C3D_API SssProfile getProfile( sdw::UInt const & index )const;
+
+	protected:
+		sdw::ShaderWriter & m_writer;
+		std::unique_ptr< sdw::ArraySsboT< SssProfile > > m_ssbo;
 	};
 }
 

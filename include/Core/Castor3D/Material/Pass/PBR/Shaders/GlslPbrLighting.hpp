@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_GlslPbrLightingModel_H___
 
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -19,6 +20,7 @@ namespace castor3d::shader
 			, sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
+			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -199,6 +201,7 @@ namespace castor3d::shader
 		C3D_API PbrMRLightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
+			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -206,6 +209,7 @@ namespace castor3d::shader
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
+			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -219,6 +223,7 @@ namespace castor3d::shader
 		C3D_API PbrSGLightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
+			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -226,6 +231,7 @@ namespace castor3d::shader
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
+			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 

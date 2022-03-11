@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
@@ -229,6 +230,15 @@ namespace castor3d
 		 */
 		C3D_API virtual void fillBuffer( PassBuffer & buffer )const = 0;
 		/**
+		 *\~english
+		 *\brief			Fills the pass buffer with this pass data.
+		 *\param[in,out]	buffer	The pass buffer.
+		 *\~french
+		 *\brief			Remplit le pass buffer aves les données de cette passe.
+		 *\param[in,out]	buffer	Le pass buffer.
+		 */
+		C3D_API void fillSssProfileBuffer( SssProfileBuffer & buffer )const;
+		/**
 		*\~english
 		*\brief
 		*	PassVisitor acceptance function, for a specific texture configuration.
@@ -351,6 +361,11 @@ namespace castor3d
 		uint32_t getId()const
 		{
 			return m_id;
+		}
+
+		uint32_t getSssProfileId()const
+		{
+			return m_sssProfileId;
 		}
 
 		VkCompareOp getAlphaFunc()const
@@ -553,6 +568,11 @@ namespace castor3d
 			m_id = value;
 		}
 
+		void setSssProfileId( uint32_t value )
+		{
+			m_sssProfileId = value;
+		}
+
 		void setAlphaFunc( VkCompareOp value )
 		{
 			m_alphaFunc = value;
@@ -683,11 +703,13 @@ namespace castor3d
 
 	public:
 		OnPassChanged onChanged;
+		OnPassChanged onSssProfileChanged;
 		static float constexpr MinEdgeWidth = 0.001f;
 		static float constexpr MaxEdgeWidth = 1000.0f;
 
 	protected:
 		bool m_dirty{ true };
+		bool m_sssDirty{ true };
 
 	private:
 		PassTypeID m_typeID;
@@ -698,6 +720,7 @@ namespace castor3d
 		std::unordered_map< TextureUnit const *, TextureSourceSet > m_unitsSources;
 		TextureFlags m_textures;
 		uint32_t m_id{ 0u };
+		uint32_t m_sssProfileId{ 0u };
 		bool m_implicit{ false };
 		bool m_automaticShader{ true };
 		std::atomic_bool m_texturesReduced{ false };
