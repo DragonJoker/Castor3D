@@ -62,12 +62,14 @@ namespace toon::shader
 	ToonPhongLightingModel::ToonPhongLightingModel( sdw::ShaderWriter & m_writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo
 		, bool isBlinnPhong )
 		: c3d::PhongLightingModel{ m_writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo
 			, isBlinnPhong }
@@ -78,12 +80,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 	{
 		return std::make_unique< ToonPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo
 			, false );
@@ -1053,11 +1057,13 @@ namespace toon::shader
 	ToonBlinnPhongLightingModel::ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 		: ToonPhongLightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo
 			, true }
@@ -1067,12 +1073,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 	{
 		return std::make_unique< ToonBlinnPhongLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo );
 	}
@@ -1159,11 +1167,13 @@ namespace toon::shader
 		, sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 		: c3d::LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo
 			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_toon_" } : std::string{ "c3d_pbrmr_toon_" } }
@@ -2099,12 +2109,14 @@ namespace toon::shader
 	ToonPbrMRLightingModel::ToonPbrMRLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 		: ToonPbrLightingModel{ false
 			, writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo }
 	{
@@ -2118,12 +2130,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPbrMRLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 	{
 		return std::make_unique< ToonPbrMRLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo );
 	}
@@ -2138,14 +2152,16 @@ namespace toon::shader
 	ToonPbrSGLightingModel::ToonPbrSGLightingModel( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 		: ToonPbrLightingModel{ true
-		, writer
-		, utils
-		, std::move( shadowOptions )
-		, isOpaqueProgram
-		, hasSsbo }
+			, writer
+			, utils
+			, std::move( shadowOptions )
+			, sssProfiles
+			, isOpaqueProgram
+			, hasSsbo }
 	{
 	}
 
@@ -2157,12 +2173,14 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPbrSGLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
+		, c3d::SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 	{
 		return std::make_unique< ToonPbrSGLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo );
 	}

@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "SdwModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 #include <ShaderWriter/CompositeTypes/Ssbo.hpp>
@@ -70,6 +71,10 @@ namespace castor3d::shader
 		sdw::Float albDiv;
 		sdw::Float spcDiv;
 
+	public:
+		sdw::Float sssProfileIndex;
+		sdw::Float sssTransmittance;
+
 	private:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
@@ -81,6 +86,7 @@ namespace castor3d::shader
 		C3D_API LightingModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, ShadowOptions shadowOptions
+			, SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo
 			, std::string prefix );
@@ -124,6 +130,7 @@ namespace castor3d::shader
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
+			, SssProfiles const * sssProfiles
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
 			, bool isOpaqueProgram
@@ -134,6 +141,7 @@ namespace castor3d::shader
 			, LightsBufBindingT lightsBufBinding
 			, uint32_t lightsBufSet
 			, ShadowOptions const & shadows
+			, SssProfiles const * sssProfiles
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
 			, bool isOpaqueProgram
@@ -144,6 +152,7 @@ namespace castor3d::shader
 				, uint32_t( lightsBufBinding )
 				, lightsBufSet
 				, shadows
+				, sssProfiles
 				, shadowMapBinding
 				, shadowMapSet
 				, isOpaqueProgram
@@ -157,6 +166,7 @@ namespace castor3d::shader
 			, uint32_t lightSet
 			, bool lightUbo
 			, ShadowOptions const & shadows
+			, SssProfiles const * sssProfiles
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
 			, bool hasSsbo )
@@ -168,6 +178,7 @@ namespace castor3d::shader
 				, uint32_t( lightBinding )
 				, lightSet
 				, shadows
+				, sssProfiles
 				, shadowMapBinding
 				, shadowMapSet
 				, hasSsbo );
@@ -377,6 +388,7 @@ namespace castor3d::shader
 			, uint32_t lightBinding
 			, uint32_t lightSet
 			, ShadowOptions const & shadows
+			, SssProfiles const * sssProfiles
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
 			, bool hasSsbo );
@@ -391,6 +403,7 @@ namespace castor3d::shader
 		bool m_hasSsbo;
 		std::string m_prefix;
 		std::shared_ptr< Shadow > m_shadowModel;
+		std::shared_ptr< SssTransmittance > m_sssTransmittance;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec4

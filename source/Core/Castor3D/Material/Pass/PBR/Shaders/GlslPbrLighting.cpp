@@ -82,11 +82,13 @@ namespace castor3d::shader
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 		: LightingModel{ writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo
 			, isSpecularGlossiness ? std::string{ "c3d_pbrsg_" } : std::string{ "c3d_pbrmr_" } }
@@ -1008,12 +1010,14 @@ namespace castor3d::shader
 	PbrMRLightingModel::PbrMRLightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 		: PbrLightingModel{ false
 			, writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo }
 	{
@@ -1027,12 +1031,14 @@ namespace castor3d::shader
 	LightingModelPtr PbrMRLightingModel::create( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 	{
 		return std::make_unique< PbrMRLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo );
 	}
@@ -1047,12 +1053,14 @@ namespace castor3d::shader
 	PbrSGLightingModel::PbrSGLightingModel( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 		: PbrLightingModel{ true
 			, writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo }
 	{
@@ -1066,12 +1074,14 @@ namespace castor3d::shader
 	LightingModelPtr PbrSGLightingModel::create( sdw::ShaderWriter & writer
 		, Utils & utils
 		, ShadowOptions shadowOptions
+		, SssProfiles const * sssProfiles
 		, bool isOpaqueProgram
 		, bool hasSsbo )
 	{
 		return std::make_unique< PbrSGLightingModel >( writer
 			, utils
 			, std::move( shadowOptions )
+			, sssProfiles
 			, isOpaqueProgram
 			, hasSsbo );
 	}

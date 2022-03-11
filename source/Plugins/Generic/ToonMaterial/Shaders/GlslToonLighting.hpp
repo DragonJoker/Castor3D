@@ -24,12 +24,14 @@ namespace toon::shader
 		ToonPhongLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo
 			, bool isBlinnPhong );
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 		sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
@@ -237,12 +239,14 @@ namespace toon::shader
 		ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 		static castor::String getName();
@@ -256,6 +260,7 @@ namespace toon::shader
 			, sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -436,6 +441,7 @@ namespace toon::shader
 		ToonPbrMRLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -443,6 +449,7 @@ namespace toon::shader
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -456,6 +463,7 @@ namespace toon::shader
 		ToonPbrSGLightingModel( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 
@@ -463,6 +471,7 @@ namespace toon::shader
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
+			, c3d::SssProfiles const * sssProfiles
 			, bool isOpaqueProgram
 			, bool hasSsbo );
 

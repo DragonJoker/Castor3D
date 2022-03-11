@@ -282,6 +282,7 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, false
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
+			, nullptr
 			, index
 			, RenderPipeline::eBuffers
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );

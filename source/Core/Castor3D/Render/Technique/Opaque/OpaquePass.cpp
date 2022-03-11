@@ -164,6 +164,7 @@ namespace castor3d
 		shader::Utils utils{ writer, *renderSystem.getEngine() };
 		auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
+			, nullptr
 			, true
 			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 

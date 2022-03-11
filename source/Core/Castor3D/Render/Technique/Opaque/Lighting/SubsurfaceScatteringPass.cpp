@@ -17,6 +17,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
@@ -49,6 +50,7 @@ namespace castor3d
 		enum BlurId : size_t
 		{
 			BlurMaterialsUboId,
+			BlurSssProfilesUboId,
 			BlurSceneUboId,
 			BlurGpInfoUboId,
 			BlurSssUboId,
@@ -98,6 +100,7 @@ namespace castor3d
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( BlurMaterialsUboId, 0u );
+			shader::SssProfiles sssProfiles{ writer, BlurSssProfilesUboId, 0u };
 			C3D_GpInfo( writer, BlurGpInfoUboId, 0u );
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
@@ -127,11 +130,14 @@ namespace castor3d
 						, data4.w() );
 					auto material = materials->getMaterial( materialId );
 
-					IF( writer, material.subsurfaceScatteringEnabled == 0_i )
+					IF( writer, material.sssProfileIndex == 0_u )
 					{
 						writer.demote();
 					}
 					FI;
+
+					auto sssProfile = writer.declLocale( "sssProfile"
+						, sssProfiles.getProfile( material.sssProfileIndex ) );
 
 					// Fetch color and linear depth for current pixel:
 					auto colorM = writer.declLocale( "colorM"
@@ -163,7 +169,7 @@ namespace castor3d
 					// The closer the pixel, the stronger the effect needs to be, hence
 					// the factor 1.0 / depthM.
 					auto finalStep = writer.declLocale( "finalStep"
-						, translucency * step * material.subsurfaceScatteringStrength * material.gaussianWidth / depthM );
+						, translucency * step * sssProfile.subsurfaceScatteringStrength * sssProfile.gaussianWidth / depthM );
 
 					auto offset = writer.declLocale< Vec2 >( "offset" );
 					auto color = writer.declLocale< Vec3 >( "color" );
@@ -235,7 +241,7 @@ namespace castor3d
 						, writer.cast< UInt >( data0.w() ) );
 					auto material = materials->getMaterial( materialId );
 
-					IF( writer, material.subsurfaceScatteringEnabled == 0_i )
+					IF( writer, material.sssProfileIndex == 0_u )
 					{
 						pxl_fragColor = original;
 					}
@@ -394,6 +400,8 @@ namespace castor3d
 			previousPass = &blurX;
 			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurX
 				, BlurMaterialsUboId );
+			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurX
+				, BlurSssProfilesUboId );
 			m_sceneUbo.createPassBinding( blurX
 				, BlurSceneUboId );
 			m_gpInfoUbo.createPassBinding( blurX
@@ -427,6 +435,8 @@ namespace castor3d
 			previousPass = &blurY;
 			getEngine()->getMaterialCache().getPassBuffer().createPassBinding( blurY
 				, BlurMaterialsUboId );
+			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurY
+				, BlurSssProfilesUboId );
 			m_sceneUbo.createPassBinding( blurY
 				, BlurSceneUboId );
 			m_gpInfoUbo.createPassBinding( blurY

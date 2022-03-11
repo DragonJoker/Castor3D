@@ -1101,6 +1101,7 @@ namespace ocean
 			, lightsIndex
 			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, nullptr
 			, index
 			, RenderPipeline::eBuffers
 			, false

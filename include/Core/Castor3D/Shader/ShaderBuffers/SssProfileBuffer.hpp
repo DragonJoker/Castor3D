@@ -1,9 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PassBuffer_H___
-#define ___C3D_PassBuffer_H___
+#ifndef ___C3D_SssProfileBuffer_H___
+#define ___C3D_SssProfileBuffer_H___
 
+#include "ShaderBuffersModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 
 #include "Castor3D/Shader/ShaderBuffer.hpp"
@@ -18,83 +19,32 @@ See LICENSE file in root folder
 #include <mutex>
 #pragma warning( pop )
 
-#define C3D_MaterialsStructOfArrays 0
-
 namespace castor3d
 {
-	class PassBuffer
+	class SssProfileBuffer
 	{
 	public:
-		/**
-		\~english
-		\brief		3 components colour.
-		\~french
-		\brief		Couleur à 3 composantes.
-		*/
-		struct RgbColour
+		struct Data
 		{
-			float r;
-			float g;
-			float b;
+			float x;
+			float y;
+			float z;
+			float w;
 		};
-		/**
-		\~english
-		\brief		4 components colour.
-		\~french
-		\brief		Couleur à 4 composantes.
-		*/
-		struct RgbaColour
+		struct SssProfileData
 		{
-			float r;
-			float g;
-			float b;
-			float a;
+			Data sssInfo;
+			std::array< Data, 10u > transmittanceProfile;
+		};
+		using SssProfilesData = castor::ArrayView< SssProfileData >;
+
+		struct SssProfileDataPtr
+		{
+			Data * sssInfo;
+			std::array< Data, 10u > * transmittanceProfile;
 		};
 
-#if C3D_MaterialsStructOfArrays
-
-		struct PassesData
-		{
-			castor::ArrayView< RgbaColour > colourDiv;
-			castor::ArrayView< RgbaColour > specDiv;
-			castor::ArrayView< RgbaColour > edgeFactors;
-			castor::ArrayView< RgbaColour > edgeColour;
-			castor::ArrayView< RgbaColour > specific;
-			castor::ArrayView< RgbaColour > common;
-			castor::ArrayView< RgbaColour > opacity;
-			castor::ArrayView< RgbaColour > reflRefr;
-		};
-
-#else
-
-		struct PassData
-		{
-			RgbaColour colourDiv;
-			RgbaColour specDiv;
-			RgbaColour edgeFactors;
-			RgbaColour edgeColour;
-			RgbaColour specific;
-			RgbaColour common;
-			RgbaColour opacity;
-			RgbaColour reflRefr;
-		};
-		using PassesData = castor::ArrayView< PassData >;
-
-#endif
-
-		struct PassDataPtr
-		{
-			RgbaColour * colourDiv;
-			RgbaColour * specDiv;
-			RgbaColour * edgeFactors;
-			RgbaColour * edgeColour;
-			RgbaColour * specific;
-			RgbaColour * common;
-			RgbaColour * opacity;
-			RgbaColour * reflRefr;
-		};
-
-		static constexpr uint32_t DataSize = sizeof( PassData );
+		static constexpr uint32_t DataSize = sizeof( SssProfileData );
 
 	public:
 		/**
@@ -111,7 +61,7 @@ namespace castor3d
 		 *\param[in]	count	Le nombre maximal de passes.
 		 *\param[in]	size	La taille d'une passe.
 		 */
-		C3D_API PassBuffer( Engine & engine
+		C3D_API SssProfileBuffer( Engine & engine
 			, RenderDevice const & device
 			, uint32_t count );
 		/**
@@ -174,11 +124,11 @@ namespace castor3d
 			, VkDescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
-		 *\return		The pointer to the data for given pass ID.
+		 *\return		The pointer to the data for given profile ID.
 		 *\~french
-		 *\brief		Le pointeur sur les données pour l'ID de passe donné.
+		 *\brief		Le pointeur sur les données pour l'ID de profil donné.
 		 */
-		C3D_API PassDataPtr getData( uint32_t passID );
+		C3D_API SssProfileDataPtr getData( uint32_t profileID );
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.
@@ -205,8 +155,8 @@ namespace castor3d
 		std::vector< Pass * > m_passes;
 		std::vector< Pass const * > m_dirty;
 		std::vector< OnPassChangedConnection > m_connections;
-		uint32_t m_passID{ 1u };
-		PassesData m_data;
+		uint32_t m_profileID{ 1u };
+		SssProfilesData m_data;
 		std::mutex m_mutex;
 	};
 }

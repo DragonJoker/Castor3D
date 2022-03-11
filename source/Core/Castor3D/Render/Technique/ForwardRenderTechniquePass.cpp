@@ -128,6 +128,7 @@ namespace castor3d
 			, lightsIndex
 			, RenderPipeline::eBuffers
 			, shader::ShadowOptions{ flags.sceneFlags, false }
+			, nullptr
 			, index
 			, RenderPipeline::eBuffers
 			, m_mode != RenderMode::eTransparentOnly
