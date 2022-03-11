@@ -165,8 +165,7 @@ namespace castor3d
 			auto lightingModel = utils.createLightingModel( shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, nullptr
-				, true
-				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+				, true );
 			uint32_t index = uint32_t( ResolveBind::eEnvironment );
 			auto reflections = lightingModel->getReflectionModel( index
 				, 0u );

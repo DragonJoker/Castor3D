@@ -131,8 +131,7 @@ namespace castor3d
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers
-			, m_mode != RenderMode::eTransparentOnly
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, m_mode != RenderMode::eTransparentOnly );
 		auto reflections = lightingModel->getReflectionModel( index
 			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };

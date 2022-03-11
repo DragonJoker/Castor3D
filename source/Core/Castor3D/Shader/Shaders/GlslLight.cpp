@@ -45,16 +45,16 @@ namespace castor3d
 			, m_volumetric{ getMember< Vec4 >( "volumetric" ) }
 			, m_shadowsOffsets{ getMember< Vec4 >( "shadowsOffsets" ) }
 			, m_shadowsVariances{ getMember< Vec4 >( "shadowsVariances" ) }
-			, m_colour{ m_colourIndex.xyz() }
-			, m_intensity{ m_intensityFarPlane.xy() }
-			, m_farPlane{ m_intensityFarPlane.z() }
-			, m_shadowType{ writer.cast< Int >( m_intensityFarPlane.w() ) }
-			, m_index{ writer.cast< Int >( m_colourIndex.w() ) }
-			, m_volumetricSteps{ writer.cast< UInt >( m_volumetric.x() ) }
-			, m_volumetricScattering{ m_volumetric.y() }
-			, m_rawShadowOffsets{ m_shadowsOffsets.xy() }
-			, m_pcfShadowOffsets{ m_shadowsOffsets.zw() }
-			, m_vsmShadowVariance{ m_shadowsVariances.xy() }
+			, colour{ m_colourIndex.xyz() }
+			, intensity{ m_intensityFarPlane.xy() }
+			, farPlane{ m_intensityFarPlane.z() }
+			, shadowType{ writer.cast< Int >( m_intensityFarPlane.w() ) }
+			, index{ writer.cast< Int >( m_colourIndex.w() ) }
+			, volumetricSteps{ writer.cast< UInt >( m_volumetric.x() ) }
+			, volumetricScattering{ m_volumetric.y() }
+			, rawShadowOffsets{ m_shadowsOffsets.xy() }
+			, pcfShadowOffsets{ m_shadowsOffsets.zw() }
+			, vsmShadowVariance{ m_shadowsVariances.xy() }
 		{
 		}
 
@@ -87,13 +87,13 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_lightBase{ getMember< Light >( "lightBase" ) }
+			, base{ getMember< Light >( "lightBase" ) }
 			, m_directionCount{ getMember< Vec4 >( "directionCount" ) }
-			, m_splitDepths{ getMember< Vec4 >( "splitDepths" ) }
-			, m_splitScales{ getMember< Vec4 >( "splitScales" ) }
-			, m_transforms{ getMemberArray< Mat4 >( "transforms" ) }
-			, m_direction{ m_directionCount.xyz() }
-			, m_cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
+			, splitDepths{ getMember< Vec4 >( "splitDepths" ) }
+			, splitScales{ getMember< Vec4 >( "splitScales" ) }
+			, transforms{ getMemberArray< Mat4 >( "transforms" ) }
+			, direction{ m_directionCount.xyz() }
+			, cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
 		{
 		}
 
@@ -126,14 +126,14 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_lightBase{ getMember< Light >( "lightBase" ) }
+			, base{ getMember< Light >( "lightBase" ) }
 			, m_directionCount{ getMember< Vec4 >( "directionCount" ) }
-			, m_tiles{ getMember< Vec4 >( "tiles" ) }
-			, m_splitDepths{ getMemberArray< Vec4 >( "splitDepths" ) }
-			, m_splitScales{ getMemberArray< Vec4 >( "splitScales" ) }
-			, m_transforms{ getMemberArray< Mat4 >( "transforms" ) }
-			, m_direction{ m_directionCount.xyz() }
-			, m_cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
+			, tiles{ getMember< Vec4 >( "tiles" ) }
+			, splitDepths{ getMemberArray< Vec4 >( "splitDepths" ) }
+			, splitScales{ getMemberArray< Vec4 >( "splitScales" ) }
+			, transforms{ getMemberArray< Mat4 >( "transforms" ) }
+			, direction{ m_directionCount.xyz() }
+			, cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
 		{
 		}
 
@@ -167,11 +167,10 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_lightBase{ getMember< Light >( "lightBase" ) }
+			, base{ getMember< Light >( "lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "attenuation" ) }
-			, m_position{ m_position4.xyz() }
-			, m_attenuation{ m_attenuation4.xyz() }
+			, position{ m_position4.xyz() }
 		{
 		}
 
@@ -202,17 +201,16 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_lightBase{ getMember< Light >( "lightBase" ) }
+			, base{ getMember< Light >( "lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "attenuation" ) }
 			, m_direction4{ getMember< Vec4 >( "direction" ) }
 			, m_exponentCutOff{ getMember< Vec4 >( "exponentCutOff" ) }
-			, m_transform{ getMember< Mat4 >( "transform" ) }
-			, m_position{ m_position4.xyz() }
-			, m_attenuation{ m_attenuation4.xyz() }
-			, m_direction{ m_direction4.xyz() }
-			, m_exponent{ m_exponentCutOff.x() }
-			, m_cutOff{ m_exponentCutOff.y() }
+			, transform{ getMember< Mat4 >( "transform" ) }
+			, position{ m_position4.xyz() }
+			, direction{ m_direction4.xyz() }
+			, exponent{ m_exponentCutOff.x() }
+			, cutOff{ m_exponentCutOff.y() }
 		{
 		}
 

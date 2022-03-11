@@ -247,8 +247,6 @@ namespace castor3d
 
 	ShaderPtr ShadowMapPassPoint::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
@@ -284,8 +282,7 @@ namespace castor3d
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, nullptr
 			, index
-			, RenderPipeline::eBuffers
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, RenderPipeline::eBuffers );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -370,18 +367,14 @@ namespace castor3d
 				auto light = writer.declLocale( "light"
 					, c3d_shadowMapData.getPointLight( *lightingModel ) );
 				auto lightToVertex = writer.declLocale( "lightToVertex"
-					, light.m_position.xyz() - in.worldPosition.xyz() );
+					, light.position - in.worldPosition.xyz() );
 				auto distance = writer.declLocale( "distance"
 					, length( lightToVertex ) );
 				auto attenuation = writer.declLocale( "attenuation"
-					, sdw::fma( light.m_attenuation.z()
-						, distance * distance
-						, sdw::fma( light.m_attenuation.y()
-							, distance
-							, light.m_attenuation.x() ) ) );
+					, light.getAttenuationFactor( distance ) );
 				pxl_flux.rgb() = ( lightMat->albedo
-						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x()
+						* light.base.colour
+						* light.base.intensity.x()
 						* clamp( dot( lightToVertex / distance, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 

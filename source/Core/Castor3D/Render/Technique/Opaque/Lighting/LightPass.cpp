@@ -145,8 +145,7 @@ namespace castor3d
 			, shader::ShadowOptions{ shadows, lightType, false }
 			, &sssProfiles
 			, index
-			, 1u
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, 1u );
 
 		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 			, FragmentOut out )

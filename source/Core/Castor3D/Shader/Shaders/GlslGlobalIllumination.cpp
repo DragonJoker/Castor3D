@@ -334,7 +334,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::DirectionalLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
 									, surface
-									, c3d_light.m_direction
+									, c3d_light.direction
 									, voxelData );
 							}
 							break;
@@ -343,7 +343,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::PointLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
 									, surface
-									, c3d_light.m_position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition
 									, voxelData );
 							}
 							break;
@@ -352,7 +352,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::SpotLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
 									, surface
-									, c3d_light.m_position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition
 									, voxelData );
 							}
 							break;
@@ -370,7 +370,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::DirectionalLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
 									, surface
-									, c3d_light.m_direction
+									, c3d_light.direction
 									, voxelData );
 							}
 							break;
@@ -379,7 +379,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::PointLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
 									, surface
-									, c3d_light.m_position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition
 									, voxelData );
 							}
 							break;
@@ -388,7 +388,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::SpotLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
 									, surface
-									, c3d_light.m_position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition
 									, voxelData );
 							}
 							break;
