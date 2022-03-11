@@ -28,16 +28,14 @@ namespace castor3d::shader
 	LightingModelPtr Utils::createLightingModel( castor::String const & name
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
-		, bool isOpaqueProgram
-		, bool hasSsbo )
+		, bool isOpaqueProgram )
 	{
 		return m_engine.getLightingModelFactory().create( name
 			, m_writer
 			, *this
 			, std::move( shadowsOptions )
 			, sssProfiles
-			, isOpaqueProgram
-			, hasSsbo );
+			, isOpaqueProgram );
 	}
 
 	void Utils::declareSwap1F()

@@ -264,8 +264,7 @@ namespace castor3d
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, nullptr
 			, index
-			, RenderPipeline::eBuffers
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, RenderPipeline::eBuffers );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -350,27 +349,23 @@ namespace castor3d
 				auto light = writer.declLocale( "light"
 					, c3d_shadowMapData.getSpotLight( *lightingModel ) );
 				auto lightToVertex = writer.declLocale( "lightToVertex"
-					, light.m_position.xyz() - in.worldPosition.xyz() );
+					, light.position - in.worldPosition.xyz() );
 				auto distance = writer.declLocale( "distance"
 					, length( lightToVertex ) );
 				auto attenuation = writer.declLocale( "attenuation"
-					, sdw::fma( light.m_attenuation.z()
-						, distance * distance
-						, sdw::fma( light.m_attenuation.y()
-							, distance
-							, light.m_attenuation.x() ) ) );
+					, light.getAttenuationFactor( distance ) );
 				auto lightDirection = writer.declLocale( "lightDirection"
 					, lightToVertex / distance );
 				auto spotFactor = writer.declLocale( "spotFactor"
-					, dot( lightDirection, -light.m_direction ) );
+					, dot( lightDirection, -light.direction ) );
 				spotFactor = max( 0.0_f
 					, sdw::fma( ( spotFactor - 1.0_f )
-						, 1.0_f / ( 1.0_f - light.m_cutOff )
+						, 1.0_f / ( 1.0_f - light.cutOff )
 						, 1.0_f ) );
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( lightMat->albedo
-						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x()
+						* light.base.colour
+						* light.base.intensity.x()
 						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 

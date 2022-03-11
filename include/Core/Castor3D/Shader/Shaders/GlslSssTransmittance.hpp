@@ -21,7 +21,6 @@ namespace castor3d
 				, Utils & utils
 				, ShadowOptions shadowOptions
 				, SssProfiles const & sssProfiles );
-			C3D_API void declare();
 
 			C3D_API sdw::Vec3 compute( shader::LightMaterial const & material
 				, shader::DirectionalLight const & light
@@ -34,6 +33,8 @@ namespace castor3d
 				, Surface const & surface );
 
 		private:
+			void doDeclare();
+
 			sdw::ShaderWriter & m_writer;
 			Shadow & m_shadow;
 			Utils & m_utils;
@@ -41,7 +42,7 @@ namespace castor3d
 
 			bool m_shadowMap;
 
-			sdw::Function < sdw::Vec3
+			sdw::Function< sdw::Vec3
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InUInt
@@ -49,6 +50,21 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InVec3
 				, sdw::InFloat > m_compute;
+			sdw::Function < sdw::Vec3
+				, sdw::InUInt
+				, sdw::InFloat
+				, InDirectionalLight
+				, InSurface > m_computeDirectional;
+			sdw::Function < sdw::Vec3
+				, sdw::InUInt
+				, sdw::InFloat
+				, InPointLight
+				, InSurface > m_computePoint;
+			sdw::Function < sdw::Vec3
+				, sdw::InUInt
+				, sdw::InFloat
+				, InSpotLight
+				, InSurface > m_computeSpot;
 		};
 	}
 }

@@ -287,8 +287,7 @@ namespace castor3d
 			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, nullptr
 			, index
-			, RenderPipeline::eBuffers
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, RenderPipeline::eBuffers );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -373,9 +372,8 @@ namespace castor3d
 				auto light = writer.declLocale( "light"
 					, c3d_shadowMapData.getDirectionalLight( *lightingModel ) );
 				pxl_flux.rgb() = lightMat->albedo
-					* light.m_lightBase.m_colour
-					* light.m_lightBase.m_intensity.x()
-				/** clamp( dot( normalize( light.m_direction ), normal ), 0.0_f, 1.0_f )*/;
+					* light.base.colour
+					* light.base.intensity.x();
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );

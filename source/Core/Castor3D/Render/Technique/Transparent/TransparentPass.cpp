@@ -139,8 +139,6 @@ namespace castor3d
 
 	ShaderPtr TransparentPass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-
 		using namespace sdw;
 		FragmentWriter writer;
 		auto textureFlags = filterTexturesFlags( flags.textures );
@@ -186,8 +184,7 @@ namespace castor3d
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers
-			, false
-			, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			, false );
 		auto reflections = lightingModel->getReflectionModel( index
 			, uint32_t( RenderPipeline::eBuffers ) );
 		shader::GlobalIllumination indirect{ writer, utils };

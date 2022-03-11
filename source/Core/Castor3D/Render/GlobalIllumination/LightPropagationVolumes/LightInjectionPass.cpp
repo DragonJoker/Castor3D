@@ -142,8 +142,7 @@ namespace castor3d
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, nullptr
 					, index
-					, 1u
-					, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+					, 1u );
 
 				writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 					, VertexOutT< SurfaceT > out )
@@ -151,7 +150,7 @@ namespace castor3d
 						auto light = writer.declLocale( "light"
 							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
-							, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
+							, writer.cast< Int >( max( 1_u, light.cascadeCount ) - 1_u ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize )
@@ -196,14 +195,11 @@ namespace castor3d
 					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, nullptr
 					, index
-					, 1u
-					, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+					, 1u );
 
 				writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 					, VertexOutT< SurfaceT > out )
 					{
-						auto light = writer.declLocale( "light"
-							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec2( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize ) ) );
@@ -255,8 +251,7 @@ namespace castor3d
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, nullptr
 				, index
-				, 1u
-				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+				, 1u );
 
 			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 				, VertexOutT< SurfaceT > out )
@@ -266,7 +261,7 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.m_lightBase.m_index * 6_i + int32_t( face ) ) );
+							, light.base.index * 6_i + int32_t( face ) ) );
 
 					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
@@ -311,8 +306,7 @@ namespace castor3d
 				, shader::ShadowOptions{ SceneFlag::eNone, true }
 				, nullptr
 				, index
-				, 1u
-				, renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+				, 1u );
 
 			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
 				, VertexOutT< SurfaceT > out )
@@ -322,7 +316,7 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.m_lightBase.m_index ) );
+							, light.base.index ) );
 
 					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
