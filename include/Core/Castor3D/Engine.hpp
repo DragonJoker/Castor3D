@@ -510,12 +510,7 @@ namespace castor3d
 			return m_renderLoop != nullptr;
 		}
 
-		RenderLoop const & getRenderLoop()const
-		{
-			return *m_renderLoop;
-		}
-
-		RenderLoop & getRenderLoop()
+		RenderLoop & getRenderLoop()const
 		{
 			return *m_renderLoop;
 		}
@@ -525,47 +520,27 @@ namespace castor3d
 			return m_threaded;
 		}
 
-		MeshFactory const & getMeshFactory()const
+		MeshFactory & getMeshFactory()const
 		{
 			return *m_meshFactory;
 		}
 
-		MeshFactory & getMeshFactory()
-		{
-			return *m_meshFactory;
-		}
-
-		PassFactory const & getPassFactory()const
+		PassFactory & getPassFactory()const
 		{
 			return *m_passFactory;
 		}
 
-		PassFactory & getPassFactory()
-		{
-			return *m_passFactory;
-		}
-
-		MeshSubdividerFactory const & getSubdividerFactory()const
+		MeshSubdividerFactory & getSubdividerFactory()const
 		{
 			return *m_subdividerFactory;
 		}
 
-		MeshSubdividerFactory & getSubdividerFactory()
-		{
-			return *m_subdividerFactory;
-		}
-
-		MeshImporterFactory const & getImporterFactory()const
+		MeshImporterFactory & getImporterFactory()const
 		{
 			return *m_importerFactory;
 		}
 
-		MeshImporterFactory & getImporterFactory()
-		{
-			return *m_importerFactory;
-		}
-
-		ParticleFactory & getParticleFactory()
+		ParticleFactory & getParticleFactory()const
 		{
 			return *m_particleFactory;
 		}
@@ -600,14 +575,19 @@ namespace castor3d
 			return m_rendererList;
 		}
 
-		castor::LoggerInstance & getLogger()
+		castor::LoggerInstance & getLogger()const
 		{
 			return *m_logger;
 		}
 
-		uint32_t getLpvGridSize()
+		uint32_t getLpvGridSize()const
 		{
 			return m_lpvGridSize;
+		}
+
+		uint32_t getMaxImageSize()const
+		{
+			return m_maxImageSize;
 		}
 
 		std::map< castor::String, RenderWindow * > const & getRenderWindows()const
@@ -649,6 +629,11 @@ namespace castor3d
 		void setPassesType( PassTypeID type )
 		{
 			m_passesType = type;
+		}
+
+		void setMaxImageSize( uint32_t size )
+		{
+			m_maxImageSize = size;
 		}
 
 		void setLpvGridSize( uint32_t size )
@@ -701,6 +686,7 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		uint32_t m_lpvGridSize{ 32u };
+		uint32_t m_maxImageSize{ 0xFFFFFFFF };
 		castor::AsyncJobQueue m_cpuJobs;
 		castor::AsyncJobQueue m_gpuJobs;
 		crg::ResourceHandler m_resourceHandler;

@@ -565,12 +565,14 @@ namespace castor3d
 			{
 				auto & imgCache = getOwner()->getEngine()->getImageCache();
 
-				if ( lhsIt.first.isFileImage() )
+				if ( lhsIt.first.isFileImage()
+					&& lhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
 				{
 					lhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( lhsIt.first.folder() / lhsIt.first.relative() ) );
 				}
 
-				if ( rhsIt.first.isFileImage() )
+				if ( rhsIt.first.isFileImage()
+					&& rhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
 				{
 					rhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( rhsIt.first.folder() / rhsIt.first.relative() ) );
 				}
