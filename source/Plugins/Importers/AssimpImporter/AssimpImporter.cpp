@@ -128,6 +128,16 @@ namespace C3dAssimp
 			return vertices;
 		}
 
+		bool hasAlphaChannel( castor::Image const & image )
+		{
+			auto alphaChannel = castor::extractComponent( image.getPixels()
+				, castor::PixelComponent::eAlpha );
+			auto data = alphaChannel->getConstPtr();
+			auto end = data + alphaChannel->getSize();
+			return !std::all_of( data, end, []( uint8_t byte ){ return byte == 0x00; } )
+				&& !std::all_of( data, end, []( uint8_t byte ){ return byte == 0xFF; } );
+		}
+
 		struct TextureInfo
 		{
 			castor::String name;
@@ -250,6 +260,16 @@ namespace C3dAssimp
 							}
 						}
 					}
+
+					if ( m_result.getTransmission() != castor::Point3f{ 1.0f, 1.0f, 1.0f }
+						&& m_result.getOpacity() == 1.0f )
+					{
+						m_result.setOpacity( float( castor::point::length( m_result.getTransmission() ) ) );
+					}
+				}
+				else
+				{
+					loadTexture( opaInfo, getRemap( TextureFlag::eOpacity, TextureConfiguration::OpacityTexture ) );
 				}
 
 				loadTexture( colInfo, getRemap( TextureFlag::eDiffuse, TextureConfiguration::DiffuseTexture ) );
@@ -261,7 +281,6 @@ namespace C3dAssimp
 				if ( !opaInfo.name.empty()
 					&& m_result.getOpacity() == 0.0f )
 				{
-					loadTexture( opaInfo, getRemap( TextureFlag::eOpacity, TextureConfiguration::OpacityTexture ) );
 					m_result.setOpacity( 1.0f );
 				}
 
@@ -445,6 +464,12 @@ namespace C3dAssimp
 					if ( m_material.Get( AI_MATKEY_OPACITY, opacity ) == aiReturn_SUCCESS )
 					{
 						value = opacity;
+
+						if ( opacity == 1.0f
+							&& m_material.Get( AI_MATKEY_TRANSPARENCYFACTOR, opacity ) == aiReturn_SUCCESS )
+						{
+							value = opacity;
+						}
 					}
 					else if ( m_material.Get( AI_MATKEY_TRANSPARENCYFACTOR, opacity ) == aiReturn_SUCCESS )
 					{
@@ -627,15 +652,47 @@ namespace C3dAssimp
 				return result;
 			}
 
+			castor::Image const & loadImage( TextureSourceInfo const & source )
+			{
+				auto & cache = m_result.getOwner()->getEngine()->getImageCache();
+				auto image = cache.tryFind( source.name() );
+
+				if ( !image.lock() )
+				{
+					if ( source.isBufferImage() )
+					{
+						image = cache.add( source.name()
+							, castor::ImageCreateParams{ source.type()
+								, source.buffer()
+								, { false, false, false } } );
+					}
+					else if ( source.isFileImage() )
+					{
+						image = cache.add( source.name()
+							, castor::ImageCreateParams{ source.folder() / source.relative()
+								, { false, false, false } } );
+					}
+				}
+
+				auto img = image.lock();
+
+				if ( !img )
+				{
+					CU_LoaderError( "Couldn't load image" + source.name() + "." );
+				}
+
+				return *img;
+			}
+
 			void loadTexture( TextureInfo const & info
 				, castor3d::TextureConfiguration texConfig )
 			{
 				if ( !info.name.empty() )
 				{
-					auto & loader = m_result.getOwner()->getEngine()->getImageLoader();
-
 					try
 					{
+						std::unique_ptr< castor3d::TextureSourceInfo > sourceInfo;
+
 						if ( info.name[0] == '*' )
 						{
 							auto id = uint32_t( castor::string::toInt( info.name.substr( 1u ) ) );
@@ -646,37 +703,24 @@ namespace C3dAssimp
 								castor::ByteArray data;
 								data.resize( texture->mWidth );
 								std::memcpy( data.data(), texture->pcData, data.size() );
-								auto sourceInfo = m_importer.loadTexture( m_sampler
+								sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
 									, "Image" + castor::string::toString( id )
 									, texture->achFormatHint
 									, std::move( data )
-									, texConfig );
-								auto layout = loader.load( info.name
-									, sourceInfo.type()
-									, sourceInfo.buffer().data()
-									, uint32_t( sourceInfo.buffer().size() )
-									, { false, false, false } ).getLayout();
-								texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
-									, castor::Angle::fromRadians( info.transform.mRotation )
-									, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
-								auto create = ashes::ImageCreateInfo{ 0u
-									, VkImageType( layout.type )
-									, VkFormat( layout.format )
-									, { layout.extent->x, layout.extent->y, layout.extent->z }
-									, layout.levels
-									, layout.layers
-									, VK_SAMPLE_COUNT_1_BIT
-									, VK_IMAGE_TILING_OPTIMAL
-									, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
-								m_result.registerTexture( std::move( sourceInfo )
-									, { create, texConfig } );
+									, texConfig ) );
 							}
 						}
 						else
 						{
-							auto path = castor::Path{ info.name };
-							auto sourceInfo = m_importer.loadTexture( m_sampler, path, texConfig );
-							auto layout = loader.load( path.getFileName(), sourceInfo.folder() / sourceInfo.relative(), { false, false, false } ).getLayout();
+							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
+								, castor::Path{ info.name }
+								, texConfig ) );
+						}
+
+						if ( sourceInfo )
+						{
+							auto & image = loadImage( *sourceInfo );
+							auto layout = image.getLayout();
 							texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
 								, castor::Angle::fromRadians( info.transform.mRotation )
 								, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
@@ -689,7 +733,16 @@ namespace C3dAssimp
 								, VK_SAMPLE_COUNT_1_BIT
 								, VK_IMAGE_TILING_OPTIMAL
 								, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
-							m_result.registerTexture( std::move( sourceInfo )
+
+							if ( texConfig.opacityMask[0] && getFlags( texConfig ) == castor3d::TextureFlag::eOpacity )
+							{
+								if ( !hasAlphaChannel( image ) )
+								{
+									texConfig.opacityMask[0] = 0x00FF0000;
+								}
+							}
+
+							m_result.registerTexture( std::move( *sourceInfo )
 								, { create, texConfig } );
 						}
 					}
@@ -698,7 +751,7 @@ namespace C3dAssimp
 						m_importer.loadTexture( m_sampler
 							, castor::Path{ info.name }
 							, { { {} }, texConfig }
-						, m_result );
+							, m_result );
 					}
 				}
 			}
@@ -1249,17 +1302,10 @@ namespace C3dAssimp
 				, scene
 				, scene.getObjectRootNode()
 				, transform );
-			std::vector< aiMesh * > aiMeshes;
-
-			for ( auto aiMesh : castor::makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
-			{
-				aiMeshes.push_back( aiMesh );
-			}
-
 			castor3d::MeshPtrStrMap registeredMeshes;
 			auto meshes = doProcessMeshesAndAnims( *aiScene
 				, scene
-				, aiMeshes
+				, castor::makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes )
 				, registeredMeshes );
 			auto merged = doMergeMeshes( scene, meshes );
 			doProcessNodes( *aiScene
@@ -1283,7 +1329,7 @@ namespace C3dAssimp
 		auto position = castor::Point3f{ aiLight.mPosition.x, aiLight.mPosition.y, aiLight.mPosition.z };
 		auto direction = castor::point::getNormalised( castor::Point3f{ aiLight.mDirection.x, aiLight.mDirection.y, aiLight.mDirection.z } );
 		auto up = castor::point::getNormalised( castor::Point3f{ aiLight.mUp.x, aiLight.mUp.y, aiLight.mUp.z } );
-		castor::String name = aiLight.mName.C_Str();
+		castor::String name = m_prefix + aiLight.mName.C_Str();
 		auto node = std::make_shared< SceneNode >( name
 			, scene );
 		LightSPtr light;
@@ -1347,7 +1393,7 @@ namespace C3dAssimp
 		, SceneNodeSPtr parent
 		, castor::Matrix4x4f accTransform )
 	{
-		castor::String name = aiNode.mName.C_Str();
+		castor::String name = m_prefix + aiNode.mName.C_Str();
 		auto lnode = scene.getSceneNodeCache().tryFind( name );
 
 		if ( !lnode.lock() )
@@ -1369,9 +1415,9 @@ namespace C3dAssimp
 				{
 					auto it = std::find_if( aiAnimation->mChannels
 						, aiAnimation->mChannels + aiAnimation->mNumChannels
-						, [&aiNode]( aiNodeAnim const * lookup )
+						, [&name]( aiNodeAnim const * lookup )
 						{
-							return lookup->mNodeName == aiNode.mName;
+							return lookup->mNodeName.C_Str() == name;
 						} );
 
 					if ( it != aiAnimation->mChannels + aiAnimation->mNumChannels )
@@ -1380,6 +1426,10 @@ namespace C3dAssimp
 					}
 				}
 			}
+		}
+		else
+		{
+			m_nodes.push_back( lnode.lock() );
 		}
 
 		parent = lnode.lock();
@@ -1399,7 +1449,7 @@ namespace C3dAssimp
 	{
 		if ( aiNode.mNumMeshes > 0 )
 		{
-			castor::String name = aiNode.mName.C_Str();
+			castor::String name = m_prefix + aiNode.mName.C_Str();
 			auto node = *std::find_if( m_nodes.begin()
 				, m_nodes.end()
 				, [&name]( SceneNodeSPtr lookup )
@@ -1554,7 +1604,7 @@ namespace C3dAssimp
 
 	std::vector< MeshData > AssimpImporter::doProcessMeshesAndAnims( aiScene const & aiScene
 		, Scene & scene
-		, std::vector< aiMesh * > const & aiMeshes
+		, castor::ArrayView< aiMesh * > aiMeshes
 		, castor3d::MeshPtrStrMap & registeredMeshes )
 	{
 		std::vector< MeshData > result;
@@ -1562,7 +1612,13 @@ namespace C3dAssimp
 
 		for ( auto & aiMesh : aiMeshes )
 		{
-			castor::String name = aiMesh->mName.C_Str();
+			castor::String name = m_prefix + aiMesh->mName.C_Str();
+
+			if ( name.size() > 150u )
+			{
+				name = m_prefix + m_fileName.getFileName() + "-" + castor::string::toString( registeredMeshes.size() );
+			}
+
 			auto regIt = registeredMeshes.find( name );
 			MeshRes mesh;
 			MeshResPtr lmesh;
@@ -1706,6 +1762,12 @@ namespace C3dAssimp
 
 		bool tangentSpace = false;
 		castor::String normals;
+		castor::String prefix;
+
+		if ( m_parameters.get( cuT( "prefix" ), prefix ) )
+		{
+			m_prefix = prefix + "-";
+		}
 
 		if ( m_parameters.get( cuT( "normals" ), normals ) )
 		{
@@ -1746,7 +1808,7 @@ namespace C3dAssimp
 	{
 		bool result = false;
 		MaterialResPtr material;
-		log::debug << cuT( "Mesh found: [" ) << aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
+		log::debug << cuT( "Mesh found: [" ) << m_prefix + aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
 
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
@@ -1809,7 +1871,7 @@ namespace C3dAssimp
 				if ( aiMesh.mNumAnimMeshes )
 				{
 					int32_t index = 0u;
-					castor::String name{ castor::string::stringCast< xchar >( aiMesh.mName.C_Str() ) };
+					castor::String name{ m_prefix + castor::string::stringCast< xchar >( aiMesh.mName.C_Str() ) };
 					log::info << cuT( "  Mesh Animation found: [" ) << name << cuT( "]" ) << std::endl;
 					auto & animation = mesh.createAnimation( name );
 					MeshAnimationSubmesh animSubmesh{ animation, submesh };
@@ -1863,7 +1925,7 @@ namespace C3dAssimp
 		MaterialResPtr result;
 		auto & cache = scene.getMaterialView();
 		aiString mtlname;
-		castor::String name = cuT( "Imp." );
+		castor::String name = cuT( "Imp-" );
 
 		if ( aiMaterial.Get( AI_MATKEY_NAME, mtlname ) == aiReturn_SUCCESS )
 		{
@@ -1922,7 +1984,7 @@ namespace C3dAssimp
 		for ( uint32_t i = 0; i < count; ++i )
 		{
 			aiBone const & aiBone = *aiBones[i];
-			castor::String name = castor::string::stringCast< xchar >( aiBone.mName.C_Str() );
+			castor::String name = m_prefix + castor::string::stringCast< xchar >( aiBone.mName.C_Str() );
 			uint32_t index;
 
 			if ( m_mapBoneByID.find( name ) == m_mapBoneByID.end() )
@@ -1948,7 +2010,7 @@ namespace C3dAssimp
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation )
 	{
-		castor::String name{ castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
+		castor::String name{ m_prefix + castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
 
 		if ( name.empty() )
 		{
@@ -2001,8 +2063,8 @@ namespace C3dAssimp
 		, SkeletonAnimationKeyFrameMap & keyFrames
 		, SkeletonAnimationObjectSet & notAnimated )
 	{
-		castor::String name = castor::string::stringCast< xchar >( aiNode.mName.data );
-		const aiNodeAnim * aiNodeAnim = findNodeAnim( aiAnimation, name );
+		castor::String name = m_prefix + castor::string::stringCast< xchar >( aiNode.mName.data );
+		const aiNodeAnim * aiNodeAnim = findNodeAnim( aiAnimation, aiNode.mName.C_Str() );
 		SkeletonAnimationObjectSPtr object;
 		auto itBone = m_mapBoneByID.find( name );
 
@@ -2045,7 +2107,8 @@ namespace C3dAssimp
 		if ( itBone != m_mapBoneByID.end() )
 		{
 			auto bone = m_arrayBones[itBone->second];
-			if ( !animation.hasObject( SkeletonAnimationObjectType::eBone, aiNode.mName.C_Str() ) )
+
+			if ( !animation.hasObject( SkeletonAnimationObjectType::eBone, name ) )
 			{
 				object = animation.addObject( bone, parent );
 				added = true;
@@ -2057,20 +2120,20 @@ namespace C3dAssimp
 			}
 			else
 			{
-				object = animation.getObject( SkeletonAnimationObjectType::eBone, aiNode.mName.C_Str() );
+				object = animation.getObject( SkeletonAnimationObjectType::eBone, name );
 				CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ) );
 				CU_Ensure( object->getParent() == parent || object == parent );
 				added = false;
 			}
 		}
-		else if ( !animation.hasObject( SkeletonAnimationObjectType::eNode, aiNode.mName.C_Str() ) )
+		else if ( !animation.hasObject( SkeletonAnimationObjectType::eNode, name ) )
 		{
-			object = animation.addObject( aiNode.mName.C_Str(), parent );
+			object = animation.addObject( name, parent );
 			added = true;
 		}
 		else
 		{
-			object = animation.getObject( SkeletonAnimationObjectType::eNode, aiNode.mName.C_Str() );
+			object = animation.getObject( SkeletonAnimationObjectType::eNode, name );
 			CU_Ensure( object->getNodeTransform() == makeMatrix4x4f( aiNode.mTransformation ) );
 			CU_Ensure( object->getParent() == parent || object == parent );
 			added = false;
@@ -2145,7 +2208,7 @@ namespace C3dAssimp
 			return;
 		}
 
-		castor::String name{ castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
+		castor::String name{ m_prefix + castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
 
 		if ( name.empty() )
 		{

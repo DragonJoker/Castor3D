@@ -56,6 +56,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "window" ), parserRootWindow, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::materialTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "max_image_size" ), parserRootMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
 
 			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), parserWindowRenderTarget );
@@ -116,6 +117,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "}" ), parserSceneEnd );
 
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "file" ), parserSceneImportFile, { makeParameter< ParameterType::ePath >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "prefix" ), parserSceneImportPrefix, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "rescale" ), parserSceneImportRescale, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "pitch" ), parserSceneImportPitch, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "yaw" ), parserSceneImportYaw, { makeParameter< ParameterType::eFloat >() } );

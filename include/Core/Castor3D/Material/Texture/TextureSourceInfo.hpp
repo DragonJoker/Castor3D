@@ -74,10 +74,12 @@ namespace castor3d
 			return m_relative;
 		}
 
-		castor::String const & name()const
+		castor::String name()const
 		{
-			CU_Require( isBufferImage() );
-			return m_name;
+			CU_Require( isFileImage() || isBufferImage() );
+			return isBufferImage()
+				? m_name
+				: relative().getFileName();
 		}
 
 		castor::String const & type()const

@@ -402,6 +402,23 @@ namespace castor3d
 	}
 	CU_EndAttributePush( CSCNSection::eWindow )
 
+	CU_ImplementAttributeParser( parserRootMaxImageSize )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [count] parameter." ) );
+		}
+		else
+		{
+			uint32_t value;
+			params[0]->get( value );
+			parsingContext.parser->getEngine()->setMaxImageSize( value );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserRootLpvGridSize )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -1374,6 +1391,13 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserSceneImportPrefix )
+	{
+		auto & parsingContext = getParserContext( context );
+		params[0]->get( parsingContext.sceneImportConfig.prefix );
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserSceneImportRescale )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -1428,6 +1452,11 @@ namespace castor3d
 		if ( parsingContext.sceneImportConfig.roll != 1.0f )
 		{
 			parameters.add( cuT( "roll" ), parsingContext.sceneImportConfig.roll );
+		}
+
+		if ( !parsingContext.sceneImportConfig.prefix.empty() )
+		{
+			parameters.add( cuT( "prefix" ), parsingContext.sceneImportConfig.prefix );
 		}
 
 		if ( !importer->import( *parsingContext.scene

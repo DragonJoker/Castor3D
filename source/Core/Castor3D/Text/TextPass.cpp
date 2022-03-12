@@ -97,11 +97,11 @@ namespace castor
 
 			if ( result )
 			{
-				result = write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
-					&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
-					&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
-					&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-					&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
+				result = writeOpt( file, cuT( "edge_width" ), pass.getEdgeWidth(), 1.0f )
+					&& writeOpt( file, cuT( "edge_depth_factor" ), pass.getDepthFactor(), 1.0f )
+					&& writeOpt( file, cuT( "edge_normal_factor" ), pass.getNormalFactor(), 1.0f )
+					&& writeOpt( file, cuT( "edge_object_factor" ), pass.getObjectFactor(), 1.0f )
+					&& writeNamedSubOpt( file, cuT( "edge_colour" ), pass.getEdgeColour(), castor::RgbaColour::fromPredefined( castor::PredefinedRgbaColour::eOpaqueBlack ) );
 			}
 
 			if ( result && pass.hasSubsurfaceScattering() )
