@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -55,26 +56,16 @@ namespace castor3d
 					if ( m_animationObject.getComponent().isReady() )
 					{
 						auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
-						auto & vertexBuffer = offsets.getVertexBuffer();
 						auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
-						auto & staging = m_animationObject.getComponent().getStagingBuffer();
-						auto & commandBuffer = m_animationObject.getComponent().getCommandBuffer();
-						commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-						staging.uploadBufferData( commandBuffer
-							, reinterpret_cast< uint8_t const * >( prv.m_buffer.data() )
+						auto & staging = m_animationObject.getComponent().getStaging();
+						staging.upload( prv.m_buffer.data()
 							, prv.m_buffer.size() * sizeof( InterleavedVertex )
-							, vertexBuffer );
-						commandBuffer.end();
-						queueData.queue->submit( commandBuffer );
-
-						if ( auto * buffer = animBuffer.lock() )
-						{
-							std::copy( cur.m_buffer.begin()
-								, cur.m_buffer.end()
-								, buffer );
-							animBuffer.flush();
-							animBuffer.unlock();
-						}
+							, offsets.getVertexOffset()
+							, offsets.getVertexBuffer() );
+						staging.upload( cur.m_buffer.data()
+							, cur.m_buffer.size() * sizeof( InterleavedVertex )
+							, animBuffer.getOffset()
+							, animBuffer.getBuffer().getBuffer() );
 					}
 				} ) );
 		}

@@ -4,7 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_IndexMapping_H___
 #define ___C3D_IndexMapping_H___
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
+
+#include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 namespace castor3d
 {
@@ -24,7 +29,6 @@ namespace castor3d
 		 */
 		C3D_API IndexMapping( Submesh & submesh
 			, castor::String const & type
-			, VkMemoryPropertyFlags bufferMemoryFlags
 			, VkBufferUsageFlags bufferUsageFlags );
 		/**
 		 *\~english
@@ -84,11 +88,6 @@ namespace castor3d
 			return m_bufferUsageFlags;
 		}
 
-		VkMemoryPropertyFlags getMemoryFlags()const
-		{
-			return m_bufferMemoryFlags;
-		}
-
 	private:
 		bool doInitialise( RenderDevice const & device )override
 		{
@@ -104,8 +103,10 @@ namespace castor3d
 		}
 
 	private:
-		VkMemoryPropertyFlags m_bufferMemoryFlags;
 		VkBufferUsageFlags m_bufferUsageFlags;
+
+	protected:
+		StagingDataUPtr m_staging;
 	};
 }
 

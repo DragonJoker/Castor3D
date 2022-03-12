@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Submesh_H___
 
 #include "Component/ComponentModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Binary/BinaryModule.hpp"
@@ -56,9 +57,7 @@ namespace castor3d
 		 *\param[in]	id		L'ID du sous-maillage.
 		 */
 		C3D_API explicit Submesh( Mesh & mesh
-			, uint32_t id = 1
-			, VkMemoryPropertyFlags bufferMemoryFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, VkBufferUsageFlags bufferUsageFlags = {} );
+			, uint32_t id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -359,6 +358,7 @@ namespace castor3d
 		inline bool hasBufferOffsets()const;
 		inline ObjectBufferOffset const & getBufferOffsets()const;
 		inline bool isInitialised()const;
+		inline bool isDynamic()const;
 		inline Mesh const & getParent()const;
 		inline Mesh & getParent();
 		inline uint32_t getId()const;
@@ -384,8 +384,6 @@ namespace castor3d
 	private:
 		uint32_t m_id;
 		MaterialRPtr m_defaultMaterial;
-		VkMemoryPropertyFlags m_bufferMemoryFlags;
-		VkBufferUsageFlags m_bufferUsageFlags;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		InterleavedVertexArray m_points;
@@ -403,9 +401,7 @@ namespace castor3d
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
-		ashes::StagingBufferPtr m_staging;
-		ashes::CommandBufferPtr m_uploadCmd;
-		ashes::FencePtr m_uploadFence;
+		StagingDataUPtr m_staging;
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;

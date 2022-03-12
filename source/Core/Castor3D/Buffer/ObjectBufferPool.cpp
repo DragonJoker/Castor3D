@@ -32,7 +32,7 @@ namespace castor3d
 
 			GpuPackedBuffer result{ device.renderSystem
 				, usage
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, debugName
 				, ashes::QueueShare{}
 				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ) } };

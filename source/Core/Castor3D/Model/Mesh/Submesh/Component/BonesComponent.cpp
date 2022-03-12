@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -126,18 +127,21 @@ namespace castor3d
 
 		if ( count && offsets.hasBones() )
 		{
-			auto mappedSize = ashes::getAlignedSize( offsets.getBonesCount() * sizeof( VertexBoneData )
-				, getOwner()->getOwner()->getEngine()->getRenderSystem()->getValue( GpuMin::eBufferMapSize ) );
-
-			if ( auto * buffer = reinterpret_cast< VertexBoneData * >( offsets.getBonesBuffer().lock( offsets.getBonesOffset(), mappedSize, 0u ) ) )
+			if ( !m_staging )
 			{
-				std::copy( m_bones.begin(), m_bones.end(), buffer );
-				offsets.getBonesBuffer().flush( offsets.getBonesOffset(), mappedSize );
-				offsets.getBonesBuffer().unlock();
+				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
+					, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "BonUpload" );
 			}
 
-			//m_bones.clear();
-			//m_bonesData.clear();
+			m_staging->upload( m_bones.data()
+				, m_bones.size() * sizeof( VertexBoneData )
+				, offsets.getBonesOffset()
+				, offsets.getBonesBuffer() );
+
+			if ( !getOwner()->isDynamic() )
+			{
+				m_staging.reset();
+			}
 		}
 	}
 
