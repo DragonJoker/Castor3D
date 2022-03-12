@@ -108,13 +108,10 @@ namespace castor3d
 		return result;
 	}
 
-	SubmeshSPtr Mesh::createSubmesh( VkMemoryPropertyFlags bufferMemoryFlags
-		, VkBufferUsageFlags bufferUsageFlags )
+	SubmeshSPtr Mesh::createSubmesh()
 	{
 		auto submesh = std::make_shared< Submesh >( *this
-			, getSubmeshCount()
-			, bufferMemoryFlags
-			, bufferUsageFlags );
+			, getSubmeshCount() );
 		m_submeshes.push_back( submesh );
 		return submesh;
 	}

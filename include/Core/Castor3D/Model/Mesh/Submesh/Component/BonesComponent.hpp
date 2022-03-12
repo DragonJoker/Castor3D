@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "SubmeshComponent.hpp"
 #include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
@@ -115,6 +116,7 @@ namespace castor3d
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 		VertexBoneDataArray m_bones;
+		StagingDataUPtr m_staging;
 
 		friend class BinaryWriter< BonesComponent >;
 		friend class BinaryParser< BonesComponent >;

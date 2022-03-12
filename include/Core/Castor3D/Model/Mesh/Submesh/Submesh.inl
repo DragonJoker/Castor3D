@@ -156,6 +156,11 @@ namespace castor3d
 		return m_initialised;
 	}
 
+	inline bool Submesh::isDynamic()const
+	{
+		return m_dynamic;
+	}
+
 	inline Mesh const & Submesh::getParent()const
 	{
 		return *getOwner();

@@ -6,6 +6,7 @@
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -129,14 +130,10 @@ namespace castor3d
 	}
 
 	Submesh::Submesh( Mesh & mesh
-		, uint32_t id
-		, VkMemoryPropertyFlags bufferMemoryFlags
-		, VkBufferUsageFlags bufferUsageFlags )
+		, uint32_t id )
 		: OwnedBy< Mesh >{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
-		, m_bufferMemoryFlags{ bufferMemoryFlags }
-		, m_bufferUsageFlags{ bufferUsageFlags }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
 	}
@@ -502,42 +499,20 @@ namespace castor3d
 
 		if ( size )
 		{
-			auto & renderSystem = *getOwner()->getOwner()->getRenderSystem();
-			auto mappedSize = ashes::getAlignedSize( std::min( size, m_bufferOffset.getVertexCount< InterleavedVertex >() ) * sizeof( InterleavedVertex )
-				, renderSystem.getValue( GpuMin::eBufferMapSize ) );
-			auto & device = renderSystem.getRenderDevice();
-			auto data = device.graphicsData();
-
-			if ( !m_staging || mappedSize > m_staging->getBuffer().getSize() )
+			if ( !m_staging )
 			{
-				m_staging = std::make_unique< ashes::StagingBuffer >( *device, 0u, mappedSize );
+				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
+					, getOwner()->getName() + std::to_string( getId() ) + "VtxUpload" );
 			}
 
-			if ( !m_uploadCmd )
-			{
-				m_uploadCmd = data->commandPool->createCommandBuffer( getOwner()->getName() + std::to_string( m_id ) + "Upload"
-					, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-				m_uploadFence = device->createFence( getOwner()->getName() + std::to_string( m_id ) + "Upload"
-					, VK_FENCE_CREATE_SIGNALED_BIT );
-			}
-
-			m_uploadFence->reset();
-			m_uploadCmd->begin();
-			m_staging->uploadBufferData( *m_uploadCmd
-				, reinterpret_cast< uint8_t const * >( m_points.data() )
+			m_staging->upload( m_points.data()
 				, m_points.size() * sizeof( InterleavedVertex )
 				, m_bufferOffset.getVertexOffset()
 				, m_bufferOffset.getVertexBuffer() );
-			m_uploadCmd->end();
-			data->queue->submit( *m_uploadCmd
-				, m_uploadFence.get() );
-			m_uploadFence->wait( ashes::MaxTimeout );
 
 			if ( !m_dynamic )
 			{
 				m_staging.reset();
-				m_uploadCmd.reset();
-				m_uploadFence.reset();
 			}
 		}
 	}
