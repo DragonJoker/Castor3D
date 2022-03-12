@@ -252,6 +252,22 @@ namespace castor3d
 				CU_LoaderError( "Couldn't load image." );
 			}
 
+			if ( !castor::isCompressed( img->getPixelFormat() ) )
+			{
+				if ( img->getWidth() > engine.getMaxImageSize() )
+				{
+					auto ratio = float( engine.getMaxImageSize() ) / float( img->getWidth() );
+					auto height = uint32_t( float( img->getHeight() ) * ratio );
+					img->resample( { engine.getMaxImageSize(), height } );
+				}
+				else if ( img->getHeight() > engine.getMaxImageSize() )
+				{
+					auto ratio = float( engine.getMaxImageSize() ) / float( img->getHeight() );
+					auto width = uint32_t( float( img->getHeight() ) * ratio );
+					img->resample( { width, engine.getMaxImageSize() } );
+				}
+			}
+
 			return getImageBuffer( *img, config );
 		}
 

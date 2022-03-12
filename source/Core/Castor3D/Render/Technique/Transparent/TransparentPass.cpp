@@ -224,6 +224,8 @@ namespace castor3d
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
+				auto transmission = writer.declLocale( "transmission"
+					, material.transmission );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
 				lightMat->create( material );
 				auto emissive = writer.declLocale( "emissive"
@@ -336,12 +338,12 @@ namespace castor3d
 							, emissive
 							, reflected
 							, refracted
-							, lightMat->albedo ) );
+							, lightMat->albedo * transmission ) );
 				}
 				else
 				{
 					auto colour = writer.declLocale( "colour"
-						, lightMat->albedo );
+						, lightMat->albedo * transmission );
 				}
 
 				auto colour = writer.getVariable < Vec3 >( "colour" );

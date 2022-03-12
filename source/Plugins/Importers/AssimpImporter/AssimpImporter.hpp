@@ -85,7 +85,7 @@ namespace C3dAssimp
 		aiScene const * doLoadScene();
 		std::vector< MeshData > doProcessMeshesAndAnims( aiScene const & aiScene
 			, castor3d::Scene & scene
-			, std::vector< aiMesh * > const & aiMeshes
+			, castor::ArrayView< aiMesh * > aiMeshes
 			, castor3d::MeshPtrStrMap & registeredMeshes );
 		std::map< uint32_t, MeshData * > doMergeMeshes( castor3d::Scene & scene
 			, std::vector< MeshData > & source );
@@ -147,6 +147,7 @@ namespace C3dAssimp
 		int m_anonymous;
 		Assimp::Importer m_importer;
 		uint32_t m_flags{};
+		castor::String m_prefix;
 		std::map< castor::String, uint32_t > m_mapBoneByID;
 		std::vector< castor3d::BoneSPtr > m_arrayBones;
 		std::map< uint32_t, uint32_t > m_submeshByID;
