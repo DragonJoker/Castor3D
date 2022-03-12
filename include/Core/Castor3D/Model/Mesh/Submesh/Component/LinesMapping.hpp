@@ -22,7 +22,6 @@ namespace castor3d
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
 		C3D_API explicit LinesMapping( Submesh & submesh
-			, VkMemoryPropertyFlags bufferMemoryFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, VkBufferUsageFlags bufferUsageFlags = {} );
 		/**
 		 *\~english

@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_MorphComponent_H___
 #define ___C3D_MorphComponent_H___
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
@@ -54,27 +55,21 @@ namespace castor3d
 			return m_animBuffer;
 		}
 
-		ashes::StagingBuffer & getStagingBuffer()const
-		{
-			return *m_stagingBuffer;
-		}
-
 		bool isReady()const
 		{
-			return m_commandBuffer
-				&& m_stagingBuffer
-				&& m_animBuffer
-				&& m_fence;
-		}
-
-		ashes::CommandBuffer & getCommandBuffer()const
-		{
-			return *m_commandBuffer;
+			return m_staging
+				&& m_animBuffer;
 		}
 
 		InterleavedVertexArray & getData()
 		{
 			return m_data;
+		}
+
+		StagingData & getStaging()
+		{
+			CU_Require( m_staging );
+			return *m_staging;
 		}
 
 		ProgramFlags getProgramFlags( MaterialRPtr material )const override
@@ -95,9 +90,7 @@ namespace castor3d
 		GpuBufferOffsetT< InterleavedVertex > m_animBuffer;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_animLayouts;
 		InterleavedVertexArray m_data;
-		ashes::StagingBufferPtr m_stagingBuffer;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::FencePtr m_fence;
+		StagingDataUPtr m_staging;
 	};
 }
 

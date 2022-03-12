@@ -822,7 +822,7 @@ namespace castor3d
 		};
 		auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, createInfo
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, relative );
 		texture->setSource( folder
 			, relative

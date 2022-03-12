@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -30,9 +31,8 @@ namespace castor3d
 	castor::String const LinesMapping::Name = "lines_mapping";
 
 	LinesMapping::LinesMapping( Submesh & submesh
-		, VkMemoryPropertyFlags bufferMemoryFlags
 		, VkBufferUsageFlags bufferUsageFlags )
-		: IndexMapping{ submesh, Name, bufferMemoryFlags, bufferUsageFlags }
+		: IndexMapping{ submesh, Name, bufferUsageFlags }
 	{
 	}
 
@@ -104,9 +104,9 @@ namespace castor3d
 					auto offsets = getOwner()->getBufferOffsets();
 					auto & indices = offsets.getIndexBuffer();
 					auto & vertices = offsets.getVertexBuffer();
+					auto indexSize = uint32_t( offsets.getIndexCount() );
 
 					m_cameraPosition = cameraPosition;
-					auto indexSize = uint32_t( offsets.getIndexCount() );
 
 					if ( auto * index = reinterpret_cast< uint32_t * >( indices.lock( offsets.getIndexOffset()
 						, offsets.idxChunk.size
@@ -165,20 +165,22 @@ namespace castor3d
 		if ( count
 			&& getOwner()->getBufferOffsets().getIndexCount() )
 		{
-			auto & renderSystem = *getOwner()->getOwner()->getOwner()->getRenderSystem();
-			auto & device = renderSystem.getRenderDevice();
+			if ( !m_staging )
+			{
+				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
+					, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "IdxUpload" );
+			}
+
 			auto offsets = getOwner()->getBufferOffsets();
-			auto & indexBuffer = offsets.getIndexBuffer();
-			auto mappedSize = ashes::getAlignedSize( std::min( count, offsets.getIndexCount() ) * sizeof( uint32_t )
-				, renderSystem.getValue( GpuMin::eBufferMapSize ) );
-			ashes::StagingBuffer staging{ *device, 0u, mappedSize };
-			auto data = device.graphicsData();
-			staging.uploadBufferData( *data->queue
-				, *data->commandPool
-				, reinterpret_cast< uint8_t const * >( m_lines.data() )
-				, m_lines.size() * sizeof( LineIndices )
+			m_staging->upload( m_lines.data()
+				, m_lines.size() * sizeof( Line )
 				, offsets.getIndexOffset()
-				, indexBuffer );
+				, offsets.getIndexBuffer() );
+
+			if ( !getOwner()->isDynamic() )
+			{
+				m_staging.reset();
+			}
 		}
 	}
 }

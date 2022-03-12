@@ -126,8 +126,7 @@ namespace castor3d
 		 *\brief		Crée un sous maillage
 		 *\return		Le sous maillage créé
 		 */
-		C3D_API SubmeshSPtr createSubmesh( VkMemoryPropertyFlags bufferMemoryFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, VkBufferUsageFlags bufferUsageFlags = {} );
+		C3D_API SubmeshSPtr createSubmesh();
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
