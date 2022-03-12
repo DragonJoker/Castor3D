@@ -291,7 +291,7 @@ namespace castor3d
 					CU_Require( it != instantiation.end() );
 					CU_Require( node->getId() > 0u );
 
-					if ( it->second.count > index )
+					if ( it->second.data.size() > index )
 					{
 						auto & buffer = it->second.data[index++];
 						buffer.m_objectIDs->x = node->getId() - 1u;

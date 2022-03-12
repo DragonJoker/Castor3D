@@ -191,7 +191,7 @@ namespace castor3d
 								, sssTransmittance
 								, light.position - surface.worldPosition
 								, light.base.farPlane );
-							result = vec3( shrinkedPos );
+							//result = vec3( shrinkedPos );
 						}
 						FI;
 
