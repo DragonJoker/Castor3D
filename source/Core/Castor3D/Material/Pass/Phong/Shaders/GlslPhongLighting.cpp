@@ -375,12 +375,13 @@ namespace castor3d::shader
 					, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( light.direction ) );
-				doComputeLight( light.base
-					, material
-					, surface
-					, worldEye
-					, lightDirection
-					, output );
+				auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+					, doComputeLight( light.base
+						, material
+						, surface
+						, worldEye
+						, lightDirection
+						, output ) );
 
 				if ( m_shadowModel->isEnabled() )
 				{
@@ -510,12 +511,13 @@ namespace castor3d::shader
 					, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( light.direction ) );
-				doComputeLight( light.base
-					, material
-					, surface
-					, worldEye
-					, lightDirection
-					, output );
+				auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+					, doComputeLight( light.base
+						, material
+						, surface
+						, worldEye
+						, lightDirection
+						, output ) );
 
 				if ( m_shadowModel->isEnabled() )
 				{
@@ -649,12 +651,13 @@ namespace castor3d::shader
 					, length( lightToVertex ) );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( lightToVertex ) );
-				doComputeLight( light.base
-					, material
-					, surface
-					, worldEye
-					, lightDirection
-					, output );
+				auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+					, doComputeLight( light.base
+						, material
+						, surface
+						, worldEye
+						, lightDirection
+						, output ) );
 
 				if ( m_shadowModel->isEnabled() )
 				{
@@ -712,12 +715,13 @@ namespace castor3d::shader
 						, length( lightToVertex ) );
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
-					auto rawDiffuse = doComputeLight( light.base
-						, material
-						, surface
-						, worldEye
-						, lightDirection
-						, output );
+					auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
+						, doComputeLight( light.base
+							, material
+							, surface
+							, worldEye
+							, lightDirection
+							, output ) );
 
 					if ( m_shadowModel->isEnabled() )
 					{
