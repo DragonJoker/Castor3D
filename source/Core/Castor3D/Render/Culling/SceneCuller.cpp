@@ -29,6 +29,11 @@ namespace castor3d
 
 	namespace
 	{
+		static constexpr VkDeviceSize MaxPipelineNodes = 1000ull;
+		static constexpr VkDeviceSize MaxSubmeshIdxDrawIndirectCommand = 1000ull;
+		static constexpr VkDeviceSize MaxSubmeshNIdxDrawIndirectCommand = 1000ull;
+		static constexpr VkDeviceSize MaxBillboardDrawIndirectCommand = 1000ull;
+
 		uint64_t getPipelineHash( RenderNodesPass const & renderPass
 			, SubmeshRenderNode const & culled
 			, bool isFrontCulled )
@@ -619,7 +624,7 @@ namespace castor3d
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
 				renderPassIt.second.pipelinesNodes = makeBuffer< PipelineNodes >( device
-					, 1'000ull
+					, MaxPipelineNodes
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/NodesIDs" );
@@ -630,12 +635,12 @@ namespace castor3d
 					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
 			{
 				renderPassIt.second.submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
-					, 1'000ull
+					, MaxSubmeshIdxDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndexedIndirectBuffer" );
 				renderPassIt.second.submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, 1'000ull
+					, MaxSubmeshNIdxDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndirectBuffer" );
@@ -645,7 +650,7 @@ namespace castor3d
 				&& !renderPassIt.second.sortedBillboards.empty() )
 			{
 				renderPassIt.second.billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, 1'000ull
+					, MaxBillboardDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/BillboardIndirectBuffer" );

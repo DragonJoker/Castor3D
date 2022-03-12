@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Vertex.hpp"
@@ -32,9 +33,8 @@ namespace castor3d
 	castor::String const TriFaceMapping::Name = "triface_mapping";
 
 	TriFaceMapping::TriFaceMapping( Submesh & submesh
-		, VkMemoryPropertyFlags bufferMemoryFlags
 		, VkBufferUsageFlags bufferUsageFlags )
-		: IndexMapping{ submesh, Name, bufferMemoryFlags, bufferUsageFlags }
+		: IndexMapping{ submesh, Name, bufferUsageFlags }
 	{
 	}
 
@@ -242,20 +242,22 @@ namespace castor3d
 		if ( count
 			&& getOwner()->getBufferOffsets().getIndexCount() )
 		{
-			auto & renderSystem = *getOwner()->getOwner()->getOwner()->getRenderSystem();
-			auto & device = renderSystem.getRenderDevice();
+			if ( !m_staging )
+			{
+				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
+					, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "IdxUpload" );
+			}
+
 			auto offsets = getOwner()->getBufferOffsets();
-			auto & indexBuffer = offsets.getIndexBuffer();
-			auto mappedSize = ashes::getAlignedSize( std::min( count, offsets.getIndexCount() ) * sizeof( uint32_t )
-				, renderSystem.getValue( GpuMin::eBufferMapSize ) );
-			ashes::StagingBuffer staging{ *device, 0u, mappedSize };
-			auto data = device.graphicsData();
-			staging.uploadBufferData( *data->queue
-				, *data->commandPool
-				, reinterpret_cast< uint8_t const * >( m_faces.data() )
-				, m_faces.size() * sizeof( FaceIndices )
+			m_staging->upload( m_faces.data()
+				, m_faces.size() * sizeof( Face )
 				, offsets.getIndexOffset()
-				, indexBuffer );
+				, offsets.getIndexBuffer() );
+
+			if ( !getOwner()->isDynamic() )
+			{
+				m_staging.reset();
+			}
 		}
 	}
 }

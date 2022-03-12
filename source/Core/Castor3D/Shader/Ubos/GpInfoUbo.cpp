@@ -89,7 +89,7 @@ namespace castor3d
 
 	GpInfoUbo::GpInfoUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPools->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
+		, m_ubo{ m_device.uboPools->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
 	}
 

@@ -1,11 +1,13 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderNodesPass.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -105,16 +107,9 @@ namespace castor3d
 
 		if ( !m_animBuffer || m_animBuffer.getCount() != count )
 		{
-			m_animBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			m_animBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, count
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
-			auto name = getOwner()->getOwner()->getName() + "_" + castor::string::toString( getOwner()->getId() ) + "_MorphStaging";
-			m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
-				, name
-				, 0u
-				, count * sizeof( InterleavedVertex ) );
-			m_commandBuffer = device.graphicsData()->commandPool->createCommandBuffer( name );
-			m_fence = device->createFence( name );
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 
 		return bool( m_animBuffer );
@@ -127,6 +122,7 @@ namespace castor3d
 			device.bufferPool->putBuffer( m_animBuffer );
 			m_animBuffer = {};
 		}
+
 		m_animLayouts.clear();
 	}
 
@@ -136,12 +132,16 @@ namespace castor3d
 		{
 			if ( getOwner()->getBufferOffsets().hasVertices() )
 			{
-				if ( auto * buffer = m_animBuffer.lock() )
+				if ( !m_staging )
 				{
-					std::copy( m_data.begin(), m_data.end(), buffer );
-					m_animBuffer.flush();
-					m_animBuffer.unlock();
+					m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
+						, getOwner()->getOwner()->getName() + "_" + castor::string::toString( getOwner()->getId() ) + "MorphUpload" );
 				}
+
+				m_staging->upload( m_data.data()
+					, m_data.size() * sizeof( InterleavedVertex )
+					, m_animBuffer.getOffset()
+					, m_animBuffer.getBuffer().getBuffer() );
 			}
 		}
 	}
