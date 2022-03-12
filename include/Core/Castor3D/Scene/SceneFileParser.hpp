@@ -110,6 +110,7 @@ namespace castor3d
 		struct SceneImportConfig
 		{
 			castor::Path file;
+			castor::String prefix;
 			std::map< TextureFlag, TextureConfiguration > textureRemaps;
 			float rescale{ 1.0f };
 			float pitch{ 0.0f };

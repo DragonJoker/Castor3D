@@ -216,6 +216,11 @@ namespace castor3d
 			}
 
 			doLoadCoreData();
+
+			if ( m_maxImageSize == 0xFFFFFFFF )
+			{
+				m_maxImageSize = m_renderSystem->getGpuInformations().getValue( GpuMax::eTexture2DSize );
+			}
 		}
 
 		if ( !m_renderSystem )

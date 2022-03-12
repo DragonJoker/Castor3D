@@ -216,27 +216,24 @@ namespace castor3d
 			float value = 1.0f;
 
 			if ( m_parameters.get( cuT( "rescale" ), value )
-				&& std::abs( value - 1.0f ) > 0.01f )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon()
+				&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
 			{
+				auto scaleNode = scene.getSceneNodeCache().add( fileName.getFileName() + "ScaleNode", scene ).lock();
+				scaleNode->setScale( { value, value, value } );
+				scaleNode->attachTo( *scene.getObjectRootNode() );
+
 				for ( auto & node : m_nodes )
 				{
-					node->setPosition( node->getPosition() * value );
-				}
-
-				for ( auto meshIt : m_meshes )
-				{
-					for ( auto submesh : *meshIt.second.lock() )
+					if ( node->getParent() == scene.getObjectRootNode().get() )
 					{
-						for ( auto & vertex : submesh->getPoints() )
-						{
-							vertex.pos *= value;
-						}
+						node->attachTo( *scaleNode );
 					}
 				}
 			}
 
 			if ( m_parameters.get( cuT( "pitch" ), value )
-				&& std::abs( value ) > 0.01f )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
 			{
 				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }
 					, castor::Angle::fromDegrees( value ) );
@@ -254,7 +251,7 @@ namespace castor3d
 			}
 
 			if ( m_parameters.get( cuT( "yaw" ), value )
-				&& std::abs( value ) > 0.01f )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
 			{
 				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }
 					, castor::Angle::fromDegrees( value ) );
@@ -272,7 +269,7 @@ namespace castor3d
 			}
 
 			if ( m_parameters.get( cuT( "roll" ), value )
-				&& std::abs( value ) > 0.01f )
+				&& std::abs( value ) > std::numeric_limits< float >::epsilon() )
 			{
 				auto rot = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 0.0f, 1.0f }
 					, castor::Angle::fromDegrees( value ) );
