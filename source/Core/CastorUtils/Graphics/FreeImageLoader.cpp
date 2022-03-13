@@ -61,6 +61,34 @@ namespace castor
 			;
 			return list;
 		}
+
+		PixelFormat convertTo32Bits( FIBITMAP *& fiImage )
+		{
+			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
+			FreeImage_Unload( fiImage );
+			fiImage = dib;
+
+			if ( !fiImage )
+			{
+				CU_LoaderError( "Can't convert image to 32 bits" );
+			}
+
+			return PixelFormat::eR8G8B8A8_SRGB;
+		}
+
+		void outputMessageFunction( FREE_IMAGE_FORMAT fif
+			, const char * msg )
+		{
+			std::string format;
+			std::cerr << "FreeImage error: " << msg;
+
+			if ( fif != FIF_UNKNOWN )
+			{
+				std::cerr << ", with format " << FreeImage_GetFormatFromFIF( fif );
+			}
+
+			std::cerr << std::endl;
+		}
 	}
 
 	//************************************************************************************************
@@ -84,6 +112,7 @@ namespace castor
 #if C3D_UseFreeImage
 
 		PixelFormat sourceFmt = PixelFormat::eR8G8B8_UNORM;
+		FreeImage_SetOutputMessage( outputMessageFunction );
 		auto fiMemory = FreeImage_OpenMemory( const_cast< uint8_t * >( data ), size );
 		FREE_IMAGE_FORMAT fiFormat = FreeImage_GetFileTypeFromMemory( fiMemory, 0 );
 
@@ -105,10 +134,10 @@ namespace castor
 		switch ( imageType )
 		{
 		case FIT_UINT16:
-			sourceFmt = PixelFormat::eR16_UINT;
+			sourceFmt = PixelFormat::eR16_UNORM;
 			break;
 		case FIT_INT16:
-			sourceFmt = PixelFormat::eR16_SINT;
+			sourceFmt = PixelFormat::eR16_SNORM;
 			break;
 		case FIT_UINT32:
 			sourceFmt = PixelFormat::eR32_UINT;
@@ -125,14 +154,6 @@ namespace castor
 		case FIT_COMPLEX:
 			sourceFmt = PixelFormat::eR64G64_SFLOAT;
 			break;
-		case FIT_RGB16:
-			sourceFmt = PixelFormat::eR16G16B16_SINT;
-			needsComponentSwap = true;
-			break;
-		case FIT_RGBA16:
-			sourceFmt = PixelFormat::eR16G16B16A16_SINT;
-			needsComponentSwap = true;
-			break;
 		case FIT_RGBF:
 			sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
 			needsComponentSwap = true;
@@ -140,20 +161,9 @@ namespace castor
 		case FIT_RGBAF:
 			sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
 			needsComponentSwap = true;
-			break;
 		default:
-			{
-				sourceFmt = PixelFormat::eR8G8B8A8_SRGB;
-				needsComponentSwap = true;
-				FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
-				FreeImage_Unload( fiImage );
-				fiImage = dib;
-
-				if ( !fiImage )
-				{
-					CU_LoaderError( "Can't convert image to 32 bits" );
-				}
-			}
+			sourceFmt = convertTo32Bits( fiImage );
+			needsComponentSwap = true;
 			break;
 		}
 
@@ -185,6 +195,10 @@ namespace castor
 	PixelFormat FreeImageLoader::getFormat( Path const & imagePath )const
 	{
 		auto result = PixelFormat::eUNDEFINED;
+
+#if C3D_UseFreeImage
+
+		FreeImage_SetOutputMessage( outputMessageFunction );
 		auto fiImage = FreeImage_Load( FreeImage_GetFileType( imagePath.c_str() )
 			, imagePath.c_str() );
 
@@ -196,10 +210,10 @@ namespace castor
 			switch ( imageType )
 			{
 			case FIT_UINT16:
-				result = PixelFormat::eR16_UINT;
+				result = PixelFormat::eR16_UNORM;
 				break;
 			case FIT_INT16:
-				result = PixelFormat::eR16_SINT;
+				result = PixelFormat::eR16_SNORM;
 				break;
 			case FIT_UINT32:
 				result = PixelFormat::eR32_UINT;
@@ -216,12 +230,6 @@ namespace castor
 			case FIT_COMPLEX:
 				result = PixelFormat::eR64G64_SFLOAT;
 				break;
-			case FIT_RGB16:
-				result = PixelFormat::eR16G16B16_SINT;
-				break;
-			case FIT_RGBA16:
-				result = PixelFormat::eR16G16B16A16_SINT;
-				break;
 			case FIT_RGBF:
 				result = PixelFormat::eR32G32B32_SFLOAT;
 				break;
@@ -233,6 +241,8 @@ namespace castor
 				break;
 			}
 		}
+
+#endif
 
 		return result;
 	}
