@@ -11,6 +11,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
@@ -97,6 +98,11 @@ namespace castor3d
 		{
 			doUpdateNodes( m_renderQueue->getRenderNodes() );
 		}
+	}
+
+	void ShadowMapPassPoint::updateFrustum( castor::Matrix4x4f const & viewMatrix )
+	{
+		static_cast< FrustumCuller & >( getCuller() ).updateFrustum( m_projection, viewMatrix );
 	}
 
 	void ShadowMapPassPoint::doUpdateUbos( CpuUpdater & updater )

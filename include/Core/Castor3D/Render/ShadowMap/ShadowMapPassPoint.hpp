@@ -57,6 +57,8 @@ namespace castor3d
 		 */
 		C3D_API void update( GpuUpdater & updater )override;
 
+		C3D_API void updateFrustum( castor::Matrix4x4f const & viewMatrix );
+
 	protected:
 		void doUpdateNodes( QueueRenderNodes & nodes );
 

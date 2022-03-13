@@ -17,7 +17,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename NodeT >
-		void cullNodes( Camera const & camera
+		void cullNodes( Frustum const & frustum
 			, SceneRenderNodes::DescriptorNodesPoolsT< NodeT > const & all
 			, SceneCuller::NodeArrayT< NodeT > & culled )
 		{
@@ -28,7 +28,7 @@ namespace castor3d
 					auto & node = *itNode.second;
 
 					if ( !isCulled( node )
-						|| isVisible( camera, node ) )
+						|| isVisible( frustum, node ) )
 					{
 						culled.push_back( &node );
 					}
@@ -48,17 +48,48 @@ namespace castor3d
 	{
 	}
 
+	FrustumCuller::FrustumCuller(Scene & scene
+		, Frustum & frustum )
+		: SceneCuller{ scene, nullptr }
+		, m_frustum{ &frustum }
+	{
+	}
+
+	void FrustumCuller::updateFrustum( castor::Matrix4x4f const & projection
+		, castor::Matrix4x4f const & view )
+	{
+		m_frustum->update( projection, view );
+	}
+
 	void FrustumCuller::doCullGeometries()
 	{
-		cullNodes( getCamera()
-			, getScene().getRenderNodes().getSubmeshNodes()
-			, m_culledSubmeshes );
+		if ( m_camera )
+		{
+			cullNodes( getCamera().getFrustum()
+				, getScene().getRenderNodes().getSubmeshNodes()
+				, m_culledSubmeshes );
+		}
+		else
+		{
+			cullNodes( *m_frustum
+				, getScene().getRenderNodes().getSubmeshNodes()
+				, m_culledSubmeshes );
+		}
 	}
 
 	void FrustumCuller::doCullBillboards()
 	{
-		cullNodes( getCamera()
-			, getScene().getRenderNodes().getBillboardNodes()
-			, m_culledBillboards );
+		if ( m_camera )
+		{
+			cullNodes( getCamera().getFrustum()
+				, getScene().getRenderNodes().getBillboardNodes()
+				, m_culledBillboards );
+		}
+		else
+		{
+			cullNodes( *m_frustum
+				, getScene().getRenderNodes().getBillboardNodes()
+				, m_culledBillboards );
+		}
 	}
 }

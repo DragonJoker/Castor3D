@@ -585,6 +585,7 @@ namespace castor3d
 	*/
 	class Viewport;
 
+	CU_DeclareCUSmartPtr( castor3d, Frustum, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Picking, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderDevice, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderLoop, C3D_API );

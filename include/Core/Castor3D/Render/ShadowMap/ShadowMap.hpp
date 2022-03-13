@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ShadowMap_H___
 
 #include "ShadowMapModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -33,8 +34,20 @@ namespace castor3d
 			{
 			}
 
+			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+				, ViewportUPtr viewport
+				, SceneCullerUPtr culler )
+				: matrixUbo{ std::move( matrixUbo ) }
+				, viewport{ std::move( viewport ) }
+				, culler{ std::move( culler ) }
+				, pass{ nullptr }
+			{
+			}
+
 			std::unique_ptr< MatrixUbo > matrixUbo;
 			CameraSPtr camera;
+			ViewportUPtr viewport;
+			FrustumUPtr frustum;
 			SceneCullerUPtr culler;
 			ShadowMapPass * pass;
 		};
