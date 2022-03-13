@@ -122,7 +122,7 @@ namespace castor3d
 		}
 
 	private:
-		Viewport & m_viewport;
+		Viewport * m_viewport;
 		Planes m_planes;
 		std::array< InterleavedVertex, 6u * 4u > m_points;
 	};

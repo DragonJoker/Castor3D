@@ -9,7 +9,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Culling/DummyCuller.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -49,6 +49,7 @@ namespace castor3d
 			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
+			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassDataPtr > result;
 			auto & smResult = shadowMap.getShadowPassResult();
 			auto & depth = smResult[SmTexture::eDepth];
@@ -65,9 +66,13 @@ namespace castor3d
 			for ( uint32_t face = 0u; face < 6u; ++face )
 			{
 				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
-					, nullptr
-					, std::make_unique< DummyCuller >( scene ) ) );
+					, castor::makeUnique< Viewport >( engine )
+					, nullptr ) );
 				auto & passData = *result.back();
+				passData.viewport->resize( castor::Size{ ShadowMapPassPoint::TextureSize
+					, ShadowMapPassPoint::TextureSize } );
+				passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
+				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.frustum );
 				auto faceIndex = shadowMapIndex * 6u + face;
 				auto name = debugName + "F" + std::to_string( face );
 				auto & pass = graph.createPass( name
@@ -150,13 +155,16 @@ namespace castor3d
 		if ( m_runnables.size() > updater.index
 			&& m_runnables[updater.index] )
 		{
-			updater.light->getPointLight()->updateShadow( int32_t( updater.index ) );
+			auto & pointLight = *updater.light->getPointLight();
+			pointLight.updateShadow( int32_t( updater.index ) );
 			uint32_t offset = updater.index * 6u;
 
 			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{
+				auto & pass = static_cast< ShadowMapPassPoint & >( *m_passes[face]->pass );
 				updater.index = face - offset;
-				m_passes[face]->pass->update( updater );
+				pass.update( updater );
+				pass.updateFrustum( pointLight.getViewMatrix( CubeMapFace( updater.index ) ) );
 			}
 		}
 	}

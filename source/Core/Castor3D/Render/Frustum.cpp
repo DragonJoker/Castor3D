@@ -6,7 +6,7 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, Frustum )
 
 #define C3D_DisableFrustumCulling 0
 
@@ -57,7 +57,7 @@ namespace castor3d
 	}
 
 	Frustum::Frustum( Viewport & viewport )
-		: m_viewport{ viewport }
+		: m_viewport{ &viewport }
 	{
 		uint32_t index = 0u;
 		// Near face
@@ -102,27 +102,27 @@ namespace castor3d
 	{
 #if !C3D_DisableFrustumCulling
 		auto const viewProjection = projection * view;
-		std::array< Point4f, size_t( FrustumPlane::eCount ) > points;
+		std::array< castor::Point4f, size_t( FrustumPlane::eCount ) > points;
 
-		const Point4f w{ viewProjection[0][3]
+		const castor::Point4f w{ viewProjection[0][3]
 			, viewProjection[1][3]
 			, viewProjection[2][3]
 			, viewProjection[3][3] };
-		const Point4f z{ viewProjection[0][2]
+		const castor::Point4f z{ viewProjection[0][2]
 			, viewProjection[1][2]
 			, viewProjection[2][2]
 			, viewProjection[3][2] };
 		points[size_t( FrustumPlane::eNear )] = w + z;
 		points[size_t( FrustumPlane::eFar )] = w - z;
 
-		const Point4f x{ viewProjection[0][0]
+		const castor::Point4f x{ viewProjection[0][0]
 			, viewProjection[1][0]
 			, viewProjection[2][0]
 			, viewProjection[3][0] };
 		points[size_t( FrustumPlane::eLeft )] = w - x;
 		points[size_t( FrustumPlane::eRight )] = w + x;
 
-		const Point4f y{ viewProjection[0][1]
+		const castor::Point4f y{ viewProjection[0][1]
 			, viewProjection[1][1]
 			, viewProjection[2][1]
 			, viewProjection[3][1] };
@@ -178,20 +178,20 @@ namespace castor3d
 		float farW{ 0.0f };
 		float nearH{ 0.0f };
 		float nearW{ 0.0f };
-		float const nearZ{ m_viewport.getNear() };
-		float const farZ{ m_viewport.getFar() };
+		float const nearZ{ m_viewport->getNear() };
+		float const farZ{ m_viewport->getFar() };
 
-		if ( m_viewport.getType() == ViewportType::eOrtho )
+		if ( m_viewport->getType() == ViewportType::eOrtho )
 		{
-			nearH = ( m_viewport.getBottom() - m_viewport.getTop() );
-			nearW = ( m_viewport.getRight() - m_viewport.getLeft() );
+			nearH = ( m_viewport->getBottom() - m_viewport->getTop() );
+			nearW = ( m_viewport->getRight() - m_viewport->getLeft() );
 			farH = nearH;
 			farW = nearW;
 		}
 		else
 		{
-			auto ratio = m_viewport.getRatio();
-			float const tan = m_viewport.getFovY().tan();
+			auto ratio = m_viewport->getRatio();
+			float const tan = m_viewport->getFovY().tan();
 			nearH = nearZ * tan;
 			nearW = nearH * ratio;
 			farH = farZ * tan;
@@ -242,16 +242,16 @@ namespace castor3d
 		, castor::Point3f const & up )
 	{
 #if !C3D_DisableFrustumCulling
-		auto f = point::getNormalised( target - eye );
-		auto u = point::getNormalised( up );
-		auto r = point::cross( f, u );
+		auto f = castor::point::getNormalised( target - eye );
+		auto u = castor::point::getNormalised( up );
+		auto r = castor::point::cross( f, u );
 		update( eye, r, u, f );
 #endif
 
 		return m_planes;
 	}
 
-	bool Frustum::isVisible( BoundingBox const & box
+	bool Frustum::isVisible( castor::BoundingBox const & box
 		, castor::Matrix4x4f const & transformations )const
 	{
 #if C3D_DisableFrustumCulling
@@ -279,7 +279,7 @@ namespace castor3d
 #endif
 	}
 
-	bool Frustum::isVisible( BoundingSphere const & sphere
+	bool Frustum::isVisible( castor::BoundingSphere const & sphere
 		, castor::Matrix4x4f const & transformations
 		, castor::Point3f const & scale)const
 	{
