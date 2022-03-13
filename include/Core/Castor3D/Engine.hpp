@@ -500,6 +500,16 @@ namespace castor3d
 			return m_enableValidation;
 		}
 
+		void enableUpdateOptimisations( bool value )
+		{
+			m_enableUpdateOptimisations = value;
+		}
+
+		bool areUpdateOptimisationsEnabled()const
+		{
+			return m_enableUpdateOptimisations;
+		}
+
 		bool isApiTraceEnabled()const
 		{
 			return m_enableApiTrace;
@@ -685,6 +695,7 @@ namespace castor3d
 		PassTypeID m_passesType{ 0u };
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
+		bool m_enableUpdateOptimisations{ true };
 		uint32_t m_lpvGridSize{ 32u };
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
 		castor::AsyncJobQueue m_cpuJobs;

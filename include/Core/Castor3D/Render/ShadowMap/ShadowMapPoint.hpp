@@ -55,6 +55,7 @@ namespace castor3d
 	private:
 		std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index )override;
 		bool doIsUpToDate( uint32_t index )const override;
+		void doSetUpToDate( uint32_t index )override;
 		void doUpdate( CpuUpdater & updater )override;
 		uint32_t doGetMaxCount()const override;
 

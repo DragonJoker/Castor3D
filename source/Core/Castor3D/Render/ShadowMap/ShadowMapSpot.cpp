@@ -173,6 +173,14 @@ namespace castor3d
 		return true;
 	}
 
+	void ShadowMapSpot::doSetUpToDate( uint32_t index )
+	{
+		if ( m_passes.size() > index )
+		{
+			return m_passes[index]->pass->setUpToDate();
+		}
+	}
+
 	void ShadowMapSpot::doUpdate( CpuUpdater & updater )
 	{
 		if ( m_runnables.size() > updater.index
