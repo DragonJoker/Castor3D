@@ -111,6 +111,7 @@ namespace GuiCommon
 				static const wxString UnlimFPS{ wxT( "unlimited" ) };
 				static const wxString FixedFPS{ wxT( "fps" ) };
 				static const wxString GpuIndex{ wxT( "gpu" ) };
+				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
 			}
 
 			namespace st
@@ -123,6 +124,7 @@ namespace GuiCommon
 				static const wxString UnlimFPS{ wxT( "u" ) };
 				static const wxString FixedFPS{ wxT( "f" ) };
 				static const wxString GpuIndex{ wxT( "g" ) };
+				static const wxString DisUpdOptim{ wxT( "d" ) };
 			}
 		}
 
@@ -144,6 +146,7 @@ namespace GuiCommon
 				static const wxString UnlimFPS{ _( "Disables FPS limit (has no effect if '" ) + option::lg::SyncRender + _( "' option is specified)." ) };
 				static const wxString FixedFPS{ _( "Defines wanted FPS (has no effect if '" ) + option::lg::UnlimFPS + _( "' option is specified)." ) };
 				static const wxString GpuIndex{ _( "The index of the wanted Vulkan physical device." ) };
+				static const wxString DisUpdOptim{ _( "Disable update optimisations." ) };
 				static const wxString SceneFile{ _( "The initial scene file." ) };
 
 				parser.AddSwitch( option::st::Help, option::lg::Help, Help, wxCMD_LINE_OPTION_HELP );
@@ -154,6 +157,7 @@ namespace GuiCommon
 				parser.AddSwitch( option::st::UnlimFPS, option::lg::UnlimFPS, UnlimFPS );
 				parser.AddOption( option::st::FixedFPS, option::lg::FixedFPS, FixedFPS, wxCMD_LINE_VAL_NUMBER );
 				parser.AddOption( option::st::GpuIndex, option::lg::GpuIndex, GpuIndex, wxCMD_LINE_VAL_NUMBER );
+				parser.AddSwitch( option::st::DisUpdOptim, option::lg::DisUpdOptim, DisUpdOptim );
 				parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
 				for ( auto & plugin : list )
@@ -218,6 +222,7 @@ namespace GuiCommon
 				config.log = getLong( option::st::LogLevel, DefaultLogType );
 				config.validate = has( option::st::Validate );
 				config.syncRender = has( option::st::SyncRender );
+				config.disableUpdateOptimisations = has( option::st::DisUpdOptim );
 
 				if ( !config.syncRender )
 				{
@@ -493,6 +498,8 @@ namespace GuiCommon
 		{
 			CU_Exception( "Renderer plugin " + m_config.rendererName + " not found" );
 		}
+
+		m_castor->enableUpdateOptimisations( !m_config.disableUpdateOptimisations );
 
 		if ( !isUnlimitedFps() )
 		{
