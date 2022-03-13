@@ -116,9 +116,4 @@ namespace castor
 			, pixels->getFormat() );
 		return ImageLayout{ ImageLayout::e2D, *outbuffer };
 	}
-
-	PixelFormat XpmImageLoader::getFormat( Path const & imagePath )const
-	{
-		return PixelFormat::eR8G8B8_UNORM;
-	}
 }
