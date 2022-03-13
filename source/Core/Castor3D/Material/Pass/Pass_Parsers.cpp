@@ -475,6 +475,15 @@ namespace castor3d
 				if ( castor::File::fileExists( context.file.getPath() / relative ) )
 				{
 					folder = context.file.getPath();
+					auto & cache = parsingContext.parser->getEngine()->getImageCache();
+					auto image = cache.tryFind( relative.getFileName() );
+
+					if ( !image.lock() )
+					{
+						image = cache.add( relative.getFileName()
+							, castor::ImageCreateParams{ folder / relative
+								, { false, false, false } } );
+					}
 				}
 				else if ( !castor::File::fileExists( relative ) )
 				{

@@ -300,51 +300,78 @@ namespace castor3d
 		return result;
 	}
 
-	castor::ImageUPtr MeshImporter::loadImage( castor::Path const & path )const
+	castor::ImageSPtr MeshImporter::loadImage( castor::String const & name
+		, castor::ImageCreateParams const & params )const
 	{
-		castor::ImageUPtr result;
+		castor::ImageSPtr result;
+
+		try
+		{
+			auto & cache = getEngine()->getImageCache();
+			auto image = cache.tryFind( name );
+
+			if ( !image.lock() )
+			{
+				image = cache.add( name, params );
+			}
+
+			result = image.lock();
+		}
+		catch ( castor::Exception & exc )
+		{
+			log::error << cuT( "Error encountered while loading image file [" ) << name << cuT( "]: " ) << exc.what() << std::endl;
+		}
+		catch ( std::exception & exc )
+		{
+			log::error << cuT( "Error encountered while loading image file [" ) << name << cuT( "]: " ) << exc.what() << std::endl;
+		}
+		catch ( ... )
+		{
+			log::error << cuT( "Error encountered while loading image file [" ) << name << cuT( "]: Unknown error" ) << std::endl;
+		}
+
+		return result;
+	}
+
+	castor::ImageSPtr MeshImporter::loadImage( castor::Path const & path )const
+	{
+		castor::ImageSPtr result;
 		castor::Path relative;
 		castor::Path folder;
 
 		if ( findImage( path, m_filePath, folder, relative ) )
 		{
-			try
-			{
-				auto image = getEngine()->getImageLoader().load( relative.getFileName()
-					, folder / relative
-					, { false, true, true } );
-				result = castor::makeUnique< castor::Image >( relative.getFileName()
-					, folder / relative
-					, *image.getPixels() );
-			}
-			catch ( castor::Exception & exc )
-			{
-				log::error << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-			}
-			catch ( std::exception & exc )
-			{
-				log::error << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
-			}
-			catch ( ... )
-			{
-				log::error << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
-			}
+			result = loadImage( relative.getFileName()
+				, castor::ImageCreateParams{ folder / relative
+					, { false, false, false } } );
 		}
 
 		return result;
+	}
+
+	castor::ImageSPtr MeshImporter::loadImage( castor::String name
+		, castor::String type
+		, castor::ByteArray data )const
+	{
+		return loadImage( name
+			, castor::ImageCreateParams{ type
+				, data
+				, { false, false, false } } );
 	}
 
 	TextureSourceInfo MeshImporter::loadTexture( castor3d::SamplerRes sampler
 		, castor::Path const & path
 		, TextureConfiguration const & config )const
 	{
-		castor::Path relative;
-		castor::Path folder;
+		auto image = loadImage( path );
 
-		if ( !findImage( path, m_filePath, folder, relative ) )
+		if ( !image )
 		{
 			CU_Exception( "Couldn't find image at path [" + path + "]" );
 		}
+
+		castor::Path relative;
+		castor::Path folder;
 
 		bool allowCompression = config.normalMask[0] == 0;
 		return TextureSourceInfo{ sampler
@@ -359,6 +386,13 @@ namespace castor3d
 		, castor::ByteArray data
 		, TextureConfiguration const & config )const
 	{
+		auto image = loadImage( name, type, data );
+
+		if ( !image )
+		{
+			CU_Exception( "Couldn't load image [" + name + "]" );
+		}
+
 		bool allowCompression = config.normalMask[0] == 0;
 		return TextureSourceInfo{ sampler
 			, std::move( name )

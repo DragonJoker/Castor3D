@@ -21,10 +21,6 @@ namespace castor
 			, uint8_t const * data
 			, uint32_t size
 			, PxBufferBaseSPtr & buffer )const override;
-		/**
-		 *\copydoc castor::ImageLoaderImpl::getFormat
-		 */
-		CU_API PixelFormat getFormat( Path const & imagePath )const override;
 	};
 }
 

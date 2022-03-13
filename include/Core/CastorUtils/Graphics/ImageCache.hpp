@@ -127,7 +127,7 @@ namespace castor
 			return m_loader;
 		}
 
-		CU_API PixelFormat getImageFormat( Path const & path );
+		CU_API PixelFormat getImageFormat( String const & name );
 
 	private:
 		ImageLoader const & m_loader;
