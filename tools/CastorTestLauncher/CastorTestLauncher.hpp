@@ -44,6 +44,7 @@ namespace test_launcher
 			castor::LogType log{ castor::LogType::eInfo };
 			castor::String renderer;
 			castor::Path fileName;
+			bool disableUpdateOptimisations{ false };
 		};
 
 		MainFrame * m_mainFrame{ nullptr };

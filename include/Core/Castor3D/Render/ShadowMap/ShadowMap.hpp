@@ -172,6 +172,7 @@ namespace castor3d
 	private:
 		C3D_API virtual std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index ) = 0;
 		C3D_API virtual bool doIsUpToDate( uint32_t index )const = 0;
+		C3D_API virtual void doSetUpToDate( uint32_t index ) = 0;
 		C3D_API virtual void doUpdate( CpuUpdater & updater ) = 0;
 		C3D_API virtual uint32_t doGetMaxCount()const = 0;
 

@@ -370,6 +370,14 @@ namespace castor3d
 			} );
 	}
 
+	void ShadowMapDirectional::doSetUpToDate( uint32_t index )
+	{
+		for ( auto & data : castor::makeArrayView( m_passes.begin(), m_passes.begin() + std::min( m_cascades, uint32_t( m_passes.size() ) ) ) )
+		{
+			data->pass->setUpToDate();
+		}
+	}
+
 	void ShadowMapDirectional::doUpdate( CpuUpdater & updater )
 	{
 		if ( m_runnables[updater.index] )
