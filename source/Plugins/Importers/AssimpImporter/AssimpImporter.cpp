@@ -654,34 +654,28 @@ namespace C3dAssimp
 
 			castor::Image const & loadImage( TextureSourceInfo const & source )
 			{
-				auto & cache = m_result.getOwner()->getEngine()->getImageCache();
-				auto image = cache.tryFind( source.name() );
+				castor::ImageSPtr result;
 
-				if ( !image.lock() )
+				if ( source.isBufferImage() )
 				{
-					if ( source.isBufferImage() )
-					{
-						image = cache.add( source.name()
-							, castor::ImageCreateParams{ source.type()
-								, source.buffer()
-								, { false, false, false } } );
-					}
-					else if ( source.isFileImage() )
-					{
-						image = cache.add( source.name()
-							, castor::ImageCreateParams{ source.folder() / source.relative()
-								, { false, false, false } } );
-					}
+					result = m_importer.loadImage( source.name()
+						, castor::ImageCreateParams{ source.type()
+							, source.buffer()
+							, { false, false, false } } );
+				}
+				else if ( source.isFileImage() )
+				{
+					result = m_importer.loadImage( source.name()
+						, castor::ImageCreateParams{ source.folder() / source.relative()
+							, { false, false, false } } );
 				}
 
-				auto img = image.lock();
-
-				if ( !img )
+				if ( !result )
 				{
 					CU_LoaderError( "Couldn't load image" + source.name() + "." );
 				}
 
-				return *img;
+				return *result;
 			}
 
 			void loadTexture( TextureInfo const & info

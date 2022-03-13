@@ -187,11 +187,6 @@ namespace castor
 		}
 	}
 
-	PixelFormat ImageLoader::getFormat( Path const & imagePath )const
-	{
-		return findLoader( string::lowerCase( imagePath.getExtension() ) )->getFormat( imagePath );
-	}
-
 	Image ImageLoader::load( String const & name
 		, String const & imageFormat
 		, uint8_t const * data
