@@ -214,9 +214,9 @@ namespace castor3d
 
 	private:
 		Scene & m_scene;
-		Camera * m_camera;
 
 	protected:
+		Camera * m_camera;
 		uint32_t m_index;
 		bool m_allChanged{ true };
 		bool m_culledChanged{ true };
