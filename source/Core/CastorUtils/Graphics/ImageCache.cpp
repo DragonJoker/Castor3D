@@ -48,9 +48,16 @@ namespace castor
 	{
 	}
 
-	PixelFormat ResourceCacheT< Image, String, ImageCacheTraits >::getImageFormat( Path const & path )
+	PixelFormat ResourceCacheT< Image, String, ImageCacheTraits >::getImageFormat( String const & name )
 	{
-		return m_loader.getFormat( path );
+		auto img = tryFind( name );
+
+		if ( img.lock() )
+		{
+			return img.lock()->getPixelFormat();
+		}
+
+		return PixelFormat::eUNDEFINED;
 	}
 
 	//*********************************************************************************************

@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
 #include <CastorUtils/Data/Path.hpp>
+#include <CastorUtils/Graphics/ImageCache.hpp>
 
 namespace castor3d
 {
@@ -74,6 +75,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads an image from a file.
+		 *\param[in]	folder		The image folder.
+		 *\param[in]	relative	The image path relative to folder.
+		 *\return		The image.
+		 *\~french
+		 *\brief		Charge une image depuis un fichier.
+		 *\param[in]	folder		Le dossier de l'image.
+		 *\param[in]	relative	Le chemin vers l'image depuis le dossier.
+		 *\return		L'image.
+		 */
+		C3D_API castor::ImageSPtr loadImage( castor::String const & name
+			, castor::ImageCreateParams const & params )const;
+		/**
+		 *\~english
+		 *\brief		Loads an image from a file.
 		 *\param[in]	path	The image file path (can be relative or absolute).
 		 *\return		The image.
 		 *\~french
@@ -81,7 +96,24 @@ namespace castor3d
 		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
 		 *\return		L'image.
 		 */
-		C3D_API castor::ImageUPtr loadImage( castor::Path const & path )const;
+		C3D_API castor::ImageSPtr loadImage( castor::Path const & path )const;
+		/**
+		 *\~english
+		 *\brief		Loads a texture.
+		 *\param[in]	name	The image name.
+		 *\param[in]	type	The image data type.
+		 *\param[in]	data	The image data.
+		 *\return		The texture unit.
+		 *\~french
+		 *\brief		Charge une texture.
+		 *\param[in]	name	Le nom de l'image.
+		 *\param[in]	type	Le type des données de l'image.
+		 *\param[in]	data	Les données de l'image.
+		 *\return		L'unité de texture.
+		 */
+		C3D_API castor::ImageSPtr loadImage( castor::String name
+			, castor::String type
+			, castor::ByteArray data )const;
 		/**
 		 *\~english
 		 *\brief		Loads a texture.
