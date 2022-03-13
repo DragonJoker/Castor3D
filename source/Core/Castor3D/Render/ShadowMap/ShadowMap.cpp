@@ -161,7 +161,8 @@ namespace castor3d
 		, uint32_t index )
 	{
 #if !C3D_MeasureShadowMapImpact
-		if ( isUpToDate( index ) )
+		if ( doIsUpToDate( index )
+			&& getEngine()->areUpdateOptimisationsEnabled() )
 		{
 			return toWait;	
 		}
@@ -174,6 +175,7 @@ namespace castor3d
 			runnable->record();
 		}
 
+		doSetUpToDate( index );
 		return m_runnables[index]->run( toWait, queue );
 	}
 

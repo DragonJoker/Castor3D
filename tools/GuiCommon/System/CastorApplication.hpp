@@ -58,6 +58,7 @@ namespace GuiCommon
 			bool syncRender{ false };
 			castor::String rendererName;
 			uint32_t gpuIndex{ 0u };
+			bool disableUpdateOptimisations{ false };
 			castor::String fileName;
 		};
 

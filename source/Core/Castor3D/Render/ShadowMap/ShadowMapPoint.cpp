@@ -185,7 +185,7 @@ namespace castor3d
 	{
 		uint32_t offset = index * 6u;
 
-		if ( m_passes.size() > offset + 6u )
+		if ( m_passes.size() >= offset + 6u )
 		{
 			return std::all_of( m_passes.begin() + offset
 				, m_passes.begin() + offset + 6u
@@ -196,6 +196,19 @@ namespace castor3d
 		}
 
 		return true;
+	}
+
+	void ShadowMapPoint::doSetUpToDate( uint32_t index )
+	{
+		uint32_t offset = index * 6u;
+
+		if ( m_passes.size() > offset + 6u )
+		{
+			for ( auto & data : castor::makeArrayView( m_passes.begin() + offset, m_passes.begin() + offset + 6u ) )
+			{
+				data->pass->setUpToDate();
+			}
+		}
 	}
 
 	void ShadowMapPoint::doUpdate( CpuUpdater & updater )

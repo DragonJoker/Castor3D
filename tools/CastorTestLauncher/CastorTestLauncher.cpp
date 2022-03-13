@@ -32,6 +32,7 @@ namespace test_launcher
 				static const wxString Validate{ wxT( "validate" ) };
 				static const wxString Generate{ wxT( "generate" ) };
 				static const wxString FrameCount{ wxT( "frames" ) };
+				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
 			}
 
 			namespace st
@@ -42,6 +43,7 @@ namespace test_launcher
 				static const wxString Validate{ wxT( "a" ) };
 				static const wxString Generate{ wxT( "e" ) };
 				static const wxString FrameCount{ wxT( "f" ) };
+				static const wxString DisUpdOptim{ wxT( "d" ) };
 			}
 
 			namespace df
@@ -80,6 +82,7 @@ namespace test_launcher
 		static const wxString Validate{ _( "Enables rendering API validation." ) };
 		static const wxString Generate{ _( "Generates the reference image, using Vulkan renderer." ) };
 		static const wxString FrameCount{ _( "The number of frames before capture." ) };
+		static const wxString DisUpdOptim{ _( "Disable update optimisations." ) };
 		static const wxString SceneFile{ _( "The tested scene file." ) };
 
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
@@ -89,6 +92,7 @@ namespace test_launcher
 		parser.AddOption( option::st::LogLevel, option::lg::LogLevel, LogLevel, wxCMD_LINE_VAL_NUMBER );
 		parser.AddSwitch( option::st::Generate, option::lg::Generate, Generate );
 		parser.AddOption( option::st::FrameCount, option::lg::FrameCount, FrameCount, wxCMD_LINE_VAL_NUMBER );
+		parser.AddSwitch( option::st::DisUpdOptim, option::lg::DisUpdOptim, DisUpdOptim );
 		parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
 
 		for ( auto & plugin : list )
@@ -137,6 +141,7 @@ namespace test_launcher
 		m_config.validate = has( option::st::Validate );
 		m_config.generate = has( option::st::Generate );
 		m_config.maxFrameCount = getLong( option::st::FrameCount, option::df::FrameCount );
+		m_config.disableUpdateOptimisations = has( option::st::DisUpdOptim );
 
 		if ( result )
 		{
@@ -230,6 +235,7 @@ namespace test_launcher
 			{
 				if ( auto engine = doInitialiseCastor() )
 				{
+					engine->enableUpdateOptimisations( !m_config.disableUpdateOptimisations );
 					MainFrame * mainFrame{ new MainFrame{ *engine, m_config.maxFrameCount } };
 
 					try
