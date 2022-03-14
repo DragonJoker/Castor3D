@@ -372,7 +372,7 @@ namespace castor3d
 						, scale * invTexDim.x() );
 					auto dy = m_writer.declLocale( "dy"
 						, scale * invTexDim.y() );
-					auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+					auto shadowMapDepth = m_writer.declLocale( "shadowFactor"
 						, 0.0_f );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 0.0_f );
@@ -440,6 +440,70 @@ namespace castor3d
 				, InCombinedImage2DArrayRgba32{ m_writer, "shadowMap" }
 				, InVec2{ m_writer, "invTexDim" }
 				, InUInt{ m_writer, "cascadeIndex" }
+				, InFloat{ m_writer, "bias" } );
+		}
+
+		void Shadow::doDeclareFilterPCFCube()
+		{
+			if ( m_filterPCFCube )
+			{
+				return;
+			}
+
+			m_filterPCFCube = m_writer.implementFunction< Float >( "c3d_shdFilterPCFCube"
+				, [this]( Vec3 const & lightToVertex
+					, CombinedImageCubeArrayRgba32 const & shadowMap
+					, Vec2 const & invTexDim
+					, Int const & index
+					, Float const & depth
+					, Float const & bias )
+				{
+					auto count = 0;
+					auto const samples = 4;
+
+					auto offset = m_writer.declLocale( "offset"
+						, 20.0_f * depth );
+					auto dx = m_writer.declLocale( "dx"
+						, -offset );
+					auto dy = m_writer.declLocale( "dy"
+						, -offset );
+					auto dz = m_writer.declLocale( "dz"
+						, -offset );
+					auto inc = m_writer.declLocale( "inc"
+						, offset / ( samples * 0.5f ) );
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
+						, 0.0_f );
+					auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+						, 0.0_f);
+
+					for ( int i = 0; i < samples; ++i )
+					{
+						for ( int j = 0; j < samples; ++j )
+						{
+							for ( int k = 0; k < samples; ++k )
+							{
+								shadowMapDepth = shadowMap.sample( vec4( lightToVertex + vec3( dx, dy, dz )
+									, m_writer.cast< Float >( index ) ) ).w();
+								shadowFactor += step( depth - bias, shadowMapDepth );
+								++count;
+								dz += inc;
+							}
+
+							dy += inc;
+							dz = -offset;
+						}
+
+						dx += inc;
+						dy = -offset;
+					}
+
+					m_writer.returnStmt( shadowFactor / float( count ) );
+				}
+				, InVec3{ m_writer, "lightToVertex" }
+				, InCombinedImageCubeArrayRgba32{ m_writer, "shadowMap" }
+				, InVec2{ m_writer, "invTexDim" }
+				, InInt{ m_writer, "index" }
+				, InFloat{ m_writer, "depth" }
 				, InFloat{ m_writer, "bias" } );
 		}
 
@@ -673,6 +737,7 @@ namespace castor3d
 
 		void Shadow::doDeclareComputePointShadow()
 		{
+			doDeclareFilterPCFCube();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
 			m_computePoint = m_writer.implementFunction< Float >( "c3d_shdComputePoint"
@@ -747,45 +812,12 @@ namespace castor3d
 										, normalize( lightToVertex )
 										, light.pcfShadowOffsets.x()
 										, light.pcfShadowOffsets.y() ) );
-								auto shadowFactor = m_writer.declLocale( "shadowFactor"
-									, 0.0_f );
-								auto offset = m_writer.declLocale( "offset"
-									, 20.0_f * depth );
-								auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
-									, 0.0_f );
-								auto x = m_writer.declLocale( "x"
-									, -offset );
-								auto y = m_writer.declLocale( "y"
-									, -offset );
-								auto z = m_writer.declLocale( "z"
-									, -offset );
-								auto const samples = 4;
-								auto inc = m_writer.declLocale( "inc"
-									, offset / ( samples * 0.5f ) );
-								auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
-
-								for( int i = 0; i < samples; ++i )
-								{
-									for ( int j = 0; j < samples; ++j )
-									{
-										for ( int k = 0; k < samples; ++k )
-										{
-											shadowMapDepth = c3d_mapNormalDepthPoint.sample( vec4( lightToVertex + vec3( x, y, z )
-													, m_writer.cast< Float >( light.index ) ) ).w();
-											shadowFactor += step( depth - bias, shadowMapDepth );
-											numSamplesUsed += 1.0_f;
-											z += inc;
-										}
-
-										y += inc;
-										z = -offset;
-									}
-
-									x += inc;
-									y = -offset;
-								}
-
-								result = shadowFactor / numSamplesUsed;
+								result = m_filterPCFCube( lightToVertex
+									, c3d_mapNormalDepthPoint
+									, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
+									, light.index
+									, depth
+									, bias );
 							}
 							ELSE
 							{
