@@ -17,8 +17,6 @@ namespace castor3d
 		{
 		public:
 			C3D_API SssTransmittance( sdw::ShaderWriter & writer
-				, Shadow & shadow
-				, Utils & utils
 				, ShadowOptions shadowOptions
 				, SssProfiles const & sssProfiles );
 
@@ -36,8 +34,6 @@ namespace castor3d
 			void doDeclare();
 
 			sdw::ShaderWriter & m_writer;
-			Shadow & m_shadow;
-			Utils & m_utils;
 			SssProfiles const & m_sssProfiles;
 
 			bool m_shadowMap;

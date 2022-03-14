@@ -48,20 +48,6 @@ namespace castor
 			}
 		}
 
-#endif
-
-		StringArray const & listExtensions()
-		{
-			static StringArray const list
-#if C3D_UseFreeImage
-			{
-				cuT( "png" ),
-			}
-#endif
-			;
-			return list;
-		}
-
 		PixelFormat convertTo32Bits( FIBITMAP *& fiImage )
 		{
 			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
@@ -88,6 +74,20 @@ namespace castor
 			}
 
 			std::cerr << std::endl;
+		}
+
+#endif
+
+		StringArray const & listExtensions()
+		{
+			static StringArray const list
+#if C3D_UseFreeImage
+			{
+				cuT( "png" ),
+			}
+#endif
+			;
+			return list;
 		}
 	}
 
