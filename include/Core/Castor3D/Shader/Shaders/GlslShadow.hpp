@@ -80,6 +80,7 @@ namespace castor3d
 			void doDeclareFilterPCFNoCascade();
 			void doDeclareFilterPCFCascade();
 			void doDeclareFilterPCFCube();
+			void doDeclareFilterVSMCube();
 			void doDeclareGetLightSpacePosition();
 			void doDeclareComputeDirectionalShadow();
 			void doDeclareComputeSpotShadow();
@@ -126,6 +127,13 @@ namespace castor3d
 				, sdw::InInt
 				, sdw::InFloat
 				, sdw::InFloat > m_filterPCFCube;
+			sdw::Function < sdw::Float
+				, sdw::InVec3
+				, sdw::InCombinedImageCubeArrayRg32
+				, sdw::InInt
+				, sdw::InFloat
+				, sdw::InFloat
+				, sdw::InFloat > m_filterVSMCube;
 			sdw::Function< sdw::Vec4
 				, sdw::InMat4
 				, sdw::InVec3 > m_getLightSpacePosition;
