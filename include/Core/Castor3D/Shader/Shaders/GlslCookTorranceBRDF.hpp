@@ -13,7 +13,7 @@ namespace castor3d::shader
 	public:
 		C3D_API explicit CookTorranceBRDF( sdw::ShaderWriter & writer
 			, Utils & utils );
-		C3D_API sdw::Vec3 compute( Light const & light
+		C3D_API sdw::RetVec3 compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular

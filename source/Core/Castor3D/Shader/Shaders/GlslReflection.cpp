@@ -228,7 +228,7 @@ namespace castor3d::shader
 			auto rayZMin = m_writer.declLocale( "rayZMin"
 				, prevZMaxEstimate );
 			auto sceneZMax = m_writer.declLocale( "sceneZMax"
-				, rayZMax + 1e4 );
+				, rayZMax + 1e4f );
 
 			// P1.x is never modified after this point, so pre-scale it by 
 			// the step direction for a signed comparison
@@ -258,7 +258,7 @@ namespace castor3d::shader
 				rayZMin = prevZMaxEstimate;
 
 				// Compute the value at 1/2 pixel into the future
-				rayZMax = ( dQ.z() * 0.5 + Q.z() ) / ( dk * 0.5 + k );
+				rayZMax = ( dQ.z() * 0.5f + Q.z() ) / ( dk * 0.5f + k );
 				prevZMaxEstimate = rayZMax;
 
 				IF ( m_writer, rayZMin > rayZMax )
@@ -280,7 +280,7 @@ namespace castor3d::shader
 			ROF;
 
 			Q.xy() += dQ.xy() * stepCount;
-			csHitPoint = Q * ( 1.0 / k );
+			csHitPoint = Q * ( 1.0f / k );
 
 			// Matches the new loop condition:
 			m_writer.returnStmt( ( rayZMax >= sceneZMax - csZThickness ) && ( rayZMin <= sceneZMax ) );
@@ -391,13 +391,13 @@ namespace castor3d::shader
 				auto ssrReflectionNormal = m_writer.declLocale( "ssrReflectionNormal"
 					, normalMap.sample( rayMarchTexPosition.xy() ).xyz() );
 				auto ssrDistanceFactor = m_writer.declLocale( "ssrDistanceFactor"
-					, vec2( distance( 0.5_f, texcoord.x() ), distance( 0.5_f, texcoord.y() ) ) * 2 );
+					, vec2( distance( 0.5_f, texcoord.x() ), distance( 0.5_f, texcoord.y() ) ) * 2.0f );
 				auto ssrFactor = m_writer.declLocale( "ssrFactor"
 					, ( 1.0_f - abs( nDotV ) )
-						* ( 1.0 - forwardStepCount / ssrForwardMaxStepCount )
-						* clamp( 1.0 - ssrDistanceFactor.x() - ssrDistanceFactor.y(), 0.0_f, 1.0_f )
-						* ( 1.0 / ( 1.0 + abs( sceneZ - rayMarchPosition.z() ) * ssrDepthMult ) )
-						* ( 1.0 - clamp( dot( ssrReflectionNormal, worldNormal ), 0.0_f, 1.0_f ) ) );
+						* ( 1.0f - forwardStepCount / ssrForwardMaxStepCount )
+						* clamp( 1.0f - ssrDistanceFactor.x() - ssrDistanceFactor.y(), 0.0_f, 1.0_f )
+						* ( 1.0f / ( 1.0f + abs( sceneZ - rayMarchPosition.z() ) * ssrDepthMult ) )
+						* ( 1.0f - clamp( dot( ssrReflectionNormal, worldNormal ), 0.0_f, 1.0_f ) ) );
 
 				auto reflectionColor = m_writer.declLocale( "reflectionColor"
 					, colourMap.sample( rayMarchTexPosition.xy() ).rgb() );
