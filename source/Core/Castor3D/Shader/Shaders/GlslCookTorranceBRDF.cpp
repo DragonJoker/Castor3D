@@ -23,7 +23,7 @@ namespace castor3d::shader
 	{
 	}
 
-	sdw::Vec3 CookTorranceBRDF::compute( Light const & light
+	sdw::RetVec3 CookTorranceBRDF::compute( Light const & light
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
 		, sdw::Vec3 const & specular

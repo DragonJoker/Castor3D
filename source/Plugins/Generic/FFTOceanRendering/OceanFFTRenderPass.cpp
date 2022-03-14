@@ -1301,7 +1301,7 @@ namespace ocean_fft
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
 						, fma( vec2( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f )
 							, vec2( c3d_oceanData.refractionDistortionFactor
-								* utils.saturate( length( scenePosition - surface.worldPosition ) * 0.5 ) )
+								* utils.saturate( length( scenePosition - surface.worldPosition ) * 0.5_f ) )
 							, hdrCoords ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_sceneDepth.sample( distortedTexCoord ) );

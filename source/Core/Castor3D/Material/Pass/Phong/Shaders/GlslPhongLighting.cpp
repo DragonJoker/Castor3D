@@ -347,13 +347,12 @@ namespace castor3d::shader
 					, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( light.direction ) );
-				auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-					, doComputeLight( light.base
-						, material
-						, surface
-						, worldEye
-						, lightDirection
-						, output ) );
+				doComputeLight( light.base
+					, material
+					, surface
+					, worldEye
+					, lightDirection
+					, output );
 
 				if ( m_shadowModel->isEnabled() )
 				{
@@ -487,13 +486,12 @@ namespace castor3d::shader
 					, length( lightToVertex ) );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( lightToVertex ) );
-				auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-					, doComputeLight( light.base
-						, material
-						, surface
-						, worldEye
-						, lightDirection
-						, output ) );
+				doComputeLight( light.base
+					, material
+					, surface
+					, worldEye
+					, lightDirection
+					, output );
 
 				if ( m_shadowModel->isEnabled() )
 				{
@@ -672,7 +670,7 @@ namespace castor3d::shader
 			, outputs );
 	}
 
-	sdw::Vec3 PhongLightingModel::doComputeLight( Light const & light
+	sdw::RetVec3 PhongLightingModel::doComputeLight( Light const & light
 		, PhongLightMaterial const & material
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
