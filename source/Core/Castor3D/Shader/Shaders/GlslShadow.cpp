@@ -300,6 +300,77 @@ namespace castor3d
 				, InFloat{ m_writer, "varianceBias" } );
 		}
 
+		void Shadow::doDeclareFilterVSMCube()
+		{
+			if ( m_filterVSMCube )
+			{
+				return;
+			}
+
+			doDeclareChebyshevUpperBound();
+			m_filterVSMCube = m_writer.implementFunction< Float >( "c3d_shdFilterVSMCube"
+				, [this]( Vec3 const & lightToVertex
+					, CombinedImageCubeArrayRg32 const & shadowMap
+					, Int const & index
+					, Float const & depth
+					, Float const & minVariance
+					, Float const & varianceBias )
+				{
+					int count = 0;
+					int const samples = 4;
+
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
+						, 0.0_f );
+					auto offset = m_writer.declLocale( "offset"
+						, 20.0_f * depth );
+					auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
+						, 0.0_f );
+					auto dx = m_writer.declLocale( "dx"
+						, -offset );
+					auto dy = m_writer.declLocale( "dy"
+						, -offset );
+					auto dz = m_writer.declLocale( "dz"
+						, -offset );
+					auto inc = m_writer.declLocale( "inc"
+						, offset / ( samples * 0.5f ) );
+					auto moments = m_writer.declLocale< Vec2 >( "moments" );
+
+					for ( int i = 0; i < samples; ++i )
+					{
+						for ( int j = 0; j < samples; ++j )
+						{
+							for ( int k = 0; k < samples; ++k )
+							{
+								moments = shadowMap
+									.lod( vec4( lightToVertex + vec3( dx, dy, dz )
+										, m_writer.cast< Float >( index ) )
+										, 0.0_f );
+								shadowFactor += m_chebyshevUpperBound( moments
+									, depth
+									, minVariance
+									, varianceBias );
+								++count;
+								dz += inc;
+							}
+
+							dy += inc;
+							dz = -offset;
+						}
+
+						dx += inc;
+						dy = -offset;
+					}
+
+					m_writer.returnStmt( shadowFactor / float( count ) );
+				}
+				, InVec3{ m_writer, "lightToVertex" }
+				, InCombinedImageCubeArrayRg32{ m_writer, "shadowMap" }
+				, InInt{ m_writer, "index" }
+				, InFloat{ m_writer, "depth" }
+				, InFloat{ m_writer, "minVariance" }
+				, InFloat{ m_writer, "varianceBias" } );
+		}
+
 		void Shadow::doDeclareFilterPCF()
 		{
 			if ( m_filterPCF )
@@ -363,8 +434,8 @@ namespace castor3d
 					, Vec2 const & invTexDim
 					, Float const & bias )
 				{
-					auto count = 0;
-					auto const range = 1;
+					int count = 0;
+					int const range = 1;
 
 					auto scale = m_writer.declLocale( "scale"
 						, 1.0_f );
@@ -409,8 +480,8 @@ namespace castor3d
 					, UInt const & cascadeIndex
 					, Float const & bias )
 				{
-					auto count = 0;
-					auto const range = 1;
+					int count = 0;
+					int const range = 1;
 
 					auto scale = m_writer.declLocale( "scale"
 						, 1.0_f );
@@ -458,8 +529,8 @@ namespace castor3d
 					, Float const & depth
 					, Float const & bias )
 				{
-					auto count = 0;
-					auto const samples = 4;
+					int count = 0;
+					int const samples = 4;
 
 					auto offset = m_writer.declLocale( "offset"
 						, 20.0_f * depth );
@@ -738,8 +809,8 @@ namespace castor3d
 		void Shadow::doDeclareComputePointShadow()
 		{
 			doDeclareFilterPCFCube();
+			doDeclareFilterVSMCube();
 			doDeclareGetShadowOffset();
-			doDeclareChebyshevUpperBound();
 			m_computePoint = m_writer.implementFunction< Float >( "c3d_shdComputePoint"
 				, [this]( shader::Light const & light
 					, Surface const & surface
@@ -758,50 +829,12 @@ namespace castor3d
 
 						IF( m_writer, light.shadowType == Int( int( ShadowType::eVariance ) ) )
 						{
-							auto shadowFactor = m_writer.declLocale( "shadowFactor"
-								, 0.0_f );
-							auto offset = m_writer.declLocale( "offset"
-								, 20.0_f * depth );
-							auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
-								, 0.0_f );
-							auto x = m_writer.declLocale( "x"
-								, -offset );
-							auto y = m_writer.declLocale( "y"
-								, -offset );
-							auto z = m_writer.declLocale( "z"
-								, -offset );
-							auto const samples = 4;
-							auto inc = m_writer.declLocale( "inc"
-								, offset / ( samples * 0.5f ) );
-							auto moments = m_writer.declLocale< Vec2 >( "moments" );
-
-							for ( int i = 0; i < samples; ++i )
-							{
-								for ( int j = 0; j < samples; ++j )
-								{
-									for ( int k = 0; k < samples; ++k )
-									{
-										moments = c3d_mapVariancePoint
-											.lod( vec4( lightToVertex + vec3( x, y, z )
-												, m_writer.cast< Float >( light.index ) )
-											, 0.0_f );
-										shadowFactor += m_chebyshevUpperBound( moments
-											, depth
-											, light.vsmShadowVariance.x()
-											, light.vsmShadowVariance.y() );
-										numSamplesUsed += 1.0_f;
-										z += inc;
-									}
-
-									y += inc;
-									z = -offset;
-								}
-
-								x += inc;
-								y = -offset;
-							}
-
-							result = shadowFactor / numSamplesUsed;
+							result = m_filterVSMCube( lightToVertex
+								, c3d_mapVariancePoint
+								, light.index
+								, depth
+								, light.vsmShadowVariance.x()
+								, light.vsmShadowVariance.y() );
 						}
 						ELSE
 						{
