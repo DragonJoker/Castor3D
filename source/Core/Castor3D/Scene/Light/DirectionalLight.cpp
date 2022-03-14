@@ -205,55 +205,6 @@ namespace castor3d
 	void DirectionalLight::doFillBuffer( LightBuffer::LightData & data )const
 	{
 		auto & directional = data.specific.directional;
-
-#if C3D_UseTiledDirectionalShadowMap
-
-		auto shadowTilesX = float( ShadowMapPassDirectional::TileCountX );
-		auto shadowTilesY = float( ShadowMapPassDirectional::TileCountY );
-		directional.directionCount = m_direction;
-		directional.directionCount.w = float( m_cascades.size() );
-
-		directional.tiles.x = shadowTilesX;
-		directional.tiles.y = shadowTilesY;
-		directional.tiles.z = 1.0f / shadowTilesX;
-		directional.tiles.w = 1.0f / shadowTilesY;
-
-		std::array< Point4f, 2u > splitDepths;
-		std::array< Point4f, 2u > splitScales;
-
-		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
-		{
-			splitDepths[i / 4][i % 4] = m_cascades[i].splitDepthScale->x;
-			splitScales[i / 4][i % 4] = m_cascades[i].splitDepthScale->y;
-		}
-
-		directional.splitDepths[0] = splitDepths[0];
-		directional.splitDepths[1] = splitDepths[1];
-		directional.splitScales[0] = splitScales[0];
-		directional.splitScales[1] = splitScales[1];
-
-		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
-		{
-			const float sizeX = 1.0f / shadowTilesX;
-			const float sizeY = 1.0f / shadowTilesY;
-			const float offsetX = ( float( i % uint32_t( shadowTilesX ) ) / shadowTilesX + sizeX * 0.5f ) * 2.0f - 1.0f;
-			const float offsetY = ( 1.0f - ( float( i / uint32_t( shadowTilesX ) ) / shadowTilesY ) - sizeY * 0.5f ) * 2.0f - 1.0f;
-			castor::Matrix4x4f tileBias;
-			tileBias[0] = { sizeX, 0.0f, 0.0f, 0.0f };
-			tileBias[1] = { 0.0f, sizeY, 0.0f, 0.0f };
-			tileBias[2] = { 0.0f, 0.0f, 1.0f, 0.0f };
-			tileBias[3] = { offsetX, offsetY, 0.0f, 1.0f };
-
-			directional.transforms[i] = tileBias * m_cascades[i].viewProjMatrix;
-		}
-
-		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
-		{
-			directional.transforms[i] = Matrix4x4f{ .0f };
-		}
-
-#else
-
 		directional.directionCount = m_direction;
 		directional.directionCount.w = float( m_cascades.size() );
 		Point4f splitDepths;
@@ -277,7 +228,5 @@ namespace castor3d
 		{
 			directional.transforms[i] = Matrix4x4f{ .0f };
 		}
-
-#endif
 	}
 }

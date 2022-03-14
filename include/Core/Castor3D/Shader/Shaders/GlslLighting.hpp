@@ -246,12 +246,6 @@ namespace castor3d::shader
 		*	Diffuse + Specular
 		*/
 		//\{
-		C3D_API virtual void compute( TiledDirectionalLight const & light
-			, LightMaterial const & material
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const = 0;
 		C3D_API virtual void compute( DirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
@@ -294,11 +288,6 @@ namespace castor3d::shader
 		*	Diffuse only
 		*/
 		//\{
-		C3D_API virtual sdw::Vec3 computeDiffuse( TiledDirectionalLight const & light
-			, LightMaterial const & material
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const = 0;
 		C3D_API virtual sdw::Vec3 computeDiffuse( DirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
@@ -334,7 +323,6 @@ namespace castor3d::shader
 		*/
 		//\{
 		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & index )const;
-		C3D_API TiledDirectionalLight getTiledDirectionalLight( sdw::UInt const & index )const;
 		C3D_API PointLight getPointLight( sdw::UInt const & index )const;
 		C3D_API SpotLight getSpotLight( sdw::UInt const & index )const;
 		//\}
@@ -362,12 +350,10 @@ namespace castor3d::shader
 
 		virtual void doDeclareModel() = 0;
 		virtual void doDeclareComputeDirectionalLight() = 0;
-		virtual void doDeclareComputeTiledDirectionalLight() = 0;
 		virtual void doDeclareComputePointLight() = 0;
 		virtual void doDeclareComputeSpotLight() = 0;
 		virtual void doDeclareDiffuseModel() = 0;
 		virtual void doDeclareComputeDirectionalLightDiffuse() = 0;
-		virtual void doDeclareComputeTiledDirectionalLightDiffuse() = 0;
 		virtual void doDeclareComputePointLightDiffuse() = 0;
 		virtual void doDeclareComputeSpotLightDiffuse() = 0;
 
@@ -405,8 +391,6 @@ namespace castor3d::shader
 			, sdw::InOutUInt > m_getBaseLight;
 		sdw::Function< shader::DirectionalLight
 			, sdw::InUInt > m_getDirectionalLight;
-		sdw::Function< shader::TiledDirectionalLight
-			, sdw::InUInt > m_getTiledDirectionalLight;
 		sdw::Function< shader::PointLight
 			, sdw::InUInt > m_getPointLight;
 		sdw::Function< shader::SpotLight

@@ -99,13 +99,9 @@ namespace castor3d
 
 	uint32_t getMipLevels( SmTexture texture, castor::Size const & size )
 	{
-#if C3D_UseTiledDirectionalShadowMap
-		return 1u;
-#else
 		return texture == SmTexture::eVariance
 			? getMipLevels( VkExtent3D{ size.getWidth(), size.getHeight(), 1u }, getFormat( texture ) )
 			: 1u;
-#endif
 	}
 
 	//*********************************************************************************************
