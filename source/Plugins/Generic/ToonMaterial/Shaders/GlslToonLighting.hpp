@@ -51,12 +51,6 @@ namespace toon::shader
 		*	Diffuse + Specular
 		*/
 		//\{
-		void compute( c3d::TiledDirectionalLight const & light
-			, c3d::LightMaterial const & material
-			, c3d::Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
 		void compute( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
@@ -99,11 +93,6 @@ namespace toon::shader
 		*	Diffuse only
 		*/
 		//\{
-		sdw::Vec3 computeDiffuse( c3d::TiledDirectionalLight const & light
-			, c3d::LightMaterial const & material
-			, c3d::Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
 		sdw::Vec3 computeDiffuse( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
@@ -136,12 +125,10 @@ namespace toon::shader
 	protected:
 		void doDeclareModel()override;
 		void doDeclareComputeDirectionalLight()override;
-		void doDeclareComputeTiledDirectionalLight()override;
 		void doDeclareComputePointLight()override;
 		void doDeclareComputeSpotLight()override;
 		void doDeclareDiffuseModel()override;
 		void doDeclareComputeDirectionalLightDiffuse()override;
-		void doDeclareComputeTiledDirectionalLightDiffuse()override;
 		void doDeclareComputePointLightDiffuse()override;
 		void doDeclareComputeSpotLightDiffuse()override;
 
@@ -178,13 +165,6 @@ namespace toon::shader
 			, sdw::InInt
 			, c3d::OutputComponents & > m_computeDirectional;
 		sdw::Function< sdw::Void
-			, c3d::InTiledDirectionalLight
-			, InToonPhongLightMaterial
-			, c3d::InSurface
-			, sdw::InVec3
-			, sdw::InInt
-			, c3d::OutputComponents & > m_computeTiledDirectional;
-		sdw::Function< sdw::Void
 			, c3d::InPointLight
 			, InToonPhongLightMaterial
 			, c3d::InSurface
@@ -204,12 +184,6 @@ namespace toon::shader
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InVec3 > m_computeLightDiffuse;
-		sdw::Function< sdw::Vec3
-			, c3d::InOutTiledDirectionalLight
-			, InToonPhongLightMaterial
-			, c3d::InSurface
-			, sdw::InVec3
-			, sdw::InInt > m_computeTiledDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
 			, c3d::InOutDirectionalLight
 			, InToonPhongLightMaterial
@@ -278,12 +252,6 @@ namespace toon::shader
 		*	Diffuse + Specular
 		*/
 		//\{
-		void compute( c3d::TiledDirectionalLight const & light
-			, c3d::LightMaterial const & material
-			, c3d::Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
-			, c3d::OutputComponents & output )const override;
 		void compute( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
@@ -326,11 +294,6 @@ namespace toon::shader
 		*	Diffuse only
 		*/
 		//\{
-		sdw::Vec3 computeDiffuse( c3d::TiledDirectionalLight const & light
-			, c3d::LightMaterial const & material
-			, c3d::Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
 		sdw::Vec3 computeDiffuse( c3d::DirectionalLight const & light
 			, c3d::LightMaterial const & material
 			, c3d::Surface const & surface
@@ -363,25 +326,16 @@ namespace toon::shader
 	protected:
 		void doDeclareModel()override;
 		void doDeclareComputeDirectionalLight()override;
-		void doDeclareComputeTiledDirectionalLight()override;
 		void doDeclareComputePointLight()override;
 		void doDeclareComputeSpotLight()override;
 		void doDeclareDiffuseModel()override;
 		void doDeclareComputeDirectionalLightDiffuse()override;
-		void doDeclareComputeTiledDirectionalLightDiffuse()override;
 		void doDeclareComputePointLightDiffuse()override;
 		void doDeclareComputeSpotLightDiffuse()override;
 
 	public:
 		bool m_isSpecularGlossiness;
 		c3d::CookTorranceBRDF m_cookTorrance;
-		sdw::Function< sdw::Void
-			, c3d::InTiledDirectionalLight
-			, InToonPbrLightMaterial
-			, c3d::InSurface
-			, sdw::InVec3
-			, sdw::InInt
-			, c3d::OutputComponents & > m_computeTiledDirectional;
 		sdw::Function< sdw::Void
 			, c3d::InDirectionalLight
 			, InToonPbrLightMaterial
@@ -403,12 +357,6 @@ namespace toon::shader
 			, sdw::InVec3
 			, sdw::InInt
 			, c3d::OutputComponents & > m_computeSpot;
-		sdw::Function< sdw::Vec3
-			, c3d::InOutTiledDirectionalLight
-			, InToonPbrLightMaterial
-			, c3d::InSurface
-			, sdw::InVec3
-			, sdw::InInt > m_computeTiledDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
 			, c3d::InOutDirectionalLight
 			, InToonPbrLightMaterial
