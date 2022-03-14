@@ -209,11 +209,7 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 					{
-#if C3D_UseTiledDirectionalShadowMap
-						auto c3d_light = writer.getVariable< shader::TiledDirectionalLight >( "c3d_light" );
-#else
 						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-#endif
 						auto light = writer.declLocale( "light", c3d_light );
 						lightingModel->compute( light
 							, *lightMat

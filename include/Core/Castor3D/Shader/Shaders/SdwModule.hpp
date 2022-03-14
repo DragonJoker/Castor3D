@@ -99,7 +99,6 @@ namespace castor3d::shader
 	struct SssProfile;
 	struct TextureAnimData;
 	struct TextureConfigData;
-	struct TiledDirectionalLight;
 	struct VoxelData;
 
 	template< ast::var::Flag FlagT >
@@ -155,7 +154,6 @@ namespace castor3d::shader
 	Writer_Parameter( SpotLight );
 	Writer_Parameter( Surface );
 	Writer_Parameter( TextureConfigData );
-	Writer_Parameter( TiledDirectionalLight );
 	Writer_Parameter( VoxelData );
 	/**
 		*\~english

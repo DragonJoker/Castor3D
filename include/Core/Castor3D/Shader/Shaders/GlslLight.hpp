@@ -100,38 +100,6 @@ namespace castor3d
 			using sdw::StructInstance::getMemberArray;
 		};
 
-		struct TiledDirectionalLight
-			: public sdw::StructInstance
-		{
-			C3D_API TiledDirectionalLight( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, TiledDirectionalLight );
-
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
-
-			Light base;
-
-		private:
-			friend class LightingModel;
-			// Raw values
-			sdw::Vec4 m_directionCount;
-
-		public:
-			sdw::Vec4 tiles;
-			sdw::Array< sdw::Vec4 > splitDepths;
-			sdw::Array< sdw::Vec4 > splitScales;
-			sdw::Array< sdw::Mat4 > transforms;
-			// Specific values
-			sdw::Vec3 direction;
-			sdw::UInt cascadeCount;
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-		};
-
 		struct PointLight
 			: public sdw::StructInstance
 		{

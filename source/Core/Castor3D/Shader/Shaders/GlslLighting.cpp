@@ -133,11 +133,7 @@ namespace castor3d::shader
 		m_writer.inlineComment( "// LIGHTING" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareModel();
-#if C3D_UseTiledDirectionalShadowMap
-		doDeclareComputeTiledDirectionalLight();
-#else
 		doDeclareComputeDirectionalLight();
-#endif
 		doDeclareComputePointLight();
 		doDeclareComputeSpotLight();
 	}
@@ -154,18 +150,6 @@ namespace castor3d::shader
 		auto end = m_writer.declLocale( "c3d_end"
 			, m_writer.cast< sdw::UInt >( sceneData.directionalLightCount ) );
 
-#if C3D_UseTiledDirectionalShadowMap
-		FOR( m_writer, Int, dir, begin, dir < end, ++dir )
-		{
-			compute( getTiledDirectionalLight( dir )
-				, material
-				, surface
-				, worldEye
-				, receivesShadows
-				, parentOutput );
-		}
-		ROF;
-#else
 		FOR( m_writer, sdw::UInt, dir, begin, dir < end, ++dir )
 		{
 			compute( getDirectionalLight( dir )
@@ -176,7 +160,6 @@ namespace castor3d::shader
 				, parentOutput );
 		}
 		ROF;
-#endif
 
 		begin = end;
 		end += m_writer.cast< sdw::UInt >( sceneData.pointLightCount );
@@ -297,11 +280,7 @@ namespace castor3d::shader
 		m_writer.inlineComment( "// DIFFUSE LIGHTING" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareDiffuseModel();
-#if C3D_UseTiledDirectionalShadowMap
-		doDeclareComputeTiledDirectionalLightDiffuse();
-#else
 		doDeclareComputeDirectionalLightDiffuse();
-#endif
 		doDeclareComputePointLightDiffuse();
 		doDeclareComputeSpotLightDiffuse();
 	}
@@ -319,17 +298,6 @@ namespace castor3d::shader
 		auto result = m_writer.declLocale( "c3d_result"
 			, vec3( 0.0_f ) );
 
-#if C3D_UseTiledDirectionalShadowMap
-		FOR( m_writer, sdw::Int, dir, begin, dir < end, ++dir )
-		{
-			result += computeDiffuse( getTiledDirectionalLight( dir )
-				, material
-				, surface
-				, worldEye
-				, receivesShadows );
-		}
-		ROF;
-#else
 		FOR( m_writer, sdw::UInt, dir, begin, dir < end, ++dir )
 		{
 			result += computeDiffuse( getDirectionalLight( dir )
@@ -339,7 +307,6 @@ namespace castor3d::shader
 				, receivesShadows );
 		}
 		ROF;
-#endif
 
 		begin = end;
 		end += m_writer.cast< sdw::UInt >( sceneData.pointLightCount );
@@ -417,11 +384,7 @@ namespace castor3d::shader
 		m_writer.inlineComment( "// LIGHTING" );
 		m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 		doDeclareModel();
-#if C3D_UseTiledDirectionalShadowMap
-		doDeclareComputeTiledDirectionalLight();
-#else
 		doDeclareComputeDirectionalLight();
-#endif
 	}
 
 	void LightingModel::declarePointModel( bool lightUbo
@@ -482,11 +445,6 @@ namespace castor3d::shader
 		doDeclareComputeSpotLight();
 	}
 
-	TiledDirectionalLight LightingModel::getTiledDirectionalLight( sdw::UInt const & index )const
-	{
-		return m_getTiledDirectionalLight( index );
-	}
-
 	DirectionalLight LightingModel::getDirectionalLight( sdw::UInt const & index )const
 	{
 		return m_getDirectionalLight( index );
@@ -522,11 +480,7 @@ namespace castor3d::shader
 		, uint32_t set )
 	{
 		sdw::Ssbo lightUbo{ m_writer, "LightSsbo", binding, set };
-#if C3D_UseTiledDirectionalShadowMap
-		lightUbo.declMember< TiledDirectionalLight >( "c3d_light" );
-#else
 		lightUbo.declMember< DirectionalLight >( "c3d_light" );
-#endif
 		lightUbo.end();
 	}
 
@@ -571,49 +525,6 @@ namespace castor3d::shader
 
 	void LightingModel::doDeclareGetDirectionalLight()
 	{
-#if C3D_UseTiledDirectionalShadowMap
-		m_getTiledDirectionalLight = m_writer.implementFunction< TiledDirectionalLight >( "c3d_getDirectionalLight"
-			, [this]( sdw::UInt const & index )
-			{
-				auto result = m_writer.declLocale< TiledDirectionalLight >( "result" );
-
-#if C3D_DebugLightBuffer
-				result.m_direction = vec3( 0.0_f, -0.7071068287_f, 0.7071067691_f );
-				result.m_transform = mat4( vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
-					, vec4( 0.0_f, 1.0_f, 0.0_f, 0.0_f )
-					, vec4( 0.0_f, 0.0_f, 1.0_f, 0.0_f )
-					, vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
-#else
-				auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-				result.base = getBaseLight( offset );
-
-				auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-				result.m_directionCount = lightsData[offset]; ++offset;
-				result.m_direction = normalize( result.m_direction );
-				result.m_tiles = lightsData[offset]; ++offset;
-				result.m_splitDepths[0] = lightsData[offset]; ++offset;
-				result.m_splitDepths[1] = lightsData[offset]; ++offset;
-				result.m_splitScales[0] = lightsData[offset]; ++offset;
-				result.m_splitScales[1] = lightsData[offset]; ++offset;
-				auto col0 = m_writer.declLocale< Vec4 >( "col0" );
-				auto col1 = m_writer.declLocale< Vec4 >( "col1" );
-				auto col2 = m_writer.declLocale< Vec4 >( "col2" );
-				auto col3 = m_writer.declLocale< Vec4 >( "col3" );
-
-				for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
-				{
-					col0 = lightsData[offset]; ++offset;
-					col1 = lightsData[offset]; ++offset;
-					col2 = lightsData[offset]; ++offset;
-					col3 = lightsData[offset]; ++offset;
-					result.m_transforms[i] = mat4( col0, col1, col2, col3 );
-				}
-#endif
-
-				m_writer.returnStmt( result );
-			}
-			, sdw::InUInt{ m_writer, "index" } );
-#else
 		m_getDirectionalLight = m_writer.implementFunction< DirectionalLight >( "c3d_getDirectionalLight"
 			, [this]( sdw::UInt const & index )
 			{
@@ -652,7 +563,6 @@ namespace castor3d::shader
 				m_writer.returnStmt( result );
 			}
 			, sdw::InUInt{ m_writer, "index" } );
-#endif
 	}
 
 	void LightingModel::doDeclareGetPointLight()
@@ -699,45 +609,6 @@ namespace castor3d::shader
 
 	void LightingModel::doDeclareGetCascadeFactors()
 	{
-#if C3D_UseTiledDirectionalShadowMap
-		m_getTileFactors = m_writer.implementFunction< sdw::Vec3 >( "c3d_getCascadeFactors"
-			, [this]( sdw::Vec3 viewVertex
-				, sdw::Array< sdw::Vec4 > splitDepths
-				, sdw::UInt index )
-			{
-				auto incIndex = m_writer.declLocale( "incIndex"
-					, index + 1u );
-				auto splitDiff = m_writer.declLocale( "splitDiff"
-					, ( splitDepths[incIndex / 4][incIndex % 4] - splitDepths[index / 4][index % 4] ) / 16.0f );
-				auto splitMax = m_writer.declLocale( "splitMax"
-					, splitDepths[index / 4][index % 4] - splitDiff );
-				splitDiff *= 2.0_f;
-				auto splitMin = m_writer.declLocale( "splitMin"
-					, splitMax + splitDiff );
-
-				IF( m_writer, viewVertex.z() < splitMin )
-				{
-					m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
-						, 1.0_f
-						, 0.0_f ) );
-				}
-				FI;
-				IF( m_writer, viewVertex.z() >= splitMin && viewVertex.z() < splitMax )
-				{
-					auto factor = m_writer.declLocale( "factor"
-						, ( viewVertex.z() - splitMax ) / splitDiff );
-					m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
-						, factor
-						, 1.0_f - factor ) );
-				}
-				FI;
-
-				m_writer.returnStmt( vec3( 0.0_f, 1.0_f, 0.0_f ) );
-			}
-			, sdw::InVec3( m_writer, "viewVertex" )
-			, sdw::InVec4Array( m_writer, "splitDepths", 2u )
-			, sdw::InUInt( m_writer, "index" ) );
-#else
 		m_getCascadeFactors = m_writer.implementFunction< sdw::Vec3 >( "c3d_getCascadeFactors"
 			, [this]( sdw::Vec3 viewVertex
 				, sdw::Vec4 splitDepths
@@ -773,7 +644,6 @@ namespace castor3d::shader
 			, sdw::InVec3( m_writer, "viewVertex" )
 			, sdw::InVec4( m_writer, "splitDepths" )
 			, sdw::InUInt( m_writer, "index" ) );
-#endif
 	}
 
 	//*********************************************************************************************

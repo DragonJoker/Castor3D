@@ -42,12 +42,6 @@ namespace castor3d::shader
 		*	Diffuse + Specular
 		*/
 		//\{
-		C3D_API void compute( TiledDirectionalLight const & light
-			, LightMaterial const & material
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows
-			, OutputComponents & output )const override;
 		C3D_API void compute( DirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
@@ -90,11 +84,6 @@ namespace castor3d::shader
 		*	Diffuse only
 		*/
 		//\{
-		C3D_API sdw::Vec3 computeDiffuse( TiledDirectionalLight const & light
-			, LightMaterial const & material
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Int const & receivesShadows )const override;
 		C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 			, LightMaterial const & material
 			, Surface const & surface
@@ -127,25 +116,16 @@ namespace castor3d::shader
 	protected:
 		void doDeclareModel()override;
 		void doDeclareComputeDirectionalLight()override;
-		void doDeclareComputeTiledDirectionalLight()override;
 		void doDeclareComputePointLight()override;
 		void doDeclareComputeSpotLight()override;
 		void doDeclareDiffuseModel()override;
 		void doDeclareComputeDirectionalLightDiffuse()override;
-		void doDeclareComputeTiledDirectionalLightDiffuse()override;
 		void doDeclareComputePointLightDiffuse()override;
 		void doDeclareComputeSpotLightDiffuse()override;
 
 	public:
 		bool m_isSpecularGlossiness;
 		CookTorranceBRDF m_cookTorrance;
-		sdw::Function< sdw::Void
-			, InTiledDirectionalLight
-			, InPbrLightMaterial
-			, InSurface
-			, sdw::InVec3
-			, sdw::InInt
-			, OutputComponents & > m_computeTiledDirectional;
 		sdw::Function< sdw::Void
 			, InDirectionalLight
 			, InPbrLightMaterial
@@ -167,12 +147,6 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InInt
 			, OutputComponents & > m_computeSpot;
-		sdw::Function< sdw::Vec3
-			, InOutTiledDirectionalLight
-			, InPbrLightMaterial
-			, InSurface
-			, sdw::InVec3
-			, sdw::InInt > m_computeTiledDirectionalDiffuse;
 		sdw::Function< sdw::Vec3
 			, InOutDirectionalLight
 			, InPbrLightMaterial

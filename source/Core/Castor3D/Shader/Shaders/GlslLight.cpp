@@ -122,47 +122,6 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		TiledDirectionalLight::TiledDirectionalLight( ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
-			, base{ getMember< Light >( "lightBase" ) }
-			, m_directionCount{ getMember< Vec4 >( "directionCount" ) }
-			, tiles{ getMember< Vec4 >( "tiles" ) }
-			, splitDepths{ getMemberArray< Vec4 >( "splitDepths" ) }
-			, splitScales{ getMemberArray< Vec4 >( "splitScales" ) }
-			, transforms{ getMemberArray< Mat4 >( "transforms" ) }
-			, direction{ m_directionCount.xyz() }
-			, cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
-		{
-		}
-
-		ast::type::BaseStructPtr TiledDirectionalLight::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_TiledDirectionalLight" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "lightBase", Light::makeType( cache ) );
-				result->declMember( "directionCount", ast::type::Kind::eVec4F );
-				result->declMember( "tiles", ast::type::Kind::eVec4F );
-				result->declMember( "splitDepths", ast::type::Kind::eVec4F, 2u );
-				result->declMember( "splitScales", ast::type::Kind::eVec4F, 2u );
-				result->declMember( "transforms", ast::type::Kind::eMat4x4F, DirectionalMaxCascadesCount );
-			}
-
-			return result;
-		}
-
-		std::unique_ptr< sdw::Struct > TiledDirectionalLight::declare( sdw::ShaderWriter & writer )
-		{
-			return std::make_unique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-
-		//*********************************************************************************************
-
 		PointLight::PointLight( ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
