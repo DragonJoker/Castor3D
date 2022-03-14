@@ -300,49 +300,6 @@ namespace castor3d
 				, InFloat{ m_writer, "varianceBias" } );
 		}
 
-		void Shadow::doDeclareTextureProj()
-		{
-			if ( m_textureProj )
-			{
-				return;
-			}
-
-			m_textureProj = m_writer.implementFunction< Float >( "c3d_shdTextureProj"
-				, [this]( Vec4 const & lightSpacePosition
-					, Vec2 const & offset
-					, CombinedImage2DArrayRgba32 const & shadowMap
-					, Int const & index
-					, Float const & bias )
-				{
-					auto shadow = m_writer.declLocale( "shadow"
-						, 1.0_f );
-					auto shadowCoord = m_writer.declLocale( "shadowCoord"
-						, lightSpacePosition );
-
-					IF( m_writer, abs( shadowCoord.z() ) < 1.0_f )
-					{
-						auto uv = m_writer.declLocale( "uv"
-							, shadowCoord.st() + offset );
-						auto dist = m_writer.declLocale( "dist"
-							, shadowMap.sample( vec3( uv, m_writer.cast< Float >( index ) ) ) );
-
-						IF( m_writer, shadowCoord.w() > 0.0_f )
-						{
-							shadow = step( shadowCoord.z() - bias, dist.w() );
-						}
-						FI;
-					}
-					FI;
-
-					m_writer.returnStmt( shadow );
-				}
-				, InVec4{ m_writer, "lightSpacePosition" }
-				, InVec2{ m_writer, "offset" }
-				, InCombinedImage2DArrayRgba32{ m_writer, "shadowMap" }
-				, InInt{ m_writer, "index" }
-				, InFloat{ m_writer, "bias" } );
-		}
-
 		void Shadow::doDeclareFilterPCF()
 		{
 			if ( m_filterPCF )
@@ -350,35 +307,35 @@ namespace castor3d
 				return;
 			}
 
-			doDeclareTextureProj();
 			m_filterPCF = m_writer.implementFunction< Float >( "c3d_shdFilterPCF"
 				, [this]( Vec4 const & lightSpacePosition
 					, CombinedImage2DArrayRgba32 const & shadowMap
-					, Int const & index
 					, Vec2 const & invTexDim
+					, Int const & index
+					, Float const & depth
 					, Float const & bias )
 				{
+					int count = 0;
+					int const range = 1;
+
 					auto scale = m_writer.declLocale( "scale"
 						, 1.0_f );
 					auto dx = m_writer.declLocale( "dx"
-						, scale * invTexDim.x() );
+						, scale * invTexDim );
 					auto dy = m_writer.declLocale( "dy"
-						, scale * invTexDim.y() );
-
+						, scale * invTexDim );
+					auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+						, 0.0_f );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 0.0_f );
-					auto count = 0;
-					auto const range = 1;
 
 					for ( int x = -range; x <= range; ++x )
 					{
 						for ( int y = -range; y <= range; ++y )
 						{
-							shadowFactor += m_textureProj( lightSpacePosition
-								, vec2( dx * float( x ), dy * float( y ) )
-								, shadowMap
-								, index
-								, bias );
+							shadowMapDepth = shadowMap.sample( vec3( lightSpacePosition.xy() + vec2( dx * float( x ), dy * float( y ) )
+								, m_writer.cast< Float >( index ) ) ).w();
+							shadowFactor += step( depth - bias, shadowMapDepth );
 							++count;
 						}
 					}
@@ -387,8 +344,9 @@ namespace castor3d
 				}
 				, InVec4{ m_writer, "lightSpacePosition" }
 				, InCombinedImage2DArrayRgba32{ m_writer, "shadowMap" }
-				, InInt{ m_writer, "index" }
 				, InVec2{ m_writer, "invTexDim" }
+				, InInt{ m_writer, "index" }
+				, InFloat{ m_writer, "depth" }
 				, InFloat{ m_writer, "bias" } );
 		}
 
@@ -726,7 +684,6 @@ namespace castor3d
 
 		void Shadow::doDeclareComputeSpotShadow()
 		{
-			doDeclareTextureProj();
 			doDeclareFilterPCF();
 			doDeclareGetShadowOffset();
 			doDeclareChebyshevUpperBound();
@@ -768,31 +725,12 @@ namespace castor3d
 										, normalize( lightToVertex )
 										, light.pcfShadowOffsets.x()
 										, light.pcfShadowOffsets.y() ) );
-								auto invTexDim = m_writer.declLocale( "invTexDim"
-									, Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) );
-								auto scale = m_writer.declLocale( "scale"
-									, 1.0_f );
-								auto dx = m_writer.declLocale( "dx"
-									, scale * invTexDim );
-								auto dy = m_writer.declLocale( "dy"
-									, scale * invTexDim );
-								auto shadowMapDepth = m_writer.declLocale( "shadowFactor"
-									, 0.0_f );
-								int count = 0;
-								int const range = 1;
-
-								for ( int x = -range; x <= range; ++x )
-								{
-									for ( int y = -range; y <= range; ++y )
-									{
-										shadowMapDepth = c3d_mapNormalDepthSpot.sample( vec3( lightSpacePosition.xy() + vec2( dx * float( x ), dy * float( y ) )
-											, m_writer.cast< Float >( light.index ) ) ).w();
-										result += step( depth - bias, shadowMapDepth );
-										++count;
-									}
-								}
-
-								result /= float( count );
+								result = m_filterPCF( lightSpacePosition
+									, c3d_mapNormalDepthSpot
+									, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
+									, light.index
+									, depth
+									, bias );
 							}
 							ELSE
 							{

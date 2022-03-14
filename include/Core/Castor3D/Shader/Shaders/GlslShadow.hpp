@@ -76,7 +76,6 @@ namespace castor3d
 			void doDeclareGetRandom();
 			void doDeclareGetShadowOffset();
 			void doDeclareChebyshevUpperBound();
-			void doDeclareTextureProj();
 			void doDeclareFilterPCF();
 			void doDeclareTextureProjNoCascade();
 			void doDeclareFilterPCFNoCascade();
@@ -100,15 +99,10 @@ namespace castor3d
 				, sdw::InFloat > m_getShadowOffset;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InVec2
 				, sdw::InCombinedImage2DArrayRgba32
-				, sdw::InInt
-				, sdw::InFloat > m_textureProj;
-			sdw::Function< sdw::Float
-				, sdw::InVec4
-				, sdw::InCombinedImage2DArrayRgba32
-				, sdw::InInt
 				, sdw::InVec2
+				, sdw::InInt
+				, sdw::InFloat
 				, sdw::InFloat > m_filterPCF;
 			sdw::Function < sdw::Float
 				, sdw::InVec2
