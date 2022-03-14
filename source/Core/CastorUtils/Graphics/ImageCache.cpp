@@ -52,9 +52,9 @@ namespace castor
 	{
 		auto img = tryFind( name );
 
-		if ( img.lock() )
+		if ( auto image = img.lock() )
 		{
-			return img.lock()->getPixelFormat();
+			return image->getPixelFormat();
 		}
 
 		return PixelFormat::eUNDEFINED;

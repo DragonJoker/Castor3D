@@ -106,8 +106,6 @@ namespace castor3d::shader
 		, m_shadowModel{ std::make_shared< Shadow >( shadowOptions, writer ) }
 		, m_sssTransmittance{ ( sssProfiles
 			? std::make_shared< SssTransmittance >( writer
-				, *m_shadowModel
-				, utils
 				, std::move( shadowOptions )
 				, *sssProfiles )
 			: nullptr ) }
