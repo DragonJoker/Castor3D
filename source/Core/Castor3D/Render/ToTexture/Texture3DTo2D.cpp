@@ -377,9 +377,9 @@ namespace castor3d
 				{
 					auto b = writer.declLocale( "b"
 						, 1_u << vertexID );
-					writer.returnStmt( vec3( writer.ternary( ( 0x287a_u & b ) != 0, 1.0_f, 0.0_f )
-						, writer.ternary( ( 0x02af_u & b ) != 0, 1.0_f, 0.0_f )
-						, writer.ternary( ( 0x31e3_u & b ) != 0, 1.0_f, 0.0_f ) ) );
+					writer.returnStmt( vec3( writer.ternary( ( 0x287a_u & b ) != 0u, 1.0_f, 0.0_f )
+						, writer.ternary( ( 0x02af_u & b ) != 0u, 1.0_f, 0.0_f )
+						, writer.ternary( ( 0x31e3_u & b ) != 0u, 1.0_f, 0.0_f ) ) );
 				}
 				, InUInt{ writer, "vertexID" } );
 
@@ -387,7 +387,7 @@ namespace castor3d
 				, PointListT< SurfaceT > list
 				, TriangleStreamT< SurfaceT > out )
 				{
-					IF( writer, list[0].voxelColour.a() > 0 )
+					IF( writer, list[0].voxelColour.a() > 0.0f )
 					{
 						FOR( writer, UInt, i, 0_u, i < 14_u, ++i )
 						{
@@ -399,7 +399,7 @@ namespace castor3d
 							auto pos = writer.declLocale( "pos"
 								, list[0].vtx.position.xyz() );
 							// [0, gridSize] => [0, 1] => [-1, 1]
-							pos = pos / writer.cast< Float >( gridSize ) * 2 - 1;
+							pos = pos / writer.cast< Float >( gridSize ) * 2.0f - 1.0f;
 							pos.y() = -pos.y();
 							// [-1, 1] => [-gridSize, gridSize]
 							pos *= writer.cast< Float >( gridSize );

@@ -122,9 +122,9 @@ namespace draw_edges
 					auto Gd = writer.declLocale( "Gd", Fdepth( data0.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).y(), zNear, zFar ) );
 					auto Hd = writer.declLocale( "Hd", Fdepth( data0.fetch( texCoord + ivec2(   +w,   -h ), 0_i ).y(), zNear, zFar ) );
 
-					g = ( abs( Ad + 2 * Bd + Cd - Fd - 2 * Gd - Hd ) + abs( Cd + 2 * Ed + Hd - Ad - 2 * Dd - Fd ) ) / 8.0;
+					g = ( abs( Ad + 2.0f * Bd + Cd - Fd - 2.0f * Gd - Hd ) + abs( Cd + 2.0f * Ed + Hd - Ad - 2.0f * Dd - Fd ) ) / 8.0f;
 					auto l = writer.declLocale( "l"
-						, ( 8 * Xd - Ad - Bd - Cd - Dd - Ed - Fd - Gd - Hd ) / 3.0 );
+						, ( 8.0f * Xd - Ad - Bd - Cd - Dd - Ed - Fd - Gd - Hd ) / 3.0f );
 
 					Dgrad = ( l + g ) * depthFactor;
 					Dgrad = smoothStep( 0.03_f, 0.1_f, Dgrad );

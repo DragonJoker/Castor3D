@@ -349,15 +349,14 @@ namespace castor3d::shader
 					, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) };
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( -light.direction ) );
-				auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-					, m_cookTorrance.compute( light.base
-						, worldEye
-						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
-						, surface
-						, output ) );
+				m_cookTorrance.compute( light.base
+					, worldEye
+					, lightDirection
+					, material.specular
+					, material.getMetalness()
+					, material.getRoughness()
+					, surface
+					, output );
 
 				if ( m_shadowModel->isEnabled() )
 				{
@@ -491,15 +490,14 @@ namespace castor3d::shader
 					, length( vertexToLight ) );
 				auto lightDirection = m_writer.declLocale( "lightDirection"
 					, normalize( vertexToLight ) );
-				auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-					, m_cookTorrance.compute( light.base
-						, worldEye
-						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
-						, surface
-						, output ) );
+				m_cookTorrance.compute( light.base
+					, worldEye
+					, lightDirection
+					, material.specular
+					, material.getMetalness()
+					, material.getRoughness()
+					, surface
+					, output );
 
 				if ( m_shadowModel->isEnabled() )
 				{

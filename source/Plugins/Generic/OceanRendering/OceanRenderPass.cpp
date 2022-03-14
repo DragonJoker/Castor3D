@@ -902,17 +902,17 @@ namespace ocean
 				auto cosN = writer.declLocale( "cosN"
 					, cos( radN ) );
 
-				result.bitangent.x() = 1 - ( qi * wave.direction.x() * wave.direction.x() * waFactor * sinN );
-				result.bitangent.z() = -1 * ( qi * wave.direction.x() * wave.direction.z() * waFactor * sinN );
+				result.bitangent.x() = 1.0_f - ( qi * wave.direction.x() * wave.direction.x() * waFactor * sinN );
+				result.bitangent.z() = -1.0_f * ( qi * wave.direction.x() * wave.direction.z() * waFactor * sinN );
 				result.bitangent.y() = wave.direction.x() * waFactor * cosN;
 
-				result.tangent.x() = -1 * ( qi * wave.direction.x() * wave.direction.z() * waFactor * sinN );
-				result.tangent.z() = 1 - ( qi * wave.direction.z() * wave.direction.z() * waFactor * sinN );
+				result.tangent.x() = -1.0_f * ( qi * wave.direction.x() * wave.direction.z() * waFactor * sinN );
+				result.tangent.z() = 1.0_f - ( qi * wave.direction.z() * wave.direction.z() * waFactor * sinN );
 				result.tangent.y() = wave.direction.z() * waFactor * cosN;
 
-				result.normal.x() = -1 * ( wave.direction.x() * waFactor * cosN );
-				result.normal.z() = -1 * ( wave.direction.z() * waFactor * cosN );
-				result.normal.y() = 1 - ( qi * waFactor * sinN );
+				result.normal.x() = -1.0_f * ( wave.direction.x() * waFactor * cosN );
+				result.normal.z() = -1.0_f * ( wave.direction.z() * waFactor * cosN );
+				result.normal.y() = 1.0_f - ( qi * waFactor * sinN );
 
 				result.bitangent = normalize( result.bitangent );
 				result.tangent = normalize( result.tangent );
@@ -1142,9 +1142,9 @@ namespace ocean
 					, in.fragCoord.xy() / vec2( c3d_colour.getSize( 0_i ) ) );
 
 				auto normalMap1 = writer.declLocale( "normalMap1"
-					, ( c3d_waveNormals1.sample( normalMapCoords1 ).rgb() * 2.0 ) - 1.0 );
+					, ( c3d_waveNormals1.sample( normalMapCoords1 ).rgb() * 2.0_f ) - 1.0_f );
 				auto normalMap2 = writer.declLocale( "normalMap2"
-					, ( c3d_waveNormals2.sample( normalMapCoords2 ).rgb() * 2.0 ) - 1.0 );
+					, ( c3d_waveNormals2.sample( normalMapCoords2 ).rgb() * 2.0_f ) - 1.0_f );
 				auto texSpace = writer.declLocale( "texSpace"
 					, mat3( tangent, bitangent, normal ) );
 				auto finalNormal = writer.declLocale( "finalNormal"
@@ -1192,9 +1192,9 @@ namespace ocean
 					// So here, I'm sampling some noise with three different sets of texture coordinates to try and achieve
 					// that sparkling look that defines water specularity.
 					auto specularNoise = writer.declLocale( "specularNoise"
-						, c3d_waveNoise.sample( normalMapCoords1 * 0.5 ) );
-					specularNoise *= c3d_waveNoise.sample( normalMapCoords2 * 0.5 );
-					specularNoise *= c3d_waveNoise.sample( in.texture1.xy() * 0.5 );
+						, c3d_waveNoise.sample( normalMapCoords1 * 0.5_f ) );
+					specularNoise *= c3d_waveNoise.sample( normalMapCoords2 * 0.5_f );
+					specularNoise *= c3d_waveNoise.sample( in.texture1.xy() * 0.5_f );
 					lightSpecular *= specularNoise;
 					displayDebugData( eNoisedSpecular, lightSpecular, 1.0_f );
 					displayDebugData( eSpecularNoise, vec3( specularNoise ), 1.0_f );
@@ -1257,7 +1257,7 @@ namespace ocean
 
 					// Wobbly refractions
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
-						, ( hdrCoords + ( ( finalNormal.xz() + finalNormal.xy() ) * 0.5 ) * c3d_oceanData.refractionDistortionFactor ) );
+						, ( hdrCoords + ( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f ) * c3d_oceanData.refractionDistortionFactor ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_depth.sample( distortedTexCoord ) );
 					auto distortedPosition = writer.declLocale( "distortedPosition"

@@ -237,7 +237,7 @@ namespace castor3d
 							planeWeight = writer.ternary( distance2 * square( scale ) < lowDistanceThreshold2
 								, 1.0_f
 								, Float{ pow( max( 0.0_f
-										, 1.0_f - c3d_ssaoConfigData.edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) )
+										, 1.0_f - c3d_ssaoConfigData.edgeSharpness * 2.0f * k_plane * planeError / sqrt( distance2 ) )
 									, 2.0_f ) } );
 						}
 						FI;
