@@ -202,7 +202,7 @@ namespace castor3d
 	{
 		uint32_t offset = index * 6u;
 
-		if ( m_passes.size() > offset + 6u )
+		if ( m_passes.size() >= offset + 6u )
 		{
 			for ( auto & data : castor::makeArrayView( m_passes.begin() + offset, m_passes.begin() + offset + 6u ) )
 			{
