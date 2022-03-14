@@ -108,14 +108,7 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, PointLight );
 
-			sdw::Float getAttenuationFactor( sdw::Float const & distance )const
-			{
-				return sdw::fma( m_attenuation4.z()
-					, distance * distance
-					, sdw::fma( m_attenuation4.y()
-						, distance
-						, m_attenuation4.x() ) );
-			}
+			C3D_API sdw::Float getAttenuationFactor( sdw::Float const & distance )const;
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -145,14 +138,7 @@ namespace castor3d
 				, bool enabled );
 			SDW_DeclStructInstance( C3D_API, SpotLight );
 
-			sdw::Float getAttenuationFactor( sdw::Float const & distance )const
-			{
-				return sdw::fma( m_attenuation4.z()
-					, distance * distance
-					, sdw::fma( m_attenuation4.y()
-						, distance
-						, m_attenuation4.x() ) );
-			}
+			C3D_API sdw::Float getAttenuationFactor( sdw::Float const & distance )const;
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );

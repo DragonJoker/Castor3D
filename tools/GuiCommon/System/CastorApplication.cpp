@@ -286,6 +286,7 @@ namespace GuiCommon
 			, !isCastorThreaded
 			, rendererType
 			, {}
+			, {}
 			, {} }
 	{
 		wxSetAssertHandler( assertHandler );

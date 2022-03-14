@@ -133,6 +133,15 @@ namespace castor3d
 		{
 		}
 
+		sdw::Float PointLight::getAttenuationFactor( sdw::Float const & distance )const
+		{
+			return sdw::fma( m_attenuation4.z()
+				, distance * distance
+				, sdw::fma( m_attenuation4.y()
+					, distance
+					, m_attenuation4.x() ) );
+		}
+
 		ast::type::BaseStructPtr PointLight::makeType( ast::type::TypesCache & cache )
 		{
 			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
@@ -171,6 +180,15 @@ namespace castor3d
 			, exponent{ m_exponentCutOff.x() }
 			, cutOff{ m_exponentCutOff.y() }
 		{
+		}
+
+		sdw::Float SpotLight::getAttenuationFactor( sdw::Float const & distance )const
+		{
+			return sdw::fma( m_attenuation4.z()
+				, distance * distance
+				, sdw::fma( m_attenuation4.y()
+					, distance
+					, m_attenuation4.x() ) );
 		}
 
 		ast::type::BaseStructPtr SpotLight::makeType( ast::type::TypesCache & cache )
