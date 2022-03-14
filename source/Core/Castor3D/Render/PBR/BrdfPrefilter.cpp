@@ -246,7 +246,7 @@ namespace castor3d
 					auto cosTheta = writer.declLocale( "cosTheta"
 						, sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a * a - 1.0_f ) * xi.y() ) ) );
 					auto sinTheta = writer.declLocale( "sinTheta"
-						, sqrt( 1.0 - cosTheta * cosTheta ) );
+						, sqrt( 1.0_f - cosTheta * cosTheta ) );
 
 					// from spherical coordinates to cartesian coordinates
 					auto H = writer.declLocale< Vec3 >( "H" );

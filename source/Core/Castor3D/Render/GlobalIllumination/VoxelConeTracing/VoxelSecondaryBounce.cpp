@@ -164,8 +164,8 @@ namespace castor3d
 						auto position = writer.declLocale( "position"
 							, ( vec3( coord ) + vec3( 0.5_f ) ) * c3d_voxelData.gridToClip );
 						// [0,1] => [-1,1]
-						position = position * 2 - 1;
-						position.y() *= -1;
+						position = position * 2.0f - 1.0f;
+						position.y() *= -1.0f;
 						// [-1,1] => [-gridSize/2,gridSize/2]
 						position *= c3d_voxelData.clipToGrid / 2.0f;
 						// to world

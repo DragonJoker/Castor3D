@@ -110,7 +110,7 @@ namespace ocean_fft
 				, [&]( sdw::Vec2 i
 					, sdw::Vec2 N )
 				{
-					writer.returnStmt( mix( i, i - N, vec2( greaterThan( i, 0.5 * N ) ) ) );
+					writer.returnStmt( mix( i, i - N, vec2( greaterThan( i, 0.5_f * N ) ) ) );
 				}
 				, sdw::InVec2{ writer, "i" }
 				, sdw::InVec2{ writer, "n" } );

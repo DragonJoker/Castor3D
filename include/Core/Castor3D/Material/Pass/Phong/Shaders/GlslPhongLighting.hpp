@@ -132,7 +132,7 @@ namespace castor3d::shader
 		void doDeclareComputeSpotLightDiffuse()override;
 
 	private:
-		sdw::Vec3 doComputeLight( Light const & light
+		sdw::RetVec3 doComputeLight( Light const & light
 			, PhongLightMaterial const & material
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye

@@ -272,7 +272,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -338,7 +338,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 

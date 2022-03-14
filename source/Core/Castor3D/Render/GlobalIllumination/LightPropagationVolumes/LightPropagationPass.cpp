@@ -268,7 +268,7 @@ namespace castor3d
 								, c3d_lpvGridData.nextGrid( neighbourGScellIndex, vec3( mainDirection ) ) );
 							auto occCoeffs = writer.declLocale( "occCoeffs"
 								, c3d_geometryVolume.sample( occCoord ) );
-							occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( vec3( -mainDirection ) ) ), 0.0_f, 1.0_f );
+							occlusionValue = 1.0f - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( vec3( -mainDirection ) ) ), 0.0_f, 1.0_f );
 						}
 
 						auto occludedDirectFaceContribution = writer.declLocale( "occludedDirectFaceContribution"
@@ -299,7 +299,7 @@ namespace castor3d
 									, c3d_lpvGridData.nextGrid( neighbourGScellIndex, evalDirection ) );
 								auto occCoeffs = writer.declLocale( "occCoeffs"
 									, c3d_geometryVolume.sample( occCoord ) );
-								occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( -evalDirection ) ), 0.0_f, 1.0_f );
+								occlusionValue = 1.0f - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( -evalDirection ) ), 0.0_f, 1.0_f );
 							}
 
 							auto occludedSideFaceContribution = writer.declLocale( "occludedSideFaceContribution"

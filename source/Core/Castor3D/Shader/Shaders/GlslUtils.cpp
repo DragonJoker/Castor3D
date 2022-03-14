@@ -838,12 +838,12 @@ namespace castor3d::shader
 
 				auto color = m_writer.declLocale< sdw::Vec4 >( "color" );
 				auto hdr = m_writer.declLocale( "hdr"
-					, m_writer.cast< sdw::Float >( ( colorMask >> 24u ) & 0x0000007f ) );
-				color.r() = m_writer.cast< sdw::Float >( ( colorMask >> 16u ) & 0x000000ff );
-				color.g() = m_writer.cast< sdw::Float >( ( colorMask >> 8u ) & 0x000000ff );
-				color.b() = m_writer.cast< sdw::Float >( colorMask & 0x000000ff );
+					, m_writer.cast< sdw::Float >( ( colorMask >> 24u ) & 0x0000007f_u ) );
+				color.r() = m_writer.cast< sdw::Float >( ( colorMask >> 16u ) & 0x000000ff_u );
+				color.g() = m_writer.cast< sdw::Float >( ( colorMask >> 8u ) & 0x000000ff_u );
+				color.b() = m_writer.cast< sdw::Float >( colorMask & 0x000000ff_u );
 
-				hdr /= 127.0f;
+				hdr /= 127.0_f;
 				color.rgb() /= vec3( 255.0_f );
 
 				color.rgb() *= hdr * hdrRange;
@@ -866,13 +866,13 @@ namespace castor3d::shader
 			, [&](  sdw::UInt const & normalMask )
 			{
 				auto iNormal = m_writer.declLocale( "iNormal"
-					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 18 ) & 0x000000ff )
-						, m_writer.cast< sdw::Int >( ( normalMask >> 9 ) & 0x000000ff )
-						, m_writer.cast< sdw::Int >( normalMask & 0x000000ff ) ) );
+					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 18_u ) & 0x000000ff_u )
+						, m_writer.cast< sdw::Int >( ( normalMask >> 9_u ) & 0x000000ff_u )
+						, m_writer.cast< sdw::Int >( normalMask & 0x000000ff_u ) ) );
 				auto iNormalSigns = m_writer.declLocale( "iNormalSigns"
-					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 25 ) & 0x00000002 )
-						, m_writer.cast< sdw::Int >( ( normalMask >> 16 ) & 0x00000002 )
-						, m_writer.cast< sdw::Int >( ( normalMask >> 7 ) & 0x00000002 ) ) );
+					, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 25_u ) & 0x00000002_u )
+						, m_writer.cast< sdw::Int >( ( normalMask >> 16_u ) & 0x00000002_u )
+						, m_writer.cast< sdw::Int >( ( normalMask >> 7_u ) & 0x00000002_u ) ) );
 				iNormalSigns = 1_i - iNormalSigns;
 				auto normal = m_writer.declLocale( "normal"
 					, vec3( iNormal ) / 255.0f );
