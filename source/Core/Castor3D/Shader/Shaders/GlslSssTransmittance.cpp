@@ -13,13 +13,9 @@ namespace castor3d
 	namespace shader
 	{
 		SssTransmittance::SssTransmittance( sdw::ShaderWriter & writer
-			, Shadow & shadow
-			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const & sssProfiles )
 			: m_writer{ writer }
-			, m_shadow{ shadow }
-			, m_utils{ utils }
 			, m_sssProfiles{ sssProfiles }
 			, m_shadowMap{ shadowOptions.type != SceneFlag::eNone }
 		{
