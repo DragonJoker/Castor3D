@@ -66,6 +66,16 @@ namespace castor3d
 		}
 	}
 
+	void RenderTargetCache::upload( ashes::CommandBuffer const & cb )
+	{
+		LockType lock{ castor::makeUniqueLock( *this ) };
+
+		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
+		{
+			target->upload( cb );
+		}
+	}
+
 	crg::SemaphoreWaitArray RenderTargetCache::render( RenderDevice const & device
 		, RenderInfo & info
 		, ashes::Queue const & queue

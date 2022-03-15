@@ -194,19 +194,19 @@ namespace castor3d
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			updater.timer->beginPass( *m_commandBuffer, updater.index + 1u );
 			// Copy output storage to billboard's vertex buffer
-			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
+			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeTransferDestination() );
+				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
 				, m_particlesCount * m_inputs.stride()
 				, 0u
 				, 0u );
-			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
+			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
-				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeVertexShaderInputResource() );
+				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeVertexShaderInputResource() );
 			updater.timer->endPass( *m_commandBuffer, updater.index + 1u );
 			m_commandBuffer->end();
 

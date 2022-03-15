@@ -177,7 +177,6 @@ namespace castor3d
 		InstanceDataMap m_instances;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_mtxLayouts;
 		uint32_t m_threshold;
-		StagingDataUPtr m_staging;
 	};
 }
 
