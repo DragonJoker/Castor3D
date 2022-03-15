@@ -81,6 +81,15 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
+		 *\brief		Uploads all overlay GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU d'incrustations en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
 		 *\brief			Renders into the render targets.
 		 *\param[in]		device	The GPU device.
 		 *\param[in,out]	info	Receives the render informations.

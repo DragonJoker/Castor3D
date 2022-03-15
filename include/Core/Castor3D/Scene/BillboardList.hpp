@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
@@ -42,7 +43,7 @@ namespace castor3d
 			, SceneNode * node
 			, ashes::PipelineVertexInputStateCreateInfoPtr vertexLayout
 			, uint32_t vertexStride
-			, ashes::VertexBufferBasePtr vertexBuffer = nullptr );
+			, GpuBufferOffsetT< uint8_t > vertexBuffer = {} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -123,14 +124,14 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		ashes::VertexBufferBase const & getVertexBuffer()const
+		GpuBufferOffsetT< uint8_t > const & getVertexBuffer()const
 		{
-			return *m_vertexBuffer;
+			return m_vertexBuffer;
 		}
 
-		ashes::VertexBufferBase & getVertexBuffer()
+		GpuBufferOffsetT< uint8_t > & getVertexBuffer()
 		{
-			return *m_vertexBuffer;
+			return m_vertexBuffer;
 		}
 
 		GeometryBuffers const & getGeometryBuffers()const
@@ -224,7 +225,7 @@ namespace castor3d
 		MaterialRPtr m_material;
 		castor::Point2f m_dimensions;
 		castor::Point3f m_cameraPosition;
-		ashes::VertexBufferBasePtr m_vertexBuffer;
+		GpuBufferOffsetT< uint8_t > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		uint32_t m_vertexStride;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_quadLayout;

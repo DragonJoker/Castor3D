@@ -57,24 +57,20 @@ namespace castor3d
 
 	uint32_t CpuParticleSystem::update( castor3d::GpuUpdater & updater )
 	{
-		auto & device = updater.device;
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		VkDeviceSize stride = m_inputs.stride();
-		auto mappedSize = ashes::getAlignedSize( m_firstUnused * stride
-			, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
+		auto * dst = vbo.getData().data();
 
-		if ( auto dst = vbo.getBuffer().lock( 0u, mappedSize, 0u ) )
+		for ( auto i = 0u; i < m_firstUnused; ++i )
 		{
-			for ( auto i = 0u; i < m_firstUnused; ++i )
-			{
-				std::memcpy( dst, m_particles[i].getData(), stride );
-				dst += stride;
-			}
-
-			vbo.getBuffer().flush( 0u, mappedSize );
-			vbo.getBuffer().unlock();
+			std::memcpy( dst, m_particles[i].getData(), stride );
+			dst += stride;
 		}
 
+		vbo.buffer->markDirty( vbo.getOffset()
+			, vbo.getSize()
+			, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		return m_firstUnused;
 	}
 

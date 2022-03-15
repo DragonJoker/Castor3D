@@ -132,16 +132,13 @@ namespace castor3d
 		{
 			if ( getOwner()->getBufferOffsets().hasVertices() )
 			{
-				if ( !m_staging )
-				{
-					m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
-						, getOwner()->getOwner()->getName() + "_" + castor::string::toString( getOwner()->getId() ) + "MorphUpload" );
-				}
-
-				m_staging->upload( m_data.data()
-					, m_data.size() * sizeof( InterleavedVertex )
-					, m_animBuffer.getOffset()
-					, m_animBuffer.getBuffer().getBuffer() );
+				std::copy( m_data.begin()
+					, m_data.end()
+					, m_animBuffer.getData().begin() );
+				m_animBuffer.buffer->markDirty( m_animBuffer.getOffset()
+					, m_animBuffer.getSize()
+					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}
 	}
