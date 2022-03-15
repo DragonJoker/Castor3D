@@ -66,7 +66,7 @@ namespace castor3d
 		castor::ArrayView< DataT > getData()
 		{
 			return castor::makeArrayView( reinterpret_cast< DataT * >( buffer->getDatas().data() + getOffset() )
-				, getSize() );
+				, getCount() );
 		}
 	};
 }

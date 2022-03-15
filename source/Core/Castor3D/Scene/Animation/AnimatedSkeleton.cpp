@@ -30,7 +30,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedSkeleton::fillShader( SkinningTransformsConfiguration * variable )const
+	uint32_t AnimatedSkeleton::fillShader( SkinningTransformsConfiguration * variable )const
 	{
 		Skeleton & skeleton = m_skeleton;
 		uint32_t i{ 0u };
@@ -61,6 +61,8 @@ namespace castor3d
 				variable->bonesMatrix[i++] = final;
 			}
 		}
+
+		return i;
 	}
 
 	void AnimatedSkeleton::fillBuffer( uint8_t * buffer )const
