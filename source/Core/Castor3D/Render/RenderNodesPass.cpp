@@ -482,8 +482,8 @@ namespace castor3d
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
 				write.bufferInfo.push_back( { morphingDatas.getBuffer()
-					, 0u
-					, morphingDatas.getBuffer().getSize() } );
+					, morphingDatas.getOffset()
+					, morphingDatas.getSize() } );
 				descriptorWrites.push_back( write );
 			}
 
@@ -495,8 +495,8 @@ namespace castor3d
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
 				transformsWrite.bufferInfo.push_back( { transformsDatas.getBuffer()
-					, 0u
-					, transformsDatas.getBuffer().getSize() } );
+					, transformsDatas.getOffset()
+					, transformsDatas.getSize() } );
 				descriptorWrites.push_back( transformsWrite );
 			}
 

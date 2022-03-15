@@ -26,22 +26,21 @@ namespace castor
 
 	namespace
 	{
-		void doInitialiseBuffer( ashes::Buffer< castor3d::SkinningTransformsConfiguration > & transforms )
+		void doInitialiseBuffer( GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > & transforms )
 		{
-			if ( auto buffer = transforms.lock( 0u, ashes::WholeSize, 0u ) )
+			auto buffer = transforms.getData();
+
+			for ( auto & dst : buffer )
 			{
-				auto view = castor::makeArrayView( buffer, buffer + 1000u );
-
-				for ( auto & dst : view )
-				{
-					std::fill_n( dst.bonesMatrix.begin()
-						, dst.bonesMatrix.size()
-						, castor::Matrix4x4f::getIdentity() );
-				}
-
-				transforms.flush( 0u, ashes::WholeSize );
-				transforms.unlock();
+				std::fill_n( dst.bonesMatrix.begin()
+					, dst.bonesMatrix.size()
+					, castor::Matrix4x4f::getIdentity() );
 			}
+
+			transforms.buffer->markDirty( transforms.getOffset()
+				, transforms.getSize()
+				, VK_ACCESS_UNIFORM_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 		}
 	}
 
@@ -59,76 +58,67 @@ namespace castor
 			, castor::ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
 		, m_engine{ *scene.getEngine() }
 		, m_device{ m_engine.getRenderSystem()->getRenderDevice() }
-		, m_morphingData{ makeBuffer< MorphingBufferConfiguration >( m_device
+		, m_morphingData{ m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, 10'000ull
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "MorphingNodesData" ) }
-		, m_skinningTransformsData{ makeBuffer< SkinningTransformsConfiguration >( m_device
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_skinningTransformsData{ m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, 1'000ull
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SkinningTransformNodesData" ) }
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
-		doInitialiseBuffer( *m_skinningTransformsData );
+		doInitialiseBuffer( m_skinningTransformsData );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & device )
 	{
 		if ( !m_morphingData )
 		{
-			m_morphingData = makeBuffer< MorphingBufferConfiguration >( m_device
+			m_morphingData = m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, 10'000ull
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "MorphingNodesData" );
-			m_skinningTransformsData = makeBuffer< SkinningTransformsConfiguration >( m_device
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, 1'000ull
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "SkinningTransformNodesData" );
-			doInitialiseBuffer( *m_skinningTransformsData );
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			doInitialiseBuffer( m_skinningTransformsData );
 		}
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup()
 	{
 		ResourceCacheBaseT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::cleanup();
-		m_skinningTransformsData.reset();
-		m_morphingData.reset();
+		m_device.bufferPool->putBuffer( m_skinningTransformsData );
+		m_device.bufferPool->putBuffer( m_morphingData );
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
+		auto skinningTransformsBuffer = m_skinningTransformsData.getData();
 
-		if ( auto skinningTransformsBuffer = m_skinningTransformsData->lock( 0u, ashes::WholeSize, 0u ) )
+		for ( auto & pair : m_skeletonEntries )
 		{
-			for ( auto & pair : m_skeletonEntries )
-			{
-				auto & entry = pair.second;
-				entry.skeleton.fillShader( &skinningTransformsBuffer[entry.skeleton.getId() - 1u] );
-			}
-
-			m_skinningTransformsData->flush( 0u, ashes::WholeSize );
-			m_skinningTransformsData->unlock();
+			auto & entry = pair.second;
+			auto max = entry.skeleton.fillShader( &skinningTransformsBuffer[entry.skeleton.getId() - 1u] );
+			m_skinningTransformsData.buffer->markDirty( m_skinningTransformsData.getOffset() + ( entry.skeleton.getId() - 1u ) * sizeof( SkinningTransformsConfiguration )
+				, sizeof( castor::Matrix4x4f ) * max
+				, VK_ACCESS_UNIFORM_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 		}
 
-		if ( auto morphingBuffer = m_morphingData->lock( 0u, ashes::WholeSize, 0u ) )
+		auto morphingBuffer = m_morphingData.getData();
+
+		for ( auto & pair : m_meshEntries )
 		{
-			for ( auto & pair : m_meshEntries )
+			auto & entry = pair.second;
+
+			if ( entry.mesh.isPlayingAnimation() )
 			{
-				auto & entry = pair.second;
-
-				if ( entry.mesh.isPlayingAnimation() )
-				{
-					auto & morphingData = morphingBuffer[entry.mesh.getId() - 1u];
-					morphingData.time->x = entry.mesh.getPlayingAnimation().getRatio();
-				}
+				auto & morphingData = morphingBuffer[entry.mesh.getId() - 1u];
+				morphingData.time->x = entry.mesh.getPlayingAnimation().getRatio();
+				m_morphingData.buffer->markDirty( m_morphingData.getOffset() + ( entry.mesh.getId() - 1u ) * sizeof( MorphingBufferConfiguration )
+					, sizeof( MorphingBufferConfiguration )
+					, VK_ACCESS_UNIFORM_READ_BIT
+					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 			}
-
-			m_morphingData->flush( 0u, ashes::WholeSize );
-			m_morphingData->unlock();
 		}
 	}
 

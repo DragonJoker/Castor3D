@@ -112,14 +112,14 @@ namespace castor
 
 		C3D_API std::vector< castor3d::AnimatedObject * > findObject( castor::String const & name )const;
 
-		ashes::Buffer< castor3d::MorphingBufferConfiguration > const & getMorphingBuffer()const
+		castor3d::GpuBufferOffsetT< castor3d::MorphingBufferConfiguration > const & getMorphingBuffer()const
 		{
-			return *m_morphingData;
+			return m_morphingData;
 		}
 
-		ashes::Buffer< castor3d::SkinningTransformsConfiguration > const & getSkinningTransformsBuffer()const
+		castor3d::GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > const & getSkinningTransformsBuffer()const
 		{
-			return *m_skinningTransformsData;
+			return m_skinningTransformsData;
 		}
 
 	private:
@@ -151,8 +151,8 @@ namespace castor
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
 		std::map< castor3d::AnimatedObjectGroup *, castor3d::OnAnimatedTextureChangeConnection > m_textureRemovedConnections;
-		ashes::BufferPtr< castor3d::MorphingBufferConfiguration > m_morphingData;
-		ashes::BufferPtr< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;
+		castor3d::GpuBufferOffsetT< castor3d::MorphingBufferConfiguration > m_morphingData;
+		castor3d::GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > m_skinningTransformsData;
 	};
 }
 
