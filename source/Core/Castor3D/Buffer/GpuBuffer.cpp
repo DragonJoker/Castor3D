@@ -3,6 +3,8 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
@@ -10,137 +12,209 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+	
+	std::pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
+		, VkDeviceSize size
+		, VkDeviceSize align )
+	{
+		auto newOffset = ashes::getAlignedSize( offset, align );
+
+		if ( newOffset != offset )
+		{
+			CU_Require( newOffset >= align );
+			newOffset -= align;
+			size += offset - newOffset;
+		}
+
+		return { newOffset, ashes::getAlignedSize( size, align ) };
+	}
+
+	//*********************************************************************************************
+
+	void copyBuffer( ashes::CommandBuffer const & commandBuffer
+		, ashes::BufferBase const & src
+		, ashes::BufferBase const & dst
+		, std::vector< VkBufferCopy > const & regions
+		, VkAccessFlags dstAccessFlags
+		, VkPipelineStageFlags dstPipelineFlags )
+	{
+		auto dstSrcStage = dst.getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstSrcStage
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, dst.makeTransferDestination() );
+		commandBuffer.copyBuffer( regions
+			, src
+			, dst );
+		auto dstDstStage = dst.getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstDstStage
+			, dstPipelineFlags
+			, dst.makeMemoryTransitionBarrier( dstAccessFlags ) );
+	}
+
+	void updateBuffer( ashes::CommandBuffer const & commandBuffer
+		, castor::ByteArray src
+		, ashes::BufferBase const & dst
+		, std::vector< VkBufferCopy > const & regions
+		, VkAccessFlags dstAccessFlags
+		, VkPipelineStageFlags dstPipelineFlags )
+	{
+		auto dstSrcStage = dst.getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstSrcStage
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, dst.makeTransferDestination() );
+
+		for ( auto & region : regions )
+		{
+			commandBuffer.updateBuffer( dst
+				, region.dstOffset
+				, ashes::makeArrayView( src.data() + region.srcOffset, region.size ) );
+		}
+
+		auto dstDstStage = dst.getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstDstStage
+			, dstPipelineFlags
+			, dst.makeMemoryTransitionBarrier( dstAccessFlags ) );
+	}
+
+	//*********************************************************************************************
+
 	GpuBufferBase::GpuBufferBase( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags memoryFlags
 		, castor::String debugName
 		, ashes::QueueShare sharingMode
-		, VkDeviceSize allocatedSize )
+		, VkDeviceSize allocatedSize
+		, bool smallData )
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
 		, m_memoryFlags{ memoryFlags }
 		, m_sharingMode{ std::move( sharingMode ) }
 		, m_allocatedSize{ allocatedSize }
-		, m_debugName{ std::move( debugName ) }
-	{
-		initialise( m_renderSystem.getRenderDevice() );
-	}
-
-	uint32_t GpuBufferBase::initialise( RenderDevice const & device )
-	{
-		m_buffer = makeBuffer< uint8_t >( device
+		, m_buffer{ makeBuffer< uint8_t >( renderSystem.getRenderDevice()
 			, uint32_t( m_allocatedSize )
-			, m_usage
+			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, m_memoryFlags
-			, m_debugName
-			, m_sharingMode );
-		return uint32_t( m_buffer->getBuffer().getSize() );
-	}
-
-	void GpuBufferBase::cleanup( RenderDevice const & device )
+			, debugName
+			, m_sharingMode ) }
 	{
-		m_buffer.reset();
-	}
+		auto & device = renderSystem.getRenderDevice();
 
-	uint8_t * GpuBufferBase::lock( MemChunk const & chunk )const
-	{
-		auto size = chunk.size;
-		auto offset = chunk.offset;
-
-		if ( size > m_buffer->getBuffer().getSize() )
+		if ( smallData )
 		{
-			size = ~( 0ull );
-			offset = 0u;
+			m_ownData.resize( m_allocatedSize );
+			m_data = castor::makeArrayView( m_ownData.data()
+				, m_ownData.size() );
 		}
-
-		return m_buffer->getBuffer().lock( offset, size, 0u );
-	}
-
-	void GpuBufferBase::flush( MemChunk const & chunk )const
-	{
-		auto size = chunk.size;
-		auto offset = chunk.offset;
-
-		if ( size > m_buffer->getBuffer().getSize() )
+		else
 		{
-			size = ~( 0ull );
-			offset = 0u;
+			m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
+				, debugName + "Staging"
+				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+				, m_allocatedSize );
+			m_data = castor::makeArrayView( m_stagingBuffer->getBuffer().lock( 0u
+				, m_allocatedSize
+				, 0u )
+				, m_allocatedSize );
 		}
-
-		return m_buffer->getBuffer().flush( offset, size );
 	}
 
-	void GpuBufferBase::invalidate( MemChunk const & chunk )const
+	void GpuBufferBase::upload( ashes::CommandBuffer const & commandBuffer )
 	{
-		auto size = chunk.size;
-		auto offset = chunk.offset;
+		std::unordered_map< size_t, MemoryRangeArray > ranges;
+		std::swap( m_ranges, ranges );
 
-		if ( size > m_buffer->getBuffer().getSize() )
+		if ( !ranges.empty() )
 		{
-			size = ~( 0ull );
-			offset = 0u;
-		}
-
-		return m_buffer->getBuffer().invalidate( offset, size );
-	}
-
-	void GpuBufferBase::unlock()const
-	{
-		m_buffer->getBuffer().unlock();
-	}
-
-	void GpuBufferBase::copy( ashes::CommandBuffer const & commandBuffer
-		, GpuBufferBase const & src
-		, MemChunk const & srcChunk
-		, VkDeviceSize dstOffset )const
-	{
-		commandBuffer.copyBuffer( VkBufferCopy
+			if ( !m_ownData.empty() )
 			{
-				srcChunk.offset,
-				dstOffset,
-				srcChunk.size,
+				for ( auto & rangesIt : ranges )
+				{
+					if ( !rangesIt.second.empty() )
+					{
+						std::vector< VkBufferCopy > regions;
+
+						for ( auto & range : rangesIt.second )
+						{
+							auto [offset, size] = adaptRange( range.offset
+								, range.size
+								, 4u );
+							regions.push_back( { offset, offset, size } );
+						}
+
+						updateBuffer( commandBuffer
+							, m_ownData
+							, getBuffer().getBuffer()
+							, regions
+							, rangesIt.second.front().dstAccessFlags
+							, rangesIt.second.front().dstPipelineFlags );
+					}
+				}
 			}
-			, src.getBuffer().getBuffer()
-			, getBuffer().getBuffer() );
+			else if ( m_stagingBuffer )
+			{
+				auto stgSrcStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+				commandBuffer.memoryBarrier( stgSrcStage
+					, VK_PIPELINE_STAGE_TRANSFER_BIT
+					, m_stagingBuffer->getBuffer().makeTransferSource() );
+
+				for ( auto & rangesIt : ranges )
+				{
+					if ( !rangesIt.second.empty() )
+					{
+						std::vector< VkBufferCopy > regions;
+
+						for ( auto & range : rangesIt.second )
+						{
+							auto [offset, size] = adaptRange( range.offset
+								, range.size
+								, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
+							regions.push_back( { offset, offset, size } );
+						}
+
+						copyBuffer( commandBuffer
+							, m_stagingBuffer->getBuffer()
+							, getBuffer().getBuffer()
+							, regions
+							, rangesIt.second.front().dstAccessFlags
+							, rangesIt.second.front().dstPipelineFlags );
+					}
+				}
+
+				auto stgDstStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+				commandBuffer.memoryBarrier( stgDstStage
+					, VK_PIPELINE_STAGE_HOST_BIT
+					, m_stagingBuffer->getBuffer().makeHostWrite() );
+			}
+		}
 	}
 
-	void GpuBufferBase::upload( ashes::StagingBuffer & stagingBuffer
-		, ashes::CommandBuffer const & commandBuffer
-		, MemChunk const & chunk
-		, uint8_t const * buffer )const
+	void GpuBufferBase::markDirty( VkDeviceSize offset
+		, VkDeviceSize size
+		, VkAccessFlags dstAccessFlags
+		, VkPipelineStageFlags dstPipelineFlags )
 	{
-		stagingBuffer.uploadBufferData( commandBuffer
-			, buffer
-			, uint32_t( chunk.size )
-			, uint32_t( chunk.offset )
-			, getBuffer() );
+		auto hash = std::hash< int32_t >{}( int32_t( dstAccessFlags ) );
+		hash = castor::hashCombine( hash, int32_t( dstPipelineFlags ) );
+		auto & ranges = m_ranges.emplace( hash, MemoryRangeArray{} ).first->second;
+		auto it = std::find_if( ranges.begin()
+			, ranges.end()
+			, [offset]( MemoryRange const & lookup )
+			{
+				return lookup.offset == offset;
+			} );
+
+		if ( it == ranges.end() )
+		{
+			ranges.push_back( MemoryRange{ offset, size, dstAccessFlags, dstPipelineFlags } );
+
+			if ( m_stagingBuffer )
+			{
+				auto [o, s] = adaptRange( offset, size, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
+				m_stagingBuffer->getBuffer().flush( o, s );
+			}
+		}
 	}
 
-	void GpuBufferBase::upload( ashes::StagingBuffer & stagingBuffer
-		, ashes::Queue const & queue
-		, ashes::CommandPool const & commandPool
-		, MemChunk const & chunk
-		, uint8_t const * buffer )const
-	{
-		stagingBuffer.uploadBufferData( queue
-			, commandPool
-			, buffer
-			, uint32_t( chunk.size )
-			, uint32_t( chunk.offset )
-			, getBuffer() );
-	}
-
-	void GpuBufferBase::download( ashes::StagingBuffer & stagingBuffer
-		, ashes::Queue const & queue
-		, ashes::CommandPool const & commandPool
-		, MemChunk const & chunk
-		, uint8_t * buffer )const
-	{
-		stagingBuffer.downloadBufferData( queue
-			, commandPool
-			, buffer
-			, uint32_t( chunk.size )
-			, uint32_t( chunk.offset )
-			, getBuffer() );
-	}
+	//*********************************************************************************************
 }

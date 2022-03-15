@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -61,14 +62,19 @@ namespace castor3d
 			eMaps,
 		};
 
-		template< typename VertexT, typename BufferIndexT >
+		template< typename VertexT, uint32_t CountT >
 		uint32_t doFillBuffers( typename std::vector< VertexT >::const_iterator begin
 			, uint32_t count
-			, BufferIndexT & bufferIndex )
+			, OverlayRenderer::VertexBufferIndexT< VertexT, CountT > & bufferIndex )
 		{
-			auto const & vertex = *begin;
-			auto size = count * sizeof( VertexT );
-			std::memcpy( &bufferIndex.pool.data[bufferIndex.index], &vertex, size );
+			auto & bufferOffset = bufferIndex.geometryBuffers.textured.bufferOffset;
+			std::copy( begin
+				, std::next( begin, count )
+				, bufferOffset.getVertexData< VertexT >().begin() );
+			bufferOffset.vtxBuffer->markDirty( bufferOffset.vtxChunk.offset
+				, bufferOffset.vtxChunk.size
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			return count;
 		}
 
@@ -251,9 +257,9 @@ namespace castor3d
 
 	namespace
 	{
-		template< typename VertexBufferIndexT, typename VertexBufferPoolT >
-		VertexBufferIndexT & getVertexBuffer( std::vector< std::unique_ptr< VertexBufferPoolT > > & pools
-			, std::map< size_t, VertexBufferIndexT > & overlays
+		template< typename VertexT, uint32_t CountT >
+		OverlayRenderer::VertexBufferIndexT< VertexT, CountT > & getVertexBuffer( std::vector< std::unique_ptr< OverlayRenderer::VertexBufferPoolT< VertexT, CountT > > > & pools
+			, std::map< size_t, OverlayRenderer::VertexBufferIndexT< VertexT, CountT > > & overlays
 			, Overlay const & overlay
 			, Pass const & pass
 			, OverlayRenderer::OverlayRenderNode & node
@@ -284,7 +290,8 @@ namespace castor3d
 
 				if ( it == overlays.end() )
 				{
-					pools.emplace_back( std::make_unique< VertexBufferPoolT >( engine
+					pools.emplace_back( std::make_unique< OverlayRenderer::VertexBufferPoolT< VertexT, CountT > >( engine
+						, getName( overlay.getType() )
 						, *device.uboPools
 						, device
 						, noTexLayout
@@ -301,18 +308,18 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	template< typename QuadT, typename OverlayT, typename BufferIndexT, typename BufferPoolT, typename VertexT >
+	template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
 	void OverlayRenderer::Preparer::doPrepareOverlay( RenderDevice const & device
 		, OverlayT const & overlay
 		, Pass const & pass
-		, std::map< size_t, BufferIndexT > & overlays
-		, std::vector< BufferPoolT > & vertexBuffers
+		, std::map< size_t, OverlayRenderer::VertexBufferIndexT< VertexT, CountT > > & overlays
+		, std::vector< OverlayRenderer::VertexBufferPoolPtrT< VertexT, CountT > > & vertexBuffers
 		, std::vector < VertexT > const & vertices
 		, FontTextureSPtr fontTexture )
 	{
 		if ( !vertices.empty() )
 		{
-			auto & bufferIndex = getVertexBuffer< BufferIndexT >( vertexBuffers
+			auto & bufferIndex = getVertexBuffer< VertexT, CountT >( vertexBuffers
 				, overlays
 				, overlay.getOverlay()
 				, pass
@@ -328,7 +335,7 @@ namespace castor3d
 				, overlay
 				, pass
 				, m_renderer.m_size );
-			doFillBuffers< VertexT >( vertices.begin()
+			doFillBuffers( vertices.begin()
 				, uint32_t( vertices.size() )
 				, bufferIndex );
 
@@ -374,8 +381,8 @@ namespace castor3d
 			commandBuffer.bindDescriptorSet( *bufferIndex.descriptorSet
 				, *bufferIndex.node.pipeline.pipelineLayout );
 			commandBuffer.bindVertexBuffer( 0u
-				, bufferIndex.pool.buffer->getBuffer()
-				, uint32_t( bufferIndex.index * sizeof( QuadT ) ) );
+				, bufferIndex.geometryBuffers.noTexture.bufferOffset.getVertexBuffer()
+				, bufferIndex.geometryBuffers.noTexture.bufferOffset.getVertexOffset() );
 			commandBuffer.draw( uint32_t( vertices.size() )
 				, 1u
 				, 0u
@@ -386,77 +393,78 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename VertexT, uint32_t CountT >
-	OverlayRenderer::VertexBufferPool< VertexT, CountT >::VertexBufferPool( Engine & engine
+	OverlayRenderer::VertexBufferPoolT< VertexT, CountT >::VertexBufferPoolT( Engine & engine
+		, std::string const & debugName
 		, UniformBufferPools & uboPools
 		, RenderDevice const & device
 		, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 		, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 		, uint32_t count )
 		: engine{ engine }
+		, device{ device }
 		, uboPools{ uboPools }
-		, maxCount{ count }
-		, data{ count, Quad{} }
 		, noTexDeclaration{ noTexDecl }
 		, texDeclaration{ texDecl }
-		, buffer{ makeVertexBuffer< Quad >( device
-			, count
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "OverlayRenderer" ) }
+		, buffer{ castor::makeUnique< VertexBufferPool >( device, debugName ) }
 	{
-		for ( auto i = 0u; i < count; ++i )
-		{
-			free.insert( i );
-		}
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	OverlayRenderer::VertexBufferIndex< VertexT, CountT > OverlayRenderer::VertexBufferPool< VertexT, CountT >::allocate( OverlayRenderNode & node )
+	OverlayRenderer::VertexBufferIndexT< VertexT, CountT > OverlayRenderer::VertexBufferPoolT< VertexT, CountT >::allocate( OverlayRenderNode & node )
 	{
-		OverlayRenderer::VertexBufferIndex< VertexT, CountT > result{ *this
-			, node
-			, InvalidIndex };
+		auto it = std::find_if( allocated.begin()
+			, allocated.end()
+			, []( ObjectBufferOffset const & lookup )
+			{
+				return lookup.vtxBuffer == nullptr;
+			} );
 
-		if ( !free.empty() )
+		if ( it == allocated.end() )
 		{
-			result.overlayUbo = uboPools.getBuffer< Configuration >( 0u );
-			result.index = *free.begin();
-			result.geometryBuffers.noTexture.bufferOffset.vtxBuffer = &buffer->getBuffer();
-			result.geometryBuffers.noTexture.layouts.emplace_back( noTexDeclaration );
-			result.geometryBuffers.noTexture.bufferOffset.vtxChunk.offset = result.index;
-			result.geometryBuffers.textured.bufferOffset.vtxBuffer = &buffer->getBuffer();
-			result.geometryBuffers.textured.layouts.emplace_back( texDeclaration );
-			result.geometryBuffers.textured.bufferOffset.vtxChunk.offset = result.index;
-			free.erase( free.begin() );
+			allocated.emplace_back( buffer->getBuffer< Quad >( 1u ) );
+			it = std::next( allocated.begin(), ptrdiff_t( allocated.size() - 1u ) );
 		}
+
+		OverlayRenderer::VertexBufferIndexT< VertexT, CountT > result{ *this
+			, node
+			, uint32_t( std::distance( allocated.begin(), it ) ) };
+		ObjectBufferOffset & offsets = *it;
+		result.overlayUbo = uboPools.getBuffer< Configuration >( 0u );
+
+		result.geometryBuffers.noTexture.bufferOffset = offsets;
+		result.geometryBuffers.noTexture.layouts.emplace_back( noTexDeclaration );
+
+		result.geometryBuffers.textured.bufferOffset = offsets;
+		result.geometryBuffers.textured.layouts.emplace_back( texDeclaration );
 
 		return result;
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	void OverlayRenderer::VertexBufferPool< VertexT, CountT >::deallocate( OverlayRenderer::VertexBufferIndex< VertexT, CountT > const & index )
+	void OverlayRenderer::VertexBufferPoolT< VertexT, CountT >::deallocate( OverlayRenderer::VertexBufferIndexT< VertexT, CountT > const & index )
 	{
 		CU_Require( &index.pool == this );
+		auto it = std::find_if( allocated.begin()
+			, allocated.end()
+			, [&index]( auto const & lookup )
+			{
+				return lookup.first == index.index;
+			} );
+		CU_Require( it != allocated.end() );
+		buffer->putBuffer( *it );
+		*it = {};
 		index.geometryBuffers.noTexture.bufferOffset = {};
 		index.geometryBuffers.noTexture.layouts.clear();
 		index.geometryBuffers.textured.bufferOffset = {};
 		index.geometryBuffers.textured.layouts.clear();
-		free.insert( index.index );
 		uboPools.putBuffer( index.overlayUbo );
 		uboPools.putBuffer( index.texturesUbo );
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	void OverlayRenderer::VertexBufferPool< VertexT, CountT >::upload()
+	void OverlayRenderer::VertexBufferPoolT< VertexT, CountT >::upload( ashes::CommandBuffer const & cb )
 	{
-		if ( auto bufferData = buffer->lock( 0u
-			, buffer->getCount()
-			, 0u ) )
-		{
-			std::memcpy( bufferData, data.data(), buffer->getSize() );
-			buffer->flush( 0u, buffer->getCount() );
-			buffer->unlock();
-		}
+		buffer->upload( cb );
 	}
 
 	//*********************************************************************************************
@@ -500,6 +508,7 @@ namespace castor3d
 
 		// Create one panel overlays buffer pool
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, "PanelOverlays"
 			, m_uboPools
 			, device
 			, m_noTexDeclaration
@@ -508,6 +517,7 @@ namespace castor3d
 
 		// Create one border overlays buffer pool
 		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, "BorderPanelOverlays"
 			, m_uboPools
 			, device
 			, m_noTexDeclaration
@@ -516,6 +526,7 @@ namespace castor3d
 
 		// create one text overlays buffer
 		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
+			, "TextOverlays"
 			, m_uboPools
 			, device
 			, m_noTexTextDeclaration
@@ -606,23 +617,25 @@ namespace castor3d
 	void OverlayRenderer::endPrepare()
 	{
 		m_commands.commandBuffer->end();
+		m_sizeChanged = false;
+	}
 
+	void OverlayRenderer::upload( ashes::CommandBuffer const & cb )
+	{
 		for ( auto & pool : m_panelVertexBuffers )
 		{
-			pool->upload();
+			pool->upload( cb );
 		}
 
 		for ( auto & pool : m_borderVertexBuffers )
 		{
-			pool->upload();
+			pool->upload( cb );
 		}
 
 		for ( auto & pool : m_textVertexBuffers )
 		{
-			pool->upload();
+			pool->upload( cb );
 		}
-		
-		m_sizeChanged = false;
 	}
 
 	crg::SemaphoreWaitArray OverlayRenderer::render( FramePassTimer & timer

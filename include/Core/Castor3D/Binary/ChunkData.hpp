@@ -1239,8 +1239,7 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	template< typename T >
-	static inline void prepareChunkData( InterleavedVertexT< T > & value )
+	static inline void prepareChunkData( InterleavedVertex & value )
 	{
 		if ( !castor::isBigEndian() )
 		{
@@ -1266,13 +1265,11 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	template< typename T >
-	static inline void prepareChunkData( SubmeshAnimationBufferT< T > & value )
+	static inline void prepareChunkData( SubmeshAnimationBuffer & value )
 	{
 		if ( !castor::isBigEndian() )
 		{
-			prepareChunkData( value.m_timeIndex );
-			castor::switchEndianness( value.m_buffer );
+			castor::switchEndianness( value.buffer );
 		}
 	}
 	/**

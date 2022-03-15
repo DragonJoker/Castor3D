@@ -4,12 +4,14 @@ namespace castor3d
 {
 	GpuBufferPackedAllocator::GpuBufferPackedAllocator( size_t size )
 		: m_allocatedSize{ size }
+		, m_alignSize{ 1u }
 	{
 	}
 
 	VkDeviceSize GpuBufferPackedAllocator::allocate( size_t size )
 	{
 		CU_Require( hasAvailable( size ) );
+		size = ashes::getAlignedSize( size, m_alignSize );
 		auto it = std::find_if( m_deallocated.begin()
 			, m_deallocated.end()
 			, [size]( MemChunk const & lookup )

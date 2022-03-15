@@ -30,6 +30,14 @@ namespace castor3d
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
+		template< typename VertexT, uint32_t CountT >
+		struct VertexBufferIndexT;
+
+		template< typename VertexT, uint32_t CountT >
+		struct VertexBufferPoolT;
+		template< typename VertexT, uint32_t CountT >
+		using VertexBufferPoolPtrT = std::unique_ptr< VertexBufferPoolT< VertexT, CountT > >;
+
 		class Preparer
 			: public OverlayVisitor
 		{
@@ -42,12 +50,12 @@ namespace castor3d
 			void visit( TextOverlay const & overlay )override;
 
 		private:
-			template< typename QuadT, typename OverlayT, typename BufferIndexT, typename BufferPoolT, typename VertexT >
+			template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
 			void doPrepareOverlay( RenderDevice const & device
 				, OverlayT const & overlay
 				, Pass const & pass
-				, std::map< size_t, BufferIndexT > & overlays
-				, std::vector< BufferPoolT > & vertexBuffers
+				, std::map< size_t, VertexBufferIndexT< VertexT, CountT > > & overlays
+				, std::vector< VertexBufferPoolPtrT< VertexT, CountT > > & vertexBuffers
 				, std::vector < VertexT > const & vertices
 				, FontTextureSPtr fontTexture );
 
@@ -131,6 +139,15 @@ namespace castor3d
 		C3D_API void endPrepare();
 		/**
 		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
 		 *\brief		Ends the overlays preparation.
 		 *\param[in]	device	The GPU device.
 		 *\param[in]	timer	The render pass timer.
@@ -200,7 +217,7 @@ namespace castor3d
 			Pass const & pass;
 		};
 
-	private:
+	public:
 		struct OverlayGeometryBuffers
 		{
 			GeometryBuffers noTexture;
@@ -208,43 +225,43 @@ namespace castor3d
 		};
 
 		template< typename VertexT, uint32_t CountT >
-		struct VertexBufferIndex;
+		struct VertexBufferIndexT;
 
 		template< typename VertexT, uint32_t CountT >
-		struct VertexBufferPool
+		struct VertexBufferPoolT
 		{
-			using MyBufferIndex = VertexBufferIndex< VertexT, CountT >;
+			using MyBufferIndex = VertexBufferIndexT< VertexT, CountT >;
 			using Quad = std::array< VertexT, CountT >;
 
-			VertexBufferPool( Engine & engine
+			VertexBufferPoolT( Engine & engine
+				, std::string const & debugName
 				, UniformBufferPools & uboPools
 				, RenderDevice const & device
 				, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 				, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 				, uint32_t count );
-			VertexBufferIndex< VertexT, CountT > allocate( OverlayRenderNode & node );
-			void deallocate( VertexBufferIndex< VertexT, CountT > const & index );
-			void upload();
+			VertexBufferIndexT< VertexT, CountT > allocate( OverlayRenderNode & node );
+			void deallocate( VertexBufferIndexT< VertexT, CountT > const & index );
+			void upload( ashes::CommandBuffer const & cb );
 
 			Engine & engine;
+			RenderDevice const & device;
 			UniformBufferPools & uboPools;
-			uint32_t const maxCount;
-			std::vector< Quad > data;
 			ashes::PipelineVertexInputStateCreateInfo const & noTexDeclaration;
 			ashes::PipelineVertexInputStateCreateInfo const & texDeclaration;
-			ashes::VertexBufferPtr< Quad > buffer;
-			std::set< uint32_t > free;
+			VertexBufferPoolUPtr buffer;
+			std::vector< ObjectBufferOffset > allocated;
 		};
 
 		template< typename VertexT, uint32_t CountT >
-		struct VertexBufferIndex
+		struct VertexBufferIndexT
 		{
 			operator bool()const
 			{
 				return index != InvalidIndex;
 			}
 
-			VertexBufferPool< VertexT, CountT > & pool;
+			VertexBufferPoolT< VertexT, CountT > & pool;
 			OverlayRenderNode & node;
 			uint32_t index;
 			UniformBufferOffsetT< Configuration > overlayUbo{};
@@ -253,13 +270,14 @@ namespace castor3d
 			FontTexture::OnChanged::connection connection{};
 		};
 
-		using PanelVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 6u >;
+		using PanelVertexBufferPool = VertexBufferPoolT< OverlayCategory::Vertex, 6u >;
 		using PanelVertexBufferIndex = PanelVertexBufferPool::MyBufferIndex;
-		using BorderPanelVertexBufferPool = VertexBufferPool< OverlayCategory::Vertex, 8u * 6u >;
+		using BorderPanelVertexBufferPool = VertexBufferPoolT< OverlayCategory::Vertex, 8u * 6u >;
 		using BorderPanelVertexBufferIndex = BorderPanelVertexBufferPool::MyBufferIndex;
-		using TextVertexBufferPool = VertexBufferPool< TextOverlay::Vertex, 600u >;
+		using TextVertexBufferPool = VertexBufferPoolT< TextOverlay::Vertex, 600u >;
 		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;
 
+	private:
 		OverlayRenderNode & doGetPanelNode( RenderDevice const & device
 			, Pass const & pass );
 		OverlayRenderNode & doGetTextNode( RenderDevice const & device

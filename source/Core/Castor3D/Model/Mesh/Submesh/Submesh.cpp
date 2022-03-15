@@ -318,7 +318,7 @@ namespace castor3d
 	uint32_t Submesh::getPointsCount()const
 	{
 		return std::max< uint32_t >( uint32_t( m_points.size() )
-			, ( m_bufferOffset ? uint32_t( m_bufferOffset.getVertexCount< InterleavedVertex >() ) : 0u ) );
+			, ( m_bufferOffset ? m_bufferOffset.getVertexCount< InterleavedVertex >() : 0u ) );
 	}
 
 	int Submesh::isInMyPoints( castor::Point3f const & vertex
@@ -499,21 +499,13 @@ namespace castor3d
 
 		if ( size )
 		{
-			if ( !m_staging )
-			{
-				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
-					, getOwner()->getName() + std::to_string( getId() ) + "VtxUpload" );
-			}
-
-			m_staging->upload( m_points.data()
-				, m_points.size() * sizeof( InterleavedVertex )
-				, m_bufferOffset.getVertexOffset()
-				, m_bufferOffset.getVertexBuffer() );
-
-			if ( !m_dynamic )
-			{
-				m_staging.reset();
-			}
+			std::copy( m_points.begin()
+				, m_points.end()
+				, m_bufferOffset.getVertexData< InterleavedVertex >().begin() );
+			m_bufferOffset.vtxBuffer->markDirty( m_bufferOffset.vtxChunk.offset
+				, m_bufferOffset.vtxChunk.size
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 }

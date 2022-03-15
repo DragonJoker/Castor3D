@@ -111,7 +111,7 @@ namespace castor
 	{
 #if C3D_UseFreeImage
 
-		PixelFormat sourceFmt = PixelFormat::eR8G8B8_UNORM;
+		PixelFormat sourceFmt{ PixelFormat::eR8G8B8A8_UNORM };
 		FreeImage_SetOutputMessage( outputMessageFunction );
 		auto fiMemory = FreeImage_OpenMemory( const_cast< uint8_t * >( data ), size );
 		FREE_IMAGE_FORMAT fiFormat = FreeImage_GetFileTypeFromMemory( fiMemory, 0 );
@@ -129,7 +129,7 @@ namespace castor
 		}
 
 		auto imageType = FreeImage_GetImageType( fiImage );
-		bool needsComponentSwap = false;
+		bool needsComponentSwap{ false };
 
 		switch ( imageType )
 		{

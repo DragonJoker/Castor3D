@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_InstantiationComponent_H___
 #define ___C3D_InstantiationComponent_H___
 
+#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
@@ -176,6 +177,7 @@ namespace castor3d
 		InstanceDataMap m_instances;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_mtxLayouts;
 		uint32_t m_threshold;
+		StagingDataUPtr m_staging;
 	};
 }
 

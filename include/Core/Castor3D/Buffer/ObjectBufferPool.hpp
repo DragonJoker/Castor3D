@@ -13,6 +13,84 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class VertexBufferPool
+		: public castor::OwnedBy< RenderSystem >
+	{
+	public:
+		struct ModelBuffers
+		{
+			ModelBuffers( GpuPackedBuffer vtx )
+				: vertex{ std::move( vtx ) }
+			{
+			}
+
+			GpuPackedBuffer vertex;
+		};
+		using BufferArray = std::vector< std::unique_ptr< ModelBuffers > >;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	debugName		The debug name.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	debugName		Le nom debug.
+		 */
+		C3D_API explicit VertexBufferPool( RenderDevice const & device
+			, castor::String debugName );
+		/**
+		 *\~english
+		 *\brief		Cleans up all GPU buffers.
+		 *\~french
+		 *\brief		Nettoie tous les tampons GPU.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GPU buffer with the given size.
+		 *\param[in]	vertexCount	The wanted buffer element count.
+		 *\return		The GPU buffer.
+		 *\~french
+		 *\brief		Récupère un tampon GPU avec la taille donnée.
+		 *\param[in]	vertexCount	Le nombre d'éléments voulu pour le tampon.
+		 *\return		Le tampon GPU.
+		 */
+		template< typename VertexT >
+		ObjectBufferOffset getBuffer( VkDeviceSize vertexCount );
+		/**
+		 *\~english
+		 *\brief		Releases a GPU buffer.
+		 *\param[in]	bufferOffset	The buffer offset to release.
+		 *\~french
+		 *\brief		Libère un tampon GPU.
+		 *\param[in]	bufferOffset	Le tampon à libérer.
+		 */
+		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
+
+	private:
+		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
+			, BufferArray & array );
+
+	private:
+		RenderDevice const & m_device;
+		castor::String m_debugName;
+		BufferArray m_buffers;
+	};
+
 	class ObjectBufferPool
 		: public castor::OwnedBy< RenderSystem >
 	{
@@ -55,19 +133,26 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
-		 *\param[in]	target	The buffer type.
-		 *\param[in]	count	The wanted buffer element count.
-		 *\param[in]	flags	The buffer memory flags.
+		 *\param[in]	vertexCount	The wanted vertex count.
+		 *\param[in]	indexCount	The wanted index count.
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\brief		Récupère un tampon GPU avec la taille donnée.
-		 *\param[in]	target	Le type de tampon.
-		 *\param[in]	count	Le nombre d'éléments voulu pour le tampon.
-		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
+		 *\param[in]	vertexCount	Le nombre de sommets voulus.
+		 *\param[in]	indexCount	Le nombre d'indices voulus.
 		 *\return		Le tampon GPU.
 		 */
-		ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
+		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount );
 		/**
 		 *\~english
@@ -77,7 +162,7 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		void putBuffer( ObjectBufferOffset const & bufferOffset );
+		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize vertexCount
@@ -135,19 +220,26 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
-		 *\param[in]	target	The buffer type.
-		 *\param[in]	count	The wanted buffer element count.
-		 *\param[in]	flags	The buffer memory flags.
+		 *\param[in]	vertexCount	The wanted vertex count.
+		 *\param[in]	indexCount	The wanted index count.
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\brief		Récupère un tampon GPU avec la taille donnée.
-		 *\param[in]	target	Le type de tampon.
-		 *\param[in]	count	Le nombre d'éléments voulu pour le tampon.
-		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
+		 *\param[in]	vertexCount	Le nombre de sommets voulus.
+		 *\param[in]	indexCount	Le nombre d'indices voulus.
 		 *\return		Le tampon GPU.
 		 */
-		ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
+		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount );
 		/**
 		 *\~english
@@ -157,7 +249,7 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		void putBuffer( ObjectBufferOffset const & bufferOffset );
+		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize vertexCount
@@ -170,5 +262,7 @@ namespace castor3d
 		BufferArray m_buffers;
 	};
 }
+
+#include "ObjectBufferPool.inl"
 
 #endif

@@ -174,6 +174,16 @@ namespace castor3d
 	*	Regroupe les pools d'uniform buffers.
 	*/
 	class UniformBufferPools;
+	/**
+	*\~english
+	*\brief
+	*	A GpuBuffer pool specific for non VBO.
+	*\~french
+	*\brief
+	*	Un pool de GpuBuffer pour les VBO.
+	*\remark
+	*/
+	class VertexBufferPool;
 
 	template< typename DataT >
 	class GpuLinearAllocatorT;
@@ -185,6 +195,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, UniformBufferBase, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, UniformBufferPool, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, UniformBufferPools, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, VertexBufferPool, C3D_API );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
@@ -213,6 +224,24 @@ namespace castor3d
 		return lhs.offset < rhs.offset;
 	}
 
+	C3D_API void copyBuffer( ashes::CommandBuffer const & commandBuffer
+		, ashes::BufferBase const & src
+		, ashes::BufferBase const & dst
+		, VkDeviceSize offset
+		, VkDeviceSize size
+		, VkPipelineStageFlags flags );
+	C3D_API void copyBuffer( ashes::CommandBuffer const & commandBuffer
+		, ashes::BufferBase const & src
+		, ashes::BufferBase const & dst
+		, std::vector< VkBufferCopy > const & regions
+		, VkAccessFlags dstAccessFlags
+		, VkPipelineStageFlags dstPipelineFlags );
+	C3D_API void updateBuffer( ashes::CommandBuffer const & commandBuffer
+		, castor::ByteArray data
+		, ashes::BufferBase const & dst
+		, std::vector< VkBufferCopy > const & regions
+		, VkAccessFlags dstAccessFlags
+		, VkPipelineStageFlags dstPipelineFlags );
 	//@}
 }
 

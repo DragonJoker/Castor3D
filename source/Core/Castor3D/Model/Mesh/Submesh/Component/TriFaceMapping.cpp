@@ -242,22 +242,14 @@ namespace castor3d
 		if ( count
 			&& getOwner()->getBufferOffsets().getIndexCount() )
 		{
-			if ( !m_staging )
-			{
-				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
-					, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "IdxUpload" );
-			}
-
 			auto offsets = getOwner()->getBufferOffsets();
-			m_staging->upload( m_faces.data()
-				, m_faces.size() * sizeof( Face )
-				, offsets.getIndexOffset()
-				, offsets.getIndexBuffer() );
-
-			if ( !getOwner()->isDynamic() )
-			{
-				m_staging.reset();
-			}
+			std::copy( m_faces.begin()
+				, m_faces.end()
+				, offsets.getIndexData< Face >().begin() );
+			offsets.idxBuffer->markDirty( offsets.idxChunk.offset
+				, offsets.idxChunk.size
+				, VK_ACCESS_INDEX_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 }

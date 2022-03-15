@@ -75,7 +75,7 @@ namespace castor3d
 		{
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedNodes.emplace( hash, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
-			auto buffer = node.data.getBufferOffsets().vtxBuffer;
+			auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedNodeArrayT< NodeT >{} );
 			bufferIres.first->second.emplace_back( &node, isFrontCulled );
 			registerPipelineNodes( hash, *buffer, nodesIds );
@@ -90,7 +90,7 @@ namespace castor3d
 		{
 			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
 			auto & pipelineNodes = sortedInstancedSubmeshes.emplace( hash, SceneCuller::SidedObjectNodeBufferMapT< SubmeshRenderNode >{} ).first->second;
-			auto buffer = node.data.getBufferOffsets().vtxBuffer;
+			auto buffer = &node.data.getBufferOffsets().vtxBuffer->getBuffer().getBuffer();
 			auto bufferIres = pipelineNodes.emplace( buffer, SceneCuller::SidedObjectNodePassMapT< SubmeshRenderNode >{} );
 			auto & passNodes = bufferIres.first->second.emplace( &node.pass, SceneCuller::SidedObjectNodeMapT< SubmeshRenderNode >{} ).first->second;
 			auto & objectNodes = passNodes.emplace( &node.data, SceneCuller::SidedNodeArrayT< SubmeshRenderNode >{} ).first->second;
@@ -128,7 +128,7 @@ namespace castor3d
 
 		uint32_t getInstanceCount( SubmeshRenderNode const & culled )
 		{
-			auto instantiation = culled.data.getInstantiation();
+			auto & instantiation = culled.data.getInstantiation();
 			return instantiation.getRefCount( culled.pass.getOwner() );
 		}
 

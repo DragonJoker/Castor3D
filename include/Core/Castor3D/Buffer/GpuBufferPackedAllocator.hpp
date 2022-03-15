@@ -59,7 +59,7 @@ namespace castor3d
 		 */
 		size_t getAlignSize()const
 		{
-			return 1u;
+			return m_alignSize;
 		}
 		/**
 		 *\~english
@@ -75,6 +75,7 @@ namespace castor3d
 
 	private:
 		size_t m_allocatedSize{};
+		size_t m_alignSize{};
 		struct MemChunkCompare
 		{
 			bool operator()( MemChunk const & lhs, MemChunk const & rhs )const

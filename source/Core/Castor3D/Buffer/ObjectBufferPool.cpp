@@ -8,6 +8,7 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, VertexBufferPool )
 CU_ImplementCUSmartPtr( castor3d, ObjectBufferPool )
 CU_ImplementCUSmartPtr( castor3d, SkinnedObjectBufferPool )
 
@@ -15,30 +16,51 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
+	VertexBufferPool::VertexBufferPool( RenderDevice const & device
+		, castor::String debugName )
+		: OwnedBy< RenderSystem >{ device.renderSystem }
+		, m_device{ device }
+		, m_debugName{ std::move( debugName ) }
 	{
-		template< typename DataT >
-		GpuPackedBuffer createBuffer( RenderDevice const & device
-			, VkDeviceSize count
-			, VkBufferUsageFlags usage
-			, std::string debugName )
+	}
+
+	void VertexBufferPool::cleanup()
+	{
+		m_buffers.clear();
+	}
+
+	void VertexBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
+	{
+		for ( auto & buffer : m_buffers )
 		{
-			VkDeviceSize maxCount = 1'000'000;
-
-			while ( maxCount < count )
-			{
-				maxCount *= 2u;
-			}
-
-			GpuPackedBuffer result{ device.renderSystem
-				, usage
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, debugName
-				, ashes::QueueShare{}
-				, GpuBufferPackedAllocator{ uint32_t( maxCount * sizeof( DataT ) ) } };
-			result.initialise( device );
-			return result;
+			buffer->vertex.upload( commandBuffer );
 		}
+	}
+
+	void VertexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	{
+		auto it = std::find_if( m_buffers.begin()
+			, m_buffers.end()
+			, [&bufferOffset]( std::unique_ptr< ModelBuffers > const & lookup )
+			{
+				return &lookup->vertex.getBuffer().getBuffer() == &bufferOffset.getVertexBuffer();
+			} );
+		CU_Require( it != m_buffers.end() );
+		( *it )->vertex.deallocate( bufferOffset.vtxChunk );
+	}
+
+	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
+		, VertexBufferPool::BufferArray & array )
+	{
+		auto it = array.begin();
+
+		while ( it != array.end()
+			&& !( *it )->vertex.hasAvailable( size ) )
+		{
+			++it;
+		}
+
+		return it;
 	}
 
 	//*********************************************************************************************
@@ -56,6 +78,15 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
+	void ObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffer->vertex.upload( commandBuffer );
+			buffer->index.upload( commandBuffer );
+		}
+	}
+
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount )
 	{
@@ -64,25 +95,27 @@ namespace castor3d
 
 		if ( it == m_buffers.end() )
 		{
-			auto buffers = std::make_unique< ModelBuffers >( createBuffer< InterleavedVertex >( m_device
+			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
 					, vertexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" + std::to_string( m_buffers.size() ) )
-				, createBuffer< uint32_t >( m_device
+					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< uint32_t >( m_device
 					, indexCount
 					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" + std::to_string( m_buffers.size() ) ) );
+					, m_debugName + "Index" + std::to_string( m_buffers.size() )
+					, false ) );
 			m_buffers.emplace_back( std::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
 
-		result.vtxBuffer = &( *it )->vertex.getBuffer().getBuffer();
+		result.vtxBuffer = &( *it )->vertex;
 		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
 
 		if ( indexCount )
 		{
-			result.idxBuffer = &( *it )->index.getBuffer().getBuffer();
+			result.idxBuffer = &( *it )->index;
 			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
 		}
 
@@ -144,6 +177,16 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
+	void SkinnedObjectBufferPool::upload( ashes::CommandBuffer const & commandBuffer )
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffer->vertex.upload( commandBuffer );
+			buffer->bones.upload( commandBuffer );
+			buffer->index.upload( commandBuffer );
+		}
+	}
+
 	ObjectBufferOffset SkinnedObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount )
 	{
@@ -152,31 +195,34 @@ namespace castor3d
 
 		if ( it == m_buffers.end() )
 		{
-			auto buffers = std::make_unique< ModelBuffers >( createBuffer< InterleavedVertex >( m_device
+			auto buffers = std::make_unique< ModelBuffers >( details::createBuffer< InterleavedVertex >( m_device
 					, vertexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Vertex" + std::to_string( m_buffers.size() ) )
-				, createBuffer< VertexBoneData >( m_device
+					, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< VertexBoneData >( m_device
 					, indexCount
 					, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Bones" + std::to_string( m_buffers.size() ) )
-				, createBuffer< uint32_t >( m_device
+					, m_debugName + "Bones" + std::to_string( m_buffers.size() )
+					, false )
+				, details::createBuffer< uint32_t >( m_device
 					, indexCount
 					, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, m_debugName + "Index" + std::to_string( m_buffers.size() ) ) );
+					, m_debugName + "Index" + std::to_string( m_buffers.size() )
+					, false ) );
 			m_buffers.emplace_back( std::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
 
-		result.vtxBuffer = &( *it )->vertex.getBuffer().getBuffer();
+		result.vtxBuffer = &( *it )->vertex;
 		result.vtxChunk = ( *it )->vertex.allocate( sizeof( InterleavedVertex ) * vertexCount );
-		result.bonBuffer = &( *it )->bones.getBuffer().getBuffer();
+		result.bonBuffer = &( *it )->bones;
 		result.bonChunk = ( *it )->bones.allocate( sizeof( VertexBoneData ) * vertexCount );
 
 		if ( indexCount )
 		{
-			result.idxBuffer = &( *it )->index.getBuffer().getBuffer();
+			result.idxBuffer = &( *it )->index;
 			result.idxChunk = ( *it )->index.allocate( sizeof( uint32_t ) * indexCount );
 		}
 
