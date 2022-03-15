@@ -61,7 +61,6 @@ namespace castor3d
 				, m_debugName
 				, ashes::QueueShare{}
 				, GpuBufferBuddyAllocator{ uint32_t( level ), m_minBlockSize } );
-			buffer->initialise( m_device );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = std::next( it->second.begin()
 				, ptrdiff_t( it->second.size() - 1u ) );

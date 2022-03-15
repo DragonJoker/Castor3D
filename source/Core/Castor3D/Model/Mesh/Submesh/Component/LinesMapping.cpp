@@ -165,22 +165,14 @@ namespace castor3d
 		if ( count
 			&& getOwner()->getBufferOffsets().getIndexCount() )
 		{
-			if ( !m_staging )
-			{
-				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
-					, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "IdxUpload" );
-			}
-
 			auto offsets = getOwner()->getBufferOffsets();
-			m_staging->upload( m_lines.data()
-				, m_lines.size() * sizeof( Line )
-				, offsets.getIndexOffset()
-				, offsets.getIndexBuffer() );
-
-			if ( !getOwner()->isDynamic() )
-			{
-				m_staging.reset();
-			}
+			std::copy( m_lines.begin()
+				, m_lines.end()
+				, offsets.getIndexData< Line >().begin() );
+			offsets.idxBuffer->markDirty( offsets.idxChunk.offset
+				, offsets.idxChunk.size
+				, VK_ACCESS_INDEX_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 }

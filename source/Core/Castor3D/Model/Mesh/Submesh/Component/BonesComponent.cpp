@@ -127,21 +127,13 @@ namespace castor3d
 
 		if ( count && offsets.hasBones() )
 		{
-			if ( !m_staging )
-			{
-				m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
-					, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "BonUpload" );
-			}
-
-			m_staging->upload( m_bones.data()
-				, m_bones.size() * sizeof( VertexBoneData )
-				, offsets.getBonesOffset()
-				, offsets.getBonesBuffer() );
-
-			if ( !getOwner()->isDynamic() )
-			{
-				m_staging.reset();
-			}
+			std::copy( m_bones.begin()
+				, m_bones.end()
+				, offsets.getBoneData().begin() );
+			offsets.bonBuffer->markDirty( offsets.bonChunk.offset
+				, offsets.bonChunk.size
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 

@@ -58,12 +58,12 @@ namespace castor3d
 						auto & offsets = m_animationObject.getSubmesh().getBufferOffsets();
 						auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
 						auto & staging = m_animationObject.getComponent().getStaging();
-						staging.upload( prv.m_buffer.data()
-							, prv.m_buffer.size() * sizeof( InterleavedVertex )
+						staging.upload( prv.buffer.data()
+							, prv.buffer.size() * sizeof( InterleavedVertex )
 							, offsets.getVertexOffset()
 							, offsets.getVertexBuffer() );
-						staging.upload( cur.m_buffer.data()
-							, cur.m_buffer.size() * sizeof( InterleavedVertex )
+						staging.upload( cur.buffer.data()
+							, cur.buffer.size() * sizeof( InterleavedVertex )
 							, animBuffer.getOffset()
 							, animBuffer.getBuffer().getBuffer() );
 					}
@@ -71,8 +71,8 @@ namespace castor3d
 		}
 
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()
-			, doInterpolateBB( prv.m_boundingBox
-				, cur.m_boundingBox
+			, doInterpolateBB( prv.boundingBox
+				, cur.boundingBox
 				, factor ) );
 		m_cur = &cur;
 		m_currentFactor = factor;

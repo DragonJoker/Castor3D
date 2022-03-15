@@ -6,13 +6,15 @@ namespace castor3d
 		, VkMemoryPropertyFlags memoryFlags
 		, castor::String debugName
 		, ashes::QueueShare sharingMode
-		, AllocatorT allocator )
+		, AllocatorT allocator
+		, bool smallData )
 		: GpuBufferBase{ renderSystem
 			, usage
 			, memoryFlags
 			, std::move( debugName )
 			, std::move( sharingMode )
-			, allocator.getTotalSize() }
+			, allocator.getTotalSize()
+			, smallData }
 		, m_allocator{ std::move( allocator ) }
 	{
 	}

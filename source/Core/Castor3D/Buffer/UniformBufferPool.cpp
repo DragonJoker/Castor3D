@@ -11,30 +11,31 @@ CU_ImplementCUSmartPtr( castor3d, UniformBufferPool )
 
 namespace castor3d
 {
-	namespace  details
+	//*********************************************************************************************
+
+	void copyBuffer( ashes::CommandBuffer const & commandBuffer
+		, ashes::BufferBase const & src
+		, ashes::BufferBase const & dst
+		, VkDeviceSize offset
+		, VkDeviceSize size
+		, VkPipelineStageFlags flags )
 	{
-		inline void copyBuffer( ashes::CommandBuffer const & commandBuffer
-			, ashes::BufferBase const & src
-			, ashes::BufferBase const & dst
-			, VkDeviceSize offset
-			, VkDeviceSize size
-			, VkPipelineStageFlags flags )
-		{
-			auto dstSrcStage = dst.getCompatibleStageFlags();
-			commandBuffer.memoryBarrier( dstSrcStage
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, dst.makeTransferDestination() );
-			commandBuffer.copyBuffer( src
-				, dst
-				, size
-				, offset
-				, 0u );
-			dstSrcStage = dst.getCompatibleStageFlags();
-			commandBuffer.memoryBarrier( dstSrcStage
-				, flags
-				, dst.makeUniformBufferInput() );
-		}
+		auto dstSrcStage = dst.getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstSrcStage
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, dst.makeTransferDestination() );
+		commandBuffer.copyBuffer( src
+			, dst
+			, size
+			, offset
+			, 0u );
+		dstSrcStage = dst.getCompatibleStageFlags();
+		commandBuffer.memoryBarrier( dstSrcStage
+			, flags
+			, dst.makeUniformBufferInput() );
 	}
+
+	//*********************************************************************************************
 
 	UniformBufferPool::UniformBufferPool( RenderSystem & renderSystem
 		, RenderDevice const & device
@@ -72,7 +73,7 @@ namespace castor3d
 				{
 					if ( buffer.buffer->hasAllocated() )
 					{
-						details::copyBuffer( commandBuffer
+						copyBuffer( commandBuffer
 							, m_stagingBuffer->getBuffer()
 							, buffer.buffer->getBuffer().getBuffer()
 							, buffer.index * m_maxUboSize
@@ -173,4 +174,6 @@ namespace castor3d
 		m_maxUboSize = itB->buffer->initialise( m_device );
 		return itB;
 	}
+
+	//*********************************************************************************************
 }

@@ -46,7 +46,7 @@ namespace castor3d
 
 				buffer = device.bufferPool->getBuffer< InstantiationData >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 					, count
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			}
 
 			return buffer;
@@ -250,12 +250,16 @@ namespace castor3d
 		{
 			if ( data.second.buffer && data.second.count )
 			{
-				if ( auto * buffer = data.second.buffer.lock() )
+				if ( !m_staging )
 				{
-					std::copy( data.second.data.begin(), data.second.data.end(), buffer );
-					data.second.buffer.flush();
-					data.second.buffer.unlock();
+					m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
+						, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "InsUpload" );
 				}
+
+				m_staging->upload( data.second.data.data()
+					, data.second.data.size() * sizeof( InstantiationData )
+					, data.second.buffer.getOffset()
+					, data.second.buffer.getBuffer().getBuffer() );
 			}
 		}
 	}

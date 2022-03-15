@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ObjectBufferOffset_HPP___
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPackedAllocator.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
 #include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 
@@ -13,9 +14,9 @@ namespace castor3d
 	struct ObjectBufferOffset
 	{
 	public:
-		ashes::BufferBase const * vtxBuffer{};
-		ashes::BufferBase const * idxBuffer{};
-		ashes::BufferBase const * bonBuffer{};
+		GpuPackedBuffer * vtxBuffer{};
+		GpuPackedBuffer * idxBuffer{};
+		GpuPackedBuffer * bonBuffer{};
 		MemChunk vtxChunk{};
 		MemChunk idxChunk{};
 		MemChunk bonChunk{};
@@ -27,17 +28,17 @@ namespace castor3d
 
 		ashes::BufferBase const & getIndexBuffer()const
 		{
-			return *idxBuffer;
+			return idxBuffer->getBuffer().getBuffer();
 		}
 
 		ashes::BufferBase const & getVertexBuffer()const
 		{
-			return *vtxBuffer;
+			return vtxBuffer->getBuffer().getBuffer();
 		}
 
 		ashes::BufferBase const & getBonesBuffer()const
 		{
-			return *bonBuffer;
+			return bonBuffer->getBuffer().getBuffer();
 		}
 
 		bool hasIndices()const
@@ -53,6 +54,29 @@ namespace castor3d
 		bool hasBones()const
 		{
 			return bonChunk.askedSize != 0;
+		}
+
+		template< typename IndexT >
+		castor::ArrayView< IndexT > getIndexData()const
+		{
+			CU_Require( hasIndices() );
+			return castor::makeArrayView( reinterpret_cast< IndexT * >( idxBuffer->getDatas().data() + getIndexOffset() )
+				, uint32_t( idxChunk.askedSize / sizeof( IndexT ) ) );
+		}
+
+		template< typename VertexT >
+		castor::ArrayView< VertexT > getVertexData()const
+		{
+			CU_Require( hasVertices() );
+			return castor::makeArrayView( reinterpret_cast< VertexT * >( vtxBuffer->getDatas().data() + getVertexOffset() )
+				, getVertexCount< VertexT >() );
+		}
+
+		castor::ArrayView< VertexBoneData > getBoneData()const
+		{
+			CU_Require( hasBones() );
+			return castor::makeArrayView( reinterpret_cast< VertexBoneData * >( bonBuffer->getDatas().data() + getBonesOffset() )
+				, getBonesCount() );
 		}
 
 		uint32_t getIndexCount()const
