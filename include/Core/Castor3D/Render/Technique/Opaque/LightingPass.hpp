@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 
+#include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Viewport.hpp"
@@ -136,7 +137,7 @@ namespace castor3d
 		LightDescriptors & doCreateLightEntry( Light const & light );
 		castor::Matrix4x4f doComputeModelMatrix( castor3d::Light const & light
 			, Camera const & camera )const;
-		ashes::VertexBufferPtr< float > doCreateVertexBuffer();
+		ObjectBufferOffset doCreateVertexBuffer();
 
 	private:
 		crg::GraphContext & m_context;
@@ -151,7 +152,7 @@ namespace castor3d
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		LightPipeline m_pipeline;
 		uint32_t m_count{};
-		ashes::VertexBufferPtr< float > m_vertexBuffer;
+		ObjectBufferOffset m_vertexBuffer;
 		std::map< size_t, std::unique_ptr< LightDescriptors > > m_lightDescriptors;
 		std::vector< LightDescriptors const * > m_enabledLights;
 		Viewport m_viewport;
