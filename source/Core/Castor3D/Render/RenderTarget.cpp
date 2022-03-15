@@ -571,7 +571,10 @@ namespace castor3d
 
 	void RenderTarget::upload( ashes::CommandBuffer const & cb )
 	{
-		m_overlayRenderer->upload( cb );
+		if ( m_initialised )
+		{
+			m_overlayRenderer->upload( cb );
+		}
 	}
 
 	crg::SemaphoreWaitArray RenderTarget::render( RenderDevice const & device

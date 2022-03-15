@@ -232,6 +232,7 @@ namespace castor3d
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 		m_uploadTimer->beginPass( *uploadResources.commands.commandBuffer );
 
+		device.bufferPool->upload( *uploadResources.commands.commandBuffer );
 		device.uboPools->upload( *uploadResources.commands.commandBuffer );
 		device.geometryPools->upload( *uploadResources.commands.commandBuffer );
 		device.skinnedGeometryPools->upload( *uploadResources.commands.commandBuffer );
@@ -247,6 +248,8 @@ namespace castor3d
 		{
 			window.second->upload( *uploadResources.commands.commandBuffer );
 		}
+
+		getEngine()->getRenderTargetCache().upload( *uploadResources.commands.commandBuffer );
 
 		m_uploadTimer->endPass( *uploadResources.commands.commandBuffer );
 		uploadResources.commands.commandBuffer->endDebugBlock();
