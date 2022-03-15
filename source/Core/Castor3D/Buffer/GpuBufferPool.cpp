@@ -26,6 +26,17 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
+	void GpuBufferPool::upload( ashes::CommandBuffer const & cb )
+	{
+		for ( auto & buffers : m_buffers )
+		{
+			for ( auto & buffer : buffers.second )
+			{
+				buffer->upload( cb );
+			}
+		}
+	}
+
 	GpuBufferBase & GpuBufferPool::doGetBuffer( VkDeviceSize size
 		, VkBufferUsageFlags target
 		, VkMemoryPropertyFlags memory

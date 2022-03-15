@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
@@ -57,19 +58,12 @@ namespace castor3d
 
 		bool isReady()const
 		{
-			return m_staging
-				&& m_animBuffer;
+			return bool( m_animBuffer );
 		}
 
 		InterleavedVertexArray & getData()
 		{
 			return m_data;
-		}
-
-		StagingData & getStaging()
-		{
-			CU_Require( m_staging );
-			return *m_staging;
 		}
 
 		ProgramFlags getProgramFlags( MaterialRPtr material )const override
@@ -90,7 +84,6 @@ namespace castor3d
 		GpuBufferOffsetT< InterleavedVertex > m_animBuffer;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_animLayouts;
 		InterleavedVertexArray m_data;
-		StagingDataUPtr m_staging;
 	};
 }
 

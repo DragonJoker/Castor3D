@@ -43,6 +43,15 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		Uploads all ready memory ranges to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\~french
+		 *\brief		Met à jour tous les intervalles mémoire prêts en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
 		 *\param[in]	target	The buffer type.
 		 *\param[in]	count	The wanted buffer element count.

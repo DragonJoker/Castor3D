@@ -250,16 +250,13 @@ namespace castor3d
 		{
 			if ( data.second.buffer && data.second.count )
 			{
-				if ( !m_staging )
-				{
-					m_staging = castor::makeUnique< StagingData >( getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice()
-						, getOwner()->getOwner()->getName() + std::to_string( getOwner()->getId() ) + "InsUpload" );
-				}
-
-				m_staging->upload( data.second.data.data()
-					, data.second.data.size() * sizeof( InstantiationData )
-					, data.second.buffer.getOffset()
-					, data.second.buffer.getBuffer().getBuffer() );
+				std::copy( data.second.data.begin()
+					, data.second.data.end()
+					, data.second.buffer.getData().begin() );
+				data.second.buffer.buffer->markDirty( data.second.buffer.getOffset()
+					, data.second.buffer.getSize()
+					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}
 	}
