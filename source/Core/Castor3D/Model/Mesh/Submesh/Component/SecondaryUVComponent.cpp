@@ -84,7 +84,7 @@ namespace castor3d
 		{
 			m_buffer = device.bufferPool->getBuffer< castor::Point3f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, count
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 
 		return bool( m_buffer );
@@ -105,12 +105,13 @@ namespace castor3d
 		{
 			if ( getOwner()->getBufferOffsets().hasVertices() )
 			{
-				if ( auto * buffer = m_buffer.lock() )
-				{
-					std::copy( m_data.begin(), m_data.end(), buffer );
-					m_buffer.flush();
-					m_buffer.unlock();
-				}
+				std::copy( m_data.begin()
+					, m_data.end()
+					, m_buffer.getData().begin() );
+				m_buffer.buffer->markDirty( m_buffer.chunk.offset
+					, m_buffer.chunk.size
+					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}
 	}

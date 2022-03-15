@@ -32,17 +32,9 @@ namespace castor3d
 
 	void UniformBufferPools::upload( ashes::CommandBuffer const & cb )const
 	{
-		cb.beginDebugBlock(
-			{
-				"Uniform Buffers Upload",
-				makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-
 		for ( auto & pool : m_pools )
 		{
 			pool.upload( cb );
 		}
-
-		cb.endDebugBlock();
 	}
 }

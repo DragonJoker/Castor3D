@@ -575,6 +575,23 @@ namespace castor3d
 		}
 	}
 
+	void RenderWindow::upload( ashes::CommandBuffer const & cb )
+	{
+		if ( m_skip )
+		{
+			return;
+		}
+
+		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
+		{
+			m_loadingScreen->upload( cb );
+		}
+		else if ( auto target = getRenderTarget() )
+		{
+			target->upload( cb );
+		}
+	}
+
 	void RenderWindow::render( RenderInfo & info
 		, bool waitOnly
 		, crg::SemaphoreWaitArray & baseToWait )

@@ -142,6 +142,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/GpuBufferPool.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/ObjectBufferOffset.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/ObjectBufferPool.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/ObjectBufferPool.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/PoolUniformBuffer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBuffer.hpp

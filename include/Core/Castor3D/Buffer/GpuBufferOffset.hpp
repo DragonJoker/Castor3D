@@ -63,19 +63,10 @@ namespace castor3d
 			return chunk.offset;
 		}
 
-		DataT * lock()const
+		castor::ArrayView< DataT > getData()
 		{
-			return reinterpret_cast< DataT * >( buffer->getBuffer().lock( chunk.offset, chunk.size, 0u ) );
-		}
-
-		void flush()const
-		{
-			return buffer->getBuffer().flush( chunk.offset, chunk.size );
-		}
-
-		void unlock()const
-		{
-			return buffer->getBuffer().unlock();
+			return castor::makeArrayView( reinterpret_cast< DataT * >( buffer->getDatas().data() + getOffset() )
+				, getSize() );
 		}
 	};
 }

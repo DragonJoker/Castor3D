@@ -7,57 +7,31 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
-using namespace castor;
-
-//*************************************************************************************************
-
 namespace castor3d
 {
-	namespace
+	//*************************************************************************************************
+
+	namespace v1_3
 	{
-		template< typename T, typename U >
+		template< typename T >
 		inline void doCopyVertices( uint32_t count
 			, OldInterleavedVertexT< T > const * src
-			, InterleavedVertexT< U > * dst )
+			, InterleavedVertex * dst )
 		{
 			for ( uint32_t i{ 0u }; i < count; ++i )
 			{
-				dst->pos[0] = U( src->pos[0] );
-				dst->pos[1] = U( src->pos[1] );
-				dst->pos[2] = U( src->pos[2] );
-				dst->nml[0] = U( src->nml[0] );
-				dst->nml[1] = U( src->nml[1] );
-				dst->nml[2] = U( src->nml[2] );
-				dst->tan[0] = U( src->tan[0] );
-				dst->tan[1] = U( src->tan[1] );
-				dst->tan[2] = U( src->tan[2] );
-				dst->tex[0] = U( src->tex[0] );
-				dst->tex[1] = U( src->tex[1] );
-				dst->tex[2] = U( src->tex[2] );
-				dst++;
-				src++;
-			}
-		}
-
-		template< typename T, typename U >
-		inline void doCopyVertices( uint32_t count
-			, InterleavedVertexT< T > const * src
-			, InterleavedVertexT< U > * dst )
-		{
-			for ( uint32_t i{ 0u }; i < count; ++i )
-			{
-				dst->pos[0] = U( src->pos[0] );
-				dst->pos[1] = U( src->pos[1] );
-				dst->pos[2] = U( src->pos[2] );
-				dst->nml[0] = U( src->nml[0] );
-				dst->nml[1] = U( src->nml[1] );
-				dst->nml[2] = U( src->nml[2] );
-				dst->tan[0] = U( src->tan[0] );
-				dst->tan[1] = U( src->tan[1] );
-				dst->tan[2] = U( src->tan[2] );
-				dst->tex[0] = U( src->tex[0] );
-				dst->tex[1] = U( src->tex[1] );
-				dst->tex[2] = U( src->tex[2] );
+				dst->pos[0] = float( src->pos[0] );
+				dst->pos[1] = float( src->pos[1] );
+				dst->pos[2] = float( src->pos[2] );
+				dst->nml[0] = float( src->nml[0] );
+				dst->nml[1] = float( src->nml[1] );
+				dst->nml[2] = float( src->nml[2] );
+				dst->tan[0] = float( src->tan[0] );
+				dst->tan[1] = float( src->tan[1] );
+				dst->tan[2] = float( src->tan[2] );
+				dst->tex[0] = float( src->tex[0] );
+				dst->tex[1] = float( src->tex[1] );
+				dst->tex[2] = float( src->tex[2] );
 				dst++;
 				src++;
 			}
@@ -134,7 +108,7 @@ namespace castor3d
 	bool BinaryParser< Submesh >::doParse( Submesh & obj )
 	{
 		bool result = true;
-		String name;
+		castor::String name;
 		std::vector< FaceIndices > faces;
 		std::vector< LineIndices > lines;
 		std::vector< VertexBoneData > bones;
@@ -318,7 +292,7 @@ namespace castor3d
 					if ( result && !srcbuf.empty() )
 					{
 						std::vector< InterleavedVertex > dstbuf( srcbuf.size() );
-						doCopyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
+						v1_3::doCopyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
 						obj.addPoints( dstbuf );
 					}
 
@@ -376,4 +350,6 @@ namespace castor3d
 
 		return result;
 	}
+
+	//*************************************************************************************************
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LoadingScreen_H___
@@ -47,6 +47,15 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		C3D_API void setRenderPass( VkRenderPass renderPass
 			, castor::Size const & renderSize );
+		/**
+		 *\~english
+		 *\brief		Uploads overlays GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU d'incrustations en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & cb );
 		C3D_API crg::SemaphoreWaitArray render( ashes::Queue const & queue
 			, ashes::FrameBuffer const & framebuffer
 			, crg::SemaphoreWaitArray const & toWait

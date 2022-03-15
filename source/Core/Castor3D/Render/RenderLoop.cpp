@@ -1,6 +1,8 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -34,11 +36,8 @@ namespace castor3d
 		, m_wantedFPS{ wantedFPS }
 		, m_frameTime{ 1000ull / wantedFPS }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
-		, m_uploadResources
-		{
-			UploadResources{ { nullptr, nullptr }, nullptr },
-			UploadResources{ { nullptr, nullptr }, nullptr },
-		}
+		, m_uploadResources{ UploadResources{ { nullptr, nullptr }, nullptr }
+			, UploadResources{ { nullptr, nullptr }, nullptr } }
 	{
 		auto lock( makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->initialise( getEngine()->getOverlayCache() );
@@ -57,6 +56,7 @@ namespace castor3d
 		{
 			auto & device = m_renderSystem.getRenderDevice();
 			auto data = m_queueData;
+			m_uploadTimer = nullptr;
 			m_queueData = nullptr;
 			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
 				{
@@ -208,6 +208,9 @@ namespace castor3d
 				};
 				resources.fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 			}
+
+			m_uploadTimer = std::make_unique< crg::FramePassTimer >( device.makeContext(), "Upload" );
+			getEngine()->registerTimer( "Buffers", *m_uploadTimer );
 		}
 
 		auto & uploadResources = m_uploadResources[m_currentUpdate];
@@ -225,7 +228,14 @@ namespace castor3d
 		CU_Require( uploadResources.waitCount == 0u );
 		uploadResources.fence->reset();
 		uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		uploadResources.commands.commandBuffer->beginDebugBlock( { "Buffers Upload"
+			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+		m_uploadTimer->beginPass( *uploadResources.commands.commandBuffer );
+
 		device.uboPools->upload( *uploadResources.commands.commandBuffer );
+		device.geometryPools->upload( *uploadResources.commands.commandBuffer );
+		device.skinnedGeometryPools->upload( *uploadResources.commands.commandBuffer );
+		device.vertexPools->upload( *uploadResources.commands.commandBuffer );
 		getEngine()->upload( *uploadResources.commands.commandBuffer );
 
 		for ( auto & buffer : m_shaderBuffers )
@@ -233,7 +243,15 @@ namespace castor3d
 			buffer->upload( *uploadResources.commands.commandBuffer );
 		}
 
+		for ( auto & window : windows )
+		{
+			window.second->upload( *uploadResources.commands.commandBuffer );
+		}
+
+		m_uploadTimer->endPass( *uploadResources.commands.commandBuffer );
+		uploadResources.commands.commandBuffer->endDebugBlock();
 		uploadResources.commands.commandBuffer->end();
+		m_uploadTimer->notifyPassRender();
 		m_queueData->queue->submit( *uploadResources.commands.commandBuffer
 			, ( uploadResources.used
 				? VkSemaphore{ VK_NULL_HANDLE }

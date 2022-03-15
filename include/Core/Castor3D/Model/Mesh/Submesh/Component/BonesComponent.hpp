@@ -116,7 +116,6 @@ namespace castor3d
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 		VertexBoneDataArray m_bones;
-		StagingDataUPtr m_staging;
 
 		friend class BinaryWriter< BonesComponent >;
 		friend class BinaryParser< BonesComponent >;
