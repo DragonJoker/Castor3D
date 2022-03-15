@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -367,8 +367,8 @@ namespace castor3d
 	{
 		if ( !m_enabledLights.empty() )
 		{
-			VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();
-			VkDeviceSize offset{};
+			VkBuffer vertexBuffer = m_vertexBuffer.getVertexBuffer();
+			VkDeviceSize offset{ m_vertexBuffer.getVertexOffset() };
 			VkDescriptorSet baseDS{};
 			auto & renderPass = m_renderPasses[index];
 			{
@@ -586,36 +586,29 @@ namespace castor3d
 		return model;
 	}
 
-	ashes::VertexBufferPtr< float > LightsPipeline::doCreateVertexBuffer()
+	ObjectBufferOffset LightsPipeline::doCreateVertexBuffer()
 	{
-		ashes::VertexBufferPtr< float > result;
+		ObjectBufferOffset result;
 
 		if ( m_config.lightType == LightType::eDirectional )
 		{
 			m_count = 6u;
-			result = makeVertexBuffer< float >( m_device
-				, 12u
-				, 0u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "DirectionalLightPassVbo" );
-
-			if ( auto buffer = result->getBuffer().lock( 0u
-				, ~( 0ull )
-				, 0u ) )
+			result = m_device.vertexPools->getBuffer< float >( 12u );
+			auto buffer = result.getVertexData< float >();
+			float data[] =
 			{
-				float data[] =
-				{
-					-1.0f, -1.0f,
-					-1.0f, +1.0f,
-					+1.0f, -1.0f,
-					+1.0f, -1.0f,
-					-1.0f, +1.0f,
-					+1.0f, +1.0f,
-				};
-				std::memcpy( buffer, data, sizeof( data ) );
-				result->getBuffer().flush( 0u, ~( 0ull ) );
-				result->getBuffer().unlock();
-			}
+				-1.0f, -1.0f,
+				-1.0f, +1.0f,
+				+1.0f, -1.0f,
+				+1.0f, -1.0f,
+				-1.0f, +1.0f,
+				+1.0f, +1.0f,
+			};
+			std::memcpy( buffer.data(), data, sizeof( data ) );
+			result.vtxBuffer->markDirty( result.getVertexOffset()
+				, result.getVertexSize()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 		else
 		{
@@ -631,18 +624,13 @@ namespace castor3d
 			}
 
 			m_count = uint32_t( data.size() );
-			result = makeVertexBuffer< float >( m_device
-				, uint32_t( data.size() * 3u )
-				, 0u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, castor::string::snakeToCamelCase( getName( m_config.lightType ) ) + "LightPassVbo" );
-
-			if ( auto * buffer = result->lock( 0u, result->getCount(), 0u ) )
-			{
-				std::memcpy( buffer, data.data()->constPtr(), result->getSize() );
-				result->flush( 0u, result->getCount() );
-				result->unlock();
-			}
+			result = m_device.vertexPools->getBuffer< float >( uint32_t( data.size() * 3u ) );
+			auto buffer = result.getVertexData< float >();
+			std::memcpy( buffer.data(), data.data()->constPtr(), result.getVertexSize() );
+			result.vtxBuffer->markDirty( result.getVertexOffset()
+				, result.getVertexSize()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 
 		return result;
