@@ -79,20 +79,35 @@ namespace castor3d
 				, getBonesCount() );
 		}
 
+		uint32_t getIndexSize()const
+		{
+			return uint32_t( idxChunk.askedSize );
+		}
+
+		uint32_t getVertexSize()const
+		{
+			return uint32_t( vtxChunk.askedSize );
+		}
+
+		uint32_t getBonesSize()const
+		{
+			return uint32_t( bonChunk.askedSize );
+		}
+
 		uint32_t getIndexCount()const
 		{
-			return uint32_t( idxChunk.askedSize / sizeof( uint32_t ) );
+			return uint32_t( getIndexSize() / sizeof( uint32_t ) );
 		}
 
 		template< typename VertexT >
 		uint32_t getVertexCount()const
 		{
-			return uint32_t( vtxChunk.askedSize / sizeof( VertexT ) );
+			return uint32_t( getVertexSize() / sizeof( VertexT ) );
 		}
 
 		uint32_t getBonesCount()const
 		{
-			return uint32_t( bonChunk.askedSize / sizeof( VertexBoneData ) );
+			return uint32_t( getBonesSize() / sizeof( VertexBoneData ) );
 		}
 
 		VkDeviceSize getIndexOffset()const
