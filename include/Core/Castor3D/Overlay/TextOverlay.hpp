@@ -25,8 +25,8 @@ namespace castor3d
 		struct Vertex
 		{
 			castor::Point2f coords;
-			castor::Point2f text;
 			castor::Point2f texture;
+			castor::Point2f text;
 		};
 		CU_DeclareVector( Vertex, Vertex );
 

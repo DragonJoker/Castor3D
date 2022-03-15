@@ -85,15 +85,16 @@ namespace castor3d
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
 			auto & bufferOffsets = node.data.getBufferOffsets();
+			auto buffer = &bufferOffsets.vtxBuffer->getBuffer().getBuffer();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, NodePtrByBufferMapT< NodeT >{} ) ).first->second.second;
-			auto & bufferMap = pipelineMap.emplace( bufferOffsets.vtxBuffer, NodePtrArrayT< NodeT >{} ).first->second;
+			auto & bufferMap = pipelineMap.emplace( buffer, NodePtrArrayT< NodeT >{} ).first->second;
 			auto it = std::find_if( bufferMap.begin()
 				, bufferMap.end()
 				, [&node]( NodeT const * lookup )
 				{
 					return compareOffsets( *lookup, node );
 				} );
-			CU_Require( bufferOffsets.vtxBuffer );
+			CU_Require( buffer );
 			bufferMap.emplace( it, &node );
 		}
 
@@ -109,8 +110,9 @@ namespace castor3d
 				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
 
 			auto & bufferOffsets = node.data.getBufferOffsets();
+			auto buffer = &bufferOffsets.vtxBuffer->getBuffer().getBuffer();
 			auto & pipelineMap = nodes.emplace( baseHash, std::make_pair( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ) ).first->second.second;
-			auto & bufferMap = pipelineMap.emplace( bufferOffsets.vtxBuffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
+			auto & bufferMap = pipelineMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
 			auto & passMap = bufferMap.emplace( &node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
 			auto & objectMap = passMap.emplace( &node.data, NodePtrArrayT< NodeT >{} ).first->second;
 			auto it = std::find_if( objectMap.begin()
@@ -119,7 +121,7 @@ namespace castor3d
 				{
 					return compareOffsets( *lookup, node );
 				} );
-			CU_Require( bufferOffsets.vtxBuffer );
+			CU_Require( buffer );
 			objectMap.emplace( it, &node );
 		}
 

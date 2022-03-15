@@ -227,7 +227,6 @@ namespace castor3d
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		uint32_t m_vertexStride;
-		ashes::VertexBufferPtr< Quad > m_quadBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_quadLayout;
 		GeometryBuffers m_geometryBuffers;
 		bool m_needUpdate{ true };

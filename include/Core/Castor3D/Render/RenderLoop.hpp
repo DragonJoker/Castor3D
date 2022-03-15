@@ -12,6 +12,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Multithreading/AsyncJobQueue.hpp>
 
+#include <RenderGraph/FramePassTimer.hpp>
+
 #include <ashespp/Core/WindowHandle.hpp>
 
 #include <chrono>
@@ -265,6 +267,7 @@ namespace castor3d
 		QueueData const * m_queueData{};
 		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
 		std::mutex m_shaderBuffersMtx;
+		std::unique_ptr< crg::FramePassTimer > m_uploadTimer;
 	};
 }
 

@@ -9,15 +9,14 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace v1_3
 	{
-		using InterleavedVertexArrayd = InterleavedVertexTArray< double >;
 		template< typename T >
 		using OldInterleavedVertexTArray = std::vector< OldInterleavedVertexT< T > >;
 
-		template< typename T, typename U >
+		template< typename T >
 		void doConvert( OldInterleavedVertexTArray< T > const & in
-			, InterleavedVertexTArray< U > & out )
+			, InterleavedVertexArray & out )
 		{
 			out.resize( in.size() );
 			auto it = out.begin();
@@ -25,18 +24,18 @@ namespace castor3d
 			for ( auto & inVtx : in )
 			{
 				auto & outVtx = *it;
-				outVtx.pos[0] = U( inVtx.pos[0] );
-				outVtx.pos[1] = U( inVtx.pos[1] );
-				outVtx.pos[2] = U( inVtx.pos[2] );
-				outVtx.nml[0] = U( inVtx.nml[0] );
-				outVtx.nml[1] = U( inVtx.nml[1] );
-				outVtx.nml[2] = U( inVtx.nml[2] );
-				outVtx.tan[0] = U( inVtx.tan[0] );
-				outVtx.tan[1] = U( inVtx.tan[1] );
-				outVtx.tan[2] = U( inVtx.tan[2] );
-				outVtx.tex[0] = U( inVtx.tex[0] );
-				outVtx.tex[1] = U( inVtx.tex[1] );
-				outVtx.tex[2] = U( inVtx.tex[2] );
+				outVtx.pos[0] = float( inVtx.pos[0] );
+				outVtx.pos[1] = float( inVtx.pos[1] );
+				outVtx.pos[2] = float( inVtx.pos[2] );
+				outVtx.nml[0] = float( inVtx.nml[0] );
+				outVtx.nml[1] = float( inVtx.nml[1] );
+				outVtx.nml[2] = float( inVtx.nml[2] );
+				outVtx.tan[0] = float( inVtx.tan[0] );
+				outVtx.tan[1] = float( inVtx.tan[1] );
+				outVtx.tan[2] = float( inVtx.tan[2] );
+				outVtx.tex[0] = float( inVtx.tex[0] );
+				outVtx.tex[1] = float( inVtx.tex[1] );
+				outVtx.tex[2] = float( inVtx.tex[2] );
 				++it;
 			}
 		}
@@ -57,12 +56,12 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = doWriteChunk( uint32_t( it.second.m_buffer.size() ), ChunkType::eMeshAnimationKeyFrameBufferSize, m_chunk );
+				result = doWriteChunk( uint32_t( it.second.buffer.size() ), ChunkType::eMeshAnimationKeyFrameBufferSize, m_chunk );
 			}
 
 			if ( result )
 			{
-				result = doWriteChunk( it.second.m_buffer, ChunkType::eMeshAnimationKeyFrameBufferData, m_chunk );
+				result = doWriteChunk( it.second.buffer, ChunkType::eMeshAnimationKeyFrameBufferData, m_chunk );
 			}
 		}
 
@@ -141,7 +140,7 @@ namespace castor3d
 	bool BinaryParser< MeshAnimationKeyFrame >::doParse_v1_3( MeshAnimationKeyFrame & obj )
 	{
 		bool result = true;
-		OldInterleavedVertexTArray< double > bufferd;
+		v1_3::OldInterleavedVertexTArray< double > bufferd;
 		InterleavedVertexArray buffer;
 		BinaryChunk chunk;
 		SubmeshSPtr submesh;
@@ -158,7 +157,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						doConvert( bufferd, buffer );
+						v1_3::doConvert( bufferd, buffer );
 						obj.addSubmeshBuffer( *submesh, buffer );
 					}
 				}

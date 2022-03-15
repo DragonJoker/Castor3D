@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
@@ -41,18 +42,13 @@ namespace castor3d
 				BillboardVertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
 				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
-			m_quadBuffer = makeVertexBuffer< Quad >( device
-				, 1u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "BillboardQuad" );
-
-			if ( auto buffer = m_quadBuffer->lock( 0u, 1u, 0u ) )
-			{
-				*buffer = vertices;
-				m_quadBuffer->flush( 0u, 1u );
-				m_quadBuffer->unlock();
-			}
+			m_geometryBuffers.bufferOffset = device.vertexPools->getBuffer< Quad >( 1u );
+			auto bufferData = m_geometryBuffers.bufferOffset.getVertexData< Quad >();
+			bufferData.front() = vertices;
+			m_geometryBuffers.bufferOffset.vtxBuffer->markDirty( m_geometryBuffers.bufferOffset.vtxChunk.offset
+				, m_geometryBuffers.bufferOffset.vtxChunk.size
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 
 			m_quadLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray
@@ -70,10 +66,6 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
-			m_geometryBuffers.bufferOffset.vtxBuffer = &m_quadBuffer->getBuffer();
-			m_geometryBuffers.bufferOffset.vtxChunk.offset = 0u;
-			m_geometryBuffers.bufferOffset.vtxChunk.askedSize = 4u * sizeof( BillboardVertex );
-			m_geometryBuffers.bufferOffset.vtxChunk.size = 4u * sizeof( BillboardVertex );
 			m_geometryBuffers.other = buffers;
 			m_geometryBuffers.otherOffsets = offsets;
 			m_geometryBuffers.layouts = layouts;
@@ -88,6 +80,7 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
+			device.vertexPools->putBuffer( m_geometryBuffers.bufferOffset );
 			m_geometryBuffers.bufferOffset.vtxBuffer = nullptr;
 			m_geometryBuffers.bufferOffset.vtxChunk.offset = 0u;
 			m_geometryBuffers.bufferOffset.vtxChunk.askedSize = 0u;
@@ -96,7 +89,6 @@ namespace castor3d
 			m_geometryBuffers.otherOffsets.clear();
 			m_geometryBuffers.layouts.clear();
 			m_quadLayout.reset();
-			m_quadBuffer.reset();
 			m_vertexLayout.reset();
 			m_vertexBuffer.reset();
 		}

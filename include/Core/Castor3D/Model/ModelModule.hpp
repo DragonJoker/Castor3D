@@ -17,8 +17,7 @@ namespace castor3d
 	\~french
 	\brief		Contient toutes les composantes d'un sommet.
 	*/
-	template< typename T >
-	struct InterleavedVertexT;
+	struct InterleavedVertex;
 	/**
 	\~english
 	\brief		Representation of a vertex inside a submesh.
@@ -30,11 +29,7 @@ namespace castor3d
 	//! SubmeshVertex array.
 	CU_DeclareVector( SubmeshVertex, SubmeshVertex );
 
-	template< typename T >
-	using InterleavedVertexTArray = std::vector< InterleavedVertexT< T > >;
-
-	using InterleavedVertex = InterleavedVertexT< float >;
-	using InterleavedVertexArray = InterleavedVertexTArray< float >;
+	using InterleavedVertexArray = std::vector< InterleavedVertex >;
 
 	//@}
 }
