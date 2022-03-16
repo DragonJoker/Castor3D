@@ -3,7 +3,7 @@
 #include "BloomPostEffect/BloomPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
@@ -142,7 +142,7 @@ namespace Bloom
 
 			for ( auto i = 0u; i < blurPassesCount; ++i )
 			{
-				auto ubo = device.uboPools->getBuffer< castor3d::GaussianBlur::Configuration >( 0u );
+				auto ubo = device.uboPool->getBuffer< castor3d::GaussianBlur::Configuration >( 0u );
 				auto & data = ubo.getData();
 				data.textureSize = castor::Point2f
 				{

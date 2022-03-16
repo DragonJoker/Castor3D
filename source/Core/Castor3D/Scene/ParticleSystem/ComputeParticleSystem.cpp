@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -55,7 +55,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
+			m_ubo = device.uboPool->getBuffer< Configuration >( 0u );
 			auto & data = m_ubo.getData();
 			data.maxParticleCount = m_parent.getMaxParticlesCount();
 		}
@@ -109,7 +109,7 @@ namespace castor3d
 
 		if ( m_ubo )
 		{
-			device.uboPools->putBuffer( m_ubo );
+			device.uboPool->putBuffer( m_ubo );
 		}
 	}
 

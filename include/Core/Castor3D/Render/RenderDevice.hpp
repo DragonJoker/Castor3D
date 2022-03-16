@@ -345,7 +345,7 @@ namespace castor3d
 		VertexBufferPoolUPtr vertexPools;
 		ObjectBufferPoolUPtr geometryPools;
 		SkinnedObjectBufferPoolUPtr skinnedGeometryPools;
-		UniformBufferPoolsSPtr uboPools;
+		UniformBufferPoolUPtr uboPool;
 
 	private:
 		bool doTryAddExtension( std::string name

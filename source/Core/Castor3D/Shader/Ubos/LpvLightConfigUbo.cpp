@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
@@ -77,13 +77,13 @@ namespace castor3d
 
 	LpvLightConfigUbo::LpvLightConfigUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 	}
 	
 	LpvLightConfigUbo::~LpvLightConfigUbo()
 	{
-		m_device.uboPools->putBuffer( m_ubo );
+		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void LpvLightConfigUbo::cpuUpdate( Light const & light

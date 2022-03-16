@@ -2,7 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
@@ -363,7 +363,7 @@ namespace castor3d
 		, m_listener{ getEngine()->getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
-		, m_configUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 		log::debug << "Created RenderWindow, size: " << size << std::endl;
 
@@ -404,7 +404,7 @@ namespace castor3d
 
 		doDestroySwapchain();
 		doDestroyProgram();
-		m_device.uboPools->putBuffer( m_configUbo );
+		m_device.uboPool->putBuffer( m_configUbo );
 	}
 
 	void RenderWindow::initialise( RenderTargetSPtr target )

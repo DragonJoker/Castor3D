@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -531,7 +531,7 @@ namespace castor3d
 
 			if ( m_config.lightType != LightType::eDirectional )
 			{
-				result.modelMatrixUbo = m_device.uboPools->getBuffer< ModelBufferConfiguration >( 0u );
+				result.modelMatrixUbo = m_device.uboPool->getBuffer< ModelBufferConfiguration >( 0u );
 				writes.emplace_back( result.modelMatrixUbo.getDescriptorWrite( uint32_t( LightPassLgtIdx::eModelMatrix ) ) );
 			}
 

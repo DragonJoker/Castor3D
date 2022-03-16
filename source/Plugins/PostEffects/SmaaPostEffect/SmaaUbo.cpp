@@ -1,7 +1,7 @@
 #include "SmaaPostEffect/SmaaUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 
 #include <ShaderWriter/Writer.hpp>
@@ -72,13 +72,13 @@ namespace smaa
 
 	SmaaUbo::SmaaUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPools->getBuffer< SmaaUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_ubo{ m_device.uboPool->getBuffer< SmaaUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
 	}
 
 	SmaaUbo::~SmaaUbo()
 	{
-		m_device.uboPools->putBuffer< SmaaUboConfiguration >( m_ubo );
+		m_device.uboPool->putBuffer< SmaaUboConfiguration >( m_ubo );
 	}
 
 	void SmaaUbo::cpuUpdate( castor::Size const & renderSize
