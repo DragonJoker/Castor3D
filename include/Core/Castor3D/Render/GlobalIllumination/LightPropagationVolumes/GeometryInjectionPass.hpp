@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "LightPropagationVolumesModule.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
@@ -160,7 +161,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		uint32_t m_rsmSize;
-		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > m_vertexBuffer;
+		GpuBufferOffsetT< NonTexturedQuad::Vertex > m_vertexBuffer;
 		ShaderModule m_vertexShader;
 		ShaderModule m_geometryShader;
 		ShaderModule m_pixelShader;
