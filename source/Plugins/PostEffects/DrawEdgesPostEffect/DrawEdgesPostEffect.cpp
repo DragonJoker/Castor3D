@@ -5,10 +5,12 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -23,6 +25,7 @@ namespace draw_edges
 		enum Idx : uint32_t
 		{
 			eMaterials,
+			eModels,
 			eData0,
 			eData1,
 			eSource,
@@ -59,6 +62,7 @@ namespace draw_edges
 
 			// Shader inputs
 			castor3d::shader::Materials materials{ writer, eMaterials, 0u };
+			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
 			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
@@ -121,8 +125,12 @@ namespace draw_edges
 
 					IF( writer, data0.w() != 0.0_f  )
 					{
+						auto nodeId = writer.declLocale( "nodeId"
+							, writer.cast< sdw::UInt >( data0.z() ) );
+						auto modelData = writer.declLocale( "modelData"
+							, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 						auto material = writer.declLocale( "material"
-							, materials.getMaterial( writer.cast< sdw::UInt >( data0.w() ) ) );
+							, materials.getMaterial( modelData.getMaterialId() ) );
 
 						IF( writer, material.edgeColour.a() != 0.0_f )
 						{
@@ -295,9 +303,14 @@ namespace draw_edges
 					, result->getTimer() );
 				return result;
 			} );
+		auto & modelBuffer = m_renderTarget.getScene()->getModelBuffer().getBuffer();
 		pass.addDependency( m_depthNormal->getPass() );
 		pass.addDependency( m_objectID->getPass() );
 		passBuffer.createPassBinding( pass,eMaterials );
+		pass.addInputStorageBuffer( { modelBuffer, "Models" }
+			, uint32_t( eModels )
+			, 0u
+			, uint32_t( modelBuffer.getSize() ) );
 		pass.addSampledView( data0, eData0 );
 		pass.addSampledView( data1, eData1 );
 		pass.addSampledView( *m_target, eSource );

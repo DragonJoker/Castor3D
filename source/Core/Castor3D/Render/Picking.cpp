@@ -54,7 +54,7 @@ namespace castor3d
 			, Submesh const *& subnode
 			, uint32_t & face )
 		{
-			auto renderNode = cache.getScene()->getRenderNodes().getSubmeshNode( nodeId + 1u );
+			auto renderNode = cache.getScene()->getRenderNodes().getSubmeshNode( nodeId );
 
 			if ( renderNode )
 			{
@@ -70,7 +70,7 @@ namespace castor3d
 			, BillboardBase const *& node
 			, uint32_t & face )
 		{
-			auto renderNode = cache.getScene()->getRenderNodes().getBillboardNode( nodeId + 1u );
+			auto renderNode = cache.getScene()->getRenderNodes().getBillboardNode( nodeId );
 
 			if ( renderNode )
 			{

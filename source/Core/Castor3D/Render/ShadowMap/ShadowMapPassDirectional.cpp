@@ -220,7 +220,7 @@ namespace castor3d
 					, v4Tangent
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId] );
+					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
@@ -313,7 +313,7 @@ namespace castor3d
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[in.nodeId] );
+					, c3d_modelsData[in.nodeId - 1] );
 				pxl_normalLinear = vec4( 0.0_f );
 				pxl_variance = vec2( 0.0_f );
 				pxl_position = vec4( 0.0_f );

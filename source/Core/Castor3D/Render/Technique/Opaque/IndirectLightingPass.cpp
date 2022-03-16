@@ -20,6 +20,7 @@
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
@@ -60,6 +61,7 @@ namespace castor3d
 			auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 1 );
 
 			// Shader inputs
+			C3D_ModelsData( writer, IndirectLightingPass::eModels, 0u );
 			C3D_GpInfo( writer, IndirectLightingPass::eGpInfo, 0u );
 			C3D_Scene( writer, IndirectLightingPass::eScene, 0u );
 			shader::GlobalIllumination indirect{ writer, utils, true };
@@ -89,18 +91,28 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, c3d_gpInfoData.calcTexCoord( utils
 							, in.fragCoord.xy() ) );
-					auto data1 = writer.declLocale( "data1"
-						, c3d_mapData1.lod( texCoord, 0.0_f ) );
-					auto flags = writer.declLocale( "flags"
-						, writer.cast< Int >( data1.w() ) );
+					auto data0 = writer.declLocale( "data0"
+						, c3d_mapData0.lod( texCoord, 0.0_f ) );
+					auto nodeId = writer.declLocale( "nodeId"
+						, writer.cast< sdw::UInt >( data0.z() ) );
+
+					IF( writer, nodeId == 0u )
+					{
+						writer.demote();
+					}
+					FI;
+
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto shadowReceiver = writer.declLocale( "shadowReceiver"
-						, 0_i );
+						, modelData.isShadowReceiver() );
 					auto lightingReceiver = writer.declLocale( "lightingReceiver"
-						, 0_i );
-					utils.decodeReceiver( flags, shadowReceiver, lightingReceiver );
+						, data0.w() );
 
 					IF( writer, lightingReceiver )
 					{
+						auto data1 = writer.declLocale( "data1"
+							, c3d_mapData1.lod( texCoord, 0.0_f ) );
 						auto data2 = writer.declLocale( "data2"
 							, c3d_mapData2.lod( texCoord, 0.0_f ) );
 						auto data3 = writer.declLocale( "data3"
@@ -110,7 +122,7 @@ namespace castor3d
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.cameraPosition );
 						auto depth = writer.declLocale( "depth"
-							, c3d_mapData0.lod( texCoord, 0.0_f ).x() );
+							, data0.x() );
 						auto vsPosition = writer.declLocale( "vsPosition"
 							, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
 						auto wsPosition = writer.declLocale( "wsPosition"
@@ -304,7 +316,7 @@ namespace castor3d
 		, m_group{ graph.createPassGroup( "IndirectLighting" ) }
 		, m_programs{ createPrograms( device, scene ) }
 	{
-		previousPass = &doCreateLightingPass( m_group, *previousPass, progress );
+		previousPass = &doCreateLightingPass( m_group, scene, *previousPass, progress );
 	}
 
 	void IndirectLightingPass::update( CpuUpdater & updater )
@@ -326,11 +338,13 @@ namespace castor3d
 	}
 
 	crg::FramePass const & IndirectLightingPass::doCreateLightingPass( crg::FramePassGroup & graph
+		, Scene const & scene
 		, crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating indirect light pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
+		auto & modelBuffer = scene.getModelBuffer().getBuffer();
 		auto & pass = graph.createPass( "IndirectLighting"
 			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -355,6 +369,10 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( previousPass );
+		pass.addInputStorageBuffer( { modelBuffer, "Models" }
+			, uint32_t( IndirectLightingPass::eModels )
+			, 0u
+			, uint32_t( modelBuffer.getSize() ) );
 		m_gpInfoUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eGpInfo ) );
 		m_sceneUbo.createPassBinding( pass

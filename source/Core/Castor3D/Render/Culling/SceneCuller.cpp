@@ -203,7 +203,7 @@ namespace castor3d
 				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, node.instance.getName() + cuT( "_Skeleton" ) ) )
 				: nullptr;
 
-			( *pipelinesBuffer )->x = node.instance.getId( node.pass, node.data ) - 1u;
+			( *pipelinesBuffer )->x = node.instance.getId( node.pass, node.data );
 
 			if ( mesh )
 			{
@@ -743,7 +743,7 @@ namespace castor3d
 							{
 								auto culled = sidedCulled.first;
 								fillIndirectCommand( *culled, indirectBuffer );
-								( *pipelinesBuffer )->x = culled->instance.getId( culled->pass ) - 1u;
+								( *pipelinesBuffer )->x = culled->instance.getId( culled->pass );
 								++pipelinesBuffer;
 							}
 						}
