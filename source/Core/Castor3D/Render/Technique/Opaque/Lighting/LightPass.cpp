@@ -17,6 +17,7 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -120,6 +121,7 @@ namespace castor3d
 		shader::SssProfiles sssProfiles{ writer
 			, uint32_t( LightPassIdx::eSssProfiles )
 			, 0u };
+		C3D_ModelsData( writer, LightPassIdx::eModels, 0u );
 		C3D_GpInfo( writer, LightPassIdx::eGpInfo, 0u );
 		C3D_Scene( writer, LightPassIdx::eScene, 0u );
 		uint32_t index = uint32_t( LightPassIdx::eData5 ) + 1u;
@@ -153,31 +155,39 @@ namespace castor3d
 				auto texCoord = writer.declLocale( "texCoord"
 					, c3d_gpInfoData.calcTexCoord( utils
 						, in.fragCoord.xy() ) );
-				auto data1 = writer.declLocale( "data1"
-					, c3d_mapData1.lod( texCoord, 0.0_f ) );
+				auto data0 = writer.declLocale( "data0"
+					, c3d_mapData0.lod( texCoord, 0.0_f ) );
+				auto nodeId = writer.declLocale( "nodeId"
+					, writer.cast< sdw::UInt >( data0.z() ) );
+
+				IF( writer, nodeId == 0u )
+				{
+					writer.demote();
+				}
+				FI;
+
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 				auto data2 = writer.declLocale( "data2"
 					, c3d_mapData2.lod( texCoord, 0.0_f ) );
-				auto flags = writer.declLocale( "flags"
-					, writer.cast< Int >( data1.w() ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
-					, 0_i );
+					, modelData.isShadowReceiver() );
 				auto lightingReceiver = writer.declLocale( "lightingReceiver"
-					, 0_i );
-				utils.decodeReceiver( flags, shadowReceiver, lightingReceiver );
+					, data0.w() );
 				auto albedo = writer.declLocale( "albedo"
 					, data2.xyz() );
 
 				IF( writer, lightingReceiver )
 				{
+					auto data1 = writer.declLocale( "data1"
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto data3 = writer.declLocale( "data3"
 						, c3d_mapData3.lod( texCoord, 0.0_f ) );
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( texCoord, 0.0_f ) );
-					auto data0 = writer.declLocale( "depth"
-						, c3d_mapData0.lod( texCoord, 0.0_f ) );
 
 					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data0.w() ) );
+						, modelData.getMaterialId() );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
 					auto lightMat = lightingModel->declMaterial( "lightMat" );

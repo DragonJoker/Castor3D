@@ -21,6 +21,7 @@ namespace draw_edges
 		enum Bindings : uint32_t
 		{
 			eMaterials,
+			eModels,
 			eData0,
 			eData1,
 			eDepthRange,

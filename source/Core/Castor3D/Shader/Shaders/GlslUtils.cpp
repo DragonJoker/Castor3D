@@ -13,10 +13,8 @@
 namespace castor3d::shader
 {
 	uint32_t constexpr ReceiverOffset = 0u;
-	uint32_t constexpr RefractionOffset = 1u;
-	uint32_t constexpr ReflectionOffset = 2u;
-	uint32_t constexpr LightingOffset = 3u;
-	uint32_t constexpr EnvMapIndexOffset = 4u;
+	uint32_t constexpr LightingOffset = 1u;
+	uint32_t constexpr EnvMapIndexOffset = 2u;
 
 	Utils::Utils( sdw::ShaderWriter & writer
 		, Engine const & engine )
@@ -465,89 +463,6 @@ namespace castor3d::shader
 				m_writer.returnStmt( vec3( v.x(), -v.y(), v.z(), v.w() ) );
 			}
 			, sdw::InVec4{ m_writer, "v" } );
-	}
-
-	void Utils::declareEncodeMaterial()
-	{
-		if ( m_encodeMaterial )
-		{
-			return;
-		}
-
-		m_encodeMaterial = m_writer.implementFunction< sdw::Void >( "c3d_encodeMaterial"
-			, [&]( sdw::Int const & receiver
-				, sdw::Int const & reflection
-				, sdw::Int const & refraction
-				, sdw::Int const & lighting
-				, sdw::Int const & envMapIndex
-				, sdw::Float encoded )
-			{
-				auto flags = m_writer.declLocale( "flags"
-					, 0_u
-					+ ( ( m_writer.cast<  sdw::UInt >( receiver ) & 1_u ) << sdw::UInt( ReceiverOffset ) )
-					+ ( ( m_writer.cast<  sdw::UInt >( refraction ) & 1_u ) << sdw::UInt( RefractionOffset ) )
-					+ ( ( m_writer.cast<  sdw::UInt >( reflection ) & 1_u ) << sdw::UInt( ReflectionOffset ) )
-					+ ( ( m_writer.cast<  sdw::UInt >( lighting ) & 1_u ) << sdw::UInt( LightingOffset ) )
-					+ ( ( m_writer.cast<  sdw::UInt >( envMapIndex ) << sdw::UInt( EnvMapIndexOffset ) ) ) );
-				encoded = m_writer.cast< sdw::Float >( flags );
-			}
-			, sdw::InInt{ m_writer, "receiver" }
-			, sdw::InInt{ m_writer, "reflection" }
-			, sdw::InInt{ m_writer, "refraction" }
-			, sdw::InInt{ m_writer, "lighting" }
-			, sdw::InInt{ m_writer, "envMapIndex" }
-			, sdw::OutFloat{ m_writer, "encoded" } );
-	}
-
-	void Utils::declareDecodeMaterial()
-	{
-		if ( m_decodeMaterial )
-		{
-			return;
-		}
-
-		m_decodeMaterial = m_writer.implementFunction< sdw::Void >( "c3d_decodeMaterial"
-			, [&]( sdw::Float const & encoded
-				, sdw::Int receiver
-				, sdw::Int reflection
-				, sdw::Int refraction
-				, sdw::Int lighting
-				, sdw::Int envMapIndex )
-			{
-				auto flags = m_writer.declLocale( "flags"
-					, m_writer.cast<  sdw::UInt >( encoded ) );
-				receiver = m_writer.cast< sdw::Int >( ( flags >> sdw::UInt( ReceiverOffset ) ) & 1_u );
-				refraction = m_writer.cast< sdw::Int >( ( flags >> sdw::UInt( RefractionOffset ) ) & 1_u );
-				reflection = m_writer.cast< sdw::Int >( ( flags >> sdw::UInt( ReflectionOffset ) ) & 1_u );
-				lighting = m_writer.cast< sdw::Int >( ( flags >> sdw::UInt( LightingOffset ) ) & 1_u );
-				envMapIndex = m_writer.cast< sdw::Int >( ( flags >> sdw::UInt( EnvMapIndexOffset ) ) );
-			}
-			, sdw::InFloat{ m_writer, "encoded" }
-			, sdw::OutInt{ m_writer, "receiver" }
-			, sdw::OutInt{ m_writer, "reflection" }
-			, sdw::OutInt{ m_writer, "refraction" }
-			, sdw::OutInt{ m_writer, "lighting" }
-			, sdw::OutInt{ m_writer, "envMapIndex" } );
-	}
-
-	void Utils::declareDecodeReceiver()
-	{
-		if ( m_decodeReceiver )
-		{
-			return;
-		}
-
-		m_decodeReceiver = m_writer.implementFunction< sdw::Void >( "c3d_decodeReceiver"
-			, [&]( sdw::Int const & encoded
-				, sdw::Int receiver
-				, sdw::Int lighting )
-			{
-				receiver = ( encoded >> sdw::Int( ReceiverOffset ) ) & 1_i;
-				lighting = ( encoded >> sdw::Int( LightingOffset ) ) & 1_i;
-			}
-			, sdw::InInt{ m_writer, "encoded" }
-			, sdw::OutInt{ m_writer, "receiver" }
-			, sdw::OutInt{ m_writer, "lighting" } );
 	}
 
 	void Utils::declareParallaxMappingFunc()
@@ -1170,48 +1085,6 @@ namespace castor3d::shader
 	{
 		declareClipToScreen();
 		return m_clipToScreen( in );
-	}
-
-	void Utils::encodeMaterial( sdw::Int const & receiver
-		, sdw::Int const & reflection
-		, sdw::Int const & refraction
-		, sdw::Int const & lighting
-		, sdw::Int const & envMapIndex
-		, sdw::Float const & encoded )
-	{
-		declareEncodeMaterial();
-		m_encodeMaterial( receiver
-			, reflection
-			, refraction
-			, lighting
-			, envMapIndex
-			, encoded );
-	}
-
-	void Utils::decodeMaterial( sdw::Float const & encoded
-		, sdw::Int const & receiver
-		, sdw::Int const & reflection
-		, sdw::Int const & refraction
-		, sdw::Int const & lighting
-		, sdw::Int const & envMapIndex )
-	{
-		declareDecodeMaterial();
-		m_decodeMaterial( encoded
-			, receiver
-			, reflection
-			, refraction
-			, lighting
-			, envMapIndex );
-	}
-
-	void Utils::decodeReceiver( sdw::Int & encoded
-		, sdw::Int const & receiver
-		, sdw::Int const & lighting )
-	{
-		declareDecodeReceiver();
-		m_decodeReceiver( encoded
-			, receiver
-			, lighting );
 	}
 
 	void Utils::applyAlphaFunc( VkCompareOp alphaFunc

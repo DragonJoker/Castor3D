@@ -5,9 +5,11 @@
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -31,6 +33,7 @@ namespace draw_edges
 		enum Idx : uint32_t
 		{
 			eMaterials,
+			eModels,
 			eData0,
 		};
 
@@ -65,6 +68,7 @@ namespace draw_edges
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			castor3d::shader::Materials materials{ writer, eMaterials, 0u };
+			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_data0 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_data0", eData0, 0u );
 
 			// Shader outputs
@@ -145,8 +149,12 @@ namespace draw_edges
 					}
 					FI;
 
+					auto nodeId = writer.declLocale( "nodeId"
+						, writer.cast< sdw::UInt >( X.z() ) );
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto material = writer.declLocale( "material"
-						, materials.getMaterial( writer.cast< sdw::UInt >( X.w() ) ) );
+						, materials.getMaterial( modelData.getMaterialId() ) );
 
 					IF( writer, material.edgeColour.w() == 0.0_f )
 					{
@@ -208,8 +216,13 @@ namespace draw_edges
 				return result;
 			} ) }
 	{
+		auto & modelBuffer = renderTarget.getScene()->getModelBuffer().getBuffer();
 		m_pass.addDependency( previousPass );
 		passBuffer.createPassBinding( m_pass, eMaterials );
+		m_pass.addInputStorageBuffer( { modelBuffer, "Models" }
+			, uint32_t( eModels )
+			, 0u
+			, uint32_t( modelBuffer.getSize() ) );
 		m_pass.addSampledView( data0, eData0 );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );

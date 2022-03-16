@@ -627,7 +627,7 @@ namespace water
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
