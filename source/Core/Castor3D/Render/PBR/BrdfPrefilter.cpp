@@ -1,7 +1,7 @@
 #include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -35,28 +35,20 @@ namespace castor3d
 		, m_commands{ m_device, *m_device.graphicsData(), "BrdfPrefilter" }
 	{
 		// Initialise the vertex buffer.
-		m_vertexBuffer = makeVertexBuffer< TexturedQuad >( m_device
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "BrdfPrefilter" );
-
-		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, 0u ) )
-		{
-			*buffer =
-			{
-				{
-					{ Point2f{ -1.0, -1.0 }, Point2f{ 0.0, 0.0 } },
-					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } },
-					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } },
-					{ Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } },
-					{ Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } },
-					{ Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } },
-				}
-			};
-			m_vertexBuffer->flush( 0u, 1u );
-			m_vertexBuffer->unlock();
-		}
+		auto queueData = m_device.graphicsData();
+		m_vertexBuffer = device.vertexPools->getBuffer< TexturedQuad >( 1u );
+		m_vertexBuffer.getVertexData< TexturedQuad >().front() = { { { Point2f{ -1.0, -1.0 }, Point2f{ 0.0, 0.0 } }
+			, { Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } }
+			, { Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } }
+			, { Point2f{ +1.0, -1.0 }, Point2f{ 1.0, 0.0 } }
+			, { Point2f{ -1.0, +1.0 }, Point2f{ 0.0, 1.0 } }
+			, { Point2f{ +1.0, +1.0 }, Point2f{ 1.0, 1.0 } } } };
+		m_vertexBuffer.vtxBuffer->uploadDirect( *queueData->queue
+			, *queueData->commandPool
+			, m_vertexBuffer.getVertexOffset()
+			, m_vertexBuffer.getVertexSize()
+			, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 
 		// Initialise the vertex layout.
 		m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
@@ -163,7 +155,7 @@ namespace castor3d
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
-		cmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		cmd.bindVertexBuffer( 0u, m_vertexBuffer.getVertexBuffer(), m_vertexBuffer.getVertexOffset() );
 		cmd.draw( 6u );
 		cmd.endRenderPass();
 		cmd.endDebugBlock();

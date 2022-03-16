@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_BrdfPrefilter_H___
 
 #include "PbrModule.hpp"
+#include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
@@ -48,7 +49,7 @@ namespace castor3d
 	private:
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
-		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
+		ObjectBufferOffset m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
