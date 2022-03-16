@@ -253,9 +253,7 @@ namespace castor3d
 				std::copy( data.second.data.begin()
 					, data.second.data.end()
 					, data.second.buffer.getData().begin() );
-				data.second.buffer.buffer->markDirty( data.second.buffer.getOffset()
-					, data.second.buffer.getSize()
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				data.second.buffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}
