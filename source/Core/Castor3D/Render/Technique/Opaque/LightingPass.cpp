@@ -993,6 +993,7 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating lighting pass" );
 		auto & engine = *m_device.renderSystem.getEngine();
+		auto & modelBuffer = scene.getModelBuffer().getBuffer();
 		auto & pass = graph.createPass( "Lighting"
 			, [this, progress, &engine, &scene]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -1019,6 +1020,10 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eMaterials ) );
 		engine.getMaterialCache().getSssProfileBuffer().createPassBinding( pass
 			, uint32_t( LightPassIdx::eSssProfiles ) );
+		pass.addInputStorageBuffer( { modelBuffer, "Models" }
+			, uint32_t( LightPassIdx::eModels )
+			, 0u
+			, uint32_t( modelBuffer.getSize() ) );
 		m_gpInfoUbo.createPassBinding( pass
 			, uint32_t( LightPassIdx::eGpInfo ) );
 		m_sceneUbo.createPassBinding( pass

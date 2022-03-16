@@ -899,7 +899,7 @@ namespace castor3d
 					, v4Tangent
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId] );
+					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
@@ -985,7 +985,7 @@ namespace castor3d
 						, pipelineID
 						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId] );
+					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
@@ -999,7 +999,7 @@ namespace castor3d
 				curToCamera = normalize( curToCamera );
 
 				auto billboardData = writer.declLocale( "billboardData"
-					, c3d_billboardData[nodeId] );
+					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
 					, billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
 				auto up = writer.declLocale( "up"

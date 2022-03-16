@@ -178,7 +178,7 @@ namespace castor3d
 			, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[in.nodeId] );
+					, c3d_modelsData[in.nodeId - 1] );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto texCoord = writer.declLocale( "texCoord"

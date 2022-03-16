@@ -355,7 +355,7 @@ namespace castor3d
 				auto v4Normal = writer.declLocale( "v4Normal"
 					, vec4( in.normal, 0.0_f ) );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId] );
+					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 
 				if ( hasTextures )
@@ -428,7 +428,7 @@ namespace castor3d
 						, pipelineID
 						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId] );
+					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
@@ -439,7 +439,7 @@ namespace castor3d
 				curToCamera = normalize( curToCamera );
 
 				auto billboardData = writer.declLocale( "billboardData"
-					, c3d_billboardData[nodeId] );
+					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
 					, billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
 				auto up = writer.declLocale( "up"
@@ -617,7 +617,7 @@ namespace castor3d
 				IF( writer, utils.isSaturated( uvw ) )
 				{
 					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[in.nodeId] );
+						, c3d_modelsData[in.nodeId - 1] );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
 					auto normal = writer.declLocale( "normal"

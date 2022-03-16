@@ -23,6 +23,7 @@
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -51,6 +52,7 @@ namespace castor3d
 		{
 			BlurMaterialsUboId,
 			BlurSssProfilesUboId,
+			BlurModelsUboId,
 			BlurSceneUboId,
 			BlurGpInfoUboId,
 			BlurSssUboId,
@@ -62,6 +64,7 @@ namespace castor3d
 		enum CombId : size_t
 		{
 			CombMaterialsUboId,
+			CombModelsUboId,
 			CombData0ImgId,
 			CombData4ImgId,
 			CombBlur1ImgId,
@@ -101,6 +104,7 @@ namespace castor3d
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( BlurMaterialsUboId, 0u );
 			shader::SssProfiles sssProfiles{ writer, BlurSssProfilesUboId, 0u };
+			C3D_ModelsData( writer, BlurModelsUboId, 0u );
 			C3D_GpInfo( writer, BlurGpInfoUboId, 0u );
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
@@ -122,12 +126,19 @@ namespace castor3d
 				{
 					auto data0 = writer.declLocale( "data0"
 						, c3d_mapData0.lod( vtx_texture, 0.0_f ) );
-					auto data4 = writer.declLocale( "data4"
-						, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
+					auto nodeId = writer.declLocale( "nodeId"
+						, writer.cast< sdw::UInt >( data0.z() ) );
+
+					IF( writer, nodeId == 0u )
+					{
+						writer.demote();
+					}
+					FI;
+
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data0.w() ) );
-					auto translucency = writer.declLocale( "translucency"
-						, data4.w() );
+						, modelData.getMaterialId() );
 					auto material = materials->getMaterial( materialId );
 
 					IF( writer, material.sssProfileIndex == 0_u )
@@ -168,6 +179,10 @@ namespace castor3d
 					//     step = sssStrength * gaussianWidth * pixelSize * dir
 					// The closer the pixel, the stronger the effect needs to be, hence
 					// the factor 1.0 / depthM.
+					auto data4 = writer.declLocale( "data4"
+						, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
+					auto translucency = writer.declLocale( "translucency"
+						, data4.w() );
 					auto finalStep = writer.declLocale( "finalStep"
 						, translucency * step * sssProfile.subsurfaceScatteringStrength * sssProfile.gaussianWidth / depthM );
 
@@ -215,6 +230,7 @@ namespace castor3d
 			// Shader inputs
 			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( CombMaterialsUboId, 0u );
+			C3D_ModelsData( writer, CombModelsUboId, 0u );
 
 			auto c3d_mapData0 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData0 ), CombData0ImgId, 0u );
 			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
@@ -235,10 +251,21 @@ namespace castor3d
 				{
 					auto data0 = writer.declLocale( "data0"
 						, c3d_mapData0.lod( vtx_texture, 0.0_f ) );
+					auto nodeId = writer.declLocale( "nodeId"
+						, writer.cast< sdw::UInt >( data0.z() ) );
+
+					IF( writer, nodeId == 0u )
+					{
+						writer.demote();
+					}
+					FI;
+
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto original = writer.declLocale( "original"
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data0.w() ) );
+						, modelData.getMaterialId() );
 					auto material = materials->getMaterial( materialId );
 
 					IF( writer, material.sssProfileIndex == 0_u )
@@ -378,6 +405,7 @@ namespace castor3d
 		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
 		auto blurXSource = &m_lpResult[LpTexture::eDiffuse];
 		stepProgressBar( progress, "Creating SSSSS Blur passes" );
+		auto & modelBuffer = scene.getModelBuffer().getBuffer();
 
 		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
@@ -402,6 +430,10 @@ namespace castor3d
 				, BlurMaterialsUboId );
 			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurX
 				, BlurSssProfilesUboId );
+			blurX.addInputStorageBuffer( { modelBuffer, "Models" }
+				, uint32_t( BlurModelsUboId )
+				, 0u
+				, uint32_t( modelBuffer.getSize() ) );
 			m_sceneUbo.createPassBinding( blurX
 				, BlurSceneUboId );
 			m_gpInfoUbo.createPassBinding( blurX
@@ -437,6 +469,10 @@ namespace castor3d
 				, BlurMaterialsUboId );
 			getEngine()->getMaterialCache().getSssProfileBuffer().createPassBinding( blurY
 				, BlurSssProfilesUboId );
+			blurY.addInputStorageBuffer( { modelBuffer, "Models" }
+				, uint32_t( BlurModelsUboId )
+				, 0u
+				, uint32_t( modelBuffer.getSize() ) );
 			m_sceneUbo.createPassBinding( blurY
 				, BlurSceneUboId );
 			m_gpInfoUbo.createPassBinding( blurY
@@ -482,6 +518,10 @@ namespace castor3d
 		previousPass = &pass;
 		getEngine()->getMaterialCache().getPassBuffer().createPassBinding( pass
 			, CombMaterialsUboId );
+		pass.addInputStorageBuffer( { modelBuffer, "Models" }
+			, uint32_t( CombModelsUboId )
+			, 0u
+			, uint32_t( modelBuffer.getSize() ) );
 		pass.addSampledView( m_gpResult[DsTexture::eData0].sampledViewId
 			, CombData0ImgId );
 		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId

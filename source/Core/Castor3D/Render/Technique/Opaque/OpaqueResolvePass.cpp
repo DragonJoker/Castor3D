@@ -28,6 +28,7 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
@@ -110,6 +111,7 @@ namespace castor3d
 		enum class ResolveBind
 		{
 			eMaterials,
+			eModels,
 			eScene,
 			eGpInfo,
 			eHdrConfig,
@@ -141,6 +143,7 @@ namespace castor3d
 			shader::Materials materials{ writer
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u };
+			C3D_ModelsData( writer, ResolveBind::eModels, 0u );
 			C3D_Scene( writer, ResolveBind::eScene, 0u );
 			C3D_GpInfo( writer, ResolveBind::eGpInfo, 0u );
 			C3D_HdrConfig( writer, ResolveBind::eHdrConfig, 0u );
@@ -179,40 +182,29 @@ namespace castor3d
 				{
 					auto data0 = writer.declLocale( "data0"
 						, c3d_mapData0.lod( vtx_texture, 0.0_f ) );
-					auto materialId = writer.declLocale( "materialId"
-						, writer.cast< UInt >( data0.w() ) );
+					auto nodeId = writer.declLocale( "nodeId"
+						, writer.cast< UInt >( data0.z() ) );
 
-					IF( writer, materialId == 0_u )
+					IF( writer, nodeId == 0u )
 					{
 						writer.demote();
 					}
 					FI;
 
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
+					auto materialId = writer.declLocale( "materialId"
+						, writer.cast< UInt >( modelData.getMaterialId() ) );
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapData1.lod( vtx_texture, 0.0_f ) );
 					auto data2 = writer.declLocale( "data2"
 						, c3d_mapData2.lod( vtx_texture, 0.0_f ) );
 					auto data5 = writer.declLocale( "data5"
 						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
-					auto flags = writer.declLocale( "flags"
-						, data1.w() );
-					auto envMapIndex = writer.declLocale( "envMapIndex"
-						, 0_i );
-					auto receiver = writer.declLocale( "receiver"
-						, 0_i );
-					auto reflection = writer.declLocale( "reflection"
-						, 0_i );
-					auto refraction = writer.declLocale( "refraction"
-						, 0_i );
 					auto lighting = writer.declLocale( "lighting"
-						, 0_i );
-
-					utils.decodeMaterial( flags
-						, receiver
-						, reflection
-						, refraction
-						, lighting
-						, envMapIndex );
+						, data0.w() );
+					auto envMapIndex = writer.declLocale( "envMapIndex"
+						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
 						, data0.x() );
 					auto albedo = writer.declLocale( "albedo"
@@ -268,8 +260,8 @@ namespace castor3d
 							, surface
 							, c3d_sceneData
 							, envMapIndex
-							, reflection
-							, refraction
+							, material.hasReflection
+							, material.hasRefraction
 							, material.refractionRatio
 							, material.transmission
 							, ambient
@@ -396,6 +388,7 @@ namespace castor3d
 		stepProgressBar( progress, "Creating opaque resolve pass" );
 		auto & engine = *getEngine();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
+		auto & modelBuffer = m_scene.getModelBuffer().getBuffer();
 		auto & pass = graph.createPass( "Resolve"
 			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -416,6 +409,10 @@ namespace castor3d
 
 		passBuffer.createPassBinding( pass
 			, uint32_t( ResolveBind::eMaterials ) );
+		pass.addInputStorageBuffer( { modelBuffer, "Models" }
+			, uint32_t( ResolveBind::eModels )
+			, 0u
+			, uint32_t( modelBuffer.getSize() ) );
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( ResolveBind::eScene ) );
 		m_gpInfoUbo.createPassBinding( pass

@@ -22,6 +22,7 @@ namespace castor3d
 		enum DescriptorIdx
 			: uint32_t
 		{
+			eModels,
 			eGpInfo,
 			eScene,
 			eLpvGridConfig,
@@ -116,6 +117,7 @@ namespace castor3d
 
 	private:
 		crg::FramePass const & doCreateLightingPass( crg::FramePassGroup & graph
+			, Scene const & scene
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
 

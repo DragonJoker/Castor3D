@@ -155,7 +155,7 @@ namespace castor3d
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
 				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );
@@ -218,17 +218,11 @@ namespace castor3d
 					, alphaRef );
 				auto matFlags = writer.declLocale( "flags"
 					, 0.0_f );
-				utils.encodeMaterial( modelData.isShadowReceiver()
-					, ( checkFlag( flags.passFlags, PassFlag::eReflection ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? 1_i : 0_i
-					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1_i : 0_i
-					, modelData.getEnvMapIndex()
-					, matFlags );
 				data0 = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
-					, writer.cast< sdw::Float >( modelData.getMaterialId() ) );
-				data1 = vec4( normal, matFlags );
+					, ( checkFlag( flags.passFlags, PassFlag::eLighting ) ) ? 1.0_f : 0.0_f );
+				data1 = vec4( normal, 0.0_f );
 				velocity = vec4( in.getVelocity(), 0.0_f, 0.0_f );
 			} );
 
