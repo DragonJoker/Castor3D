@@ -63,6 +63,20 @@ namespace castor3d
 		C3D_API void upload( ashes::CommandBuffer const & cb );
 		/**
 		 *\~english
+		 *\brief		Uploads a memory range.
+		 *\param[in]	offset, size	The memory range.
+		 *\~french
+		 *\brief		Met à jour un intervalle mémoire en VRAM.
+		 *\param[in]	offset, size	L'intervalle mémoire.
+		 */
+		C3D_API void uploadDirect( ashes::Queue const & queue
+			, ashes::CommandPool const & commandPool
+			, VkDeviceSize offset
+			, VkDeviceSize size
+			, VkAccessFlags dstAccessFlags
+			, VkPipelineStageFlags dstPipelineFlags );
+		/**
+		 *\~english
 		 *\brief		Marks a memory range to be ready for upload.
 		 *\param[in]	offset, size	The memory range.
 		 *\~french
