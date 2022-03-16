@@ -18,7 +18,7 @@ See LICENSE file in root folder
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Math/Angle.hpp>

@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -378,8 +378,8 @@ namespace castor3d
 			, doCreateImage( graph, m_device, textureSize, m_intermediate->getFormat(), "SSSBlur1" )
 			, doCreateImage( graph, m_device, textureSize, m_intermediate->getFormat(), "SSSBlur2" ) }
 		, m_result{ doCreateImage( graph, m_device, textureSize, m_intermediate->getFormat(), "SSSResult" ) }
-		, m_blurCfgUbo{ m_device.uboPools->getBuffer< BlurConfiguration >( 0u ) }
-		, m_blurWgtUbo{ m_device.uboPools->getBuffer< BlurWeights >( 0u ) }
+		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
+		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", getVertexProgram() }
 		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurX", getBlurProgram( m_device.renderSystem, false ) }
 		, m_blurXShader{ makeShaderState( m_device, m_blurHorizVertexShader )

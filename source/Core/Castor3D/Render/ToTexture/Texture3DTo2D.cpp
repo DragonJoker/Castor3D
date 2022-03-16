@@ -1,7 +1,7 @@
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -476,7 +476,7 @@ namespace castor3d
 		, m_matrixUbo{ matrixUbo }
 		, m_target{ createTarget( device, size ) }
 		, m_depthBuffer{ createDepthBuffer( device, m_target ) }
-		, m_uniformBuffer{ device.uboPools->getBuffer< Texture3DTo2DData >( 0u ) }
+		, m_uniformBuffer{ device.uboPool->getBuffer< Texture3DTo2DData >( 0u ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_renderPass{ createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
@@ -492,7 +492,7 @@ namespace castor3d
 	{
 		m_depthBuffer.destroy();
 		m_target.destroy();
-		m_device.uboPools->putBuffer( m_uniformBuffer );
+		m_device.uboPool->putBuffer( m_uniformBuffer );
 	}
 
 	void Texture3DTo2D::createPasses( QueueData const & queueData

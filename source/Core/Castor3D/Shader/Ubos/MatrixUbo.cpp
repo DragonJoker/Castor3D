@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -181,13 +181,13 @@ namespace castor3d
 
 	MatrixUbo::MatrixUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
 	}
 
 	MatrixUbo::~MatrixUbo()
 	{
-		m_device.uboPools->putBuffer( m_ubo );
+		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void MatrixUbo::cpuUpdate( castor::Matrix4x4f const & view

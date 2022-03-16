@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -115,13 +115,13 @@ namespace castor3d
 
 	SceneUbo::SceneUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 	}
 
 	SceneUbo::~SceneUbo()
 	{
-		m_device.uboPools->putBuffer( m_ubo );
+		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void SceneUbo::cpuUpdateCameraPosition( Camera const & camera )

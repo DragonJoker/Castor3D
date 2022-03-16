@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
@@ -273,7 +273,7 @@ namespace castor3d
 		, m_size{ makeExtent2D( getExtent( m_sources[0] ) ) }
 		, m_format{ getFormat( m_sources[0] ) }
 		, m_intermediateView{ intermediateView }
-		, m_blurUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_kernel{ getHalfPascal( kernelSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + cuT( "GB" ), getVertexProgram() }
 		, m_pixelShaderX{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBX" ), getBlurXProgram( ashes::isDepthFormat( m_format ) ) }
