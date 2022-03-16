@@ -474,30 +474,16 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
+			auto & animCache = scene.getAnimatedObjectGroupCache();
+
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto & morphingDatas = scene.getAnimatedObjectGroupCache().getMorphingBuffer();
-				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eMorphingData )
-					, 0u
-					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				write.bufferInfo.push_back( { morphingDatas.getBuffer()
-					, morphingDatas.getOffset()
-					, morphingDatas.getSize() } );
-				descriptorWrites.push_back( write );
+				descriptorWrites.push_back( animCache.getMorphingBuffer().getStorageBinding( uint32_t( GlobalBuffersIdx::eMorphingData ) ) );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto & transformsDatas = scene.getAnimatedObjectGroupCache().getSkinningTransformsBuffer();
-				auto transformsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eSkinningTransformData )
-					, 0u
-					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				transformsWrite.bufferInfo.push_back( { transformsDatas.getBuffer()
-					, transformsDatas.getOffset()
-					, transformsDatas.getSize() } );
-				descriptorWrites.push_back( transformsWrite );
+				descriptorWrites.push_back( animCache.getSkinningTransformsBuffer().getStorageBinding( uint32_t( GlobalBuffersIdx::eSkinningTransformData ) ) );
 			}
 
 			doFillAdditionalDescriptor( descriptorWrites
