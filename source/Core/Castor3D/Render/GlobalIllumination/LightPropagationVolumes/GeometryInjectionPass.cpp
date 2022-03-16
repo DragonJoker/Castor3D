@@ -2,7 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
@@ -479,31 +479,28 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > createVertexBuffer( castor::String const & name
+		GpuBufferOffsetT< NonTexturedQuad::Vertex > createVertexBuffer( castor::String const & name
 			, RenderDevice const & device
 			, uint32_t rsmSize )
 		{
 			auto vplCount = rsmSize * rsmSize;
 
-			auto result = makeVertexBuffer< NonTexturedQuad::Vertex >( device
+			auto result = device.bufferPool->getBuffer< NonTexturedQuad::Vertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, vplCount
-				, 0u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, name );
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			NonTexturedQuad::Vertex vtx;
+			auto buffer = result.getData().data();
 
-			if ( auto buffer = result->lock( 0u, vplCount, 0u ) )
+			for ( auto i = 0u; i < vplCount; ++i )
 			{
-				for ( auto i = 0u; i < vplCount; ++i )
-				{
-					*buffer = vtx;
-					++buffer;
-				}
-
-				result->flush( 0u, vplCount );
-				result->unlock();
+				*buffer = vtx;
+				++buffer;
 			}
 
+			result.buffer->markDirty( result.getOffset()
+				, result.getSize()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			return result;
 		}
 	}
@@ -692,8 +689,8 @@ namespace castor3d
 	{
 		m_holder.recordInto( context, commandBuffer, index );
 		auto vplCount = m_rsmSize * m_rsmSize;
-		VkDeviceSize offset{};
-		VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();
+		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
+		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer();
 		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
 		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
