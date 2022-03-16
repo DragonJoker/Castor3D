@@ -6,8 +6,35 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 
+#include <ashespp/Descriptor/WriteDescriptorSet.hpp>
+
 namespace castor3d
 {
+	C3D_API void createUniformPassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::Buffer< uint8_t > const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::Buffer< uint8_t > const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::Buffer< uint8_t > const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::Buffer< uint8_t > const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+
 	template< typename DataT >
 	struct GpuBufferOffsetT
 	{
@@ -76,6 +103,74 @@ namespace castor3d
 				, getSize()
 				, dstAccessFlags
 				, dstPipelineFlags );
+		}
+
+		void createUniformPassBinding( crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			castor3d::createUniformPassBinding( pass
+				, binding
+				, name
+				, getBuffer()
+				, getOffset()
+				, getSize() );
+		}
+
+		void createInputStoragePassBinding( crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			castor3d::createInputStoragePassBinding( pass
+				, binding
+				, name
+				, getBuffer()
+				, getOffset()
+				, getSize() );
+		}
+
+		void createInOutStoragePassBinding( crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			castor3d::createInOutStoragePassBinding( pass
+				, binding
+				, name
+				, getBuffer()
+				, getOffset()
+				, getSize() );
+		}
+
+		void createOutputStoragePassBinding( crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			castor3d::createOutputStoragePassBinding( pass
+				, binding
+				, name
+				, getBuffer()
+				, getOffset()
+				, getSize() );
+		}
+
+		ashes::WriteDescriptorSet getUniformBinding( uint32_t binding )const
+		{
+			auto result = ashes::WriteDescriptorSet{ binding
+				, 0u
+				, 1u
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
+			result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
+			return result;
+		}
+
+		ashes::WriteDescriptorSet getStorageBinding( uint32_t binding )const
+		{
+			auto result = ashes::WriteDescriptorSet{ binding
+				, 0u
+				, 1u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+			result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
+			return result;
 		}
 	};
 }
