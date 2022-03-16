@@ -169,7 +169,7 @@ namespace castor3d
 					, curPosition
 					, out.texture0 );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[ids.nodeId] );
+					, c3d_modelsData[ids.nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( ids.nodeId );
 				out.instanceId = writer.cast< UInt >( in.instanceIndex );
 
@@ -247,7 +247,7 @@ namespace castor3d
 			, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
 				auto material = materials.getMaterial( modelData.getMaterialId() );
 				auto opacity = writer.declLocale( "opacity"
 					, material.opacity );

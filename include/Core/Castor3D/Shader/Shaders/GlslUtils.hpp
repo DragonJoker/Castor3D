@@ -74,63 +74,6 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 clipToScreen( sdw::Vec4 const & in );
 		/**
 		 *\~english
-		 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
-		 *\param[in]	receiver	The shadow receiver status.
-		 *\param[in]	reflection	The reflection status.
-		 *\param[in]	refraction	The refraction status.
-		 *\param[in]	envMapIndex	The environment map index.
-		 *\param[in]	encoded		The variable that will receive the encoded value.
-		 *\~french
-		 *\brief		Appelle la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
-		 *\param[in]	receiver	Le statut de receveur d'ombres.
-		 *\param[in]	reflection	Le statut de réflexion.
-		 *\param[in]	refraction	Le statut de réfraction.
-		 *\param[in]	envMapIndex	L'indice de la texture environnementale.
-		 *\param[in]	encoded		La variable qui recevra la valeur encodée.
-		 */
-		C3D_API void encodeMaterial( sdw::Int const & receiver
-			, sdw::Int const & reflection
-			, sdw::Int const & refraction
-			, sdw::Int const & lighting
-			, sdw::Int const & envMapIndex
-			, sdw::Float const & encoded );
-		/**
-		 *\~english
-		 *\brief		Calls the GLSL function used to dencode the material specifics from a vec4.
-		 *\param[in]	encoded		The encoded value.
-		 *\param[in]	receiver	The variable that contains the shadow receiver status.
-		 *\param[in]	reflection	The variable that contains the reflection status.
-		 *\param[in]	refraction	The variable that contains the refraction status.
-		 *\param[in]	envMapIndex	The variable that contains the environment map index.
-		 *\~french
-		 *\brief		Appelle la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
-		 *\param[in]	encoded		La valeur encodée.
-		 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
-		 *\param[in]	reflection	La variable qui recevra le statut de réflexion.
-		 *\param[in]	refraction	La variable qui recevra le statut de réfraction.
-		 *\param[in]	envMapIndex	La variable qui recevra l'indice de la texture environnementale.
-		 */
-		C3D_API void decodeMaterial( sdw::Float const & encoded
-			, sdw::Int const & receiver
-			, sdw::Int const & reflection
-			, sdw::Int const & refraction
-			, sdw::Int const & lighting
-			, sdw::Int const & envMapIndex );
-		/**
-		 *\~english
-		 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
-		 *\param[in]	encoded		The encoded value.
-		 *\param[in]	receiver	The variable that contains the shadow receiver status.
-		 *\~french
-		 *\brief		Appelle la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
-		 *\param[in]	encoded		La valeur encodée.
-		 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
-		 */
-		C3D_API void decodeReceiver( sdw::Int & encoded
-			, sdw::Int const & receiver
-			, sdw::Int const & lighting );
-		/**
-		 *\~english
 		 *\brief		Writes the alpha function in GLSL.
 		 *\param		alphaFunc	The alpha function.
 		 *\param[in]	alpha		The alpha TypeEnum.
@@ -210,9 +153,6 @@ namespace castor3d::shader
 		void declareNegateVec3Y();
 		void declareNegateVec4Y();
 
-		void declareEncodeMaterial();
-		void declareDecodeMaterial();
-		void declareDecodeReceiver();
 		void declareParallaxMappingFunc();
 		void declareParallaxShadowFunc();
 
@@ -287,24 +227,6 @@ namespace castor3d::shader
 			, sdw::InVec3 > m_negateVec3Y;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec4 > m_negateVec4Y;
-		sdw::Function< sdw::Void
-			, sdw::InInt
-			, sdw::InInt
-			, sdw::InInt
-			, sdw::InInt
-			, sdw::InInt
-			, sdw::OutFloat > m_encodeMaterial;
-		sdw::Function< sdw::Void
-			, sdw::InFloat
-			, sdw::OutInt
-			, sdw::OutInt
-			, sdw::OutInt
-			, sdw::OutInt
-			, sdw::OutInt > m_decodeMaterial;
-		sdw::Function< sdw::Void
-			, sdw::InInt
-			, sdw::OutInt
-			, sdw::OutInt > m_decodeReceiver;
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2
 			, sdw::InVec3

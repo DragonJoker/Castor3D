@@ -294,7 +294,7 @@ namespace castor3d
 					if ( it->second.data.size() > index )
 					{
 						auto & buffer = it->second.data[index++];
-						buffer.m_objectIDs->x = node->getId() - 1u;
+						buffer.m_objectIDs->x = node->getId();
 
 						if ( node->mesh )
 						{

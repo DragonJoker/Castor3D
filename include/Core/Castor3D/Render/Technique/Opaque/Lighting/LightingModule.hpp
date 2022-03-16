@@ -35,6 +35,7 @@ namespace castor3d
 	{
 		eMaterials,
 		eSssProfiles,
+		eModels,
 		eGpInfo,
 		eScene,
 		eData0,

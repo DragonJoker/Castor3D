@@ -3,9 +3,11 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
-#include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -53,6 +55,7 @@ namespace draw_edges
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			castor3d::shader::Materials materials{ writer, DepthNormalEdgeDetection::eMaterials, 0u };
+			C3D_ModelsData( writer, DepthNormalEdgeDetection::eModels, 0u );
 			auto data0( writer.declCombinedImg< FImg2DRgba32 >( "data0", DepthNormalEdgeDetection::eData0, 0u ) );
 			auto data1( writer.declCombinedImg< FImg2DRgba32 >( "data1", DepthNormalEdgeDetection::eData1, 0u ) );
 			auto depthRangeBuffer( writer.declStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
@@ -156,8 +159,12 @@ namespace draw_edges
 					}
 					FI;
 
+					auto nodeId = writer.declLocale( "nodeId"
+						, writer.cast< sdw::UInt >( X.z() ) );
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto material = writer.declLocale( "material"
-						, materials.getMaterial( writer.cast< sdw::UInt >( X.w() ) ) );
+						, materials.getMaterial( modelData.getMaterialId() ) );
 
 					IF( writer, material.edgeColour.w() == 0.0_f )
 					{
@@ -235,8 +242,13 @@ namespace draw_edges
 				return result;
 			} ) }
 	{
+		auto & modelBuffer = renderTarget.getScene()->getModelBuffer().getBuffer();
 		m_pass.addDependency( previousPass );
 		passBuffer.createPassBinding( m_pass, eMaterials );
+		m_pass.addInputStorageBuffer( { modelBuffer, "Models" }
+			, uint32_t( eModels )
+			, 0u
+			, uint32_t( modelBuffer.getSize() ) );
 		m_pass.addSampledView( data0, eData0 );
 		m_pass.addSampledView( data1, eData1 );
 		m_pass.addInputStorageBuffer( { depthRange.getBuffer(), "DepthRange" }, eDepthRange, 0u, depthRange.getBuffer().getSize() );

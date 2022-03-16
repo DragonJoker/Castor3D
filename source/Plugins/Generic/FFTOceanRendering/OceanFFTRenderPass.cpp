@@ -697,7 +697,7 @@ namespace ocean_fft
 						, in.drawID
 						, flags.programFlags ) );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId] );
+					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -748,7 +748,7 @@ namespace ocean_fft
 						, pipelineID
 						, in.drawID ) );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId] );
+					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
@@ -761,7 +761,7 @@ namespace ocean_fft
 				curToCamera = normalize( curToCamera );
 
 				auto billboardData = writer.declLocale( "billboardData"
-					, c3d_billboardData[nodeId] );
+					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
 					, billboardData.getCameraRight( flags.programFlags, c3d_matrixData ) );
 				auto up = writer.declLocale( "up"
@@ -1028,7 +1028,7 @@ namespace ocean_fft
 
 				out.nodeId = patchIn.nodeId;
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( out.nodeId )] );
+					, c3d_modelsData[writer.cast< sdw::UInt >( out.nodeId ) - 1u] );
 				out.curPosition = vec4( pos.x(), heightDisplacement.x(), pos.y(), 1.0_f );
 				out.worldPosition = modelData.modelToWorld( out.curPosition );
 				out.viewPosition = c3d_matrixData.worldToCurView( out.worldPosition );
@@ -1154,7 +1154,7 @@ namespace ocean_fft
 				, FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId )] );
+					, c3d_modelsData[writer.cast< sdw::UInt >( in.nodeId ) - 1u] );
 				auto hdrCoords = writer.declLocale( "hdrCoords"
 					, in.fragCoord.xy() / c3d_sceneData.renderSize );
 				auto gradJacobian = writer.declLocale( "gradJacobian"
