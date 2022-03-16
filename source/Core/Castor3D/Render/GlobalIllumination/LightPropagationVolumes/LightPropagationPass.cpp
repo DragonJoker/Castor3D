@@ -370,9 +370,7 @@ namespace castor3d
 				}
 			}
 
-			result.buffer->markDirty( result.getOffset()
-				, result.getSize()
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			result.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			return result;
 		}

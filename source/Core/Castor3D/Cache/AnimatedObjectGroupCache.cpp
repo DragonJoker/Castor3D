@@ -37,9 +37,7 @@ namespace castor
 					, castor::Matrix4x4f::getIdentity() );
 			}
 
-			transforms.buffer->markDirty( transforms.getOffset()
-				, transforms.getSize()
-				, VK_ACCESS_UNIFORM_READ_BIT
+			transforms.markDirty( VK_ACCESS_SHADER_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 		}
 	}
