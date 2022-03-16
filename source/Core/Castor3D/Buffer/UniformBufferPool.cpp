@@ -37,10 +37,9 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	UniformBufferPool::UniformBufferPool( RenderSystem & renderSystem
-		, RenderDevice const & device
+	UniformBufferPool::UniformBufferPool( RenderDevice const & device
 		, castor::String debugName )
-		: castor::OwnedBy< RenderSystem >{ renderSystem }
+		: castor::OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
 		, m_debugName{ std::move( debugName ) }
 	{

@@ -168,15 +168,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Regroups all uniform buffer pools.
-	*\~french
-	*\brief
-	*	Regroupe les pools d'uniform buffers.
-	*/
-	class UniformBufferPools;
-	/**
-	*\~english
-	*\brief
 	*	A GpuBuffer pool specific for non VBO.
 	*\~french
 	*\brief
@@ -194,7 +185,6 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, PoolUniformBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, UniformBufferBase, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, UniformBufferPool, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, UniformBufferPools, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, VertexBufferPool, C3D_API );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
 

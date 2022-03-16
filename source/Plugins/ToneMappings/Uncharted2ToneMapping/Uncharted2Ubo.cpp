@@ -1,7 +1,7 @@
 #include "Uncharted2ToneMapping/Uncharted2Ubo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -59,7 +59,7 @@ namespace Uncharted2
 
 	Uncharted2Ubo::Uncharted2Ubo( castor3d::RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 		auto & data = m_ubo.getData();
 		data = Configuration{};
@@ -67,7 +67,7 @@ namespace Uncharted2
 
 	Uncharted2Ubo::~Uncharted2Ubo()
 	{
-		m_device.uboPools->putBuffer( m_ubo );
+		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	//************************************************************************************************

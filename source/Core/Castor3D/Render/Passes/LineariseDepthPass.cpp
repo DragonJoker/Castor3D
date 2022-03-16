@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -177,7 +177,7 @@ namespace castor3d
 		, m_prefix{ graph.getName() + prefix }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
-		, m_clipInfo{ m_device.uboPools->getBuffer< Point3f >( 0u ) }
+		, m_clipInfo{ m_device.uboPool->getBuffer< Point3f >( 0u ) }
 		, m_lastPass{ &previousPass }
 		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", getVertexProgram() }
 		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", getLinearisePixelProgram() }
@@ -196,12 +196,12 @@ namespace castor3d
 	{
 		for ( auto & level : m_previousLevel )
 		{
-			m_device.uboPools->putBuffer( level );
+			m_device.uboPool->putBuffer( level );
 		}
 
 		if ( m_clipInfo )
 		{
-			m_device.uboPools->putBuffer( m_clipInfo );
+			m_device.uboPool->putBuffer( m_clipInfo );
 		}
 
 		m_result.destroy();
@@ -280,7 +280,7 @@ namespace castor3d
 		for ( auto index = 0u; index < MaxMipLevel; ++index )
 		{
 			stepProgressBar( progress, "Creating depth minify pass " + std::to_string( index ) );
-			m_previousLevel.push_back( m_device.uboPools->getBuffer< castor::Point2i >( 0u ) );
+			m_previousLevel.push_back( m_device.uboPool->getBuffer< castor::Point2i >( 0u ) );
 			auto & previousLevel = m_previousLevel.back();
 			auto & data = previousLevel.getData();
 			data = Point2i{ size.width, size.height };

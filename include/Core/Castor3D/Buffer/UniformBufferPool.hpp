@@ -34,17 +34,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The RenderSystem.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	debugName		The buffer debug name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		C3D_API UniformBufferPool( RenderSystem & renderSystem
-			, RenderDevice const & device
+		C3D_API UniformBufferPool( RenderDevice const & device
 			, castor::String debugName );
 		/**
 		 *\~english

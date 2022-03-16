@@ -68,14 +68,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	uboPools	The UBO pools.
-		 *\param[in]	target		The target texture view.
+		 *\param[in]	device	The GPU device.
+		 *\param[in]	uboPool	The UBO pool.
+		 *\param[in]	target	The target texture view.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	uboPools	Les pools d'UBO.
-		 *\param[in]	target		La vue de texture cible.
+		 *\param[in]	device	Le device GPU.
+		 *\param[in]	uboPool	Le pool d'UBO.
+		 *\param[in]	target	La vue de texture cible.
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
 			, Texture const & target
@@ -235,7 +235,7 @@ namespace castor3d
 
 			VertexBufferPoolT( Engine & engine
 				, std::string const & debugName
-				, UniformBufferPools & uboPools
+				, UniformBufferPool & uboPool
 				, RenderDevice const & device
 				, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 				, ashes::PipelineVertexInputStateCreateInfo const & texDecl
@@ -246,7 +246,7 @@ namespace castor3d
 
 			Engine & engine;
 			RenderDevice const & device;
-			UniformBufferPools & uboPools;
+			UniformBufferPool & uboPool;
 			ashes::PipelineVertexInputStateCreateInfo const & noTexDeclaration;
 			ashes::PipelineVertexInputStateCreateInfo const & texDeclaration;
 			VertexBufferPoolUPtr buffer;
@@ -312,7 +312,7 @@ namespace castor3d
 		void doCreateRenderPass( RenderDevice const & device );
 
 	private:
-		UniformBufferPools & m_uboPools;
+		UniformBufferPool & m_uboPool;
 		Texture const & m_target;
 		CommandsSemaphore m_commands;
 		ashes::FencePtr m_fence;

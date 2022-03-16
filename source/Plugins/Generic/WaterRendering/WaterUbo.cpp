@@ -1,7 +1,7 @@
 #include "WaterRendering/WaterUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -94,13 +94,13 @@ namespace water
 
 	WaterUbo::WaterUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 	}
 
 	WaterUbo::~WaterUbo()
 	{
-		m_device.uboPools->putBuffer( m_ubo );
+		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void WaterUbo::cpuUpdate( WaterUboConfiguration const & config )

@@ -1,7 +1,7 @@
 #include "LinearMotionBlurPostEffect/LinearMotionBlurPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
@@ -124,7 +124,7 @@ namespace motion_blur
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_ubo{ renderSystem.getRenderDevice().uboPools->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur", getFragmentProgram() }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
@@ -135,7 +135,7 @@ namespace motion_blur
 
 	PostEffect::~PostEffect()
 	{
-		getRenderSystem()->getRenderDevice().uboPools->putBuffer( m_ubo );
+		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_ubo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget

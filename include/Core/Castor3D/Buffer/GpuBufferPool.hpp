@@ -31,8 +31,7 @@ namespace castor3d
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	debugName		Le nom debug.
 		 */
-		C3D_API explicit GpuBufferPool( RenderSystem & renderSystem
-			, RenderDevice const & device
+		C3D_API GpuBufferPool( RenderDevice const & device
 			, castor::String debugName );
 		/**
 		 *\~english
