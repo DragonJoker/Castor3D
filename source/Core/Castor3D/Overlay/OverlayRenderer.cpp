@@ -71,10 +71,7 @@ namespace castor3d
 			std::copy( begin
 				, std::next( begin, count )
 				, bufferOffset.getVertexData< VertexT >().begin() );
-			bufferOffset.vtxBuffer->markDirty( bufferOffset.vtxChunk.offset
-				, bufferOffset.vtxChunk.size
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			bufferOffset.markVertexDirty();
 			return count;
 		}
 

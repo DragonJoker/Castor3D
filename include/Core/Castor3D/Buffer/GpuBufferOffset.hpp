@@ -68,6 +68,15 @@ namespace castor3d
 			return castor::makeArrayView( reinterpret_cast< DataT * >( buffer->getDatas().data() + getOffset() )
 				, getCount() );
 		}
+
+		void markDirty( VkAccessFlags dstAccessFlags
+			, VkPipelineStageFlags dstPipelineFlags )const
+		{
+			buffer->markDirty( getOffset()
+				, getSize()
+				, dstAccessFlags
+				, dstPipelineFlags );
+		}
 	};
 }
 

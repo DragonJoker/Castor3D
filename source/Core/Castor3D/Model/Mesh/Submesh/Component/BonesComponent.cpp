@@ -130,10 +130,7 @@ namespace castor3d
 			std::copy( m_bones.begin()
 				, m_bones.end()
 				, offsets.getBoneData().begin() );
-			offsets.bonBuffer->markDirty( offsets.bonChunk.offset
-				, offsets.bonChunk.size
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			offsets.markBonesDirty();
 		}
 	}
 

@@ -140,6 +140,33 @@ namespace castor3d
 		{
 			return uint32_t( getBonesOffset() / sizeof( VertexBoneData ) );
 		}
+
+		void markVertexDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
+		{
+			vtxBuffer->markDirty( getVertexOffset()
+				, getVertexSize()
+				, dstAccessFlags
+				, dstPipelineFlags );
+		}
+
+		void markIndexDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_INDEX_READ_BIT
+			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
+		{
+			idxBuffer->markDirty( getIndexOffset()
+				, getIndexSize()
+				, dstAccessFlags
+				, dstPipelineFlags );
+		}
+
+		void markBonesDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
+		{
+			bonBuffer->markDirty( getBonesOffset()
+				, getBonesSize()
+				, dstAccessFlags
+				, dstPipelineFlags );
+		}
 	};
 }
 

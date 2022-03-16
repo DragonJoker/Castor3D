@@ -502,10 +502,7 @@ namespace castor3d
 			std::copy( m_points.begin()
 				, m_points.end()
 				, m_bufferOffset.getVertexData< InterleavedVertex >().begin() );
-			m_bufferOffset.vtxBuffer->markDirty( m_bufferOffset.vtxChunk.offset
-				, m_bufferOffset.vtxChunk.size
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			m_bufferOffset.markVertexDirty();
 		}
 	}
 }

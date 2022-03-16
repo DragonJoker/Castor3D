@@ -67,9 +67,7 @@ namespace castor3d
 			dst += stride;
 		}
 
-		vbo.buffer->markDirty( vbo.getOffset()
-			, vbo.getSize()
-			, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+		vbo.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		return m_firstUnused;
 	}

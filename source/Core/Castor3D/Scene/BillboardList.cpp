@@ -99,9 +99,7 @@ namespace castor3d
 			m_geometryBuffers.bufferOffset = device.vertexPools->getBuffer< Quad >( 1u );
 			auto bufferData = m_geometryBuffers.bufferOffset.getVertexData< Quad >();
 			bufferData.front() = vertices;
-			m_geometryBuffers.bufferOffset.vtxBuffer->markDirty( m_geometryBuffers.bufferOffset.vtxChunk.offset
-				, m_geometryBuffers.bufferOffset.vtxChunk.size
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			m_geometryBuffers.bufferOffset.markVertexDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 
 			m_quadLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
@@ -182,9 +180,7 @@ namespace castor3d
 					gpuBuffer += m_vertexStride;
 				}
 
-				m_vertexBuffer.buffer->markDirty( m_vertexBuffer.getOffset()
-					, m_vertexBuffer.getSize()
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				m_vertexBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 			catch ( castor::Exception const & p_exc )
@@ -310,9 +306,7 @@ namespace castor3d
 				buffer += m_vertexStride;
 			}
 
-			m_vertexBuffer.buffer->markDirty( m_vertexBuffer.getOffset()
-				, m_vertexBuffer.getSize()
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+			m_vertexBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 
