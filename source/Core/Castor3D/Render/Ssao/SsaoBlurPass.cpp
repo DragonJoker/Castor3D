@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -467,7 +467,7 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBlur" + prefix, SsaoBlurPass::ResultFormat, m_size, axis->y != 0 ) }
 		, m_bentResult{ doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
-		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_programs{ Program{ device, false, m_graph.getName() }, Program{ device, true, m_graph.getName() } }
 	{
 		stepProgressBar( progress, "Creating " + m_graph.getName() + " SSAO " + prefix + " blur pass" );

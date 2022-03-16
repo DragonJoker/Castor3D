@@ -8,7 +8,7 @@
 #include "NoiseLayer6.xpm"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
@@ -178,7 +178,7 @@ namespace film_grain
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "FilmGrain", getFragmentProgram() }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
-		, m_configUbo{ renderSystem.getRenderDevice().uboPools->getBuffer< Configuration >( 0u ) }
+		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
 		, m_noiseImages{ loadImages( *renderTarget.getEngine() ) }
 	{
 		m_config.pixelSize = Point2f{ m_renderTarget.getSize().getWidth()
@@ -211,7 +211,7 @@ namespace film_grain
 
 	PostEffect::~PostEffect()
 	{
-		getRenderSystem()->getRenderDevice().uboPools->putBuffer( m_configUbo );
+		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_configUbo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
@@ -354,7 +354,7 @@ namespace film_grain
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		device.uboPools->putBuffer( m_configUbo );
+		device.uboPool->putBuffer( m_configUbo );
 	}
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )

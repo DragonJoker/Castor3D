@@ -1,7 +1,7 @@
 #include "GrayScalePostEffect/GrayScalePostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBufferPools.hpp>
+#include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
@@ -105,7 +105,7 @@ namespace grayscale
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_configUbo{ renderSystem.getRenderDevice().uboPools->getBuffer< castor::Point3f >( 0u ) }
+		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< castor::Point3f >( 0u ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale", getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale", getFragmentProgram() }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
@@ -116,7 +116,7 @@ namespace grayscale
 
 	PostEffect::~PostEffect()
 	{
-		getRenderSystem()->getRenderDevice().uboPools->putBuffer( m_configUbo );
+		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_configUbo );
 	}
 
 	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
@@ -194,7 +194,7 @@ namespace grayscale
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		device.uboPools->putBuffer( m_configUbo );
+		device.uboPool->putBuffer( m_configUbo );
 	}
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )

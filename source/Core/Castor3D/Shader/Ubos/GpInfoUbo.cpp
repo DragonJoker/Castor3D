@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -89,13 +89,13 @@ namespace castor3d
 
 	GpInfoUbo::GpInfoUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPools->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_ubo{ m_device.uboPool->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
 	}
 
 	GpInfoUbo::~GpInfoUbo()
 	{
-		m_device.uboPools->putBuffer< GpInfoUboConfiguration >( m_ubo );
+		m_device.uboPool->putBuffer< GpInfoUboConfiguration >( m_ubo );
 	}
 
 	void GpInfoUbo::cpuUpdate( castor::Size const & renderSize

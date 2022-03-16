@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Passes/BackgroundPass.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -378,7 +378,7 @@ namespace castor3d
 		, crg::ImageViewId const * depth )
 		: m_device{ device }
 		, m_matrixUbo{ m_device }
-		, m_modelUbo{ m_device.uboPools->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
+		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
 			, std::move( previousPasses )
 			, name
@@ -394,7 +394,7 @@ namespace castor3d
 
 	BackgroundRenderer::~BackgroundRenderer()
 	{
-		m_device.uboPools->putBuffer( m_modelUbo );
+		m_device.uboPool->putBuffer( m_modelUbo );
 	}
 
 	void BackgroundRenderer::update( CpuUpdater & updater )

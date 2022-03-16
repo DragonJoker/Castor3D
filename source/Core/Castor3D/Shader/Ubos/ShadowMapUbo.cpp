@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
@@ -89,12 +89,12 @@ namespace castor3d
 	ShadowMapUbo::ShadowMapUbo( RenderDevice const & device )
 		: m_device{ device }
 	{
-		m_ubo = m_device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+		m_ubo = m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 	}
 
 	ShadowMapUbo::~ShadowMapUbo()
 	{
-		m_device.uboPools->putBuffer( m_ubo );
+		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void ShadowMapUbo::update( Light const & light

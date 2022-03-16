@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -233,7 +233,7 @@ namespace castor3d
 		m_uploadTimer->beginPass( *uploadResources.commands.commandBuffer );
 
 		device.bufferPool->upload( *uploadResources.commands.commandBuffer );
-		device.uboPools->upload( *uploadResources.commands.commandBuffer );
+		device.uboPool->upload( *uploadResources.commands.commandBuffer );
 		device.geometryPools->upload( *uploadResources.commands.commandBuffer );
 		device.skinnedGeometryPools->upload( *uploadResources.commands.commandBuffer );
 		device.vertexPools->upload( *uploadResources.commands.commandBuffer );

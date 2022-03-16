@@ -1,6 +1,6 @@
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -87,13 +87,13 @@ namespace castor3d
 
 	VoxelizerUbo::VoxelizerUbo( RenderDevice const & device )
 		: m_device{ device }
-		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
+		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 	{
 	}
 
 	VoxelizerUbo::~VoxelizerUbo()
 	{
-		m_device.uboPools->putBuffer( m_ubo );
+		m_device.uboPool->putBuffer( m_ubo );
 	}
 
 	void VoxelizerUbo::cpuUpdate( VoxelSceneData const & voxelConfig

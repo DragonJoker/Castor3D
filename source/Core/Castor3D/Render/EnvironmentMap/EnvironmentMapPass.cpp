@@ -1,7 +1,7 @@
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"

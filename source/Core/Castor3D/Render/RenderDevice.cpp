@@ -2,7 +2,7 @@
 
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
@@ -449,17 +449,17 @@ namespace castor3d
 			}
 		}
 
-		bufferPool = castor::makeUnique< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
+		bufferPool = castor::makeUnique< GpuBufferPool >( *this, cuT( "GlobalBufferPool" ) );
 		geometryPools = castor::makeUnique< ObjectBufferPool >( *this, cuT( "ModelBuffersPool" ) );
 		vertexPools = castor::makeUnique< VertexBufferPool >( *this, cuT( "VertexBuffersPool" ) );
 		skinnedGeometryPools = castor::makeUnique< SkinnedObjectBufferPool >( *this, cuT( "SkinnedModelBuffersPool" ) );
-		uboPools = std::make_shared< UniformBufferPools >( renderSystem, *this );
+		uboPool = castor::makeUnique< UniformBufferPool >( *this, cuT( "UniformBufferPool" ) );
 	}
 
 	RenderDevice::~RenderDevice()
 	{
 		renderSystem.getEngine()->getGraphResourceHandler().clear( makeContext() );
-		uboPools.reset();
+		uboPool.reset();
 		skinnedGeometryPools.reset();
 		vertexPools.reset();
 		geometryPools.reset();
