@@ -189,6 +189,56 @@ namespace castor3d
 		}
 	}
 
+	void GpuBufferBase::uploadDirect( ashes::Queue const & queue
+		, ashes::CommandPool const & commandPool
+		, VkDeviceSize offset
+		, VkDeviceSize size
+		, VkAccessFlags dstAccessFlags
+		, VkPipelineStageFlags dstPipelineFlags )
+	{
+		auto commandBuffer = commandPool.createCommandBuffer( "StaginBufferUpload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		auto [o, s] = adaptRange( offset
+			, size
+			, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
+		std::vector< VkBufferCopy > regions;
+		regions.push_back( { o, o, s } );
+
+		if ( !m_ownData.empty() )
+		{
+			updateBuffer( *commandBuffer
+				, m_ownData
+				, getBuffer().getBuffer()
+				, regions
+				, dstAccessFlags
+				, dstPipelineFlags );
+		}
+		else if ( m_stagingBuffer )
+		{
+			auto stgSrcStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+			commandBuffer->memoryBarrier( stgSrcStage
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, m_stagingBuffer->getBuffer().makeTransferSource() );
+			copyBuffer( *commandBuffer
+				, m_stagingBuffer->getBuffer()
+				, getBuffer().getBuffer()
+				, regions
+				, dstAccessFlags
+				, dstPipelineFlags );
+			auto stgDstStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+			commandBuffer->memoryBarrier( stgDstStage
+				, VK_PIPELINE_STAGE_HOST_BIT
+				, m_stagingBuffer->getBuffer().makeHostWrite() );
+		}
+
+		commandBuffer->end();
+		auto fence = m_renderSystem.getRenderDevice()->createFence();
+		queue.submit( *commandBuffer
+			, fence.get() );
+		fence->wait( ashes::MaxTimeout );
+	}
+
 	void GpuBufferBase::markDirty( VkDeviceSize offset
 		, VkDeviceSize size
 		, VkAccessFlags dstAccessFlags
