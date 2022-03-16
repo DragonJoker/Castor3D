@@ -1,7 +1,7 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -348,36 +348,33 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::VertexBufferPtr< castor::Point3f > createVertexBuffer( RenderDevice const & device
+		GpuBufferOffsetT< castor::Point3f > createVertexBuffer( RenderDevice const & device
 			, castor::String const & name
 			, uint32_t gridSize )
 		{
 			auto bufferSize = gridSize * gridSize * gridSize;
-			auto vertexBuffer = makeVertexBuffer< castor::Point3f >( device
+			auto result = device.bufferPool->getBuffer< castor::Point3f >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, bufferSize
-				, 0u
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, name );
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			auto buffer = result.getData().data();
 
-			if ( auto buffer = vertexBuffer->lock( 0u, bufferSize, 0u ) )
+			for ( uint32_t d = 0; d < gridSize; d++ )
 			{
-				for ( uint32_t d = 0; d < gridSize; d++ )
+				for ( uint32_t c = 0; c < gridSize; c++ )
 				{
-					for ( uint32_t c = 0; c < gridSize; c++ )
+					for ( uint32_t r = 0; r < gridSize; r++ )
 					{
-						for ( uint32_t r = 0; r < gridSize; r++ )
-						{
-							*buffer = castor::Point3f{ float( r ), float( c ), float( d ) };
-							++buffer;
-						}
+						*buffer = castor::Point3f{ float( r ), float( c ), float( d ) };
+						++buffer;
 					}
 				}
-
-				vertexBuffer->flush( 0u, 4u );
-				vertexBuffer->unlock();
 			}
 
-			return vertexBuffer;
+			result.buffer->markDirty( result.getOffset()
+				, result.getSize()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			return result;
 		}
 	}
 
@@ -541,8 +538,8 @@ namespace castor3d
 	{
 		m_holder.recordInto( context, commandBuffer, index );
 		auto vplCount = m_gridSize * m_gridSize * m_gridSize;
-		VkDeviceSize offset{};
-		VkBuffer vertexBuffer = m_vertexBuffer->getBuffer();
+		VkDeviceSize offset{ m_vertexBuffer.getOffset() };
+		VkBuffer vertexBuffer = m_vertexBuffer.getBuffer();
 		m_context.vkCmdBindVertexBuffers( commandBuffer, 0u, 1u, &vertexBuffer, &offset );
 		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
