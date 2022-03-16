@@ -169,10 +169,7 @@ namespace castor3d
 			std::copy( m_lines.begin()
 				, m_lines.end()
 				, offsets.getIndexData< Line >().begin() );
-			offsets.idxBuffer->markDirty( offsets.idxChunk.offset
-				, offsets.idxChunk.size
-				, VK_ACCESS_INDEX_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			offsets.markIndexDirty();
 		}
 	}
 }

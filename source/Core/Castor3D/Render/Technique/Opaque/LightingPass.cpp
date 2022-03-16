@@ -605,10 +605,7 @@ namespace castor3d
 				+1.0f, +1.0f,
 			};
 			std::memcpy( buffer.data(), data, sizeof( data ) );
-			result.vtxBuffer->markDirty( result.getVertexOffset()
-				, result.getVertexSize()
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			result.markVertexDirty();
 		}
 		else
 		{
@@ -627,10 +624,7 @@ namespace castor3d
 			result = m_device.vertexPools->getBuffer< float >( uint32_t( data.size() * 3u ) );
 			auto buffer = result.getVertexData< float >();
 			std::memcpy( buffer.data(), data.data()->constPtr(), result.getVertexSize() );
-			result.vtxBuffer->markDirty( result.getVertexOffset()
-				, result.getVertexSize()
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			result.markVertexDirty();
 		}
 
 		return result;

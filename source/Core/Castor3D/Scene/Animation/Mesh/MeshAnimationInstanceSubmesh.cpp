@@ -57,17 +57,12 @@ namespace castor3d
 				std::copy( prv.buffer.begin()
 					, prv.buffer.end()
 					, offsets.getVertexData< InterleavedVertex >().begin() );
-				offsets.vtxBuffer->markDirty( offsets.getVertexOffset()
-					, offsets.getVertexCount< InterleavedVertex >() * sizeof( InterleavedVertex )
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+				offsets.markVertexDirty();
 
 				std::copy( cur.buffer.begin()
 					, cur.buffer.end()
 					, animBuffer.getData().begin() );
-				animBuffer.buffer->markDirty( animBuffer.getOffset()
-					, animBuffer.getSize()
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				animBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}

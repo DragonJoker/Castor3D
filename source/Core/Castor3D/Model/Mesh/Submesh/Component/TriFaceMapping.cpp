@@ -246,10 +246,7 @@ namespace castor3d
 			std::copy( m_faces.begin()
 				, m_faces.end()
 				, offsets.getIndexData< Face >().begin() );
-			offsets.idxBuffer->markDirty( offsets.idxChunk.offset
-				, offsets.idxChunk.size
-				, VK_ACCESS_INDEX_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			offsets.markIndexDirty();
 		}
 	}
 }

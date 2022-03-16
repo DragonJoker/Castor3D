@@ -135,9 +135,7 @@ namespace castor3d
 				std::copy( m_data.begin()
 					, m_data.end()
 					, m_animBuffer.getData().begin() );
-				m_animBuffer.buffer->markDirty( m_animBuffer.getOffset()
-					, m_animBuffer.getSize()
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				m_animBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}
