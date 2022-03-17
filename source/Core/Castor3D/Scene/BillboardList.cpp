@@ -295,7 +295,7 @@ namespace castor3d
 				device.bufferPool->putBuffer( m_vertexBuffer );
 			}
 
-			m_vertexBuffer = device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			m_vertexBuffer = device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, uint32_t( m_arrayPositions.size() ) * m_vertexStride
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			auto * buffer = m_vertexBuffer.getData().data();

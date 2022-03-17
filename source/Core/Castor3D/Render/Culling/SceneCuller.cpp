@@ -625,7 +625,7 @@ namespace castor3d
 			{
 				renderPassIt.second.pipelinesNodes = makeBuffer< PipelineNodes >( device
 					, MaxPipelineNodes
-					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/NodesIDs" );
 			}
@@ -636,12 +636,12 @@ namespace castor3d
 			{
 				renderPassIt.second.submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
 					, MaxSubmeshIdxDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndexedIndirectBuffer" );
 				renderPassIt.second.submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
 					, MaxSubmeshNIdxDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/SubmeshIndirectBuffer" );
 			}
@@ -651,7 +651,7 @@ namespace castor3d
 			{
 				renderPassIt.second.billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
 					, MaxBillboardDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, renderPassIt.first->getTypeName() + "/BillboardIndirectBuffer" );
 			}
