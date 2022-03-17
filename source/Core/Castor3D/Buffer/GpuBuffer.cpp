@@ -103,8 +103,8 @@ namespace castor3d
 		if ( smallData )
 		{
 			m_ownData.resize( m_allocatedSize );
-			m_data = castor::makeArrayView( m_ownData.data()
-				, m_ownData.size() );
+			m_data = castor::makeArrayView( m_ownData.begin()
+				, m_ownData.end() );
 		}
 		else
 		{
