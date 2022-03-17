@@ -90,7 +90,7 @@ namespace motion_blur
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					auto blurVector = writer.declLocale( "vector"
+					auto blurVector = writer.declLocale( "blurVector"
 						, ( c3d_mapVelocity.sample( vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
 					pxl_fragColor = c3d_mapColor.sample( vtx_texture );
@@ -227,7 +227,7 @@ namespace motion_blur
 			auto & configuration = m_ubo.getData();
 			configuration.samplesCount = m_configuration.samplesCount;
 			configuration.vectorDivider = m_configuration.vectorDivider;
-			configuration.blurScale = ( m_fpsScale && ( fps != float( castor3d::RenderLoop::UnlimitedFPS ) ) )
+			configuration.blurScale = ( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() != castor3d::RenderLoop::UnlimitedFPS )
 				? fps / float( getRenderSystem()->getEngine()->getRenderLoop().getWantedFps() )
 				: 1.0f;
 			m_saved = current;
