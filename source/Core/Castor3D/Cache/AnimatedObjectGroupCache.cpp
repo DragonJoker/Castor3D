@@ -56,10 +56,10 @@ namespace castor
 			, castor::ResourceMergerT< AnimatedObjectGroupCache >{ scene.getName() } }
 		, m_engine{ *scene.getEngine() }
 		, m_device{ m_engine.getRenderSystem()->getRenderDevice() }
-		, m_morphingData{ m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+		, m_morphingData{ m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, 10'000ull
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
-		, m_skinningTransformsData{ m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+		, m_skinningTransformsData{ m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, 1'000ull
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
@@ -70,10 +70,10 @@ namespace castor
 	{
 		if ( !m_morphingData )
 		{
-			m_morphingData = m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			m_morphingData = m_device.bufferPool->getBuffer< MorphingBufferConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, 10'000ull
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			m_skinningTransformsData = m_device.bufferPool->getBuffer< SkinningTransformsConfiguration >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, 1'000ull
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			doInitialiseBuffer( m_skinningTransformsData );
