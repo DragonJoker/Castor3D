@@ -9,7 +9,7 @@ set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} scene exporter" )
 set( ${PROJECT_NAME}_BRIEF "Scene exporter for Castor3D" )
 set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-dark-small.png" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 2 )
+set( ${PROJECT_NAME}_VERSION_MINOR 3 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES

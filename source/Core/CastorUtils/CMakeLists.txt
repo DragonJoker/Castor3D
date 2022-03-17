@@ -203,7 +203,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	set( ${PROJECT_NAME}_BRIEF "Multiplatform utilities library" )
 	set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-dark-small.png" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-	set( ${PROJECT_NAME}_VERSION_MINOR 11 )
+	set( ${PROJECT_NAME}_VERSION_MINOR 12 )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
