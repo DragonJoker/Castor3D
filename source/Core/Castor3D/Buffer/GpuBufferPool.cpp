@@ -72,7 +72,6 @@ namespace castor3d
 	GpuBufferPool::GpuBufferPool( RenderDevice const & device
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
-		, m_device{ device }
 		, m_debugName{ std::move( debugName ) }
 		, m_minBlockSize{ uint32_t( device.renderSystem.getProperties().limits.minMemoryMapAlignment ) }
 	{

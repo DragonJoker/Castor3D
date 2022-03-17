@@ -14,7 +14,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 	
-	std::pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
+	static std::pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
 		, VkDeviceSize size
 		, VkDeviceSize align )
 	{
