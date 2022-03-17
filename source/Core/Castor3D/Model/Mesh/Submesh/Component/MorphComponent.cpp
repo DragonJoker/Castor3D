@@ -107,7 +107,7 @@ namespace castor3d
 
 		if ( !m_animBuffer || m_animBuffer.getCount() != count )
 		{
-			m_animBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			m_animBuffer = device.bufferPool->getBuffer< InterleavedVertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, count
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
