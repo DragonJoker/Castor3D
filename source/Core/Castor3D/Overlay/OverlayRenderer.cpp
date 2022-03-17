@@ -70,7 +70,7 @@ namespace castor3d
 			auto & bufferOffset = bufferIndex.geometryBuffers.textured.bufferOffset;
 			std::copy( begin
 				, std::next( begin, count )
-				, bufferOffset.getVertexData< VertexT >().begin() );
+				, bufferOffset.template getVertexData< VertexT >().begin() );
 			bufferOffset.markVertexDirty();
 			return count;
 		}

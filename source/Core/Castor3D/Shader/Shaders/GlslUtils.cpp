@@ -12,10 +12,6 @@
 
 namespace castor3d::shader
 {
-	uint32_t constexpr ReceiverOffset = 0u;
-	uint32_t constexpr LightingOffset = 1u;
-	uint32_t constexpr EnvMapIndexOffset = 2u;
-
 	Utils::Utils( sdw::ShaderWriter & writer
 		, Engine const & engine )
 		: m_writer{ writer }
@@ -43,7 +39,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_swap1F = m_writer.implementFunction< sdw::Void >( "c3d_distanceSquared2F"
+		m_swap1F = m_writer.implementFunction< sdw::Void >( "c3d_swap1F"
 			, [&]( sdw::Float A
 				, sdw::Float B )
 			{
@@ -412,7 +408,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_invertVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_invertVec3Y"
+		m_invertVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_invertVec4Y"
 			, [&]( sdw::Vec4 const & v )
 			{
 				m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z(), v.w() ) );
@@ -457,7 +453,7 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_negateVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_negateVec3Y"
+		m_negateVec4Y = m_writer.implementFunction< sdw::Vec4 >( "c3d_negateVec4Y"
 			, [&]( sdw::Vec4 const & v )
 			{
 				m_writer.returnStmt( vec3( v.x(), -v.y(), v.z(), v.w() ) );
@@ -866,7 +862,7 @@ namespace castor3d::shader
 
 		auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
 
-		m_clipToScreen = m_writer.implementFunction< sdw::Vec4 >( "c3d_perspectiveDivide"
+		m_clipToScreen = m_writer.implementFunction< sdw::Vec4 >( "c3d_clipToScreen"
 			, [&]( sdw::Vec4 const & in )
 			{
 				auto out = m_writer.declLocale( "out", in );

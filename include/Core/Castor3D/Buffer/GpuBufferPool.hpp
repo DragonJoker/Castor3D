@@ -93,7 +93,6 @@ namespace castor3d
 			, MemChunk const & chunk );
 
 	private:
-		RenderDevice const & m_device;
 		castor::String m_debugName;
 		std::map< uint32_t, BufferArray > m_buffers;
 		BufferArray m_nonSharedBuffers;
