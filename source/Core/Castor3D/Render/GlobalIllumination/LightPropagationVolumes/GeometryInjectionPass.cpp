@@ -485,7 +485,7 @@ namespace castor3d
 		{
 			auto vplCount = rsmSize * rsmSize;
 
-			auto result = device.bufferPool->getBuffer< NonTexturedQuad::Vertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			auto result = device.bufferPool->getBuffer< NonTexturedQuad::Vertex >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 				, vplCount
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			NonTexturedQuad::Vertex vtx;
